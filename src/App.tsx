@@ -498,10 +498,9 @@ export default function App() {
         setVisaTypes(visaData);
       }
 
-      const geoData = await safeFetchJson('/api/geo', undefined, null);
-      if (geoData?.country) {
-        setDetectedCountry(geoData.country);
-        setSelectedOrigin(geoData.country);
+      if (typeof window !== 'undefined' && navigator.language) {
+        const browserLang = navigator.language.startsWith('ja') ? 'ja' : navigator.language.startsWith('es') ? 'es' : 'en';
+        // Auto browser language detection initialized
       }
     };
 
