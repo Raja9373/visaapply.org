@@ -907,7 +907,7 @@ function AdminPortal({ drafts, articles, cronLoading, cronResult, onTriggerCron,
     setLoadingAuth(true);
     setAuthError(null);
     try {
-      const res = await fetch('/api/admin/auth', {
+      const res = await fetch('/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: passwordInput })

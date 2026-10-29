@@ -231,6 +231,17 @@ app.get('/api/articles/:slug', (req, res) => {
   }
 });
 
+// Admin: Auth check at /api as well
+app.post('/api', (req, res) => {
+  const { password } = req.body || {};
+  const adminPass = process.env.ADMIN_PASSWORD || 'Alokms98';
+  if (password === adminPass) {
+    res.json({ success: true });
+  } else {
+    res.status(401).json({ success: false, message: 'Authentication failed' });
+  }
+});
+
 // Admin: Auth check
 app.post('/api/admin/auth', (req, res) => {
   const { password } = req.body;
