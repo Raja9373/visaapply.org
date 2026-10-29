@@ -645,10 +645,7 @@ export default function App() {
           {/* Nav Links */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
-            <button onClick={() => navigate('/sitemap')} className={`transition-colors cursor-pointer ${currentPath === '/sitemap' ? 'text-white font-bold' : 'hover:text-white'}`}>Sitemap (540+ Pages)</button>
-            <button onClick={() => navigate('/audit')} className={`transition-colors cursor-pointer ${currentPath === '/audit' ? 'text-emerald-300 font-bold' : 'hover:text-emerald-200'} flex items-center gap-1 font-bold`}>
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Live Audit (540+ Visas)
-            </button>
+            <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer hover:text-white`}>Countries</button>
             <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
             <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
               <Shield className="w-4 h-4 text-amber-300" /> Admin Portal
@@ -676,8 +673,6 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
-            <button onClick={() => { navigate('/sitemap'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Sitemap (540+ Pages)</button>
-            <button onClick={() => { navigate('/audit'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-emerald-200 font-medium font-bold">Live Audit (540+ Visas)</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
           </div>
@@ -768,26 +763,26 @@ export default function App() {
             </div>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Navigation</h4>
+            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors cursor-pointer">Home & Destinations</button></li>
-              <li><button onClick={() => navigate('/audit')} className="hover:text-emerald-400 font-bold text-emerald-300 transition-colors cursor-pointer">Audit Report (540+ visas)</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-white transition-colors cursor-pointer">Sitemap (540+ pages)</button></li>
+              <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors cursor-pointer">About Us & Home</button></li>
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
-              <li><button onClick={() => navigate('/admin')} className="hover:text-white transition-colors cursor-pointer">Admin Dashboard</button></li>
+              <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
+              <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (540+ Pages)</button></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Legal & Compliance</h4>
+            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
-              <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
-              <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms of Service</button></li>
-              <li><span className="text-slate-500">Cookie Preferences</span></li>
+              <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
+              <li className="text-xs text-slate-500">540+ Visa Guides across 30 Destination Countries</li>
+              <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. Independent portal. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 540+ Visa Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -2375,6 +2370,41 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
           <button onClick={() => window.location.reload()} className="text-xs underline font-semibold">Refresh Page</button>
         </div>
       )}
+
+      {/* Verification Tools Section */}
+      <div className="bg-gradient-to-r from-slate-900 to-[#0B3D91] text-white p-6 sm:p-8 rounded-2xl mb-10 shadow-lg">
+        <h2 className="text-lg font-bold mb-2 flex items-center gap-2">
+          <span>🛠️ Verification & SEO Infrastructure Tools</span>
+        </h2>
+        <p className="text-xs text-blue-200 mb-6">
+          Access real-time audit reporting and public sitemap indices for 540+ visa records.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div 
+            onClick={() => navigate('/audit')}
+            className="p-5 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all cursor-pointer flex flex-col justify-between"
+          >
+            <div>
+              <div className="text-2xl mb-2">🔍</div>
+              <h3 className="font-extrabold text-base text-emerald-300">Live Audit (540+ Visas) – Admin Only</h3>
+              <p className="text-xs text-slate-200 mt-1">Real-time database count, document completeness checks, country-wise matrix vs Excel targets.</p>
+            </div>
+            <span className="text-xs font-bold text-emerald-300 mt-4 inline-flex items-center gap-1">Open Live Audit Report →</span>
+          </div>
+
+          <div 
+            onClick={() => navigate('/sitemap')}
+            className="p-5 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all cursor-pointer flex flex-col justify-between"
+          >
+            <div>
+              <div className="text-2xl mb-2">🗺️</div>
+              <h3 className="font-extrabold text-base text-blue-200">Sitemap (540+ Pages) – Public + Admin</h3>
+              <p className="text-xs text-slate-200 mt-1">Indexed links for all 540+ visa guides across 30 destination countries for search crawler optimization.</p>
+            </div>
+            <span className="text-xs font-bold text-blue-200 mt-4 inline-flex items-center gap-1">Open Public Sitemap →</span>
+          </div>
+        </div>
+      </div>
 
       {/* Stats Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
