@@ -33,6 +33,10 @@ interface Article {
   content?: string;
 }
 
+const FALLBACK_COUNTRIES = [
+  { code: "US", name: "United States", flag: "🇺🇸" }, { code: "CA", name: "Canada", flag: "🇨🇦" }, { code: "GB", name: "United Kingdom", flag: "🇬🇧" }, { code: "AU", name: "Australia", flag: "🇦🇺" }, { code: "DE", name: "Germany", flag: "🇩🇪" }, { code: "FR", name: "France", flag: "🇫🇷" }, { code: "AE", name: "UAE Dubai", flag: "🇦🇪" }, { code: "SG", name: "Singapore", flag: "🇸🇬" }, { code: "JP", name: "Japan", flag: "🇯🇵" }, { code: "IN", name: "India", flag: "🇮🇳" }, { code: "BR", name: "Brazil", flag: "🇧🇷" }, { code: "IT", name: "Italy", flag: "🇮🇹" }, { code: "ES", name: "Spain", flag: "🇪🇸" }, { code: "NL", name: "Netherlands", flag: "🇳🇱" }, { code: "NZ", name: "New Zealand", flag: "🇳🇿" }, { code: "SE", name: "Sweden", flag: "🇸🇪" }, { code: "CH", name: "Switzerland", flag: "🇨🇭" }, { code: "IE", name: "Ireland", flag: "🇮🇪" }, { code: "NO", name: "Norway", flag: "🇳🇴" }, { code: "PT", name: "Portugal", flag: "🇵🇹" }, { code: "DK", name: "Denmark", flag: "🇩🇰" }, { code: "FI", name: "Finland", flag: "🇫🇮" }, { code: "BE", name: "Belgium", flag: "🇧🇪" }, { code: "AT", name: "Austria", flag: "🇦🇹" }, { code: "PL", name: "Poland", flag: "🇵🇱" }, { code: "MY", name: "Malaysia", flag: "🇲🇾" }, { code: "TH", name: "Thailand", flag: "🇹🇭" }, { code: "TR", name: "Turkey", flag: "🇹🇷" }, { code: "ZA", name: "South Africa", flag: "🇿🇦" }, { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" }
+];
+
 function generateMetadata(path: string, countries: Country[], article?: Article | null) {
   const isAdmin = path === '/admin';
   const isSitemap = path === '/sitemap';
@@ -108,7 +112,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [countries, setCountries] = useState<Country[]>(FALLBACK_COUNTRIES);
   const [visaTypes, setVisaTypes] = useState<VisaType[]>([]);
   const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
   const [selectedOrigin, setSelectedOrigin] = useState<Country | null>(null);
@@ -147,9 +151,14 @@ export default function App() {
     const loadAppData = async () => {
       try {
         const countriesRes = await fetch('/api/countries');
-        if (countriesRes.ok) setCountries(await countriesRes.json());
+        if (countriesRes.ok) {
+          const data = await countriesRes.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setCountries(data);
+          }
+        }
       } catch (err) {
-        console.error('Failed to load countries:', err);
+        console.error('Failed to load countries, using fallback:', err);
       }
 
       try {
@@ -623,6 +632,48 @@ function SitemapView({ countries, visaTypes, navigate }: any) {
 function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuizStep, selectedVisaType, setSelectedVisaType, followUpAnswer, setFollowUpAnswer }: any) {
   const fromCode = match[1].toUpperCase();
   const toCode = match[2].toUpperCase();
+  const storageKey = `visa_quiz_${fromCode}_${toCode}`;
+
+  const [resumed, setResumed] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.step) setQuizStep(parsed.step);
+        if (parsed.visaType) setSelectedVisaType(parsed.visaType);
+        if (parsed.followUp) setFollowUpAnswer(parsed.followUp);
+        setResumed(true);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    try {
+      const sessionData = {
+        step: quizStep,
+        visaType: selectedVisaType,
+        followUp: followUpAnswer,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(storageKey, JSON.stringify(sessionData));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [quizStep, selectedVisaType, followUpAnswer, storageKey]);
+
+  const handleResetQuiz = () => {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch (e) {}
+    setQuizStep(1);
+    setSelectedVisaType('tourist');
+    setFollowUpAnswer('yes');
+    setResumed(false);
+  };
 
   const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
   const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
@@ -633,6 +684,9 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
   };
 
   const handleCompleteQuiz = () => {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch (e) {}
     navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${selectedVisaType}`);
   };
 
@@ -646,6 +700,12 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12">
+        {resumed && (
+          <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-center justify-between">
+            <span>Resumed your previous quiz session for {fromCountry.name} to {toCountry.name}.</span>
+            <button onClick={handleResetQuiz} className="underline font-semibold hover:text-blue-700">Start Over</button>
+          </div>
+        )}
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="flex items-center justify-center gap-4 mb-4">
