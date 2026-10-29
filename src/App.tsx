@@ -4,6 +4,9 @@ import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
 import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
 import { VerificationView } from './components/VerificationView';
+import { AuditPage } from './pages/AuditPage';
+import { SitemapPage } from './pages/SitemapPage';
+
 import { JP_TO_IN_VISA } from './data/jpToInDetailed';
 import { marked } from 'marked';
 import { 
@@ -607,6 +610,7 @@ export default function App() {
   const isPrivacy = currentPath === '/privacy';
   const isTerms = currentPath === '/terms';
   const isSitemap = currentPath === '/sitemap';
+  const isAudit = currentPath === '/audit';
   const isVerification = currentPath === '/verification';
 
   // 1. Level 1: /in-to-us
@@ -641,9 +645,9 @@ export default function App() {
           {/* Nav Links */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
-            <button onClick={() => navigate('/sitemap')} className={`transition-colors cursor-pointer ${currentPath === '/sitemap' ? 'text-white font-bold' : 'hover:text-white'}`}>All Visa Guides</button>
-            <button onClick={() => navigate('/verification')} className={`transition-colors cursor-pointer ${currentPath === '/verification' ? 'text-emerald-300 font-bold' : 'hover:text-emerald-200'} flex items-center gap-1`}>
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 540 Visas Check
+            <button onClick={() => navigate('/sitemap')} className={`transition-colors cursor-pointer ${currentPath === '/sitemap' ? 'text-white font-bold' : 'hover:text-white'}`}>Sitemap (540+ Pages)</button>
+            <button onClick={() => navigate('/audit')} className={`transition-colors cursor-pointer ${currentPath === '/audit' ? 'text-emerald-300 font-bold' : 'hover:text-emerald-200'} flex items-center gap-1 font-bold`}>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Live Audit (540+ Visas)
             </button>
             <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
             <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
@@ -672,8 +676,8 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
-            <button onClick={() => { navigate('/sitemap'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">All Visa Guides</button>
-            <button onClick={() => { navigate('/verification'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-emerald-200 font-medium">540 Visas Check</button>
+            <button onClick={() => { navigate('/sitemap'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Sitemap (540+ Pages)</button>
+            <button onClick={() => { navigate('/audit'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-emerald-200 font-medium font-bold">Live Audit (540+ Visas)</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
           </div>
@@ -695,6 +699,8 @@ export default function App() {
             onDelete={handleDeleteDraft}
             navigate={navigate}
           />
+        ) : isAudit ? (
+          <AuditPage navigate={navigate} />
         ) : isVerification ? (
           <VerificationView navigate={navigate} />
         ) : isContact ? (
@@ -704,10 +710,8 @@ export default function App() {
         ) : isTerms ? (
           <TermsView navigate={navigate} />
         ) : isSitemap ? (
-          <SitemapView 
-            countries={countries} 
-            navigate={navigate} 
-          />
+          <SitemapPage navigate={navigate} />
+
         ) : isLevel2Match ? (
           <VisaCategoryListView 
             match={isLevel2Match} 
@@ -767,9 +771,9 @@ export default function App() {
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Navigation</h4>
             <ul className="space-y-2 text-sm">
               <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors cursor-pointer">Home & Destinations</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-white transition-colors cursor-pointer">All Visa Guides</button></li>
+              <li><button onClick={() => navigate('/audit')} className="hover:text-emerald-400 font-bold text-emerald-300 transition-colors cursor-pointer">Audit Report (540+ visas)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-white transition-colors cursor-pointer">Sitemap (540+ pages)</button></li>
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
-              <li><a href="/api/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-1 text-slate-400">Sitemap (For Google) <ExternalLink className="w-3.5 h-3.5 opacity-70" /></a></li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white transition-colors cursor-pointer">Admin Dashboard</button></li>
             </ul>
           </div>

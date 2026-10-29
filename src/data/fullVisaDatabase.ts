@@ -408,3 +408,7 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
 
 // Auto-run logger on load
 verifyNoVisaMissed();
+
+export const VISA_COUNTS_FROM_EXCEL = COUNTRY_VISA_COUNTS;
+export const FULL_VISA_DB_DETAILED = FULL_VISA_DB;
+
