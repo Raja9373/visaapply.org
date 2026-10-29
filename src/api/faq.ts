@@ -1,31 +1,59 @@
 import { GoogleGenAI, Type } from '@google/genai';
+import { FULL_VISA_DB } from '../data/fullVisaDatabase';
 
 export interface FaqItem {
   question: string;
   answer: string;
+  q?: string;
+  a?: string;
 }
 
 export function getFallbackFaqs(destination: string, visaType: string, fromCountry: string = 'India'): FaqItem[] {
-  const destName = destination || 'United States';
-  const vType = visaType || 'Tourist';
+  const destCode = (destination || 'US').toUpperCase();
+  const vType = (visaType || 'tourist').toLowerCase();
   const origin = fromCountry || 'India';
 
+  // 1. Try pulling static FAQs directly from FULL_VISA_DB
+  const countryVisas = FULL_VISA_DB[destCode] || FULL_VISA_DB['US'];
+  if (countryVisas) {
+    let categoryKey: any = 'tourist';
+    if (vType.includes('work')) categoryKey = 'work';
+    else if (vType.includes('student') || vType.includes('study')) categoryKey = 'student';
+    else if (vType.includes('family')) categoryKey = 'family';
+    else if (vType.includes('business')) categoryKey = 'business';
+    else if (vType.includes('pr') || vType.includes('golden')) categoryKey = 'pr';
+
+    const items = countryVisas[categoryKey] || countryVisas.tourist || [];
+    const matchedVisa = items.find((v: any) => v.id.toLowerCase() === vType) || items[0];
+
+    if (matchedVisa && matchedVisa.faq && matchedVisa.faq.length > 0) {
+      return matchedVisa.faq.map((f: any) => ({
+        question: f.q || f.question,
+        answer: f.a || f.answer,
+        q: f.q || f.question,
+        a: f.a || f.answer
+      }));
+    }
+  }
+
+  // 2. Default rich fallback FAQs if not found in database
+  const destName = destCode;
   return [
     {
-      question: `What are the mandatory passport and photo specifications for a ${vType} visa to ${destName}?`,
+      question: `What are the mandatory passport and photo specifications for a ${visaType} visa to ${destName}?`,
       answer: `Applicants from ${origin} must possess a valid passport with at least 6 months validity beyond their planned departure date from ${destName}, along with a minimum of 2 blank visa pages. Two recent passport-size photographs meeting official consular biometric standards (white/light background) are required.`
     },
     {
-      question: `How long does processing take for a ${vType} visa from ${origin} to ${destName}?`,
+      question: `How long does processing take for a ${visaType} visa from ${origin} to ${destName}?`,
       answer: `Consular processing times typically average between 15 and 30 business days for standard applications. Processing may take longer during peak travel seasons or if additional administrative review or biometrics appointments are required.`
     },
     {
-      question: `What financial proof is required when applying for a ${vType} visa to ${destName}?`,
+      question: `What financial proof is required when applying for a ${visaType} visa to ${destName}?`,
       answer: `Applicants must provide official bank statements for the past 3 to 6 months demonstrating sufficient liquidated balance to cover lodging, living expenses, and round-trip transport during their stay in ${destName}.`
     },
     {
-      question: `Can a ${vType} visa be extended or converted after arriving in ${destName}?`,
-      answer: `In most cases, short-term ${vType} visas cannot be converted or extended from within ${destName} unless authorized under rare emergency or humanitarian circumstances. Visitors must leave before their authorized stay expires.`
+      question: `Can a ${visaType} visa be extended or converted after arriving in ${destName}?`,
+      answer: `In most cases, short-term ${visaType} visas cannot be converted or extended from within ${destName} unless authorized under rare emergency or humanitarian circumstances. Visitors must leave before their authorized stay expires.`
     }
   ];
 }
@@ -58,7 +86,7 @@ export async function generateFaqsWithGemini(
 
 Focus on official consular requirements, processing times, required financial documentation, and visa validity rules.`;
 
-    const response = await ai.models.generateContent({
+    const apiPromise = ai.models.generateContent({
       model: 'gemini-3.8-flash',
       contents: prompt,
       config: {
@@ -84,9 +112,14 @@ Focus on official consular requirements, processing times, required financial do
       }
     });
 
-    const text = response.text || '';
-    if (text) {
-      const parsed = JSON.parse(text);
+    const timeoutPromise = new Promise<null>((_, reject) =>
+      setTimeout(() => reject(new Error('Gemini API call timed out after 6 seconds')), 6000)
+    );
+
+    const response: any = await Promise.race([apiPromise, timeoutPromise]);
+
+    if (response && response.text) {
+      const parsed = JSON.parse(response.text);
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed.map((item: any) => ({
           question: String(item.question || ''),
@@ -95,7 +128,7 @@ Focus on official consular requirements, processing times, required financial do
       }
     }
   } catch (error) {
-    console.error('Error generating dynamic FAQs via Gemini API:', error);
+    console.warn('Dynamic Gemini FAQ generation failed or timed out. Falling back to FULL_VISA_DB static data:', error);
   }
 
   return getFallbackFaqs(destination, visaType, fromCountry);
