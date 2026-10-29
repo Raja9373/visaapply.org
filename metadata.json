@@ -1,0 +1,6 @@
+{
+  "name": "VisaApply.org - Global Visa Guides & AI Auto-Blogger",
+  "description": "Global visa info for all countries with 2-step quiz, Gemini AI auto-blogging cron, admin approval workflow, and VFS Global official styling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

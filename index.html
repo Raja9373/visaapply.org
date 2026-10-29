@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      try {
+        let originalFetch = window.fetch;
+        Object.defineProperty(window, 'fetch', {
+          get() { return originalFetch; },
+          set(v) { originalFetch = v; },
+          configurable: true,
+          enumerable: true
+        });
+      } catch (e) {}
+    </script>
+    <title>VisaApply.org – Global Visa Guides, Requirements & AI Auto-Blogger</title>
+    <meta name="description" content="Official global visa information, 2-step visa type quiz, fees, documents, and step-by-step application guides for all countries worldwide." />
+    <meta property="og:title" content="VisaApply.org – Global Visa Guides & Requirements" />
+    <meta property="og:description" content="Find comprehensive visa requirements, documents, processing times, and fees for travel, work, study, business, and PR worldwide." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
