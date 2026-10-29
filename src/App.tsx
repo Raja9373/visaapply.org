@@ -3,7 +3,8 @@ import { marked } from 'marked';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
-  ArrowRight, ExternalLink, Clock, DollarSign, Menu, X, ChevronRight, Check
+  ArrowRight, ExternalLink, Clock, DollarSign, Menu, X, ChevronRight, Check,
+  Mail, Copy, Send
 } from 'lucide-react';
 
 interface Country {
@@ -41,6 +42,9 @@ const FALLBACK_COUNTRIES = [
 function generateMetadata(path: string, countries: Country[], article?: Article | null) {
   const isAdmin = path === '/admin';
   const isSitemap = path === '/sitemap';
+  const isContact = path === '/contact';
+  const isPrivacy = path === '/privacy';
+  const isTerms = path === '/terms';
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/);
 
@@ -50,6 +54,15 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
+  } else if (isContact) {
+    title = 'Contact Us – VisaApply.org';
+    description = 'Get in touch with VisaApply.org. Email contact@visaapply.org for visa inquiries, partnerships, or support.';
+  } else if (isPrivacy) {
+    title = 'Privacy Policy – VisaApply.org';
+    description = 'Privacy Policy for VisaApply.org. Learn how we handle data. Contact: contact@visaapply.org.';
+  } else if (isTerms) {
+    title = 'Terms of Service – VisaApply.org';
+    description = 'Terms of Service for VisaApply.org. Contact: contact@visaapply.org.';
   } else if (isSitemap) {
     title = 'All Visa Guides – Global Itineraries & Requirements | VisaApply.org';
     description = 'Explore complete visa requirements, official fees, and document checklists across all 30 global destination countries and visa categories.';
@@ -102,6 +115,12 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
 
   if (isAdmin) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Admin Portal", "item": `${baseUrl}/admin` });
+  } else if (isContact) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Contact Us", "item": `${baseUrl}/contact` });
+  } else if (isPrivacy) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Privacy Policy", "item": `${baseUrl}/privacy` });
+  } else if (isTerms) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Terms of Service", "item": `${baseUrl}/terms` });
   } else if (isSitemap) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All Visa Guides", "item": `${baseUrl}/sitemap` });
   } else if (quizMatch) {
@@ -303,6 +322,9 @@ export default function App() {
   // Router parsing
   const isHome = currentPath === '/';
   const isAdmin = currentPath === '/admin';
+  const isContact = currentPath === '/contact';
+  const isPrivacy = currentPath === '/privacy';
+  const isTerms = currentPath === '/terms';
   const isSitemap = currentPath === '/sitemap';
   const isArticleMatch = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
   const isQuizMatch = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/);
@@ -326,11 +348,12 @@ export default function App() {
             </div>
           </div>
 
-          {/* Nav Links (XML sitemap link removed as requested) */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-blue-100">
-            <button onClick={() => navigate('/')} className="hover:text-white transition-colors whitespace-nowrap">Home</button>
-            <button onClick={() => navigate('/sitemap')} className="hover:text-white transition-colors whitespace-nowrap">All Visa Guides</button>
-            <button onClick={() => navigate('/admin')} className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1.5">
+          {/* Nav Links */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-blue-100">
+            <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
+            <button onClick={() => navigate('/sitemap')} className={`transition-colors cursor-pointer ${currentPath === '/sitemap' ? 'text-white font-bold' : 'hover:text-white'}`}>All Visa Guides</button>
+            <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
+            <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
               <Shield className="w-4 h-4 text-amber-300" /> Admin Portal
             </button>
           </nav>
@@ -357,6 +380,7 @@ export default function App() {
           <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
             <button onClick={() => { navigate('/sitemap'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">All Visa Guides</button>
+            <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
           </div>
         )}
@@ -377,6 +401,12 @@ export default function App() {
             onDelete={handleDeleteDraft}
             navigate={navigate}
           />
+        ) : isContact ? (
+          <ContactView navigate={navigate} />
+        ) : isPrivacy ? (
+          <PrivacyView navigate={navigate} />
+        ) : isTerms ? (
+          <TermsView navigate={navigate} />
         ) : isSitemap ? (
           <SitemapView 
             countries={countries} 
@@ -433,28 +463,34 @@ export default function App() {
             <p className="text-xs text-slate-500">
               Disclaimer: We are not affiliated with VFS Global, IRCC, USCIS, or any government embassy. Official applications must be submitted through official government portals.
             </p>
+            <div className="pt-2 text-xs text-slate-300 font-medium flex items-center gap-2">
+              <Mail className="w-4 h-4 text-blue-400" />
+              <span>Contact Us: </span>
+              <a href="mailto:contact@visaapply.org" className="text-blue-400 font-bold hover:underline">contact@visaapply.org</a>
+            </div>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Navigation</h4>
             <ul className="space-y-2 text-sm">
-              <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors">Home & Destinations</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-white transition-colors">All Visa Guides</button></li>
+              <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors cursor-pointer">Home & Destinations</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-white transition-colors cursor-pointer">All Visa Guides</button></li>
+              <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><a href="/api/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-1 text-slate-400">Sitemap (For Google) <ExternalLink className="w-3.5 h-3.5 opacity-70" /></a></li>
-              <li><button onClick={() => navigate('/admin')} className="hover:text-white transition-colors">Admin Dashboard</button></li>
+              <li><button onClick={() => navigate('/admin')} className="hover:text-white transition-colors cursor-pointer">Admin Dashboard</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Legal & Compliance</h4>
             <ul className="space-y-2 text-sm">
-              <li><span className="text-slate-500">Privacy Policy</span></li>
-              <li><span className="text-slate-500">Terms of Service</span></li>
+              <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
+              <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms of Service</button></li>
               <li><span className="text-slate-500">Cookie Preferences</span></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved.</p>
-          <p className="text-blue-400 font-medium">domain: visaapply.org</p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. Independent portal. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
     </div>
@@ -1122,175 +1158,392 @@ function ArticleView({ match, articles = [], navigate }: any) {
     return <ArticleSkeleton />;
   }
 
+  const path = window.location.pathname; // example /in-to-ae-student
+  const cleanPath = path.replace('/', '');
+  const parts = cleanPath.split('-to-');
+  const routeFrom = parts[0] || fromCode;
+  const remaining = parts[1] || `${toCode}-${typeCode}`;
+  const routeTo = remaining.split('-')[0] || toCode;
+  const visaTypeRaw = remaining.split('-').slice(1).join(' ') || typeCode;
+  const visaType = visaTypeRaw.charAt(0).toUpperCase() + visaTypeRaw.slice(1);
+
+  const guideData = {
+    title: article?.title || `${routeFrom.toUpperCase()} to ${routeTo.toUpperCase()} ${visaType} Visa 2026 - Complete Guide`,
+    fee: article?.fees || '$50-$500',
+    time: '5-15 working days',
+    documents: [
+      'Valid Passport (6 months validity)',
+      'Visa Application Form',
+      'Passport Photos',
+      'Bank Statements 6 months',
+      'Travel Insurance & Flight Booking',
+      'Hotel Booking',
+      visaType.toLowerCase().includes('student') || typeCode.toLowerCase().includes('student') ? 'Admission Letter + IELTS' : null,
+      visaType.toLowerCase().includes('work') || typeCode.toLowerCase().includes('work') ? 'Job Offer + Work Contract' : null,
+    ].filter(Boolean),
+    steps: [
+      'Gather documents',
+      'Fill online form',
+      'Pay fees',
+      'Book VFS appointment',
+      'Biometrics & Submission',
+      'Track status',
+      'Get visa'
+    ]
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="bg-white rounded-xl shadow p-6">
+        <div className="text-center mb-6">
+          <div className="text-sm text-blue-600 font-bold">{fromCode.toUpperCase()} → {toCode.toUpperCase()}</div>
+          <h1 className="text-3xl font-bold mt-2">{guideData.title}</h1>
+          <div className="flex justify-center gap-4 mt-4">
+            <span className="bg-blue-100 px-4 py-2 rounded-full">Fee: {guideData.fee}</span>
+            <span className="bg-green-100 px-4 py-2 rounded-full">Time: {guideData.time}</span>
+          </div>
+        </div>
+        
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-3">📄 Required Documents</h2>
+          {guideData.documents.map((doc, i) => (
+            <div key={i} className="flex gap-2 py-2 border-b"><span>✅</span> {doc}</div>
+          ))}
+        </div>
+        
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-3">📝 Step-by-Step Process</h2>
+          {guideData.steps.map((step, i) => (
+            <div key={i} className="flex gap-3 py-2"><span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">{i+1}</span> {step}</div>
+          ))}
+        </div>
+
+        {/* Dynamic Gemini AI FAQs */}
+        <div className="mt-8 pt-8 border-t border-slate-200">
+          <h2 className="text-xl font-bold mb-4 text-slate-900 flex items-center gap-2">
+            <span>❓ Frequently Asked Questions ({fromCode.toUpperCase()} → {toCode.toUpperCase()})</span>
+          </h2>
+          {faqLoading ? (
+            <div className="space-y-3 animate-pulse">
+              <div className="h-10 bg-slate-100 rounded-xl"></div>
+              <div className="h-10 bg-slate-100 rounded-xl"></div>
+            </div>
+          ) : faqs && faqs.length > 0 ? (
+            <div className="space-y-3">
+              {faqs.map((faq, index) => (
+                <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                  <button 
+                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                    className="w-full text-left p-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-100 transition-colors cursor-pointer text-sm"
+                  >
+                    <span>{faq.q || faq.question}</span>
+                    <span className="text-slate-500 font-bold ml-2">{openFaqIndex === index ? '−' : '+'}</span>
+                  </button>
+                  {openFaqIndex === index && (
+                    <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-100 leading-relaxed">
+                      {faq.a || faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-xs text-slate-500 italic">No custom FAQs generated for this route yet. Refer to official embassy guidelines.</div>
+          )}
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-blue-50/60 p-4 rounded-xl text-sm">
+          <div className="flex items-center gap-2 text-slate-700 font-medium">
+            <Mail className="w-4 h-4 text-[#0B3D91]" />
+            <span>Need help with this visa guide? Email us:</span>
+          </div>
+          <a 
+            href="mailto:contact@visaapply.org" 
+            className="px-4 py-2 bg-[#0B3D91] text-white font-semibold rounded-lg text-xs hover:bg-[#09327a] transition-colors shadow-sm font-bold"
+          >
+            contact@visaapply.org
+          </a>
+        </div>
+        
+        <div className="mt-6 bg-yellow-50 p-4 rounded text-sm">Disclaimer: Check official embassy site for latest fees.</div>
+        <div className="mt-6 text-center"><button onClick={() => navigate('/')} className="bg-blue-600 text-white px-6 py-2 rounded cursor-pointer font-semibold hover:bg-blue-700 transition-colors">Return to Home</button></div>
+      </div>
+
+      <VisaUpdatesSignup />
+    </div>
+  );
+}
+
+// ----------------------------------------------------
+// Visa Updates Email Signup Form
+// ----------------------------------------------------
+function VisaUpdatesSignup() {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) return;
+
+    try {
+      const existing = localStorage.getItem('visa_update_subscribers');
+      const subscribers = existing ? JSON.parse(existing) : [];
+      if (!subscribers.includes(email)) {
+        subscribers.push(email);
+        localStorage.setItem('visa_update_subscribers', JSON.stringify(subscribers));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    setSubscribed(true);
+  };
+
+  return (
+    <div className="mt-10 bg-gradient-to-r from-[#0B3D91] to-[#072a68] rounded-2xl p-8 text-white shadow-lg">
+      <div className="max-w-xl mx-auto text-center space-y-4">
+        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mx-auto text-blue-200">
+          <Mail className="w-6 h-6" />
+        </div>
+        <h3 className="text-2xl font-bold tracking-tight">Get Visa Policy & Fee Updates</h3>
+        <p className="text-blue-100 text-sm">
+          Stay informed about sudden changes in visa fees, document checklists, and processing times for your favorite travel destinations.
+        </p>
+
+        {subscribed ? (
+          <div className="p-4 bg-emerald-500/20 border border-emerald-400/30 rounded-xl text-emerald-200 text-sm font-semibold flex items-center justify-center gap-2">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            <span>Subscribed successfully! You will receive visa requirement updates.</span>
+          </div>
+        ) : (
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address..."
+              required
+              className="flex-1 px-4 py-3 bg-white text-slate-900 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-slate-400"
+            />
+            <button 
+              type="submit"
+              className="px-6 py-3 bg-amber-400 text-slate-950 font-bold rounded-xl text-sm hover:bg-amber-300 transition-colors shadow-md shrink-0 cursor-pointer"
+            >
+              Subscribe
+            </button>
+          </form>
+        )}
+        <p className="text-xs text-blue-200/70">No spam. Unsubscribe anytime. Official contact: <a href="mailto:contact@visaapply.org" className="underline hover:text-white">contact@visaapply.org</a></p>
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------
+// Contact Page View Component
+// ----------------------------------------------------
+function ContactView({ navigate }: any) {
+  const [copied, setCopied] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('contact@visaapply.org');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const mailtoUrl = `mailto:contact@visaapply.org?subject=Inquiry from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+    window.location.href = mailtoUrl;
+    setFormSubmitted(true);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
         <button onClick={() => navigate('/')} className="hover:underline">Home</button>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="uppercase">{article.from} to {article.to} ({article.type})</span>
+        <span>Contact Us</span>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Article Content */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-12 relative overflow-hidden">
-          {/* Scroll Progress Bar */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-slate-100 z-20">
-            <div 
-              className="h-full bg-[#0B3D91] transition-all duration-75 ease-out"
-              style={{ width: `${scrollProgress}%` }}
-            ></div>
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="w-14 h-14 bg-blue-100 text-[#0B3D91] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Mail className="w-7 h-7" />
           </div>
-
-          <div className="flex items-center gap-3 mb-4 text-xs font-semibold">
-            <span className="bg-blue-50 text-[#0B3D91] px-3 py-1 rounded-md uppercase">{article.type} Visa</span>
-            <span className="text-slate-400">·</span>
-            <span className="text-slate-500">Published on {article.date}</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">
-            {article.title}
-          </h1>
-
-          {/* Social Media Share Component */}
-          <div className="flex flex-wrap items-center gap-3 mb-8 pb-6 border-b border-slate-100">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Share This Guide:</span>
-            <button 
-              onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank', 'width=600,height=400')}
-              className="px-3.5 py-1.5 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5"
-            >
-              <span>Facebook</span>
-            </button>
-            <button 
-              onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(window.location.href)}`, '_blank', 'width=600,height=400')}
-              className="px-3.5 py-1.5 bg-slate-900/10 text-slate-900 hover:bg-slate-900/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5"
-            >
-              <span>X (Twitter)</span>
-            </button>
-            <button 
-              onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank', 'width=600,height=400')}
-              className="px-3.5 py-1.5 bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2]/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5"
-            >
-              <span>LinkedIn</span>
-            </button>
-          </div>
-
-          <div 
-            className="prose prose-slate max-w-none space-y-6 text-slate-700 leading-relaxed text-base [&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-8 [&>h2]:mb-3 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5"
-            dangerouslySetInnerHTML={{ __html: article.contentHtml || '' }}
-          />
-
-          {/* Dynamic AI FAQ Section */}
-          <div className="mt-12 pt-8 border-t border-slate-200">
-            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#0B3D91]"></span>
-              <span>Frequently Asked Questions ({fromCode.toUpperCase()} to {toCode.toUpperCase()} {typeCode.toUpperCase()})</span>
-            </h2>
-
-            {faqLoading ? (
-              <div className="space-y-3 animate-pulse">
-                <div className="h-14 w-full bg-slate-100 rounded-xl"></div>
-                <div className="h-14 w-full bg-slate-100 rounded-xl"></div>
-              </div>
-            ) : faqs.length === 0 ? (
-              <p className="text-sm text-slate-500">No FAQs available for this route.</p>
-            ) : (
-              <div className="space-y-4">
-                {faqs.map((faq: any, idx: number) => {
-                  const isOpen = openFaqIndex === idx;
-                  return (
-                    <div key={idx} className="border border-slate-200 rounded-xl overflow-hidden bg-white transition-all">
-                      <button
-                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        className="w-full text-left p-4 font-semibold text-slate-900 text-sm sm:text-base flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors cursor-pointer"
-                      >
-                        <span>{faq.question}</span>
-                        <ChevronRight className={`w-4 h-4 text-slate-500 transition-transform shrink-0 ${isOpen ? 'rotate-90 text-[#0B3D91]' : ''}`} />
-                      </button>
-                      {isOpen && (
-                        <div className="p-4 pt-0 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/50">
-                          {faq.answer}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Contact VisaApply.org</h1>
+          <p className="text-sm text-slate-600 mt-2">
+            We reply within 24 hours. For visa queries, editorial corrections, partnerships, or advertising.
+          </p>
         </div>
 
-        {/* Right Sidebar: Quick Facts & AdSense */}
-        <div className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-28">
-            <h3 className="font-bold text-slate-900 text-lg mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
-              <Shield className="w-5 h-5 text-[#0B3D91]" />
-              <span>Visa Summary</span>
-            </h3>
+        {/* Email Card */}
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-10 text-center max-w-lg mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left">
+            <span className="text-xs font-semibold uppercase tracking-wider text-blue-700">Official Email Address</span>
+            <a href="mailto:contact@visaapply.org" className="block text-xl sm:text-2xl font-bold text-[#0B3D91] hover:underline mt-0.5">
+              contact@visaapply.org
+            </a>
+          </div>
+          <button 
+            onClick={handleCopyEmail}
+            className="px-4 py-2.5 bg-white border border-blue-300 text-[#0B3D91] font-semibold rounded-xl text-xs hover:bg-blue-100 transition-colors flex items-center gap-2 shadow-sm shrink-0 cursor-pointer"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+            <span>{copied ? 'Copied!' : 'Copy Email'}</span>
+          </button>
+        </div>
 
-            <div className="space-y-4 text-sm">
-              <div>
-                <span className="text-xs text-slate-500 font-medium block">Official Fees</span>
-                <span className="font-semibold text-slate-900 flex items-center gap-1 mt-0.5">
-                  <DollarSign className="w-4 h-4 text-emerald-600" /> {article.fees}
-                </span>
-              </div>
-              <div>
-                <span className="text-xs text-slate-500 font-medium block">Required Documents</span>
-                <p className="font-medium text-slate-800 mt-0.5 text-xs leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200">
-                  {article.docs}
-                </p>
-              </div>
-              <div>
-                <span className="text-xs text-slate-500 font-medium block">Processing Time</span>
-                <span className="font-semibold text-slate-900 flex items-center gap-1 mt-0.5">
-                  <Clock className="w-4 h-4 text-amber-600" /> 15 to 30 Business Days
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-slate-100 space-y-4">
+        {/* Contact Form */}
+        <div className="max-w-xl mx-auto">
+          {formSubmitted ? (
+            <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
+              <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+              <h3 className="font-bold text-slate-900 text-lg">Thank you for reaching out!</h3>
+              <p className="text-xs text-slate-600">Your email client has been opened to send your message to contact@visaapply.org. We reply within 24 hours.</p>
               <button 
-                onClick={() => window.print()}
-                className="w-full py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs hover:bg-slate-200 transition-colors"
+                onClick={() => setFormSubmitted(false)}
+                className="mt-4 px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl text-xs hover:bg-emerald-700 transition-colors"
               >
-                Print / Save Guide PDF
+                Send Another Message
               </button>
-              
-              {/* AdSense Sidebar Slot */}
-              <div className="pt-4 border-t border-slate-100 text-center">
-                <ins className="adsbygoogle"
-                     style={{display:'block'}}
-                     data-ad-client="ca-pub-9048615701580913"
-                     data-ad-slot="auto"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-              </div>
             </div>
-          </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Your Name</label>
+                <input 
+                  type="text" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. John Doe"
+                  required
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                <input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  required
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Message</label>
+                <textarea 
+                  rows={4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Type your visa question or inquiry here..."
+                  required
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                />
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+                <span>Send Message to contact@visaapply.org</span>
+              </button>
+            </form>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Recently Published Guides at Bottom */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-12 border-t border-slate-200">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Recently Published AI Guides</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {articles.slice(0, 3).map((art: Article) => (
-            <div 
-              key={art.slug}
-              onClick={() => navigate(`/${art.slug}`)}
-              className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
-            >
-              <div>
-                <span className="text-xs uppercase bg-blue-50 text-[#0B3D91] px-2.5 py-1 rounded-md font-semibold">{art.type} visa</span>
-                <h3 className="font-bold text-slate-900 text-base mt-3 line-clamp-2">{art.title}</h3>
-                <p className="text-xs text-slate-600 mt-2 line-clamp-2">{art.excerpt}</p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-[#0B3D91]">
-                <span>Read Complete Guide</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </div>
-            </div>
-          ))}
+// ----------------------------------------------------
+// Privacy Policy View Component
+// ----------------------------------------------------
+function PrivacyView({ navigate }: any) {
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
+        <button onClick={() => navigate('/')} className="hover:underline">Home</button>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+        <span>Privacy Policy</span>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12 space-y-6">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Privacy Policy</h1>
+        <p className="text-xs text-slate-500 font-medium">Last updated: 2026</p>
+
+        <p className="text-sm text-slate-700 leading-relaxed">
+          At <strong>VisaApply.org</strong>, we prioritize the privacy and confidentiality of our visitors. This Privacy Policy outlines the minimal information collected and how it is used across our global visa guidance services.
+        </p>
+
+        <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
+          <h2 className="text-lg font-bold text-slate-900">1. Information We Collect</h2>
+          <p>We collect minimal personal data necessary to deliver global visa requirements, documentation guidance, and updates:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Email Subscriptions:</strong> When you subscribe to 'Get Visa Updates', we save your email address in local browser storage to notify you of policy changes.</li>
+            <li><strong>Log Files & Analytics:</strong> Standard non-personally identifiable log information such as browser type, IP address, and pages visited for performance optimization.</li>
+          </ul>
+
+          <h2 className="text-lg font-bold text-slate-900">2. Cookies and Advertising</h2>
+          <p>VisaApply.org uses cookies to store visitor preferences and optimize user experience. Google AdSense and third-party vendors use cookies to serve relevant advertisements based on past visits.</p>
+
+          <h2 className="text-lg font-bold text-slate-900">3. Third-Party Links & Disclaimers</h2>
+          <p>VisaApply.org is an independent information portal. We provide external links to official embassy and immigration portals for user convenience. We are not responsible for the privacy practices or content of third-party websites.</p>
+        </div>
+
+        <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-xl text-sm text-slate-800 font-medium flex items-center justify-between gap-4">
+          <span>For any privacy queries, data requests, or concerns, contact us:</span>
+          <a href="mailto:contact@visaapply.org" className="text-[#0B3D91] font-bold hover:underline shrink-0">contact@visaapply.org</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------
+// Terms of Service View Component
+// ----------------------------------------------------
+function TermsView({ navigate }: any) {
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
+        <button onClick={() => navigate('/')} className="hover:underline">Home</button>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+        <span>Terms of Service</span>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12 space-y-6">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Terms of Service</h1>
+        <p className="text-xs text-slate-500 font-medium">Last updated: 2026</p>
+
+        <p className="text-sm text-slate-700 leading-relaxed">
+          Welcome to <strong>VisaApply.org</strong>. By accessing or using our website, you agree to comply with and be bound by the following terms and conditions.
+        </p>
+
+        <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
+          <h2 className="text-lg font-bold text-slate-900">1. Information & Non-Governmental Status</h2>
+          <p>VisaApply.org is an independent travel intelligence and informational portal. <strong>We are NOT affiliated with VFS Global, IRCC, USCIS, or any government embassy or diplomatic mission.</strong> Official visa applications, biometrics, and fee payments must be processed directly through official government channels.</p>
+
+          <h2 className="text-lg font-bold text-slate-900">2. Content Accuracy & Disclaimers</h2>
+          <p>While we make every effort to maintain updated requirements, visa fees, document checklists, and processing timelines, immigration policies change frequently without prior notice. Users are advised to double-check information on official embassy channels before making non-refundable travel bookings.</p>
+
+          <h2 className="text-lg font-bold text-slate-900">3. Intellectual Property</h2>
+          <p>All guides, tools, and content published on VisaApply.org are protected by copyright laws. Reproduction without written consent is prohibited.</p>
+        </div>
+
+        <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-xl text-sm text-slate-800 font-medium flex items-center justify-between gap-4">
+          <span>For any legal or editorial queries, contact us:</span>
+          <a href="mailto:contact@visaapply.org" className="text-[#0B3D91] font-bold hover:underline shrink-0">contact@visaapply.org</a>
         </div>
       </div>
     </div>
@@ -1545,6 +1798,10 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="mt-8 text-center text-xs text-slate-500 font-medium">
+        VisaApply.org Editorial Management Portal · Support: <a href="mailto:contact@visaapply.org" className="text-[#0B3D91] font-bold hover:underline">contact@visaapply.org</a>
       </div>
     </div>
   );
