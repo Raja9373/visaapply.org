@@ -839,9 +839,32 @@ function ArticleView({ match, navigate }: any) {
             <span className="text-slate-400">·</span>
             <span className="text-slate-500">Published on {article.date}</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-8">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">
             {article.title}
           </h1>
+
+          {/* Social Media Share Component */}
+          <div className="flex flex-wrap items-center gap-3 mb-8 pb-6 border-b border-slate-100">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Share This Guide:</span>
+            <button 
+              onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank', 'width=600,height=400')}
+              className="px-3.5 py-1.5 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5"
+            >
+              <span>Facebook</span>
+            </button>
+            <button 
+              onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(window.location.href)}`, '_blank', 'width=600,height=400')}
+              className="px-3.5 py-1.5 bg-slate-900/10 text-slate-900 hover:bg-slate-900/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5"
+            >
+              <span>X (Twitter)</span>
+            </button>
+            <button 
+              onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank', 'width=600,height=400')}
+              className="px-3.5 py-1.5 bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2]/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5"
+            >
+              <span>LinkedIn</span>
+            </button>
+          </div>
 
           <div 
             className="prose prose-slate max-w-none space-y-6 text-slate-700 leading-relaxed text-base [&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-8 [&>h2]:mb-3 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5"
