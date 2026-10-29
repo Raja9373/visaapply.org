@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas } from './data/fullVisaDatabase';
+import { getEmbassyInfo } from './data/embassyAddresses';
+import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
+import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
+import { VerificationView } from './components/VerificationView';
+import { JP_TO_IN_VISA } from './data/jpToInDetailed';
 import { marked } from 'marked';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
   ArrowRight, ExternalLink, Clock, DollarSign, Menu, X, ChevronRight, Check,
-  Mail, Copy, Send
+  Mail, Copy, Send, MapPin, Phone
 } from 'lucide-react';
 
 interface Country {
@@ -166,22 +171,54 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
   const fromCode = match[1].toUpperCase();
   const toCode = match[2].toUpperCase();
 
+  const initialLang = LANGUAGE_MAP[fromCode] || 'en';
+  const [currentLang, setCurrentLang] = useState(initialLang);
+
+  useEffect(() => {
+    setCurrentLang(LANGUAGE_MAP[fromCode] || 'en');
+  }, [fromCode]);
+
+  const t = getTranslation(currentLang);
+  const isJa = currentLang === 'ja';
+
   const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
   const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
 
-  const countryVisas = FULL_VISA_DB[toCode] || FULL_VISA_DB["US"];
+  const isJpToIn = fromCode === 'JP' && toCode === 'IN';
+  const countryVisas = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
 
   const CATEGORIES = [
-    { id: 'tourist', name: 'Tourist Visa', icon: '🏖️', desc: 'Vacations, sightseeing, visiting friends & short term stay', count: countryVisas?.tourist?.length || 2 },
-    { id: 'work', name: 'Work Visa', icon: '💼', desc: 'Employment, job permit, executive transfers & skilled work', count: countryVisas?.work?.length || 2 },
-    { id: 'student', name: 'Student Visa', icon: '🎓', desc: 'Higher education, university degree & vocational study', count: countryVisas?.student?.length || 2 },
-    { id: 'family', name: 'Family Visa', icon: '👨‍👩‍👧', desc: 'Spouse, children, parents & dependent residence permits', count: countryVisas?.family?.length || 2 },
-    { id: 'business', name: 'Business Visa', icon: '🤝', desc: 'Corporate meetings, conferences & commercial investor options', count: countryVisas?.business?.length || 2 },
-    { id: 'pr', name: 'PR / Golden Visa', icon: '🏠', desc: 'Permanent residency, long term immigration & golden investments', count: countryVisas?.pr?.length || 2 }
+    { id: 'tourist', name: t.touristVisa, icon: '🏖️', desc: isJa ? '観光、親族訪問、短期滞在、ヨガ・瞑想' : 'Vacations, sightseeing, visiting friends & short term stay', count: countryVisas?.tourist?.length || 2 },
+    { id: 'work', name: t.workVisa, icon: '💼', desc: isJa ? '就労、駐在員、技術指導、専門業務' : 'Employment, job permit, executive transfers & skilled work', count: countryVisas?.work?.length || 2 },
+    { id: 'student', name: t.studentVisa, icon: '🎓', desc: isJa ? '大学・大学院留学、研究機関、語学研修' : 'Higher education, university degree & vocational study', count: countryVisas?.student?.length || 2 },
+    { id: 'family', name: t.familyVisa, icon: '👨‍👩‍👧', desc: isJa ? '配偶者・家族帯同、同伴ビザ' : 'Spouse, children, parents & dependent residence permits', count: countryVisas?.family?.length || 2 },
+    { id: 'business', name: t.businessVisa, icon: '🤝', desc: isJa ? '商談、会議出張、市場調査、契約締結' : 'Corporate meetings, conferences & commercial investor options', count: countryVisas?.business?.length || 2 },
+    { id: 'pr', name: t.prVisa, icon: '🏠', desc: isJa ? 'インド海外市民権（OCI）、終身ビザ免除' : 'Permanent residency, long term immigration & golden investments', count: countryVisas?.pr?.length || 2 }
   ];
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Language Bar */}
+      <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+        <div className="flex items-center gap-2 font-bold text-slate-800">
+          <Globe className="w-4 h-4 text-[#0B3D91]" />
+          <span>Language / 言語:</span>
+          {isJpToIn && (
+            <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
+              🇯🇵 日本人向け特別ガイド
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <button onClick={() => setCurrentLang('en')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'en' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇺🇸 English</button>
+          <button onClick={() => setCurrentLang('ja')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'ja' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇯🇵 日本語</button>
+          <button onClick={() => setCurrentLang('de')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'de' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇩🇪 Deutsch</button>
+          <button onClick={() => setCurrentLang('fr')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'fr' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇫🇷 Français</button>
+          <button onClick={() => setCurrentLang('es')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'es' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇪🇸 Español</button>
+          <button onClick={() => setCurrentLang('hi')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'hi' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇮🇳 हिन्दी</button>
+        </div>
+      </div>
+
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
         <button onClick={() => navigate('/')} className="hover:underline cursor-pointer">Home</button>
@@ -197,10 +234,10 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
             <span className="text-4xl">{toCountry.flag}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Travel from {fromCountry.name} to {toCountry.name}
+            {isJa ? `${fromCountry.name}から${toCountry.name}への渡航ビザ` : `Travel from ${fromCountry.name} to ${toCountry.name}`}
           </h1>
           <p className="text-sm text-slate-600 mt-2">
-            Step 1 of 2: Select your primary purpose of travel below to see all official visa options.
+            {isJa ? 'ステップ 1/2: 渡航目的を選択して公式ビザ一覧を確認' : 'Step 1 of 2: Select your primary purpose of travel below to see all official visa options.'}
           </p>
         </div>
 
@@ -215,14 +252,14 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-4xl">{cat.icon}</span>
                   <span className="bg-blue-100 text-[#0B3D91] text-xs font-bold px-2.5 py-1 rounded-full">
-                    {cat.count} Visa Types
+                    {cat.count} {isJa ? '種類' : 'Visa Types'}
                   </span>
                 </div>
                 <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors">{cat.name}</h3>
                 <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">{cat.desc}</p>
               </div>
               <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#0B3D91]">
-                <span>Explore Category</span>
+                <span>{isJa ? 'ビザ一覧を見る' : 'Explore Category'}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </button>
@@ -241,16 +278,48 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   const toCode = match[2].toUpperCase();
   const category = match[3].toLowerCase() as keyof CountryVisas;
 
+  const initialLang = LANGUAGE_MAP[fromCode] || 'en';
+  const [currentLang, setCurrentLang] = useState(initialLang);
+
+  useEffect(() => {
+    setCurrentLang(LANGUAGE_MAP[fromCode] || 'en');
+  }, [fromCode]);
+
+  const t = getTranslation(currentLang);
+  const isJa = currentLang === 'ja';
+
   const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
   const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
 
-  const countryVisas = FULL_VISA_DB[toCode] || FULL_VISA_DB["US"];
+  const isJpToIn = fromCode === 'JP' && toCode === 'IN';
+  const countryVisas = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
   const categoryVisas = countryVisas[category] || [];
 
   const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Language Bar */}
+      <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+        <div className="flex items-center gap-2 font-bold text-slate-800">
+          <Globe className="w-4 h-4 text-[#0B3D91]" />
+          <span>Language / 言語:</span>
+          {isJpToIn && (
+            <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
+              🇯🇵 日本人向け特別ガイド
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <button onClick={() => setCurrentLang('en')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'en' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇺🇸 English</button>
+          <button onClick={() => setCurrentLang('ja')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'ja' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇯🇵 日本語</button>
+          <button onClick={() => setCurrentLang('de')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'de' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇩🇪 Deutsch</button>
+          <button onClick={() => setCurrentLang('fr')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'fr' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇫🇷 Français</button>
+          <button onClick={() => setCurrentLang('es')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'es' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇪🇸 Español</button>
+          <button onClick={() => setCurrentLang('hi')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'hi' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇮🇳 हिन्दी</button>
+        </div>
+      </div>
+
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
         <button onClick={() => navigate('/')} className="hover:underline cursor-pointer">Home</button>
@@ -269,10 +338,16 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
           <span className="text-3xl">{toCountry.flag}</span>
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          {fromCountry.name} to {toCountry.name} {categoryTitle} Visas ({categoryVisas.length} Types)
+          {isJa 
+            ? `${fromCountry.name}から${toCountry.name}への${t[(`${category}Visa` as keyof typeof t) || 'touristVisa']} (${categoryVisas.length}種類)`
+            : `${fromCountry.name} to ${toCountry.name} ${categoryTitle} Visas (${categoryVisas.length} Types)`
+          }
         </h1>
         <p className="text-sm text-slate-600 mt-2">
-          Official list of all {categoryVisas.length} {categoryTitle.toLowerCase()} visa categories for {toCountry.name}. Select a specific visa type below to view full requirements, document checklists, and application guidelines.
+          {isJa 
+            ? `${toCountry.name}の全${categoryVisas.length}種類の${t[(`${category}Visa` as keyof typeof t) || 'touristVisa']}一覧です。詳細、必要書類、手続きを確認したいビザを選択してください。`
+            : `Official list of all ${categoryVisas.length} ${categoryTitle.toLowerCase()} visa categories for ${toCountry.name}. Select a specific visa type below to view full requirements, document checklists, and application guidelines.`
+          }
         </p>
       </div>
 
@@ -291,21 +366,25 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
                 <span className="text-3xl">{v.icon || '📄'}</span>
                 {v.popular && (
                   <span className="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    ⭐ Popular Choice
+                    ⭐ {isJa ? '人気・おすすめ' : 'Popular Choice'}
                   </span>
                 )}
               </div>
-              <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">{v.name}</h3>
-              <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">{v.purpose}</p>
+              <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">
+                {(isJa && v.name_ja) ? v.name_ja : v.name}
+              </h3>
+              <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
+                {(isJa && v.purpose_ja) ? v.purpose_ja : v.purpose}
+              </p>
 
               <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span className="text-slate-400 block font-medium">Official Fee</span>
+                  <span className="text-slate-400 block font-medium">{t.fee}</span>
                   <span className="font-bold text-slate-800">{v.fee}</span>
                 </div>
                 {v.validity && (
                   <div>
-                    <span className="text-slate-400 block font-medium">Validity</span>
+                    <span className="text-slate-400 block font-medium">{t.validity}</span>
                     <span className="font-bold text-slate-800">{v.validity}</span>
                   </div>
                 )}
@@ -313,7 +392,7 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
             </div>
 
             <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#0B3D91]">
-              <span>View Requirements & Docs</span>
+              <span>{isJa ? '必要書類と詳細を見る' : 'View Requirements & Docs'}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
@@ -323,14 +402,18 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
       {/* Suggest Missing Visa CTA */}
       <div className="bg-slate-100 border border-slate-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <h4 className="font-bold text-slate-900 text-sm">Looking for a specific visa type not listed here?</h4>
-          <p className="text-xs text-slate-600 mt-0.5">Our editorial team updates official visa rules daily. Let us know and we will add it within 24 hours.</p>
+          <h4 className="font-bold text-slate-900 text-sm">
+            {isJa ? 'ご希望のビザタイプが見つかりませんか？' : 'Looking for a specific visa type not listed here?'}
+          </h4>
+          <p className="text-xs text-slate-600 mt-0.5">
+            {isJa ? '編集チームが最新ビザ情報を毎日更新しています。追加リクエストはお気軽にお問い合わせください。' : 'Our editorial team updates official visa rules daily. Let us know and we will add it within 24 hours.'}
+          </p>
         </div>
         <a 
-          href={`mailto:contact@visaapply.org?subject=Missing Visa Request for ${toCountry.name} ${categoryTitle}&body=Hi VisaApply team, please add visa type for ${fromCountry.name} to ${toCountry.name}...`}
+          href={`mailto:contact@visaapply.org?subject=Missing Visa Request for ${toCountry.name} ${categoryTitle}`}
           className="px-5 py-2.5 bg-[#0B3D91] text-white font-bold text-xs rounded-xl hover:bg-[#09327a] transition-colors shrink-0 cursor-pointer shadow-sm"
         >
-          Suggest Missing Visa
+          {isJa ? 'リクエストを送信' : 'Suggest Missing Visa'}
         </a>
       </div>
     </div>
@@ -505,6 +588,7 @@ export default function App() {
   const isPrivacy = currentPath === '/privacy';
   const isTerms = currentPath === '/terms';
   const isSitemap = currentPath === '/sitemap';
+  const isVerification = currentPath === '/verification';
 
   // 1. Level 1: /in-to-us
   const isLevel1Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/i);
@@ -539,6 +623,9 @@ export default function App() {
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
             <button onClick={() => navigate('/sitemap')} className={`transition-colors cursor-pointer ${currentPath === '/sitemap' ? 'text-white font-bold' : 'hover:text-white'}`}>All Visa Guides</button>
+            <button onClick={() => navigate('/verification')} className={`transition-colors cursor-pointer ${currentPath === '/verification' ? 'text-emerald-300 font-bold' : 'hover:text-emerald-200'} flex items-center gap-1`}>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 540 Visas Check
+            </button>
             <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
             <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
               <Shield className="w-4 h-4 text-amber-300" /> Admin Portal
@@ -567,6 +654,7 @@ export default function App() {
           <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
             <button onClick={() => { navigate('/sitemap'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">All Visa Guides</button>
+            <button onClick={() => { navigate('/verification'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-emerald-200 font-medium">540 Visas Check</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
           </div>
@@ -588,6 +676,8 @@ export default function App() {
             onDelete={handleDeleteDraft}
             navigate={navigate}
           />
+        ) : isVerification ? (
+          <VerificationView navigate={navigate} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (
@@ -1295,6 +1385,16 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const categoryCode = (match[3] || 'tourist').toLowerCase();
   const subtypeCode = match[4] ? match[4].toLowerCase() : categoryCode;
 
+  const initialLang = LANGUAGE_MAP[fromCode] || 'en';
+  const [currentLang, setCurrentLang] = useState(initialLang);
+
+  useEffect(() => {
+    setCurrentLang(LANGUAGE_MAP[fromCode] || 'en');
+  }, [fromCode]);
+
+  const t = getTranslation(currentLang);
+  const isJa = currentLang === 'ja';
+
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [faqs, setFaqs] = useState<any[]>([]);
@@ -1302,7 +1402,8 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [checkedDocs, setCheckedDocs] = useState<Record<number, boolean>>({});
 
-  const countryData = FULL_VISA_DB[toCode] || FULL_VISA_DB["US"];
+  const isJpToIn = fromCode === 'JP' && toCode === 'IN';
+  const countryData = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
   const categoryVisas = countryData[categoryCode as keyof CountryVisas] || countryData['tourist'] || [];
   
   // Find matching subtype visa in database
@@ -1339,11 +1440,13 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const fromCountry = FALLBACK_COUNTRIES.find(c => c.code === fromCode) || { name: fromCode, flag: '🌍' };
   const toCountry = FALLBACK_COUNTRIES.find(c => c.code === toCode) || { name: toCode, flag: '🏛️' };
 
-  const guideTitle = dbVisaItem 
-    ? `${fromCountry.name} to ${toCountry.name} ${dbVisaItem.name} (2026 Guide)`
-    : `${fromCode} to ${toCode} ${categoryCode.toUpperCase()} Visa - Complete Guide`;
+  const visaName = (isJa && dbVisaItem?.name_ja) ? dbVisaItem.name_ja : (dbVisaItem?.name || subtypeCode.toUpperCase());
 
-  const docsList = dbVisaItem?.docs || [
+  const guideTitle = isJa 
+    ? `${fromCountry.name}から${toCountry.name}への${visaName} (2026年最新ガイド)`
+    : `${fromCountry.name} to ${toCountry.name} ${visaName} (2026 Guide)`;
+
+  const docsList = (isJa && dbVisaItem?.docs_ja) ? dbVisaItem.docs_ja : (dbVisaItem?.docs || [
     'Valid Passport (minimum 6 months validity)',
     'Completed Official Visa Application Form',
     'Passport-size photographs as per spec',
@@ -1351,18 +1454,18 @@ function ArticleView({ match, articles = [], navigate }: any) {
     'Income Tax Return (ITR) / Tax assessment for past 2-3 years',
     'Proof of Accommodation / Hotel Booking',
     'Confirmed Travel Itinerary / Flight Ticket'
-  ];
+  ]);
 
-  const infoReqList = dbVisaItem?.infoReq || [
+  const infoReqList = (isJa && dbVisaItem?.infoReq_ja) ? dbVisaItem.infoReq_ja : (dbVisaItem?.infoReq || [
     'Full Name, DOB, Passport No, Issue & Expiry Date, Place of Issue',
     'Father, Mother & Spouse Full Names & Dates of Birth',
     'Host Address in Destination Country, Contact Name & Phone',
     'Employer / Company Name, Business Address, Job Title & Monthly Income',
     'Prior travel history to destination country, visa refusal dates & reasons',
     'Security, Health & Criminal Background Declarations'
-  ];
+  ]);
 
-  const stepsList = dbVisaItem?.steps || [
+  const stepsList = (isJa && dbVisaItem?.steps_ja) ? dbVisaItem.steps_ja : (dbVisaItem?.steps || [
     'Check eligibility criteria and gather required documents',
     'Fill official online visa application form',
     'Pay required visa fee',
@@ -1371,7 +1474,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
     'Attend consulate visa interview (if required)',
     'Track visa application status online',
     'Collect passport with visa stamp'
-  ];
+  ]);
 
   const toggleDocCheck = (idx: number) => {
     setCheckedDocs(prev => ({ ...prev, [idx]: !prev[idx] }));
@@ -1379,6 +1482,27 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Language Switcher Toolbar */}
+      <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+        <div className="flex items-center gap-2 font-bold text-slate-800">
+          <Globe className="w-4 h-4 text-[#0B3D91]" />
+          <span>Language / 言語:</span>
+          {isJpToIn && (
+            <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
+              🇯🇵 日本人向け特別ガイド
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <button onClick={() => setCurrentLang('en')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'en' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇺🇸 English</button>
+          <button onClick={() => setCurrentLang('ja')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'ja' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇯🇵 日本語</button>
+          <button onClick={() => setCurrentLang('de')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'de' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇩🇪 Deutsch</button>
+          <button onClick={() => setCurrentLang('fr')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'fr' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇫🇷 Français</button>
+          <button onClick={() => setCurrentLang('es')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'es' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇪🇸 Español</button>
+          <button onClick={() => setCurrentLang('hi')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'hi' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇮🇳 हिन्दी</button>
+        </div>
+      </div>
       {/* Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium no-print">
         <button onClick={() => navigate('/')} className="hover:underline cursor-pointer">Home</button>
@@ -1409,38 +1533,40 @@ function ArticleView({ match, articles = [], navigate }: any) {
           </h1>
 
           <p className="text-sm text-slate-600 max-w-2xl mx-auto">
-            {dbVisaItem?.purpose || `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${fromCountry.name} passport holders.`}
+            {(isJa && dbVisaItem?.purpose_ja) ? dbVisaItem.purpose_ja : (dbVisaItem?.purpose || `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${fromCountry.name} passport holders.`)}
           </p>
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 max-w-2xl mx-auto text-xs">
             <div className="bg-blue-50/70 p-3 rounded-xl border border-blue-100 text-center">
-              <span className="text-slate-500 block font-medium">Official Fee</span>
+              <span className="text-slate-500 block font-medium">{t.fee}</span>
               <span className="font-bold text-[#0B3D91] text-sm mt-0.5 block">{dbVisaItem?.fee || '$185'}</span>
             </div>
             <div className="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100 text-center">
-              <span className="text-slate-500 block font-medium">Validity</span>
+              <span className="text-slate-500 block font-medium">{t.validity}</span>
               <span className="font-bold text-emerald-800 text-sm mt-0.5 block">{dbVisaItem?.validity || 'Up to 10 yrs'}</span>
             </div>
             <div className="bg-amber-50/70 p-3 rounded-xl border border-amber-100 text-center">
-              <span className="text-slate-500 block font-medium">Max Stay</span>
-              <span className="font-bold text-amber-800 text-sm mt-0.5 block">{dbVisaItem?.stay || '6 months/visit'}</span>
+              <span className="text-slate-500 block font-medium">{t.maxStay}</span>
+              <span className="font-bold text-amber-800 text-sm mt-0.5 block">{dbVisaItem?.stay || '90 days/visit'}</span>
             </div>
             <div className="bg-purple-50/70 p-3 rounded-xl border border-purple-100 text-center">
-              <span className="text-slate-500 block font-medium">Processing</span>
-              <span className="font-bold text-purple-800 text-sm mt-0.5 block">5-15 Days</span>
+              <span className="text-slate-500 block font-medium">{t.processing}</span>
+              <span className="font-bold text-purple-800 text-sm mt-0.5 block">3-5 Days</span>
             </div>
           </div>
         </div>
 
         {/* Eligibility & Overview */}
-        {dbVisaItem?.eligibility && (
+        {(dbVisaItem?.eligibility || dbVisaItem?.eligibility_ja) && (
           <div className="bg-blue-50/50 border border-blue-200 rounded-xl p-5 text-xs sm:text-sm text-slate-800 space-y-1">
             <h3 className="font-bold text-[#0B3D91] flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Eligibility & Requirements Summary</span>
+              <span>{t.eligibility}</span>
             </h3>
-            <p className="leading-relaxed">{dbVisaItem.eligibility}</p>
+            <p className="leading-relaxed">
+              {(isJa && dbVisaItem?.eligibility_ja) ? dbVisaItem.eligibility_ja : dbVisaItem?.eligibility}
+            </p>
           </div>
         )}
 
@@ -1449,63 +1575,24 @@ function ArticleView({ match, articles = [], navigate }: any) {
           <div className="flex items-center justify-between border-b pb-2">
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <FileText className="w-5 h-5 text-[#0B3D91]" />
-              <span>Information Required in Official Application Form</span>
+              <span>{t.infoRequired}</span>
             </h2>
             <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Mandatory Data</span>
           </div>
 
           <p className="text-xs text-slate-600">
-            Keep the following key biographic, financial, and travel details ready before filling the official online visa form:
+            {isJa ? '公式オンラインビザ申請フォームへの入力前に、以下の基本情報を手元にご用意ください:' : 'Keep the following key biographic, financial, and travel details ready before filling the official online visa form:'}
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-[#0B3D91]">
-                1. Biographic & Passport Info
-              </h4>
-              <ul className="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
-                <li>Full Name, Previous / Other Names used</li>
-                <li>Date & Place of Birth, Gender, Marital Status</li>
-                <li>Passport No, Issue & Expiry Date, Issue Authority</li>
-                <li>Details of any previous / expired passports</li>
-              </ul>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-[#0B3D91]">
-                2. Travel & Host Details
-              </h4>
-              <ul className="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
-                <li>Intended Arrival Date & Stay Duration</li>
-                <li>Hotel Booking Address / Relative Contact in Destination</li>
-                <li>Payer Entity / Individual funding the trip</li>
-                <li>Detailed Travel Itinerary & Cities to visit</li>
-              </ul>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-[#0B3D91]">
-                3. Family, Job & Financials
-              </h4>
-              <ul className="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
-                <li>Father's & Mother's Full Names & Dates of Birth</li>
-                <li>Present Employer / Business Name, Address, Monthly Salary</li>
-                <li>Work experience history (past 5 years)</li>
-                <li>Educational degrees & institutions attended</li>
-              </ul>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-[#0B3D91]">
-                4. Background & Travel History
-              </h4>
-              <ul className="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
-                <li>Prior visits to target country & visa history</li>
-                <li>Any previous visa refusals (Date & Reason)</li>
-                <li>Countries visited in past 5-10 years</li>
-                <li>Standard legal, medical & security declarations (NO)</li>
-              </ul>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {infoReqList.map((item: string, idx: number) => (
+              <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-medium flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-blue-100 text-[#0B3D91] font-bold flex items-center justify-center shrink-0 text-[10px]">
+                  {idx + 1}
+                </span>
+                <span className="mt-0.5 leading-relaxed">{item}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -1513,9 +1600,11 @@ function ArticleView({ match, articles = [], navigate }: any) {
         <div className="space-y-4 pt-4 border-t border-slate-200">
           <div className="flex items-center justify-between border-b pb-2">
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-              <span>📄 Required Documents Checklist</span>
+              <span>📄 {t.requiredDocs}</span>
             </h2>
-            <span className="text-xs text-slate-500 font-medium">{Object.keys(checkedDocs).filter(k => checkedDocs[Number(k)]).length} of {docsList.length} Checked</span>
+            <span className="text-xs text-slate-500 font-medium">
+              {Object.keys(checkedDocs).filter(k => checkedDocs[Number(k)]).length} {isJa ? '/' : 'of'} {docsList.length} {t.checkedCount}
+            </span>
           </div>
 
           <div className="space-y-2">
@@ -1544,7 +1633,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         {/* Step-by-Step Process */}
         <div className="space-y-4 pt-4 border-t border-slate-200">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>📝 Step-by-Step Application Process</span>
+            <span>📝 {t.steps}</span>
           </h2>
 
           <div className="space-y-3">
@@ -1563,7 +1652,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         {dbVisaItem?.tips && (
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-xs sm:text-sm text-amber-900 space-y-1">
             <h3 className="font-bold flex items-center gap-2 text-amber-950">
-              💡 Expert Application & Interview Tips
+              💡 {t.tips}
             </h3>
             <p className="leading-relaxed">
               {typeof dbVisaItem.tips === 'string' ? dbVisaItem.tips : (dbVisaItem.tips as string[]).join(' ')}
@@ -1574,7 +1663,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         {/* Dynamic Gemini AI / Database FAQs */}
         <div className="space-y-4 pt-4 border-t border-slate-200">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>❓ Frequently Asked Questions ({fromCode} → {toCode})</span>
+            <span>❓ {t.faqs} ({fromCode} → {toCode})</span>
           </h2>
 
           {faqLoading ? (
@@ -1606,13 +1695,130 @@ function ArticleView({ match, articles = [], navigate }: any) {
           )}
         </div>
 
+        {/* Official Embassy, Consulate & VFS Contact Details */}
+        {(() => {
+          const embassyData = getEmbassyInfo(toCode, fromCode);
+          return (
+            <div className="space-y-4 pt-4 border-t border-slate-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-[#0B3D91]" />
+                  <span>{t.embassy} ({embassyData.country})</span>
+                </h2>
+                {embassyData.vfs && (
+                  <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                    {embassyData.vfs}
+                  </span>
+                )}
+              </div>
+
+              {dbVisaItem?.embassy?.tokyo && (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl text-xs space-y-1">
+                  <span className="font-bold text-[#0B3D91] block">🏛️ 日本国内の在日インド大使館・領事館情報 (Tokyo & Osaka):</span>
+                  <p className="text-slate-800 font-medium">{dbVisaItem.embassy.tokyo}</p>
+                  {dbVisaItem.embassy.osaka && <p className="text-slate-800 font-medium">{dbVisaItem.embassy.osaka}</p>}
+                </div>
+              )}
+
+              {embassyData.officialWebsite && (
+                <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                    <Globe className="w-4 h-4 text-[#0B3D91]" />
+                    {t.officialGovLink}:
+                  </span>
+                  <a 
+                    href={embassyData.officialWebsite.startsWith('http') ? embassyData.officialWebsite : `https://${embassyData.officialWebsite}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="font-bold text-[#0B3D91] hover:underline flex items-center gap-1 break-all"
+                  >
+                    <span>{embassyData.officialWebsite}</span>
+                    <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                  </a>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {embassyData.inIndia.map((item, idx) => (
+                  <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-shadow shadow-xs space-y-2 text-xs text-slate-700">
+                    <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                      <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                        <Building2 className="w-4 h-4 text-[#0B3D91] shrink-0" />
+                        <span>{item.city}</span>
+                      </h3>
+                      {item.map && (
+                        <a 
+                          href={item.map} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-[#0B3D91] hover:underline flex items-center gap-1 font-semibold text-[11px] shrink-0"
+                        >
+                          <MapPin className="w-3.5 h-3.5" />
+                          <span>Map</span>
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5 text-slate-600">
+                      <p className="flex items-start gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                        <span className="leading-relaxed">{item.address}</span>
+                      </p>
+
+                      {item.phone && (
+                        <p className="flex items-center gap-2">
+                          <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <a href={`tel:${item.phone}`} className="text-slate-800 font-semibold hover:text-[#0B3D91] transition-colors">
+                            {item.phone}
+                          </a>
+                        </p>
+                      )}
+
+                      {item.email && (
+                        <p className="flex items-center gap-2">
+                          <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <a href={`mailto:${item.email}`} className="text-[#0B3D91] font-semibold hover:underline break-all">
+                            {item.email}
+                          </a>
+                        </p>
+                      )}
+
+                      {item.timings && (
+                        <p className="flex items-center gap-2 text-slate-500">
+                          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>{item.timings}</span>
+                        </p>
+                      )}
+
+                      {item.website && (
+                        <p className="flex items-center gap-2">
+                          <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <a 
+                            href={item.website.startsWith('http') ? item.website : `https://${item.website}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-[#0B3D91] font-semibold hover:underline flex items-center gap-1"
+                          >
+                            <span>{item.website}</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Action Toolbar: Print / Email Support */}
         <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-100 p-4 rounded-2xl no-print">
           <button 
             onClick={() => window.print()}
             className="w-full sm:w-auto px-5 py-2.5 bg-slate-800 text-white font-bold rounded-xl text-xs hover:bg-slate-900 transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
           >
-            🖨️ Download / Print Checklist PDF
+            🖨️ {t.downloadChecklist}
           </button>
 
           <a 
@@ -1620,12 +1826,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
             className="w-full sm:w-auto px-5 py-2.5 bg-[#0B3D91] text-white font-bold rounded-xl text-xs hover:bg-[#09327a] transition-colors flex items-center justify-center gap-2 shadow-sm text-center"
           >
             <Mail className="w-4 h-4" />
-            <span>Need Help? contact@visaapply.org</span>
+            <span>{t.contact}</span>
           </a>
         </div>
 
         <div className="mt-4 bg-yellow-50 border border-yellow-200 p-4 rounded-xl text-xs text-slate-700">
-          <strong>Disclaimer:</strong> VisaApply.org is an independent information portal. Visa rules, fees, and requirements can change without prior notice. Always verify details on the official government or consulate website before submitting your application.
+          {t.disclaimer}
         </div>
       </div>
 
