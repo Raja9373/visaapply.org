@@ -712,6 +712,15 @@ function SitemapView({ countries, visaTypes, navigate }: any) {
   );
 }
 
+const VISA_TYPES = [
+  { id: 'tourist', name: 'Tourist Visa', label: 'Tourist Visa', icon: '🏖️', desc: 'Vacation, sightseeing, short visits' },
+  { id: 'work', name: 'Work Visa', label: 'Work Visa', icon: '💼', desc: 'Employment, job, work permit' },
+  { id: 'student', name: 'Student Visa', label: 'Student Visa', icon: '🎓', desc: 'Study, university, education' },
+  { id: 'family', name: 'Family Visa', label: 'Family Visa', icon: '👨‍👩‍👧', desc: 'Spouse, family reunion, dependent' },
+  { id: 'business', name: 'Business Visa', label: 'Business Visa', icon: '🤝', desc: 'Meetings, conferences, business' },
+  { id: 'pr', name: 'PR / Golden Visa', label: 'PR / Golden Visa', icon: '🏠', desc: 'Permanent residency, immigration' }
+];
+
 // ----------------------------------------------------
 // Visa Quiz View Component (2-Step Wizard)
 // ----------------------------------------------------
@@ -721,6 +730,8 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
   const storageKey = `visa_quiz_${fromCode}_${toCode}`;
 
   const [resumed, setResumed] = useState(false);
+
+  const activeVisaTypes = (visaTypes && visaTypes.length > 0) ? visaTypes : VISA_TYPES;
 
   useEffect(() => {
     try {
@@ -764,9 +775,11 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
   const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
   const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
 
-  const handleSelectType = (typeId: string) => {
-    setSelectedVisaType(typeId);
-    setQuizStep(2);
+  const handleVisaSelect = (typeId: string) => {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch (e) {}
+    navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${typeId}`);
   };
 
   const handleCompleteQuiz = () => {
@@ -815,32 +828,27 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
         {quizStep === 1 ? (
           <div>
             <h2 className="text-lg font-semibold text-slate-900 mb-6 text-center">Why do you want to go to {toCountry.name}?</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {visaTypes.map((vt: VisaType) => {
-                const isSelected = selectedVisaType === vt.id;
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+              {activeVisaTypes.map((type: any) => {
+                const icon = type.icon || (
+                  type.id === 'tourist' ? '🏖️' :
+                  type.id === 'work' ? '💼' :
+                  type.id === 'student' ? '🎓' :
+                  type.id === 'family' ? '👨‍👩‍👧' :
+                  type.id === 'business' ? '🤝' : '🏠'
+                );
                 return (
-                  <button
-                    key={vt.id}
-                    onClick={() => handleSelectType(vt.id)}
-                    className={`text-left p-5 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
-                      isSelected 
-                        ? 'border-[#0B3D91] bg-blue-50/50 shadow-md' 
-                        : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
-                    }`}
+                  <button 
+                    key={type.id}
+                    onClick={() => handleVisaSelect(type.id)}
+                    className="p-6 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition text-left cursor-pointer bg-white shadow-sm flex flex-col justify-between"
                   >
                     <div>
-                      <div className="w-10 h-10 rounded-lg bg-[#0B3D91]/10 text-[#0B3D91] flex items-center justify-center mb-3">
-                        {vt.id === 'tourist' && <Plane className="w-5 h-5" />}
-                        {vt.id === 'work' && <Briefcase className="w-5 h-5" />}
-                        {vt.id === 'student' && <GraduationCap className="w-5 h-5" />}
-                        {vt.id === 'family' && <Users className="w-5 h-5" />}
-                        {vt.id === 'business' && <Building2 className="w-5 h-5" />}
-                        {vt.id === 'pr' && <Award className="w-5 h-5" />}
-                      </div>
-                      <h3 className="font-bold text-slate-900 text-base">{vt.name}</h3>
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">{vt.desc}</p>
+                      <div className="text-3xl mb-2">{icon}</div>
+                      <div className="font-bold text-lg text-slate-900">{type.name || type.label}</div>
+                      <div className="text-sm text-gray-500 mt-1">{type.desc}</div>
                     </div>
-                    <div className="mt-6 flex items-center justify-between text-xs font-semibold text-[#0B3D91]">
+                    <div className="mt-4 flex items-center justify-between text-xs font-semibold text-[#0B3D91]">
                       <span>Select Category</span>
                       <ArrowRight className="w-4 h-4" />
                     </div>
