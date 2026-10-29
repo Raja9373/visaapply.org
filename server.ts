@@ -5,6 +5,7 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { GoogleGenAI } from '@google/genai';
+import handleFaqRequest from './src/api/faq.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -274,53 +275,8 @@ app.get('/api/guides', (req, res) => {
 });
 
 // FAQ endpoint for local dev
-app.get('/api/faq', async (req, res) => {
-  const { from = 'IN', to = 'US', type = 'tourist' } = req.query || {};
-  try {
-    const GEMINI_KEY = process.env.GEMINI_API_KEY;
-    if (!GEMINI_KEY) {
-      return res.json({
-        faqs: [
-          { question: `What are the photo and passport requirements for a ${type} visa from ${from} to ${to}?`, answer: `You need a passport valid for at least 6 months beyond your planned stay with at least two blank pages, and recent passport-sized color photographs adhering to official specifications.` },
-          { question: `How long does processing take for a ${type} visa to ${to}?`, answer: `Standard processing typically takes between 15 to 30 business days, though expedited options may be available depending on your nationality and consulate workload.` },
-          { question: `Can I extend my ${type} visa once I arrive in ${to}?`, answer: `Visa extensions depend on the specific visa subclass. Generally, tourist and visitor visas cannot be extended from within the country without exiting and reapplying.` }
-        ]
-      });
-    }
-
-    const prompt = `Generate 4 frequently asked questions (FAQs) with detailed answers for traveling from ${from} to ${to} on a ${type} visa. Return valid JSON only in this exact format: [{"question": "...", "answer": "..."}]`;
-
-    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
-      })
-    });
-
-    const data = await geminiRes.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    
-    let faqs = [];
-    try {
-      const jsonMatch = text.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        faqs = JSON.parse(jsonMatch[0]);
-      }
-    } catch (e) {
-      faqs = [
-        { question: `What are the financial requirements for a ${type} visa to ${to}?`, answer: `You must demonstrate sufficient funds (typically bank statements for the last 3-6 months) to cover your entire stay without working locally.` }
-      ];
-    }
-
-    res.json({ faqs });
-  } catch (err: any) {
-    res.json({
-      faqs: [
-        { question: `What is the application procedure for a ${type} visa from ${from} to ${to}?`, answer: `The application process involves submitting online forms, paying official fees, booking a biometric appointment, and attending an interview if required.` }
-      ]
-    });
-  }
+app.all('/api/faq', async (req, res) => {
+  return handleFaqRequest(req, res);
 });
 
 // Drafts endpoint for local dev

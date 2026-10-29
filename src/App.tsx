@@ -1400,6 +1400,15 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const [faqLoading, setFaqLoading] = useState(true);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [checkedDocs, setCheckedDocs] = useState<Record<number, boolean>>({});
+  const [faqSearchQuery, setFaqSearchQuery] = useState('');
+
+  const filteredFaqs = faqs.filter(faq => {
+    if (!faqSearchQuery.trim()) return true;
+    const q = (faq.q || faq.question || '').toLowerCase();
+    const a = (faq.a || faq.answer || '').toLowerCase();
+    const query = faqSearchQuery.toLowerCase().trim();
+    return q.includes(query) || a.includes(query);
+  });
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const countryData = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
@@ -1661,33 +1670,81 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
         {/* Dynamic Gemini AI / Database FAQs */}
         <div className="space-y-4 pt-4 border-t border-slate-200">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>❓ {t.faqs} ({fromCode} → {toCode})</span>
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+              <span>❓ {t.faqs} ({fromCode} → {toCode})</span>
+              {faqs.length > 0 && (
+                <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                  {filteredFaqs.length} {filteredFaqs.length === 1 ? 'question' : 'questions'}
+                </span>
+              )}
+            </h2>
+
+            {/* FAQ Search Input */}
+            {faqs && faqs.length > 0 && (
+              <div className="relative min-w-[220px] sm:w-72">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={faqSearchQuery}
+                  onChange={(e) => setFaqSearchQuery(e.target.value)}
+                  placeholder={isJa ? "FAQを検索..." : "Search FAQs..."}
+                  className="w-full pl-9 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B3D91] focus:bg-white text-slate-800"
+                />
+                {faqSearchQuery && (
+                  <button
+                    onClick={() => setFaqSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded-full cursor-pointer"
+                    title="Clear search"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
           {faqLoading ? (
             <div className="space-y-3 animate-pulse">
               <div className="h-10 bg-slate-100 rounded-xl"></div>
               <div className="h-10 bg-slate-100 rounded-xl"></div>
             </div>
-          ) : faqs && faqs.length > 0 ? (
+          ) : filteredFaqs && filteredFaqs.length > 0 ? (
             <div className="space-y-3">
-              {faqs.map((faq, index) => (
-                <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
-                  <button 
-                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                    className="w-full text-left p-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-100 transition-colors cursor-pointer text-xs sm:text-sm"
-                  >
-                    <span>{faq.q || faq.question}</span>
-                    <span className="text-slate-500 font-bold ml-2">{openFaqIndex === index ? '−' : '+'}</span>
-                  </button>
-                  {openFaqIndex === index && (
-                    <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-100 leading-relaxed">
-                      {faq.a || faq.answer}
-                    </div>
-                  )}
-                </div>
-              ))}
+              {filteredFaqs.map((faq, index) => {
+                const questionText = faq.q || faq.question;
+                const answerText = faq.a || faq.answer;
+                const isOpen = openFaqIndex === index;
+
+                return (
+                  <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 hover:border-slate-300 transition-colors">
+                    <button 
+                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                      className="w-full text-left p-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-100 transition-colors cursor-pointer text-xs sm:text-sm"
+                    >
+                      <span className="pr-2">{questionText}</span>
+                      <span className="text-slate-500 font-bold shrink-0 text-base">{isOpen ? '−' : '+'}</span>
+                    </button>
+                    {isOpen && (
+                      <div className="p-4 pt-2 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-100 leading-relaxed">
+                        {answerText}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : faqs && faqs.length > 0 && faqSearchQuery ? (
+            <div className="text-center py-6 px-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <p className="text-xs text-slate-600 font-medium">
+                No questions found matching "<span className="font-bold text-slate-900">{faqSearchQuery}</span>"
+              </p>
+              <button
+                onClick={() => setFaqSearchQuery('')}
+                className="text-xs font-semibold text-[#0B3D91] hover:underline inline-flex items-center gap-1 cursor-pointer"
+              >
+                Clear FAQ Search
+              </button>
             </div>
           ) : (
             <div className="text-xs text-slate-500 italic">No custom FAQs generated for this route yet. Refer to official embassy guidelines.</div>
