@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { marked } from 'marked';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
@@ -163,8 +164,21 @@ export default function App() {
   };
 
   useEffect(() => {
-    // Fetch countries, visa types, articles, and drafts with robust safe JSON parsing
+    // Load pending drafts & published guides from localStorage, plus app data
     const loadAppData = async () => {
+      try {
+        const localDrafts = localStorage.getItem('pendingDrafts');
+        if (localDrafts) {
+          const parsed = JSON.parse(localDrafts);
+          if (Array.isArray(parsed) && parsed.length > 0) setDrafts(parsed);
+        }
+        const localPub = localStorage.getItem('publishedGuides');
+        if (localPub) {
+          const parsedPub = JSON.parse(localPub);
+          if (Array.isArray(parsedPub) && parsedPub.length > 0) setArticles(parsedPub);
+        }
+      } catch (e) {}
+
       const countriesData = await safeFetchJson('/api/countries', undefined, null);
       if (Array.isArray(countriesData) && countriesData.length > 0) {
         setCountries(countriesData);
@@ -180,22 +194,6 @@ export default function App() {
         setDetectedCountry(geoData.country);
         setSelectedOrigin(geoData.country);
       }
-
-      const guidesData = await safeFetchJson('/api/guides', undefined, null);
-      if (guidesData?.published && Array.isArray(guidesData.published)) {
-        setArticles(guidesData.published);
-      } else {
-        const artData = await safeFetchJson('/api/articles', undefined, []);
-        if (Array.isArray(artData)) setArticles(artData);
-      }
-
-      const draftsData = await safeFetchJson('/api/drafts', undefined, null);
-      if (draftsData?.drafts && Array.isArray(draftsData.drafts)) {
-        setDrafts(draftsData.drafts);
-      } else {
-        const adminDrafts = await safeFetchJson('/api/admin/drafts', undefined, []);
-        if (Array.isArray(adminDrafts)) setDrafts(adminDrafts);
-      }
     };
 
     loadAppData();
@@ -205,16 +203,14 @@ export default function App() {
     setCronLoading(true);
     setCronResult(null);
     try {
-      const data = await safeFetchJson('/api/cron', { method: 'POST' }, { message: 'Cron triggered' });
-      setCronResult(data.message || 'Cron triggered successfully!');
-      
-      const draftsData = await safeFetchJson('/api/drafts', undefined, []);
-      if (Array.isArray(draftsData)) setDrafts(draftsData);
-      else if (draftsData?.drafts) setDrafts(draftsData.drafts);
-
-      const artData = await safeFetchJson('/api/guides', undefined, []);
-      if (artData?.published) setArticles(artData.published);
-      else if (Array.isArray(artData)) setArticles(artData);
+      const data = await safeFetchJson('/api/cron', { method: 'POST' }, { success: false, drafts: [] });
+      if (data?.success && Array.isArray(data.drafts) && data.drafts.length > 0) {
+        setDrafts(data.drafts);
+        localStorage.setItem('pendingDrafts', JSON.stringify(data.drafts));
+        setCronResult(`Generated ${data.drafts.length} AI drafts successfully using Gemini!`);
+      } else {
+        setCronResult(data.message || 'Cron triggered, but no drafts returned.');
+      }
     } catch (err: any) {
       setCronResult(`Error: ${err.message}`);
     } finally {
@@ -222,27 +218,44 @@ export default function App() {
     }
   };
 
-  const handleApproveDraft = async (slug: string) => {
+  const handleApproveDraft = async (draftId: string) => {
     try {
-      await fetch('/api/admin/approve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug })
-      });
-      const draftsRes = await fetch('/api/admin/drafts').then(r => r.json());
-      setDrafts(draftsRes);
-      const artRes = await fetch('/api/articles').then(r => r.json());
-      setArticles(artRes);
+      const currentDrafts = [...drafts];
+      const draftIndex = currentDrafts.findIndex((d: any) => d.id === draftId || d.slug === draftId);
+      if (draftIndex !== -1) {
+        const approved: any = currentDrafts[draftIndex];
+        currentDrafts.splice(draftIndex, 1);
+        setDrafts(currentDrafts);
+        localStorage.setItem('pendingDrafts', JSON.stringify(currentDrafts));
+
+        const newArticle: Article = {
+          slug: approved.route || approved.slug || `guide-${Date.now()}`,
+          title: approved.title,
+          from: 'IN',
+          to: 'US',
+          type: approved.visaType?.toLowerCase() || 'tourist',
+          date: new Date().toISOString().split('T')[0],
+          fees: approved.fees || 'Standard Govt Fees',
+          docs: approved.docs || 'Passport, Financial Proofs',
+          excerpt: (approved.content || '').substring(0, 160).replace(/[#*`]/g, '') + '...',
+          contentHtml: String(marked.parse(approved.content || '')),
+          rawContent: approved.content
+        };
+
+        const updatedArticles = [newArticle, ...articles];
+        setArticles(updatedArticles);
+        localStorage.setItem('publishedGuides', JSON.stringify(updatedArticles));
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleDeleteDraft = async (slug: string) => {
+  const handleDeleteDraft = async (draftId: string) => {
     try {
-      await fetch(`/api/admin/drafts/${slug}`, { method: 'DELETE' });
-      const draftsRes = await fetch('/api/admin/drafts').then(r => r.json());
-      setDrafts(draftsRes);
+      const currentDrafts = drafts.filter((d: any) => d.id !== draftId && d.slug !== draftId);
+      setDrafts(currentDrafts);
+      localStorage.setItem('pendingDrafts', JSON.stringify(currentDrafts));
     } catch (err) {
       console.error(err);
     }
