@@ -252,6 +252,48 @@ app.post('/api/admin/auth', (req, res) => {
   }
 });
 
+// Guides endpoint for local dev
+app.get('/api/guides', (req, res) => {
+  try {
+    const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
+    const published = files.map(file => {
+      const filePath = path.join(CONTENT_DIR, file);
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const parsed = matter(raw);
+      const slug = file.replace('.md', '');
+      return {
+        slug,
+        ...parsed.data,
+        excerpt: parsed.content.substring(0, 160).replace(/[#*`]/g, '') + '...'
+      };
+    });
+    res.json({ published, drafts: [], total: published.length });
+  } catch (err: any) {
+    res.json({ published: [], drafts: [], total: 0 });
+  }
+});
+
+// Drafts endpoint for local dev
+app.get('/api/drafts', (req, res) => {
+  try {
+    const files = fs.readdirSync(DRAFTS_DIR).filter(f => f.endsWith('.md'));
+    const drafts = files.map(file => {
+      const filePath = path.join(DRAFTS_DIR, file);
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const parsed = matter(raw);
+      const slug = file.replace('.md', '');
+      return {
+        slug,
+        ...parsed.data,
+        content: parsed.content
+      };
+    });
+    res.json({ drafts });
+  } catch (err: any) {
+    res.json({ drafts: [] });
+  }
+});
+
 // Admin: Get Drafts
 app.get('/api/admin/drafts', (req, res) => {
   try {

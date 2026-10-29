@@ -146,53 +146,55 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const safeFetchJson = async (url: string, options?: RequestInit, fallback: any = null) => {
+    try {
+      const res = await fetch(url, options);
+      const text = await res.text();
+      const trimmed = text.trim();
+      if (!text || trimmed.startsWith('<') || trimmed.startsWith('export')) {
+        console.warn(`API ${url} returned non-JSON response`);
+        return fallback;
+      }
+      return JSON.parse(text);
+    } catch (err) {
+      console.error(`Fetch error for ${url}:`, err);
+      return fallback;
+    }
+  };
+
   useEffect(() => {
-    // Fetch countries, visa types, articles, and geo with robust try-catch blocks
+    // Fetch countries, visa types, articles, and drafts with robust safe JSON parsing
     const loadAppData = async () => {
-      try {
-        const countriesRes = await fetch('/api/countries');
-        if (countriesRes.ok) {
-          const data = await countriesRes.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setCountries(data);
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load countries, using fallback:', err);
+      const countriesData = await safeFetchJson('/api/countries', undefined, null);
+      if (Array.isArray(countriesData) && countriesData.length > 0) {
+        setCountries(countriesData);
       }
 
-      try {
-        const visaTypesRes = await fetch('/api/visa-types');
-        if (visaTypesRes.ok) setVisaTypes(await visaTypesRes.json());
-      } catch (err) {
-        console.error('Failed to load visa types:', err);
+      const visaData = await safeFetchJson('/api/visa-types', undefined, null);
+      if (Array.isArray(visaData)) {
+        setVisaTypes(visaData);
       }
 
-      try {
-        const geoRes = await fetch('/api/geo');
-        if (geoRes.ok) {
-          const data = await geoRes.json();
-          if (data.country) {
-            setDetectedCountry(data.country);
-            setSelectedOrigin(data.country);
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load geo:', err);
+      const geoData = await safeFetchJson('/api/geo', undefined, null);
+      if (geoData?.country) {
+        setDetectedCountry(geoData.country);
+        setSelectedOrigin(geoData.country);
       }
 
-      try {
-        const articlesRes = await fetch('/api/articles');
-        if (articlesRes.ok) setArticles(await articlesRes.json());
-      } catch (err) {
-        console.error('Failed to load articles:', err);
+      const guidesData = await safeFetchJson('/api/guides', undefined, null);
+      if (guidesData?.published && Array.isArray(guidesData.published)) {
+        setArticles(guidesData.published);
+      } else {
+        const artData = await safeFetchJson('/api/articles', undefined, []);
+        if (Array.isArray(artData)) setArticles(artData);
       }
 
-      try {
-        const draftsRes = await fetch('/api/admin/drafts');
-        if (draftsRes.ok) setDrafts(await draftsRes.json());
-      } catch (err) {
-        console.error('Failed to load drafts:', err);
+      const draftsData = await safeFetchJson('/api/drafts', undefined, null);
+      if (draftsData?.drafts && Array.isArray(draftsData.drafts)) {
+        setDrafts(draftsData.drafts);
+      } else {
+        const adminDrafts = await safeFetchJson('/api/admin/drafts', undefined, []);
+        if (Array.isArray(adminDrafts)) setDrafts(adminDrafts);
       }
     };
 
@@ -203,13 +205,16 @@ export default function App() {
     setCronLoading(true);
     setCronResult(null);
     try {
-      const res = await fetch('/api/cron', { method: 'POST' });
-      const data = await res.json();
+      const data = await safeFetchJson('/api/cron', { method: 'POST' }, { message: 'Cron triggered' });
       setCronResult(data.message || 'Cron triggered successfully!');
-      const draftsRes = await fetch('/api/admin/drafts').then(r => r.json());
-      setDrafts(draftsRes);
-      const artRes = await fetch('/api/articles').then(r => r.json());
-      setArticles(artRes);
+      
+      const draftsData = await safeFetchJson('/api/drafts', undefined, []);
+      if (Array.isArray(draftsData)) setDrafts(draftsData);
+      else if (draftsData?.drafts) setDrafts(draftsData.drafts);
+
+      const artData = await safeFetchJson('/api/guides', undefined, []);
+      if (artData?.published) setArticles(artData.published);
+      else if (Array.isArray(artData)) setArticles(artData);
     } catch (err: any) {
       setCronResult(`Error: ${err.message}`);
     } finally {
@@ -995,11 +1000,17 @@ function AdminPortal({ drafts, articles, cronLoading, cronResult, onTriggerCron,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: passwordInput })
       });
-      const data = await res.json();
+      const text = await res.text();
+      if (!text || text.trim().startsWith('<')) {
+        setAuthError('Server error: API endpoint returned HTML');
+        setLoadingAuth(false);
+        return;
+      }
+      const data = JSON.parse(text);
       if (res.ok && data.success) {
         setIsAuthenticated(true);
       } else {
-        setAuthError('Wrong password');
+        setAuthError(data.message || 'Wrong password');
       }
     } catch (err) {
       setAuthError('Authentication failed');
