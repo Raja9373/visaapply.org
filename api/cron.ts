@@ -23,6 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ];
 
     const drafts = [];
+    const uniqueSuffix = Date.now().toString(36);
 
     for (let i = 0; i < 5; i++) {
       const topic = topics[i];
@@ -40,10 +41,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const geminiData = await geminiRes.json();
       const content = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || `Sample guide for ${topic.from} to ${topic.to} ${topic.type}`;
 
+      const randomId = Math.random().toString(36).substring(2, 7);
       drafts.push({
-        id: `draft-${Date.now()}-${i}`,
-        title: `${topic.from} to ${topic.to} ${topic.type} 2026 - Complete Guide`,
-        route: `${topic.from.toLowerCase()}-to-${topic.to.toLowerCase()}-${topic.type.toLowerCase().replace(/\s+/g, '-')}`,
+        id: `draft-${uniqueSuffix}-${i}-${randomId}`,
+        title: `${topic.from} to ${topic.to} ${topic.type} 2026 - Complete Guide (${randomId})`,
+        route: `${topic.from.toLowerCase()}-to-${topic.to.toLowerCase()}-${topic.type.toLowerCase().replace(/\s+/g, '-')}-${randomId}`,
         visaType: topic.type,
         content: content,
         date: new Date().toISOString(),

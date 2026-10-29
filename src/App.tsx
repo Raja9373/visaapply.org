@@ -95,20 +95,48 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     document.head.appendChild(ldScript);
   }
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "VisaApply.org",
-    "applicationCategory": "TravelApplication",
-    "operatingSystem": "All",
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
+  const baseUrl = window.location.origin;
+  let breadcrumbItems: any[] = [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": `${baseUrl}/` }
+  ];
+
+  if (isAdmin) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Admin Portal", "item": `${baseUrl}/admin` });
+  } else if (isSitemap) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All Visa Guides", "item": `${baseUrl}/sitemap` });
+  } else if (quizMatch) {
+    const from = quizMatch[1].toUpperCase();
+    const to = quizMatch[2].toUpperCase();
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Visa Quiz`, "item": window.location.href });
+  } else if (articleMatch) {
+    const from = articleMatch[1].toUpperCase();
+    const to = articleMatch[2].toUpperCase();
+    const type = articleMatch[3].toUpperCase();
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Guides`, "item": `${baseUrl}/${from.toLowerCase()}-to-${to.toLowerCase()}` });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": `${type} Visa Guide`, "item": window.location.href });
+  }
+
+  const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "VisaApply.org",
+      "applicationCategory": "TravelApplication",
+      "operatingSystem": "All",
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbItems
     }
-  };
-  ldScript.textContent = JSON.stringify(structuredData);
+  ];
+  ldScript.textContent = JSON.stringify(schemas);
 }
 
 export default function App() {
@@ -224,6 +252,17 @@ export default function App() {
       const draftIndex = currentDrafts.findIndex((d: any) => d.id === draftId || d.slug === draftId);
       if (draftIndex !== -1) {
         const approved: any = currentDrafts[draftIndex];
+        
+        // Check if already published
+        const exists = articles.some((g: any) => g.title === approved.title || g.slug === approved.route || g.slug === approved.slug);
+        if (exists) {
+          alert('Already published');
+          currentDrafts.splice(draftIndex, 1);
+          setDrafts(currentDrafts);
+          localStorage.setItem('pendingDrafts', JSON.stringify(currentDrafts));
+          return;
+        }
+
         currentDrafts.splice(draftIndex, 1);
         setDrafts(currentDrafts);
         localStorage.setItem('pendingDrafts', JSON.stringify(currentDrafts));
@@ -329,6 +368,8 @@ export default function App() {
           <AdminPortal 
             drafts={drafts} 
             articles={articles}
+            setArticles={setArticles}
+            setDrafts={setDrafts}
             cronLoading={cronLoading}
             cronResult={cronResult}
             onTriggerCron={handleTriggerCron}
@@ -425,8 +466,15 @@ export default function App() {
 // ----------------------------------------------------
 function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate }: any) {
   const [targetSearch, setTargetSearch] = useState('');
+  const [showMostPopularOnly, setShowMostPopularOnly] = useState(true);
 
-  const filteredCountries = countries.filter((c: Country) => 
+  const popularCodes = ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'AE', 'SG', 'JP', 'IT', 'ES', 'NL'];
+
+  const baseCountries = showMostPopularOnly 
+    ? countries.filter((c: Country) => popularCodes.includes(c.code.toUpperCase()))
+    : countries;
+
+  const filteredCountries = baseCountries.filter((c: Country) => 
     c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
     c.code.toLowerCase().includes(targetSearch.toLowerCase())
   );
@@ -478,14 +526,34 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         </div>
       </section>
 
-      {/* 30 Country Flag Grid Section */}
+      {/* Country Flag Grid Section with Filter Toggle */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Popular Destinations</h2>
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+              {showMostPopularOnly ? 'Most Popular Destinations' : 'All Global Destinations'}
+            </h2>
             <p className="text-sm text-slate-500 mt-1">Click any country flag to start your visa assessment & application guide</p>
           </div>
-          <span className="text-xs text-slate-400 font-medium">{filteredCountries.length} countries available</span>
+          
+          <div className="flex items-center gap-2 bg-slate-200/70 p-1 rounded-xl">
+            <button
+              onClick={() => setShowMostPopularOnly(true)}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                showMostPopularOnly ? 'bg-white text-[#0B3D91] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Most Popular
+            </button>
+            <button
+              onClick={() => setShowMostPopularOnly(false)}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                !showMostPopularOnly ? 'bg-white text-[#0B3D91] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              All 30 Countries
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -844,6 +912,41 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
   );
 }
 
+function ArticleSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-pulse">
+      <div className="h-4 w-48 bg-slate-200 rounded mb-6"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-12 space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-24 bg-slate-200 rounded-md"></div>
+            <div className="h-4 w-32 bg-slate-200 rounded-md"></div>
+          </div>
+          <div className="h-10 w-3/4 bg-slate-200 rounded-xl"></div>
+          <div className="space-y-3 pt-4">
+            <div className="h-4 w-full bg-slate-200 rounded"></div>
+            <div className="h-4 w-full bg-slate-200 rounded"></div>
+            <div className="h-4 w-5/6 bg-slate-200 rounded"></div>
+            <div className="h-32 w-full bg-slate-100 rounded-xl mt-6"></div>
+            <div className="h-4 w-full bg-slate-200 rounded"></div>
+            <div className="h-4 w-4/5 bg-slate-200 rounded"></div>
+          </div>
+        </div>
+        <div className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <div className="h-6 w-32 bg-slate-200 rounded"></div>
+            <div className="space-y-3">
+              <div className="h-12 w-full bg-slate-100 rounded-xl"></div>
+              <div className="h-20 w-full bg-slate-100 rounded-xl"></div>
+              <div className="h-12 w-full bg-slate-100 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ----------------------------------------------------
 // Article View Component
 // ----------------------------------------------------
@@ -856,6 +959,37 @@ function ArticleView({ match, navigate }: any) {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [faqLoading, setFaqLoading] = useState(true);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/faq?from=${fromCode}&to=${toCode}&type=${typeCode}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data?.faqs && Array.isArray(data.faqs)) {
+          setFaqs(data.faqs);
+        }
+        setFaqLoading(false);
+      })
+      .catch(() => {
+        setFaqLoading(false);
+      });
+  }, [fromCode, toCode, typeCode]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (totalScroll > 0) {
+        const currentScroll = window.scrollY;
+        const progress = (currentScroll / totalScroll) * 100;
+        setScrollProgress(Math.min(100, Math.max(0, progress)));
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     fetch(`/api/articles/${slug}`)
@@ -875,14 +1009,7 @@ function ArticleView({ match, navigate }: any) {
   }, [slug]);
 
   if (loading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="flex items-center gap-3 text-[#0B3D91] font-medium">
-          <RefreshCw className="w-6 h-6 animate-spin" />
-          <span>Loading official visa guide...</span>
-        </div>
-      </div>
-    );
+    return <ArticleSkeleton />;
   }
 
   if (error || !article) {
@@ -911,7 +1038,15 @@ function ArticleView({ match, navigate }: any) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Article Content */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-12">
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-12 relative overflow-hidden">
+          {/* Scroll Progress Bar */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-slate-100 z-20">
+            <div 
+              className="h-full bg-[#0B3D91] transition-all duration-75 ease-out"
+              style={{ width: `${scrollProgress}%` }}
+            ></div>
+          </div>
+
           <div className="flex items-center gap-3 mb-4 text-xs font-semibold">
             <span className="bg-blue-50 text-[#0B3D91] px-3 py-1 rounded-md uppercase">{article.type} Visa</span>
             <span className="text-slate-400">·</span>
@@ -948,6 +1083,45 @@ function ArticleView({ match, navigate }: any) {
             className="prose prose-slate max-w-none space-y-6 text-slate-700 leading-relaxed text-base [&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-8 [&>h2]:mb-3 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5"
             dangerouslySetInnerHTML={{ __html: article.contentHtml || '' }}
           />
+
+          {/* Dynamic AI FAQ Section */}
+          <div className="mt-12 pt-8 border-t border-slate-200">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#0B3D91]"></span>
+              <span>Frequently Asked Questions ({fromCode.toUpperCase()} to {toCode.toUpperCase()} {typeCode.toUpperCase()})</span>
+            </h2>
+
+            {faqLoading ? (
+              <div className="space-y-3 animate-pulse">
+                <div className="h-14 w-full bg-slate-100 rounded-xl"></div>
+                <div className="h-14 w-full bg-slate-100 rounded-xl"></div>
+              </div>
+            ) : faqs.length === 0 ? (
+              <p className="text-sm text-slate-500">No FAQs available for this route.</p>
+            ) : (
+              <div className="space-y-4">
+                {faqs.map((faq: any, idx: number) => {
+                  const isOpen = openFaqIndex === idx;
+                  return (
+                    <div key={idx} className="border border-slate-200 rounded-xl overflow-hidden bg-white transition-all">
+                      <button
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                        className="w-full text-left p-4 font-semibold text-slate-900 text-sm sm:text-base flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors cursor-pointer"
+                      >
+                        <span>{faq.question}</span>
+                        <ChevronRight className={`w-4 h-4 text-slate-500 transition-transform shrink-0 ${isOpen ? 'rotate-90 text-[#0B3D91]' : ''}`} />
+                      </button>
+                      {isOpen && (
+                        <div className="p-4 pt-0 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/50">
+                          {faq.answer}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Sidebar: Quick Facts & AdSense */}
@@ -997,11 +1171,34 @@ function ArticleView({ match, navigate }: any) {
 // ----------------------------------------------------
 // Admin Portal Component (Password Protected)
 // ----------------------------------------------------
-function AdminPortal({ drafts, articles, cronLoading, cronResult, onTriggerCron, onApprove, onDelete, navigate }: any) {
+function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cronResult, onTriggerCron, onApprove, onDelete, navigate }: any) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  const handleTriggerWithCooldown = async () => {
+    if (cooldown > 0 || cronLoading) return;
+    setCooldown(30);
+    const interval = setInterval(() => {
+      setCooldown(c => {
+        if (c <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return c - 1;
+      });
+    }, 1000);
+
+    await onTriggerCron();
+  };
+
+  const handleClearDuplicates = () => {
+    const unique = articles.filter((g: any, index: number, self: any[]) => index === self.findIndex(t => t.title === g.title));
+    setArticles(unique);
+    localStorage.setItem('publishedGuides', JSON.stringify(unique));
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1089,12 +1286,12 @@ function AdminPortal({ drafts, articles, cronLoading, cronResult, onTriggerCron,
 
         <div className="flex items-center gap-3">
           <button 
-            disabled={cronLoading}
-            onClick={onTriggerCron}
+            disabled={cronLoading || cooldown > 0}
+            onClick={handleTriggerWithCooldown}
             className="px-5 py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-all flex items-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${cronLoading ? 'animate-spin' : ''}`} />
-            <span>{cronLoading ? 'Generating AI Guides...' : 'Trigger Gemini AI Auto-Blogger Now'}</span>
+            <span>{cronLoading ? 'Generating AI Guides...' : cooldown > 0 ? `Generating... Please wait (${cooldown}s)` : 'Trigger Gemini AI Auto-Blogger Now'}</span>
           </button>
           <button 
             onClick={() => setIsAuthenticated(false)}
@@ -1179,7 +1376,15 @@ function AdminPortal({ drafts, articles, cronLoading, cronResult, onTriggerCron,
 
       {/* Published Guides Management */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <h2 className="text-lg font-bold text-slate-900 mb-6">Published Guides ({articles.length})</h2>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h2 className="text-lg font-bold text-slate-900">Published Guides ({articles.length})</h2>
+          <button 
+            onClick={handleClearDuplicates}
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors shadow-sm"
+          >
+            Clear All Duplicates
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-100 text-slate-700 font-semibold text-xs uppercase tracking-wider">
