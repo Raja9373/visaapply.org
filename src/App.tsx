@@ -6,6 +6,7 @@ import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
 import { VerificationView } from './components/VerificationView';
 import { AuditPage } from './pages/AuditPage';
 import { SitemapPage } from './pages/SitemapPage';
+import { AdSenseBanner } from './components/AdSenseBanner';
 
 import { JP_TO_IN_VISA } from './data/jpToInDetailed';
 import { marked } from 'marked';
@@ -735,12 +736,8 @@ export default function App() {
         )}
       </main>
 
-      {/* AdSense Readiness Slot */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
-        <div id="ad-slot" className="w-full bg-slate-200/70 border border-slate-300 rounded-xl p-4 text-center text-xs text-slate-500 tracking-wider uppercase">
-          Advertisement Slot (Google AdSense Ready)
-        </div>
-      </div>
+      {/* Google AdSense Banner */}
+      <AdSenseBanner />
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
