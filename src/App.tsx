@@ -384,7 +384,7 @@ export default function App() {
             navigate={navigate} 
           />
         ) : isArticleMatch ? (
-          <ArticleView match={isArticleMatch} navigate={navigate} />
+          <ArticleView match={isArticleMatch} articles={articles} navigate={navigate} />
         ) : isQuizMatch ? (
           <VisaQuizView 
             match={isQuizMatch} 
@@ -955,10 +955,70 @@ function ArticleSkeleton() {
   );
 }
 
+function getFallbackGuide(from: string, to: string, type: string) {
+  const fromCountry = FALLBACK_COUNTRIES.find((c: Country) => c.code.toLowerCase() === from.toLowerCase()) || { name: from.toUpperCase() };
+  const toCountry = FALLBACK_COUNTRIES.find((c: Country) => c.code.toLowerCase() === to.toLowerCase()) || { name: to.toUpperCase() };
+  
+  const title = `${fromCountry.name} to ${toCountry.name} ${type.toUpperCase()} Visa 2026 - Complete Guide`;
+  const fees = type === 'student' ? '$150-$500' : type === 'work' ? '$200-$1000' : '$50-$200';
+  const documents = [
+    'Valid Passport (6 months validity)',
+    'Visa Application Form',
+    'Photographs (passport size)',
+    'Bank Statements (6 months)',
+    'Travel Insurance',
+    type === 'student' ? 'Admission Letter from University' : '',
+    type === 'work' ? 'Job Offer Letter & Work Contract' : '',
+    type === 'family' ? 'Family Relationship Proof' : '',
+  ].filter(Boolean);
+
+  const steps = [
+    'Check eligibility and gather documents',
+    'Fill online application form',
+    'Pay visa fees',
+    'Book appointment at VFS/Embassy',
+    'Attend interview/biometrics',
+    'Track application status',
+    'Collect passport with visa'
+  ];
+
+  const contentHtml = `
+    <h2>Overview for ${fromCountry.name} to ${toCountry.name} ${type.toUpperCase()} Visa</h2>
+    <p>Planning your journey from <strong>${fromCountry.name}</strong> to <strong>${toCountry.name}</strong> for a <strong>${type}</strong> stay? This comprehensive 2026 guide outlines official documentation, fees, processing timelines, and step-by-step application instructions.</p>
+    
+    <h2>Required Documents Checklist</h2>
+    <ul>
+      ${documents.map(d => `<li>${d}</li>`).join('')}
+    </ul>
+
+    <h2>Step-by-Step Application Process</h2>
+    <ol>
+      ${steps.map(s => `<li>${s}</li>`).join('')}
+    </ol>
+
+    <h2>Important Tips & Expert Advice</h2>
+    <p>Apply at least 1 month before your intended travel date. Ensure all document copies are clear and certified where necessary. For official submissions, always refer to the official embassy or consulate portal.</p>
+  `;
+
+  return {
+    slug: `${from.toLowerCase()}-to-${to.toLowerCase()}-${type.toLowerCase()}`,
+    title,
+    from: from.toUpperCase(),
+    to: to.toUpperCase(),
+    type: type.toLowerCase(),
+    date: new Date().toISOString().split('T')[0],
+    fees,
+    docs: documents.join(', '),
+    excerpt: `Complete 2026 visa requirements, official fees, and document checklist for traveling from ${fromCountry.name} to ${toCountry.name}.`,
+    contentHtml,
+    rawContent: contentHtml
+  };
+}
+
 // ----------------------------------------------------
 // Article View Component
 // ----------------------------------------------------
-function ArticleView({ match, navigate }: any) {
+function ArticleView({ match, articles = [], navigate }: any) {
   const fromCode = match[1];
   const toCode = match[2];
   const typeCode = match[3];
@@ -966,7 +1026,6 @@ function ArticleView({ match, navigate }: any) {
 
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [faqs, setFaqs] = useState<any[]>([]);
   const [faqLoading, setFaqLoading] = useState(true);
@@ -1000,6 +1059,47 @@ function ArticleView({ match, navigate }: any) {
   }, []);
 
   useEffect(() => {
+    // 1. Check articles prop
+    const found = articles.find((g: any) => g.slug === slug || g.route === `/${slug}`);
+    if (found) {
+      setArticle({
+        ...found,
+        from: fromCode.toUpperCase(),
+        to: toCode.toUpperCase(),
+        type: typeCode.toLowerCase(),
+        fees: found.fees || (typeCode === 'student' ? '$150-$500' : '$50-$200'),
+        docs: found.docs || 'Valid Passport, Application Form, Bank Statements',
+        contentHtml: found.contentHtml || marked.parse(found.content || found.excerpt || '')
+      });
+      generateMetadata(window.location.pathname, [], found);
+      setLoading(false);
+      return;
+    }
+
+    // 2. Check localStorage publishedGuides
+    try {
+      const localPub = localStorage.getItem('publishedGuides');
+      if (localPub) {
+        const parsed = JSON.parse(localPub);
+        const foundLocal = parsed.find((g: any) => g.slug === slug || g.route === `/${slug}`);
+        if (foundLocal) {
+          setArticle({
+            ...foundLocal,
+            from: fromCode.toUpperCase(),
+            to: toCode.toUpperCase(),
+            type: typeCode.toLowerCase(),
+            fees: foundLocal.fees || (typeCode === 'student' ? '$150-$500' : '$50-$200'),
+            docs: foundLocal.docs || 'Valid Passport, Application Form, Bank Statements',
+            contentHtml: foundLocal.contentHtml || marked.parse(foundLocal.content || foundLocal.excerpt || '')
+          });
+          generateMetadata(window.location.pathname, [], foundLocal);
+          setLoading(false);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // 3. Fetch API or Fallback
     fetch(`/api/articles/${slug}`)
       .then(res => {
         if (!res.ok) throw new Error('Not found');
@@ -1011,28 +1111,15 @@ function ArticleView({ match, navigate }: any) {
         setLoading(false);
       })
       .catch(() => {
-        setError(true);
+        const fallback = getFallbackGuide(fromCode, toCode, typeCode);
+        setArticle(fallback as any);
+        generateMetadata(window.location.pathname, [], fallback);
         setLoading(false);
       });
-  }, [slug]);
+  }, [slug, fromCode, toCode, typeCode, articles]);
 
   if (loading) {
     return <ArticleSkeleton />;
-  }
-
-  if (error || !article) {
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">Visa Guide Not Available Yet</h1>
-        <p className="text-slate-600 mb-6">This specific visa route guide hasn't been generated or approved yet.</p>
-        <button 
-          onClick={() => navigate('/')} 
-          className="px-6 py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm"
-        >
-          Return to Home
-        </button>
-      </div>
-    );
   }
 
   return (
@@ -1161,15 +1248,49 @@ function ArticleView({ match, navigate }: any) {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-100">
+            <div className="mt-8 pt-6 border-t border-slate-100 space-y-4">
               <button 
                 onClick={() => window.print()}
                 className="w-full py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs hover:bg-slate-200 transition-colors"
               >
                 Print / Save Guide PDF
               </button>
+              
+              {/* AdSense Sidebar Slot */}
+              <div className="pt-4 border-t border-slate-100 text-center">
+                <ins className="adsbygoogle"
+                     style={{display:'block'}}
+                     data-ad-client="ca-pub-9048615701580913"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Recently Published Guides at Bottom */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-12 border-t border-slate-200">
+        <h2 className="text-2xl font-bold text-slate-900 mb-6">Recently Published AI Guides</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {articles.slice(0, 3).map((art: Article) => (
+            <div 
+              key={art.slug}
+              onClick={() => navigate(`/${art.slug}`)}
+              className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+            >
+              <div>
+                <span className="text-xs uppercase bg-blue-50 text-[#0B3D91] px-2.5 py-1 rounded-md font-semibold">{art.type} visa</span>
+                <h3 className="font-bold text-slate-900 text-base mt-3 line-clamp-2">{art.title}</h3>
+                <p className="text-xs text-slate-600 mt-2 line-clamp-2">{art.excerpt}</p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-[#0B3D91]">
+                <span>Read Complete Guide</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
