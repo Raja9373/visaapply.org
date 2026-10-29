@@ -1,0 +1,178 @@
+{
+  "total_countries": 30,
+  "total_visas_target": 540,
+  "visa_counts_per_country": {
+    "US": {
+      "country": "United States",
+      "total": 29
+    },
+    "AE": {
+      "country": "UAE",
+      "total": 24
+    },
+    "CA": {
+      "country": "Canada",
+      "total": 18
+    },
+    "GB": {
+      "country": "United Kingdom",
+      "total": 19
+    },
+    "AU": {
+      "country": "Australia",
+      "total": 22
+    },
+    "DE": {
+      "country": "Germany",
+      "total": 17
+    },
+    "FR": {
+      "country": "France",
+      "total": 17
+    },
+    "SG": {
+      "country": "Singapore",
+      "total": 16
+    },
+    "JP": {
+      "country": "Japan",
+      "total": 15
+    },
+    "IN": {
+      "country": "India",
+      "total": 20
+    },
+    "BR": {
+      "country": "Brazil",
+      "total": 15
+    },
+    "IT": {
+      "country": "Italy",
+      "total": 16
+    },
+    "ES": {
+      "country": "Spain",
+      "total": 15
+    },
+    "NL": {
+      "country": "Netherlands",
+      "total": 14
+    },
+    "NZ": {
+      "country": "New Zealand",
+      "total": 14
+    },
+    "SE": {
+      "country": "Sweden",
+      "total": 13
+    },
+    "CH": {
+      "country": "Switzerland",
+      "total": 13
+    },
+    "IE": {
+      "country": "Ireland",
+      "total": 12
+    },
+    "NO": {
+      "country": "Norway",
+      "total": 12
+    },
+    "PT": {
+      "country": "Portugal",
+      "total": 13
+    },
+    "DK": {
+      "country": "Denmark",
+      "total": 12
+    },
+    "FI": {
+      "country": "Finland",
+      "total": 12
+    },
+    "BE": {
+      "country": "Belgium",
+      "total": 12
+    },
+    "AT": {
+      "country": "Austria",
+      "total": 12
+    },
+    "PL": {
+      "country": "Poland",
+      "total": 12
+    },
+    "MY": {
+      "country": "Malaysia",
+      "total": 14
+    },
+    "TH": {
+      "country": "Thailand",
+      "total": 14
+    },
+    "TR": {
+      "country": "Turkey",
+      "total": 14
+    },
+    "ZA": {
+      "country": "South Africa",
+      "total": 13
+    },
+    "SA": {
+      "country": "Saudi Arabia",
+      "total": 15
+    }
+  },
+  "must_have_docs": {
+    "student": [
+      "Offer Letter / Admission Letter (MOST IMPORTANT)",
+      "I-20 / CAS / CoE / LOA",
+      "SEVIS/CAS Fee Receipt",
+      "Academic Docs",
+      "Bank Statements",
+      "Sponsor Docs"
+    ],
+    "tourist": [
+      "Invitation Letter OR Hotel Booking (MOST IMPORTANT)",
+      "Flight Itinerary",
+      "Bank Statements",
+      "Employment Letter",
+      "Property Docs",
+      "Cover Letter"
+    ],
+    "business": [
+      "Business Invitation Letter from Destination Company (MOST IMPORTANT)",
+      "Sponsor Letter / Email Chain",
+      "Indian Company Letter",
+      "Company Registration",
+      "Previous Business Correspondence",
+      "Bank Statements"
+    ],
+    "work": [
+      "Job Offer Letter (MOST IMPORTANT)",
+      "Labour Docs LMIA/LCA/CoS",
+      "Educational Qualifications",
+      "Work Experience Letters"
+    ],
+    "family": [
+      "Relationship Proof - Marriage/Birth Certificate (MOST IMPORTANT)",
+      "Invitation Letter from family in destination + Sponsor docs"
+    ],
+    "pr": [
+      "Investment Proof (MOST IMPORTANT)",
+      "Source of Funds Proof"
+    ]
+  },
+  "sample_detailed_visas": {
+    "IN_to_US_tourist_b1b2": {
+      "id": "b1b2",
+      "name": "B1/B2 Combined Most Popular",
+      "fee": "$185",
+      "documents_must": [
+        "Invitation OR Hotel Booking",
+        "Bank Statements",
+        "Employment Letter"
+      ]
+    }
+  }
+}

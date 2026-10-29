@@ -1,0 +1,271 @@
+FROM_COUNTRY,TO_COUNTRY,CATEGORY,SUBTYPE_ID,SUBTYPE_NAME,FEE,VALIDITY,STAY,DOCUMENTS_MUST_HAVE
+IN,US,tourist,b1,"B1 Business Visitor",$185,10 years,6 months,Invitation OR Hotel
+IN,US,tourist,b2,"B2 Tourist Visitor",$185,10 years,6 months,Invitation OR Hotel
+IN,US,tourist,b1b2,"B1/B2 Combined",$185,10 years,6 months,Invitation OR Hotel
+IN,US,tourist,c1,"C1 Transit",$185,29 days,Transit,Onward ticket
+IN,US,tourist,c1d,"C1/D Crew",$185,29 days,Transit,Crew letter
+IN,US,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,US,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,US,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,US,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,US,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,US,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,AE,tourist,48h,"48 Hours Transit",AED 50,48h,48h,Onward ticket
+IN,AE,tourist,96h,"96 Hours Transit",AED 250,96h,96h,Onward ticket
+IN,AE,tourist,14d,"14 Days Tourist",AED 350,14d,14d,Hotel
+IN,AE,tourist,30s,"30 Days Single",AED 400,60d,30d,Hotel
+IN,AE,tourist,30m,"30 Days Multiple",AED 650,60d,30d multiple,Hotel
+IN,AE,tourist,60s,"60 Days Single",AED 600,60d,60d,Hotel
+IN,AE,tourist,60m,"60 Days Multiple",AED 900,60d,60d multiple,Hotel
+IN,AE,tourist,90s,"90 Days Single",AED 800,90d,90d,Invitation OR Hotel
+IN,AE,tourist,90m,"90 Days Multiple",AED 1100,90d,90d multiple,Invitation OR Hotel
+IN,AE,tourist,5yr,"5 Years Multiple Tourist",AED 650+3000 deposit,5 years,90d per visit,Hotel
+IN,AE,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,AE,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,AE,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,AE,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,AE,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,AE,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,CA,tourist,tourist-1,"Canada Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,CA,tourist,tourist-2,"Canada Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,CA,tourist,tourist-3,"Canada Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,CA,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,CA,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,CA,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,CA,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,CA,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,CA,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,GB,tourist,tourist-1,"United Kingdom Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,GB,tourist,tourist-2,"United Kingdom Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,GB,tourist,tourist-3,"United Kingdom Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,GB,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,GB,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,GB,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,GB,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,GB,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,GB,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,AU,tourist,tourist-1,"Australia Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,AU,tourist,tourist-2,"Australia Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,AU,tourist,tourist-3,"Australia Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,AU,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,AU,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,AU,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,AU,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,AU,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,AU,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,DE,tourist,tourist-1,"Germany Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,DE,tourist,tourist-2,"Germany Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,DE,tourist,tourist-3,"Germany Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,DE,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,DE,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,DE,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,DE,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,DE,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,DE,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,FR,tourist,tourist-1,"France Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,FR,tourist,tourist-2,"France Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,FR,tourist,tourist-3,"France Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,FR,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,FR,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,FR,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,FR,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,FR,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,FR,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,SG,tourist,tourist-1,"Singapore Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SG,tourist,tourist-2,"Singapore Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SG,tourist,tourist-3,"Singapore Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SG,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,SG,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,SG,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,SG,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,SG,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,SG,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,JP,tourist,tourist-1,"Japan Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,JP,tourist,tourist-2,"Japan Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,JP,tourist,tourist-3,"Japan Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,JP,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,JP,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,JP,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,JP,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,JP,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,JP,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,BR,tourist,tourist-1,"Brazil Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,BR,tourist,tourist-2,"Brazil Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,BR,tourist,tourist-3,"Brazil Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,BR,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,BR,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,BR,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,BR,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,BR,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,BR,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,IT,tourist,tourist-1,"Italy Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,IT,tourist,tourist-2,"Italy Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,IT,tourist,tourist-3,"Italy Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,IT,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,IT,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,IT,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,IT,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,IT,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,IT,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,ES,tourist,tourist-1,"Spain Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,ES,tourist,tourist-2,"Spain Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,ES,tourist,tourist-3,"Spain Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,ES,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,ES,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,ES,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,ES,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,ES,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,ES,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,NL,tourist,tourist-1,"Netherlands Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NL,tourist,tourist-2,"Netherlands Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NL,tourist,tourist-3,"Netherlands Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NL,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,NL,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,NL,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,NL,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,NL,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,NL,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,NZ,tourist,tourist-1,"New Zealand Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NZ,tourist,tourist-2,"New Zealand Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NZ,tourist,tourist-3,"New Zealand Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NZ,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,NZ,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,NZ,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,NZ,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,NZ,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,NZ,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,SE,tourist,tourist-1,"Sweden Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SE,tourist,tourist-2,"Sweden Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SE,tourist,tourist-3,"Sweden Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SE,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,SE,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,SE,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,SE,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,SE,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,SE,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,CH,tourist,tourist-1,"Switzerland Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,CH,tourist,tourist-2,"Switzerland Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,CH,tourist,tourist-3,"Switzerland Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,CH,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,CH,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,CH,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,CH,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,CH,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,CH,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,IE,tourist,tourist-1,"Ireland Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,IE,tourist,tourist-2,"Ireland Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,IE,tourist,tourist-3,"Ireland Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,IE,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,IE,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,IE,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,IE,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,IE,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,IE,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,NO,tourist,tourist-1,"Norway Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NO,tourist,tourist-2,"Norway Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NO,tourist,tourist-3,"Norway Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,NO,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,NO,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,NO,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,NO,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,NO,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,NO,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,PT,tourist,tourist-1,"Portugal Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,PT,tourist,tourist-2,"Portugal Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,PT,tourist,tourist-3,"Portugal Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,PT,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,PT,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,PT,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,PT,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,PT,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,PT,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,DK,tourist,tourist-1,"Denmark Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,DK,tourist,tourist-2,"Denmark Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,DK,tourist,tourist-3,"Denmark Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,DK,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,DK,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,DK,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,DK,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,DK,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,DK,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,FI,tourist,tourist-1,"Finland Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,FI,tourist,tourist-2,"Finland Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,FI,tourist,tourist-3,"Finland Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,FI,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,FI,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,FI,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,FI,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,FI,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,FI,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,BE,tourist,tourist-1,"Belgium Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,BE,tourist,tourist-2,"Belgium Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,BE,tourist,tourist-3,"Belgium Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,BE,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,BE,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,BE,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,BE,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,BE,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,BE,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,AT,tourist,tourist-1,"Austria Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,AT,tourist,tourist-2,"Austria Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,AT,tourist,tourist-3,"Austria Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,AT,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,AT,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,AT,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,AT,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,AT,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,AT,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,PL,tourist,tourist-1,"Poland Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,PL,tourist,tourist-2,"Poland Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,PL,tourist,tourist-3,"Poland Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,PL,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,PL,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,PL,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,PL,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,PL,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,PL,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,MY,tourist,tourist-1,"Malaysia Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,MY,tourist,tourist-2,"Malaysia Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,MY,tourist,tourist-3,"Malaysia Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,MY,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,MY,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,MY,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,MY,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,MY,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,MY,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,TH,tourist,tourist-1,"Thailand Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,TH,tourist,tourist-2,"Thailand Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,TH,tourist,tourist-3,"Thailand Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,TH,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,TH,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,TH,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,TH,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,TH,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,TH,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,TR,tourist,tourist-1,"Turkey Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,TR,tourist,tourist-2,"Turkey Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,TR,tourist,tourist-3,"Turkey Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,TR,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,TR,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,TR,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,TR,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,TR,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,TR,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,ZA,tourist,tourist-1,"South Africa Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,ZA,tourist,tourist-2,"South Africa Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,ZA,tourist,tourist-3,"South Africa Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,ZA,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,ZA,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,ZA,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,ZA,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,ZA,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,ZA,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
+IN,SA,tourist,tourist-1,"Saudi Arabia Tourist Type 1",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SA,tourist,tourist-2,"Saudi Arabia Tourist Type 2",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SA,tourist,tourist-3,"Saudi Arabia Tourist Type 3",$50-$150,1 year,30-90 days,Invitation OR Hotel
+IN,SA,work,h1b-type,Work Visa 1,$185,1-3 years,1-3 years,Job Offer Letter
+IN,SA,work,l1-type,Work Visa 2,$460,1-3 years,1-3 years,Job Offer Letter
+IN,SA,student,f1-type,Student Visa 1,$185+SEVIS,1-5 years,Study duration,Offer Letter + I-20/CAS
+IN,SA,family,family-type,Family Visa 1,$325,Immigrant,Permanent,Relationship Proof
+IN,SA,business,b1-business,Business Visa 1,$185,1-10 years,6 months-1 year,Business Invitation + Sponsor
+IN,SA,pr,pr-type,PR/Golden Visa 1,$700+,5-10 years,Permanent,Investment Proof
