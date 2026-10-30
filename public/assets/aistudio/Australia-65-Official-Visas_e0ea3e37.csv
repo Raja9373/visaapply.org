@@ -1,0 +1,58 @@
+FROM,TO,CATEGORY,OFFICIAL_CODE,OFFICIAL_NAME,FEE,VALIDITY,STAY,PURPOSE,STATUS,DOCS_MUST
+IN,AU,work,186,Employer Nomination Scheme visa,"AUD $4,770",Permanent,Permanent,Permanent employer sponsored work,Active,Job Offer
+IN,AU,work,189,Skilled Independent visa,"AUD $4,770",Permanent,Permanent,Points-tested permanent skilled - Most Popular,Active,Job Offer
+IN,AU,work,190,Skilled Nominated visa,"AUD $4,770",Permanent,Permanent,State nominated permanent skilled,Active,Job Offer
+IN,AU,pr,191,Permanent Residence (Skilled Regional) visa,AUD $500,Permanent,Permanent,Permanent for 491/494 holders,Active,Business Invitation+Sponsor
+IN,AU,work,192,Pacific Engagement visa,AUD $325,Permanent,Permanent,Permanent for Pacific island citizens,Active,Job Offer
+IN,AU,work,400,Temporary Work (Short Stay Specialist) visa,AUD $415,Up to 6 months,Up to 6 months,Short stay highly specialized work,Active,Job Offer
+IN,AU,work,403,Temporary Work (International Relations) visa,AUD $355,Up to 4 years,Up to 4 years,International relations work,Active,Job Offer
+IN,AU,student,407,Training visa,AUD $405,Up to 2 years,Up to 2 years,"Occupational training, professional development",Active,Offer Letter/CoE
+IN,AU,work,408,Temporary Activity visa,AUD $415,Up to 2 years,Up to 2 years,"Temporary activity - entertainment, sport, research",Active,Job Offer
+IN,AU,work,482,Skills in Demand visa,"AUD $1,455 - $3,035",Up to 4 years,Up to 4 years,Employer sponsored skills in demand - Replaces TSS,Active,Job Offer
+IN,AU,student,485,Temporary Graduate visa,"AUD $2,235",Up to 4 years,Up to 4 years,Post-study work for international students,Active,Offer Letter/CoE
+IN,AU,work,491,Skilled Work Regional (Provisional) visa,"AUD $4,770",5 years,5 years,Regional provisional points-tested,Active,Job Offer
+IN,AU,work,494,Skilled Employer Sponsored Regional (Provisional) visa,"AUD $4,770",5 years,5 years,Regional employer sponsored provisional,Active,Job Offer
+IN,AU,pr,858,National Innovation visa,"AUD $4,770",Permanent,Permanent,"National innovation - Global talent, permanent",Active,Business Invitation+Sponsor
+IN,AU,tourist,600,Visitor visa,"AUD $195 - $1,100",Up to 12 months,"3, 6 or 12 months","Tourist, Business Visitor, Family Sponsored - Most Popular",Active,Invitation OR Hotel
+IN,AU,tourist,601,Electronic Travel Authority (ETA),AUD $20,12 months,3 months per visit,ETA for eligible passports,Active,Invitation OR Hotel
+IN,AU,tourist,651,eVisitor visa,Free,12 months,3 months per visit,eVisitor for EU passports,Active,Invitation OR Hotel
+IN,AU,tourist,771,Transit visa,Free,72 hours,72 hours,Transit through Australia,Active,Invitation OR Hotel
+IN,AU,tourist,417,Working Holiday visa,AUD $670,12 months,12 months,Working holiday for eligible countries,Active,Invitation OR Hotel
+IN,AU,tourist,462,Work and Holiday visa,AUD $670,12 months,12 months,Work and holiday for India and other countries,Active,Invitation OR Hotel
+IN,AU,student,500,Student visa,"AUD $1,600",Up to 5 years,Duration of course,Full-time study in Australia - Most Popular Student,Active,Offer Letter/CoE
+IN,AU,family,590,Student Guardian visa,"AUD $1,000",Duration of student stay,Duration of student stay,Guardian for student under 18,Active,Relationship Proof
+IN,AU,family,100,Partner visa (Migrant),"AUD $9,955",Permanent,Permanent,Permanent partner of Australian citizen/PR,Active,Relationship Proof
+IN,AU,family,101,Child visa,"AUD $3,720",Permanent,Permanent,Child of Australian citizen/PR,Active,Relationship Proof
+IN,AU,family,102,Adoption visa,"AUD $3,720",Permanent,Permanent,Adopted child overseas,Active,Relationship Proof
+IN,AU,family,103,Parent visa,"AUD $5,125",Permanent,Permanent,Parent of Australian citizen/PR - Queue,Active,Relationship Proof
+IN,AU,family,114,Aged Dependent Relative visa,"AUD $5,125",Permanent,Permanent,Aged dependent relative,Active,Relationship Proof
+IN,AU,family,115,Remaining Relative visa,"AUD $5,125",Permanent,Permanent,Last remaining relative in Australia,Active,Relationship Proof
+IN,AU,family,116,Carer visa,"AUD $2,140",Permanent,Permanent,Carer for relative with medical condition,Active,Relationship Proof
+IN,AU,family,143,Contributory Parent visa,"AUD $31,930",Permanent,Permanent,Fast-track contributory parent - Popular,Active,Relationship Proof
+IN,AU,family,173,Contributory Parent (Temporary) visa,"AUD $32,730",2 years,2 years,Temporary contributory parent to 143,Active,Relationship Proof
+IN,AU,family,300,Prospective Marriage visa,"AUD $9,955",9-15 months,9-15 months,Fiance to marry in Australia,Active,Relationship Proof
+IN,AU,family,309,Partner visa (Provisional),"AUD $9,955",Temporary,Until 100 granted,Provisional partner offshore to 100,Active,Relationship Proof
+IN,AU,family,445,Dependent Child visa,"AUD $3,720",Temporary,Until parent permanent,Dependent child added to parent application,Active,Relationship Proof
+IN,AU,family,461,New Zealand Citizen Family Relationship visa,AUD $460,5 years,5 years,Family of NZ citizen in Australia,Active,Relationship Proof
+IN,AU,family,801,Partner visa (Permanent),Included in 820/309,Permanent,Permanent,Permanent partner stage after 820/309,Active,Relationship Proof
+IN,AU,family,802,Child visa (Onshore),"AUD $3,720",Permanent,Permanent,Child onshore,Active,Relationship Proof
+IN,AU,family,804,Aged Parent visa,"AUD $5,125",Permanent,Permanent,Aged parent onshore - Queue,Active,Relationship Proof
+IN,AU,family,820,Partner visa (Temporary),"AUD $9,955",Temporary,Until 801,Temporary partner onshore to 801,Active,Relationship Proof
+IN,AU,family,864,Contributory Aged Parent visa,"AUD $31,930",Permanent,Permanent,Contributory aged parent onshore,Active,Relationship Proof
+IN,AU,family,870,Sponsored Parent (Temporary) visa,"AUD $5,000 - $10,000",3 or 5 years,3 or 5 years,"Temporary sponsored parent - Popular, 3/5 years",Active,Relationship Proof
+IN,AU,family,884,Contributory Aged Parent (Temporary) visa,"AUD $32,730",2 years,2 years,Temporary to 864,Active,Relationship Proof
+IN,AU,business,188,Business Innovation and Investment (Provisional) visa,"AUD $6,085 - $9,455",Up to 5 years,Up to 5 years,"Business innovation provisional - Check status, programme changes",Active,Business Invitation+Sponsor
+IN,AU,business,888,Business Innovation and Investment (Permanent) visa,"AUD $2,890 - $4,045",Permanent,Permanent,Permanent after 188,Active,Business Invitation+Sponsor
+IN,AU,pr,187,Regional Sponsored Migration Scheme visa,"AUD $4,770",Permanent,Permanent,"Regional employer sponsored - Historical/Restricted, closed for new",Legacy/Restricted - Check Home Affairs,Business Invitation+Sponsor
+IN,AU,pr,887,Skilled Regional visa,AUD $490,Permanent,Permanent,Permanent for 489/491/494 regional,Active,Business Invitation+Sponsor
+IN,AU,pr,200,Refugee visa,Free,Permanent,Permanent,Refugee - Offshore referral,Active,Business Invitation+Sponsor
+IN,AU,pr,202,Global Special Humanitarian visa,Free,Permanent,Permanent,Humanitarian offshore,Active,Business Invitation+Sponsor
+IN,AU,pr,866,Protection visa,AUD $50,Permanent,Permanent,Protection onshore - Asylum,Active,Business Invitation+Sponsor
+IN,AU,pr,785,Temporary Protection visa,Free,3 years,3 years,Temporary protection,Active,Business Invitation+Sponsor
+IN,AU,business,010,Bridging visa A,Free,Until decision,Until decision,Bridging during processing,Active,Business Invitation+Sponsor
+IN,AU,business,020,Bridging visa B,AUD $185,Until decision,Travel allowed,Bridging with travel,Active,Business Invitation+Sponsor
+IN,AU,pr,155,Five Year Resident Return visa,AUD $490,5 years travel,Permanent resident return,Resident return 5 years,Active,Business Invitation+Sponsor
+IN,AU,pr,157,Three Month Resident Return visa,AUD $490,3 months travel,Resident return 3 months,Resident return 3 months,Active,Business Invitation+Sponsor
+IN,AU,tourist,444,Special Category visa,Free,Temporary,While in Australia,NZ citizen special category,Active,Invitation OR Hotel
+IN,AU,tourist,602,Medical Treatment visa,AUD $355 - Free,Up to 12 months,Up to 12 months,Medical treatment,Active,Invitation OR Hotel
+IN,AU,business,988,Maritime Crew visa,Free,3 years,Per entry,Maritime crew,Active,Business Invitation+Sponsor

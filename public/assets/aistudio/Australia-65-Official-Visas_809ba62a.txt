@@ -1,0 +1,60 @@
+Australia Official 57 Visas - Copy paste this list in AI Studio prompt
+Official Source: https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing
+
+186 | Employer Nomination Scheme visa | Category: work | Fee: AUD $4,770 | Validity: Permanent | Purpose: Permanent employer sponsored work
+189 | Skilled Independent visa | Category: work | Fee: AUD $4,770 | Validity: Permanent | Purpose: Points-tested permanent skilled - Most Popular
+190 | Skilled Nominated visa | Category: work | Fee: AUD $4,770 | Validity: Permanent | Purpose: State nominated permanent skilled
+191 | Permanent Residence (Skilled Regional) visa | Category: pr | Fee: AUD $500 | Validity: Permanent | Purpose: Permanent for 491/494 holders
+192 | Pacific Engagement visa | Category: work | Fee: AUD $325 | Validity: Permanent | Purpose: Permanent for Pacific island citizens
+400 | Temporary Work (Short Stay Specialist) visa | Category: work | Fee: AUD $415 | Validity: Up to 6 months | Purpose: Short stay highly specialized work
+403 | Temporary Work (International Relations) visa | Category: work | Fee: AUD $355 | Validity: Up to 4 years | Purpose: International relations work
+407 | Training visa | Category: student | Fee: AUD $405 | Validity: Up to 2 years | Purpose: Occupational training
+408 | Temporary Activity visa | Category: work | Fee: AUD $415 | Validity: Up to 2 years | Purpose: Temporary activity - entertainment, sport
+482 | Skills in Demand visa | Category: work | Fee: AUD $1,455 - $3,035 | Validity: Up to 4 years | Purpose: Employer sponsored skills in demand - Replaces TSS
+485 | Temporary Graduate visa | Category: student | Fee: AUD $2,235 | Validity: Up to 4 years | Purpose: Post-study work for international students
+491 | Skilled Work Regional (Provisional) visa | Category: work | Fee: AUD $4,770 | Validity: 5 years | Purpose: Regional provisional points-tested
+494 | Skilled Employer Sponsored Regional (Provisional) visa | Category: work | Fee: AUD $4,770 | Validity: 5 years | Purpose: Regional employer sponsored provisional
+858 | National Innovation visa | Category: pr | Fee: AUD $4,770 | Validity: Permanent | Purpose: National innovation - Global talent
+600 | Visitor visa | Category: tourist | Fee: AUD $195 - $1,100 | Validity: Up to 12 months | Purpose: Tourist, Business Visitor, Family Sponsored
+601 | Electronic Travel Authority (ETA) | Category: tourist | Fee: AUD $20 | Validity: 12 months | Purpose: ETA for eligible passports
+651 | eVisitor visa | Category: tourist | Fee: Free | Validity: 12 months | Purpose: eVisitor for EU passports
+771 | Transit visa | Category: tourist | Fee: Free | Validity: 72 hours | Purpose: Transit through Australia
+417 | Working Holiday visa | Category: tourist | Fee: AUD $670 | Validity: 12 months | Purpose: Working holiday for eligible countries
+462 | Work and Holiday visa | Category: tourist | Fee: AUD $670 | Validity: 12 months | Purpose: Work and holiday for India and other countries
+500 | Student visa | Category: student | Fee: AUD $1,600 | Validity: Up to 5 years | Purpose: Full-time study in Australia
+590 | Student Guardian visa | Category: family | Fee: AUD $1,000 | Validity: Duration of student stay | Purpose: Guardian for student under 18
+100 | Partner visa (Migrant) | Category: family | Fee: AUD $9,955 | Validity: Permanent | Purpose: Permanent partner
+101 | Child visa | Category: family | Fee: AUD $3,720 | Validity: Permanent | Purpose: Child of Australian citizen/PR
+102 | Adoption visa | Category: family | Fee: AUD $3,720 | Validity: Permanent | Purpose: Adopted child overseas
+103 | Parent visa | Category: family | Fee: AUD $5,125 | Validity: Permanent | Purpose: Parent - Queue
+114 | Aged Dependent Relative visa | Category: family | Fee: AUD $5,125 | Validity: Permanent | Purpose: Aged dependent relative
+115 | Remaining Relative visa | Category: family | Fee: AUD $5,125 | Validity: Permanent | Purpose: Last remaining relative
+116 | Carer visa | Category: family | Fee: AUD $2,140 | Validity: Permanent | Purpose: Carer for relative
+143 | Contributory Parent visa | Category: family | Fee: AUD $31,930 | Validity: Permanent | Purpose: Fast-track contributory parent
+173 | Contributory Parent (Temporary) visa | Category: family | Fee: AUD $32,730 | Validity: 2 years | Purpose: Temporary to 143
+300 | Prospective Marriage visa | Category: family | Fee: AUD $9,955 | Validity: 9-15 months | Purpose: Fiance to marry in Australia
+309 | Partner visa (Provisional) | Category: family | Fee: AUD $9,955 | Validity: Temporary | Purpose: Provisional partner offshore
+445 | Dependent Child visa | Category: family | Fee: AUD $3,720 | Validity: Temporary | Purpose: Dependent child added
+461 | New Zealand Citizen Family Relationship visa | Category: family | Fee: AUD $460 | Validity: 5 years | Purpose: Family of NZ citizen
+801 | Partner visa (Permanent) | Category: family | Fee: Included in 820/309 | Validity: Permanent | Purpose: Permanent partner stage
+802 | Child visa (Onshore) | Category: family | Fee: AUD $3,720 | Validity: Permanent | Purpose: Child onshore
+804 | Aged Parent visa | Category: family | Fee: AUD $5,125 | Validity: Permanent | Purpose: Aged parent onshore
+820 | Partner visa (Temporary) | Category: family | Fee: AUD $9,955 | Validity: Temporary | Purpose: Temporary partner onshore
+864 | Contributory Aged Parent visa | Category: family | Fee: AUD $31,930 | Validity: Permanent | Purpose: Contributory aged parent onshore
+870 | Sponsored Parent (Temporary) visa | Category: family | Fee: AUD $5,000 - $10,000 | Validity: 3 or 5 years | Purpose: Temporary sponsored parent
+884 | Contributory Aged Parent (Temporary) visa | Category: family | Fee: AUD $32,730 | Validity: 2 years | Purpose: Temporary to 864
+188 | Business Innovation and Investment (Provisional) visa | Category: business | Fee: AUD $6,085 - $9,455 | Validity: Up to 5 years | Purpose: Business innovation provisional - Check status
+888 | Business Innovation and Investment (Permanent) visa | Category: business | Fee: AUD $2,890 - $4,045 | Validity: Permanent | Purpose: Permanent after 188
+187 | Regional Sponsored Migration Scheme visa | Category: pr | Fee: AUD $4,770 | Validity: Permanent | Purpose: Regional employer - Historical/Restricted
+887 | Skilled Regional visa | Category: pr | Fee: AUD $490 | Validity: Permanent | Purpose: Permanent for 489/491/494 regional
+200 | Refugee visa | Category: pr | Fee: Free | Validity: Permanent | Purpose: Refugee - Offshore referral
+202 | Global Special Humanitarian visa | Category: pr | Fee: Free | Validity: Permanent | Purpose: Humanitarian offshore
+866 | Protection visa | Category: pr | Fee: AUD $50 | Validity: Permanent | Purpose: Protection onshore - Asylum
+785 | Temporary Protection visa | Category: pr | Fee: Free | Validity: 3 years | Purpose: Temporary protection
+010 | Bridging visa A | Category: business | Fee: Free | Validity: Until decision | Purpose: Bridging during processing
+020 | Bridging visa B | Category: business | Fee: AUD $185 | Validity: Until decision | Purpose: Bridging with travel
+155 | Five Year Resident Return visa | Category: pr | Fee: AUD $490 | Validity: 5 years travel | Purpose: Resident return 5 years
+157 | Three Month Resident Return visa | Category: pr | Fee: AUD $490 | Validity: 3 months travel | Purpose: Resident return 3 months
+444 | Special Category visa | Category: tourist | Fee: Free | Validity: Temporary | Purpose: NZ citizen special category
+602 | Medical Treatment visa | Category: tourist | Fee: AUD $355 - Free | Validity: Up to 12 months | Purpose: Medical treatment
+988 | Maritime Crew visa | Category: business | Fee: Free | Validity: 3 years | Purpose: Maritime crew

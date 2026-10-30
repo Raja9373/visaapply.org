@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from '@google/genai';
-import { FULL_VISA_DB } from '../data/fullVisaDatabase';
+import { FULL_VISA_DB, CountryVisas } from '../data/fullVisaDatabase';
 
 export interface FaqItem {
   question: string;
@@ -8,15 +8,53 @@ export interface FaqItem {
   a?: string;
 }
 
-export function getFallbackFaqs(destination: string, visaType: string, fromCountry: string = 'India'): FaqItem[] {
-  const destCode = (destination || 'US').toUpperCase();
-  const vType = (visaType || 'tourist').toLowerCase();
-  const origin = fromCountry || 'India';
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  'united states': 'US', 'usa': 'US', 'us': 'US',
+  'canada': 'CA', 'ca': 'CA',
+  'united kingdom': 'GB', 'uk': 'GB', 'gb': 'GB',
+  'australia': 'AU', 'au': 'AU',
+  'germany': 'DE', 'de': 'DE',
+  'france': 'FR', 'fr': 'FR',
+  'uae': 'AE', 'uae dubai': 'AE', 'dubai': 'AE', 'ae': 'AE',
+  'singapore': 'SG', 'sg': 'SG',
+  'japan': 'JP', 'jp': 'JP',
+  'india': 'IN', 'in': 'IN',
+  'brazil': 'BR', 'br': 'BR',
+  'italy': 'IT', 'it': 'IT',
+  'spain': 'ES', 'es': 'ES',
+  'netherlands': 'NL', 'nl': 'NL',
+  'new zealand': 'NZ', 'nz': 'NZ',
+  'sweden': 'SE', 'se': 'SE',
+  'switzerland': 'CH', 'ch': 'CH',
+  'ireland': 'IE', 'ie': 'IE',
+  'norway': 'NO', 'no': 'NO',
+  'portugal': 'PT', 'pt': 'PT',
+  'denmark': 'DK', 'dk': 'DK',
+  'finland': 'FI', 'fi': 'FI',
+  'belgium': 'BE', 'be': 'BE',
+  'austria': 'AT', 'at': 'AT',
+  'poland': 'PL', 'pl': 'PL',
+  'malaysia': 'MY', 'my': 'MY',
+  'thailand': 'TH', 'th': 'TH',
+  'turkey': 'TR', 'tr': 'TR',
+  'south africa': 'ZA', 'za': 'ZA',
+  'saudi arabia': 'SA', 'saudi': 'SA', 'sa': 'SA',
+  'schengen': 'DE'
+};
 
-  // 1. Try pulling static FAQs directly from FULL_VISA_DB
-  const countryVisas = FULL_VISA_DB[destCode] || FULL_VISA_DB['US'];
+export function getFallbackFaqs(destination: string, visaType: string, fromCountry: string = 'India'): FaqItem[] {
+  const origin = fromCountry || 'India';
+  const cleanOrigin = origin.toLowerCase().trim();
+  const cleanDest = (destination || 'US').toLowerCase().trim();
+  const originCode = COUNTRY_NAME_TO_CODE[cleanOrigin] || (origin.length === 2 ? origin.toUpperCase() : 'IN');
+  const destCode = COUNTRY_NAME_TO_CODE[cleanDest] || (destination.length === 2 ? destination.toUpperCase() : 'US');
+  const vType = (visaType || 'tourist').toLowerCase();
+  
+  const countryVisas = (FULL_VISA_DB[originCode] && FULL_VISA_DB[originCode][destCode]) || 
+                       FULL_VISA_DB[destCode] || 
+                       FULL_VISA_DB['US'];
   if (countryVisas) {
-    let categoryKey: any = 'tourist';
+    let categoryKey: keyof CountryVisas = 'tourist';
     if (vType.includes('work')) categoryKey = 'work';
     else if (vType.includes('student') || vType.includes('study')) categoryKey = 'student';
     else if (vType.includes('family')) categoryKey = 'family';
@@ -24,7 +62,7 @@ export function getFallbackFaqs(destination: string, visaType: string, fromCount
     else if (vType.includes('pr') || vType.includes('golden')) categoryKey = 'pr';
 
     const items = countryVisas[categoryKey] || countryVisas.tourist || [];
-    const matchedVisa = items.find((v: any) => v.id.toLowerCase() === vType) || items[0];
+    const matchedVisa = items.find((v: any) => v.id.toLowerCase() === vType || v.id.toLowerCase().includes(vType)) || items[0];
 
     if (matchedVisa && matchedVisa.faq && matchedVisa.faq.length > 0) {
       return matchedVisa.faq.map((f: any) => ({
@@ -59,7 +97,46 @@ export function getFallbackFaqs(destination: string, visaType: string, fromCount
 }
 
 /**
- * Generates dynamic FAQs using Gemini API with fallback to static data
+ * Helper to execute an async Gemini API call with configurable timeout and exponential backoff retry.
+ * Prevents dynamic FAQ failure on transient network glitches or cold starts.
+ */
+async function callGeminiWithRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  timeoutMs: number = 15000, // Increased beyond 6 seconds to 15 seconds
+  initialDelayMs: number = 1000,
+  multiplier: number = 2
+): Promise<T> {
+  let attempt = 0;
+  while (attempt < maxRetries) {
+    attempt++;
+    let timeoutHandle: any;
+    try {
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutHandle = setTimeout(() => {
+          reject(new Error(`Gemini API call timed out after ${Math.round(timeoutMs / 1000)} seconds`));
+        }, timeoutMs);
+      });
+
+      const result = await Promise.race([fn(), timeoutPromise]);
+      clearTimeout(timeoutHandle);
+      return result;
+    } catch (err: any) {
+      clearTimeout(timeoutHandle);
+      const isLastAttempt = attempt >= maxRetries;
+      if (isLastAttempt) {
+        throw err;
+      }
+      const delay = Math.round(initialDelayMs * Math.pow(multiplier, attempt - 1) + Math.random() * 250);
+      console.info(`[Gemini FAQ] Attempt ${attempt}/${maxRetries} failed: ${err?.message || err}. Retrying in ${delay}ms...`);
+      await new Promise(res => setTimeout(res, delay));
+    }
+  }
+  throw new Error(`Gemini API call retries exhausted after ${maxRetries} attempts`);
+}
+
+/**
+ * Generates dynamic FAQs using Gemini API with exponential backoff retry and fallback to static data
  */
 export async function generateFaqsWithGemini(
   destination: string,
@@ -86,62 +163,61 @@ export async function generateFaqsWithGemini(
 
 Focus on official consular requirements, processing times, required financial documentation, and visa validity rules.`;
 
-    const apiPromise = ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.ARRAY,
-          description: 'List of FAQ objects',
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              question: {
-                type: Type.STRING,
-                description: 'The frequently asked question text'
+    const response: any = await callGeminiWithRetry(async () => {
+      return await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.ARRAY,
+            description: 'List of FAQ objects',
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                question: {
+                  type: Type.STRING,
+                  description: 'The frequently asked question text'
+                },
+                answer: {
+                  type: Type.STRING,
+                  description: 'Comprehensive and helpful answer'
+                }
               },
-              answer: {
-                type: Type.STRING,
-                description: 'Comprehensive and helpful answer'
-              }
-            },
-            required: ['question', 'answer']
+              required: ['question', 'answer']
+            }
           }
         }
-      }
-    });
-
-    const timeoutPromise = new Promise<null>((_, reject) =>
-      setTimeout(() => reject(new Error('Gemini API call timed out after 6 seconds')), 6000)
-    );
-
-    const response: any = await Promise.race([apiPromise, timeoutPromise]);
+      });
+    }, 3, 15000); // 3 retries with exponential backoff and 15s timeout (strictly > 6s)
 
     if (response && response.text) {
       const parsed = JSON.parse(response.text);
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed.map((item: any) => ({
           question: String(item.question || ''),
-          answer: String(item.answer || '')
+          answer: String(item.answer || ''),
+          q: String(item.question || ''),
+          a: String(item.answer || '')
         })).filter(item => item.question && item.answer);
       }
     }
-  } catch (error) {
-    console.warn('Dynamic Gemini FAQ generation failed or timed out. Falling back to FULL_VISA_DB static data:', error);
+  } catch (error: any) {
+    console.warn(`Dynamic Gemini FAQ generation failed or timed out. Falling back to FULL_VISA_DB static data: ${error?.message || error}`);
   }
 
   return getFallbackFaqs(destination, visaType, fromCountry);
 }
 
 /**
- * Client-side helper to fetch dynamic FAQs from the API route with fallback
+ * Client-side helper to fetch dynamic FAQs from the API route with retry and fallback
  */
 export async function fetchFaqContent(
   destination: string,
   visaType: string,
   fromCountry: string = 'India'
 ): Promise<FaqItem[]> {
+  const fallback = getFallbackFaqs(destination, visaType, fromCountry);
   try {
     const queryParams = new URLSearchParams({
       destination,
@@ -149,12 +225,9 @@ export async function fetchFaqContent(
       from: fromCountry
     });
 
-    const response = await fetch(`/api/faq?${queryParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error ${response.status}`);
-    }
-
-    const data = await response.json();
+    const res = await fetch(`/api/faq?${queryParams.toString()}`);
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    const data = await res.json();
     if (data && Array.isArray(data.faqs) && data.faqs.length > 0) {
       return data.faqs;
     }
@@ -162,7 +235,7 @@ export async function fetchFaqContent(
     console.warn('Network or API failure when fetching FAQs. Utilizing robust static fallback:', err);
   }
 
-  return getFallbackFaqs(destination, visaType, fromCountry);
+  return fallback;
 }
 
 /**

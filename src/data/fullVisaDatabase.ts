@@ -1,19 +1,52 @@
+import { AUSTRALIA_135_VISAS } from './australiaVisas';
+
 export interface VisaItem {
   id: string;
   name: string;
+  code?: string;
+  officialCode?: string;
+  officialName?: string;
+  categoryCode?: string;
+  subcategoryCode?: string;
+  shortName?: string;
   icon?: string;
   fee: string;
   validity?: string;
   stay?: string;
+  processing?: string;
   purpose?: string;
   eligibility?: string;
   popular?: boolean;
   highlight?: boolean;
+  isActive?: boolean;
+  isLegacy?: boolean;
+  officialSource?: string;
+  fundsBox?: {
+    minimum: string;
+    bankMonths: string;
+    suddenDeposit: string;
+    example: string;
+  };
+  itrBox?: {
+    years: string;
+    match: string;
+    noItr: string;
+  };
+  bankBox?: {
+    months: string;
+    regularCredit: string;
+    fd: string;
+    source: string;
+  };
   docs?: string[];
+  documents?: string[];
   infoReq?: string[];
   steps?: string[];
   tips?: string | string[];
   faq?: { q: string; a: string }[];
+  name_ja?: string;
+  docs_ja?: string[];
+  purpose_ja?: string;
 }
 
 export interface CountryVisas {
@@ -26,7 +59,7 @@ export interface CountryVisas {
 }
 
 // Country Code to Name & Currency map
-const COUNTRY_INFO: Record<string, { name: string; currency: string; flag: string }> = {
+export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag: string }> = {
   US: { name: "United States", currency: "USD ($)", flag: "🇺🇸" },
   CA: { name: "Canada", currency: "CAD ($)", flag: "🇨🇦" },
   GB: { name: "United Kingdom", currency: "GBP (£)", flag: "🇬🇧" },
@@ -59,12 +92,12 @@ const COUNTRY_INFO: Record<string, { name: string; currency: string; flag: strin
   SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" }
 };
 
-// Target counts per country from official matrix (540 Total)
+// Target counts per country from official matrix (653 Total with AU 135: 118 tourist, 138 work, 93 student, 97 family, 73 business, 134 pr)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
   US: { tourist: 5, work: 6, student: 5, family: 5, business: 3, pr: 5 }, // 29
   CA: { tourist: 2, work: 4, student: 3, family: 3, business: 2, pr: 4 }, // 18
   GB: { tourist: 4, work: 5, student: 3, family: 2, business: 2, pr: 3 }, // 19
-  AU: { tourist: 4, work: 5, student: 3, family: 3, business: 2, pr: 5 }, // 22
+  AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   DE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   FR: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   AE: { tourist: 10, work: 3, student: 2, family: 2, business: 2, pr: 5 }, // 24
@@ -356,11 +389,15 @@ function createVisaItem(
   };
 }
 
-// Full Visa Database for all 30 Countries with exact counts
-export const FULL_VISA_DB: Record<string, CountryVisas> = {};
+// Base database mapping: TO country code -> CountryVisas
+export const BASE_COUNTRY_VISAS: Record<string, CountryVisas> = {};
 
-// Populate database to match exact matrix (540 Total)
+// Populate base database to match exact matrix (653 Total with AU 135)
 Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
+  if (code === 'AU') {
+    BASE_COUNTRY_VISAS['AU'] = AUSTRALIA_135_VISAS;
+    return;
+  }
   const cVisas: CountryVisas = {
     tourist: [],
     work: [],
@@ -377,8 +414,53 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
     }
   });
 
-  FULL_VISA_DB[code] = cVisas;
+  BASE_COUNTRY_VISAS[code] = cVisas;
 });
+
+// Create FULL_VISA_DB supporting BOTH:
+// 1. Direct access: FULL_VISA_DB[toCode] -> CountryVisas (e.g. FULL_VISA_DB["AU"].tourist)
+// 2. 2-Level access: FULL_VISA_DB[fromCode][toCode] -> CountryVisas (e.g. FULL_VISA_DB["IN"]["AU"].tourist)
+export const FULL_VISA_DB: any = {};
+
+// 1. Assign direct destination properties
+Object.entries(BASE_COUNTRY_VISAS).forEach(([toCode, visas]) => {
+  // Create a combined object containing category arrays AND route mappings
+  const countryObj: any = {
+    tourist: visas.tourist,
+    work: visas.work,
+    student: visas.student,
+    family: visas.family,
+    business: visas.business,
+    pr: visas.pr
+  };
+  FULL_VISA_DB[toCode] = countryObj;
+});
+
+// 2. Assign 2-level [fromCode][toCode] mapping on each country object
+Object.keys(COUNTRY_INFO).forEach(fromCode => {
+  if (!FULL_VISA_DB[fromCode]) {
+    FULL_VISA_DB[fromCode] = {};
+  }
+  Object.keys(COUNTRY_INFO).forEach(toCode => {
+    if (BASE_COUNTRY_VISAS[toCode]) {
+      // Map to the destination country's CountryVisas
+      FULL_VISA_DB[fromCode][toCode] = BASE_COUNTRY_VISAS[toCode];
+    }
+  });
+});
+
+// Detailed 2D database for all 30 FROM countries x 29 TO countries
+export const FULL_VISA_DB_DETAILED: Record<string, Record<string, CountryVisas>> = {};
+Object.keys(COUNTRY_INFO).forEach(fromCode => {
+  FULL_VISA_DB_DETAILED[fromCode] = {};
+  Object.keys(COUNTRY_INFO).forEach(toCode => {
+    if (fromCode !== toCode && BASE_COUNTRY_VISAS[toCode]) {
+      FULL_VISA_DB_DETAILED[fromCode][toCode] = BASE_COUNTRY_VISAS[toCode];
+    }
+  });
+});
+
+export const VISA_COUNTS_FROM_EXCEL = COUNTRY_VISA_COUNTS;
 
 // Verification function
 export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; report: string } {
@@ -387,7 +469,7 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
 
   const expectedCategories: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
 
-  Object.entries(FULL_VISA_DB).forEach(([code, countryData]) => {
+  Object.entries(BASE_COUNTRY_VISAS).forEach(([code, countryData]) => {
     expectedCategories.forEach(cat => {
       const items = countryData[cat] || [];
       totalCount += items.length;
@@ -397,10 +479,10 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
     });
   });
 
-  const isValid = issues.length === 0 && totalCount === 540;
-  const report = `Total Visas in Database: ${totalCount} across ${Object.keys(FULL_VISA_DB).length} countries. Status: ${isValid ? 'PASSED - EXACT 540 VISAS MATCHED!' : 'COUNT MISMATCH'}`;
+  const isValid = issues.length === 0 && totalCount === 653;
+  const report = `Total Visas in Database: ${totalCount} across ${Object.keys(BASE_COUNTRY_VISAS).length} countries. Status: ${isValid ? 'PASSED - EXACT 653 VISAS MATCHED!' : 'COUNT MISMATCH'}`;
   
-  console.log(`Total visas created: 540+`);
+  console.log(`Total visas created: 653+`);
   console.log(`[VisaApply Database Check] ${report}`);
 
   return { totalVisas: totalCount, isValid, report };
@@ -408,7 +490,3 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
 
 // Auto-run logger on load
 verifyNoVisaMissed();
-
-export const VISA_COUNTS_FROM_EXCEL = COUNTRY_VISA_COUNTS;
-export const FULL_VISA_DB_DETAILED = FULL_VISA_DB;
-

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FULL_VISA_DB, verifyNoVisaMissed } from '../data/fullVisaDatabase';
+import { BASE_COUNTRY_VISAS, FULL_VISA_DB, COUNTRY_VISA_COUNTS, verifyNoVisaMissed } from '../data/fullVisaDatabase';
 import { CheckCircle2, Shield, Globe, Award, ChevronRight } from 'lucide-react';
 
 interface Props {
@@ -7,18 +7,9 @@ interface Props {
 }
 
 const EXCEL_TARGETS: Record<string, number> = {
-  US: 29,
-  AE: 24,
-  CA: 18,
-  GB: 19,
-  AU: 22,
-  DE: 17,
-  FR: 17,
-  SG: 16,
-  JP: 15,
-  IN: 20,
-  BR: 12, IT: 12, ES: 12, NL: 12, NZ: 12, SE: 12, CH: 12, IE: 12, NO: 12, PT: 12,
-  DK: 12, FI: 12, BE: 12, AT: 12, PL: 12, MY: 12, TH: 12, TR: 12, ZA: 12, SA: 12
+  US: 29, AE: 24, CA: 18, GB: 19, AU: 135, DE: 17, FR: 17, SG: 16, JP: 15, IN: 20,
+  BR: 15, IT: 16, ES: 15, NL: 14, NZ: 14, SE: 13, CH: 13, IE: 12, NO: 12, PT: 13,
+  DK: 12, FI: 12, BE: 12, AT: 12, PL: 12, MY: 14, TH: 14, TR: 14, ZA: 13, SA: 15
 };
 
 const COUNTRY_NAMES: Record<string, string> = {
@@ -35,7 +26,7 @@ export function VerificationView({ navigate }: Props) {
   const verificationReport = verifyNoVisaMissed();
 
   const countryRows = Object.keys(COUNTRY_NAMES).map(code => {
-    const data = FULL_VISA_DB[code] || FULL_VISA_DB["US"];
+    const data = BASE_COUNTRY_VISAS[code] || FULL_VISA_DB[code] || { tourist: [], work: [], student: [], family: [], business: [], pr: [] };
     const tourist = data.tourist?.length || 0;
     const work = data.work?.length || 0;
     const student = data.student?.length || 0;
@@ -43,7 +34,10 @@ export function VerificationView({ navigate }: Props) {
     const business = data.business?.length || 0;
     const pr = data.pr?.length || 0;
     const total = tourist + work + student + family + business + pr;
-    const target = EXCEL_TARGETS[code] || 12;
+    const targetCounts = COUNTRY_VISA_COUNTS[code];
+    const target = targetCounts 
+      ? (targetCounts.tourist + targetCounts.work + targetCounts.student + targetCounts.family + targetCounts.business + targetCounts.pr)
+      : (EXCEL_TARGETS[code] || 12);
     const isComplete = total >= target;
 
     return {

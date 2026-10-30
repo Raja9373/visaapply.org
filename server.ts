@@ -394,16 +394,33 @@ Format: Markdown with clean headings.`;
 
       let articleText = `# ${sourceCountry.name} to ${targetCountry.name} ${vType.name} Guide\n\n## 1. Overview\nComprehensive guide for ${sourceCountry.name} citizens.\n\n## 2. Fees\nStandard government processing fees apply.\n\n## 3. Documents\nPassport, bank statements, photos.`;
       
-      try {
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: prompt,
-        });
-        if (response.text) {
-          articleText = response.text;
+      const maxRetries = 3;
+      const timeoutMs = 15000;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        let timeoutHandle: any;
+        try {
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            timeoutHandle = setTimeout(() => reject(new Error(`Timeout after ${Math.round(timeoutMs / 1000)}s`)), timeoutMs);
+          });
+          const apiPromise = ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+          });
+          const response: any = await Promise.race([apiPromise, timeoutPromise]);
+          clearTimeout(timeoutHandle);
+          if (response?.text) {
+            articleText = response.text;
+            break;
+          }
+        } catch (aiErr: any) {
+          clearTimeout(timeoutHandle);
+          if (attempt >= maxRetries) {
+            console.warn(`[Cron Gemini] Retries exhausted for ${slug}:`, aiErr?.message || aiErr);
+          } else {
+            const delay = Math.round(1000 * Math.pow(2, attempt - 1) + Math.random() * 250);
+            await new Promise(r => setTimeout(r, delay));
+          }
         }
-      } catch (aiErr) {
-        console.error('Gemini API generation error in cron:', aiErr);
       }
 
       const frontmatter = `---

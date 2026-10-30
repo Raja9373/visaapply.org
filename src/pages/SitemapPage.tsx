@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FULL_VISA_DB, COUNTRY_VISA_COUNTS, VisaItem, CountryVisas } from '../data/fullVisaDatabase';
+import { BASE_COUNTRY_VISAS, FULL_VISA_DB, COUNTRY_VISA_COUNTS, VisaItem, CountryVisas } from '../data/fullVisaDatabase';
 
 const COUNTRY_NAMES: Record<string, string> = {
   US: "United States", CA: "Canada", GB: "United Kingdom", AU: "Australia",
@@ -23,12 +23,13 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
     return code.toLowerCase().includes(q) || name.includes(q);
   });
 
+  const categoriesList: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
   let totalVisasCount = 0;
   countryCodes.forEach(code => {
-    const data = FULL_VISA_DB[code];
-    if (data) {
-      Object.values(data).forEach((arr: any) => {
-        if (Array.isArray(arr)) totalVisasCount += arr.length;
+    const countryData: CountryVisas = BASE_COUNTRY_VISAS[code] || FULL_VISA_DB[code];
+    if (countryData) {
+      categoriesList.forEach(cat => {
+        totalVisasCount += countryData[cat]?.length || 0;
       });
     }
   });
@@ -69,7 +70,7 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
       <div className="space-y-8">
         {filteredCodes.map(code => {
           const cName = COUNTRY_NAMES[code];
-          const countryData = FULL_VISA_DB[code];
+          const countryData: CountryVisas = BASE_COUNTRY_VISAS[code] || FULL_VISA_DB[code];
           if (!countryData) return null;
 
           const categories: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
@@ -94,7 +95,17 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs font-semibold">
+                <div className="flex items-center gap-3 text-xs font-semibold">
+                  {code === 'AU' && (
+                    <a
+                      href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:underline"
+                    >
+                      🏛️ Official Home Affairs Register ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}
@@ -134,9 +145,19 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                               <a
                                 href={url}
                                 onClick={(e) => { if (navigate) { e.preventDefault(); navigate(url); } }}
-                                className="hover:underline truncate pr-2 font-medium"
+                                className="hover:underline truncate pr-2 font-medium flex items-center"
                               >
-                                • {v.name}
+                                {v.officialCode && (
+                                  <span className="bg-slate-200 text-slate-800 font-mono text-[9px] px-1 py-0.5 rounded font-bold mr-1 shrink-0">
+                                    {v.officialCode}
+                                  </span>
+                                )}
+                                <span className="truncate">• {v.name}</span>
+                                {v.isLegacy && (
+                                  <span className="bg-amber-100 text-amber-800 text-[8px] px-1 py-0.2 rounded font-semibold ml-1 shrink-0">
+                                    Legacy
+                                  </span>
+                                )}
                               </a>
                               <span className="text-[10px] text-slate-400 font-mono shrink-0">{v.fee}</span>
                             </li>
@@ -154,3 +175,4 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
     </div>
   );
 }
+

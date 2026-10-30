@@ -7,6 +7,9 @@ import { VerificationView } from './components/VerificationView';
 import { AuditPage } from './pages/AuditPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { AdSenseBanner } from './components/AdSenseBanner';
+import { BlogArticleView } from './components/BlogArticleView';
+import { DEFAULT_PUBLISHED_GUIDES } from './data/defaultArticles';
+import { fetchWithRetry } from './utils/fetchWithRetry';
 
 import { JP_TO_IN_VISA } from './data/jpToInDetailed';
 import { marked } from 'marked';
@@ -14,7 +17,7 @@ import {
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
   ArrowRight, ExternalLink, Clock, DollarSign, Menu, X, ChevronRight, Check,
-  Mail, Copy, Send, MapPin, Phone
+  Mail, Copy, Send, MapPin, Phone, ChevronDown, ArrowUp, Navigation
 } from 'lucide-react';
 
 interface Country {
@@ -76,6 +79,9 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   } else if (isSitemap) {
     title = 'All Visa Guides – Global Itineraries & Requirements | VisaApply.org';
     description = 'Explore complete visa requirements, official fees, and document checklists across all 30 global destination countries and visa categories.';
+  } else if (article && article.title) {
+    title = `${article.title} | VisaApply.org`;
+    description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find fees, documents, processing time, and FAQs.`;
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
@@ -97,6 +103,11 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
 
     title = `${fromName} to ${toName} Visa Quiz & Requirements – VisaApply.org`;
     description = `Take our 2-step visa quiz for traveling from ${fromName} to ${toName}. Explore tourist, work, student, family, and business visa guides.`;
+  } else if (path !== '/' && path.includes('-to-')) {
+    const clean = path.replace(/^\//, '').replace(/-/g, ' ');
+    const formatted = clean.charAt(0).toUpperCase() + clean.slice(1);
+    title = `${formatted} (2026 Guide) | VisaApply.org`;
+    description = `Official 2026 comprehensive visa requirements, application process, and documentation guide for ${formatted}.`;
   }
 
   document.title = title;
@@ -310,6 +321,22 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   const countryVisas = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
   const categoryVisas = countryVisas[category] || [];
 
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'legacy'>('all');
+
+  const sortedVisas = [...categoryVisas].sort((a: any, b: any) => {
+    if (a.popular && !b.popular) return -1;
+    if (!a.popular && b.popular) return 1;
+    if (a.highlight && !b.highlight) return -1;
+    if (!a.highlight && b.highlight) return 1;
+    return 0;
+  });
+
+  const displayedVisas = sortedVisas.filter((v: any) => {
+    if (statusFilter === 'active') return v.isActive !== false;
+    if (statusFilter === 'legacy') return v.isLegacy === true;
+    return true;
+  });
+
   const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
 
   return (
@@ -373,11 +400,42 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
             : `Official list of all ${categoryVisas.length} ${categoryTitle.toLowerCase()} visa categories for ${toCountry.name}. Select a specific visa type below to view full requirements, document checklists, and application guidelines.`
           }
         </p>
+
+        {/* Filter Toolbar for Active vs Legacy subclasses */}
+        {toCode === 'AU' && (
+          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-200">
+            <span className="text-xs font-semibold text-slate-500">Filter by Status:</span>
+            <button
+              onClick={() => setStatusFilter('all')}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                statusFilter === 'all' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              All Types ({categoryVisas.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('active')}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                statusFilter === 'active' ? 'bg-emerald-700 text-white shadow-xs' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+              }`}
+            >
+              Active Only ({categoryVisas.filter((v: any) => v.isActive !== false).length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('legacy')}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                statusFilter === 'legacy' ? 'bg-amber-700 text-white shadow-xs' : 'bg-amber-50 text-amber-800 hover:bg-amber-100'
+              }`}
+            >
+              Legacy / Repealed ({categoryVisas.filter((v: any) => v.isLegacy === true).length})
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Grid of Visa Type Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {categoryVisas.map((v: any) => (
+        {displayedVisas.map((v: any) => (
           <div
             key={v.id}
             onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${category}-${v.id}`)}
@@ -387,12 +445,30 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
           >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-3xl">{v.icon || '📄'}</span>
-                {v.popular && (
-                  <span className="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    ⭐ {isJa ? '人気・おすすめ' : 'Popular Choice'}
-                  </span>
-                )}
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl">{v.icon || '📄'}</span>
+                  {v.officialCode && (
+                    <span className="bg-blue-100 text-[#0B3D91] font-mono text-xs font-black px-2 py-0.5 rounded shadow-xs">
+                      Subclass {v.officialCode}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                  {v.isLegacy ? (
+                    <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">
+                      Legacy
+                    </span>
+                  ) : (
+                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">
+                      Active
+                    </span>
+                  )}
+                  {v.popular && (
+                    <span className="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">
+                      ⭐ {isJa ? '人気' : 'Popular'}
+                    </span>
+                  )}
+                </div>
               </div>
               <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">
                 {(isJa && v.name_ja) ? v.name_ja : v.name}
@@ -450,7 +526,7 @@ export default function App() {
   const [visaTypes, setVisaTypes] = useState<VisaType[]>([]);
   const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
   const [selectedOrigin, setSelectedOrigin] = useState<Country | null>(null);
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<Article[]>(DEFAULT_PUBLISHED_GUIDES);
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -497,8 +573,9 @@ export default function App() {
   };
 
   useEffect(() => {
-    // Load pending drafts & published guides from localStorage, plus app data
+    // Load pending drafts & published guides from localStorage, plus app data with exponential backoff retry
     const loadAppData = async () => {
+      let parsedPub: Article[] = [];
       try {
         const localDrafts = localStorage.getItem('pendingDrafts');
         if (localDrafts) {
@@ -507,24 +584,66 @@ export default function App() {
         }
         const localPub = localStorage.getItem('publishedGuides');
         if (localPub) {
-          const parsedPub = JSON.parse(localPub);
-          if (Array.isArray(parsedPub) && parsedPub.length > 0) setArticles(parsedPub);
+          const parsed = JSON.parse(localPub);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            parsedPub = parsed;
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Error reading from localStorage in loadAppData:', e);
+      }
 
-      const countriesData = await safeFetchJson('/api/countries', undefined, null);
+      // Fetch server articles with 3-attempt exponential backoff and 15s timeout
+      const remoteArticles = await fetchWithRetry<Article[] | { published?: Article[] }>('/api/articles', {}, {
+        retries: 3,
+        initialDelay: 1000,
+        backoffMultiplier: 2,
+        timeoutMs: 15000,
+        fallback: []
+      });
+
+      const serverList: Article[] = Array.isArray(remoteArticles) 
+        ? remoteArticles 
+        : (Array.isArray((remoteArticles as any)?.published) ? (remoteArticles as any).published : []);
+
+      // Merge backend articles, localStorage articles, and DEFAULT_PUBLISHED_GUIDES deduplicated by slug
+      const mergedBySlug = new Map<string, Article>();
+      DEFAULT_PUBLISHED_GUIDES.forEach(a => mergedBySlug.set(a.slug.toLowerCase(), a));
+      parsedPub.forEach(a => {
+        if (a?.slug) mergedBySlug.set(a.slug.toLowerCase(), a);
+      });
+      serverList.forEach(a => {
+        if (a?.slug) mergedBySlug.set(a.slug.toLowerCase(), a);
+      });
+
+      const finalArticles = Array.from(mergedBySlug.values());
+      setArticles(finalArticles);
+      try {
+        localStorage.setItem('publishedGuides', JSON.stringify(finalArticles));
+      } catch (e) {
+        // quota ignore
+      }
+
+      const countriesData = await fetchWithRetry<Country[]>('/api/countries', {}, {
+        retries: 3,
+        initialDelay: 1000,
+        backoffMultiplier: 2,
+        timeoutMs: 15000,
+        fallback: FALLBACK_COUNTRIES
+      });
       if (Array.isArray(countriesData) && countriesData.length > 0) {
         setCountries(countriesData);
       }
 
-      const visaData = await safeFetchJson('/api/visa-types', undefined, null);
+      const visaData = await fetchWithRetry<VisaType[]>('/api/visa-types', {}, {
+        retries: 3,
+        initialDelay: 1000,
+        backoffMultiplier: 2,
+        timeoutMs: 15000,
+        fallback: []
+      });
       if (Array.isArray(visaData)) {
         setVisaTypes(visaData);
-      }
-
-      if (typeof window !== 'undefined' && navigator.language) {
-        const browserLang = navigator.language.startsWith('ja') ? 'ja' : navigator.language.startsWith('es') ? 'es' : 'en';
-        // Auto browser language detection initialized
       }
     };
 
@@ -535,7 +654,13 @@ export default function App() {
     setCronLoading(true);
     setCronResult(null);
     try {
-      const data = await safeFetchJson('/api/cron', { method: 'POST' }, { success: false, drafts: [] });
+      const data = await fetchWithRetry<any>('/api/cron', { method: 'POST' }, {
+        retries: 3,
+        initialDelay: 1000,
+        backoffMultiplier: 2,
+        timeoutMs: 30000,
+        fallback: { success: false, drafts: [], message: 'Cron request failed after 3 retries' }
+      });
       if (data?.success && Array.isArray(data.drafts) && data.drafts.length > 0) {
         setDrafts(data.drafts);
         localStorage.setItem('pendingDrafts', JSON.stringify(data.drafts));
@@ -624,6 +749,19 @@ export default function App() {
   const isLevel3Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i) || 
                         (!isLevel2Match && currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i));
 
+  const cleanPathSlug = currentPath.replace(/^\//, '').toLowerCase().trim();
+
+  // 4. Published Blog Articles: e.g. /india-to-canada-work-visa-atlxt or any custom article slug
+  const matchedBlogArticle = articles.find((a: Article) => {
+    const s = (a.slug || '').toLowerCase().trim();
+    const r = ((a as any).route || '').toLowerCase().trim();
+    return s === cleanPathSlug || r === cleanPathSlug || ('/' + s) === currentPath.toLowerCase();
+  });
+
+  const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isLevel1Match && !isLevel2Match && !isLevel3Match && (
+    Boolean(matchedBlogArticle) || cleanPathSlug.includes('-to-') || cleanPathSlug.includes('guide') || cleanPathSlug.includes('visa')
+  );
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
       {/* Official VFS-Style Top Header */}
@@ -707,7 +845,14 @@ export default function App() {
           <TermsView navigate={navigate} />
         ) : isSitemap ? (
           <SitemapPage navigate={navigate} />
-
+        ) : isBlogMatch ? (
+          <BlogArticleView 
+            article={matchedBlogArticle} 
+            pathSlug={cleanPathSlug}
+            articles={articles}
+            countries={countries} 
+            navigate={navigate} 
+          />
         ) : isLevel2Match ? (
           <VisaCategoryListView 
             match={isLevel2Match} 
@@ -766,20 +911,20 @@ export default function App() {
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (540+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (653+ Pages)</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-500">540+ Visa Guides across 30 Destination Countries</li>
+              <li className="text-xs text-slate-500">653+ Visa Guides across 30 Destination Countries</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 540+ Visa Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 653+ Visa Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -1018,7 +1163,9 @@ function SitemapView({ countries, navigate }: any) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCountries.map((c: any) => {
           const isExpanded = expandedCountry === c.code || search.length > 0;
-          const countryVisas = FULL_VISA_DB[c.code.toUpperCase()] || FULL_VISA_DB["US"];
+          const countryVisas = (FULL_VISA_DB['IN'] && FULL_VISA_DB['IN'][c.code.toUpperCase()]) 
+                               ? FULL_VISA_DB['IN'][c.code.toUpperCase()] 
+                               : (FULL_VISA_DB['US'] && FULL_VISA_DB['US']['US'] ? FULL_VISA_DB['US']['US'] : { tourist: [], work: [], student: [], family: [], business: [], pr: [] });
           
           let totalCountryCount = 0;
           if (countryVisas) {
@@ -1417,6 +1564,16 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [checkedDocs, setCheckedDocs] = useState<Record<number, boolean>>({});
   const [faqSearchQuery, setFaqSearchQuery] = useState('');
+  const [activeSection, setActiveSection] = useState<string>('');
+
+  const handleJumpToSection = (sectionId: string) => {
+    if (!sectionId) return;
+    setActiveSection(sectionId);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const filteredFaqs = faqs.filter(faq => {
     if (!faqSearchQuery.trim()) return true;
@@ -1427,8 +1584,11 @@ function ArticleView({ match, articles = [], navigate }: any) {
   });
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
-  const countryData = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
-  const categoryVisas = countryData[categoryCode as keyof CountryVisas] || countryData['tourist'] || [];
+  // Resiliently access FROM -> TO -> Visas or direct TO -> Visas
+  const countryData = isJpToIn
+    ? JP_TO_IN_VISA["IN"]
+    : (FULL_VISA_DB[fromCode]?.[toCode] || FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
+  const categoryVisas = countryData?.[categoryCode as keyof CountryVisas] || countryData?.['tourist'] || [];
   
   // Find matching subtype visa in database
   const dbVisaItem = categoryVisas.find((v: any) => v.id.toLowerCase() === subtypeCode) ||
@@ -1436,9 +1596,56 @@ function ArticleView({ match, articles = [], navigate }: any) {
                      categoryVisas[0];
 
   useEffect(() => {
-    fetch(`/api/faq?from=${fromCode}&to=${toCode}&type=${subtypeCode}`)
-      .then(res => res.json())
+    const sectionIds = [
+      'section-overview',
+      'section-subclass',
+      'section-financial',
+      'section-info-req',
+      'section-docs',
+      'section-steps',
+      'section-tips',
+      'section-faqs',
+      'section-embassy'
+    ];
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, {
+      rootMargin: '-80px 0px -60% 0px',
+      threshold: 0
+    });
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [toCode, dbVisaItem]);
+
+  useEffect(() => {
+    let isMounted = true;
+    setFaqLoading(true);
+
+    const queryUrl = `/api/faq?from=${encodeURIComponent(fromCode)}&to=${encodeURIComponent(toCode)}&type=${encodeURIComponent(subtypeCode)}`;
+
+    fetchWithRetry<{ success?: boolean; faqs?: any[] }>(
+      queryUrl,
+      {},
+      {
+        retries: 3,
+        initialDelay: 1000,
+        backoffMultiplier: 2,
+        timeoutMs: 15000, // Timeout increased beyond 6s to 15s
+        fallback: { success: true, faqs: dbVisaItem?.faq || [] }
+      }
+    )
       .then(data => {
+        if (!isMounted) return;
         if (data?.faqs && Array.isArray(data.faqs) && data.faqs.length > 0) {
           setFaqs(data.faqs);
         } else if (dbVisaItem?.faq) {
@@ -1447,9 +1654,14 @@ function ArticleView({ match, articles = [], navigate }: any) {
         setFaqLoading(false);
       })
       .catch(() => {
+        if (!isMounted) return;
         if (dbVisaItem?.faq) setFaqs(dbVisaItem.faq);
         setFaqLoading(false);
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [fromCode, toCode, subtypeCode, dbVisaItem]);
 
   useEffect(() => {
@@ -1506,21 +1718,83 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Sticky Back Buttons Bar */}
-      <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 py-2.5 border-b md:border-0 mb-4 flex flex-wrap gap-2 no-print">
-        <button 
-          onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${categoryCode}`)} 
-          className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs cursor-pointer"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          Back to {categoryCode.charAt(0).toUpperCase() + categoryCode.slice(1)} Visas
-        </button>
-        <button 
-          onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} 
-          className="flex items-center gap-2 px-4 py-2 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 text-xs sm:text-sm font-medium text-slate-700 cursor-pointer"
-        >
-          Back to Categories
-        </button>
+      {/* Refactored Sticky Mobile & Desktop Navigation Bar with Breadcrumbs & Jump-to-Section Dropdown */}
+      <div className="sticky top-0 bg-white/95 backdrop-blur-md z-30 py-2.5 px-3 sm:px-4 -mx-4 sm:mx-0 rounded-b-2xl sm:rounded-2xl border-b border-slate-200/90 shadow-sm mb-6 no-print">
+        <div className="flex flex-col gap-2">
+          {/* Top Row: Back Buttons & Compact Breadcrumb Indicator */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button 
+                onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${categoryCode}`)} 
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 text-xs font-bold text-slate-800 shadow-xs cursor-pointer transition-colors"
+                title={`Back to ${categoryCode} Visas`}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
+                <span className="hidden sm:inline">Back to</span> <span className="capitalize">{categoryCode}</span>
+              </button>
+              <button 
+                onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} 
+                className="hidden md:inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 text-xs font-medium text-slate-600 cursor-pointer"
+                title="Back to all categories"
+              >
+                Categories
+              </button>
+            </div>
+
+            {/* Breadcrumb Indicator */}
+            <div className="flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-slate-600 bg-slate-100/90 px-2.5 py-1 rounded-lg border border-slate-200 truncate min-w-0">
+              <span className="shrink-0">{fromCountry.flag} {fromCode}</span>
+              <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
+              <span className="shrink-0">{toCountry.flag} {toCode}</span>
+              <span className="text-slate-300 shrink-0">/</span>
+              <span className="capitalize text-[#0B3D91] shrink-0 font-bold">{categoryCode}</span>
+              <span className="text-slate-300 shrink-0">/</span>
+              <span className="truncate font-bold text-slate-900" title={visaName}>
+                {dbVisaItem?.officialCode ? `Subclass ${dbVisaItem.officialCode}` : visaName}
+              </span>
+            </div>
+          </div>
+
+          {/* Bottom Row: Jump-to-Section Dropdown & Quick Actions */}
+          <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-100">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <label htmlFor="jump-section-select" className="text-[11px] font-bold text-slate-700 shrink-0 flex items-center gap-1">
+                <Navigation className="w-3.5 h-3.5 text-[#0B3D91]" />
+                <span className="hidden xs:inline">Jump to:</span>
+              </label>
+              <div className="relative flex-1 min-w-0">
+                <select
+                  id="jump-section-select"
+                  value={activeSection}
+                  onChange={(e) => handleJumpToSection(e.target.value)}
+                  className="w-full text-xs font-medium bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-lg py-1.5 pl-2.5 pr-8 text-slate-800 appearance-none focus:outline-none focus:ring-2 focus:ring-[#0B3D91] cursor-pointer truncate"
+                >
+                  <option value="">⚡ Jump to Section...</option>
+                  <option value="section-overview">📌 1. Overview & Fees</option>
+                  {toCode === 'AU' && <option value="section-subclass">🇦🇺 2. Official Subclass Registry</option>}
+                  <option value="section-financial">💼 3. Funds, ITR & Bank Rules</option>
+                  <option value="section-info-req">📋 4. Mandatory Application Data</option>
+                  <option value="section-docs">📄 5. Document Checklist ({docsList.length} docs)</option>
+                  <option value="section-steps">📝 6. Step-by-Step Process</option>
+                  {dbVisaItem?.tips && <option value="section-tips">💡 7. Advisory & Interview Tips</option>}
+                  <option value="section-faqs">❓ 8. FAQs & Rules</option>
+                  <option value="section-embassy">🏛️ 9. Embassy & VFS Centers</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Quick Scroll To Top Button */}
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-slate-700 text-xs font-medium cursor-pointer shrink-0 transition-colors"
+              title="Scroll to Top"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Top</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Language Switcher Toolbar */}
@@ -1559,7 +1833,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
       {/* Main Guide Container */}
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-10 space-y-8">
         {/* Header Title & Badges */}
-        <div className="text-center space-y-3 pb-6 border-b border-slate-200">
+        <div id="section-overview" className="text-center space-y-3 pb-6 border-b border-slate-200 scroll-mt-28">
           <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#0B3D91] bg-blue-50 px-3 py-1 rounded-full w-max mx-auto">
             <span>{fromCountry.flag} {fromCode}</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -1608,8 +1882,156 @@ function ArticleView({ match, articles = [], navigate }: any) {
           </div>
         )}
 
+        {/* AUSTRALIA OFFICIAL SUBCLASS & HOME AFFAIRS REGISTER STATUS */}
+        {toCode === 'AU' && (
+          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2 scroll-mt-28 ${
+            dbVisaItem?.isLegacy ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-blue-50 border-blue-200 text-blue-950'
+          }`}>
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-current/20">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                <span>🇦🇺</span>
+                <span>Australian Immigration Registry: {dbVisaItem?.officialName || dbVisaItem?.name}</span>
+                {dbVisaItem?.officialCode && (
+                  <span className="bg-[#0B3D91] text-white font-mono text-xs px-2 py-0.5 rounded font-black">
+                    Subclass {dbVisaItem.officialCode}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {dbVisaItem?.isLegacy ? (
+                  <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    ⚠️ Legacy / Repealed Subclass
+                  </span>
+                ) : (
+                  <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    🟢 Official Active Subclass
+                  </span>
+                )}
+                <a
+                  href={dbVisaItem?.officialSource || "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold underline flex items-center gap-1 text-[11px] hover:opacity-80"
+                >
+                  <span>Home Affairs Register</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+
+            {dbVisaItem?.isLegacy ? (
+              <p className="leading-relaxed text-[11px]">
+                <strong>Important Notice:</strong> Subclass {dbVisaItem?.officialCode || subtypeCode} is repealed or closed to new primary applicants under current Australian migration legislation. Information provided here is maintained for historical record, existing visa condition compliance, and legal audit reference. Check current replacement streams on the official Department of Home Affairs register.
+              </p>
+            ) : (
+              <p className="leading-relaxed text-[11px]">
+                Active official Australian visa subclass verified against the Department of Home Affairs legislation (Migration Regulations 1994).
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* 3 MICRO BOXES: FUNDS BOX, ITR BOX, BANK BOX (HINDI + ENGLISH MIX) */}
+        <div id="section-financial" className="space-y-4 pt-2 scroll-mt-28">
+          <div className="flex items-center justify-between border-b pb-2">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+              <span>💼 Financial, ITR & Bank Statements Micro Verification</span>
+            </h2>
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+              Zero-Rejection Checklist
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            {/* Box 1: Funds Box */}
+            <div className="bg-gradient-to-br from-emerald-50/80 to-white border-2 border-emerald-400/80 rounded-2xl p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-emerald-950 font-bold text-sm pb-2 border-b border-emerald-200">
+                  <span className="text-base">💰</span>
+                  <span>Funds Requirement Box</span>
+                </div>
+                <div className="space-y-2.5 mt-2.5 text-slate-700">
+                  <div>
+                    <span className="font-bold text-slate-900 block">Minimum Funds (Kitna Dikhana Hai):</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.fundsBox?.minimum || "₹3-5 Lakhs liquid balance in savings account (AUD $5,000+ equivalent for tourist; ₹30-35 Lakhs for student)."}</p>
+                  </div>
+                  <div>
+                    <span className="font-bold text-slate-900 block">Bank Duration & Access:</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.fundsBox?.bankMonths || "Last 6 months bank statement, genuine access, minimum 3 months seasoned funds."}</p>
+                  </div>
+                  <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-red-900 text-[11px] leading-relaxed">
+                    <span className="font-bold block text-red-950">Sudden Deposit Warning:</span>
+                    {dbVisaItem?.fundsBox?.suddenDeposit || "❌ 1 din pehle 10 lakh daal ke mat dikhao - 3 mahine purana hona chahiye. Large deposit >50k ka source proof chahiye (Salary slip/Bonus/Property sale/Gift deed). Credit card se borrowed money reject."}
+                  </div>
+                </div>
+              </div>
+              <div className="p-2.5 bg-emerald-100/70 border border-emerald-300 rounded-lg text-[11px] text-emerald-950 font-medium">
+                {dbVisaItem?.fundsBox?.example || "✅ Sahi: Regular monthly salary credits. ❌ Galat: One-day loan deposit without source."}
+              </div>
+            </div>
+
+            {/* Box 2: ITR Box */}
+            <div className="bg-gradient-to-br from-blue-50/80 to-white border-2 border-blue-400/80 rounded-2xl p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-blue-950 font-bold text-sm pb-2 border-b border-blue-200">
+                  <span className="text-base">📄</span>
+                  <span>ITR & Tax Compliance Box</span>
+                </div>
+                <div className="space-y-2.5 mt-2.5 text-slate-700">
+                  <div>
+                    <span className="font-bold text-slate-900 block">Required ITR (Kitne Saal):</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.itrBox?.years || "2-3 years ITR-V + Computation of Income + Form 16 + Balance sheet if business."}</p>
+                  </div>
+                  <div>
+                    <span className="font-bold text-slate-900 block">ITR & Bank Reconciliation Match:</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.itrBox?.match || "ITR aur bank credit match hona chahiye. ITR 10 lakh, bank credit 50 lakh = Mismatch = Direct Reject under PIC 4020."}</p>
+                  </div>
+                  <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-[11px] leading-relaxed">
+                    <span className="font-bold block text-amber-950">No ITR Case:</span>
+                    {dbVisaItem?.itrBox?.noItr || "No ITR? Form 26AS + 6 months salary slips + Employer NOC but 60% higher refusal risk."}
+                  </div>
+                </div>
+              </div>
+              <div className="p-2.5 bg-blue-100/70 border border-blue-300 rounded-lg text-[11px] text-blue-950 font-medium">
+                Rule: Tax assessment name, PAN, and employer must reconcile with application details.
+              </div>
+            </div>
+
+            {/* Box 3: Bank Box */}
+            <div className="bg-gradient-to-br from-indigo-50/80 to-white border-2 border-indigo-400/80 rounded-2xl p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-indigo-950 font-bold text-sm pb-2 border-b border-indigo-200">
+                  <span className="text-base">🏦</span>
+                  <span>Bank Statement & Source Box</span>
+                </div>
+                <div className="space-y-2.5 mt-2.5 text-slate-700">
+                  <div>
+                    <span className="font-bold text-slate-900 block">Months & Seal:</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.bankBox?.months || "Last 6 months statement with original bank seal and signature on every page."}</p>
+                  </div>
+                  <div>
+                    <span className="font-bold text-slate-900 block">Regular Credits:</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.bankBox?.regularCredit || "Salary / business revenue credited predictably between 1st-10th of each month."}</p>
+                  </div>
+                  <div>
+                    <span className="font-bold text-slate-900 block">Fixed Deposits (FDs):</span>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.bankBox?.fd || "FDs must be 3+ months seasoned and lien-free (no loan against FD)."}</p>
+                  </div>
+                  <div className="p-2.5 bg-slate-100 border border-slate-200 rounded-lg text-[11px] text-slate-800 leading-relaxed">
+                    <span className="font-bold block text-slate-900">Source of Large Funds:</span>
+                    {dbVisaItem?.bankBox?.source || "Agri: J-Form + Land deeds. Property: Registered Sale deed + Bank credit. Gift: Registered Gift Deed + Donor ITR."}
+                  </div>
+                </div>
+              </div>
+              <div className="p-2.5 bg-indigo-100/70 border border-indigo-300 rounded-lg text-[11px] text-indigo-950 font-medium">
+                Credit card cash withdrawal or borrowed funds strictly prohibited.
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* MANDATORY SECTION: Information Required in Application Form */}
-        <div className="space-y-4 pt-2">
+        <div id="section-info-req" className="space-y-4 pt-2 scroll-mt-28">
           <div className="flex items-center justify-between border-b pb-2">
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <FileText className="w-5 h-5 text-[#0B3D91]" />
@@ -1635,7 +2057,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         </div>
 
         {/* Required Documents Checklist with Interactive Checkboxes */}
-        <div className="space-y-4 pt-4 border-t border-slate-200">
+        <div id="section-docs" className="space-y-4 pt-4 border-t border-slate-200 scroll-mt-28">
           <div className="flex items-center justify-between border-b pb-2">
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <span>📄 {t.requiredDocs}</span>
@@ -1669,7 +2091,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         </div>
 
         {/* Step-by-Step Process */}
-        <div className="space-y-4 pt-4 border-t border-slate-200">
+        <div id="section-steps" className="space-y-4 pt-4 border-t border-slate-200 scroll-mt-28">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
             <span>📝 {t.steps}</span>
           </h2>
@@ -1688,7 +2110,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
         {/* Interview Tips / Advisory */}
         {dbVisaItem?.tips && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-xs sm:text-sm text-amber-900 space-y-1">
+          <div id="section-tips" className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-xs sm:text-sm text-amber-900 space-y-1 scroll-mt-28">
             <h3 className="font-bold flex items-center gap-2 text-amber-950">
               💡 {t.tips}
             </h3>
@@ -1699,7 +2121,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         )}
 
         {/* Dynamic Gemini AI / Database FAQs */}
-        <div className="space-y-4 pt-4 border-t border-slate-200">
+        <div id="section-faqs" className="space-y-4 pt-4 border-t border-slate-200 scroll-mt-28">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <span>❓ {t.faqs} ({fromCode} → {toCode})</span>
@@ -1785,7 +2207,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         {(() => {
           const embassyData = getEmbassyInfo(toCode, fromCode);
           return (
-            <div className="space-y-4 pt-4 border-t border-slate-200">
+            <div id="section-embassy" className="space-y-4 pt-4 border-t border-slate-200 scroll-mt-28">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-[#0B3D91]" />
