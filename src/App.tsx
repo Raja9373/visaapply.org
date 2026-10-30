@@ -1475,7 +1475,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   <span className="text-3xl">{country.flag}</span>
                   <div>
                     <h3 className="font-semibold text-slate-900 text-sm group-hover:text-[#0B3D91] transition-colors">{country.name}</h3>
-                    <p className="text-xs text-slate-500">{isSelf ? 'Your Country' : `${selectedOrigin?.name || 'Your'} Visa`}</p>
+                    <p className="text-xs text-slate-500">{isSelf ? 'Your Country' : country.flag}</p>
                   </div>
                 </div>
                 {!isSelf && <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#0B3D91] group-hover:translate-x-0.5 transition-all" />}
