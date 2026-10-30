@@ -70,6 +70,40 @@ export interface VisaItem {
   isVisa?: boolean;
   programmeCategory?: string;
   programmeNote?: string;
+  record_type?:
+    | 'VISA'
+    | 'PERMIT'
+    | 'TRAVEL_DOCUMENT'
+    | 'IMMIGRATION_PROGRAM'
+    | 'PROGRAM_STREAM'
+    | 'WORK_PERMIT_PATHWAY'
+    | 'EMPLOYER_DESIGNATION'
+    | 'REGIONAL_LOCATION'
+    | 'LEGACY_PROGRAM'
+    | 'SPECIAL_MEASURE'
+    | 'LEGAL_STATUS'
+    | 'FORM';
+  isPaused?: boolean;
+  intakeStatus?: 'Active' | 'Paused' | 'Closed' | 'Legacy' | 'Stream-dependent' | 'Measure-specific' | 'Historical';
+  directoryGroup?:
+    | 'Directory 1: Visa & Immigration Documents'
+    | 'Directory 2: Immigration Programmes & Pathways'
+    | 'Shared Supporting: Regional Communities'
+    | 'Shared Supporting: IRCC Forms & Guides';
+  lastVerifiedDate?: string;
+  communityDetails?: {
+    communityCode: string;
+    province: string;
+    officialBoundaryMapURL: string;
+    municipalityEligibleArea: string;
+    participatingPilot: string;
+    designatedEmployerList: string;
+    eligibleOccupations: string;
+    status: string;
+    lastVerifiedDate: string;
+    dualPilotNote?: string;
+  };
+  irccReferenceLinks?: { id: number; title: string; url: string }[];
 }
 
 export interface CountryVisas {
@@ -128,10 +162,26 @@ export const US_OFFICIAL_VISA_COUNTS = {
   totalEntries: 201
 };
 
-// Target counts per country from official matrix (1001 Total with US 201 [164 Visas + 37 Programmes], AU 135, GB 111 & CA 102)
+// Official Canada Breakdown: 102 Official Visa & Immigration Documents + 97 Additional Programmes, Communities & Forms (66 Programmes + 20 Communities + 11 Forms) = 199 Total Canada Entries
+export const CA_OFFICIAL_VISA_COUNTS = {
+  tourist: 14,
+  work: 30,
+  student: 12,
+  family: 22,
+  business: 10,
+  pr: 14,
+  totalVisas: 102,
+  totalProgrammes: 66,
+  totalCommunities: 20,
+  totalForms: 11,
+  totalAdditional: 97,
+  totalEntries: 199
+};
+
+// Target counts per country from official matrix (1098 Total with US 201 [164 Visas + 37 Programmes], CA 199 [102 Visas + 66 Programmes + 20 Communities + 11 Forms], AU 135 & GB 111)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
   US: { tourist: 16, work: 49, student: 11, family: 35, business: 18, pr: 72 }, // 201 (164 Official Visas + 37 Programmes/Set-Asides/Forms/Travel Auth)
-  CA: { tourist: 14, work: 30, student: 12, family: 22, business: 10, pr: 14 }, // 102
+  CA: { tourist: 21, work: 41, student: 14, family: 23, business: 12, pr: 88 }, // 199 (102 Official Visas/Permits + 66 Programmes/Pathways + 20 Regional Communities + 11 IRCC Forms)
   GB: { tourist: 13, work: 32, student: 10, family: 27, business: 9, pr: 20 }, // 111
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   DE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17

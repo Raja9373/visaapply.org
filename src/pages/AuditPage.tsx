@@ -108,7 +108,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
           VisaApply.org - Live Audit Report
         </h1>
-        <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201 [164 Official Visas + 37 Programmes], Australia 135, UK 111 & Canada 102)</p>
+        <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201 [164 Official Visas + 37 Programmes], Australia 135, UK 111 & Canada 199 [102 Visas + 66 Programmes + 20 Communities + 11 Forms])</p>
       </div>
 
       {/* Hero Banner */}
@@ -116,7 +116,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         <div className="text-5xl sm:text-6xl font-black text-emerald-700 tracking-tight">{totalCount}+</div>
         <div className="text-xl sm:text-2xl font-bold text-emerald-900 mt-1">Total Visa & Programme Records LIVE</div>
         <div className="text-xs sm:text-sm font-semibold text-emerald-800 mt-2 bg-emerald-100/80 px-3 py-1 rounded-md inline-block">
-          Target: 1001+ (USA 201 [164 Official Visas + 37 Non-Visa Programmes], Australia 135, UK 111 & Canada 102) | Status: {totalCount >= 1001 ? "✅ COMPLETE - All 1001+ Live" : `Status: Live ${totalCount} records`}
+          Target: 1098+ (USA 201, Canada 199 [102 Visas + 66 Programmes + 20 Communities + 11 Forms], Australia 135, UK 111) | Status: {totalCount >= 1098 ? "✅ COMPLETE - All 1098+ Live" : `Status: Live ${totalCount} records`}
         </div>
       </div>
 
@@ -226,20 +226,38 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
           </div>
 
           {/* Canada Visa Status Breakdown */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
-            <h3 className="font-bold text-slate-900 text-base mb-3">🇨🇦 Canada IRCC Visa Breakdown</h3>
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
+            <h3 className="font-bold text-slate-900 text-base mb-1">🇨🇦 Canada 199 Complete 2-Directory Breakdown</h3>
             <div className="text-xs space-y-2 text-slate-700 font-medium">
-              <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex justify-between items-center">
-                <span>🟢 Active IRCC Streams:</span>
-                <span className="font-bold text-emerald-800">~90 Official Visas</span>
+              <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg space-y-1">
+                <div className="flex justify-between items-center font-bold text-red-950">
+                  <span>🛂 Directory 1: Official Visas & Permits:</span>
+                  <span className="bg-red-700 text-white px-2 py-0.5 rounded">102 Entries</span>
+                </div>
+                <div className="text-[11px] text-red-900">
+                  Tourist: <strong>14</strong> | Work: <strong>30</strong> | Student: <strong>12</strong> | Family: <strong>22</strong> | Business: <strong>10</strong> | PR: <strong>14</strong>
+                </div>
               </div>
-              <div className="p-2 bg-amber-50 border border-amber-200 rounded-lg flex justify-between items-center">
-                <span>📜 Paused / Legacy Streams:</span>
-                <span className="font-bold text-amber-800">~12 Streams (QIIP, Interim Caregiver)</span>
+              <div className="p-2.5 bg-purple-50 border border-purple-200 rounded-lg space-y-1">
+                <div className="flex justify-between items-center font-bold text-purple-950">
+                  <span>📋 Directory 2: Programmes & Pathways:</span>
+                  <span className="bg-purple-700 text-white px-2 py-0.5 rounded">66 Pathways</span>
+                </div>
+                <div className="text-[11px] text-purple-900">
+                  AIP, RNIP, RCIP, FCIP, PNP streams, Quebec PSTQ/Arrima, Agri-Food, Caregivers, Express Entry categories
+                </div>
               </div>
-              <div className="p-2 bg-red-50 border border-red-200 rounded-lg flex justify-between items-center">
-                <span>🇨🇦 Total Canada IRCC Visas:</span>
-                <span className="font-bold text-red-900">102 Official Visas</span>
+              <div className="p-2 bg-teal-50 border border-teal-200 rounded-lg flex justify-between items-center">
+                <span>🌄 Regional Communities Directory:</span>
+                <span className="font-bold text-teal-900">20 Communities (RCIP 14 + FCIP 6)</span>
+              </div>
+              <div className="p-2 bg-blue-50 border border-blue-200 rounded-lg flex justify-between items-center">
+                <span>📄 IRCC Forms & Guides:</span>
+                <span className="font-bold text-blue-900">11 Official IMM Forms</span>
+              </div>
+              <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg flex justify-between items-center font-bold text-emerald-950">
+                <span>🇨🇦 Total Canada IRCC Entries:</span>
+                <span className="bg-emerald-700 text-white px-2 py-0.5 rounded">199 Total</span>
               </div>
             </div>
           </div>

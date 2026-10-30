@@ -175,6 +175,24 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                 </div>
               )}
 
+              {/* Canada Regional Clarification & 2-Directory Architecture Banner */}
+              {code === 'CA' && (
+                <div className="p-4 bg-red-50/80 border border-red-200 rounded-xl text-xs space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-extrabold text-red-950 flex items-center gap-1.5">
+                      <span>🇨🇦</span>
+                      <span>Canada 199 Complete 2-Directory Architecture: 102 Official Visas/Permits + 66 Programmes/Pathways + 20 Regional Communities + 11 IRCC Forms = 199 Total Entries</span>
+                    </span>
+                    <span className="text-[11px] font-bold bg-red-800 text-white px-2 py-0.5 rounded">
+                      No Postcode Visa System
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed">
+                    <strong>Clarification:</strong> Canada mein Australia jaisa universal postcode-based Regional Migration DAMA visa system nahi hai. RCIP aur FCIP ke liye IRCC selected community boundaries aur designated employers publish karta hai. Isliye Canada me postcode visa system add mat karo — Community boundary + Designated employer + Programme-specific rules ke through maintain karo.
+                  </p>
+                </div>
+              )}
+
               {/* Australia Regional Migration 7-Category Summary Box */}
               {code === 'AU' && (
                 <div className="p-4 bg-teal-50/80 border border-teal-200 rounded-xl text-xs space-y-2">
