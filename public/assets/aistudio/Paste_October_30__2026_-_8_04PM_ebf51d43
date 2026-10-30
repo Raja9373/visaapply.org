@@ -1,0 +1,181 @@
+You are building visaapply.org - 30 countries portal - 540+ records LIVE must stay - DO NOT BREAK.
+
+Stable state you must keep:
+- FULL_VISA_DB dual-access: FULL_VISA_DB[toCode][category] AND FULL_VISA_DB[fromCode][toCode][category] + BASE_COUNTRY_VISAS
+- Routes: /[from]-to-[to] Level1 6 categories, /[from]-to-[to]-[category] Level2, /[from]-to-[to]-[category]-[subcode] Level3
+- Back button window.history.back() + breadcrumbs at every step
+- Footer Sitemap for SEO, /audit admin-only, /sitemap grouped by 30 countries
+- Language auto-detect navigator.language + IP: JP->ja, ES->es, DE->de, FR->fr
+- contact@visaapply.org + AdSense pub-9048615701580913 in footer
+- Embassy API /api/embassy?from={from}&to={to} - Show destination embassy in FROM country
+
+TASK: Add Singapore 109 records - Self-contained list below - NO PDF needed - Data is already here:
+
+SINGAPORE 109 RECORDS - 13 SECTIONS:
+
+SECTION 01 - 7 records - Short-Term Visit & Tourism:
+1. SG-VIS-001 Short-Term Visit Pass STVP tourism/social visit VISIT_PASS Active - 30 days - Entry visa + STVP on arrival - Documents: Passport 6M + Photo 35x45 + Form14A entry visa SGD30 + SG Arrival Card mandatory 3 days before + Flight return + Hotel OR Invitation Letter SC/PR + IC + Relationship + Bank 6 months genuine + ITR 2-3 years - Funds SGD100/day - Warning sudden deposit 1 day before rejection
+2. SG-VIS-002 STVP business visit VISIT_PASS Active - Business visitor activities not employment - Business Invitation Letter Singapore company + Indian company letter + ACRA registration + Purpose letter MOST IMPORTANT
+3. SG-VIS-003 Medical treatment visit VISIT_PASS Conditional - Medical visit purpose stay permission case dependent - Hospital appointment letter Singapore hospital + Medical report + Advance payment receipt + Medical purpose letter MOST IMPORTANT - Not residence like 【entity-UAE¦canonical_name=UAE】 4 medical visas - Only visit pass
+4. SG-VIS-004 Miscellaneous Work Pass WORK_PASS Active - Short-term pass for specified eligible activities events distinct from employment - 60 days - Event invitation + Company letter
+5. SG-VIS-005 Visa-required national entry visa ENTRY_VISA Nationality-dependent - Entry visa facilitates travel not permission to enter by itself - India needs - Form14A SGD30 - Documents Passport + Photo + Flight + Hotel + Bank
+6. SG-VIS-006 Visa-free national short-term entry SUPPORTING_CLASSIFICATION Nationality-dependent - Visa exemption depends on passport - US UK EU visa-free entitlement - Not visa
+7. SG-VIS-007 Multiple Journey Visa ENTRY_VISA Conditional - Multiple-entry facility eligible applicants nationalities - 1 Year Business Frequent Traveller + 2 Years Family SC/PR - Business history + Previous SG visas + Family SC/PR sponsor + Relationship proof
+
+SECTION 02 - 4 records - Transit & Special Visit:
+8. SG-TRN-001 Visa-Free Transit Facility VFTF TRANSIT_FACILITY Nationality-dependent - Up to 96 hours qualifying travellers - For Indian with valid US AU CA JP UK Schengen visa + Onward ticket + Indian passport - Free 96 hours ⭐ MOST IMPORTANT for India - ChatGPT misses this
+9. SG-TRN-002 Airside transit without immigration clearance SUPPORTING_CLASSIFICATION Conditional - Transit arrangements depend on airline
+10. SG-TRN-003 Special Pass SPECIAL_PASS Conditional - Issued for specific circumstances competent authority investigation court etc - Not general migration route
+11. SG-TRN-004 LTVP short-term bridging administrative stay VISIT_PASS Conditional - Use actual issued pass category administrative extension - Extended social visit pass LTVP pending
+
+SECTION 03 - 17 records - Work Passes Employment & Skilled Work:
+12. SG-WRK-001 Employment Pass EP WORK_PASS Active - Eligible foreign professionals managers executives qualifying salary COMPASS - Salary 5000+ regular 5500+ Finance + COMPASS 40 points + Degree + Job offer + Company ACRA - 2 years - Job offer letter MOST IMPORTANT + Degree + Salary
+13. SG-WRK-002 S Pass WORK_PASS Active - Mid-skilled salary quota levy - Salary 3150+ regular 3700+ Finance + Quota 10-15% + Levy SGD450-650 + Degree Diploma
+14. SG-WRK-003 Work Permit migrant worker WORK_PASS Active - Sector source-country specific - Employer + Salary + Safety course + Quota MYE + Levy 300-950
+15. SG-WRK-004 Work Permit domestic worker WORK_PASS Active - Eligible migrant domestic workers MDW FDW Housemaid Nanny - Employer SC/PR salary 6000+ + MDW insurance + Security bond + Age 23-50 + Education 8 years MOST IMPORTANT
+16. SG-WRK-005 Work Permit confinement nanny WORK_PASS Active - Specific arrangement eligible confinement nannies Malaysian 16 weeks - Malaysian Age 23-70 + Employer SC + Child birth proof
+17. SG-WRK-006 Work Permit performing artiste WORK_PASS Legacy/closed - Scheme closed new applications from 1 June 2022 retain historical - Performing artiste Pub Bar Hotel KTV 6 months - Legacy closed
+18. SG-WRK-007 Overseas Networks & Expertise Pass ONE Pass WORK_PASS Active - Top talent high salary outstanding achievements - Salary 30000+ OR Outstanding achievements Business Arts Culture Sports Academia Research Technology - 5 years - No employer tied - Can start business - Spouse can work LOC - MOST IMPORTANT high earner
+19. SG-WRK-008 Personalised Employment Pass PEP WORK_PASS Active - Eligible high-earning EP holders overseas professionals not tied to one employer - Salary 22000+ last 6 months + Degree + 3 years no employer tied + Can stay 6 months between jobs
+20. SG-WRK-009 EntrePass WORK_PASS Active - Eligible foreign entrepreneurs starting operating venture-backed innovative business - Business plan + Funding 100k VC or Govt grant or Patent or Incubator + Company <6 months + 30% share + 100k paid-up + 1 year + 2 years renew - Business plan MOST IMPORTANT
+21. SG-WRK-010 Training Employment Pass TEP WORK_PASS Active - Eligible foreign trainees undergoing practical training short-term - Training attachment + Student degree or Professional salary 3000+ + Company letter + University letter
+22. SG-WRK-011 Work Holiday Pass Work and Holiday Programme Australia WORK_PASS Active - Eligible young people Australia - Age 18-30 University
+23. SG-WRK-012 Work Holiday Pass participating country region programme WORK_PASS Active - Eligibility limited specified countries regions recognised institutions - France Germany HK Japan NZ Switzerland UK USA Age 18-25 University student graduate + University letter - ChatGPT misses 6 countries
+24. SG-WRK-013 Training Work Permit TWP WORK_PASS Active - Eligible semi-skilled foreign trainees students - 6 months - Training + Company
+25. SG-WRK-014 Miscellaneous Work Pass WORK_PASS Active - Specified short-term work assignments religious workers journalists speakers - 60 days - Event invitation
+26. SG-WRK-015 Work pass for eligible family member of work-pass holder WORK_PASS Conditional - Dependant's Pass LTVP holders generally need work pass to work - DP LTVP + Job offer
+27. SG-WRK-016 Letter of Consent LOC WORK_AUTHORIZATION Conditional - Work authorisation specified eligible pass holders not visa - LTVP DP holder can work with LOC - Free - LTVP DP + Job offer + Company letter
+28. SG-WRK-017 Pre-approved Letter of Consent PLOC WORK_AUTHORIZATION Conditional - Eligible LTVP LTVP+ holders spouses children of SC/PR - LTVP+ spouse SC pre-approved no employer apply - Free
+
+SECTION 04 - 9 records - Work Pass Sector & Admin Classifications - SUPPORTING_CLASSIFICATION - NOT separate visa - Sector framework - Australia DAMA Regional jaisa nahi:
+29. SG-SEC-001 Construction sector Work Permit SUPPORTING_CLASSIFICATION Active - Sector-specific framework levy quota safety course - Show as sub-pathway inside SG-WRK-003
+30. SG-SEC-002 Manufacturing sector Work Permit SUPPORTING_CLASSIFICATION
+31. SG-SEC-003 Marine shipyard sector Work Permit SUPPORTING_CLASSIFICATION
+32. SG-SEC-004 Process sector Work Permit Chemical SUPPORTING_CLASSIFICATION
+33. SG-SEC-005 Services sector Work Permit Retail F&B Hotel 35% quota SUPPORTING_CLASSIFICATION
+34. SG-SEC-006 Non-traditional source NTS occupation list SUPPORTING_CLASSIFICATION Active - Occupation source-country framework not separate pass - India Bangladesh Myanmar Philippines Sri Lanka Thailand - NTS
+35. SG-SEC-007 Higher-skilled worker classification SUPPORTING_CLASSIFICATION Levy skill classification lower levy
+36. SG-SEC-008 Basic-skilled worker classification SUPPORTING_CLASSIFICATION Higher levy
+37. SG-SEC-009 Migrant domestic worker eligibility classification SUPPORTING_CLASSIFICATION Age source-country employer conditions Age 23-50 Education 8 years Employer salary 6000+
+
+SECTION 05 - 13 records - Family & Dependant Passes:
+38. SG-FAM-001 Dependant's Pass DP spouse DEPENDANT_PASS Active - Legally married spouse qualifying work-pass holder salary 6000+ - Marriage certificate attested MOST IMPORTANT + Work pass holder salary + Passport
+39. SG-FAM-002 Dependant's Pass unmarried child under 21 DEPENDANT_PASS Active - Including legally adopted - Birth certificate attested
+40. SG-FAM-003 LTVP parent of eligible work-pass holder LONG_TERM_VISIT_PASS Conditional - Salary criteria EP ONE Pass PEP 12000+ - Birth certificate attested parent-child + Parent passport + Insurance
+41. SG-FAM-004 LTVP common-law spouse LONG_TERM_VISIT_PASS Conditional - Documentary evidence common-law affidavit
+42. SG-FAM-005 LTVP unmarried handicapped child aged 21+ LONG_TERM_VISIT_PASS Conditional - Disability certificate
+43. SG-FAM-006 LTVP stepchild under 21 LONG_TERM_VISIT_PASS Conditional - Documentary evidence
+44. SG-FAM-007 LTVP for spouse of SC/PR LONG_TERM_VISIT_PASS Active ICA - Spouse SC/PR - SC/PR sponsor + Marriage certificate attested + PMLA course Pre-Marriage Long-Term Visit Pass Assessment MOST IMPORTANT
+45. SG-FAM-008 LTVP for child of SC/PR LONG_TERM_VISIT_PASS Active - Birth certificate attested
+46. SG-FAM-009 LTVP for parent of SC/PR LONG_TERM_VISIT_PASS Conditional sponsor status ICA assessment - Parent SC/PR - Sponsor salary 12000+ + Birth certificate attested + Housing + Insurance MOST IMPORTANT
+47. SG-FAM-010 LTVP for graduate seeking employment LONG_TERM_VISIT_PASS Conditional recognised Singapore institutions - Graduate job search
+48. SG-FAM-011 LTVP for mother grandmother of child studying LONG_TERM_VISIT_PASS Conditional student sponsor conditions - Student Pass + Mother Grandmother relationship + Female only + Age child <16 + Guardian - Female only
+49. SG-FAM-012 LTVP for visitor seeking permission to remain family reasons LONG_TERM_VISIT_PASS Conditional ICA assessment not automatic entitlement - Extended social visit pass LTVP pending 6 months
+50. SG-FAM-013 LTVP+ Long-Term Visit Pass-Plus LONG_TERM_VISIT_PASS Conditional eligible foreign spouses SC includes enhanced stay work-related benefits - 3 years marriage or child SC + Enhanced stay 3-5 years + Pre-approved LOC + Can work + No separate LOC application MOST IMPORTANT - Singapore Green equivalent
+
+SECTION 06 - 8 records - Student & Training:
+51. SG-STU-001 Student's Pass university STUDENT_PASS Active - Full-time course approved institution - University 【entity-NUS¦canonical_name=NUS】 NTU SMU SUTD SIT SUSS - Admission letter MOST IMPORTANT + Bank + Passport + Photo + Birth certificate
+52. SG-STU-002 Student's Pass polytechnic STUDENT_PASS Active
+53. SG-STU-003 Student's Pass ITE STUDENT_PASS Active - Institute of Technical Education
+54. SG-STU-004 Student's Pass junior college centralised institute STUDENT_PASS Active - JC CI
+55. SG-STU-005 Student's Pass private education institution STUDENT_PASS Conditional institution must meet requirements course must qualify EduTrust - Private PEI Diploma Degree EduTrust certification MOST IMPORTANT
+56. SG-STU-006 Student's Pass exchange student programme STUDENT_PASS Conditional programme institution require Student's Pass - Exchange Erasmus
+57. SG-STU-007 Training Employment Pass WORK_PASS Active - Practical training route eligible foreign professionals trainees - Same as WRK-010 duplicate keep once
+58. SG-STU-008 Training Work Permit WORK_PASS Active - Practical training route eligible semi-skilled trainees students - Same as WRK-013 duplicate keep once
+
+SECTION 07 - 8 records - Permanent Residence:
+59. SG-PR-001 PR spouse of SC/PR PERMANENT_RESIDENCE Active Family ties ICA assesses - PR Sponsored Spouse - SC/PR sponsor + Marriage certificate attested
+60. SG-PR-002 PR unmarried child under 21 of citizen PR PERMANENT_RESIDENCE Active
+61. SG-PR-003 PR aged parent of Singapore citizen PERMANENT_RESIDENCE Conditional May apply under family ties scheme - Parent SC
+62. SG-PR-004 PR Employment Pass S Pass holder PERMANENT_RESIDENCE Active Work-pass holder may apply approval discretionary - PR PTS Professionals Technical Personnel Skilled Workers Scheme EP S Pass holder Salary 6 months payslips Degree Employment letter ITR Notice of Assessment 3 years Bank statement Passport Birth Marriage certificate MOST IMPORTANT - ICA discretionary
+63. SG-PR-005 PR Global Investor Programme GIP PERMANENT_RESIDENCE Active Investor route 【entity-EDB¦canonical_name=EDB】 - GIP PR direct 10M 25M 50M investment Fee SGD10000 PR 5 years Re-entry MOST IMPORTANT
+64. SG-PR-006 PR Foreign Artistic Talent ForArts PERMANENT_RESIDENCE Conditional Specialised arts talent route verify NAC ICA - Arts talent + NAC National Arts Council + Portfolio + Recommendation + Training + Arts contribution
+65. SG-PR-007 PR student scheme PERMANENT_RESIDENCE Active Eligible students examination residence conditions may apply - Student 2 years residence + Pass exam
+66. SG-PR-008 PR family-sponsored child born overseas PERMANENT_RESIDENCE Conditional Specific family citizenship PR circumstances
+
+SECTION 08 - 7 records - Investor Entrepreneur Business:
+67. SG-BIZ-001 GIP Option A Investment new existing Singapore business INVESTOR_RESIDENCE Active Investment new existing Singapore business subject 【entity-EDB¦canonical_name=EDB】 criteria - Option A 10M Business Entity 25M turnover company 30% share Turnover 200M + 3 years business track record + Fee 10000 + PR 5 years MOST IMPORTANT - Singapore Golden
+68. SG-BIZ-002 GIP Option B Investment approved GIP-select fund INVESTOR_RESIDENCE Active - Option B 25M Fund 【entity-EDB¦canonical_name=EDB】 GIP Select Fund - 25M Fund MOST IMPORTANT
+69. SG-BIZ-003 GIP Option C Establishing expanding Singapore-based single-family office INVESTOR_RESIDENCE Active - Option C 50M Family Office SFO AUM 200M + Investment 50M in 4 categories listed companies + SFO Singapore - 50M MOST IMPORTANT
+70. SG-BIZ-004 EntrePass venture-backed innovative business WORK_PASS Active Work-pass route eligible entrepreneurs not direct PR - EntrePass 100k funding Business plan 1 year + 2 years renew - Business plan MOST IMPORTANT
+71. SG-BIZ-005 Employment Pass business owner director WORK_PASS Conditional Company role must meet EP criteria incorporation alone does not guarantee pass - Business owner EP salary 5000+ COMPASS - Company register alone not guarantee pass - EP criteria must meet
+72. SG-BIZ-006 ONE Pass business and technology talent WORK_PASS Active Eligible top talent business criteria achievements apply - ONE Pass 30000+ 5 years
+73. SG-BIZ-007 Investor PR GIP PR outcome PERMANENT_RESIDENCE Active PR outcome route distinguish from underlying GIP application process - PR outcome
+
+SECTION 09 - 7 records - Overseas Talent Specialised Passes - ONE Pass + PEP breakdown - Sub-pathways inside ONE Pass PEP not separate visas:
+74. SG-TAL-001 ONE Pass general eligibility route WORK_PASS Active High salary outstanding achievements validity renewal - General eligibility - Sub-pathway inside ONE Pass
+75. SG-TAL-002 ONE Pass established leader in business WORK_PASS Active Achievement-based eligibility category - Business leader - Sub-pathway inside ONE Pass - Not separate visa
+76. SG-TAL-003 ONE Pass established leader in arts culture sports WORK_PASS Active - Arts sports - Sub-pathway
+77. SG-TAL-004 ONE Pass established leader in academia research WORK_PASS Active - Academia research - Sub-pathway
+78. SG-TAL-005 ONE Pass established leader in technology WORK_PASS Active - Technology - Sub-pathway
+79. SG-TAL-006 PEP overseas professional WORK_PASS Active Eligibility based qualifying overseas salary other requirements - Overseas 22000+ last 6 months - Sub-pathway inside PEP
+80. SG-TAL-007 PEP existing EP holder WORK_PASS Active Eligible EP holder may apply subject salary - Existing EP 22000+ - Sub-pathway inside PEP
+
+SECTION 10 - 3 records - Working Holiday Youth Mobility:
+81. SG-WH-001 Work Holiday Pass Australia Work and Holiday Programme WORK_PASS Active Age programme eligibility - Australia WHP Age 18-30
+82. SG-WH-002 Work Holiday Pass participating country region programme WORK_PASS Active Eligibility limited specified countries regions recognised institutions - France Germany HK Japan NZ Switzerland UK USA Age 18-25 University student graduate
+83. SG-WH-003 Work Holiday Pass historical country region eligibility record LEGACY_VISA Historical verify Keep country-specific programme rules versioned do not assume every nationality qualifies - Legacy old rules
+
+SECTION 11 - 6 records - Special Humanitarian Official Status:
+84. SG-SPC-001 Special Pass investigation court or other specified circumstances SPECIAL_PASS Conditional Issued relevant authority defined circumstances not general migration route - Special Pass investigation court - Not general visa
+85. SG-SPC-002 Immigration Exemption Order exempt person status SUPPORTING_CLASSIFICATION Conditional Applies only persons classes exempted under law order - Exempt person
+86. SG-SPC-003 Diplomatic official passport visa exemption SUPPORTING_CLASSIFICATION Nationality-dependent Depends nationality passport type bilateral arrangements - Diplomatic visa exemption - Visa-free entitlement not visa
+87. SG-SPC-004 Foreign government official mission stay SUPPORTING_CLASSIFICATION Conditional Protocol applicable immigration arrangements govern - Government official
+88. SG-SPC-005 UN international organisation official status SUPPORTING_CLASSIFICATION Conditional Subject applicable privileges immunities permissions - UN official
+89. SG-SPC-006 Victim of trafficking protected person special arrangements SPECIAL_PASS Conditional Case-specific protection authority arrangements not general public visa category - Trafficking victim protection
+
+SECTION 12 - 14 records - Pass Issuance Renewal Supporting Documents - STATUS_DOCUMENT - NOT visa - Procedural:
+90. SG-ADM-001 In-Principle Approval IPA letter STATUS_DOCUMENT Active Approval entry document relevant work pass not itself visa residence pass - IPA letter 6 months - Entry before issuance MOST IMPORTANT
+91. SG-ADM-002 Work pass issuance STATUS_DOCUMENT Active Administrative issuance step after entry requirements - Issuance
+92. SG-ADM-003 Work pass renewal STATUS_DOCUMENT Active Renewal process subject pass-specific conditions - Renewal 2 years
+93. SG-ADM-004 Work pass cancellation STATUS_DOCUMENT Active Employer holder compliance procedure - Cancellation
+94. SG-ADM-005 Notification Letter STATUS_DOCUMENT Active Temporary proof permission specified work-pass situations - Notification Letter
+95. SG-ADM-006 Digital work pass SGWorkPass STATUS_DOCUMENT Active Digital proof work-pass status - Digital card SGWorkPass app
+96. SG-ADM-007 e-Pass electronic Visit Pass STATUS_DOCUMENT Active Digital record visit pass permitted stay - e-Pass STVP digital
+97. SG-ADM-008 Student's Pass issuance renewal STATUS_DOCUMENT Active Administrative process Student's Pass
+98. SG-ADM-009 Long-Term Visit Pass issuance renewal STATUS_DOCUMENT Active Administrative process LTVP LTVP+
+99. SG-ADM-010 Permanent Residence Re-Entry Permit REP STATUS_DOCUMENT Active Required PRs travelling out returning SG validity renewal rules apply - REP 5 years PR must have REP to re-enter MOST IMPORTANT for PR
+100. SG-ADM-011 Entry visa ENTRY_VISA Nationality-dependent Visa required certain passport holders does not guarantee admission - Entry visa Form14A SGD30
+101. SG-ADM-012 Arrival Card SG Arrival Card STATUS_DOCUMENT Active Pre-arrival health travel declaration where required not visa - SGAC mandatory 3 days before arrival MOST IMPORTANT - Free - Not visa but mandatory
+102. SG-ADM-013 Medical examination for pass issuance STATUS_DOCUMENT Required where applicable Medical examination requirement depends pass category - Medical exam HIV etc Work Permit MDW
+103. SG-ADM-014 Biometrics identity registration STATUS_DOCUMENT Required where applicable Identity registration relevant passes - Biometrics FIN card
+
+SECTION 13 - 6 records - Legacy Closed Routes - LEGACY_VISA:
+104. SG-LEG-001 Work Permit performing artistes LEGACY_VISA Closed new applications Scheme closed new applications from 1 June 2022 retain historical - Performing artiste closed 2022
+105. SG-LEG-002 EntrePass historical eligibility criteria LEGACY_VISA Historical updated Criteria have changed use current MOM requirements - EntrePass old criteria
+106. SG-LEG-003 Older PEP criteria LEGACY_VISA Historical updated Retain historical criteria separately from current PEP rules - PEP old criteria
+107. SG-LEG-004 Older Work Holiday country region eligibility rules LEGACY_VISA Historical updated Country region participation institutional rules may change - WHP old countries
+108. SG-LEG-005 Pre-COMPASS EP assessment framework LEGACY_VISA Historical updated Keep earlier assessment rules historical reference only - Pre-COMPASS old EP points
+109. SG-LEG-006 Old paper-based immigration pass documents LEGACY_VISA Historical Superseded current digital updated procedures where applicable - Old paper FIN card to digital
+
+END OF 109.
+
+LOGIC FOR AI STUDIO CODE:
+
+- Create array SINGAPORE_VISAS_ALL 109 objects with fields: code, title, category mapping as per above (tourist: 1-11, work: 12-37, student: 51-56, family: 38-50, business: 67-73 + 74-80 as sub-pathways, pr: 59-66 + 99-100 + 84-89 special), recordType, nationalityDependent boolean, conditional boolean, legacy boolean, fee, validity, stay, purpose, eligibility, documents.mostImportant[], documents.allDocs[], fundsBox, itrBox, bankBox, warningBox {title, wrong ❌ Galat example, right ✅ Sahi example}, embassy logic, seo title description.
+
+- For counting audit: Live visas = 65 actual (11 tourist + 22 work actual + 6 student + 13 family + 6 business GIP options counted as 1 GIP with 3 sub-options + 7 pr + REP + SGAC + IPA = 65). Supporting sector 9 + supporting nationality visa-free 3 + status docs 14-4 actual = 10 + legacy 6 + special 6 + duplicate TEP TWP 2 + ONE Pass 5 sub-pathways counted as 1 + PEP 2 sub-pathways counted as 1 = total directory 109 but live 65. For audit page show 109 directory breakdown + 65 live.
+
+- DUAL-ACCESS: For each fromCode in 30 countries list: us, ca, gb, au, de, fr, ae, sg, jp, in, br, it, es, nl, nz, se, ch, ie, no, pt, dk, fi, be, at, pl, my, th, tr, za, sa - Do:
+  if (!FULL_VISA_DB[fromCode]) FULL_VISA_DB[fromCode] = {}
+  if (!FULL_VISA_DB[fromCode]['sg']) FULL_VISA_DB[fromCode]['sg'] = {tourist:[], work:[], student:[], family:[], business:[], pr:[]}
+  Then for each visaObj in SINGAPORE_VISAS_ALL filtered live (65), push to FULL_VISA_DB[fromCode]['sg'][visaObj.category] AND also to FULL_VISA_DB['sg'][visaObj.category]
+  Also BASE_COUNTRY_VISAS['sg'] = FULL_VISA_DB['sg']
+
+- Do NOT overwrite existing FULL_VISA_DB - Use if (!FULL_VISA_DB['sg']) create, else push.
+
+- FundsBox bankBox itrBox warningBox for every visa - No half work - Tourist must have Invitation Letter OR Hotel Booking MOST IMPORTANT, Business must have Business Invitation Letter + Sponsor Letter + Indian Company Letter, Student must have Offer Letter Admission Letter + I-20 CAS CoE LOA equivalent (Singapore Admission letter + IPA), Work must have Job Offer letter, Family must have Relationship Proof attested, PR must have Investment Proof GIP 10M/25M/50M or EP salary etc.
+
+- Back button + breadcrumbs at every level + Footer Sitemap link + contact@visaapply.org + pub-9048615701580913.
+
+- Sitemap grouped by 30 countries, SG shows 11 tourist + 32 work (including 5 sectors as sub-pathways) + 6 student + 13 family + 8 business (including 5 ONE Pass achievement categories as sub-pathways + 3 GIP options) + 8 pr + 14 adm + 6 legacy + 11 special = 109 directory but 65 live pages - Show live 65 in Level2 counts, 109 in audit searchable list.
+
+- Update AUDIT_TOTAL = previous 1344 + 65 = 1409 live visa records.
+
+- Verify: /audit shows 1409 Total Visa Records LIVE, SG 65/65 live, searchable list 109, /in-to-sg-tourist shows 11 types including VFTF 96 Hours Free, /in-to-sg-work shows 22 actual + sector sub-pathways + ONE Pass sub-pathways, docs show MOST IMPORTANT tags, fundsBox SGD100/day, ITR 2-3 years, bank 6 months genuine, warning ❌ sudden deposit 1 day before vs ✅ gradual savings.
+
+Generate TypeScript file: singapore-109-official-visas.ts + singapore-109-ai-studio-compatible.json + Update FULL_VISA_DB.ts
+
+Do NOT delete existing 540 data - Append only - Keep 540+ live.
+
+END PROMPT.

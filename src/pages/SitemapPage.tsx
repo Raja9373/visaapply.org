@@ -167,6 +167,16 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       🏛️ Official Make it in Germany Portal ↗
                     </a>
                   )}
+                  {code === 'SG' && (
+                    <a
+                      href="https://www.ica.gov.sg/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200 hover:underline"
+                    >
+                      🏛️ Official ICA & MOM Singapore Portal ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}
@@ -209,6 +219,24 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                   </div>
                   <p className="text-[11px] text-slate-700 leading-relaxed">
                     <strong>Clarification:</strong> Canada mein Australia jaisa universal postcode-based Regional Migration DAMA visa system nahi hai. RCIP aur FCIP ke liye IRCC selected community boundaries aur designated employers publish karta hai. Isliye Canada me postcode visa system add mat karo — Community boundary + Designated employer + Programme-specific rules ke through maintain karo.
+                  </p>
+                </div>
+              )}
+
+              {/* Singapore 2-Directory Architecture & Passes Banner */}
+              {code === 'SG' && (
+                <div className="p-4 bg-teal-50/80 border border-teal-200 rounded-xl text-xs space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-extrabold text-teal-900 flex items-center gap-1.5">
+                      <span>🇸🇬</span>
+                      <span>Singapore 2-Directory Architecture: 109 Comprehensive Immigration Records (Passes, Permits, Schemes & Administrative Status)</span>
+                    </span>
+                    <span className="text-[11px] font-bold bg-teal-700 text-white px-2 py-0.5 rounded">
+                      COMPASS Framework + GIP + EntrePass
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed">
+                    <strong>Clarification:</strong> Singapore uses Visit Passes (STVP, Long Term Visit Pass), Work Passes (Employment Pass with COMPASS points, S Pass, ONE Pass, PEP, EntrePass, Work Permit), Student Passes, Dependant's Passes, Permanent Residence (PTS, GIP Options A/B/C, ForArts, Student Scheme), and administrative status documents (IPA, SGAC, REP) without postal codes or Australian regional DAMA systems.
                   </p>
                 </div>
               )}
