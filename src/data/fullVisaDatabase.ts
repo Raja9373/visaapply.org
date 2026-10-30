@@ -27,6 +27,7 @@ import { MALAYSIA_84_VISAS } from './malaysiaVisas';
 import { INDONESIA_82_VISAS } from './indonesiaVisas';
 import { PHILIPPINES_68_VISAS } from './philippinesVisas';
 import { SCHENGEN_96_VISAS } from './schengenVisas';
+import { SWEDEN_94_VISAS } from './swedenVisas';
 
 export interface VisaItem {
   id: string;
@@ -188,6 +189,7 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   NL: { name: "Netherlands", currency: "EUR (€)", flag: "🇳🇱" },
   NZ: { name: "New Zealand", currency: "NZD ($)", flag: "🇳🇿" },
   SE: { name: "Sweden", currency: "SEK", flag: "🇸🇪" },
+  se: { name: "Sweden", currency: "SEK", flag: "🇸🇪" },
   CH: { name: "Switzerland", currency: "CHF", flag: "🇨🇭" },
   IE: { name: "Ireland", currency: "EUR (€)", flag: "🇮🇪" },
   NO: { name: "Norway", currency: "NOK", flag: "🇳🇴" },
@@ -291,7 +293,8 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   ES: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Spain Entries
   NL: { tourist: 14, work: 20, student: 14, family: 10, business: 8, pr: 26 }, // 92 Netherlands Live Visas (Official IND / VFS)
   NZ: { tourist: 15, work: 22, student: 12, family: 15, business: 12, pr: 12 }, // 88 New Zealand Live Visas (Official INZ / DIA)
-  SE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  SE: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 36 }, // 94 Sweden Live Visas (Official Migrationsverket)
+  se: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 36 },
   CH: { tourist: 12, work: 20, student: 15, family: 15, business: 15, pr: 19 }, // 96 Switzerland Live Visas (Official SEM FDFA ch.ch)
   IE: { tourist: 14, work: 23, student: 12, family: 14, business: 15, pr: 8 }, // 86 Ireland Live Visas (Official INIS / DETE)
   NO: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
@@ -699,6 +702,11 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (code === 'SC' || code === 'schengen') {
     BASE_COUNTRY_VISAS['SC'] = SCHENGEN_96_VISAS;
     BASE_COUNTRY_VISAS['schengen'] = SCHENGEN_96_VISAS;
+    return;
+  }
+  if (code === 'SE' || code === 'se') {
+    BASE_COUNTRY_VISAS['SE'] = SWEDEN_94_VISAS;
+    BASE_COUNTRY_VISAS['se'] = SWEDEN_94_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
