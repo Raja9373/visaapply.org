@@ -23,6 +23,7 @@ import { NETHERLANDS_92_VISAS } from './netherlandsVisas';
 import { SOUTH_AFRICA_71_VISAS } from './southAfricaVisas';
 import { TURKEY_79_VISAS } from './turkeyVisas';
 import { VIETNAM_76_VISAS } from './vietnamVisas';
+import { MALAYSIA_84_VISAS } from './malaysiaVisas';
 
 export interface VisaItem {
   id: string;
@@ -68,6 +69,30 @@ export interface VisaItem {
   steps?: string[];
   tips?: string | string[];
   faq?: { q: string; a: string }[];
+  toCountry?: string;
+  fromCountry?: string;
+  warningBox?: string;
+  rawFundsBox?: string;
+  rawBankBox?: string;
+  microDetails?: {
+    fundsBox?: {
+      minimum: string;
+      bankMonths: string;
+      suddenDeposit: string;
+      example: string;
+    };
+    itrBox?: {
+      years: string;
+      match: string;
+      noItr: string;
+    };
+    bankBox?: {
+      months: string;
+      regularCredit: string;
+      fd: string;
+      source: string;
+    };
+  };
   name_ja?: string;
   docs_ja?: string[];
   purpose_ja?: string;
@@ -271,7 +296,7 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   BE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   AT: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   PL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  MY: { tourist: 5, work: 3, student: 2, family: 2, business: 2, pr: 4 }, // 18
+  MY: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 24 }, // 84 Malaysia Live Visas (Official Immigration Department / ESD / EMGS / MDEC / MM2H / PVIP)
   TH: { tourist: 15, work: 15, student: 8, family: 15, business: 20, pr: 40 }, // 113 Thailand Entries (93 Live Visas + 20 Procedural/Supporting/Legacy)
   TR: { tourist: 12, work: 20, student: 8, family: 8, business: 8, pr: 23 }, // 79 Turkey Live Visas (Official MFA / Göç İdaresi)
   ZA: { tourist: 10, work: 16, student: 8, family: 8, business: 8, pr: 21 }, // 71 South Africa Live Visas (Official DHA / VFS)
@@ -648,6 +673,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'VN') {
     BASE_COUNTRY_VISAS['VN'] = VIETNAM_76_VISAS;
+    return;
+  }
+  if (code === 'MY') {
+    BASE_COUNTRY_VISAS['MY'] = MALAYSIA_84_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
