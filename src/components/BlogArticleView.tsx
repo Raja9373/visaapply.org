@@ -26,6 +26,9 @@ export interface Article {
   to: string;
   type: string;
   date: string;
+  publishedDate?: string;
+  createdAt?: string;
+  updatedAt?: string;
   fees: string;
   docs: string;
   excerpt?: string;

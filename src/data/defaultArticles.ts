@@ -2,6 +2,7 @@ import { marked } from 'marked';
 import { Article } from '../components/BlogArticleView';
 
 export const DEFAULT_PUBLISHED_GUIDES: Article[] = [
+  // TODAY'S 5 BLOGS (2026-10-30)
   {
     slug: 'india-to-canada-work-visa-atlxt',
     title: 'India to Canada Work Visa 2026 - Complete Guide (atlxt)',
@@ -9,6 +10,9 @@ export const DEFAULT_PUBLISHED_GUIDES: Article[] = [
     to: 'CA',
     type: 'work',
     date: '2026-10-30',
+    publishedDate: '2026-10-30',
+    createdAt: '2026-10-30T10:00:00.000Z',
+    updatedAt: '2026-10-30T10:00:00.000Z',
     fees: 'CAD $155 + $85 Biometrics',
     docs: 'LMIA Number, Job Offer Letter, Police Clearance Certificate, Upfront Medical Exam, Bank Proof',
     excerpt: 'Comprehensive 2026 guide for Indian skilled workers applying for employer-specific work permits in Canada. Includes LMIA requirements, prevailing wage standards, documentation checklist, and biometrics processing times.',
@@ -62,6 +66,9 @@ To work legally in Canada as an Indian citizen, you typically require an employe
     to: 'DE',
     type: 'tourist',
     date: '2026-10-30',
+    publishedDate: '2026-10-30',
+    createdAt: '2026-10-30T10:00:00.000Z',
+    updatedAt: '2026-10-30T10:00:00.000Z',
     fees: '€90 Consular Fee',
     docs: 'US Green Card / I-797, Travel Insurance €30,000, Flight Itinerary, Hotel Booking, 3 Months US Bank Statements',
     excerpt: 'Step-by-step roadmap for US green card holders and foreign residents applying for Schengen tourist visa entry across 29 European member states. Covering 90/180-day limits and VFS appointments.',
@@ -94,6 +101,9 @@ Under Schengen Visa Code rules, submit your application to the consulate or visa
     to: 'GB',
     type: 'tourist',
     date: '2026-10-30',
+    publishedDate: '2026-10-30',
+    createdAt: '2026-10-30T10:00:00.000Z',
+    updatedAt: '2026-10-30T10:00:00.000Z',
     fees: '£115 (Standard Visitor)',
     docs: 'Passport, 6 Months Bank Statement, Salary Slips, Employer NOC, Property/Ties Proof, Accommodation Booking',
     excerpt: 'Essential UK Standard Visitor Visa requirements for tourism, family visits, and business meetings. Comprehensive breakdown of the 6-month financial requirement, source of funds verification, and refusal risk mitigation.',
@@ -126,6 +136,9 @@ UK Visas and Immigration (UKVI) refuses applications under Immigration Rule V 4.
     to: 'US',
     type: 'student',
     date: '2026-10-30',
+    publishedDate: '2026-10-30',
+    createdAt: '2026-10-30T10:00:00.000Z',
+    updatedAt: '2026-10-30T10:00:00.000Z',
     fees: '$185 MRV + $350 SEVIS',
     docs: 'Form I-20, SEVIS Fee Receipt, DS-160 Confirmation, Bank Statements ₹25-35L, Academic Transcripts & Degree',
     excerpt: 'Ultimate F-1 student visa guide from university admission offer letter and I-20 verification to US Embassy consular interview preparation, 214(b) non-immigrant intent, and financial sponsorship.',
@@ -154,6 +167,9 @@ Consular officers expect liquid proof covering 1 year of total estimated expense
     to: 'AE',
     type: 'tourist',
     date: '2026-10-30',
+    publishedDate: '2026-10-30',
+    createdAt: '2026-10-30T10:00:00.000Z',
+    updatedAt: '2026-10-30T10:00:00.000Z',
     fees: '$90-150 (30/60 Days)',
     docs: 'Passport Color Scan, Passport Photo, Confirmed Return Air Ticket, Hotel Booking, OK to Board',
     excerpt: 'Fast-track Dubai and UAE tourist eVisa instructions, 30-day and 60-day single/multiple entry options, OK to Board protocols, and airport immigration clearance.',
@@ -173,13 +189,18 @@ Indian passport holders can visit Dubai, Abu Dhabi, Sharjah, and other emirates 
 4. Sufficient financial funds (minimum AED 3,000 cash or credit card limit).
 5. OK to Board (OTB) verification completed with airlines where required.`
   },
+
+  // YESTERDAY'S 5 BLOGS (2026-10-29)
   {
     slug: 'in-to-ca-tourist',
     title: 'India to Canada Tourist Visa Guide (Visitor Visa)',
     from: 'IN',
     to: 'CA',
     type: 'tourist',
-    date: '2026-10-30',
+    date: '2026-10-29',
+    publishedDate: '2026-10-29',
+    createdAt: '2026-10-29T10:00:00.000Z',
+    updatedAt: '2026-10-29T10:00:00.000Z',
     fees: 'CAD $100 + CAD $85 Biometrics',
     docs: 'Valid Passport, Bank Statements ($10,000+ CAD), Return Flight Itinerary, Travel Insurance, Cover Letter',
     excerpt: 'Planning a trip from India to Canada? This comprehensive guide covers everything you need to successfully apply for a Canadian Visitor Visa (Temporary Resident Visa - TRV).',
@@ -217,7 +238,10 @@ Citizens of India holding an ordinary passport require a TRV to enter Canada for
     from: 'US',
     to: 'GB',
     type: 'tourist',
-    date: '2026-10-30',
+    date: '2026-10-29',
+    publishedDate: '2026-10-29',
+    createdAt: '2026-10-29T10:00:00.000Z',
+    updatedAt: '2026-10-29T10:00:00.000Z',
     fees: '£115 (Standard 6 Months)',
     docs: 'Valid US Passport or Green Card, Proof of Employment/Funds, Travel Itinerary',
     excerpt: 'Traveling from the United States to the United Kingdom? Complete guide to UK ETA and Standard Visitor Visa requirements, fees, and biometric appointments for US residents.',
@@ -243,6 +267,73 @@ Traveling from the United States to the United Kingdom? US passport holders visi
 2. Pay visa fee online.
 3. Book biometrics appointment at a USCIS Application Support Center (ASC) or VFS Global Premium Application Centre.
 4. Mail or submit passport with UPS return label for vignette sticker.`
+  },
+  {
+    slug: 'in-to-au-work',
+    title: 'India to Australia Skilled Work Visa Guide 2026',
+    from: 'IN',
+    to: 'AU',
+    type: 'work',
+    date: '2026-10-29',
+    publishedDate: '2026-10-29',
+    createdAt: '2026-10-29T10:00:00.000Z',
+    updatedAt: '2026-10-29T10:00:00.000Z',
+    fees: 'AUD $4,640 (Subclass 189/190)',
+    docs: 'Skills Assessment, PTE/IELTS 79+, Expression of Interest (EOI), Police Clearance',
+    excerpt: 'Official Australian skilled migration guide for Indian professionals seeking Subclass 189, 190, and 491 permanent residency and work visas in 2026.',
+    content: `# India to Australia Skilled Work Visa Guide 2026
+
+Australia's skilled migration program offers direct permanent residency pathways for qualified professionals from India under Subclass 189 (Skilled Independent), Subclass 190 (State Nominated), and Subclass 491 (Regional Sponsored).
+
+## 1. Core Requirements
+- **Skills Assessment:** Positive skills assessment from the designated Australian assessing authority for your nominated ANZSCO occupation.
+- **English Proficiency:** PTE Academic (79+ in each band) or IELTS Academic (8+ in each band) to claim maximum points.
+- **Points Test:** Minimum 65 points on the Department of Home Affairs points calculator (competitive scores range from 85-105+).
+- **Expression of Interest (EOI):** Submit profile via SkillSelect portal.`
+  },
+  {
+    slug: 'in-to-de-student',
+    title: 'India to Germany Student Visa & Blocked Account Guide 2026',
+    from: 'IN',
+    to: 'DE',
+    type: 'student',
+    date: '2026-10-29',
+    publishedDate: '2026-10-29',
+    createdAt: '2026-10-29T10:00:00.000Z',
+    updatedAt: '2026-10-29T10:00:00.000Z',
+    fees: '€75 Consular Fee + €11,904 Blocked Account',
+    docs: 'University Admission Letter (Zulassungsbescheid), Blocked Account Confirmation (Sperrkonto), Health Insurance, APS Certificate',
+    excerpt: 'Comprehensive roadmap for Indian students applying for German university study visa (Section 16b) with APS certificate and Expatrio/Fintiba blocked account requirements.',
+    content: `# India to Germany Student Visa & Blocked Account Guide 2026
+
+Studying in Germany from India requires obtaining an APS certificate from the Academic Evaluation Centre (APS India) before applying for the National Student Visa (Section 16b) at VFS Global.
+
+## 1. Financial Requirement: Blocked Account (Sperrkonto)
+- **Minimum Requirement:** €11,904 per year (€992 per month) deposited into an approved blocked account provider such as Expatrio, Fintiba, or Coracle.
+- **APS Certificate:** Mandatory verification of academic credentials before embassy appointment.
+- **University Admission:** Zulassungsbescheid from a public or accredited German university.`
+  },
+  {
+    slug: 'in-to-sg-tourist',
+    title: 'India to Singapore Tourist Visa & Entry Requirements 2026',
+    from: 'IN',
+    to: 'SG',
+    type: 'tourist',
+    date: '2026-10-29',
+    publishedDate: '2026-10-29',
+    createdAt: '2026-10-29T10:00:00.000Z',
+    updatedAt: '2026-10-29T10:00:00.000Z',
+    fees: 'SGD $30 + VFS Service Fee',
+    docs: 'Passport, SG Arrival Card (SGAC), Hotel Booking, Return Flight Ticket, Local Contact / Form 14A',
+    excerpt: 'Official entry rules and tourist visa application guide for Indian citizens visiting Singapore. Covers SG Arrival Card, authorized travel agents, and ICA processing.',
+    content: `# India to Singapore Tourist Visa & Entry Requirements 2026
+
+Indian nationals holding ordinary passports require a valid entry visa to visit Singapore. Applications are processed electronically through authorized strategic partners and VFS Global appointed by the Immigration & Checkpoints Authority (ICA) of Singapore.
+
+## 1. Mandatory Requirements
+- **SG Arrival Card (SGAC):** Must be submitted online within 3 days prior to arrival in Singapore (free of charge).
+- **Processing Time:** 1 to 3 working days via authorized visa agents in India.
+- **Financial Proof:** Sufficient funds for length of stay and confirmed return air tickets.`
   }
 ].map(item => ({
   ...item,
@@ -250,9 +341,6 @@ Traveling from the United States to the United Kingdom? US passport holders visi
   contentHtml: String(marked.parse(item.content || ''))
 }));
 
-/**
- * Checks whether an article body or excerpt is rich (non-stub) content.
- */
 export function isRichContent(text?: string | null): boolean {
   if (!text || typeof text !== 'string') return false;
   const trimmed = text.trim();
@@ -261,9 +349,6 @@ export function isRichContent(text?: string | null): boolean {
   return true;
 }
 
-/**
- * Checks whether an excerpt is valid and not a "Sample guide for..." placeholder.
- */
 export function isRichExcerpt(text?: string | null): boolean {
   if (!text || typeof text !== 'string') return false;
   const trimmed = text.trim();
@@ -272,17 +357,11 @@ export function isRichExcerpt(text?: string | null): boolean {
   return true;
 }
 
-/**
- * Normalizes a slug by stripping leading/trailing slashes and lowercasing.
- */
 export function normalizeBlogSlug(slug?: string | null): string {
   if (!slug || typeof slug !== 'string') return '';
   return slug.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
 }
 
-/**
- * Strips trailing 5-char random suffix (e.g. "-7d0ed", "-atlxt") or "-2026-complete-guide" for fuzzy matching.
- */
 function getBaseSlugPattern(slug: string): string {
   return normalizeBlogSlug(slug)
     .replace(/-[a-z0-9]{5}$/i, '')
@@ -290,9 +369,6 @@ function getBaseSlugPattern(slug: string): string {
     .replace(/-complete-guide$/i, '');
 }
 
-/**
- * Finds the best matching guide from DEFAULT_PUBLISHED_GUIDES by slug, base slug pattern, title, or route tuple.
- */
 export function findDefaultGuideMatch(
   slugOrTitle?: string | null,
   fromCode?: string | null,
@@ -301,13 +377,11 @@ export function findDefaultGuideMatch(
 ): Article | undefined {
   const cleanSlug = normalizeBlogSlug(slugOrTitle);
   if (cleanSlug) {
-    // 1. Exact slug match
     const exact = DEFAULT_PUBLISHED_GUIDES.find(
       g => normalizeBlogSlug(g.slug) === cleanSlug
     );
     if (exact) return exact;
 
-    // 2. Base slug match (handles slugs with or without random 5-char suffixes like -atlxt, -7d0ed, etc.)
     const baseTarget = getBaseSlugPattern(cleanSlug);
     if (baseTarget) {
       const byBase = DEFAULT_PUBLISHED_GUIDES.find(g => {
@@ -322,7 +396,6 @@ export function findDefaultGuideMatch(
       if (byBase) return byBase;
     }
 
-    // 3. Title match
     const cleanTitle = slugOrTitle!.toLowerCase().replace(/\([a-z0-9]{5}\)/gi, '').trim();
     const byTitle = DEFAULT_PUBLISHED_GUIDES.find(g => {
       const gTitle = g.title.toLowerCase().replace(/\([a-z0-9]{5}\)/gi, '').trim();
@@ -331,7 +404,6 @@ export function findDefaultGuideMatch(
     if (byTitle) return byTitle;
   }
 
-  // 4. Match by (from, to, type) tuple if provided
   if (fromCode && toCode) {
     const f = fromCode.toUpperCase();
     const t = toCode.toUpperCase() === 'UK' ? 'GB' : toCode.toUpperCase();
@@ -345,9 +417,6 @@ export function findDefaultGuideMatch(
   return undefined;
 }
 
-/**
- * Synthesizes a complete markdown body when an article has no markdown body of its own.
- */
 export function buildFallbackMarkdownForArticle(art: Partial<Article>): string {
   const title = art.title || '2026 Official Visa Guide & Application Requirements';
   const from = (art.from || 'IN').toUpperCase();
@@ -384,10 +453,6 @@ Applicants traveling from **${from}** to **${to}** under the **${type}** categor
 5. Track your application status online and collect your passport upon visa issuance.`;
 }
 
-/**
- * Hydrates a raw/partial article object using a cache-first strategy with fallback to DEFAULT_PUBLISHED_GUIDES.
- * Ensures that shallow server summaries or stale "Sample guide for..." stubs never overwrite rich markdown content.
- */
 export function hydrateArticleWithCacheAndFallback(
   incoming: any,
   cachedOrExisting?: Partial<Article> | null
@@ -406,7 +471,6 @@ export function hydrateArticleWithCacheAndFallback(
     incoming?.type || incoming?.visaType || cachedOrExisting?.type
   );
 
-  // Determine best raw markdown content (prefer rich incoming -> rich cached -> defaultMatch -> synthesized)
   const incomingRaw = incoming?.rawContent || incoming?.content || '';
   const cachedRaw = cachedOrExisting?.rawContent || cachedOrExisting?.content || '';
   const defaultRaw = defaultMatch?.rawContent || defaultMatch?.content || '';
@@ -473,13 +537,19 @@ export function hydrateArticleWithCacheAndFallback(
     .trim()
     .toLowerCase();
 
+  // PRESERVE PUBLISHED DATE FOREVER - NEVER OVERWRITE WITH NEW DATE()
+  const resolvedDate = incoming?.date || incoming?.publishedDate || cachedOrExisting?.date || cachedOrExisting?.publishedDate || defaultMatch?.date || defaultMatch?.publishedDate || '2026-10-30';
+
   return {
     slug: rawSlug,
     title: incoming?.title || cachedOrExisting?.title || defaultMatch?.title || rawSlug,
     from: (incoming?.from || cachedOrExisting?.from || defaultMatch?.from || 'IN').toUpperCase(),
     to: (incoming?.to || cachedOrExisting?.to || defaultMatch?.to || 'US').toUpperCase(),
     type: rawType,
-    date: incoming?.date || cachedOrExisting?.date || defaultMatch?.date || new Date().toISOString().split('T')[0],
+    date: resolvedDate,
+    publishedDate: resolvedDate,
+    createdAt: incoming?.createdAt || cachedOrExisting?.createdAt || defaultMatch?.createdAt || '2026-10-30T10:00:00.000Z',
+    updatedAt: incoming?.updatedAt || cachedOrExisting?.updatedAt || defaultMatch?.updatedAt || new Date().toISOString(),
     fees: bestFees,
     docs: bestDocs,
     excerpt: bestExcerpt,
@@ -489,14 +559,9 @@ export function hydrateArticleWithCacheAndFallback(
   };
 }
 
-/**
- * Merges multiple lists of articles (cache-first + DEFAULT_PUBLISHED_GUIDES fallback),
- * deduplicating by normalized slug and ensuring every article has full hydrated content.
- */
 export function mergeArticleCollections(...collections: Array<any[] | undefined | null>): Article[] {
   const bySlug = new Map<string, Article>();
 
-  // Always seed with DEFAULT_PUBLISHED_GUIDES first so they are guaranteed to be present
   for (const def of DEFAULT_PUBLISHED_GUIDES) {
     const hydrated = hydrateArticleWithCacheAndFallback(def, null);
     if (hydrated) {
@@ -521,10 +586,6 @@ export function mergeArticleCollections(...collections: Array<any[] | undefined 
   return Array.from(bySlug.values());
 }
 
-/**
- * Calculates a deterministic richness score for an article object based on its
- * markdown body, HTML body, excerpt, fees, and checklist documentation.
- */
 export function getArticleRichnessScore(article?: Partial<Article> | any | null): number {
   if (!article) return 0;
 
@@ -554,10 +615,6 @@ export function getArticleRichnessScore(article?: Partial<Article> | any | null)
   return score;
 }
 
-/**
- * Evaluates whether a remote article payload contains either newly published slugs
- * or richer content/metadata for any existing slug compared to the current cached state.
- */
 export function hasRicherRemoteArticles(
   cachedArticles: Article[],
   remoteList: any[] | undefined | null
@@ -582,7 +639,6 @@ export function hasRicherRemoteArticles(
 
     const existing = cachedBySlug.get(slug);
     if (!existing) {
-      // Remote payload has a brand-new published guide not yet in cache
       return true;
     }
 
@@ -600,4 +656,3 @@ export function hasRicherRemoteArticles(
 
   return false;
 }
-
