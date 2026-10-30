@@ -1,0 +1,332 @@
+You are building visaapply.org - Add ITALY - 130 visas - Exact structure.
+
+CRITICAL ANTI-BUG RULES - READ FIRST - 0 Types bug fix:
+1. DO NOT replace existing FULL_VISA_DB - MERGE into it.
+2. Keep both structures: FULL_VISA_DB["ITALY"] AND FULL_VISA_DB["INDIA"]["ITALY"] = SAME ARRAY REFERENCE
+3. BASE_COUNTRY_VISAS["ITALY"] = 130
+4. DO NOT create FULL_VISA_DB["ITALY"]["TOURIST"] nested - It must be ARRAY, not object. 
+   If FULL_VISA_DB["ITALY"] is already object with category keys, KEEP IT and also add FLAT ARRAY for backward compatibility.
+   BEST: FULL_VISA_DB["ITALY"] = ARRAY[130] AND FULL_VISA_DB["ITALY"]["CATEGORY"] auto-derived via filter. 
+   Simplest: Keep current DUAL STRUCTURE from backup: 
+   if(typeof FULL_VISA_DB["INDIA"] !== "undefined") FULL_VISA_DB["INDIA"]["ITALY"] = italyVisas;
+   FULL_VISA_DB["ITALY"] = italyVisas;
+   window.FULL_VISA_DB = FULL_VISA_DB;
+
+5. Each visa object MUST have EXACT fields - NO EXTRA NESTING:
+{
+  id: "IT-VIS-001",
+  country: "ITALY",
+  countryName: "Italy",
+  code: "TOURIST",
+  category: "TOURIST_VISA",
+  name: "Short-stay Schengen Tourist 90/180 Days C Visa Turismo",
+  shortName: "Tourist 90/180 C Visa",
+  type: "TOURIST_VISA",
+  fee: "EUR 80 + VFS 28",
+  feeINR: "INR 9000 + VFS 2500",
+  validity: "90/180 days short-stay C visa turismo",
+  stay: "90 days within 180 days",
+  processingTime: "15 days + VFS",
+  purpose: "Tourism sightseeing",
+  eligibility: "Indian citizen + Passport 3M 2 blank + Financial means 31000 EUR? No 467 EUR? Actually tourist no fixed but bank genuine",
+  documents: [
+    "Passport 3M validity 2 blank pages + Old passports",
+    "Photo 35x40mm white background 80% face matte",
+    "Flight reservation return",
+    "Hotel booking OR Invitation Letter Lettera di invito + Dichiarazione di garanzia + Dichiarazione di ospitalita + Host carta d'identita + Host permesso di soggiorno if non-EU + Host proof accommodation + Fideiussione bancaria bank guarantee 3,600 EUR yearly if sponsor",
+    "Cover letter purpose itinerary",
+    "Bank statements 6 months genuine with sufficient balance - NO sudden deposit - Bank seal signature",
+    "ITR 2-3 years",
+    "Employment letter + NOC + Company ID if employed + Business registration if self-employed",
+    "Travel Insurance 30000 EUR mandatory",
+    "Itinerary day-wise",
+    "If invitation: Lettera di invito original + Host carta d'identita + Host permesso di soggiorno + Host proof income busta paga + Fideiussione bancaria if required"
+  ],
+  fundsBox: {
+    title: "Funds Requirement - Tourist Italy Schengen",
+    minimumBalance: "EUR 1500-2000 for 7-10 days trip OR EUR 100/day + Hotel + Flight - No fixed but sufficient + Genuine - Italy Visto per l'Italia no fixed minimum but embassy expects sufficient for stay + 50 EUR/day + Hotel",
+    perDayRequirement: "EUR 100-150/day if hotel not prepaid else EUR 50-70/day + Hotel prepaid reduces",
+    totalTripCost: "Hotel 80-120 EUR/night + Flight 45000-60000 INR + Daily expense 50 EUR/day + Insurance 1000-1500 INR + Visa fee 80 EUR",
+    warning: "WARNING: Bank statement MUST be genuine - No large cash deposit last minute - Italy embassy very strict on genuineness - 6 months statement with salary credits + Bank seal signature original - NO fake statement - Rejection if sudden 1-2 lakh deposit before application",
+    proof: "Bank statement 6 months original with bank seal + signature + Salary slips 3 months + Employment letter with salary + ITR 2-3 years + Credit card statement if any"
+  },
+  itrBox: {
+    yearsRequired: "2-3 years ITR mandatory for tourist Schengen Italy - 3 years preferred",
+    minimumIncome: "No fixed minimum but ITR should show income matching bank - 4-6 lakh yearly minimum for tourist",
+    warning: "ITR must match bank credits - No mismatch - ITR-V acknowledgement"
+  },
+  bankBox: {
+    monthsRequired: "6 months bank statements - Latest - Up to date - No gap - Original bank seal signature",
+    minimumBalanceWarning: "Maintain balance 1.5-2 lakh minimum for 10 days trip - No zero balance - Regular salary credits - No sudden large deposit - If sponsor: Sponsor bank 6 months + Fideiussione bancaria 3600 EUR yearly guarantee + Sponsor income proof busta paga 1200 EUR/month minimum",
+    suddenDepositWarning: "CRITICAL: NO sudden cash deposit of 50k-1 lakh within 1 month of application - Embassy will ask source - Show 6 months average balance - Italy VFS checks genuineness strictly"
+  },
+  invitationRequired: false,
+  hotelRequired: true,
+  invitationOrHotel: "Invitation Letter Lettera di invito + Dichiarazione di ospitalita + Fideiussione bancaria OR Hotel Booking - MOST IMPORTANT",
+  embassy: "Italy Embassy New Delhi + Consulate Mumbai Kolkata + VFS Global",
+  officialLink: "https://vistoperitalia.esteri.it + https://www.poliziadistato.it",
+  categoryGroup: "TOURIST"
+}
+
+NOW BUILD ITALY 130 VISAS - COPY EXACT LIST - 13 SECTIONS:
+
+SECTION 01 - TOURIST SHORT-STAY SCHENGEN 12:
+IT-VIS-001 Tourist 90/180 C Visa Turismo - Fee EUR 80+VFS 28 INR 9000+VFS 2500 - Validity 90/180 short-stay C visa turismo - Stay 90/180 days - Purpose Tourism - Docs: Passport 3M 2 blank + Photo 35x40 white 80% face + Flight return + Hotel OR Invitation Letter Lettera di invito + Dichiarazione di garanzia + Dichiarazione di ospitalita + Host carta d'identita + Host permesso di soggiorno + Host proof accommodation + Fideiussione bancaria 3600 EUR yearly if sponsor + Bank 6M genuine + ITR 2-3Y + Employment + Cover letter + Itinerary + Insurance 30000 EUR - MOST IMPORTANT Invitation Lettera di invito OR Hotel Booking + Bank genuine + ITR + Insurance - fundsBox minimum 1.5-2 lakh + 100 EUR/day + warning NO sudden deposit + bank seal - itrBox 2-3 years - bankBox 6 months genuine warning
+
+IT-VIS-002 Business 90/180 C Visa Affari - Docs: Business Invitation Italy + Visura Camerale company registration Italy + Invitation letter Italian company + Indian company letter + Business registration India + Purpose letter + Bank 6M + Employment + Itinerary + Company guarantee + Insurance 30000 EUR - MOST IMPORTANT Business Invitation + Visura Camerale + Indian Company Letter
+
+IT-VIS-003 Family Visit 90/180 C Visa Visita Famiglia Amici - Docs: Lettera di invito original + Host carta d'identita + Host permesso di soggiorno if non-EU + Host proof accommodation + Host busta paga income proof + Relationship proof + Invitee bank + Photo + Flight + Insurance + Fideiussione bancaria if required - MOST IMPORTANT Lettera di invito + Dichiarazione di ospitalita + Fideiussione bancaria
+
+IT-VIS-004 Multiple 1Y 90/180 - Docs: Passport + Prev Schengen 2+ + Bank 6M high + ITR 3Y + Employment + Invitation OR Hotel + Reason multiple entry + Insurance 1Y 30000 EUR - MOST IMPORTANT Prev Schengen + Bank high + Multiple reason
+
+IT-VIS-005 Multiple 2Y 90/180 - Same 1Y + Prev Schengen 3+ + Higher income
+
+IT-VIS-006 Multiple 5Y 90/180 - Same 2Y + Prev Schengen 5+ + Higher income - Best Schengen multiple
+
+IT-VIS-007 Transit Airport Transit A Visa Transito Aeroportuale - Docs: Onward ticket + Third country visa + Passport + Flight - India requires airport transit if no Schengen US UK etc - Nationality-dependent
+
+IT-VIS-008 Seaman Transit 5 Days C Visa Transito Marittimo - Docs: Seaman book + Employment contract shipping company + Flight + Onward ticket + Shipping company letter + Crew list
+
+IT-VIS-009 Sports Competition Gara Sportiva 90/180 C Visa - Docs: Sports invitation + CONI Federazione invitation + Event organizer + Event registration + Participation certificate + Bank + Employment + Invitation + Insurance + CONI
+
+IT-VIS-010 Medical Treatment Cure Mediche 90/180 C Visa Medical + Accompanier - Docs: Hospital appointment letter Italy hospital + Medical certificate + Treatment plan + Medical institution guarantee letter + Bank 6M + Companion relationship proof + Medical institution registration + Guarantee letter hospital + Advance payment receipt 30% + Medical institution attestation + Insurance 30000 EUR - MOST IMPORTANT Hospital guarantee letter + Advance receipt 30% - fundsBox medical cost 5000-20000 EUR + Companion funds - Medical Italy
+
+IT-VIS-011 Religious Motivi Religiosi Religious 90/180 C Visa Religious - Docs: Religious invitation Vatican Diocese + Religious organization invitation + Religious activities + Organization registration + Religious letter + Church invitation + Vatican
+
+IT-VIS-012 Study Short Studio Short Study 90/180 C Visa Study Short - Docs: Admission letter short course 90/180 days + School registration + Course + Bank + Accommodation + Study short + Admission short
+
+SECTION 02 - LONG-STAY ELECTIVE RESIDENCE VISITOR 8:
+IT-LV-001 Elective Residence Residenza Elettiva D Visa 1Y - Fee EUR 116+VFS 28 - Validity 1Y D visa residenza elettiva + Permesso di soggiorno residenza elettiva 1Y - Stay 1Y - Purpose Elective residence retirement passive income no work - Docs: Passive income proof pension rental investment + Financial means 31000 EUR yearly approx INR 27 lakh yearly single +20% spouse +5% each child + Accommodation Italy owned rented + Insurance + Proof accommodation + Financial means attestation + No work declaration + Elective residence activities + Bank 6M + Income proof passive + Accommodation proof owned rented - MOST IMPORTANT Financial means 31000 EUR yearly passive income + No work + Accommodation owned rented + Insurance - Residenza elettiva - Retirement - fundsBox 31000 EUR yearly passive + Accommodation owned rented + Bank passive income proof
+
+IT-LV-002 Elective Residence Extension Renewal Permesso di Soggiorno Residenza Elettiva 1Y Renewal - Fee Questura 80-200+Marca 16 - Docs: Passport + Elective Residence D visa + Bank + Accommodation + Financial means 31000 EUR yearly + Insurance + Questura + Permesso
+
+IT-LV-003 Religious Motivi Religiosi Religious D Visa 1Y - Docs: Religious organization invitation + Religious activities + Organization registration + Religious letter + Church invitation + Vatican + Nulla Osta? Actually religious needs Nulla Osta?
+
+IT-LV-004 Adoption Adozione D Visa 1Y - Docs: Adoption authorization CAI Commissione Adozioni Internazionali + Adoption agency + Adoption decree + Child adoption
+
+IT-LV-005 Re-entry Reingresso D Visa 1Y - Docs: Re-entry + Previous permesso di soggiorno + Re-entry authorization + Questura
+
+IT-LV-006 Waiting Employment Attesa Occupazione D Visa 1Y - Docs: Waiting employment + Previous work permit + Job loss + Attesa occupazione + Previous permesso di soggiorno lavoro + Attesa occupazione authorization + Job search
+
+IT-LV-007 Waiting Citizenship Attesa Cittadinanza D Visa 1Y - Docs: Waiting citizenship + Citizenship application + Attesa cittadinanza + Citizenship application receipt
+
+IT-LV-008 Justice Giustizia D Visa 1Y - Docs: Justice + Court invitation + Justice authorization + Court + Justice
+
+SECTION 03 - STUDENT EDUCATION 10:
+IT-STU-001 Study Studio D Visa 1Y University - Fee EUR 50+VFS 28+Permesso 80-200 - Validity 1Y D visa studio + Permesso di soggiorno studio 1Y + Renewal yearly - Stay 1Y - Purpose Study university AFAM - Docs: Admission letter Italy university AFAM + Universitaly pre-enrollment + Universitaly portal + Dichiarazione di Valore + CIMEA + Academic records + Degree transcript + Italian language B2 if Italian taught OR English IELTS TOEFL if English taught + Passport + Photo + Bank 6M + Financial means 467.65 EUR/month approx EUR 5611 yearly INR 5 lakh yearly + Accommodation + Insurance + Admission letter + Universitaly - MOST IMPORTANT Admission letter + Universitaly pre-enrollment + Universitaly portal + Dichiarazione di Valore + Bank + Financial means 467.65 EUR/month - fundsBox student 467.65 EUR/month 5611 yearly + Accommodation + Tuition + Bank 6M + ITR 2Y + Sponsor if any - itrBox 2Y student - bankBox 6M genuine student
+
+IT-STU-002 Master Master D Visa 1Y Master - Docs: Master admission + Universitaly + Degree + Master + Bank + Accommodation
+
+IT-STU-003 Doctorate Dottorato D Visa 1Y +3-4Y doctoral - Docs: Doctorate admission + Doctoral school + Research lab + Doctoral scholarship + Funding + Doctoral activities + University doctoral + Research plan + Funding proof
+
+IT-STU-004 Erasmus Erasmus D Visa 1Y - Docs: Erasmus mobility + University mobility letter + University registration + Mobility program + Academic records + Bank
+
+IT-STU-005 Professional Training Formazione Professionale D Visa 1Y - Docs: Professional training admission + Training center + Training course + Training admission + Bank + Accommodation
+
+IT-STU-006 Internship Tirocinio D Visa 1Y - Docs: Internship agreement + University internship letter + Company internship letter + Internship agreement + University registration + Passport + Bank + Tirocinio + Internship agreement
+
+IT-STU-007 Job Search Attesa Occupazione Ricerca Lavoro D Visa 1Y Job Search After Study - Docs: Graduation certificate Italy Laurea + Job search activities + Business creation plan + Financial means + Bank + University + Job search plan - MOST IMPORTANT Graduation Laurea Italy + Job search 1Y - After student graduate Italy Laurea job search 1 year - Attesa occupazione
+
+IT-STU-008 Minor Studio Minore D Visa Minor Study - Docs: Minor study + School admission Italy + Parent consent + Guardian + School registration + Minor study authorization + Parent passport + Guardian + School admission
+
+IT-STU-009 Language Course Corso Lingua D Visa 1Y Language Course - Docs: Language course admission + Language school + Language course + Bank + Accommodation
+
+IT-STU-010 Study Extension Renewal Permesso di Soggiorno Studio 1Y Renewal - Fee Questura 80-200+Marca 16 - Docs: Passport + Study D visa + Bank + Accommodation + Academic progress + School letter + Financial means 467.65 EUR/month + Study extension renewal
+
+SECTION 04 - WORK SUBORDINATE FLUSSI 10:
+IT-WRK-001 Work Subordinate Lavoro Subordinato D Visa 1Y Subordinate Employee Decreto Flussi - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 1Y D visa lavoro subordinato + Permesso di soggiorno lavoro subordinato 1Y - Stay 1Y - Purpose Work subordinate - Docs: Job offer Italy + Employment contract + Employer + Nulla Osta work authorization + Sportello Unico Immigrazione SUI Nulla Osta + Prefettura work authorization + Company registration Visura Camerale + Salary CCNL minimum + Employment contract + Nulla Osta - MOST IMPORTANT Job Offer letter + Nulla Osta + SUI Sportello Unico Immigrazione + Prefettura + Employment contract + Company Visura Camerale + Salary CCNL + Decreto Flussi quota - Decreto Flussi = Annual quota for non-EU workers + Flussi Day Click Day - fundsBox salary CCNL minimum 1200-1500 EUR/month + Company financials + Nulla Osta cost employer - itrBox company + employee - bankBox company registration Visura Camerale
+
+IT-WRK-002 Seasonal Work Lavoro Stagionale D Visa 9M Seasonal Worker Decreto Flussi Stagionale - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 9M D visa lavoro stagionale + Permesso di soggiorno lavoro stagionale 9M + Multi-year seasonal 3Y 9M each year - Docs: Seasonal work + Employment contract seasonal + Nulla Osta seasonal + SUI Nulla Osta seasonal + Company + Seasonal worker activities + Seasonal 9 months + Return + Seasonal worker 3Y multi-year seasonal 9M each year - MOST IMPORTANT Seasonal 9 months - Decreto Flussi Stagionale - Agriculture tourism hotel
+
+IT-WRK-003 EU Blue Card Carta Blu UE D Visa 2Y EU Blue Card Highly Qualified Carta Blu UE - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 2Y D visa carta blu UE + Permesso di soggiorno carta blu UE 2Y + Renewal 3Y - Docs: EU Blue Card Carta Blu UE + Highly qualified employment + Degree Laurea 3 years + Experience 5Y + Employment contract 12 months+ + Salary 24904 EUR yearly 2024 approx INR 22 lakh yearly + Degree + Experience letters + Salary + Company + EU Blue Card authorization Nulla Osta + Company Visura Camerale + Degree Laurea - MOST IMPORTANT EU Blue Card Carta Blu UE - Salary 24904 EUR yearly - Degree Laurea 3 years + Experience 5Y + Employment contract 12M+ - Highly qualified - EU Blue Card - 2 years + Renewal 3Y - Carta Blu UE - fundsBox salary 24904 EUR yearly highly qualified - itrBox company - bankBox company Visura Camerale + Degree
+
+IT-WRK-004 ICT Intra-corporate Transferee ICT Trasferimento Intra-societario D Visa 1Y ICT - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 1Y D visa ICT +3Y ICT - Docs: ICT transfer + Transfer from overseas parent company + Employment 6 months+ in overseas company + Company relationship parent subsidiary + Transfer letter + Company registration Italy + Overseas + Employment contract + ICT activities + Salary + ICT authorization Nulla Osta ICT + SUI
+
+IT-WRK-005 ICT Mobile ICT Mobile D Visa 1Y ICT Mobile - Docs: ICT mobile + ICT from other EU country + ICT mobile authorization + Company + Transfer letter + ICT mobile activities + Nulla Osta ICT mobile
+
+IT-WRK-006 Work Extension Renewal Permesso di Soggiorno Lavoro Subordinato 1Y Renewal - Fee Questura 80-200+Marca 16 - Docs: Passport + Work D visa + Employment contract + Company + Salary + Nulla Osta + Tax + Work extension renewal
+
+IT-WRK-007 Seasonal Extension Renewal Permesso di Soggiorno Lavoro Stagionale 9M Renewal - Docs: Passport + Seasonal Work D visa + Employment contract seasonal + Company + Salary + Nulla Osta seasonal + Seasonal extension renewal
+
+IT-WRK-008 EU Blue Card Extension Renewal Permesso di Soggiorno Carta Blu UE 2Y Renewal - Docs: Passport + EU Blue Card D visa + Employment contract + Company + Salary + Nulla Osta + Tax + EU Blue Card extension renewal
+
+IT-WRK-009 ICT Extension Renewal Permesso di Soggiorno ICT 1Y Renewal - Docs: Passport + ICT D visa + Employment contract + Company + Salary + Nulla Osta ICT + ICT extension renewal
+
+IT-WRK-010 Waiting Employment Attesa Occupazione D Visa 1Y Waiting Employment - Docs: Waiting employment + Previous work permit + Job loss + Attesa occupazione + Previous permesso di soggiorno lavoro + Attesa occupazione authorization + Job search + Attesa occupazione
+
+SECTION 05 - WORK AUTONOMOUS ENTREPRENEUR 10:
+IT-WRK-011 Self-employment Lavoro Autonomo D Visa 1Y Lavoro Autonomo Self-employment - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 1Y D visa lavoro autonomo + Permesso di soggiorno lavoro autonomo 1Y - Docs: Self-employment + Business plan + Company registration + Self-employment activities + Financial means + Business plan + Company registration + Self-employment authorization Nulla Osta + SUI + Chamber of Commerce Camera di Commercio + Partita IVA + Financial means - MOST IMPORTANT Business plan + Company registration + Financial means + Self-employment authorization Nulla Osta + Camera di Commercio + Partita IVA - fundsBox business plan investment 50000 EUR? No fixed but sufficient + Company registration + Partita IVA
+
+IT-WRK-012 Entrepreneur Startup Startup Innovativa D Visa 1Y Startup Innovativa - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 1Y D visa startup innovativa + Italia Startup Visa program + Extension to lavoro autonomo - Docs: Entrepreneur startup innovativa + Startup innovative + Business plan + Investment + Company creation + Business plan + Investment + Company registration + Startup innovativa recognition + Italia Startup Visa committee + Nulla Osta startup + Italia Startup Visa program - MOST IMPORTANT Startup innovativa recognition + Business plan + Investment - Italia Startup Visa - Startup innovativa - Innovative startup
+
+IT-WRK-013 Freelance Libero Professionista D Visa 1Y Libero Professionista Freelance - Docs: Freelance + Professional qualification + Freelance activities + Financial means + Business plan + Professional qualification + Freelance authorization Nulla Osta + Professional association Albo
+
+IT-WRK-014 Business Owner Titolare Azienda D Visa 1Y Titolare Azienda Business Owner - Docs: Business owner + Company ownership + Business plan + Investment + Company registration + Business owner activities + Business plan + Company registration + Business owner authorization Nulla Osta
+
+IT-WRK-015 Company Administrator Amministratore Societa D Visa 1Y Amministratore Societa - Docs: Company administrator + Company + Amministratore societa + Company registration + Company administrator activities + Company + Amministratore + Company registration
+
+IT-WRK-016 Sports Professional Sportivo Professionista D Visa 1Y Sportivo Professionista - Docs: Sports professional + CONI Federazione + Sports contract + Sports professional activities + CONI authorization + Nulla Osta sportivo + CONI
+
+IT-WRK-017 Artist Artist Artista D Visa 1Y Artista Artist - Docs: Artist + Artistic activities + Contract + Achievements + Income + Artist proof + Invitation + Organization + Artist + Cultural + Artist activities + Contract + Nulla Osta artista
+
+IT-WRK-018 Digital Nomad Nomade Digitale D Visa 1Y Digital Nomad 2024 New - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 1Y D visa nomade digitale + Permesso di soggiorno nomade digitale 1Y + Renewal 1Y - Purpose Digital nomad remote work - Docs: Digital Nomad - New March 2024 - Highly qualified work + Remote work + Income 24000 EUR yearly approx INR 21 lakh yearly + Health insurance + Employment contract remote OR Freelance + Company 6 months+ + Degree Laurea OR Experience 5Y + Health insurance 30000 EUR + Accommodation + Funds + Remote work + No Italy employer + Health insurance 30000 EUR coverage + Nulla Osta digital nomad + Questura + Digital nomad authorization - MOST IMPORTANT Income 24000 EUR yearly =21 lakh yearly - 1 year + Renewal 1Y - Highly qualified + Degree Laurea OR Experience 5Y + Remote work + Health insurance 30000 EUR - Digital Nomad Italy 2024 New - Can bring family - fundsBox income 24000 EUR yearly + Health insurance 30000 EUR + Accommodation + Remote work proof
+
+IT-WRK-019 Digital Nomad Family Family Digital Nomad Family D Visa Digital Nomad Family - Docs: Marriage certificate attested + Birth certificate attested + Digital Nomad holder passport + Digital Nomad + Relationship proof + Financial support + Digital Nomad family - Family digital nomad - Can bring family
+
+IT-WRK-020 Work Autonomous Extension Renewal Permesso di Soggiorno Lavoro Autonomo 1Y Renewal - Docs: Passport + Work Autonomous D visa + Company docs + Tax + Financial statement + Business plan + Company registration + Tax + Work autonomous extension renewal
+
+SECTION 06 - FAMILY REUNIFICATION 15:
+IT-FAM-001 Family Reunification Ricongiungimento Familiare D Visa 1Y Family Reunification - Fee EUR 116+VFS 28+Nulla Osta+Permesso 80-200 - Validity 1Y D visa ricongiungimento familiare + Permesso di soggiorno motivi familiari 1Y - Docs: Family reunification + Sponsor in Italy + Sponsor permesso di soggiorno + Accommodation + Financial means + Relationship proof Marriage Birth attested + SUI Nulla Osta family + Prefettura family authorization + Sponsor accommodation idoneita alloggiativa + Sponsor income + Relationship proof + Nulla Osta ricongiungimento familiare + SUI + Prefettura + Sponsor accommodation idoneita alloggiativa + Sponsor income + Relationship proof - MOST IMPORTANT Nulla Osta ricongiungimento familiare + SUI + Prefettura + Sponsor permesso di soggiorno + Accommodation idoneita alloggiativa + Relationship proof attested - fundsBox sponsor income minimum 15000 EUR yearly + Accommodation idoneita alloggiativa certificate Comune - itrBox sponsor - bankBox sponsor + idoneita alloggiativa
+
+IT-FAM-002 Spouse Coniuge D Visa Spouse Family Reunification Coniuge - Docs: Marriage certificate attested + Sponsor passport + Sponsor permesso di soggiorno + Relationship proof + Financial support + Nulla Osta coniuge + SUI + Prefettura + Marriage certificate attested
+
+IT-FAM-003 Child Figlio Minore D Visa Child Family Reunification Figlio Minore - Docs: Birth certificate attested + Parent passport + Parent permesso di soggiorno + Relationship proof + Financial support + Nulla Osta figlio minore + SUI + Prefettura
+
+IT-FAM-004 Adult Child Figlio Maggiore D Visa Adult Child Family Reunification Figlio Maggiore - Docs: Birth certificate attested + Adult child dependency proof + Parent passport + Parent permesso di soggiorno + Relationship proof + Financial support + Nulla Osta figlio maggiore + SUI + Prefettura + Dependency proof
+
+IT-FAM-005 Parent Genitore D Visa Parent Family Reunification Genitore - Docs: Birth certificate attested + Parent dependency proof + Child passport + Child permesso di soggiorno + Relationship proof + Financial support + Nulla Osta genitore + SUI + Prefettura + Dependency proof
+
+IT-FAM-006 Parent Over 65 Genitore Over 65 D Visa Parent Over 65 Family Reunification - Docs: Birth certificate attested + Parent over 65 dependency + Health insurance + Parent over 65 + Child passport + Child permesso di soggiorno + Relationship proof + Financial support + Nulla Osta genitore over 65 + SUI + Prefettura + Parent over 65 dependency + Health insurance - MOST IMPORTANT Parent over 65 + Health insurance + Dependency
+
+IT-FAM-007 Family Cohesion Coesione Familiare D Visa 1Y Family Cohesion - Docs: Family cohesion + Family member already in Italy + Relationship proof + Financial support + Cohesion + Family already Italy + Relationship proof + Financial support + Cohesion familiare - Family already in Italy coesione familiare
+
+IT-FAM-008 Family Member EU Citizen Familiare Cittadino UE D Visa Family EU Citizen EU Citizen Family - Docs: Family member EU citizen + EU citizen passport + Relationship proof + Accommodation + Financial means + Family EU citizen category + EU citizen passport + Relationship proof
+
+IT-FAM-009 Parent of Italian Minor Genitore Minore Italiano D Visa 1Y Parent Italian Minor - Docs: Birth certificate child Italian + Italian child nationality certificate + Parent passport + Relationship proof + Financial support + Parent Italian minor category
+
+IT-FAM-010 Child of Italian National Figlio Cittadino Italiano D Visa Child Italian National - Docs: Birth certificate child Italian + Italian parent nationality certificate + Italian parent passport + Relationship proof + Financial support
+
+IT-FAM-011 Spouse of Italian National Coniuge Cittadino Italiano D Visa Spouse Italian National - Docs: Marriage certificate Italian + Italian spouse nationality certificate + Italian spouse passport + Marriage certificate attested + Relationship proof + Financial support
+
+IT-FAM-012 EU Blue Card Family Family EU Blue Card Family D Visa EU Blue Card Family - Docs: Marriage certificate attested + Birth certificate attested + EU Blue Card holder passport + EU Blue Card + Relationship proof + Financial support
+
+IT-FAM-013 Digital Nomad Family Family Digital Nomad Family D Visa Digital Nomad Family - Docs: Marriage certificate attested + Birth certificate attested + Digital Nomad holder passport + Digital Nomad + Relationship proof + Financial support
+
+IT-FAM-014 Investor Family Family Investor Family D Visa Investor Family - Docs: Marriage certificate attested + Birth certificate attested + Investor holder passport + Investor + Relationship proof + Financial support
+
+IT-FAM-015 Family Reunification Extension Renewal Permesso di Soggiorno Motivi Familiari 1Y Renewal - Fee Questura 80-200+Marca 16 - Docs: Passport + Family Reunification D visa + Relationship proof + Accommodation + Financial means + Family reunification extension renewal
+
+SECTION 07 - BUSINESS INVESTOR GOLDEN 10:
+IT-BIZ-001 Investor Visa Investitore D Visa 2Y Investor Visa 250k Startup Innovative /500k Company /1M Philanthropic /2M Government Bonds - Fee EUR 116+VFS 28+Nulla Osta Investor+Permesso 80-200 - Validity 2Y D visa investitore + Permesso di soggiorno investitore 2Y + Renewal 3Y - Stay 2Y - Purpose Investor - Docs: Investor + Investment EUR 250k startup innovative Italy OR EUR 500k company Italy OR EUR 1M philanthropic Italy OR EUR 2M government bonds Italy + Company + Investment + Business plan + Investor activities + Investment + Company + Business plan + Investor Committee Comitato + Nulla Osta investor + Investor Visa Committee + Investment proof - MOST IMPORTANT Investment 250k startup innovative /500k company /1M philanthropic /2M government bonds = INR 2.2 Cr /4.4 Cr /8.8 Cr /17.6 Cr - Investor Visa Italy - Investment + Comitato Investor Visa + Nulla Osta investor - 2 years + Renewal 3Y - fundsBox investment 250k startup innovative =2.2 Cr OR 500k company =4.4 Cr OR 1M philanthropic =8.8 Cr OR 2M government bonds =17.6 Cr + Investment maintained 2Y + Renewal 3Y - itrBox investor - bankBox investment proof + Comitato approval
+
+IT-BIZ-002 Investor Startup Innovative Startup Innovativa 250k EUR D Visa Investor Startup Innovative 250k EUR - Docs: Startup innovative + Investment 250k EUR startup innovative Italy + Business plan + Investment + Company registration + Startup innovative recognition + Comitato Investor Visa + Nulla Osta investor startup innovative + Investment 250k EUR - MOST IMPORTANT Investment 250k EUR startup innovative =2.2 Cr INR
+
+IT-BIZ-003 Investor Company Company 500k EUR D Visa Investor Company 500k EUR - Docs: Company + Investment 500k EUR company Italy + Business plan + Investment + Company registration + Company + Comitato Investor Visa + Nulla Osta investor company + Investment 500k EUR - MOST IMPORTANT Investment 500k EUR company =4.4 Cr INR
+
+IT-BIZ-004 Investor Philanthropic Philanthropic 1M EUR D Visa Investor Philanthropic 1M EUR - Docs: Philanthropic + Investment 1M EUR philanthropic Italy culture education immigration research + Investment + Philanthropic + Comitato Investor Visa + Nulla Osta investor philanthropic + Investment 1M EUR - MOST IMPORTANT Investment 1M EUR philanthropic =8.8 Cr INR
+
+IT-BIZ-005 Investor Government Bonds Government Bonds 2M EUR D Visa Investor Government Bonds 2M EUR - Docs: Government bonds + Investment 2M EUR government bonds Italy BTP + Investment + Government bonds + Comitato Investor Visa + Nulla Osta investor government bonds + Investment 2M EUR - MOST IMPORTANT Investment 2M EUR government bonds =17.6 Cr INR - BTP Buoni del Tesoro Poliennali
+
+IT-BIZ-006 Self-employment Lavoro Autonomo D Visa 1Y Lavoro Autonomo Self-employment - Docs: Self-employment + Business plan + Company registration + Self-employment activities + Financial means + Business plan + Company registration + Self-employment authorization Nulla Osta + SUI + Chamber of Commerce Camera di Commercio + Partita IVA + Financial means
+
+IT-BIZ-007 Entrepreneur Startup Startup Innovativa D Visa 1Y Startup Innovativa - Docs: Entrepreneur startup innovativa + Startup innovative + Business plan + Investment + Company creation + Business plan + Investment + Company registration + Startup innovativa recognition + Italia Startup Visa committee + Nulla Osta startup + Italia Startup Visa program - MOST IMPORTANT Startup innovativa recognition + Business plan + Investment - Italia Startup Visa
+
+IT-BIZ-008 Business Owner Titolare Azienda D Visa 1Y Titolare Azienda Business Owner - Docs: Business owner + Company ownership + Business plan + Investment + Company registration + Business owner activities + Business plan + Company registration + Business owner authorization Nulla Osta
+
+IT-BIZ-009 Company Administrator Amministratore Societa D Visa 1Y Amministratore Societa - Docs: Company administrator + Company + Amministratore societa + Company registration + Company administrator activities + Company + Amministratore + Company registration
+
+IT-BIZ-010 Business Extension Renewal Permesso di Soggiorno Lavoro Autonomo 1Y Renewal - Docs: Passport + Business D visa + Company docs + Tax + Financial statement + Business plan + Company registration + Tax + Business extension renewal
+
+SECTION 08 - PR LONG-TERM SETTLEMENT GOLDEN 15:
+IT-PR-001 Long-term EU Residence Permesso di Soggiorno UE per Soggiornanti di Lungo Periodo Long-term EU Residence EU Long-term Residence Carta di Soggiorno EU Long-term - Fee Questura 80-200+Marca 16 - Validity Permanent EU long-term residence indefinite - Docs: Residence 5 years + Italian language A2 + Financial stability + Tax + Good conduct + Integration + Residence certificate + Tax certificate + Employment letter + Bank + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability - MOST IMPORTANT Permesso di Soggiorno UE per Soggiornanti di Lungo Periodo - 5 years residence + Language A2 + Tax + Good conduct + Financial stability + Integration - Permanent EU long-term residence indefinite - PR Italy
+
+IT-PR-002 Permanent Residence Carta di Soggiorno Permanente Permanent Residence Carta di Soggiorno Permanente - Docs: Permanent residence + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability + Integration - Permanent residence indefinite
+
+IT-PR-003 EU Blue Card Permanent EU Blue Card Permanent Permesso di Soggiorno UE Lungo Periodo EU Blue Card Permanent - Docs: EU Blue Card 5 years + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability + Integration - EU Blue Card permanent - EU Blue Card 5Y = Permanent EU long-term residence
+
+IT-PR-004 Investor Permanent Investor Permanent Permesso di Soggiorno UE Lungo Periodo Investor Permanent 2Y+3Y+5Y = Long-term EU - Docs: Investor 2Y + Renewal 3Y + Residence 5 years + Investment maintained + Tax + Financial support + Language A2 + Investor permanent + Residence 5 years = Permanent EU long-term residence eligible - Investor 2Y+3Y=5Y = Permanent EU long-term residence
+
+IT-PR-005 Family Permanent Family Permanent Permesso di Soggiorno UE Lungo Periodo Family Permanent - Docs: Family 5 years + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability + Integration
+
+IT-PR-006 Work Permanent Work Permanent Permesso di Soggiorno UE Lungo Periodo Work Permanent - Docs: Work 5 years + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability + Integration
+
+IT-PR-007 Elective Residence Permanent Elective Residence Permanent Permesso di Soggiorno UE Lungo Periodo Elective Residence Permanent - Docs: Elective residence 5 years + Residence 5 years + Financial means 31000 EUR yearly + Language A2 + Tax + Good conduct + Financial stability + Integration
+
+IT-PR-008 Citizenship by Residence Cittadinanza per Residenza Citizenship by Residence 10 Years Residence Citizenship - Fee Prefettura 250+Marca 16 - Validity Italian citizenship indefinite - Docs: Residence 10 years + Italian language B1 + Tax + Good conduct + Integration + Residence certificate + Tax certificate + Employment letter + Bank + Residence 10 years + Language B1 + Tax + Good conduct + Financial stability + Integration - MOST IMPORTANT Citizenship by residence - 10 years residence + Language B1 + Tax + Good conduct + Integration - Italian citizenship - Anytime apply after 10 years residence - Non-EU 10Y EU 4Y
+
+IT-PR-009 Citizenship by Marriage Cittadinanza per Matrimonio Citizenship by Marriage 2 Years Marriage + 1 Year Residence Citizenship Marriage - Fee Prefettura 250+Marca 16 - Docs: Marriage Italian national 2 years + Residence Italy 1 year OR Marriage 3 years no residence + Italian spouse nationality certificate + Italian spouse passport + Marriage certificate attested + Relationship proof + Language B1 + Marriage 2Y + Residence 1Y OR Marriage 3Y = Citizenship marriage eligible - Citizenship by marriage - Marriage 2Y + Residence 1Y OR Marriage 3Y
+
+IT-PR-010 Citizenship by Birth Birth Italian Citizenship Birth Figlio Cittadino Italiano Citizenship Birth - Docs: Birth Italy + Parent Italian OR Birth Italy + Residence 3 years + Birth certificate + Nationality certificate + Birth Italy citizenship birth - Citizenship by birth - Birth Italy + Parent Italian OR Birth Italy + Residence 3Y
+
+IT-PR-011 Citizenship by Descent Jure Sanguinis Citizenship by Descent Jure Sanguinis Descent Italian Citizenship Descent - Fee Consulate 300+Marca 16 - Docs: Descent Italian + Italian ancestor + Birth certificate attested + Italian ancestor birth certificate + Italian ancestor naturalization certificate + Descent proof + Jure Sanguinis + Italian ancestor + Descent - Citizenship by descent Jure Sanguinis - Italian ancestor - No limit generations but ancestor never naturalized before child birth - MOST IMPORTANT Descent Jure Sanguinis - No limit generations
+
+IT-PR-012 Long-term EU Residence Extension Renewal Permesso di Soggiorno UE Lungo Periodo Renewal Extension Long-term EU Residence - Docs: Passport + Long-term EU Residence + Tax + Financial support + Language + Long-term EU extension renewal
+
+IT-PR-013 Italian Nationality by Long Residence Lungo Residenza Nationality by Long Residence - Docs: Residence 10 years + Language B1 + Tax + Good conduct + Integration + Long residence + Nationality by long residence
+
+IT-PR-014 Italian Nationality by Service Service Nationality by Service - Docs: Service Italy + Contribution Italy + Service certificate + Service + Contribution + Nationality by service
+
+IT-PR-015 EU Long-term Residence EU Long-term Residence Permesso di Soggiorno UE per Soggiornanti di Lungo Periodo EU Long-term Residence - Docs: EU long-term residence + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability + Integration
+
+SECTION 09 - LONG-STAY OTHER 10:
+IT-LTR-001 Volunteer Volontariato D Visa 1Y Volontariato Volunteer - Docs: Volunteer + Volunteer organization + Volunteer activities + Volunteer agreement + Organization registration + Volunteer + Volunteer organization + Volunteer agreement + Nulla Osta? Actually volunteer needs Nulla Osta? + Volunteer
+
+IT-LTR-002 Religious Motivi Religiosi Religious D Visa 1Y Religious - Docs: Religious organization invitation + Religious activities + Organization registration + Religious letter + Church invitation + Religious organization + Religious activities + Nulla Osta? + Religious
+
+IT-LTR-003 Research Ricerca D Visa 1Y Research - Docs: Research + Hosting agreement + Research organization + Research activities + Degree + Research plan + Hosting agreement + Research organization + Degree + Research plan - MOST IMPORTANT Hosting agreement + Research organization + Degree
+
+IT-LTR-004 Sports Gara Sportiva Sportivo D Visa 1Y Sports - Docs: Sports + CONI Federazione + Sports contract + Sports activities + CONI authorization + Nulla Osta sportivo + CONI
+
+IT-LTR-005 Mission Missione D Visa 1Y Mission - Docs: Mission + Organization invitation + Mission activities + Organization registration + Mission letter + Organization + Mission + Organization invitation
+
+IT-LTR-006 Working Holiday Vacanza Lavoro D Visa 1Y Working Holiday Agreement - Docs: Working Holiday - Agreement countries: Australia NZ Canada Korea Japan etc - Age 18-30 + Funds + Return ticket + Health insurance + Working Holiday agreement - Working Holiday - Age 18-30 - Funds - Working Holiday agreement
+
+IT-LTR-007 Au Pair Alla Pari D Visa 1Y Alla Pari Au Pair - Docs: Au pair contract + Family invitation au pair + Au pair agreement + Family registration + Au pair activities + Language course + Au pair family + Age 18-30 + Au pair contract - MOST IMPORTANT Au pair agreement + Family invitation
+
+IT-LTR-008 Minor Child Minore D Visa 1Y Minore Child - Docs: Minor child + Parent passport + Parent permesso di soggiorno + Birth certificate attested + Relationship proof + Financial support + Minor child authorization + Parent + Guardian
+
+IT-LTR-009 Justice Giustizia D Visa 1Y Justice - Docs: Justice + Court invitation + Justice authorization + Court + Justice + Court invitation
+
+IT-LTR-010 Other Other Long-stay D Visa Other Other Long-stay - Docs: Other long-stay + Relationship proof + Financial support + Other long-stay activities
+
+SECTION 10 - ENTRY PERMIT PROCEDURAL 10:
+IT-EP-001 Nulla Osta Nulla Osta Work Authorization Nulla Osta Lavoro Work Authorization Nulla Osta - Fee Free (employer applies SUI) - Validity 6 months Nulla Osta validity Must apply visa within 6 months Nulla Osta issuance - Docs: Nulla Osta application + Employment contract + Company registration Visura Camerale + Company + Work authorization + SUI Sportello Unico Immigrazione + Prefettura + Nulla Osta - MOST IMPORTANT Nulla Osta = Work authorization - Employer applies SUI Sportello Unico Immigrazione + Prefettura - Nulla Osta 6 months validity - Must apply visa within 6 months Nulla Osta - Nulla Osta + Visa application at consulate = Visa - Nulla Osta required for work subordinate seasonal EU Blue Card ICT self-employment investor startup family reunification
+
+IT-EP-002 Nulla Osta Family Nulla Osta Ricongiungimento Familiare Nulla Osta Family Reunification Family Nulla Osta - Fee Free (sponsor applies SUI) - Validity 6 months Nulla Osta family validity - Docs: Nulla Osta family application + Relationship proof Marriage Birth attested + Sponsor permesso di soggiorno + Sponsor accommodation idoneita alloggiativa + Sponsor income + SUI + Prefettura + Nulla Osta family - MOST IMPORTANT Nulla Osta ricongiungimento familiare = Family reunification authorization - Sponsor applies SUI + Prefettura - Nulla Osta family 6 months validity
+
+IT-EP-003 Nulla Osta Investor Nulla Osta Investitore Nulla Osta Investor Investor Nulla Osta - Fee Free (Investor Committee Comitato) - Validity 6 months Nulla Osta investor validity - Docs: Nulla Osta investor application + Investment 250k/500k/1M/2M + Business plan + Company + Investment proof + Comitato Investor Visa Committee + Nulla Osta investor - MOST IMPORTANT Nulla Osta investitore = Investor authorization - Comitato Investor Visa + Nulla Osta investor - Investment 250k startup innovative /500k company /1M philanthropic /2M government bonds
+
+IT-EP-004 Permesso di Soggiorno Permesso di Soggiorno Residence Permit Permesso di Soggiorno 1Y Residence Permit 1Y - Fee Questura 80-200+Marca 16+Poste 30 - Validity 1Y permesso di soggiorno - Docs: Passport + D visa + Nulla Osta + Accommodation + Financial means + Permesso di soggiorno application + Questura + Poste Italiane kit giallo + Permesso di soggiorno - Permesso di soggiorno - Residence permit - Must apply Questura Poste kit giallo within 8 days arrival Italy - Permesso di soggiorno - Must apply within 8 days arrival - Poste kit giallo
+
+IT-EP-005 Carta di Soggiorno Carta di Soggiorno EU Long-term Residence Card Carta di Soggiorno EU Long-term - Fee Questura 80-200+Marca 16 - Validity Permanent EU long-term residence indefinite - Docs: Passport + Permesso di soggiorno 5 years + Residence 5 years + Language A2 + Tax + Good conduct + Financial stability + Integration + Carta di soggiorno application + Questura - Carta di soggiorno - EU long-term residence - Permanent - After 5 years residence, can get carta di soggiorno EU long-term
+
+IT-EP-006 Dichiarazione di Presenza Dichiarazione di Presenza Presence Declaration Dichiarazione di Presenza 8 Days Presence Declaration - Fee Free - Validity 8 days to declare presence - Docs: Passport + Schengen visa + Dichiarazione di presenza + Questura + Dichiarazione di presenza application + Questura - Dichiarazione di presenza - Presence declaration - Must declare presence Questura within 8 days arrival if entering via Schengen other country - Dichiarazione di presenza - 8 days
+
+IT-EP-007 Codice Fiscale Codice Fiscale Fiscal Code Codice Fiscale Fiscal Code - Fee Free - Validity Indefinite codice fiscale - Docs: Passport + Codice fiscale application + Agenzia delle Entrate + Codice fiscale - MOST IMPORTANT Codice fiscale = Fiscal code = Tax ID Italy - Required for permesso di soggiorno + Bank + Accommodation + Work + Company + Residence - Codice fiscale - Agenzia delle Entrate - Fiscal code - Tax ID
+
+IT-EP-008 Idoneita Alloggiativa Idoneita Alloggiativa Accommodation Suitability Idoneita Alloggiativa Accommodation Suitability - Fee Comune 0-50 - Validity 6 months idoneita alloggiativa validity - Docs: Accommodation + Idoneita alloggiativa + Comune + Accommodation suitability certificate + Comune + Idoneita alloggiativa application + Comune - Idoneita alloggiativa - Accommodation suitability - Required for family reunification + Work + Elective residence + Family cohesion - Comune issues idoneita alloggiativa
+
+IT-EP-009 Fideiussione Bancaria Fideiussione Bancaria Bank Guarantee Fideiussione Bancaria Bank Guarantee - Fee Bank 0-200 - Validity 90/180 days fideiussione bancaria validity - Docs: Bank guarantee + Fideiussione bancaria + Bank + Sponsor + Invitation + Fideiussione bancaria application + Bank - Fideiussione bancaria - Bank guarantee - Required for tourist family visit invitation + Elective residence? Actually fideiussione bancaria = Bank guarantee for invitation - Sponsor provides bank guarantee - Fideiussione bancaria - Bank guarantee
+
+IT-EP-010 Assicurazione Sanitaria Health Insurance Health Insurance Assicurazione Sanitaria Health Insurance - Fee Insurance 30000 EUR yearly - Validity 1Y insurance - Docs: Passport + Insurance 30000 EUR + Health insurance + Assicurazione sanitaria + Insurance application + Insurance - Assicurazione sanitaria - Health insurance - Required for all long-stay visas - Insurance 30000 EUR yearly
+
+SECTION 11 - SUPPORTING DOCUMENTS AUTHORITIES 5:
+IT-DOC-001 Company Registration Visura Camerale - Fee Camera di Commercio 0-10 - Docs: Company registration Visura Camerale - Camera di Commercio - Visura Camerale = Company registration certificate Italy
+
+IT-DOC-002 Sportello Unico Immigrazione SUI Authority SUI Authority Sportello Unico Immigrazione SUI Authority - Docs: SUI - Sportello Unico Immigrazione = Single Desk Immigration - Work + Family reunification + Nulla Osta + Work authorization - SUI - Prefettura + SUI - Work + Family - Nulla Osta
+
+IT-DOC-003 Questura Authority Questura Authority Questura Authority - Docs: Questura - Questura = Police Headquarters - Permesso di soggiorno + Carta di soggiorno + Dichiarazione di presenza + Residence permit - Questura authority
+
+IT-DOC-004 Prefettura Authority Prefettura Authority Prefettura Authority - Docs: Prefettura - Prefettura = Prefecture = Local administration Italy - Nulla Osta + Work authorization + Family reunification + SUI - Prefettura authority
+
+IT-DOC-005 Camera di Commercio Authority Camera di Commercio Authority Camera di Commercio Authority - Docs: Camera di Commercio - Chamber of Commerce - Company registration Visura Camerale + Self-employment + Business + Partita IVA - Camera di Commercio authority
+
+SECTION 12 - SEASONAL QUOTA DECRETO FLUSSI 5:
+IT-FLU-001 Decreto Flussi Quota Annual Quota Decreto Flussi Annual Quota Non-EU Workers Quota - Docs: Decreto Flussi = Annual quota decree for non-EU workers - Quota for lavoro subordinato + lavoro stagionale + lavoro autonomo + Conversion + Family? Actually Decreto Flussi quota = Annual quota for non-EU workers entry Italy - Flussi Day Click Day - Quota - Non-EU workers - Decreto Flussi - Annual quota - Lavoro subordinato + Lavoro stagionale + Lavoro autonomo - Quota
+
+IT-FLU-002 Flussi Day Click Day Click Day Flussi Day - Docs: Click Day = Day when employers can submit Nulla Osta applications online - Flussi Day Click Day - Click Day - First come first served - Click Day - Flussi Day - Quota - Click Day - Non-EU workers
+
+IT-FLU-003 Nulla Osta Seasonal Lavoro Stagionale Nulla Osta Seasonal Seasonal Work Nulla Osta Seasonal - Docs: Nulla Osta stagionale = Seasonal work authorization - Agriculture tourism hotel - 9 months seasonal work - Nulla Osta stagionale - Seasonal worker - Agriculture tourism hotel - 9 months
+
+IT-FLU-004 Conversion Permesso di Soggiorno Conversion Conversion Permesso di Soggiorno Conversion Permesso di Soggiorno Conversion - Fee Questura 80-200+Marca 16 - Docs: Conversion + Permesso di soggiorno conversion + Conversion authorization + Conversion from studio to lavoro + From stagionale to subordinato + Conversion + Permesso di soggiorno conversion - Conversion - Change of residence permit type - Conversion - Studio to lavoro + Stagionale to subordinato
+
+IT-FLU-005 Seasonal Multi-year Pluriannual Seasonal Multi-year Pluriannual Seasonal Multi-year Seasonal 3 Years Multi-year Seasonal - Fee Questura 80-200+Marca 16 - Docs: Multi-year seasonal + Seasonal work multi-year + Employment contract seasonal multi-year + Nulla Osta seasonal multi-year + Seasonal worker 3Y multi-year 9M each year - Multi-year seasonal - Seasonal worker 3Y 9M each year - Agriculture tourism hotel - Multi-year seasonal
+
+SECTION 13 - LEGACY CLOSED 5:
+IT-LEG-001 Investor Old - Old investor visa closed new investor 250k/500k/1M/2M new rules
+IT-LEG-002 Work Old - Old lavoro subordinato old rules closed new lavoro subordinato new rules
+IT-LEG-003 Student Old - Old studio old rules closed new studio new rules
+IT-LEG-004 Elective Residence Old - Old residenza elettiva old rules closed new residenza elettiva new rules
+IT-LEG-005 Family Reunification Old - Old ricongiungimento familiare old rules closed new ricongiungimento familiare new rules
+
+END - TOTAL 130 - MERGE with existing - DO NOT overwrite other countries - Keep DUAL STRUCTURE FULL_VISA_DB["ITALY"] = italyVisas AND FULL_VISA_DB["INDIA"]["ITALY"] = italyVisas SAME REFERENCE - BASE_COUNTRY_VISAS["ITALY"] = 130 - Verify no 0 Types bug - Check typeof FULL_VISA_DB["ITALY"] === object array - Check FULL_VISA_DB["ITALY"].length === 130 - All docs detailed - All fundsBox itrBox bankBox with warnings - Invitation Letter OR Hotel Booking MOST IMPORTANT - Nulla Osta + Decreto Flussi + Flussi Day Click Day + Idoneita Alloggiativa + Fideiussione Bancaria + Codice Fiscale + Dichiarazione di Presenza + Permesso di Soggiorno kit giallo + Carta di Soggiorno + Investor 250k/500k/1M/2M + Digital Nomad 2024 24000 EUR + EU Blue Card 24904 EUR + Elective Residence 31000 EUR + Student 467.65 EUR/month + Medical cure mediche + Seasonal 9 months agriculture tourism hotel + Multi-year seasonal 3Y 9M + Working Holiday + Au Pair + Volunteer + Religious + Research + Sports + Mission + Justice + Other - Total site should be 1707+130=1837 entries now - Output as single file ITALY-130-Complete.js - Ready to paste in AI Studio

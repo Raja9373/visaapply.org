@@ -7,6 +7,8 @@ import { GERMANY_138_VISAS } from './germanyVisas';
 import { SINGAPORE_109_VISAS } from './singaporeVisas';
 import { THAILAND_113_VISAS } from './thailandVisas';
 import { JAPAN_123_VISAS } from './japanVisas';
+import { FRANCE_127_VISAS } from './franceVisas';
+import { ITALY_130_VISAS } from './italyVisas';
 
 export interface VisaItem {
   id: string;
@@ -232,12 +234,12 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   AE: { tourist: 28, work: 32, student: 5, family: 14, business: 18, pr: 38 }, // 135 (Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38)
   DE: { tourist: 11, work: 21, student: 11, family: 10, business: 7, pr: 78 }, // 138 (Tourist 11, Work 21, Student 11, Family 10, Business 7, PR/Regional/Legacy 78)
-  FR: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  FR: { tourist: 20, work: 25, student: 10, family: 15, business: 10, pr: 25 }, // 127 France Entries (105 Live Visas + 22 Supporting/Procedural/Legacy)
   SG: { tourist: 11, work: 31, student: 6, family: 13, business: 14, pr: 34 }, // 109 Singapore Visas, Passes & Programmes
   JP: { tourist: 12, work: 45, student: 6, family: 15, business: 10, pr: 40 }, // 128 Japan Entries (100 Live Visas + 28 Supporting/Procedural/Legacy)
   IN: { tourist: 5, work: 4, student: 3, family: 2, business: 3, pr: 3 }, // 20
   BR: { tourist: 3, work: 3, student: 2, family: 2, business: 2, pr: 2 }, // 14
-  IT: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  IT: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Italy Entries
   ES: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   NL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   NZ: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 4 }, // 18
@@ -560,6 +562,14 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'JP') {
     BASE_COUNTRY_VISAS['JP'] = JAPAN_123_VISAS;
+    return;
+  }
+  if (code === 'FR') {
+    BASE_COUNTRY_VISAS['FR'] = FRANCE_127_VISAS;
+    return;
+  }
+  if (code === 'IT') {
+    BASE_COUNTRY_VISAS['IT'] = ITALY_130_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
