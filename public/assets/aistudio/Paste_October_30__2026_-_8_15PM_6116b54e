@@ -1,0 +1,195 @@
+You are building visaapply.org - 30 countries portal - 540+ records LIVE must stay - DO NOT BREAK.
+
+Stable state you must keep:
+- FULL_VISA_DB dual-access: FULL_VISA_DB[toCode][category] AND FULL_VISA_DB[fromCode][toCode][category] + BASE_COUNTRY_VISAS
+- Routes: /[from]-to-[to] Level1 6 categories Tourist Work Student Family Business PR-Golden, /[from]-to-[to]-[category] Level2 sub-types, /[from]-to-[to]-[category]-[subcode] Level3 full detail
+- Back button window.history.back() + breadcrumbs at every step
+- Footer Sitemap for SEO crawl, /audit admin-only, /sitemap grouped by 30 countries
+- Language auto-detect navigator.language + IP: JP->ja, ES->es, DE->de, FR->fr
+- contact@visaapply.org + AdSense pub-9048615701580913 in footer
+- Embassy API /api/embassy?from={from}&to={to} - Show destination embassy in FROM country (e.g., IN user sees Thai Embassy Delhi + Consulates Mumbai Chennai Kolkata)
+
+TASK: Add Thailand 108 records - Self-contained list below - NO PDF needed - Data is already here:
+
+THAILAND 108 RECORDS - 13 SECTIONS - 9 groups:
+
+SECTION 01 - 15 records - Tourist Visitor Transit:
+1. TH-VIS-001 Visa Exemption 60 Days 93 Countries Free 60 days +30 extension THB1900 - Passport 6M + Flight return + Hotel OR Invitation + Bank 6M + TDAC mandatory 3 days before MOST IMPORTANT - TM30 landlord report 24H + TDAC new 2025 replaces TM6
+2. TH-VIS-002 Visa Exemption Extension 30 Days Immigration Office THB1900 +30 days =90 days total - Passport + Photo + TM30 + Bank + Hotel + Reason letter - Extension Chaengwattana
+3. TH-VIS-003 Visa On Arrival VOA 30 Days 31 Countries THB2000 30 days - Passport 6M + Photo 4x6 + Flight return 30 days + Hotel + Bank THB10000 per person THB20000 family + Application form + Fee cash only MOST IMPORTANT - At airport - Non-extendable? Actually can extend 7 days
+4. TH-VIS-004 Tourist Visa TR 60 Days Single Entry THB1000 60 days +30 extension =90 days - Passport 6M + Photo + Flight + Hotel OR Invitation Letter + Bank 6M 500USD THB20000 per person + Employment letter + Cover letter - Invitation OR Hotel MOST IMPORTANT
+5. TH-VIS-005 Tourist Visa TR 60 Days Multiple Entry 6 Months METV THB5000 6 months multiple 60 days each entry - Passport + Photo + Flight + Hotel + Bank 6 months THB200000 min balance + Employment + ITR + Previous visas - Bank genuine MOST IMPORTANT
+6. TH-VIS-006 Medical Treatment Visa MT 90 Days + Medical Companion THB1000+5000 90 days + extension - Hospital appointment letter Thailand hospital + Medical report + Advance payment receipt + Medical purpose letter + Bank 6M + Companion relationship proof MOST IMPORTANT - Hospital letter - Companion can get MT too - 90 days + extension - Similar Singapore Visit Pass Medical + UAE Medical
+7. TH-VIS-007 Sports Visa S 90 Days Athlete Sports Event THB1000 90 days - Sports Authority Thailand SAT letter + Event organizer invitation + Sports association letter
+8. TH-VIS-008 Transit Visa TS 30 Days Single Double Transit 12-24H THB800 30 days - Onward ticket + Visa third country + Passport + Flight + Hotel transit
+9. TH-VIS-009 Crew Visa C Airline Crew 30 Days THB800 30 days - Airline letter + Crew ID + Flight roster
+10. TH-VIS-010 Diplomatic Visa D Diplomatic Official 90 Days Free 90 days - Diplomatic note verbale + Diplomatic passport
+11. TH-VIS-011 Official Visa F Official Government Mission 90 Days Free 90 days - Official note verbale + Official passport + Government letter
+12. TH-VIS-012 Courtesy Visa Courtesy 90 Days Diplomatic Courtesy SUPPORTING Free 90 days - MFA courtesy letter
+13. TH-VIS-013 Destination Thailand Visa DTV Workcation 180 Days 5 Years Workation Thai Soft Power Muay Thai Education THB10000 5 years multiple 180 days per entry +180 extension =360 days per stay - Passport 6M + Photo + Bank 6M THB500000 INR12 lakh + Employment letter remote work + Company registration + Client contract OR Thai Soft Power activity letter Muay Thai Education Cooking Sports + Purpose letter MOST IMPORTANT - New 2024 launched - Workcation + Thai Soft Power - Can work remote - No work permit needed DTV - Can stay 360 days per year - Extension 180+180 - DTV = Digital nomad
+14. TH-VIS-014 DTV Spouse Child of DTV Holder DTV Dependent 180 Days 5 Years THB10000 5 years 180 days per entry - Marriage certificate attested + Birth certificate attested + DTV holder passport + Relationship proof + Bank DTV holder
+15. TH-VIS-015 Visa-Free Extension Special Cases 60 Days Covid Special SUPPORTING THB1900 60 days - Special announcement MFA
+
+SECTION 02 - 15 records - Work Employment:
+16. TH-WRK-001 Non-Immigrant Visa B Business Employment 90 Days Single THB2000 90 days -> Work Permit + Extension 1 year - Job offer letter Thailand company + Company registration DBD 6 months + List shareholders + VAT + Withholding tax + Financial statement + BOI if BOI + Work Permit application + Degree + Resume + Company invitation MOST IMPORTANT + Salary - Job offer MOST IMPORTANT
+17. TH-WRK-002 Non-B Business Employment 1 Year Multiple Entry THB5000 1 year multiple 90 days each - Same as B + Multiple entry request + Previous B + Work Permit
+18. TH-WRK-003 Work Permit WP General Foreign Worker 1 Year THB3000+1000-3000 1-2 years - Employer + Non-B visa + Degree + Employment contract + Company documents DBD + VAT + Withholding tax + Financial statement + Map company + Photos + Medical certificate + Degree attestation + Work Permit application WP1 WP2 WP3 - MOST IMPORTANT Work Permit card Blue book
+19. TH-WRK-004 Work Permit BOI BOI Company Work Permit 1-2 Years BOI Privilege BOI fee 1-2 years - BOI promotion certificate + Non-B + Company BOI + Employment contract + BOI approval letter - BOI privilege no 4 Thai per foreigner rule + Land ownership + Work Permit easier
+20. TH-WRK-005 SMART Visa T Talent Highly Skilled Talent 4 Years THB10000 per year 4 years - Salary THB100000+ monthly + Degree Bachelor+ + Employment contract highly skilled + Company in targeted industries Next-Gen Automotive Smart Electronics Wellness Agriculture Biotech Food Future Robotics Aviation Logistics Biofuels Biochemicals Digital Medical Hub + Expertise endorsement + No work permit needed SMART replaces work permit MOST IMPORTANT - BOI SMART
+21. TH-WRK-006 SMART Visa I Investor 4 Years Investor 20M THB THB10000 per year 4 years - Investment THB20M technology business targeted industries + Company registration + BOI endorsement + No work permit needed - Investment proof 20M MOST IMPORTANT
+22. TH-WRK-007 SMART Visa E Executive 4 Years Executive 50k Salary THB10000 per year 4 years - Salary THB50000+ + Employment contract executive + Company targeted industries + Bachelor+ + Experience 10 years + BOI endorsement
+23. TH-WRK-008 SMART Visa S Startup 2+2 Years Startup 600k Deposit THB10000 per year 2+2 years - Deposit THB600000 + Startup targeted industries + Incubator accelerator endorsement + Health insurance + Company registration + Business plan + BOI SMART S
+24. TH-WRK-009 SMART Visa O Other Spouse Child of SMART Holder 4 Years THB10000 per year 4 years same as SMART - Marriage certificate attested + Birth certificate attested + SMART holder passport + Relationship proof
+25. TH-WRK-010 Non-Immigrant Visa B-A Business Approved BOI 1 Year BOI Business THB2000 1 year - BOI approval letter + Company BOI + Job offer + Degree + BOI promotion certificate - BOI privilege
+26. TH-WRK-011 Non-Immigrant Visa IM Investment BOI IM 1 Year Investment BOI THB2000 1 year - BOI IM approval + Investment proof + Company BOI
+27. TH-WRK-012 Work Permit Digital Work Permit Digital Nomad DTV Workcation no work permit needed SUPPORTING - DTV Workcation no work permit needed Remote work allowed Not Thai employer - DTV no work permit
+28. TH-WRK-013 Non-B Teacher Teacher License 90 Days + Extension 1 Year Teacher THB2000 90 days ->1 year - School license + Teacher license + Degree + Transcript + School invitation + Employment contract + Degree attestation + Police clearance + School registration Ministry Education
+29. TH-WRK-014 Non-B NGO Volunteer Volunteer 90 Days + Extension 1 Year THB2000 90 days ->1 year - NGO foundation registration + NGO invitation + Volunteer letter + NGO license + Ministry approval
+30. TH-WRK-015 Work Permit Extension Renewal 1 Year Extension STATUS_DOCUMENT THB3000 1 year - Passport + Work Permit + Non-B extension + Company docs + Tax + Financial statement
+
+SECTION 03 - 8 records - Student Education:
+31. TH-STU-001 Non-Immigrant Visa ED Education Student 90 Days Single THB2000 90 days ->1 year extension - Admission letter university school language school + Ministry Education MOE approval letter + School registration + School license + Course details + Passport + Photo + Bank 6 months + Parent consent if <18 + Guardian if <15 + School invitation MOST IMPORTANT - Admission letter + MOE approval
+32. TH-STU-002 Non-ED Education 1 Year Multiple Entry Student THB5000 1 year multiple 90 days each - Same as ED + Multiple entry + Previous ED + Extension history
+33. TH-STU-003 Non-ED Language School Thai Language 90 Days +1 Year Language THB2000 90 days ->1 year - Language school registration Ministry Education + Language course + School license + Admission letter + Bank + Passport - Language school 1 year max 3 years total
+34. TH-STU-004 Non-ED University Degree Bachelor Master PhD 90 Days +1 Year University THB2000 90 days ->1 year - University admission letter + MOE approval + University registration + Degree transcript + Passport + Bank - University degree
+35. TH-STU-005 Non-ED International School Primary Secondary 90 Days +1 Year International School THB2000 90 days ->1 year - International school admission + MOE approval + Parent Non-O or Work Permit + Birth certificate + Parent passport + School license
+36. TH-STU-006 Non-ED Internship Internship 90 Days +1 Year Internship THB2000 90 days ->1 year - Company internship letter + University internship letter + MOE approval if required + Internship agreement + University registration + Passport
+37. TH-STU-007 Non-ED Novice Monk Monk Student Novice 90 Days +1 Year THB2000 90 days ->1 year - Temple invitation + Sangha Supreme Council approval + Monk certificate + Temple registration + Abbot letter
+38. TH-STU-008 ED Extension Renewal 1 Year Extension Student STATUS_DOCUMENT THB1900 1 year - Passport + Non-ED + School letter + MOE approval + Attendance + Grades + Bank
+
+SECTION 04 - 15 records - Family Dependant:
+39. TH-FAM-001 Non-Immigrant Visa O Spouse of Thai Citizen Marriage Visa 90 Days Single THB2000 90 days ->1 year extension marriage - Marriage certificate Thai + Marriage certificate Indian attested + Spouse Thai ID + House registration Tabien Baan + Passport + Photo + Bank Thai 400000 THB 2 months or Income 40000 THB monthly + Map house + Photos marriage + Interview + Kor Ror 2 marriage registration MOST IMPORTANT - Marriage visa
+40. TH-FAM-002 Non-O Spouse Thai Citizen 1 Year Multiple Entry Marriage THB5000 1 year multiple 90 days each - Same as O spouse + Multiple entry + Previous marriage extension + Bank 400k 2 months
+41. TH-FAM-003 Non-O Child of Thai Citizen Child Thai 90 Days +1 Year Child THB2000 90 days ->1 year - Birth certificate attested Thai child + Parent Thai ID + House registration + Passport + Bank 400k or Income 40000 + Relationship proof
+42. TH-FAM-004 Non-O Parent of Thai Child Parent Thai Child 90 Days +1 Year Parent THB2000 90 days ->1 year - Birth certificate Thai child attested + Parent passport + Thai parent ID + House registration + Bank 400k or Income 40000 + Parent relationship proof
+43. TH-FAM-005 Non-O Spouse Child of Foreign Worker Dependent Non-B Holder 90 Days +1 Year Dependent THB2000 90 days ->1 year same as worker - Marriage certificate attested + Birth certificate attested + Worker Non-B Work Permit + Worker passport + Company letter + Bank worker + Relationship proof MOST IMPORTANT - Relationship proof attested
+44. TH-FAM-006 Non-O Spouse Child of Student Dependent ED Holder 90 Days +1 Year Dependent Student THB2000 90 days ->1 year same as student - Marriage certificate attested + Birth certificate attested + Student Non-ED + School letter + Bank student + Relationship proof
+45. TH-FAM-007 Non-O Parent of Student Parent Student 90 Days +1 Year Parent Student THB2000 90 days ->1 year - Birth certificate attested + Student Non-ED + School letter + Parent passport + Bank
+46. TH-FAM-008 Non-O Guardian of Student Guardian 90 Days +1 Year Guardian THB2000 90 days ->1 year - Birth certificate attested + Student Non-ED + School letter + Guardian letter + Bank + Guardian passport - Guardian of student <15
+47. TH-FAM-009 Non-O Aged Parent Parent 50+ of Long-term Resident 90 Days +1 Year Aged Parent THB2000 90 days ->1 year - Birth certificate attested + Child long-term resident passport + Child visa + Parent passport + Bank 800k? Actually 500k? + Relationship proof + Health insurance
+48. TH-FAM-010 Non-O Retirement Dependent Spouse Child of Retirement Visa Holder 90 Days +1 Year Dependent Retirement THB2000 90 days ->1 year same as retirement - Marriage certificate attested + Birth certificate attested + Retirement visa holder passport + Bank retirement holder + Relationship proof
+49. TH-FAM-011 Non-O-A Long Stay 1 Year Retirement 50+ 1 Year Single Retirement THB5000 1 year - Age 50+ + Passport 6M + Photo + Bank Thai 800000 THB 2 months or Income 65000 THB monthly + Bank statement Thai bank + Health insurance 40000 inpatient 4000 outpatient + Medical certificate + Police clearance + Application form + Fee THB5000 + Bank 800k MOST IMPORTANT - Retirement 1 year O-A - Can extend yearly - Health insurance mandatory
+50. TH-FAM-012 Non-O-X Long Stay 10 Years Retirement 50+ 5+5 Years 10 Years Retirement THB10000 5+5=10 years - Age 50+ + Bank Thai 3M THB 1 year + Deposit 1.8M THB + Health insurance 40000 inpatient 4000 outpatient + Medical certificate + Police clearance + Bank 3M MOST IMPORTANT - 10 years retirement - 5+5 - Countries: Japan Australia Denmark Finland France Germany Italy Netherlands Norway Sweden Switzerland UK Canada USA +14 countries - India not eligible O-X
+51. TH-FAM-013 Non-O Retirement 1 Year 50+ Inside Thailand Conversion 1 Year Retirement Inside THB1900 extension 1 year - Age 50+ + Non-O or Tourist converted + Bank Thai 800k 2 months or Income 65k + Health insurance + Medical certificate + Passport + TM30 - Conversion at Immigration
+52. TH-FAM-014 Non-O Marriage Extension 1 Year Marriage Extension Inside Thailand STATUS_DOCUMENT THB1900 1 year - Marriage certificate Thai + Kor Ror 2 + Spouse Thai ID + House registration + Bank Thai 400k 2 months + Map house + Photos + Interview + Passport + TM30 - Extension at Immigration
+53. TH-FAM-015 Non-O Dependent Extension 1 Year Dependent Extension Inside STATUS_DOCUMENT THB1900 1 year - Marriage Birth certificate attested + Worker Student Retirement passport + Visa + Company School letter + Bank + TM30
+
+SECTION 05 - 20 records - Business Investor SMART BOI LTR:
+54. TH-BIZ-001 Non-B Business 90 Days Single Business Meeting THB2000 90 days - Company invitation Thailand company + Company registration DBD + List shareholders + Company financial statement + Indian company letter + Business registration India + Purpose letter + Bank 6 months + Employment letter MOST IMPORTANT - Business Invitation Letter + Sponsor Letter + Indian Company Letter
+55. TH-BIZ-002 Non-B Business 1 Year Multiple Entry Business Frequent THB5000 1 year multiple 90 days each - Same as Business + Multiple entry + Previous Business visas + Company invitation + Bank 6 months genuine
+56. TH-BIZ-003 SMART Visa T Talent Highly Skilled 4 Years BOI Targeted Industries THB10000 per year 4 years - Salary THB100000+ + Degree + Employment contract highly skilled + Targeted industries + Expertise endorsement + BOI SMART - No work permit needed - MOST IMPORTANT
+57. TH-BIZ-004 SMART Visa I Investor 20M THB 4 Years Investor THB10000 per year 4 years - Investment THB20M technology business targeted industries + Company registration + BOI endorsement - Investment proof 20M MOST IMPORTANT
+58. TH-BIZ-005 SMART Visa E Executive 50k Salary 4 Years Executive THB10000 per year 4 years - Salary THB50000+ + Employment contract executive + Company targeted industries + Bachelor+ + Experience 10 years + BOI endorsement
+59. TH-BIZ-006 SMART Visa S Startup 600k Deposit 2+2 Years Startup THB10000 per year 2+2 years - Deposit THB600000 + Startup targeted industries + Incubator accelerator endorsement + Health insurance + Company registration + Business plan
+60. TH-BIZ-007 SMART Visa O Other Spouse Child of SMART Holder 4 Years THB10000 per year 4 years same as SMART - Marriage certificate attested + Birth certificate attested + SMART holder passport
+61. TH-BIZ-008 BOI Promotion Business BOI Company Business 1-2 Years BOI Privilege BOI fee 1-2 years - BOI promotion certificate + Non-B + Company BOI + Employment contract + BOI approval letter - BOI privilege no 4 Thai per foreigner - Land ownership + Work Permit easier
+62. TH-BIZ-009 LTR Visa Wealthy Global Citizen Investor 500k USD Assets 1M USD + Investment 500k USD 10 Years LTR THB50000 10 years multiple 1 year per entry - Assets USD1M + Investment USD500k Thailand property or business or government bond + Health insurance USD50000 + Annual income USD80000+ last 2 years + Passport + Photo + Bank statement + Investment proof + BOI LTR endorsement MOST IMPORTANT - LTR Wealthy Global Citizen - 10 years - Fast track - Tax 17%
+63. TH-BIZ-010 LTR Visa Wealthy Pensioner Pensioner 40k USD Income 10 Years LTR Pensioner THB50000 10 years - Age 50+ + Income USD40000 yearly pension or Income USD40000 + Investment USD250k if income 40000-80000 + Health insurance USD50000 + Passport + Bank + Investment proof + BOI LTR endorsement MOST IMPORTANT
+64. TH-BIZ-011 LTR Visa Work-from-Thailand Professional Remote Worker 40k USD Income 10 Years LTR Remote THB50000 10 years - Income USD40000 last 2 years + Employment contract remote worker + Company 3 years + Company revenue USD150M last 3 years or 5 years experience + Health insurance USD50000 + Passport + Employment letter remote + Company registration MOST IMPORTANT - Remote worker LTR - Can work remote Thailand - No Thai employer
+65. TH-BIZ-012 LTR Visa Highly-Skilled Professional Highly Skilled 40k USD Income 10 Years LTR Highly Skilled THB50000 10 years - Income USD40000 last 2 years + Employment contract highly skilled + Company targeted industries + Degree + Experience 5 years + Health insurance USD50000 + BOI LTR endorsement MOST IMPORTANT
+66. TH-BIZ-013 LTR Visa Spouse and Dependents Spouse Child of LTR Holder 10 Years LTR Dependent THB50000 10 years same as LTR holder - Marriage certificate attested + Birth certificate attested + LTR holder passport + Relationship proof + LTR holder visa
+67. TH-BIZ-014 Non-B Investment Investment 2M THB 1 Year Investment THB2000 90 days ->1 year - Investment THB2M Thailand property or business or government bond or deposit + Investment proof + Company registration + Bank statement + Investment certificate - Investment proof 2M MOST IMPORTANT
+68. TH-BIZ-015 Non-B Investment Condominium Condominium Purchase 3M THB 1 Year Condo THB2000 90 days ->1 year - Condominium purchase THB3M+ + Title deed Chanote + Condo registration + Transfer receipt + Bank statement + Investment proof - Condo title deed MOST IMPORTANT - Condo purchase 3M THB =70 lakh INR se Investment visa - Property title deed
+69. TH-BIZ-016 Non-B Business BOI Business BOI Business 1 Year BOI Business THB2000 1 year - BOI approval letter + Company BOI + Job offer + Degree + BOI promotion certificate
+70. TH-BIZ-017 Industrial Estate Authority of Thailand IEAT Business IEAT Business 1 Year IEAT THB2000 1 year - IEAT approval + Company IEAT + Job offer + Degree + IEAT promotion
+71. TH-BIZ-018 Non-B Film Movie Production Movie Film Production 90 Days +1 Year Film THB2000 90 days ->1 year - Film Board Thailand approval + Production company letter + Film script + Production schedule + Company registration + Work Permit application + Film Board endorsement
+72. TH-BIZ-019 Non-B Sports Business Sports Business 90 Days +1 Year Sports Business THB2000 90 days ->1 year - Sports Authority Thailand SAT approval + Company registration + Sports business license + Employment contract
+73. TH-BIZ-020 Business Extension Renewal 1 Year Extension Business STATUS_DOCUMENT THB1900 1 year - Passport + Non-B + Company docs DBD VAT Withholding Tax Financial statement + Work Permit + Bank + Tax
+
+SECTION 06 - 20 records - PR Long-term Settlement Golden Elite LTR DTV:
+74. TH-PR-001 Permanent Residence PR Thailand PR Unlimited Permanent THB191400 Permanent - Blue book + Red book - Book 1 year then permanent - Non-immigrant visa 3 years consecutive + Work Permit 3 years + Salary + Tax 3 years + Thai language test + Interview + Residence 3 years + Category: Investment or Employment or Family or Expert + Points system 100 points + Quota 100 per nationality per year + Police clearance + Medical certificate + Residence certificate + Employer letter + Financial statement + Tax receipts 3 years + Work Permit + Non-B + Bank + Degree MOST IMPORTANT - PR Thailand - Blue book Tabien Baan + Alien Certificate Red book - Quota 100 per nationality - Annual application window Oct-Dec
+75. TH-PR-002 LTR Visa Wealthy Global Citizen 10 Years LTR Wealthy Global Citizen Investor 500k USD THB50000 10 years multiple 1 year per entry - Assets USD1M + Investment USD500k Thailand + Health insurance USD50000 + Income USD80000 last 2 years + Investment proof MOST IMPORTANT - LTR 10 years - Tax 17% - Fast track immigration
+76. TH-PR-003 LTR Visa Wealthy Pensioner 10 Years LTR Pensioner 40k USD Income THB50000 10 years - Age 50+ + Income USD40000 pension + Health insurance USD50000 + Bank + Investment if income 40k-80k + BOI endorsement
+77. TH-PR-004 LTR Visa Work-from-Thailand Professional Remote Worker 10 Years LTR Remote 40k USD Income THB50000 10 years - Income USD40000 + Employment remote + Company 3 years revenue USD150M + Health insurance USD50000 + Employment letter remote
+78. TH-PR-005 LTR Visa Highly-Skilled Professional Highly Skilled 10 Years LTR Highly Skilled THB50000 10 years - Income USD40000 + Employment highly skilled + Targeted industries + Degree + Experience 5 years + Health insurance USD50000
+79. TH-PR-006 LTR Visa Spouse and Dependents LTR Dependent 10 Years THB50000 10 years same as LTR holder - Marriage Birth certificate attested + LTR holder passport + Relationship proof
+80. TH-PR-007 Thailand Privilege Card Elite Easy Access 5 Years Elite 5 Years THB900000 5 years multiple 1 year per entry - Passport 6M + Photo + Application form + Fee THB900000 + Background check + No criminal record + Elite Easy Access membership - 5 years - VIP fast track + Golf + Spa + No work permit - Can upgrade - Thailand Privilege Company - Privilege Entry Visa PE - MOST IMPORTANT fee 900k - New name Thailand Privilege Card - 5 years Elite
+81. TH-PR-008 Thailand Privilege Card Elite Privilege Access 10 Years Elite 10 Years THB1500000 10 years multiple 1 year per entry - Passport + Photo + Fee THB1500000 + Background check - 10 years - Privilege Access - VIP + Golf + Spa
+82. TH-PR-009 Thailand Privilege Card Elite Superiority Extension 20 Years Elite 20 Years THB2140000 20 years multiple 1 year per entry - Passport + Photo + Fee THB2140000 + Background check - 20 years - Superiority Extension - 5+15 years? Actually 20 years total - VIP
+83. TH-PR-010 Thailand Privilege Card Elite Ultimate Privilege 20 Years Elite Ultimate THB2140000 20 years multiple 1 year per entry - Passport + Photo + Fee THB2140000 + Background check - 20 years - Ultimate Privilege - Transferable? Actually Ultimate 20 years - Includes 20 years + Transferable + Work permit allowed? Actually Elite Ultimate includes work permit privilege - VIP + Golf + Spa + Transferable
+84. TH-PR-011 Thailand Privilege Card Elite Reserve 20 Years + Investment Reserve THB5000000 + Investment 20 years + - Passport + Photo + Fee THB5000000 + Investment + Background check - 20 years Reserve - Top tier - Includes investment + Work permit + Transferable + VIP + Golf + Spa
+85. TH-PR-012 Destination Thailand Visa DTV Workcation 180 Days 5 Years Workcation THB10000 5 years multiple 180 days per entry +180 extension =360 days per stay - Passport 6M + Photo + Bank 6M THB500000 INR12 lakh + Employment remote + Company registration + Client contract OR Thai Soft Power activity letter Muay Thai Education Cooking Sports + Purpose letter MOST IMPORTANT - New 2024 - 5 years - Can stay 360 days per year - Remote work allowed - No work permit needed - Workcation
+86. TH-PR-013 DTV Spouse Child DTV Dependent 180 Days 5 Years THB10000 5 years 180 days per entry - Marriage Birth certificate attested + DTV holder passport + Relationship proof + Bank DTV holder
+87. TH-PR-014 Non-O-A Long Stay 1 Year Retirement 50+ 1 Year Single O-A THB5000 1 year - Age 50+ + Passport 6M + Photo + Bank Thai 800000 2 months or Income 65000 monthly + Bank statement Thai bank + Health insurance 40000 inpatient 4000 outpatient + Medical certificate + Police clearance - Bank 800k MOST IMPORTANT - O-A 1 year - Can extend yearly
+88. TH-PR-015 Non-O-X Long Stay 10 Years Retirement 50+ 5+5 Years 10 Years O-X THB10000 5+5=10 years - Age 50+ + Bank Thai 3M 1 year + Deposit 1.8M + Health insurance 40000 inpatient 4000 outpatient + Medical certificate + Police clearance + Bank 3M MOST IMPORTANT - 10 years O-X - 14 countries only - India not eligible O-X - Countries Japan Australia Denmark Finland France Germany Italy Netherlands Norway Sweden Switzerland UK Canada USA
+89. TH-PR-016 Permanent Residence Extension Blue Book Tabien Baan + Red Book Alien Certificate Renewal STATUS_DOCUMENT THB7600 Permanent - Blue book yearly address report + Red book yearly renewal? Actually PR permanent but book renewal - PR approval + Blue book + Red book + Passport + Residence certificate + TM30
+90. TH-PR-017 Residence Certificate Certificate of Residence 1 Year Residence Certificate STATUS_DOCUMENT Free at Immigration 1 year - Passport + PR or Long-term visa + TM30 + House registration + Bank + Employment
+91. TH-PR-018 Re-Entry Permit Single Multiple Re-Entry Permit Single Multiple STATUS_DOCUMENT THB1000 single THB3800 multiple Same as visa - Passport + Visa + Departure + Application form - Required for PR and long-term visa travelling out returning - Single multiple
+92. TH-PR-019 90 Days Report TM47 90 Days Report 90 Days STATUS_DOCUMENT Free 90 days - Passport + Visa + TM30 + TM47 form - Report every 90 days at Immigration or online - Mandatory long-term
+93. TH-PR-020 Thailand Digital Arrival Card TDAC Mandatory 3 Days Before Arrival STATUS_DOCUMENT Free 1 entry - Passport + Flight + Hotel + TDAC online mandatory 3 days before arrival - New 2025 replaces TM6 - TDAC mandatory
+
+SECTION 07 - 10 records - Entry Permit Procedural:
+94. TH-EP-001 TM30 House Master Report TM30 Landlord Report Landlord Report 24 Hours STATUS_DOCUMENT Free Per entry - Passport + Visa + House registration + Landlord ID + TM30 form - Landlord must report foreigner within 24 hours - Mandatory - TM30
+95. TH-EP-002 TM6 Departure Card? Actually TDAC now replaces TM6 STATUS_DOCUMENT Free - TDAC now replaces TM6 - Digital arrival card mandatory
+96. TH-EP-003 TDAC Thailand Digital Arrival Card Mandatory 3 Days Before ENTRY_PERMIT Free 1 entry - Passport + Flight + Hotel + TDAC online - Mandatory 3 days before - New 2025 - Replaces TM6 - TDAC mandatory 3 days before
+97. TH-EP-004 Extension of Stay 30 Days Tourist Extension 30 Days STATUS_DOCUMENT THB1900 +30 days - Passport + Photo + TM30 + Hotel + Bank + Reason letter + Application form - Extension at Immigration
+98. TH-EP-005 Extension of Stay 1 Year Non-B Work Extension 1 Year STATUS_DOCUMENT THB1900 1 year - Passport + Non-B + Work Permit + Company docs DBD VAT Withholding Tax Financial statement + Bank + Tax + TM30
+99. TH-EP-006 Extension of Stay 1 Year Non-ED Student Extension 1 Year STATUS_DOCUMENT THB1900 1 year - Passport + Non-ED + School letter + MOE approval + Attendance + Grades + Bank + TM30
+100. TH-EP-007 Extension of Stay 1 Year Non-O Family Marriage Dependent Extension 1 Year STATUS_DOCUMENT THB1900 1 year - Passport + Non-O + Marriage Birth certificate + Spouse Thai ID + House registration + Bank Thai 400k 2 months + Map house + Photos + Interview + TM30
+101. TH-EP-008 Extension of Stay 1 Year Retirement Extension 1 Year O-A O-X Inside STATUS_DOCUMENT THB1900 1 year - Passport + Non-O retirement + Bank Thai 800k 2 months + Health insurance + Medical certificate + TM30
+102. TH-EP-009 Visa Conversion Tourist to Non-B Non-ED Non-O Inside Thailand Conversion ENTRY_PERMIT THB2000 90 days - Passport + Tourist visa + Job offer or School admission or Marriage certificate + Company docs or School docs or Marriage docs + Bank + Application form - Conversion at Immigration Bangkok Chaengwattana
+103. TH-EP-010 Work Permit Application WP1 WP2 WP3 Work Permit Application ENTRY_PERMIT THB3000 1-2 years - Passport + Non-B + Degree + Employment contract + Company docs + Medical certificate + Photos + Map + WP1 WP2 WP3 forms
+
+SECTION 08 - 5 records - Supporting Documents Authorities:
+104. TH-DOC-001 Company Registration DBD Department of Business Development DBD STATUS_DOCUMENT THB500 - DBD registration - Company registration
+105. TH-DOC-002 Work Permit Card Work Permit Book Blue Book Work Permit Card STATUS_DOCUMENT THB3000 Same as work permit - Work Permit card Blue book
+106. TH-DOC-003 Immigration Bureau Authority Immigration Bureau Thailand Authority SUPPORTING_CLASSIFICATION - Immigration Bureau - Tourist Work Student Family PR extensions TM30 TM47 TDAC
+107. TH-DOC-004 BOI Authority Board of Investment BOI Authority SUPPORTING_CLASSIFICATION - BOI - SMART Visa LTR BOI promotion
+108. TH-DOC-005 Thailand Privilege Card Authority Thailand Privilege Company Authority SUPPORTING_CLASSIFICATION - Thailand Privilege Company - Elite card
+
+SECTION 09 - 5 records - Legacy Closed Routes:
+109. TH-LEG-001 Thailand Elite Card Old Tiers Old Elite Easy Access Old Price Closed Old Elite LEGACY_VISA - Old Elite Easy Access THB500000 closed new price THB900000
+110. TH-LEG-002 Non-O-A Old Health Insurance 400k Inpatient 40k Outpatient Old Insurance Closed LEGACY_VISA - Old health insurance 400k 40k old rules closed new rules 40000 inpatient 4000 outpatient? Actually old higher - New lower? Check - Old 400k inpatient 40k outpatient new same? Actually new 40000 inpatient 4000 outpatient lower? Need verify - Old rules closed
+111. TH-LEG-003 Tourist Visa TR 60 Days Old Extension 30 Days Old Rules Closed Old Tourist LEGACY_VISA - Old tourist 30 days extension old rules closed new 60 days exemption +30 extension
+112. TH-LEG-004 SMART Visa Old Criteria Old SMART Old Salary Criteria Closed LEGACY_VISA - Old SMART criteria closed new criteria 2023 updated
+113. TH-LEG-005 LTR Visa Old Criteria Old LTR Old Income Criteria Closed LEGACY_VISA - Old LTR criteria closed new criteria updated 2023
+
+END OF 113 records - 108 directory? Actually 113 total with 5 legacy = 108 live? Actually 113 = 108 live +5 legacy - Directory 108 live +5 legacy =113 total. For audit show 108 live directory breakdown but 95 actual live visa pages (since many are extensions procedural status docs).
+
+LOGIC FOR AI STUDIO CODE - CRITICAL TO AVOID 0 TYPES BUG:
+
+- Create array THAILAND_VISAS_ALL 113 objects with fields: code, title, category mapping:
+  tourist: 1-15 (15)
+  work: 16-30 (15)
+  student: 31-38 (8)
+  family: 39-53 (15)
+  business: 54-73 (20)
+  pr: 74-93 (20) + 94-103 procedural + 104-113 supporting legacy
+  Map category for audit: tourist 15, work 15, student 8, family 15, business 20, pr 20 = 93? Actually 15+15+8+15+20+20=93 live visas. Supporting 10 + legacy 5 + procedural? Wait procedural counted inside categories? Keep as above mapping but for Level2 counts use live 93.
+
+- For counting audit: Live visas = 93 actual (15 tourist including DTV Workcation + VOA + Visa Exemption + TR + MT + Transit + Diplomatic Official Courtesy + DTV Dependent, 15 work including Non-B + Work Permit + Work Permit BOI + SMART T I E S O + B-A IM + Teacher + NGO + Extension, 8 student including ED + ED Multiple + Language + University + International School + Internship + Monk + Extension, 15 family including O spouse Thai + O spouse multiple + Child Thai + Parent Thai Child + Spouse Child foreign worker + Spouse Child student + Parent student + Guardian + Aged Parent + Retirement Dependent + O-A 1Y + O-X 10Y + Retirement Inside + Marriage Extension + Dependent Extension, 20 business including Non-B Business single multiple + SMART T I E S O + BOI + LTR Wealthy Global Citizen 500k USD + Wealthy Pensioner 40k USD + Work-from-Thailand Remote 40k USD + Highly-Skilled 40k USD + Spouse Dependents LTR + Investment 2M THB + Condo 3M THB + BOI Business + IEAT + Film + Sports + Business Extension, 20 pr including PR permanent + LTR 5 categories + Elite Easy Access 5Y 900k + Privilege Access 10Y 1.5M + Superiority 20Y 2.14M + Ultimate 20Y 2.14M + Reserve 20Y 5M + Investment + DTV Workcation 5Y + DTV Dependent + O-A + O-X + PR Extension Blue Red book + Residence Certificate + Re-Entry Permit + 90 Days Report TM47 + TDAC mandatory). Supporting 10 + legacy 5 = total directory 108-113.
+
+- DUAL-ACCESS: For each fromCode in 30 countries list: us, ca, gb, au, de, fr, ae, sg, jp, in, br, it, es, nl, nz, se, ch, ie, no, pt, dk, fi, be, at, pl, my, th, tr, za, sa - Do:
+  if (!FULL_VISA_DB[fromCode]) FULL_VISA_DB[fromCode] = {}
+  if (!FULL_VISA_DB[fromCode]['th']) FULL_VISA_DB[fromCode]['th'] = {tourist:[], work:[], student:[], family:[], business:[], pr:[]}
+  Then for each visaObj in THAILAND_VISAS_ALL filtered live (93), push to FULL_VISA_DB[fromCode]['th'][visaObj.category] AND also to FULL_VISA_DB['th'][visaObj.category]
+  Also BASE_COUNTRY_VISAS['th'] = FULL_VISA_DB['th']
+
+- Do NOT overwrite existing FULL_VISA_DB - Use if (!FULL_VISA_DB['th']) create, else push.
+
+- FundsBox bankBox itrBox warningBox for every visa - No half work - Tourist must have Invitation Letter OR Hotel Booking MOST IMPORTANT, Medical must have Hospital appointment letter Thailand hospital MOST IMPORTANT, Business must have Business Invitation Letter + Sponsor Letter + Indian Company Letter MOST IMPORTANT, Work must have Job Offer letter + Company registration DBD + Degree MOST IMPORTANT, Family must have Relationship Proof attested Marriage Birth certificate + Bank Thai 400k 2 months marriage 800k retirement MOST IMPORTANT, Student must have Admission letter + MOE approval letter MOST IMPORTANT, PR must have Investment Proof GIP? Actually Thailand PR + LTR investment proof 500k USD + Elite fee 900k-5M + Bank + Tax + Thai language test + Quota 100 per nationality + Residence certificate + Blue book + Red book MOST IMPORTANT, DTV must have Bank 6 months THB500000 MOST IMPORTANT + Remote work employment letter + Thai Soft Power activity letter, LTR must have Assets 1M USD + Investment 500k USD + Income 80k USD + Health insurance 50k USD MOST IMPORTANT, Retirement O-A O-X must have Bank Thai 800k 2 months or Income 65k monthly + Health insurance 40k inpatient 4k outpatient MOST IMPORTANT.
+
+- Back button + breadcrumbs at every level + Footer Sitemap link + contact@visaapply.org + pub-9048615701580913.
+
+- Sitemap grouped by 30 countries, TH shows 15 tourist +15 work +8 student +15 family +20 business +20 pr +10 procedural +5 supporting +5 legacy =113 directory but 93 live pages - Show live 93 in Level2 counts, 113 in audit searchable list.
+
+- Update AUDIT_TOTAL = previous 1409 +93 =1502 live visa records.
+
+- Verify: /audit shows 1502 Total Visa Records LIVE, TH 93/93 live, searchable list 113, /in-to-th-tourist shows 15 types including DTV Workcation 5Y 180+180=360 days + VOA 30 Days + Visa Exemption 60 Days + TR 60 Days + MT Medical Treatment + Transit + Diplomatic Official + DTV Dependent, /in-to-th-work shows 15 types including Non-B + Work Permit + BOI + SMART T I E S O + B-A IM + Teacher + NGO, /in-to-th-family shows 15 types including Marriage visa 400k bank + O-A 800k bank + O-X 3M bank, /in-to-th-business shows 20 types including LTR Wealthy Global Citizen 500k USD + Condo 3M THB + Investment 2M THB + SMART + BOI, /in-to-th-pr shows 20 types including PR quota 100 per nationality + LTR 10Y 5 categories + Elite 5Y 900k 10Y 1.5M 20Y 2.14M 5M Reserve + DTV + O-A O-X + Re-Entry Permit + 90 Days Report TM47 + TDAC mandatory, docs show MOST IMPORTANT tags, fundsBox THB100/day? Actually bank Thai 400k marriage 800k retirement 3M O-X 500k DTV 500k USD LTR, ITR 2-3 years, bank 6 months genuine, warning sudden deposit 1 day before ❌ Galat vs ✅ Sahi.
+
+- Special notes for Thailand:
+  Australia DAMA Regional jaisa Thailand me nahi hai - Sector-based BOI zones hai - BOI zones 3 zones Zone1 Bangkok Samut Prakan Zone2 10 provinces Zone3 58 provinces +20 BOI industrial estates - Tax incentive zone-based - Not visa regional - Visa same but tax privilege zone-based - Supporting classification
+  Thailand has no Australia-style regional postcode points
+  Thailand has no Canada-style RCIP FCIP AIP PNP EMPP
+  Thailand Medical visa MT 90 days + Companion - Hospital letter MOST IMPORTANT - Not like UAE 4 medical visas - 1 MT + 1 Companion
+  Thailand Investment - Condo 3M THB Title deed Chanote MOST IMPORTANT - Investment 2M THB - SMART I 20M THB - LTR Wealthy Global Citizen 500k USD investment + Assets 1M + Elite 900k-5M fee - Elite = Golden
+  Thailand Digital Nomad - DTV Workcation 5Y 180+180=360 days - Bank 500k THB - Remote work allowed no work permit - LTR Work-from-Thailand Professional 40k USD income 10Y - Remote work allowed - Tax 17%
+  Thailand PR quota 100 per nationality per year - Annual window Oct-Dec - Points system 100 points - Thai language test + Interview - Blue book Tabien Baan + Red book Alien Certificate
+  Thailand TDAC mandatory 3 days before arrival new 2025 replaces TM6 - TM30 landlord report 24H mandatory - 90 Days Report TM47 mandatory long-term - Re-Entry Permit required PR long-term travelling out returning - Extension at Immigration THB1900
+  Thailand O-X 10Y retirement only 14 countries Japan Australia Denmark Finland France Germany Italy Netherlands Norway Sweden Switzerland UK Canada USA - India not eligible O-X - O-A 1Y eligible India
+
+Generate TypeScript file: thailand-108-official-visas.ts + thailand-108-ai-studio-compatible.json + Update FULL_VISA_DB.ts
+
+Do NOT delete existing 540+65=1409 data - Append only - Keep 1409+93=1502 live.
+
+END PROMPT.

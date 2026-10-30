@@ -177,6 +177,16 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       🏛️ Official ICA & MOM Singapore Portal ↗
                     </a>
                   )}
+                  {code === 'TH' && (
+                    <a
+                      href="https://www.mfa.go.th/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 hover:underline"
+                    >
+                      🏛️ Official Thai MFA & Immigration Portal ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}
@@ -237,6 +247,24 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                   </div>
                   <p className="text-[11px] text-slate-700 leading-relaxed">
                     <strong>Clarification:</strong> Singapore uses Visit Passes (STVP, Long Term Visit Pass), Work Passes (Employment Pass with COMPASS points, S Pass, ONE Pass, PEP, EntrePass, Work Permit), Student Passes, Dependant's Passes, Permanent Residence (PTS, GIP Options A/B/C, ForArts, Student Scheme), and administrative status documents (IPA, SGAC, REP) without postal codes or Australian regional DAMA systems.
+                  </p>
+                </div>
+              )}
+
+              {/* Thailand Architecture & Compliance Banner */}
+              {code === 'TH' && (
+                <div className="p-4 bg-purple-50/80 border border-purple-200 rounded-xl text-xs space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-extrabold text-purple-900 flex items-center gap-1.5">
+                      <span>🇹🇭</span>
+                      <span>Thailand Architecture: 113 Total Entries (93 Live Visas + 20 Procedural/Supporting/Legacy)</span>
+                    </span>
+                    <span className="text-[11px] font-bold bg-purple-700 text-white px-2 py-0.5 rounded">
+                      DTV Workcation + LTR + SMART + BOI Zones
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed">
+                    <strong>Clarification:</strong> Thailand has no Australia-style regional postcodes or Canada-style RCIP/FCIP/PNP programmes. Instead, Thailand uses sector-based BOI investment zones (Zones 1-3), DTV 5-year remote work visas, LTR visas, SMART visas, condominium ownership (THB 3M+ Chanote title deed), Medical Treatment visas (MT + Companion), PR quota (100 per nationality per year with Oct-Dec application window), TDAC digital arrival cards (replacing TM6 in 2025), TM30 landlord reports (24H), and TM47 90-day reports.
                   </p>
                 </div>
               )}
