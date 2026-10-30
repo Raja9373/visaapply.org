@@ -1391,15 +1391,7 @@ export default function App() {
 // ----------------------------------------------------
 function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate }: any) {
   const [targetSearch, setTargetSearch] = useState('');
-  const [showMostPopularOnly, setShowMostPopularOnly] = useState(true);
-
-  const popularCodes = ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'AE', 'SG', 'JP', 'IT', 'ES', 'NL'];
-
-  const baseCountries = showMostPopularOnly 
-    ? countries.filter((c: Country) => popularCodes.includes(c.code.toUpperCase()))
-    : countries;
-
-  const filteredCountries = baseCountries.filter((c: Country) => 
+  const filteredCountries = countries.filter((c: Country) => 
     c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
     c.code.toLowerCase().includes(targetSearch.toLowerCase())
   );
@@ -1456,28 +1448,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
           <div>
             <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-              {showMostPopularOnly ? 'Most Popular Destinations' : 'All Global Destinations'}
+              All Global Destinations
             </h2>
             <p className="text-sm text-slate-500 mt-1">Click any country flag to start your visa assessment & application guide</p>
-          </div>
-          
-          <div className="flex items-center gap-2 bg-slate-200/70 p-1 rounded-xl">
-            <button
-              onClick={() => setShowMostPopularOnly(true)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                showMostPopularOnly ? 'bg-white text-[#0B3D91] shadow-sm' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Most Popular
-            </button>
-            <button
-              onClick={() => setShowMostPopularOnly(false)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                !showMostPopularOnly ? 'bg-white text-[#0B3D91] shadow-sm' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              All 30 Countries
-            </button>
           </div>
         </div>
 
@@ -2045,12 +2018,35 @@ function ArticleView({ match, articles = [], navigate }: any) {
     return q.includes(query) || a.includes(query);
   });
 
-  const isJpToIn = fromCode === 'JP' && toCode === 'IN';
-  // Resiliently access FROM -> TO -> Visas or direct TO -> Visas
-  const countryData = isJpToIn
-    ? JP_TO_IN_VISA["IN"]
-    : (FULL_VISA_DB[fromCode]?.[toCode] || FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
-  const categoryVisas = countryData?.[categoryCode as keyof CountryVisas] || countryData?.['tourist'] || [];
+  // ===== CRITICAL FIX: Use robust retrieval to prevent blog fallback =====
+  const getVisasFixed = (from: string, to: string, category: string): VisaItem[] => {
+    // 1. Try dual-access: from->to->category
+    if(FULL_VISA_DB[from] && FULL_VISA_DB[from][to] && FULL_VISA_DB[from][to][category] && FULL_VISA_DB[from][to][category].length>0){
+      return FULL_VISA_DB[from][to][category];
+    }
+    // 2. Try base: to->category
+    if(FULL_VISA_DB[to] && FULL_VISA_DB[to][category] && FULL_VISA_DB[to][category].length>0){
+      return FULL_VISA_DB[to][category];
+    }
+    // 3. Try BASE_COUNTRY_VISAS filtered by category
+    const baseVisas = BASE_COUNTRY_VISAS[to];
+    if(baseVisas && baseVisas[category as keyof CountryVisas] && baseVisas[category as keyof CountryVisas].length > 0){
+        return baseVisas[category as keyof CountryVisas].filter(v=>v.record_type!=="SUPPORTING_CLASSIFICATION"&&v.record_type!=="LEGACY_VISA");
+    }
+    // 4. Fallback to all live if category is empty
+    const allVisas = BASE_COUNTRY_VISAS[to] ? [
+        ...(BASE_COUNTRY_VISAS[to].tourist || []),
+        ...(BASE_COUNTRY_VISAS[to].work || []),
+        ...(BASE_COUNTRY_VISAS[to].student || []),
+        ...(BASE_COUNTRY_VISAS[to].family || []),
+        ...(BASE_COUNTRY_VISAS[to].business || []),
+        ...(BASE_COUNTRY_VISAS[to].pr || [])
+    ].filter(v=>v.record_type!=="SUPPORTING_CLASSIFICATION"&&v.record_type!=="LEGACY_VISA") : [];
+    
+    return allVisas;
+  };
+
+  const categoryVisas = getVisasFixed(fromCode, toCode, categoryCode);
   
   // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus cross-category lookup for subclasses like /in-to-au-work-187 -> 187)
   const expectedFullId = `in-to-${toCode.toLowerCase()}-${categoryCode}-${subtypeCode}`;
