@@ -157,6 +157,16 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       🏛️ Official UAE ICP & GDRFA Dubai ↗
                     </a>
                   )}
+                  {code === 'DE' && (
+                    <a
+                      href="https://www.make-it-in-germany.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:underline"
+                    >
+                      🏛️ Official Make it in Germany Portal ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}
@@ -246,6 +256,24 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                   </div>
                   <p className="text-[11px] text-slate-700 leading-relaxed">
                     <strong>Clarification:</strong> UAE mein Australia jaisa postcode-based regional visa system nahi hai, lekin alag regional system hai: 1. Emirate-wise GDRFA Dubai vs ICP (Federal Authority for Abu Dhabi, Sharjah, Ajman, UAQ, RAK, Fujairah), 2. Mainland vs Free Zone (3000+ Free Zones where visa type is identical — Free Zone Employment / Investor — with authority names like DMCC, JAFZA, DAFZA, DIFC, ADGM, RAKEZ, etc. counted as one per type), 3. Entry Permit (eVisa 60 days) vs Residence Permit (2-3 years) vs Emirates ID.
+                  </p>
+                </div>
+              )}
+
+              {/* Germany State-Wise Authorities & Architecture Banner */}
+              {code === 'DE' && (
+                <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-xl text-xs space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-extrabold text-amber-950 flex items-center gap-1.5">
+                      <span>🇩🇪</span>
+                      <span>Germany 138 Total Entries: Tourist 11, Work 21, Student 11, Family 10, Business 7, PR/Regional/Legacy 78 = 138 Entries</span>
+                    </span>
+                    <span className="text-[11px] font-bold bg-amber-800 text-white px-2 py-0.5 rounded">
+                      16 Federal States Ausländerbehörde Directory
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed">
+                    <strong>Clarification:</strong> Germany mein UAE-style Golden Visa, Green Visa, Mainland/Free Zone split, ya Australia-style DAMA postcode-based regional visa programme nahi hai. Federal states and local immigration authorities (Ausländerbehörde across 16 Bundesländer like Berlin LEA, Munich, Hamburg) are supporting directory data, not separate visa subclasses. Tourism, business, medical, and family visits operate under Schengen Type C purposes.
                   </p>
                 </div>
               )}

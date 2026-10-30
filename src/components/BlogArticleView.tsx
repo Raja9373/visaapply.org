@@ -239,6 +239,53 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
   const [faqs, setFaqs] = useState<any[]>([]);
   const [faqSearchQuery, setFaqSearchQuery] = useState('');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [aiAnswer, setAiAnswer] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+
+  useEffect(() => {
+    if (!faqSearchQuery.trim()) {
+      setAiAnswer(null);
+      setAiLoading(false);
+      return;
+    }
+    const filtered = faqs.filter(f => {
+      const q = (f.q || f.question || '').toLowerCase();
+      const a = (f.a || f.answer || '').toLowerCase();
+      const query = faqSearchQuery.toLowerCase();
+      return q.includes(query) || a.includes(query);
+    });
+
+    if (filtered.length === 0) {
+      setAiLoading(true);
+      const controller = new AbortController();
+      fetchWithRetry<{ success?: boolean; answer?: string }>(
+        `/api/ask-faq?q=${encodeURIComponent(faqSearchQuery)}&destination=${encodeURIComponent(toCountry.name)}&visaType=${encodeURIComponent(categoryCode)}&from=${encodeURIComponent(fromCountry.name)}`,
+        { signal: controller.signal },
+        {
+          retries: 3,
+          initialDelay: 500,
+          timeoutMs: 30000,
+          fallback: { success: true, answer: `Regarding your query "${faqSearchQuery}": Please consult official consular guidelines and maintain complete documentation.` }
+        }
+      ).then(res => {
+        if (!controller.signal.aborted) {
+          setAiAnswer(res?.answer || `Regarding your query "${faqSearchQuery}": Please check official embassy guidelines.`);
+          setAiLoading(false);
+        }
+      }).catch(() => {
+        if (!controller.signal.aborted) {
+          setAiAnswer(`Regarding your query "${faqSearchQuery}": Please verify official requirements on the government portal.`);
+          setAiLoading(false);
+        }
+      });
+      return () => {
+        controller.abort();
+      };
+    } else {
+      setAiAnswer(null);
+      setAiLoading(false);
+    }
+  }, [faqSearchQuery, faqs, toCountry.name, categoryCode, fromCountry.name]);
 
   // Cache-first hydration effect with background server check and DEFAULT_PUBLISHED_GUIDES fallback
   useEffect(() => {
@@ -875,28 +922,61 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
           </div>
 
           <div className="space-y-3">
-            {filteredFaqs.map((faq, index) => {
-              const questionText = faq.q || faq.question;
-              const answerText = faq.a || faq.answer;
-              const isOpen = openFaqIndex === index;
-
-              return (
-                <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 hover:border-slate-300 transition-colors">
-                  <button 
-                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                    className="w-full text-left p-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-100 transition-colors cursor-pointer text-xs sm:text-sm"
-                  >
-                    <span className="pr-2">{questionText}</span>
-                    <span className="text-slate-500 font-bold shrink-0 text-base">{isOpen ? '−' : '+'}</span>
-                  </button>
-                  {isOpen && (
-                    <div className="p-4 pt-2 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-100 leading-relaxed">
-                      {answerText}
-                    </div>
-                  )}
+            {filteredFaqs.length === 0 ? (
+              <div className="p-6 sm:p-8 bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white border-2 border-blue-300 rounded-2xl shadow-xs space-y-4 text-left">
+                <div className="flex items-center gap-2 text-blue-950 font-bold text-sm sm:text-base">
+                  <span>✨ Gemini AI Answer for &quot;{faqSearchQuery}&quot;</span>
+                  <span className="text-xs bg-blue-600 text-white px-2.5 py-0.5 rounded font-black">AI Powered</span>
                 </div>
-              );
-            })}
+
+                {aiLoading ? (
+                  <div className="flex items-center gap-3 py-6 text-slate-600 text-xs sm:text-sm">
+                    <svg className="animate-spin h-5 w-5 text-[#0B3D91]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Asking Gemini AI for official consular guidance regarding your query...</span>
+                  </div>
+                ) : (
+                  <div className="text-xs sm:text-sm text-slate-800 leading-relaxed bg-white p-4 rounded-xl border border-blue-200 shadow-2xs space-y-2">
+                    <p>{aiAnswer}</p>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between pt-2">
+                  <span className="text-[11px] text-slate-500">No matching local FAQs found; generated via Gemini AI.</span>
+                  <button
+                    onClick={() => setFaqSearchQuery('')}
+                    className="px-4 py-2 bg-[#0B3D91] text-white font-bold text-xs rounded-xl hover:bg-[#09327a] transition-colors cursor-pointer shadow-xs"
+                  >
+                    Clear Search & View All FAQs
+                  </button>
+                </div>
+              </div>
+            ) : (
+              filteredFaqs.map((faq, index) => {
+                const questionText = faq.q || faq.question;
+                const answerText = faq.a || faq.answer;
+                const isOpen = openFaqIndex === index;
+
+                return (
+                  <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 hover:border-slate-300 transition-colors">
+                    <button 
+                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                      className="w-full text-left p-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-100 transition-colors cursor-pointer text-xs sm:text-sm"
+                    >
+                      <span className="pr-2">{questionText}</span>
+                      <span className="text-slate-500 font-bold shrink-0 text-base">{isOpen ? '−' : '+'}</span>
+                    </button>
+                    {isOpen && (
+                      <div className="p-4 pt-2 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-100 leading-relaxed">
+                        {answerText}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 

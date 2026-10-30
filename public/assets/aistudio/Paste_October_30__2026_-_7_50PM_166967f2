@@ -1,0 +1,292 @@
+FINAL UPGRADE GERMANY 138 COMPLETE - 14 categories - Tourist 11 + Work 21 + Job Search 5 + Student 11 + Family 10 + Business 7 + PR Settlement 8 + Golden Equivalent 5 + Humanitarian 10 + EU Rights 5 + Nationality Citizenship 9 + Entry Docs Procedures 15 + Regional Authorities 16 + Legacy 8 = 138 - No duplicate - Dual-access keep
+
+CRITICAL: Germany mein UAE-style Golden Visa, Green Visa, Mainland/Free Zone split, ya Australia-style DAMA postcode-based regional visa programme nahi hai. Federal states and local immigration authorities are supporting directory data, not separate visa subclasses. Isliye DERG-BW to DERG-TH (16 Bundesländer) ko alag visa mat gino - Ye sirf authority directory hai - LEA Berlin, Hamburg, Munich, Bavaria, Baden-Württemberg etc - Supporting classification hai, alag visa nahi. Tourism, business, medical, family visits generally purpose under Schengen Type C, not separate visa subclasses. Entry visas, residence titles, status documents, nationality routes and supporting procedures are classified separately. Isliye DEV-TOUR, DEV-FAM-VIS, DEV-BUS-VIS, DEV-MED, DEV-CULT, DEV-SPORT, DEV-FAIR, DEV-OFFICIAL sab Type C ke andar purpose hai, alag subclass nahi - But user-facing ke liye humne 11 alag banaye taki docs me dikhe: Invitation Letter vs Hotel Booking vs Business Invitation vs Medical Appointment.
+
+For TO=DE for all 30 FROM - Update to 115 actual visas + 16 regional authorities + 8 legacy = 138 total directory - For user site count 115 visa routes - With record_type classification to avoid duplicate:
+
+GERMANY LIST - Use these exact codes - No duplicate - Each with fee validity stay entry purpose eligibility documents fundsBox itrBox bankBox:
+
+TOURIST VISITOR TRANSIT - DEV 11 TYPES:
+- in-to-de-tour-sch-c Schengen Visa Type C Short-stay visa - VISA - Fee EUR 80 - Validity 90 days in 180 days - Stay up to 90 days in 180 days - Short-stay purpose - Purpose Tourism, visits, business and other permitted short stays - Most Important: Passport 3 months beyond + 2 blank pages + Photo + Travel insurance EUR 30000 + Flight + Hotel booking OR Invitation Letter Verpflichtungserklärung + Bank statement 6 months genuine no sudden deposit + ITR 2-3 years + Employment letter - Funds: Blocked? No for tourist but bank 6 months with EUR 100/day ~ EUR 3000 for 30 days + Salary slips - Invitation Letter OR Hotel Booking = MOST IMPORTANT for tourist - Type: Short-stay visa - Status: Active - Record: VISA
+- in-to-de-tour-tour Tourist Holiday purpose - VISA - Purpose under Type C; not a separate visa subclass - Same docs as SCH-C - Purpose Tourist - Most Important: Hotel booking + Flight + Itinerary + Bank 6 months
+- in-to-de-tour-fam-vis Family and Friends Visit purpose - VISA - Visiting relatives/friends under Type C - Most Important: Invitation letter from Germany host + Verpflichtungserklärung (Formal obligation letter from Ausländerbehörde) + Host passport copy + Relationship proof + Your bank 6 months
+- in-to-de-tour-bus-vis Business Visitor purpose - VISA - Meetings, conferences and permitted business activities - Most Important: Business invitation letter from German company ⭐ + Your Indian company letter + Company registration + Bank 6 months + ITR 2 years
+- in-to-de-tour-med Medical Treatment Visitor purpose - VISA - Medical treatment under applicable visitor rules - Most Important: Hospital appointment letter from Germany + Medical reports + Advance payment receipt + Bank 6 months + Insurance
+- in-to-de-tour-cult Cultural / Artistic Visit purpose - VISA - Cultural events and permitted activities - Most Important: Event organizer invitation + Cultural institution letter
+- in-to-de-tour-sport Sports Event Visitor purpose - VISA - Sports events and permitted activities - Most Important: Sports federation invitation + Event tickets + Sponsorship letter
+- in-to-de-tour-fair Trade Fair / Exhibition Visitor purpose - VISA - Trade fairs and exhibitions - Most Important: Trade fair organizer invitation + Exhibitor pass + Business invitation + Company letter
+- in-to-de-tour-official Official / Government Visit purpose - VISA - Official visits; protocol rules may apply - Most Important: Government invitation + Ministry letter
+- in-to-de-tour-transit-a Airport Transit Visa Type A - TRANSIT_VISA - International airport transit where required - Fee EUR 80 - Transit visa - Stay airside only - Most Important: Onward ticket + Destination visa
+- in-to-de-tour-transit-c Schengen Transit / Entry Visa - TRANSIT_VISA - Where transit requires entry into Schengen - Fee EUR 80 - Most Important: Onward ticket + Hotel if needed + Insurance
+
+WORK EMPLOYMENT - DEW 21 TYPES - Skilled Worker §18a §18b §18g §19c §16d etc - Most Important: Job offer letter + Degree recognition:
+- in-to-de-work-skill-18a Skilled Worker Vocational Qualification (§18a) - MAINLAND_VISA - Employment residence - Recognised vocational qualification - Fee EUR 75 national + EUR 100 residence - Validity 4 years or contract + 3 months - Stay 4 years - Employment - Eligibility: Recognised vocational qualification + Job offer + BA approval + German A1? - Most Important: Vocational certificate recognised ⭐ + Employment contract + BA Federal Employment Agency approval + Passport + Degree attestation - Funds: Salary contract min EUR 0? No minimum but must support - No blocked account - Salary slip - Bank not required but job offer MOST IMPORTANT - ITR not required - Record: MAINLAND_VISA
+- in-to-de-work-skill-18b Skilled Worker Academic Qualification (§18b) - MAINLAND_VISA - Recognised/comparable university qualification - Most Important: University degree recognised Anabin/H+ ⭐ + Employment contract + BA approval - Comparable to Indian degree - Funds: Salary as per contract - Job offer MOST IMPORTANT
+- in-to-de-work-blue-18g EU Blue Card (§18g) - VISA - Highly skilled employment - Qualification and salary requirements apply - Fee EUR 140 - Validity 4 years - Stay 4 years + 3 months - Eligibility: University degree + Job offer salary 2024: EUR 45,300 regular, EUR 41,041.80 shortage (MINT, IT, Doctors, Engineers) - 2025 approx EUR 48k - Most Important: Degree recognised ⭐ + Job contract salary threshold ⭐ + BA approval not needed if threshold met - Funds: Salary threshold must - EUR 45300 - Documents: Degree + Contract - ITR not needed - Record: VISA - Most Important salary threshold + degree
+- in-to-de-work-exp-19c Professionally Experienced Worker (§19c2) - VISA - Practical experience and eligible occupation conditions - Eligibility: 3 years experience in last 7 years + Vocational qualification + Salary 50% of threshold + German employer - Most Important: 3 years experience proof + Salary slips + Employment contract + Qualification
+- in-to-de-work-it-spec IT Specialist without Formal Degree - VISA - Experience-based IT eligibility under applicable rules - Eligibility: 3 years IT experience + Job offer salary EUR 49,680 approx + IT specialist - Most Important: 3 years IT experience letters ⭐ + Job offer IT + Salary threshold - No degree needed
+- in-to-de-work-recog Recognition of Foreign Qualifications (§16d) - VISA - Recognition-linked route - Recognition measures for foreign qualifications - Fee EUR 75 - Stay up to 18 months extendable - Purpose Recognition + Employment - Most Important: Recognition application to competent authority + Partial recognition letter + Language B1
+- in-to-de-work-recog-part Recognition Partnership (§16d3) - VISA - Employer-supported recognition - Employer agrees to support recognition - Most Important: Employer declaration recognition partnership + Employment contract + Partial recognition
+- in-to-de-work-ict Intra-Corporate Transfer ICT Card (§19) - VISA - Qualifying manager, specialist or trainee transfer - Intra-company transfer from outside EU to Germany branch - Fee EUR 75 - Validity 3 years managers/specialists, 1 year trainees - Most Important: Employment contract 6 months prior in company + Manager/specialist proof + German branch letter + Salary
+- in-to-de-work-mobile-ict Mobile ICT Card - VISA - Qualifying transfer from another EU Member State - Mobile from other EU ICT - Most Important: ICT card from other EU + German assignment letter
+- in-to-de-work-research Researcher Residence (§18d) - VISA - Hosting agreement or qualifying contract - Researcher - Most Important: Hosting agreement with research institution ⭐ + Research project + Degree
+- in-to-de-work-mob-research Mobile Researcher (§18f) - VISA - EU mobility for qualifying researchers - Mobile researcher from other EU
+- in-to-de-work-artist Artist / Creative Professional Employment - MAINLAND_VISA - Case-specific - Applicable employment and residence basis - Most Important: Contract with cultural institution + Portfolio + Künstlersozialkasse if needed + BA approval
+- in-to-de-work-sport Professional Sportsperson Employment - MAINLAND_VISA - Case-specific - Employment and applicable conditions - Most Important: Sports club contract + Federation approval + Salary
+- in-to-de-work-exec Executive / Senior Management Employment - MAINLAND_VISA - Case-specific - Legal basis depends on role and arrangement - Most Important: Executive contract + Company registration + Salary high + Board resolution
+- in-to-de-work-season Seasonal Employment - VISA - Conditional - Sector, nationality and Federal Employment Agency conditions - Seasonal work agriculture, hospitality - 90 days to 6 months - Most Important: Seasonal contract + BA approval seasonal
+- in-to-de-work-short-quota Short-term Quota Employment - VISA - Conditional - Specific legal conditions and approvals - Short-term 90 days + BA approval
+- in-to-de-work-aupair Au Pair Residence (§19c and employment rules) - VISA - Active - Age, host family and duration conditions - Age 18-27 + Host family + Language A1 + 6-12 months - Most Important: Host family invitation + Au pair contract + Language A1 certificate + Age proof 18-27 ⭐
+- in-to-de-work-vol Voluntary Service - VISA - Active - Eligible recognised voluntary programmes - FSJ, FÖJ, BFD, IJFD - Most Important: Voluntary service agreement + Institution recognition + Age
+- in-to-de-work-int-ag International Agreement Employment - VISA - Case-specific - Treaty/agreement-based employment - Based on international agreements - Most Important: Agreement proof + Employment contract
+
+JOB SEARCH OPPORTUNITY CARD - DEJ 5 TYPES - Chancenkarte:
+- in-to-de-job-opp Opportunity Card / Chancenkarte (§20a) - RESIDENCE_PERMIT - Job-search residence - Points route or qualifying skilled-worker route - Fee EUR 75 - Validity 12 months - Stay 12 months - Job search - Eligibility: Recognised skilled-worker qualification OR Points based: Qualification + Language + Age + Experience - Most Important: Recognised qualification ⭐ + Points: Language A1=1 B1=2 B2=3, Age <35=2 <40=1, Experience 2Y=1 5Y=2, German ties - Blocked account EUR 11208 2024 (~13,680 2025) ⭐ + FundsBox - Funds: Blocked account EUR 11208 per year = 11,208/12=934 per month - Bank 6 months + Blocked account - ITR not needed but funds mandatory - Record: RESIDENCE_PERMIT - Active
+- in-to-de-job-opp-point Opportunity Card Points-Based Route - SUPPORTING_CLASSIFICATION - Eligibility pathway - Qualification, language, age and points criteria - Points calculation - Not separate visa but eligibility for Chancenkarte
+- in-to-de-job-opp-qual Opportunity Card Skilled Worker Route - SUPPORTING_CLASSIFICATION - Recognised skilled-worker qualification - Direct skilled worker route to Chancenkarte
+- in-to-de-job-grad-js Job Search after German University Graduation (§20) - RESIDENCE_PERMIT - Job-search residence - Eligible German graduates - 18 months after graduation to find job - Most Important: German university degree + Funds blocked account - Stay 18 months
+- in-to-de-job-recog-js Job Search after Recognition Measures - RESIDENCE_PERMIT - Conditional - Recognition-linked cases - After §16d recognition - Stay 12 months
+
+STUDENT EDUCATION TRAINING - DES 11 TYPES - Most Important: Admission letter + Blocked account EUR 11208:
+- in-to-de-study-study Study Residence (§16b) - RESIDENCE_PERMIT - Student residence - University studies - Fee EUR 100 - Validity 1-2 years renewable - Stay duration of studies - Purpose Study - Eligibility: University admission letter + Blocked account + Health insurance - Most Important: Admission letter / Studienplatz ⭐ + Blocked account EUR 11208 2024 (EUR 11,208/year = 934/month) ⭐ + Health insurance + Passport - Funds: Blocked account EUR 11208 minimum - Bank 6 months + Blocked account - ITR parents if needed - Record: RESIDENCE_PERMIT
+- in-to-de-study-search Seeking a Place in Higher Education - VISA - Study-search route - University place search - 9 months - Most Important: School leaving certificate + University application proof + Blocked account + Language B1/B2
+- in-to-de-study-lang Language Acquisition Course (§16f) - RESIDENCE_PERMIT - Qualifying language courses - Language course + Not preparatory for study alone unless combined - Most Important: Language school admission + Course fees + Blocked account + Duration
+- in-to-de-study-school School Attendance - RESIDENCE_PERMIT - Eligible school education - School pupils - Most Important: School admission + Parental consent + Guardian in Germany + Funds
+- in-to-de-study-voc Vocational Training (§16a) - RESIDENCE_PERMIT - Ausbildung - Vocational training + Contract - Most Important: Ausbildung contract ⭐ + School + Language B1 + Funds blocked or salary
+- in-to-de-study-voc-search Seeking a Vocational Training Place (§17) - VISA - Search for an Ausbildung place - 6-9 months - Most Important: School certificate + Language B1 + Blocked account
+- in-to-de-study-internship Study-Related Internship EU (§16e) - RESIDENCE_PERMIT - Eligible internship agreement - Internship + Study link - Most Important: Internship agreement + University enrolment proof + Duration up to 6 months
+- in-to-de-study-exchange Student / Educational Exchange - RESIDENCE_PERMIT - Programme-dependent - Exchange arrangements - Erasmus etc - Most Important: Exchange programme letter + Home university enrolment + Funds
+- in-to-de-study-prep Preparatory Studies / Studienkolleg - RESIDENCE_PERMIT - University preparation - Studienkolleg + Language + Entrance exam - Most Important: Studienkolleg admission + Language + Blocked account
+- in-to-de-study-doctoral Doctoral Studies - RESIDENCE_PERMIT - Study/research classification - Study or employment depending on arrangement - PhD admission or employment as research associate - Most Important: PhD supervisor acceptance letter ⭐ + Research proposal + Funds or employment contract
+- in-to-de-study-postdoc Postdoctoral Research - RESIDENCE_PERMIT - Research classification - Researcher or employment route depending on contract - Postdoc contract or fellowship - Most Important: Postdoc invitation + Research institution hosting + Funds
+
+FAMILY DEPENDANTS - DEF 10 TYPES - Most Important: Relationship proof + Salary:
+- in-to-de-fam-spouse Spouse Family Reunification - FAMILY_RESIDENCE - Active - Joining spouse in Germany - Spouse must have residence + Salary enough + Housing - Most Important: Marriage certificate attested ⭐ + Spouse residence permit + Language A1 certificate for spouse + Housing proof + Salary certificate - Funds: Salary enough to support family + Housing 12sqm per person - Language A1 mandatory - Record: FAMILY_RESIDENCE
+- in-to-de-fam-partner Registered Civil Partner - FAMILY_RESIDENCE - Conditional - Legally recognised partnership - Same as spouse but registered partnership - Most Important: Partnership certificate + A1 + Housing
+- in-to-de-fam-child Minor Child Family Reunification - FAMILY_RESIDENCE - Active - Joining parent/parents - Child under 18 - Both parents or one with custody + Age <16 no language, 16-18 C1 or integration - Most Important: Birth certificate attested ⭐ + Parent residence + Custody proof
+- in-to-de-fam-parent-minor Parent Joining Minor German Child - FAMILY_RESIDENCE - Conditional - Parent of a minor German child - Custody + German child citizenship - Most Important: Child birth certificate German citizenship + Parent custody + Housing
+- in-to-de-fam-parent-ref Parent Joining Refugee Child - FAMILY_RESIDENCE - Conditional - Protection-related family reunification - Refugee child under 18 in Germany - Most Important: Refugee status proof + Relationship proof + BAMF approval
+- in-to-de-fam-other-fam Other Family Members Exceptional Hardship - FAMILY_RESIDENCE - Restricted - Exceptional hardship cases - Other family members only in exceptional hardship - Age, illness, etc - Most Important: Hardship proof + Medical + Relationship + Income
+- in-to-de-fam-depend-blue EU Blue Card Family Reunification - FAMILY_RESIDENCE - Active - Family of Blue Card holder - Blue Card holder family - No A1 required for spouse if Blue Card holder - Most Important: Blue Card holder residence + Marriage certificate + No A1 needed
+- in-to-de-fam-depend-skill Skilled Worker Family Reunification - FAMILY_RESIDENCE - Active - Family of qualifying skilled worker - Family of §18a/18b holder - Most Important: Skilled worker residence + Marriage certificate
+- in-to-de-fam-depend-stude Student Family Reunification - FAMILY_RESIDENCE - Conditional - Subject to individual requirements - Student family - Funds higher + Limited - Most Important: Student residence + Funds proof extra + Marriage certificate + Housing
+- in-to-de-fam-depend-ict ICT Card Holder Family Reunification - FAMILY_RESIDENCE - Conditional - Corporate transferee's family - ICT family - Most Important: ICT card holder residence + Marriage certificate
+
+BUSINESS INVESTOR SELF-EMPLOYMENT - DEB 7 TYPES:
+- in-to-de-biz-self-emp Self-Employment Residence (§21) - INVESTOR_VISA - Active - Commercial self-employment - Freelance or commercial - Business plan viable + Economic interest + Capital - Most Important: Business plan ⭐ + Financing plan EUR 50k+ + CV + Market analysis + Health insurance + Pension + Trade office approval IHK + Passport - Funds: Investment capital + Bank statement - ITR 3 years + Company registration - Record: INVESTOR_VISA
+- in-to-de-biz-entre Entrepreneur Residence - INVESTOR_VISA - Case-specific - Viable business and economic-interest assessment - Economic interest or regional interest - Most Important: Business plan + IHK opinion + Capital + Economic interest proof
+- in-to-de-biz-startup Startup Founder Residence - INVESTOR_VISA - Case-specific - Generally assessed under §21 - Startup + Innovation - Most Important: Startup business plan + Incubator acceptance + Funding + Innovative idea + IHK
+- in-to-de-biz-freelance Freelance Residence - RESIDENCE_PERMIT - Profession-dependent - Freelance professions - Artists, teachers, engineers, doctors, lawyers, IT consultants - Most Important: Freelance clients contracts 2-3 letters of intent ⭐ + Portfolio + Financing + Health insurance + Pension + Tax office registration + CV - Funds: Expected income + Bank statement
+- in-to-de-biz-company Company Founder / Managing Director - INVESTOR_VISA - Case-specific - Legal form and genuine self-employment assessment - GmbH founder managing director - 25k capital GmbH - Most Important: GmbH registration + Shareholder agreement + Business plan + 25k capital proof
+- in-to-de-biz-invest Business Investment Residence - INVESTOR_VISA - Case-specific - No automatic investment-for-residence programme - Investment but no fixed threshold - Most Important: Investment proof + Business plan - No automatic Golden Visa like UAE - Germany has no fixed Golden Visa investment threshold
+- in-to-de-biz-manager Foreign Company Managing Director - SUPPORTING_CLASSIFICATION - Case-specific - Legal basis depends on role and ownership - Managing director of foreign company branch - Most Important: Branch registration + Employment contract + Ownership proof
+
+LONG-TERM RESIDENCE SETTLEMENT - DER 8 TYPES - PR:
+- in-to-de-pr-settle Settlement Permit Niederlassungserlaubnis - RESIDENCE_PERMIT - Active - Permanent domestic settlement - Permanent residence - Eligibility: 5 years residence + 60 months pension + Language B1 + Secure livelihood + Housing + No criminal - Most Important: 5 years residence ⭐ + Pension 60 months ⭐ + Language B1 + Employment contract + Housing - Funds: Salary enough - PR route - Record: RESIDENCE_PERMIT
+- in-to-de-pr-eu-ltr EU Long-Term Residence Permit - RESIDENCE_PERMIT - Active - Qualifying long-term residents - EU long-term - Eligibility: 5 years + B1 + 60 months pension + Secure livelihood - Similar to Settlement but EU-wide mobility - Most Important: 5 years + Pension + B1 + Funds - Mobility to other EU
+- in-to-de-pr-blue-set Settlement after EU Blue Card - RESIDENCE_PERMIT - Active - Accelerated settlement subject to requirements - Blue Card holder 21 months with B1 or 33 months with A1 - Most Important: Blue Card 21 months B1 or 33 months A1 ⭐ + Employment + Pension 21/33 months - Fast track PR
+- in-to-de-pr-skill-set Settlement after Skilled Employment - RESIDENCE_PERMIT - Active - Qualifying employment and residence - Skilled worker §18a/18b 3 years + B1 + Pension 36 months - Most Important: Skilled worker 3 years + B1 + Pension 36 months + Employment
+- in-to-de-pr-grad-set Settlement for German University Graduates - RESIDENCE_PERMIT - Active - Special qualifying conditions - Graduate of German university + 2 years employment + 24 months pension + B1 - Most Important: German degree + 2 years employment + Pension 24 months
+- in-to-de-pr-self-set Settlement after Self-Employment - RESIDENCE_PERMIT - Conditional - Business and livelihood requirements - Self-employed 3 years successful + Secure livelihood + Pension - Most Important: 3 years self-employment successful + Business financials + Pension + B1
+- in-to-de-pr-ref-set Settlement after Recognised Refugee Status - RESIDENCE_PERMIT - Conditional - Protection-based settlement - Refugee status 3-5 years + Language + Livelihood + Integration - Most Important: Refugee status + 3-5 years + B1 + Employment + Integration course
+- in-to-de-pr-int-set Permanent Residence for Certain Family Members - RESIDENCE_PERMIT - Conditional - Qualifying family members - Family members 5 years + B1 + etc - Most Important: 5 years family residence + B1 + Pension
+
+GOLDEN GREEN VISA EQUIVALENT - DEG 5 TYPES - Germany does NOT have UAE-style Golden Visa:
+- in-to-de-gold-blue EU Blue Card - RESIDENCE_PERMIT - Highly skilled residence - Active - Not a Golden Visa - Highly skilled - Blue Card = Germany's talent route - Salary threshold 45300 regular 41041 shortage - Fee EUR 140 - Most Important: Degree + Job contract salary threshold - Note: Not a Golden Visa
+- in-to-de-gold-settle Settlement Permit - RESIDENCE_PERMIT - Permanent residence - Long-term/permanent status - Active - Not a Golden Visa - Settlement = PR
+- in-to-de-gold-eu-ltr EU Long-Term Residence - RESIDENCE_PERMIT - Permanent EU status - EU long-term mobility subject to conditions - Active
+- in-to-de-gold-entre Entrepreneur Residence - INVESTOR_VISA - Business residence - Case-specific - No fixed Golden Visa investment threshold - No fixed Golden Visa investment threshold - Most Important: Business plan + IHK - Not a Golden Visa
+- in-to-de-gold-research Researcher Residence - RESIDENCE_PERMIT - Specialist residence - Research hosting or employment - Active
+
+HUMANITARIAN REFUGEE PROTECTION - DEH 10 TYPES:
+- in-to-de-hum-asylum Asylum Procedure - SUPPORTING_CLASSIFICATION - Protection application - Active - Asylum application and procedure - Asylum seeker upon arrival - BAMF procedure - Most Important: Passport + Asylum application + BAMF interview
+- in-to-de-hum-refugee Refugee Status - RESIDENCE_PERMIT - International protection - Convention refugee protection - BAMF recognition Geneva Convention - 3 years residence - Most Important: BAMF recognition letter + Passport
+- in-to-de-hum-asylum-ent Entitlement to Asylum under German Constitution - RESIDENCE_PERMIT - Protection status - Article 16a Basic Law - Political persecution - Most Important: BAMF recognition Art 16a
+- in-to-de-hum-subsidiary Subsidiary Protection - RESIDENCE_PERMIT - Protection status - Subsidiary international protection - Serious harm - 1 year renewable - Most Important: BAMF subsidiary protection letter
+- in-to-de-hum-national-ban National Deportation Ban - RESIDENCE_PERMIT - Protection status - Section 60(5) or (7) circumstances - Deportation ban - Most Important: BAMF national ban letter
+- in-to-de-hum-temp-protect Temporary Protection (§24) - RESIDENCE_PERMIT - Programme-dependent - Ukraine and other EU temporary protection cases - Ukraine war 2022+ - Temporary protection 1-3 years - Most Important: Ukrainian passport + Proof residence Ukraine + No asylum needed
+- in-to-de-hum-resettle Refugee Resettlement - SUPPORTING_CLASSIFICATION - Humanitarian programme - Government-supported admission programme - UNHCR resettlement - Most Important: UNHCR referral + BAMF admission
+- in-to-de-hum-hardship Hardship Commission / Exceptional Cases - RESIDENCE_PERMIT - State-dependent - Federal-state procedures - Hardship commission - Most Important: Hardship application + State commission approval
+- in-to-de-hum-tolerated Duldung Temporary Suspension of Deportation - SUPPORTING_CLASSIFICATION - Temporary status, not residence permit - Does not equal regular residence permit - Tolerated stay deportation suspended - Most Important: Duldung document + No residence permit
+- in-to-de-hum-child Unaccompanied Minor Protection - SUPPORTING_CLASSIFICATION - Protection procedure - Special child-protection process - UAM - Most Important: Age assessment + Youth welfare office
+
+EU EEA SWISS RESIDENCE RIGHTS - DEEU 5 TYPES:
+- in-to-de-eu-fm Residence Card for Family Members of EU Citizens - RESIDENCE_PERMIT - Active - Qualifying non-EU family members - Family of EU citizen exercising free movement in Germany - 5 years - Most Important: EU citizen passport + Family relationship + EU citizen registration + Housing - Right
+- in-to-de-eu-perm Permanent Residence Card - RESIDENCE_PERMIT - Active - Qualifying EU-family members - After 5 years with EU citizen - Most Important: 5 years with EU citizen + EU citizen permanent right
+- in-to-de-eu-free EU Freedom of Movement - SUPPORTING_CLASSIFICATION - Legal residence right - EU/EEA/Swiss nationals - EU nationals no visa needed - Registration only Anmeldung - Most Important: EU passport + Anmeldung
+- in-to-de-eu-swiss Swiss Citizens Residence Rights - SUPPORTING_CLASSIFICATION - Treaty-based residence right - EU-Switzerland agreement - Swiss nationals - Most Important: Swiss passport + Registration + Employment
+- in-to-de-eu-return Retained Residence Rights - SUPPORTING_CLASSIFICATION - Legal residence classification - Case-specific - Qualifying retained rights - After divorce/death of EU citizen - Most Important: Divorce/death proof + Prior residence + Employment/self-sufficient
+
+NATIONALITY CITIZENSHIP ETHNIC GERMAN RESETTLEMENT - DEN 9 TYPES:
+- in-to-de-nat-nat German Citizenship by Naturalisation - SUPPORTING_CLASSIFICATION - Nationality route - Naturalisation - Eligibility: 5 years residence (new law 2024: 5 years regular, 3 years with special integration) + Language B1/C1 + Citizenship test + Secure livelihood + No criminal + Dual citizenship allowed since 2024 - Most Important: 5 years residence ⭐ + B1/C1 + Citizenship test + Employment + Pension - Fee EUR 255 + EUR 51 child - Record: SUPPORTING_CLASSIFICATION
+- in-to-de-nat-desc German Citizenship by Descent - SUPPORTING_CLASSIFICATION - German parent and applicable nationality law - Child of German parent - Most Important: Parent German passport + Birth certificate + Parent marriage certificate
+- in-to-de-nat-birth German Citizenship by Birth in Germany - SUPPORTING_CLASSIFICATION - Subject to parental conditions - Born in Germany to foreign parents - Parent 5 years residence + Permanent right - New law: 5 years instead of 8 - Most Important: Birth certificate Germany + Parent residence 5 years
+- in-to-de-nat-adopt German Citizenship through Adoption - SUPPORTING_CLASSIFICATION - Qualifying adoption - Adoption by German parent - Most Important: Adoption decree + German parent citizenship
+- in-to-de-nat-restore Restoration of German Citizenship - SUPPORTING_CLASSIFICATION - Eligibility-specific - Certain historical loss cases - Restoration after loss - Most Important: Prior German citizenship proof + Loss reason
+- in-to-de-nat-art116 Article 116(2) Basic Law Restitution of Citizenship - SUPPORTING_CLASSIFICATION - Nazi persecution-related deprivation - Victims of Nazi persecution + Descendants - Most Important: Nazi persecution proof + Family lineage + Prior citizenship
+- in-to-de-nat-staag Citizenship under Section 15 StAG - SUPPORTING_CLASSIFICATION - Historical persecution cases - Gender discrimination pre-1975 etc - Most Important: Historical discrimination proof + Lineage
+- in-to-de-nat-spaet Ethnic German Resettler Spätaussiedler (§4 BVFG) - SUPPORTING_CLASSIFICATION - Resettlement/nationality route - Ethnic German admission - From former Soviet Union etc - German ethnicity + Language + Admission - Most Important: German ethnicity proof + Language B1 + Admission notice Aufnahmebescheid
+- in-to-de-nat-family-sp Family Members of Spätaussiedler - SUPPORTING_CLASSIFICATION - Family/resettlement route - Conditional - Linked to resettlement eligibility - Spouse/child of Spätaussiedler - Most Important: Spätaussiedler admission + Family relationship + Language A1
+
+ENTRY VISA RESIDENCE DOCUMENTS PROCEDURES - DEX 15 TYPES - Supporting but important:
+- in-to-de-entry-nat-d National Visa Type D - ENTRY_PERMIT - Long-stay entry visa - Active - Work, study, family and business - National visa for long stay before residence permit - Fee EUR 75 - Validity 6-12 months - Stay 90+ days - Purpose Work, Study, Family - Most Important: Job offer / Admission letter / Family proof + Passport + Insurance
+- in-to-de-entry-c-visa Schengen Visa Type C - ENTRY_PERMIT - Short-stay entry visa - Generally up to 90 days in 180 - Type C - Fee EUR 80
+- in-to-de-entry-air Airport Transit Visa Type A - ENTRY_PERMIT - Transit entry visa - Where required
+- in-to-de-entry-etias European Travel Information and Authorisation System - E_VISA - Electronic travel authorisation - Implementation-dependent - Verify operational launch before publishing as active - ETIAS 2025+ - Fee EUR 7 - Not visa but authorisation - Most Important: Passport + ETIAS application - Note: Check launch
+- in-to-de-entry-eat Electronic Residence Permit Card (eAT) - STATUS_DOCUMENT - Residence status document - Physical card with electronic chip - eAT card - Most Important: eAT card - Residence permit card
+- in-to-de-entry-fikt Fiktionsbescheinigung - STATUS_DOCUMENT - Temporary proof of continued status - Evidence while residence decision is pending - Fiktionsbescheinigung - Stay allowed while decision pending - Most Important: Fiktionsbescheinigung paper
+- in-to-de-entry-aufent Aufenthaltstitel - STATUS_DOCUMENT - Residence title - Umbrella term for German residence titles - Aufenthaltserlaubnis, Niederlassungserlaubnis, Blaue Karte EU, ICT-Karte, etc - Most Important: Aufenthaltstitel
+- in-to-de-entry-work-app Work Authorisation / Employment Conditions - SUPPORTING_CLASSIFICATION - Work permission classification - Linked to residence title - BA approval + Work conditions on residence card supplement sheet - Most Important: Work permit supplement sheet Zusatzblatt
+- in-to-de-entry-address Anmeldung Residence Registration - SUPPORTING_CLASSIFICATION - Administrative registration - Not a visa - Anmeldung within 14 days of moving - Most Important: Landlord confirmation Wohnungsgeberbestätigung + Passport + Anmeldung form - Mandatory within 14 days
+- in-to-de-entry-tax Tax Identification Number - SUPPORTING_CLASSIFICATION - Administrative identifier - Not an immigration permit - Tax ID - 11-digit - From Federal Central Tax Office - Most Important: Tax ID letter
+- in-to-de-entry-insurance Health Insurance Requirement - SUPPORTING_CLASSIFICATION - Supporting requirement - Residence compliance requirement - Health insurance mandatory public or private - Most Important: Health insurance certificate ⭐ - Mandatory for all residence
+- in-to-de-entry-recog Foreign Qualification Recognition - SUPPORTING_CLASSIFICATION - Qualification procedure - Not a visa - Recognition procedure Anabin etc - Most Important: Recognition application + Certificate
+- in-to-de-entry-ba-approval Federal Employment Agency Approval - SUPPORTING_CLASSIFICATION - Employment approval - Where required - BA approval from Bundesagentur für Arbeit - Most Important: BA approval letter - Required for many work visas
+- in-to-de-entry-fast-track Fast-Track Procedure for Skilled Workers (§81a) - SUPPORTING_CLASSIFICATION - Application procedure - Employer-assisted process - Accelerated procedure employer pays EUR 411 + Can get appointment within 2 months + Visa within 3 weeks - Most Important: Employer power of attorney + Fast-track agreement with Ausländerbehörde + Fee EUR 411
+- in-to-de-entry-... plus add Anmeldung etc
+
+REGIONAL STATE-WISE IMMIGRATION AUTHORITIES - DERG 16 TYPES - Supporting directory not visa:
+- in-to-de-reg-bw Baden-Württemberg Immigration Authority Directory - SUPPORTING_CLASSIFICATION - State/local offices - Active - Stuttgart, Mannheim, Karlsruhe Ausländerbehörde
+- in-to-de-reg-by Bavaria Immigration Authority Directory - SUPPORTING_CLASSIFICATION - Munich, Nuremberg, Augsburg
+- in-to-de-reg-be Berlin Immigration Authority Directory - SUPPORTING_CLASSIFICATION - LEA Berlin - Landesamt für Einwanderung Berlin - Most important Berlin authority
+- in-to-de-reg-bb Brandenburg Immigration Authority Directory - SUPPORTING_CLASSIFICATION - Potsdam etc
+- in-to-de-reg-hb Bremen Immigration Authority Directory - SUPPORTING_CLASSIFICATION
+- in-to-de-reg-hh Hamburg Immigration Authority Directory - SUPPORTING_CLASSIFICATION - Hamburg authority
+- in-to-de-reg-he Hesse Immigration Authority Directory - SUPPORTING_CLASSIFICATION - Frankfurt, Wiesbaden
+- in-to-de-reg-mv Mecklenburg-Vorpommern Immigration Authority Directory
+- in-to-de-reg-ni Lower Saxony Immigration Authority Directory - Hannover etc
+- in-to-de-reg-nw North Rhine-Westphalia Immigration Authority Directory - Cologne, Düsseldorf, Dortmund, Essen - Largest state
+- in-to-de-reg-rp Rhineland-Palatinate Immigration Authority Directory
+- in-to-de-reg-sl Saarland Immigration Authority Directory
+- in-to-de-reg-sn Saxony Immigration Authority Directory - Dresden, Leipzig
+- in-to-de-reg-st Saxony-Anhalt Immigration Authority Directory
+- in-to-de-reg-sh Schleswig-Holstein Immigration Authority Directory
+- in-to-de-reg-th Thuringia Immigration Authority Directory
+
+LEGACY CLOSED REPLACED ROUTES - DEL 8 TYPES - Historical:
+- in-to-de-leg-job-old Former General Job-Seeker Visa - LEGACY_VISA - Replaced - Current Opportunity Card and job-search framework applies - Old §20 job-seeker 6 months replaced by Chancenkarte 12 months
+- in-to-de-leg-ict-old Former ICT Residence Provisions - LEGACY_VISA - Replaced/updated - Current ICT Card provisions apply
+- in-to-de-leg-study-old Former Student Applicant Provisions - LEGACY_VISA - Updated - Current study-search provisions apply
+- in-to-de-leg-psw Former Post-Study Work Arrangements - LEGACY_VISA - Replaced - Current graduate job-search route
+- in-to-de-leg-invest Historical Investor-Only Residence Claims - LEGACY_VISA - Not a general current route - No automatic investment-for-residence Golden Visa
+- in-to-de-leg-old-blue Earlier EU Blue Card Salary Rules - LEGACY_VISA - Replaced/updated - Salary thresholds change over time
+- in-to-de-leg-old-asyl Historical Asylum / Protection Categories - LEGACY_VISA - Historical - Preserve historical records
+- in-to-de-leg-old-temp Historical Temporary Protection Schemes - LEGACY_VISA - Case-specific - Separate from current §24 permissions
+
+For fundsBox itrBox bankBox for all 115 actual visas:
+
+- Tourist Schengen Type C: No blocked account but bank 6 months genuine no sudden 1-day deposit - ITR 2-3 years - Employment letter + Salary slips 3 months - Funds: EUR 100/day ~ EUR 3000 for 30 days - Hotel booking OR Invitation Letter Verpflichtungserklärung = MOST IMPORTANT - Invitation letter from host + Host salary + Host passport
+- Business Visitor: Business invitation letter German company ⭐ + Indian company letter + Company registration + ITR 2 years + Bank 6 months company + Personal bank 6 months + Employment proof - Most Important business invitation letter
+- Medical Visitor: Hospital appointment letter Germany ⭐ + Medical reports + Advance payment + Insurance EUR 30000 + Bank 6 months + ITR 2 years
+- Work Skill 18a 18b: Job offer letter ⭐ + Degree recognised Anabin/H+ ⭐ + BA Federal Employment Agency approval + Employment contract + Passport - No blocked account - Salary as per contract - No ITR - Degree MOST IMPORTANT
+- Blue Card 18g: Degree recognised + Job contract salary threshold EUR 45300 regular 41041 shortage 2024 ⭐ + Most Important degree + salary threshold - No BA approval if threshold met - Salary proof
+- IT Specialist without degree: 3 years IT experience letters ⭐ + Job offer IT salary ~49680 + No degree needed - Most Important experience proof
+- Recognition 16d: Recognition application + Partial recognition letter + Language B1 + Blocked account? No but funds for recognition period - Employer partnership letter if 16d3
+- ICT Card 19: Employment 6 months prior in company outside EU + Manager/specialist/trainee proof + German branch letter + Assignment - Most Important prior employment 6 months
+- Researcher 18d: Hosting agreement research institution ⭐ + Research project + Degree + Funds salary or scholarship
+- Artist Sport Executive: Contract with institution/club/company ⭐ + Portfolio + Federation approval + BA approval + Salary
+- Seasonal Short-term: Seasonal contract + BA approval seasonal + Quota + Duration 90 days to 6 months
+- Au Pair 19c: Host family invitation + Au pair contract + Language A1 certificate + Age proof 18-27 ⭐ + Most Important age + host family
+- Voluntary Service: Voluntary service agreement FSJ/FÖJ/BFD + Institution recognition + Age + Funds pocket money
+- Opportunity Card Chancenkarte 20a: Recognised qualification OR Points - Blocked account EUR 11208 (2024) EUR 12324 (2025 est) ⭐ + Most Important blocked account + qualification + Points - Language A1=1 B1=2 B2=3, Age <35=2 <40=1, Experience 2Y=1 5Y=2, German ties, Previous Germany stay - 12 months job search - Funds: Blocked account mandatory - Bank 6 months + Blocked account - ITR not needed
+- Job Search after German University: German university degree ⭐ + Blocked account EUR 11208 + 18 months stay
+- Student Residence 16b: Admission letter Studienplatz ⭐ + Blocked account EUR 11208 per year (934/month) ⭐ + Health insurance + Passport - Funds: Blocked account mandatory - ITR parents optional - Most Important admission + blocked account
+- Study Search: School leaving certificate + University application proof + Blocked account + Language B1/B2
+- Language Course 16f: Language school admission + Course fees + Blocked account + Duration + Not preparatory alone
+- Vocational Training Ausbildung 16a: Ausbildung contract ⭐ + School + Language B1 + Funds blocked or salary - Most Important Ausbildung contract
+- Seeking Vocational Training Place 17: School certificate + Language B1 + Blocked account + 6-9 months search
+- Internship 16e: Internship agreement + University enrolment proof + Duration up to 6 months
+- Exchange: Exchange programme letter Erasmus + Home university enrolment + Funds blocked or scholarship
+- Preparatory Studienkolleg: Studienkolleg admission + Language + Blocked account + Entrance exam
+- Doctoral: PhD supervisor acceptance letter ⭐ + Research proposal + Funds or employment contract as research associate
+- Postdoctoral: Postdoc invitation + Research institution hosting + Funds fellowship or contract
+- Family Spouse: Marriage certificate attested ⭐ + Spouse residence permit + Language A1 certificate for spouse + Housing proof 12sqm per person + Salary certificate - Funds: Salary enough to support + Housing - Language A1 mandatory for spouse - Most Important marriage + A1
+- Family Child: Birth certificate attested ⭐ + Parent residence + Custody proof + Housing - Child under 18 - No language if <16
+- Family Parent Minor German Child: Child birth certificate German citizenship + Parent custody + Housing + No language? But integration
+- Family Other Exceptional: Hardship proof + Medical + Relationship + Income - Restricted - Only exceptional hardship
+- Family Blue Card: Blue Card holder residence + Marriage certificate + No A1 needed for spouse if Blue Card holder - Most Important Blue Card + marriage
+- Family Skilled Worker: Skilled worker residence §18a/18b + Marriage certificate + Housing
+- Family Student: Student residence + Funds proof extra + Marriage certificate + Housing + Conditional - Funds higher
+- Family ICT: ICT card holder residence + Marriage certificate + Housing
+- Business Self-Employment 21: Business plan ⭐ + Financing plan EUR 50k+ + CV + Market analysis + Health insurance + Pension + Trade office approval IHK + Passport + Company registration - Funds: Investment capital + Bank statement - ITR 3 years - Most Important business plan + IHK opinion
+- Entrepreneur: Business plan + IHK opinion + Capital + Economic interest proof - Economic interest or regional interest
+- Startup Founder: Startup business plan + Incubator acceptance + Funding + Innovative idea + IHK - Most Important startup plan + incubator
+- Freelance: Freelance clients contracts 2-3 letters of intent ⭐ + Portfolio + Financing + Health insurance + Pension + Tax office registration + CV - Most Important client letters
+- Company Founder GmbH Managing Director: GmbH registration + Shareholder agreement + Business plan + 25k capital proof - 25k GmbH capital
+- Investment: Investment proof + Business plan - No automatic Golden Visa - No fixed threshold
+- Foreign Company Managing Director: Branch registration + Employment contract + Ownership proof
+- Settlement PR: 5 years residence + 60 months pension ⭐ + Language B1 + Secure livelihood + Housing + No criminal - Most Important 5 years + pension 60 months + B1 - PR route
+- EU Long-Term Residence: 5 years + B1 + 60 months pension + Secure livelihood + EU-wide mobility - Similar to Settlement but EU mobility
+- Blue Card Settlement: Blue Card 21 months with B1 or 33 months with A1 ⭐ + Employment + Pension 21/33 months - Fast track PR 21/33 months
+- Skilled Worker Settlement: Skilled worker §18a/18b 3 years + B1 + Pension 36 months + Employment - Most Important 3 years + B1 + Pension 36 months
+- German University Graduate Settlement: German degree + 2 years employment + 24 months pension + B1 - Most Important German degree + 2 years employment
+- Self-Employment Settlement: 3 years self-employment successful + Secure livelihood + Business financials + Pension + B1 - Most Important 3 years successful + financials
+- Refugee Settlement: Refugee status 3-5 years + Language + Livelihood + Integration course + B1 + Employment - Most Important refugee status + 3-5 years + B1
+- Family Members Settlement: 5 years family residence + B1 + Pension + Employment - Most Important 5 years family
+- Blue Card: Degree + Job contract salary threshold EUR 45300 regular 41041 shortage 2024 - Not a Golden Visa - Germany's talent route - Fee EUR 140
+- Settlement: Permanent residence - PR - 5 years + pension - Not Golden
+- EU LTR: Permanent EU status - EU long-term mobility - Not Golden
+- Entrepreneur: No fixed Golden Visa investment threshold - Not Golden
+- Researcher: Research hosting or employment - Not Golden
+- Asylum Procedure: Asylum application + BAMF interview + Passport - Protection application
+- Refugee Status: BAMF recognition letter Geneva Convention + 3 years residence
+- Entitlement to Asylum Art 16a: Political persecution + BAMF recognition Art 16a
+- Subsidiary Protection: Serious harm + BAMF subsidiary protection letter + 1 year renewable
+- National Deportation Ban 60(5)(7): Deportation ban + BAMF national ban letter
+- Temporary Protection 24: Ukraine war + Ukrainian passport + Proof residence Ukraine + No asylum needed + 1-3 years
+- Resettlement: UNHCR referral + BAMF admission + Government-supported admission programme
+- Hardship Commission: Hardship application + State commission approval + Federal-state procedures
+- Duldung: Tolerated stay deportation suspended + Duldung document + No residence permit + Temporary status not residence permit
+- Unaccompanied Minor: Age assessment + Youth welfare office + Special child-protection process
+- EU FM: EU citizen passport + Family relationship + EU citizen registration + Housing + 5 years
+- EU Permanent: 5 years with EU citizen + EU citizen permanent right
+- EU Freedom of Movement: EU passport + Anmeldung - EU nationals no visa needed - Registration only
+- Swiss: Swiss passport + Registration + Employment - EU-Switzerland agreement
+- Retained Residence: Divorce/death proof + Prior residence + Employment/self-sufficient + Qualifying retained rights
+- Naturalisation: 5 years residence new law 2024 5 years regular 3 years special integration + Language B1/C1 + Citizenship test + Secure livelihood + No criminal + Dual citizenship allowed since 2024 - Fee EUR 255 + EUR 51 child - Most Important 5 years + B1/C1 + test - Not visa but nationality
+- Descent: Parent German passport + Birth certificate + Parent marriage certificate
+- Birth in Germany: Birth certificate Germany + Parent residence 5 years new law 5 years instead of 8 - Parent 5 years permanent right
+- Adoption: Adoption decree + German parent citizenship
+- Restoration: Prior German citizenship proof + Loss reason
+- Art 116: Nazi persecution proof + Family lineage + Prior citizenship
+- Section 15 StAG: Historical discrimination proof + Lineage - Gender discrimination pre-1975 etc
+- Spätaussiedler Ethnic German Resettler 4 BVFG: German ethnicity proof + Language B1 + Admission notice Aufnahmebescheid - From former Soviet Union etc
+- Family of Spätaussiedler: Spätaussiedler admission + Family relationship + Language A1
+- National Visa Type D: Job offer / Admission letter / Family proof + Passport + Insurance - Fee EUR 75 - Long-stay entry visa 6-12 months - Work Study Family Business
+- Schengen Visa Type C: Short-stay 90 days in 180 - Fee EUR 80
+- Airport Transit Type A: Onward ticket + Destination visa
+- ETIAS: Passport + ETIAS application Fee EUR 7 - Electronic travel authorisation - Implementation-dependent 2025+ - Verify launch
+- eAT Electronic Residence Permit Card: eAT card - Physical card electronic chip - Residence status document
+- Fiktionsbescheinigung: Temporary proof continued status - Evidence while residence decision pending - Stay allowed while decision pending
+- Aufenthaltstitel: Umbrella term German residence titles - Aufenthaltserlaubnis, Niederlassungserlaubnis, Blaue Karte EU, ICT-Karte etc
+- Work Authorisation Zusatzblatt: Work permission classification - BA approval + Work conditions on residence card supplement sheet Zusatzblatt
+- Anmeldung: Landlord confirmation Wohnungsgeberbestätigung + Passport + Anmeldung form - Mandatory within 14 days of moving - Not a visa - Administrative registration
+- Tax ID: Tax ID letter - 11-digit - Federal Central Tax Office - Not immigration permit
+- Health Insurance: Health insurance certificate ⭐ - Mandatory public or private for all residence
+- Qualification Recognition: Recognition application + Certificate - Anabin etc - Not a visa
+- BA Approval: BA approval letter Bundesagentur für Arbeit - Required for many work visas
+- Fast-Track 81a: Employer power of attorney + Fast-track agreement with Ausländerbehörde + Fee EUR 411 - Accelerated procedure employer pays EUR 411 + Appointment within 2 months + Visa within 3 weeks
+
+Update VISA_COUNTS: Germany 115 actual visas (Tourist Visitor Transit 11, Work Employment 21, Job Search Opportunity 5, Student Education Training 11, Family Dependants 10, Business Investor Self-Employment 7, Long-Term Residence Settlement 8, Golden Green Equivalent 5, Humanitarian Refugee Protection 10, EU EEA Swiss 5, Nationality Citizenship Ethnic German 9, Entry Visa Docs Procedures 15 = 115) + Regional Authorities 16 + Legacy 8 = 139? Wait 115+16+8=139 but directory says 148 records includes supporting classifications duplicate - Use 138 for audit compatibility (115 visas + 15 entry docs + 16 regional + 8 legacy = 154 but keep 138 as per PDF 148? Adjust: Use 138 total directory 148 records includes supporting classifications - For site count show 115 active visas + 16 authorities + 8 legacy = 139 directory entries - Show 115 live visa pages)
+
+Grand Total site: Previous 1344 + 115 Germany = 1459 entries (or 1344+138=1482 if including regional/legacy) - Update FULL_VISA_DB with 115 Germany entries - Dual-access structure keep
+
+Update AuditPage: Show Total 1459+ (or 1482) Total Records LIVE - Germany section: Tourist Visitor Transit 11, Work Employment 21, Job Search Opportunity 5, Student Education Training 11, Family Dependants 10, Business Investor Self-Employment 7, Long-Term Residence Settlement 8, Golden Green Equivalent 5 (note: Not a Golden Visa, Blue Card etc), Humanitarian Refugee Protection 10, EU EEA Swiss Rights 5, Nationality Citizenship Ethnic German 9, Entry Visa Docs Procedures 15, Regional Authorities 16, Legacy Closed 8 = 138 directory - Show breakdown with record_type badges VISA TRANSIT_VISA ENTRY_PERMIT RESIDENCE_PERMIT MAINLAND_VISA INVESTOR_VISA FAMILY_RESIDENCE SUPPORTING_CLASSIFICATION STATUS_DOCUMENT LEGACY_VISA and Active/Case-specific/Conditional/Restricted status - Show last verified Oct 30 2026 - Show official sources BAMF, Auswärtiges Amt, BMI, Bundesagentur für Arbeit, Anabin, Ausländerbehörde, LEA Berlin
+
+Update SitemapPage: Show Germany 115 Visa Types grouped by 14 groups: Tourist Visitor Transit 11, Work Employment 21, Job Search Opportunity 5, Student Education Training 11, Family Dependants 10, Business Investor Self-Employment 7, Long-Term Residence Settlement 8, Golden Green Equivalent 5, Humanitarian Refugee Protection 10, EU EEA Swiss 5, Nationality Citizenship 9, Entry Visa Docs Procedures 15, Regional Authorities 16, Legacy 8 = 138 directory with record_type badges and Active tags, Official Source links BAMF, Auswärtiges Amt, Anabin
+
+Add warning boxes on Germany pages:
+- Regional: "Germany does not have a UAE-style Golden Visa, Green Visa, Mainland/Free Zone split, or Australia-style DAMA postcode-based regional visa programme. Federal states and local immigration authorities (Baden-Württemberg, Bavaria, Berlin LEA Berlin, Brandenburg, Bremen, Hamburg, Hesse, Mecklenburg-Vorpommern, Lower Saxony, North Rhine-Westphalia, Rhineland-Palatinate, Saarland, Saxony, Saxony-Anhalt, Schleswig-Holstein, Thuringia) are supporting directory data, not separate visa subclasses. Tourism, business, medical, family visits are generally purposes under Schengen Type C, not separate visa subclasses. Entry visas, residence titles, status documents, nationality routes and supporting procedures are classified separately. Do not create duplicate visa records for every Bundesland or city."
+- Golden: "Germany does NOT have a UAE-style Golden Visa. There is no fixed Golden Visa investment threshold like UAE AED 2M property. Entrepreneur Residence §21 requires viable business and economic-interest assessment by IHK, no fixed investment. EU Blue Card §18g is Germany's highly skilled route with salary threshold EUR 45,300 regular / EUR 41,041.80 shortage occupations MINT, IT, Doctors, Engineers (2024) ~ EUR 48k 2025. Settlement Permit is PR after 5 years + 60 months pension + B1. EU Long-Term Residence is permanent EU status with EU mobility. Researcher Residence is specialist residence with hosting agreement."
+- Blue Card: "EU Blue Card §18g - Highly skilled employment - University degree recognised Anabin/H+ + Job offer salary 2024: EUR 45,300 regular, EUR 41,041.80 shortage - 2025 approx EUR 48k regular - No BA approval if threshold met - Validity 4 years + 3 months - Settlement after 21 months with B1 or 33 months with A1 - Family reunification without A1 for spouse"
+- Opportunity Card: "Opportunity Card Chancenkarte §20a - Points-based job-search residence 12 months - Eligibility: Recognised skilled-worker qualification OR Points: Qualification + Language A1=1 B1=2 B2=3 + Age <35=2 <40=1 + Experience 2Y=1 5Y=2 + German ties + Previous Germany stay - Blocked account EUR 11,208 per year 2024 (~EUR 12,324 2025) = EUR 934/month mandatory - No job offer needed for Chancenkarte - Job search only - Can work trial 2 weeks + Part-time 20h/week"
+- Student: "Study Residence §16b - University admission letter Studienplatz + Blocked account EUR 11,208 per year 2024 = EUR 934/month mandatory ⭐ + Health insurance + Passport - Funds: Blocked account mandatory - Bank 6 months genuine no sudden deposit + ITR parents optional - Most Important admission + blocked account - Ausbildung §16a contract + Language B1 + Blocked or salary - Doctoral PhD supervisor acceptance letter + Research proposal - Anabin database for degree recognition"
+- Family: "Family Reunification - Marriage certificate attested ⭐ + Spouse residence permit + Language A1 certificate for spouse mandatory (except Blue Card, Skilled Worker §18a/18b with B1, Researcher) + Housing 12sqm per person + Salary enough to support family - Child under 18 - Birth certificate attested ⭐ - Parent joining minor German child custody + German child citizenship - Exceptional hardship only for other family members - Blue Card family no A1 needed"
+- Business: "Self-Employment §21 - Business plan ⭐ + Financing plan EUR 50k+ + CV + Market analysis + Health insurance + Pension + Trade office approval IHK + Passport - Freelance: Client letters 2-3 letters of intent ⭐ + Portfolio + Tax office registration - GmbH Founder 25k capital - No fixed Golden Visa investment threshold - IHK opinion mandatory - Economic interest or regional interest assessment"
+- Settlement PR: "Settlement Permit Niederlassungserlaubnis - PR - 5 years residence + 60 months pension ⭐ + Language B1 + Secure livelihood + Housing + No criminal - EU Long-Term similar + EU mobility - Blue Card PR 21 months B1 or 33 months A1 fast track - Skilled worker 3 years + B1 + 36 months pension - German graduate 2 years employment + 24 months pension + B1 - Self-employed 3 years successful + financials + B1"
+- Humanitarian: "Humanitarian Protection - Asylum procedure BAMF + Refugee status Geneva Convention 3 years + Entitlement to Asylum Art 16a Basic Law political persecution + Subsidiary protection serious harm 1 year renewable + National deportation ban 60(5)(7) + Temporary protection §24 Ukraine war Ukrainian passport + Resettlement UNHCR + Hardship Commission state-dependent + Duldung tolerated stay not residence permit + Unaccompanied minor youth welfare office"
+- Entry Docs: "Entry Visa Type D National visa long-stay 6-12 months for Work Study Family Business Fee EUR 75 - Schengen Type C 90 days in 180 Fee EUR 80 - Airport Transit Type A airside - ETIAS electronic travel authorisation EUR 7 implementation-dependent 2025+ verify launch - eAT electronic residence permit card chip - Fiktionsbescheinigung temporary proof while decision pending - Aufenthaltstitel umbrella term - Zusatzblatt work conditions supplement sheet - Anmeldung residence registration mandatory within 14 days Wohnungsgeberbestätigung + Passport - Tax ID 11-digit Federal Central Tax Office - Health insurance mandatory public/private - BA approval Bundesagentur für Arbeit required for many work visas - Fast-track §81a employer pays EUR 411 appointment 2 months visa 3 weeks"
+
+Keep dual-access structure, keep all previous features: Back buttons, Breadcrumbs, Embassy (【entity-German Embassy New Delhi¦canonical_name=German Embassy New Delhi】 + Consulate Mumbai Chennai Bangalore Kolkata + Goethe Institut), Footer Sitemap (1459+ Pages), Audit admin only, AdSense pub-9048615701580913 and ads.txt, Contact email contact@visaapply.org, Multilingual (EN, HI, DE, etc - Site language auto-detects from user's country/IP DE->German/English, IN->Hindi/English)
+
+Build and Push - Check /in-to-de-tour-sch-c should show Schengen Visa Type C 90 days in 180 Fee EUR 80 invitation letter OR hotel booking MOST IMPORTANT bank 6 months genuine ITR 2-3 years insurance EUR 30000, /in-to-de-work-blue-18g should show EU Blue Card §18g degree recognised salary threshold EUR 45300 regular 41041 shortage 2024 MOST IMPORTANT degree + salary threshold, /in-to-de-job-opp should show Opportunity Card Chancenkarte §20a blocked account EUR 11208 mandatory points A1=1 B1=2 B2=3 Age <35=2, /in-to-de-study-study should show Study Residence §16b admission letter + blocked account EUR 11208 MOST IMPORTANT, /in-to-de-fam-spouse should show Family Reunification spouse marriage certificate attested MOST IMPORTANT A1 mandatory housing 12sqm salary enough, /in-to-de-biz-self-emp should show Self-Employment §21 business plan MOST IMPORTANT financing EUR 50k+ IHK approval, /in-to-de-pr-settle should show Settlement Permit 5 years + 60 months pension + B1 PR, /in-to-de-pr-blue-set should show Settlement after EU Blue Card 21 months B1 or 33 months A1 fast track, /in-to-de-hum-temp-protect should show Temporary Protection §24 Ukraine, /in-to-de-entry-fast-track should show Fast-Track §81a employer EUR 411 appointment 2 months, /audit Total 1459+ (or 1482), /sitemap Germany 115 visa types + 16 regional authorities + 8 legacy

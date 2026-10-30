@@ -3,6 +3,7 @@ import { USA_145_VISAS } from './usaVisas';
 import { CANADA_102_VISAS } from './canadaVisas';
 import { UK_111_VISAS } from './ukVisas';
 import { UAE_135_VISAS } from './uaeVisas';
+import { GERMANY_138_VISAS } from './germanyVisas';
 
 export interface VisaItem {
   id: string;
@@ -83,7 +84,13 @@ export interface VisaItem {
     | 'LEGACY_PROGRAM'
     | 'SPECIAL_MEASURE'
     | 'LEGAL_STATUS'
-    | 'FORM';
+    | 'FORM'
+    | 'RESIDENCE_PERMIT'
+    | 'INVESTOR_VISA'
+    | 'MAINLAND_VISA'
+    | 'FAMILY_RESIDENCE'
+    | 'TRANSIT_VISA'
+    | string;
   isPaused?: boolean;
   intakeStatus?: 'Active' | 'Paused' | 'Closed' | 'Legacy' | 'Stream-dependent' | 'Measure-specific' | 'Historical';
   directoryGroup?:
@@ -203,6 +210,17 @@ export const UAE_OFFICIAL_VISA_COUNTS = {
   totalEntries: 135
 };
 
+// Official Germany Breakdown: 138 Total Entries (Tourist 11, Work 21, Student 11, Family 10, Business 7, PR/Regional/Legacy 78) = 138 Total Germany Entries
+export const GERMANY_OFFICIAL_VISA_COUNTS = {
+  tourist: 11,
+  work: 21,
+  student: 11,
+  family: 10,
+  business: 7,
+  pr: 78,
+  totalEntries: 138
+};
+
 // Target counts per country from official matrix (1344 Total with US 201, CA 199, GB 222, AU 135, AE 135)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
   US: { tourist: 16, work: 49, student: 11, family: 35, business: 18, pr: 72 }, // 201 (164 Official Visas + 37 Programmes/Set-Asides/Forms/Travel Auth)
@@ -210,6 +228,7 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   GB: { tourist: 13, work: 43, student: 10, family: 41, business: 14, pr: 101 }, // 222 (111 Official Visas + 111 Additional Routes & Classifications)
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   AE: { tourist: 28, work: 32, student: 5, family: 14, business: 18, pr: 38 }, // 135 (Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38)
+  DE: { tourist: 11, work: 21, student: 11, family: 10, business: 7, pr: 78 }, // 138 (Tourist 11, Work 21, Student 11, Family 10, Business 7, PR/Regional/Legacy 78)
   FR: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   SG: { tourist: 4, work: 3, student: 2, family: 2, business: 2, pr: 3 }, // 16
   JP: { tourist: 3, work: 3, student: 3, family: 2, business: 2, pr: 2 }, // 15
@@ -522,6 +541,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'AE') {
     BASE_COUNTRY_VISAS['AE'] = UAE_135_VISAS;
+    return;
+  }
+  if (code === 'DE') {
+    BASE_COUNTRY_VISAS['DE'] = GERMANY_138_VISAS;
     return;
   }
   const cVisas: CountryVisas = {

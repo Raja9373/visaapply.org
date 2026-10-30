@@ -271,6 +271,48 @@ app.post('/api/admin', (req, res) => {
   }
 });
 
+// AI FAQ Answer Generation for un-matched queries
+app.get('/api/ask-faq', async (req, res) => {
+  const query = (req.query?.q || '') as string;
+  const destination = (req.query?.destination || 'United States') as string;
+  const visaType = (req.query?.visaType || 'Tourist') as string;
+  const fromCountry = (req.query?.from || 'India') as string;
+
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'dummy_key') {
+      return res.json({ 
+        success: true, 
+        answer: `Regarding your query "${query}" for traveling from ${fromCountry} to ${destination} (${visaType} visa): Please ensure you meet all official consular requirements, maintain sufficient verified funds in your bank account, and carry all mandatory supporting documentation to your visa appointment.` 
+      });
+    }
+
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+    });
+
+    const prompt = `A traveler from ${fromCountry} applying for a ${visaType} visa to ${destination} searched for: "${query}".
+Provide a concise, highly accurate, and helpful official consular answer addressing this specific question. Keep it professional, structured, and practical.`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: prompt,
+      config: {
+        thinkingLevel: ThinkingLevel.LOW
+      }
+    });
+
+    const answer = response.text || `Official guidance for "${query}" regarding ${fromCountry} to ${destination} ${visaType} visa: Verify all official guidelines on the consular portal and maintain complete documentation.`;
+    res.json({ success: true, answer });
+  } catch (err: any) {
+    res.json({ 
+      success: true, 
+      answer: `Regarding your query "${query}" for ${fromCountry} to ${destination} ${visaType} visa: Please review official embassy guidelines, maintain 3-6 months bank statements, and ensure valid passport documentation.` 
+    });
+  }
+});
+
 // Admin: Auth check
 app.post('/api/admin/auth', (req, res) => {
   const { password } = req.body;
