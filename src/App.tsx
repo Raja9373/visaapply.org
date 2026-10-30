@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas } from './data/fullVisaDatabase';
+import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount } from './data/fullVisaDatabase';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
@@ -1459,6 +1459,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             const originCode = (selectedOrigin?.code || 'IN').toLowerCase();
             const destCode = country.code.toLowerCase();
             const isSelf = originCode === destCode;
+            const count = getLiveVisaCount(country.code.toUpperCase());
 
             return (
               <button
@@ -1472,13 +1473,20 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl">{country.flag}</span>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 text-sm group-hover:text-[#0B3D91] transition-colors">{country.name}</h3>
-                    <p className="text-xs text-slate-500">{isSelf ? 'Your Country' : country.flag}</p>
+                  <div className="w-10 h-10 rounded-lg bg-gray-50 border flex items-center justify-center text-lg">
+                    {country.flag}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-sm tracking-wider flex items-center gap-1.5 text-slate-900 group-hover:text-[#0B3D91]">
+                      {country.code.toUpperCase()} <span className="text-base">{country.flag}</span>
+                    </span>
+                    <span className="text-xs text-gray-500">{country.name}</span>
                   </div>
                 </div>
-                {!isSelf && <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#0B3D91] group-hover:translate-x-0.5 transition-all" />}
+                <div className="flex items-center gap-2">
+                  {count > 0 && <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{count}</span>}
+                  {!isSelf && <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#0B3D91] group-hover:translate-x-0.5 transition-all" />}
+                </div>
               </button>
             );
           })}
