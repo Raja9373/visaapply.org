@@ -25,6 +25,7 @@ import { TURKEY_79_VISAS } from './turkeyVisas';
 import { VIETNAM_76_VISAS } from './vietnamVisas';
 import { MALAYSIA_84_VISAS } from './malaysiaVisas';
 import { INDONESIA_82_VISAS } from './indonesiaVisas';
+import { PHILIPPINES_68_VISAS } from './philippinesVisas';
 
 export interface VisaItem {
   id: string;
@@ -299,6 +300,7 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   PL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   MY: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 24 }, // 84 Malaysia Live Visas (Official Immigration Department / ESD / EMGS / MDEC / MM2H / PVIP)
   ID: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 22 }, // 82 Indonesia Live Visas (Official Directorate General of Immigration / Kemnaker / Molina)
+  PH: { tourist: 12, work: 16, student: 6, family: 6, business: 8, pr: 20 }, // 68 Philippines Live Visas (Official Bureau of Immigration / DOLE / PRA / BOI)
   TH: { tourist: 15, work: 15, student: 8, family: 15, business: 20, pr: 40 }, // 113 Thailand Entries (93 Live Visas + 20 Procedural/Supporting/Legacy)
   TR: { tourist: 12, work: 20, student: 8, family: 8, business: 8, pr: 23 }, // 79 Turkey Live Visas (Official MFA / Göç İdaresi)
   ZA: { tourist: 10, work: 16, student: 8, family: 8, business: 8, pr: 21 }, // 71 South Africa Live Visas (Official DHA / VFS)
@@ -683,6 +685,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'ID') {
     BASE_COUNTRY_VISAS['ID'] = INDONESIA_82_VISAS;
+    return;
+  }
+  if (code === 'PH') {
+    BASE_COUNTRY_VISAS['PH'] = PHILIPPINES_68_VISAS;
     return;
   }
   const cVisas: CountryVisas = {

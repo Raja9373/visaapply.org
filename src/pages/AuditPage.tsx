@@ -217,6 +217,9 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                       {c.code === 'ID' && (
                         <span className="bg-red-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">82 Indonesia Visas (82 Live)</span>
                       )}
+                      {c.code === 'PH' && (
+                        <span className="bg-amber-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">68 Philippines Visas (68 Live)</span>
+                      )}
                     </td>
                     <td className="p-2 text-center text-slate-600">{c.tourist}</td>
                     <td className="p-2 text-center text-slate-600">{c.work}</td>
