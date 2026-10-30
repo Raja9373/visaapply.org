@@ -19,6 +19,7 @@ import { SOUTH_KOREA_94_VISAS } from './southKoreaVisas';
 import { CHINA_108_VISAS } from './chinaVisas';
 import { SAUDI_ARABIA_88_VISAS } from './saudiArabiaVisas';
 import { IRELAND_86_VISAS } from './irelandVisas';
+import { NETHERLANDS_92_VISAS } from './netherlandsVisas';
 
 export interface VisaItem {
   id: string;
@@ -254,7 +255,7 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   BR: { tourist: 10, work: 16, student: 10, family: 10, business: 12, pr: 14 }, // 72 Brazil Live Visas (Official MRE / Policia Federal / Ministry of Labor)
   IT: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Italy Entries
   ES: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Spain Entries
-  NL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  NL: { tourist: 14, work: 20, student: 14, family: 10, business: 8, pr: 26 }, // 92 Netherlands Live Visas (Official IND / VFS)
   NZ: { tourist: 15, work: 22, student: 12, family: 15, business: 12, pr: 12 }, // 88 New Zealand Live Visas (Official INZ / DIA)
   SE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   CH: { tourist: 12, work: 20, student: 15, family: 15, business: 15, pr: 19 }, // 96 Switzerland Live Visas (Official SEM FDFA ch.ch)
@@ -626,6 +627,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'IE') {
     BASE_COUNTRY_VISAS['IE'] = IRELAND_86_VISAS;
+    return;
+  }
+  if (code === 'NL') {
+    BASE_COUNTRY_VISAS['NL'] = NETHERLANDS_92_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
