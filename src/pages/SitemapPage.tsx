@@ -187,6 +187,16 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       🏛️ Official Thai MFA & Immigration Portal ↗
                     </a>
                   )}
+                  {code === 'JP' && (
+                    <a
+                      href="https://www.mofa.go.jp/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 hover:underline"
+                    >
+                      🏛️ Official Japanese MOFA & ISA Portal ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}
@@ -265,6 +275,24 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                   </div>
                   <p className="text-[11px] text-slate-700 leading-relaxed">
                     <strong>Clarification:</strong> Thailand has no Australia-style regional postcodes or Canada-style RCIP/FCIP/PNP programmes. Instead, Thailand uses sector-based BOI investment zones (Zones 1-3), DTV 5-year remote work visas, LTR visas, SMART visas, condominium ownership (THB 3M+ Chanote title deed), Medical Treatment visas (MT + Companion), PR quota (100 per nationality per year with Oct-Dec application window), TDAC digital arrival cards (replacing TM6 in 2025), TM30 landlord reports (24H), and TM47 90-day reports.
+                  </p>
+                </div>
+              )}
+
+              {/* Japan Architecture & Compliance Banner */}
+              {code === 'JP' && (
+                <div className="p-4 bg-rose-50/80 border border-rose-200 rounded-xl text-xs space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-extrabold text-rose-900 flex items-center gap-1.5">
+                      <span>🇯🇵</span>
+                      <span>Japan Architecture: 128 Total Entries (100 Live Visas + 28 Supporting/Procedural/Legacy)</span>
+                    </span>
+                    <span className="text-[11px] font-bold bg-rose-700 text-white px-2 py-0.5 rounded">
+                      HSP Fast Track + J-Skip + J-Find + SSW 14 Sectors
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed">
+                    <strong>Clarification:</strong> Japan has no Australia-style regional postcodes or Canada-style PNP programmes. Instead, Japan utilizes Certificate of Eligibility (COE) pre-clearance, Highly Skilled Professional (HSP) points system (70 points 3 years PR / 80 points 1 year PR), J-Skip (JPY 20M+ income fast track), J-Find (top 100 university graduates job search), Business Manager visa (JPY 5M+ capital), SSW 14 industrial sectors, Zairyu Residence Card, City Hall address registration (14 days), My Number Card, and part-time work permissions (28 hours/week).
                   </p>
                 </div>
               )}

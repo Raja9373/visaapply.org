@@ -108,7 +108,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
           VisaApply.org - Live Audit Report
         </h1>
-        <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201, Canada 199, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109 & Thailand 113)</p>
+        <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201, Canada 199, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113 & Japan 128)</p>
       </div>
 
       {/* Hero Banner */}
@@ -116,7 +116,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         <div className="text-5xl sm:text-6xl font-black text-emerald-700 tracking-tight">{totalCount}+</div>
         <div className="text-xl sm:text-2xl font-bold text-emerald-900 mt-1">Total Visa & Programme Records LIVE</div>
         <div className="text-xs sm:text-sm font-semibold text-emerald-800 mt-2 bg-emerald-100/80 px-3 py-1 rounded-md inline-block">
-          Target: 1502+ (USA 201, Canada 199, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113) | Status: {totalCount >= 1502 ? "✅ COMPLETE - All 1502+ Live" : `Status: Live ${totalCount} records`}
+          Target: 1602+ (USA 201, Canada 199, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113, Japan 128) | Status: {totalCount >= 1602 ? "✅ COMPLETE - All 1602+ Live" : `Status: Live ${totalCount} records`}
         </div>
       </div>
 
@@ -143,7 +143,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
               {countryWise.map(c => {
                 const target = c.target;
                 return (
-                  <tr key={c.code} className={`hover:bg-slate-50 transition-colors ${c.code === 'US' ? 'bg-blue-50/70 font-semibold' : c.code === 'AU' ? 'bg-amber-50/60 font-semibold' : c.code === 'CA' ? 'bg-red-50/60 font-semibold' : c.code === 'GB' ? 'bg-indigo-50/70 font-semibold' : c.code === 'AE' ? 'bg-cyan-50/70 font-semibold' : c.code === 'DE' ? 'bg-amber-50/70 font-semibold' : c.code === 'SG' ? 'bg-teal-50/70 font-semibold' : c.code === 'TH' ? 'bg-purple-50/70 font-semibold' : ''}`}>
+                  <tr key={c.code} className={`hover:bg-slate-50 transition-colors ${c.code === 'US' ? 'bg-blue-50/70 font-semibold' : c.code === 'AU' ? 'bg-amber-50/60 font-semibold' : c.code === 'CA' ? 'bg-red-50/60 font-semibold' : c.code === 'GB' ? 'bg-indigo-50/70 font-semibold' : c.code === 'AE' ? 'bg-cyan-50/70 font-semibold' : c.code === 'DE' ? 'bg-amber-50/70 font-semibold' : c.code === 'SG' ? 'bg-teal-50/70 font-semibold' : c.code === 'TH' ? 'bg-purple-50/70 font-semibold' : c.code === 'JP' ? 'bg-rose-50/70 font-semibold' : ''}`}>
                     <td className="p-2 font-bold text-slate-900 flex items-center gap-2 flex-wrap">
                       <span>{c.flag}</span>
                       <span className="font-mono text-blue-900 bg-blue-50 px-1.5 py-0.5 rounded text-xs">{c.code}</span>
@@ -171,6 +171,9 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                       )}
                       {c.code === 'TH' && (
                         <span className="bg-purple-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">113 Thailand Entries (93 Live)</span>
+                      )}
+                      {c.code === 'JP' && (
+                        <span className="bg-rose-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">128 Japan Entries (100 Live)</span>
                       )}
                     </td>
                     <td className="p-2 text-center text-slate-600">{c.tourist}</td>
