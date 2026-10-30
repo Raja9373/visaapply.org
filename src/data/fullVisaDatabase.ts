@@ -9,6 +9,7 @@ import { THAILAND_113_VISAS } from './thailandVisas';
 import { JAPAN_123_VISAS } from './japanVisas';
 import { FRANCE_127_VISAS } from './franceVisas';
 import { ITALY_130_VISAS } from './italyVisas';
+import { SPAIN_130_VISAS } from './spainVisas';
 
 export interface VisaItem {
   id: string;
@@ -240,7 +241,7 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   IN: { tourist: 5, work: 4, student: 3, family: 2, business: 3, pr: 3 }, // 20
   BR: { tourist: 3, work: 3, student: 2, family: 2, business: 2, pr: 2 }, // 14
   IT: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Italy Entries
-  ES: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  ES: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Spain Entries
   NL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   NZ: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 4 }, // 18
   SE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
@@ -570,6 +571,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'IT') {
     BASE_COUNTRY_VISAS['IT'] = ITALY_130_VISAS;
+    return;
+  }
+  if (code === 'ES') {
+    BASE_COUNTRY_VISAS['ES'] = SPAIN_130_VISAS;
     return;
   }
   const cVisas: CountryVisas = {

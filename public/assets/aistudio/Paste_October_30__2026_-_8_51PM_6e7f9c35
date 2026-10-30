@@ -1,0 +1,403 @@
+PROMPT FOR GOOGLE AI STUDIO - SPAIN 130 VISAS - VISAAPPLY.ORG - SELF-CONTAINED
+
+TASK: Create Spain visa database - 130 unique visas - No attachment - Use this prompt only - Create 3 files: Spain-130-Official-Visas.json + Spain-130-Official-Visas.js + Spain-130-Official-Visas.txt
+
+CRITICAL RULES - MUST FOLLOW - NO MISTAKE:
+
+1. DUAL-ACCESS STRUCTURE - MANDATORY - TO PREVENT 0 TYPES BUG:
+   Create FULL_VISA_DB[toCode][category] AND FULL_VISA_DB[fromCode][toCode][category] + BASE_COUNTRY_VISAS
+   Example:
+   FULL_VISA_DB['ES']['TOURIST'] = [12 visas]
+   FULL_VISA_DB['ES']['LONG_STAY'] = [8 visas]
+   FULL_VISA_DB['ES']['STUDENT'] = [10 visas]
+   FULL_VISA_DB['ES']['WORK'] = [10 visas]
+   FULL_VISA_DB['ES']['ENTREPRENEUR'] = [10 visas]
+   FULL_VISA_DB['ES']['FAMILY'] = [15 visas]
+   FULL_VISA_DB['ES']['BUSINESS'] = [10 visas]
+   FULL_VISA_DB['ES']['PR'] = [15 visas]
+   FULL_VISA_DB['ES']['LONG_STAY_OTHER'] = [10 visas]
+   FULL_VISA_DB['ES']['ENTRY_PERMIT'] = [10 visas]
+   FULL_VISA_DB['ES']['SUPPORTING'] = [5 visas]
+   FULL_VISA_DB['ES']['ARRAIGO'] = [5 visas]
+   FULL_VISA_DB['ES']['LEGACY'] = [5 visas]
+   TOTAL = 12+8+10+10+10+15+10+15+10+10+5+5+5 = 130
+
+   ALSO:
+   FULL_VISA_DB['IN']['ES']['TOURIST'] = same 12
+   FULL_VISA_DB['IN']['ES']['LONG_STAY'] = same 8
+   ... all categories same
+   BASE_COUNTRY_VISAS['ES'] = all 130 combined
+
+2. TOTAL SITE COUNT UPDATE:
+   Previous total = 1837 entries (after France 127 + Italy 130)
+   Spain adds 130
+   New total = 1837 + 130 = 1967 entries
+   Update audit page: Total Visa Records LIVE = 1967
+   Category-wise update: Tourist 112+12=124, Work 115+10=125, Student 84+10=94, Family 65+15=80, Business 63+10=73, PR 101+15=116 + Long-stay-other 10 + Entry-permit 10 + Supporting 5 + Arraigo 5 + Legacy 5 = 1967
+
+3. FUNDSBOX + ITRBOX + BANKBOX - MANDATORY FOR EACH VISA - WITH WARNING BOXES:
+
+   For Tourist visa:
+   fundsBox: {
+     minimum: "EUR 108 per day per person - Approx EUR 10000 for 90 days = INR 9 lakh - But show high balance EUR 15000-20000 for 90 days = INR 13-18 lakh",
+     recommended: "EUR 15000-20000 for 90 days stay = INR 13-18 lakh",
+     warning: "❌ GALAT: 1 day before application me sudden deposit EUR 10000 - VO will reject - Sudden deposit = Fraud suspicion",
+     correct: "✅ SAHI: 6 months genuine bank statement - Gradual increase - Salary credit + Savings - No sudden lump sum - 6 months average balance EUR 8000-10000"
+   }
+   itrBox: {
+     years: "3 years ITR - Minimum 2 years - Recommended 3 years - ITR 1 + 2 + 3 = 3 years - ITR for tourist must show income EUR 15000 yearly = INR 13 lakh yearly minimum",
+     income: "Minimum income EUR 15000 yearly = INR 13 lakh yearly - Recommended EUR 25000 yearly = INR 23 lakh yearly for strong profile"
+   }
+   bankBox: {
+     months: "6 months bank statement - Genuine - No sudden deposit - Average balance EUR 8000-10000 - Salary credit every month - Savings",
+     warning: "❌ 1 day before application me EUR 10000 deposit = REJECT - VO checks 6 months transaction history - Sudden deposit 1 day before = Fraud - Must show 6 months genuine transactions"
+   }
+
+   For Medical visa:
+   fundsBox: {
+     minimum: "Hospital guarantee letter + Advance payment receipt 30% + Bank 6 months + Treatment cost EUR 10000-50000 = INR 9-45 lakh",
+     hospital: "Hospital appointment letter Spain hospital + Medical institution guarantee letter + Advance payment receipt 30% + Medical institution registration"
+   }
+
+   For Business visa:
+   fundsBox: {
+     minimum: "Company invitation Spain + Spanish company CIF + Company guarantee + Business proof + Bank 6M",
+     business: "Business Invitation Letter + Sponsor Letter + Indian Company Letter + CIF MOST IMPORTANT ⭐ - Business invitation letter Spanish company + CIF + Indian company letter + Company guarantee"
+   }
+
+   For Work visa:
+   fundsBox: {
+     minimum: "Job offer Spain + Employment contract + Autorización trabajo cuenta ajena + Oficina de Extranjería + INEM + Company CIF + Salary SMI 1080 EUR/month minimum",
+     work: "Job Offer letter + Autorización trabajo cuenta ajena + Oficina de Extranjería + INEM + Employment contract + Company CIF + Salary SMI 1080 EUR/month MOST IMPORTANT ⭐"
+   }
+
+   For Student visa:
+   fundsBox: {
+     minimum: "Admission letter + Matrícula + Bank 6M + Financial means 100% IPREM 600 EUR/month = EUR 7200 yearly = INR 6.5 lakh yearly + Accommodation + Insurance private health",
+     student: "Admission letter + Matrícula + Bank + Financial means 100% IPREM 600 EUR/month MOST IMPORTANT ⭐ - Admission letter + Matrícula + Bank + Financial means 100% IPREM"
+   }
+
+   For Non-lucrative visa:
+   fundsBox: {
+     minimum: "Financial means 400% IPREM 2400 EUR/month = EUR 28300 yearly = INR 25 lakh yearly + 100% IPREM each family member 600 EUR/month + Bank + Passive income + Property + Pension + Annuity + Accommodation Spain + Insurance private health no copay",
+     nonLucrative: "Non-lucrative residence + No work allowed no lucrativa + Financial means 400% IPREM 2400 EUR/month approx EUR 28300 yearly INR 25 lakh yearly + 100% IPREM each family member 600 EUR/month + Bank + Passive income + Property + Pension + Annuity + Bank + Accommodation Spain + Insurance private health no copay + Proof accommodation + Financial means attestation + No work declaration + No lucrativa activities + Bank 6M + Income proof + Accommodation proof MOST IMPORTANT ⭐ - Financial means 400% IPREM 2400 EUR/month 28300 EUR yearly + No work + Accommodation + Insurance private health no copay - No lucrativa 1Y - Non-lucrative residence - Retirement passive income visa Spain - Most popular retirement visa Spain"
+   }
+
+   For Digital Nomad visa:
+   fundsBox: {
+     minimum: "Income 200% SMI 2763 EUR/month = EUR 33176 yearly = INR 29 lakh yearly + Health insurance + Employment contract remote + Company outside Spain 3 months+ + Degree Título superior OR Experience 3Y + Company 12 months+",
+     digitalNomad: "Digital Nomad Teletrabajo Internacional - New 2023 - Remote work + Employment contract remote OR Freelance + Company outside Spain 3 months+ + Degree Título superior OR Experience 3Y + Company 12 months+ + Income 200% SMI 2763 EUR/month approx EUR 33176 yearly INR 29 lakh yearly + Health insurance + Employment contract remote + Company + Funds + Remote work + No Spain employer + Health insurance private + Company outside Spain 3M+ + Degree OR Experience 3Y + Company 12M+ + Income 200% SMI 2763 EUR/month + Health insurance + Autorización teletrabajo internacional + UGE-CE + Digital nomad authorization MOST IMPORTANT ⭐ - Income 200% SMI 2763 EUR/month 33176 yearly =29 lakh yearly - 1 year + Renewal 2Y+2Y =5Y - Highly qualified + Degree Título superior OR Experience 3Y + Remote work + Health insurance - Digital Nomad Spain 2023 New - Can bring family - Digital nomad - Teletrabajo internacional - Beckham Law tax benefit 24% flat tax"
+   }
+
+   For EU Blue Card visa:
+   fundsBox: {
+     minimum: "Salary 1.5x average Spain 30000 EUR yearly approx INR 27 lakh yearly + Degree Título superior 3 years + Experience 5Y + Employment contract 6 months+ + Company CIF + Autorización tarjeta azul-UE + UGE-CE",
+     blueCard: "EU Blue Card Tarjeta Azul-UE + Highly qualified employment + Degree Título superior 3 years + Experience 5Y + Employment contract 6 months+ + Salary 1.5x average Spain 30000 EUR yearly approx INR 27 lakh yearly + Degree + Experience letters + Salary + Company + EU Blue Card authorization Autorización tarjeta azul-UE + UGE-CE + Company CIF + Degree Título superior MOST IMPORTANT ⭐ - EU Blue Card Tarjeta Azul-UE - Salary 30000 EUR yearly - Degree Título superior 3 years + Experience 5Y + Employment contract 6M+ - Highly qualified - EU Blue Card - 1 year + Renewal 2Y - Tarjeta Azul-UE"
+   }
+
+   For Golden Visa (CLOSED):
+   fundsBox: {
+     minimum: "Investment EUR 500k real estate Spain OR EUR 1M shares Spain OR EUR 2M government bonds Spain OR EUR 1M bank deposit Spain OR EUR 1M business project Spain + Company + Investment + Business plan + Investor activities + Investment + Company + Business plan + Golden Visa Law 14/2013 + UGE-CE + Autorización inversor + Golden Visa + Investment proof",
+     golden: "Investment 500k real estate /1M shares /2M bonds /1M project = INR 4.6 Cr /9.2 Cr /18.4 Cr /9.2 Cr - Golden Visa Spain - Investment + UGE-CE + Autorización inversor - 1 year + Renewal 2Y +5Y - Golden Visa - CLOSED April 3 2025 - No new golden visa after April 2025 - But existing holders can renew - Golden visa closed - Investment 500k real estate =4.6 Cr INR - Golden visa real estate 500k - CLOSED April 2025 - Investment 1M shares/bank deposit =9.2 Cr INR - Golden visa capital 1M - CLOSED April 2025 - Investment 2M government bonds =18.4 Cr INR - Golden visa government bonds 2M - Deuda Pública - CLOSED April 2025 - Investment 1M business project =9.2 Cr INR - Golden visa business project 1M - CLOSED April 2025"
+   }
+
+4. SPAIN 130 VISAS LIST - 13 SECTIONS - MUST INCLUDE ALL - NO MISS - OFFICIAL MINISTERIO DE ASUNTOS EXTERIORES + OFICINA DE EXTRANJERÍA + UGE-CE + NIE + TIE + EMPADRONAMIENTO + AUTORIZACIÓN + GOLDEN VISA 500k/1M/2M CLOSED APRIL 2025 + NO LUCRATIVA 2830 EUR/MONTH + DIGITAL NOMAD TELETRABAJO 2023 + EU BLUE CARD TARJETA AZUL-UE + EMPRENDEDOR + ARRAIGO SOCIAL LABORAL FAMILIAR + HIGHLY QUALIFIED + BECKHAM LAW:
+
+SECTION 01 - TOURIST SHORT-STAY SCHENGEN 12 VISAS:
+ES-VIS-001 Short-stay Schengen Tourist 90/180 Days C Visa Turismo 90/180 Single Double Multiple - Passport 3M 2 blank + Photo 35x45 white 80% face + Flight return + Hotel OR Invitation Letter Carta de Invitación Comisaría + Host DNI NIE + Host empadronamiento + Host proof accommodation + Bank 6 months genuine + ITR 2-3 years + Employment letter + NOC + Cover letter + Itinerary + Insurance 30000 EUR + Invitation letter carta de invitación + Carta de invitación Comisaría + Hotel booking - Invitation Letter Carta de Invitación Comisaría OR Hotel Booking MOST IMPORTANT ⭐ + Bank 6 months genuine + ITR 3 years + Insurance 30000 EUR + Medios económicos 108 EUR/day
+
+ES-VIS-002 Short-stay Schengen Business 90/180 Days C Visa Negocios Business - Company invitation Spain + Spanish company CIF + Spanish company invitation letter + Indian company letter + Business registration India + Purpose letter + Bank 6M + Employment letter + Itinerary + Company guarantee + Business proof + Invitation letter Spanish company + CIF MOST IMPORTANT ⭐ - Business Invitation Letter + Sponsor Letter + Indian Company Letter + CIF
+
+ES-VIS-003 Short-stay Schengen Visiting Family Friends 90/180 Days C Visa Visita Familia Amigos Family Visit - Invitation Carta de Invitación Comisaría original + Inviter DNI NIE + Inviter empadronamiento + Inviter proof accommodation + Relationship proof + Invitee bank + Photo + Itinerary + Insurance 30000 EUR + Carta de Invitación Comisaría + Medios económicos MOST IMPORTANT - Carta de Invitación Comisaría - Family visit - Carta de invitación Comisaría Nacional de Policía
+
+ES-VIS-004 Short-stay Schengen Multiple Entry 1 Year 90/180 Days C Visa 1 Year Multiple 90/180 - Passport + Previous Schengen 2+ + Bank 6M high balance + ITR 3 years + Employment + Invitation OR Hotel + Reason letter multiple entry + Insurance 30000 EUR 1 year - Bank + Previous Schengen MOST IMPORTANT - Multiple entry reason
+
+ES-VIS-005 Short-stay Schengen Multiple Entry 2 Years 90/180 Days C Visa 2 Years Multiple - Same as 1Y + Higher income + Previous Schengen 3+ + Bank 6M + ITR 3 years + Employment + Reason letter multiple entry - Bank genuine + ITR + Previous Schengen MOST IMPORTANT
+
+ES-VIS-006 Short-stay Schengen Multiple Entry 5 Years 90/180 Days C Visa 5 Years Multiple - Same as 2Y + Higher income + Previous Schengen 5+ + Bank 6M + ITR 3 years + Employment + Reason letter multiple entry - Bank genuine + ITR + Previous Schengen MOST IMPORTANT - 5 years multiple - Best Schengen multiple
+
+ES-VIS-007 Short-stay Schengen Transit Airport Transit A Visa Tránsito Aeroportuario Airport Transit - Onward ticket + Visa third country + Passport + Flight - Airport transit A visa - For transit via Spain airport - India requires airport transit visa if no Schengen US UK etc - Nationality-dependent
+
+ES-VIS-008 Short-stay Schengen Seaman Seaman Transit 5 Days C Visa Tránsito Marítimo Seaman - Seaman book + Employment contract shipping company + Flight + Onward ticket + Shipping company letter + Crew list
+
+ES-VIS-009 Short-stay Schengen Cultural Sports Religious Event 90/180 Days C Visa Cultural Deportivo Religioso Cultural Sports Religious - Event invitation + Event organizer letter + Event registration + Participation certificate + Bank + Employment + Invitation + Insurance + Vatican invitation if religious
+
+ES-VIS-010 Medical Treatment Tratamiento Médico 90/180 Days C Visa Medical Treatment + Accompanier - Hospital appointment letter Spain hospital + Medical certificate + Treatment plan + Medical institution guarantee letter + Bank 6M + Companion relationship proof + Medical institution registration + Guarantee letter hospital + Advance payment receipt 30% + Medical institution attestation + Insurance 30000 EUR MOST IMPORTANT ⭐ - Hospital guarantee letter - Medical treatment + Accompanier - 90/180 days - Spain medical - Hospital attestation + Tratamiento médico
+
+ES-VIS-011 Short-stay Schengen Study Short Estudios Short Study 90/180 Days C Visa Study Short 90 Days - Admission letter short course + School registration + Course 90/180 days + Bank + Accommodation + Study short + Admission short + Medios económicos 100% IPREM 600 EUR/month
+
+ES-VIS-012 Short-stay Schengen Official Official Delegation Official Passport C Visa Official - Official invitation Spain government + Diplomatic note verbale + Official passport + Delegation letter + Ministry letter
+
+SECTION 02 - LONG-STAY NON-LUCRATIVE RESIDENCE 8 VISAS:
+ES-LV-001 Non-lucrative Residence Residencia No Lucrativa D Visa No Lucrativa 1 Year Residencia No Lucrativa Non-lucrative Residence - Non-lucrative residence + No work allowed no lucrativa + Financial means 400% IPREM 2400 EUR/month approx EUR 28300 yearly INR 25 lakh yearly + 100% IPREM each family member 600 EUR/month + Bank + Passive income + Property + Pension + Annuity + Bank + Accommodation Spain + Insurance private health no copay + Proof accommodation + Financial means attestation + No work declaration + No lucrativa activities + Bank 6M + Income proof + Accommodation proof MOST IMPORTANT ⭐ - Financial means 400% IPREM 2400 EUR/month 28300 EUR yearly + No work + Accommodation + Insurance private health no copay - No lucrativa 1Y - Non-lucrative residence - Retirement passive income visa Spain - Most popular retirement visa Spain
+
+ES-LV-002 Non-lucrative Extension Renewal Non-lucrative Prórroga Residencia No Lucrativa 2 Years Renewal Prórroga No Lucrativa - Passport + No Lucrativa D visa + Bank + Accommodation + Financial means 400% IPREM 2400 EUR/month + Insurance + Extranjería + TIE - No lucrativa extension renewal Prórroga - 1Y+2Y+2Y=5Y long-term EU
+
+ES-LV-003 Non-lucrative Family Family No Lucrativa Family D Visa No Lucrativa Family - Marriage certificate attested + Birth certificate attested + No Lucrativa holder passport + No Lucrativa + Relationship proof + Financial support + No Lucrativa family - Family no lucrativa - 100% IPREM each family member 600 EUR/month
+
+ES-LV-004 Long-stay Religious Motivos Religiosos Religious D Visa Religious 1 Year Religious - Religious organization invitation + Religious activities + Organization registration + Religious letter + Church invitation + Religious organization + Religious activities + Religious + Autorización religious
+
+ES-LV-005 Long-stay Re-grouping Family Reagrupación Familiar D Visa Family Reunification 1 Year Reagrupación Familiar - Family reunification + Sponsor in Spain + Sponsor TIE + Accommodation + Financial means + Relationship proof Marriage Birth attested + Autorización reagrupación familiar + Oficina de Extranjería + Sponsor accommodation informe vivienda + Sponsor income + Relationship proof + Autorización reagrupación familiar + Oficina de Extranjería + Sponsor accommodation informe vivienda + Sponsor income + Relationship proof MOST IMPORTANT - Autorización reagrupación familiar + Oficina de Extranjería + Sponsor TIE + Accommodation informe vivienda + Relationship proof attested
+
+ES-LV-006 Long-stay Recovery Residence Recuperación Residencia D Visa Recovery Residence 1 Year Recovery - Recovery residence + Previous residence permit + Recovery residence authorization + Extranjería + Recovery + Previous TIE + Recovery residence
+
+ES-LV-007 Long-stay Independent Work Residencia y Trabajo Cuenta Propia D Visa Self-employment Work Cuenta Propia 1 Year Cuenta Propia - Self-employment cuenta propia + Business plan + Company registration + Self-employment activities + Financial means + Business plan + Company registration + Autorización cuenta propia + Oficina de Extranjería + Cámara de Comercio + NIF + Financial means MOST IMPORTANT - Business plan + Company registration + Financial means + Autorización cuenta propia + Cámara de Comercio + NIF
+
+ES-LV-008 Long-stay Exceptional Circumstances Arraigo D Visa Arraigo Exceptional Circumstances 1 Year Arraigo - Exceptional circumstances arraigo + Arraigo social 2-3 years residence Spain + Employment contract + Integration + Empadronamiento 2-3 years + Arraigo laboral + Arraigo familiar + Arraigo social + Employment contract + Empadronamiento + Integration + Social services informe + Arraigo authorization + Oficina de Extranjería - Arraigo social laboral familiar - Exceptional circumstances
+
+SECTION 03 - STUDENT EDUCATION 10 VISAS:
+ES-STU-001 Long-stay Study Estudios D Visa Study 1 Year Long-stay Study D Visa 1Y Study Estancia por Estudios - Admission letter Spain university + Matrícula + Academic records + Degree transcript + Spanish language DELE B2 if Spanish taught OR English IELTS 【entity-TOEFL¦canonical_name=TOEFL】 if English taught + Passport + Photo + Bank 6M + Financial means 100% IPREM 600 EUR/month approx EUR 7200 yearly INR 6.5 lakh yearly + Accommodation + Insurance private health + Admission letter + Matrícula MOST IMPORTANT ⭐ - Admission letter + Matrícula + Bank + Financial means 100% IPREM 600 EUR/month
+
+ES-STU-002 Long-stay Study Post Graduate Master Master D Visa Master 1 Year Master Estudios Master - Master admission + Matrícula + Degree + Master + Bank + Accommodation + Master
+
+ES-STU-003 Long-stay Study Doctorate Doctorado D Visa Doctorate 1 Year Doctorate Doctorado - Doctorate admission + Doctoral school + Research lab + Doctoral scholarship + Funding + Doctoral activities + University doctoral + Research plan + Funding proof + Doctorado
+
+ES-STU-004 Long-stay Study Exchange Erasmus Erasmus D Visa Erasmus 1 Year Erasmus Exchange - Erasmus mobility + University mobility letter + University registration + Mobility program + Academic records + Bank + Erasmus
+
+ES-STU-005 Long-stay Study Language Course Curso Idioma D Visa Language Course 1 Year Curso Idioma Language Course - Language course admission + Language school + Language course + Bank + Accommodation + Language course + Curso idioma
+
+ES-STU-006 Long-stay Study Internship Prácticas D Visa Internship 1 Year Prácticas Internship - Internship agreement Convenio de prácticas + University internship letter + Company internship letter + Internship agreement + University registration + Passport + Bank + Prácticas + Internship agreement
+
+ES-STU-007 Long-stay Study Job Search Búsqueda Empleo D Visa Job Search After Study 1 Year Job Search After Study Búsqueda Empleo Estancia Estudios Búsqueda Empleo - Graduation certificate Spain Título + Job search activities + Business creation plan + Financial means 100% IPREM 600 EUR/month + Bank + University + Job search plan - Job search after graduation 1 year - After student graduate Spain Título job search 1 year - Búsqueda empleo MOST IMPORTANT - Graduation Título Spain + Job search 1Y
+
+ES-STU-008 Long-stay Study Mobility Movilidad D Visa Mobility 1 Year Movilidad Students - Mobility + University mobility letter + University registration + Mobility program + Academic records + Bank + Movilidad
+
+ES-STU-009 Long-stay Study Research Investigación D Visa Research 1 Year Investigación Research - Research + Hosting agreement + Research organization + Research activities + Degree + Research plan + Hosting agreement + Research organization + Degree + Research plan MOST IMPORTANT - Hosting agreement + Research organization + Degree
+
+ES-STU-010 Long-stay Study Extension Renewal Study Prórroga Estancia Estudios 1 Year Renewal Extension Study - Passport + Study D visa + Bank + Accommodation + Academic progress + School letter + Financial means 100% IPREM 600 EUR/month + Study extension renewal Prórroga estancia estudios
+
+SECTION 04 - WORK RESIDENCE 10 VISAS:
+ES-WRK-001 Long-stay Work Residence Residencia y Trabajo Cuenta Ajena D Visa Work Residence Cuenta Ajena 1 Year Residencia Trabajo Cuenta Ajena Work Employee - Job offer Spain + Employment contract + Employer + Autorización trabajo cuenta ajena + Oficina de Extranjería + INEM + Company registration CIF + Salary SMI minimum 1080 EUR/month + Employment contract + Autorización MOST IMPORTANT ⭐ - Job Offer letter + Autorización trabajo cuenta ajena + Oficina de Extranjería + INEM + Employment contract + Company CIF + Salary SMI 1080 EUR/month
+
+ES-WRK-002 Long-stay Seasonal Work Trabajo Temporada D Visa Seasonal Work 9 Months Trabajo Temporada Seasonal Worker - Seasonal work + Employment contract seasonal + Autorización temporada + Oficina de Extranjería + Company + Seasonal worker activities + Seasonal 9 months + Return + Seasonal worker - Seasonal worker MOST IMPORTANT - Seasonal 9 months - Temporada - Agriculture tourism hotel - Seasonal 9 months
+
+ES-WRK-003 Long-stay Highly Qualified Highly Qualified Professional Altamente Cualificado D Visa Highly Qualified 1 Year Altamente Cualificado Highly Qualified Professional - Highly qualified professional + Employment contract + Degree + Experience + Employment contract + Highly qualified activities + Company + Degree + Highly qualified authorization Autorización altamente cualificado + UGE-CE Unidad Grandes Empresas + Company CIF + Salary 40000 EUR yearly approx + Highly qualified MOST IMPORTANT - Highly qualified + UGE-CE + Salary 40000 EUR yearly + Degree + Experience + Employment contract - Highly qualified professional - Altamente cualificado
+
+ES-WRK-004 Long-stay EU Blue Card Tarjeta Azul-UE D Visa EU Blue Card 1 Year EU Blue Card Tarjeta Azul-UE Highly Qualified - EU Blue Card Tarjeta Azul-UE + Highly qualified employment + Degree Título superior 3 years + Experience 5Y + Employment contract 6 months+ + Salary 1.5x average Spain 30000 EUR yearly approx INR 27 lakh yearly + Degree + Experience letters + Salary + Company + EU Blue Card authorization Autorización tarjeta azul-UE + UGE-CE + Company CIF + Degree Título superior MOST IMPORTANT ⭐ - EU Blue Card Tarjeta Azul-UE - Salary 30000 EUR yearly - Degree Título superior 3 years + Experience 5Y + Employment contract 6M+ - Highly qualified - EU Blue Card - 1 year + Renewal 2Y - Tarjeta Azul-UE
+
+ES-WRK-005 Long-stay ICT Intra-corporate Transferee ICT Traslado Intraempresarial D Visa ICT 1 Year ICT Intra-corporate Transferee - ICT transfer + Transfer from overseas parent company + Employment 6 months+ in overseas company + Company relationship parent subsidiary + Transfer letter + Company registration Spain + Overseas + Employment contract + ICT activities + Salary + ICT authorization Autorización ICT + UGE-CE
+
+ES-WRK-006 Long-stay Work Extension Renewal Work Prórroga Residencia Trabajo Cuenta Ajena 1 Year Renewal Extension Work - Passport + Work D visa + Employment contract + Company + Salary + Autorización + Tax + Work extension renewal Prórroga
+
+ES-WRK-007 Long-stay Seasonal Extension Renewal Seasonal Work Prórroga Trabajo Temporada 9 Months Renewal Extension Seasonal Work - Passport + Seasonal Work D visa + Employment contract seasonal + Company + Salary + Autorización temporada + Seasonal extension renewal
+
+ES-WRK-008 Long-stay Highly Qualified Extension Renewal Highly Qualified Prórroga Altamente Cualificado 2 Years Renewal Extension Highly Qualified - Passport + Highly Qualified D visa + Employment contract + Company + Salary + Autorización + Tax + Highly Qualified extension renewal
+
+ES-WRK-009 Long-stay EU Blue Card Extension Renewal EU Blue Card Prórroga Tarjeta Azul-UE 2 Years Renewal Extension EU Blue Card - Passport + EU Blue Card D visa + Employment contract + Company + Salary + Autorización + Tax + EU Blue Card extension renewal
+
+ES-WRK-010 Long-stay ICT Extension Renewal ICT Prórroga ICT 1 Year Renewal Extension ICT - Passport + ICT D visa + Employment contract + Company + Salary + Autorización ICT + ICT extension renewal
+
+SECTION 05 - ENTREPRENEUR DIGITAL NOMAD 10 VISAS:
+ES-ENT-001 Entrepreneur Emprendedor D Visa Entrepreneur 1 Year Emprendedor Entrepreneur Law 14/2013 Entrepreneur - Entrepreneur emrendedor + Business plan + Innovative business + Investment + Company creation + Business plan + Investment + Company registration + Emprendedor recognition + 【entity-ENISA¦canonical_name=ENISA】 + UGE-CE Unidad Grandes Empresas + Autorización emprendedor + UGE-CE + Business plan + Investment + Company registration + Innovative business MOST IMPORTANT ⭐ - Emprendedor recognition + Business plan + Investment + Innovative business + 【entity-ENISA¦canonical_name=ENISA】 + UGE-CE - Emprendedor - Entrepreneur - Innovative business - Law 14/2013 Entrepreneur
+
+ES-ENT-002 Digital Nomad Teletrabajo Internacional D Visa Digital Nomad 1 Year Teletrabajo Internacional Digital Nomad 2023 New - Digital Nomad Teletrabajo Internacional - New 2023 - Remote work + Employment contract remote OR Freelance + Company outside Spain 3 months+ + Degree Título superior OR Experience 3Y + Company 12 months+ + Income 200% SMI 2763 EUR/month approx EUR 33176 yearly INR 29 lakh yearly + Health insurance + Employment contract remote + Company + Funds + Remote work + No Spain employer + Health insurance private + Company outside Spain 3M+ + Degree OR Experience 3Y + Company 12M+ + Income 200% SMI 2763 EUR/month + Health insurance + Autorización teletrabajo internacional + UGE-CE + Digital nomad authorization MOST IMPORTANT ⭐ - Income 200% SMI 2763 EUR/month 33176 yearly =29 lakh yearly - 1 year + Renewal 2Y+2Y =5Y - Highly qualified + Degree Título superior OR Experience 3Y + Remote work + Health insurance - Digital Nomad Spain 2023 New - Can bring family - Digital nomad - Teletrabajo internacional - Beckham Law tax benefit 24% flat tax
+
+ES-ENT-003 Digital Nomad Family Family Teletrabajo Internacional Family D Visa Digital Nomad Family - Marriage certificate attested + Birth certificate attested + Digital Nomad holder passport + Digital Nomad + Relationship proof + Financial support + Digital Nomad family - Family digital nomad - Can bring family - Digital nomad family - 75% SMI first family member 100% second
+
+ES-ENT-004 Highly Qualified Professional Altamente Cualificado D Visa Highly Qualified 1 Year Altamente Cualificado Highly Qualified Professional - Highly qualified professional + Employment contract + Degree + Experience + Employment contract + Highly qualified activities + Company + Degree + Highly qualified authorization Autorización altamente cualificado + UGE-CE + Company CIF + Salary 40000 EUR yearly approx
+
+ES-ENT-005 Intra-company Transferee ICT Traslado Intraempresarial D Visa ICT 1 Year ICT - ICT transfer + Transfer from overseas parent company + Employment 6 months+ in overseas company + Company relationship parent subsidiary + Transfer letter + Company registration Spain + Overseas + Employment contract + ICT activities + Salary + ICT authorization Autorización ICT + UGE-CE
+
+ES-ENT-006 Research Investigador D Visa Research 1 Year Investigador Research Law 14/2013 Research - Research + Hosting agreement + Research organization + Research activities + Degree + Research plan + Hosting agreement + Research organization + Degree + Research plan + Autorización investigador + UGE-CE MOST IMPORTANT - Hosting agreement + Research organization + Degree + UGE-CE
+
+ES-ENT-007 Business Self-employment Cuenta Propia D Visa Self-employment 1 Year Cuenta Propia Self-employment - Self-employment cuenta propia + Business plan + Company registration + Self-employment activities + Financial means + Business plan + Company registration + Autorización cuenta propia + Oficina de Extranjería + Cámara de Comercio + NIF + Financial means MOST IMPORTANT - Business plan + Company registration + Financial means + Autorización cuenta propia + Cámara de Comercio + NIF
+
+ES-ENT-008 EU Blue Card Tarjeta Azul-UE D Visa EU Blue Card 1 Year EU Blue Card Tarjeta Azul-UE - EU Blue Card Tarjeta Azul-UE + Highly qualified employment + Degree Título superior 3 years + Experience 5Y + Employment contract 6 months+ + Salary 1.5x average Spain 30000 EUR yearly + Degree + Experience letters + Salary + Company + EU Blue Card authorization Autorización tarjeta azul-UE + UGE-CE + Company CIF + Degree Título superior MOST IMPORTANT - EU Blue Card Tarjeta Azul-UE - Salary 30000 EUR yearly - Degree Título superior 3 years + Experience 5Y + Employment contract 6M+ - Highly qualified - EU Blue Card
+
+ES-ENT-009 Entrepreneur Extension Renewal Entrepreneur Prórroga Emprendedor 2 Years Renewal Extension Entrepreneur - Passport + Entrepreneur D visa + Company docs + Tax + Financial statement + Business plan + Company registration + Tax + Entrepreneur extension renewal
+
+ES-ENT-010 Digital Nomad Extension Renewal Digital Nomad Prórroga Teletrabajo Internacional 2 Years Renewal Extension Digital Nomad - Passport + Digital Nomad D visa + Employment contract remote + Company + Salary + Autorización teletrabajo internacional + Tax + Digital Nomad extension renewal
+
+SECTION 06 - FAMILY REUNIFICATION 15 VISAS:
+ES-FAM-001 Family Reunification Reagrupación Familiar D Visa Family Reunification 1 Year Reagrupación Familiar Family Reunification - Family reunification + Sponsor in Spain + Sponsor TIE + Accommodation + Financial means + Relationship proof Marriage Birth attested + Autorización reagrupación familiar + Oficina de Extranjería + Sponsor accommodation informe vivienda + Sponsor income 150% IPREM + Relationship proof + Autorización reagrupación familiar + Oficina de Extranjería + Sponsor accommodation informe vivienda + Sponsor income 150% IPREM + Relationship proof MOST IMPORTANT - Autorización reagrupación familiar + Oficina de Extranjería + Sponsor TIE + Accommodation informe vivienda + Relationship proof attested + Sponsor income 150% IPREM 900 EUR/month first family member 50% IPREM 300 EUR/month each additional
+
+ES-FAM-002 Spouse Cónyuge D Visa Spouse Family Reunification Cónyuge - Marriage certificate attested + Sponsor passport + Sponsor TIE + Relationship proof + Financial support + Autorización cónyuge + Oficina de Extranjería + Marriage certificate attested MOST IMPORTANT - Sponsor TIE + Autorización cónyuge + Relationship proof
+
+ES-FAM-003 Child Hijo Menor D Visa Child Family Reunification Hijo Menor - Birth certificate attested + Parent passport + Parent TIE + Relationship proof + Financial support + Autorización hijo menor + Oficina de Extranjería + Birth certificate attested
+
+ES-FAM-004 Adult Child Hijo Mayor D Visa Adult Child Family Reunification Hijo Mayor - Birth certificate attested + Adult child dependency proof + Parent passport + Parent TIE + Relationship proof + Financial support + Autorización hijo mayor + Oficina de Extranjería + Dependency proof + Adult child dependency
+
+ES-FAM-005 Parent Ascendiente D Visa Parent Family Reunification Ascendiente - Birth certificate attested + Parent dependency proof + Child passport + Child TIE + Relationship proof + Financial support + Autorización ascendiente + Oficina de Extranjería + Dependency proof + Parent dependency
+
+ES-FAM-006 Parent Over 65 Ascendiente Mayor 65 D Visa Parent Over 65 Family Reunification - Birth certificate attested + Parent over 65 dependency + Health insurance + Parent over 65 + Child passport + Child TIE + Relationship proof + Financial support + Autorización ascendiente mayor 65 + Oficina de Extranjería + Parent over 65 dependency + Health insurance MOST IMPORTANT - Parent over 65 + Health insurance + Dependency
+
+ES-FAM-007 Family EU Citizen Familiar Ciudadano UE D Visa Family EU Citizen EU Citizen Family - Family member EU citizen + EU citizen passport + Relationship proof + Accommodation + Financial means + Family EU citizen category + EU citizen passport + Relationship proof + Family EU citizen - Family EU citizen 5Y + TIE 5Y
+
+ES-FAM-008 Spouse EU Citizen Cónyuge Ciudadano UE D Visa Spouse EU Citizen - Marriage certificate attested + EU citizen passport + Relationship proof + Financial support + EU citizen spouse - Marriage certificate attested + EU citizen passport
+
+ES-FAM-009 Child EU Citizen Hijo Ciudadano UE D Visa Child EU Citizen - Birth certificate attested + EU citizen parent passport + Relationship proof + Financial support + EU citizen child
+
+ES-FAM-010 Parent EU Citizen Ascendiente Ciudadano UE D Visa Parent EU Citizen - Birth certificate attested + EU citizen child passport + Relationship proof + Financial support + EU citizen parent
+
+ES-FAM-011 EU Blue Card Family Family EU Blue Card Family D Visa EU Blue Card Family - Marriage certificate attested + Birth certificate attested + EU Blue Card holder passport + EU Blue Card + Relationship proof + Financial support + EU Blue Card family - Family EU Blue Card
+
+ES-FAM-012 Digital Nomad Family Family Teletrabajo Internacional Family D Visa Digital Nomad Family - Marriage certificate attested + Birth certificate attested + Digital Nomad holder passport + Digital Nomad + Relationship proof + Financial support + Digital Nomad family - Family digital nomad - Can bring family - Digital nomad family - 75% SMI first family member 100% second
+
+ES-FAM-013 Entrepreneur Family Family Emprendedor Family D Visa Entrepreneur Family - Marriage certificate attested + Birth certificate attested + Entrepreneur holder passport + Entrepreneur + Relationship proof + Financial support + Entrepreneur family
+
+ES-FAM-014 Golden Visa Family Family Golden Visa Family D Visa Golden Visa Family - Marriage certificate attested + Birth certificate attested + Golden Visa holder passport + Golden Visa + Relationship proof + Financial support + Golden Visa family - Family golden visa - Golden visa family - Golden visa closed April 2025 but family still valid if main holder before closure
+
+ES-FAM-015 Family Reunification Extension Renewal Family Reunification Prórroga Reagrupación Familiar 1 Year Renewal Extension Family Reunification - Passport + Family Reunification D visa + Relationship proof + Accommodation + Financial means + Family reunification extension renewal
+
+SECTION 07 - BUSINESS INVESTOR GOLDEN 10 VISAS:
+ES-BIZ-001 Golden Visa Investor Inversor D Visa Golden Visa Investor 1 Year Investor Visa 500k Real Estate /1M Shares /2M Bonds /1M Project Golden Visa Spain - CLOSED April 2025 - Investor + Investment EUR 500k real estate Spain OR EUR 1M shares Spain OR EUR 2M government bonds Spain OR EUR 1M bank deposit Spain OR EUR 1M business project Spain + Company + Investment + Business plan + Investor activities + Investment + Company + Business plan + Golden Visa Law 14/2013 + UGE-CE + Autorización inversor + Golden Visa + Investment proof MOST IMPORTANT ⭐ - Investment 500k real estate /1M shares /2M bonds /1M project = INR 4.6 Cr /9.2 Cr /18.4 Cr /9.2 Cr - Golden Visa Spain - Investment + UGE-CE + Autorización inversor - 1 year + Renewal 2Y +5Y - Golden Visa - CLOSED April 3 2025 - No new golden visa after April 2025 - But existing holders can renew - Golden visa closed
+
+ES-BIZ-002 Golden Visa Real Estate Inmueble 500k EUR D Visa Golden Visa Real Estate 500k EUR - CLOSED April 2025 - Real estate + Investment 500k EUR real estate Spain + Property deed Escritura + Land registry Registro de la Propiedad + Property + Investment 500k EUR + Property deed + Land registry + Autorización inversor inmueble + UGE-CE + Investment 500k EUR MOST IMPORTANT - Investment 500k EUR real estate =4.6 Cr INR - Golden visa real estate 500k - CLOSED April 2025
+
+ES-BIZ-003 Golden Visa Capital Capital 1M EUR D Visa Golden Visa Capital 1M EUR - CLOSED April 2025 - Capital + Investment 1M EUR shares Spain OR 1M EUR bank deposit Spain + Investment + Capital + Autorización inversor capital + UGE-CE + Investment 1M EUR MOST IMPORTANT - Investment 1M EUR capital =9.2 Cr INR - Golden visa capital 1M - CLOSED April 2025
+
+ES-BIZ-004 Golden Visa Government Bonds Deuda Pública 2M EUR D Visa Golden Visa Government Bonds 2M EUR - CLOSED April 2025 - Government bonds + Investment 2M EUR government bonds Spain Deuda Pública + Investment + Government bonds + Autorización inversor deuda pública + UGE-CE + Investment 2M EUR MOST IMPORTANT - Investment 2M EUR government bonds =18.4 Cr INR - Golden visa government bonds 2M - Deuda Pública - CLOSED April 2025
+
+ES-BIZ-005 Golden Visa Business Project Proyecto Empresarial 1M EUR D Visa Golden Visa Business Project 1M EUR - CLOSED April 2025 - Business project + Investment 1M EUR business project Spain + Business plan + Investment + Business project + Autorización inversor proyecto empresarial + UGE-CE + Investment 1M EUR MOST IMPORTANT - Investment 1M EUR business project =9.2 Cr INR - Golden visa business project 1M - CLOSED April 2025
+
+ES-BIZ-006 Entrepreneur Emprendedor D Visa Entrepreneur 1 Year Emprendedor Entrepreneur Law 14/2013 Entrepreneur - Entrepreneur emrendedor + Business plan + Innovative business + Investment + Company creation + Business plan + Investment + Company registration + Emprendedor recognition + ENISA + UGE-CE Unidad Grandes Empresas + Autorización emprendedor + UGE-CE + Business plan + Investment + Company registration + Innovative business MOST IMPORTANT ⭐ - Emprendedor recognition + Business plan + Investment + Innovative business + ENISA + UGE-CE - Emprendedor - Entrepreneur - Innovative business - Law 14/2013 Entrepreneur
+
+ES-BIZ-007 Self-employment Cuenta Propia D Visa Self-employment 1 Year Cuenta Propia Self-employment - Self-employment cuenta propia + Business plan + Company registration + Self-employment activities + Financial means + Business plan + Company registration + Autorización cuenta propia + Oficina de Extranjería + Cámara de Comercio + NIF + Financial means MOST IMPORTANT - Business plan + Company registration + Financial means + Autorización cuenta propia + Cámara de Comercio + NIF
+
+ES-BIZ-008 Highly Qualified Professional Altamente Cualificado D Visa Highly Qualified 1 Year Altamente Cualificado Highly Qualified Professional - Highly qualified professional + Employment contract + Degree + Experience + Employment contract + Highly qualified activities + Company + Degree + Highly qualified authorization Autorización altamente cualificado + UGE-CE + Company CIF + Salary 40000 EUR yearly approx
+
+ES-BIZ-009 Business Extension Renewal Business Prórroga Cuenta Propia 2 Years Renewal Extension Business - Passport + Business D visa + Company docs + Tax + Financial statement + Business plan + Company registration + Tax + Business extension renewal
+
+ES-BIZ-010 Golden Visa Extension Renewal Golden Visa Prórroga Inversor 5 Years Renewal Extension Golden Visa - Existing Holders Only - CLOSED New Applications April 2025 - Passport + Golden Visa D visa + Investment maintained + Company docs + Tax + Financial statement + Investment proof + Golden Visa extension renewal - Golden visa extension renewal - Existing holders only - Golden visa closed April 2025
+
+SECTION 08 - PR LONG-TERM SETTLEMENT GOLDEN 15 VISAS:
+ES-PR-001 Long-term Residence Larga Duración D Visa Long-term Residence 5 Years Long-term Residence Larga Duración Long-term EU Residence - Residence 5 years + Continuous residence 5 years Spain + No long absence >10 months in 5 years + Financial stability + Tax + Good conduct + Integration + Residence certificate + Tax certificate + Employment letter + Bank + Residence 5 years + Language? No language required for long-term but integration + Tax + Good conduct + Financial stability MOST IMPORTANT ⭐ - Larga Duración - 5 years residence + Continuous 5 years + No absence >10 months in 5 years + Tax + Good conduct + Financial stability + Integration - Permanent EU long-term residence indefinite - PR Spain - Quota? No quota but approval discretionary - Anytime apply - Larga Duración - Long-term residence
+
+ES-PR-002 Long-term EU Residence Larga Duración-UE D Visa Long-term EU Residence 5 Years Long-term EU Residence Larga Duración-UE Long-term EU Residence EU - Long-term EU residence + Residence 5 years + Continuous 5 years EU + Financial stability + Tax + Good conduct + Integration + Residence certificate + Tax certificate + Employment letter + Bank + Residence 5 years + Financial stability + Tax + Good conduct + Integration - Long-term EU residence EU - Larga Duración-UE - EU long-term residence - Can move to other EU country
+
+ES-PR-003 Permanent Residence Permanent? Actually Larga Duración = Permanent Residence Spain - Larga Duración Permanent - Permanent residence + Residence 5 years + Continuous 5 years + Tax + Good conduct + Financial stability + Integration - Permanent residence indefinite - Larga Duración permanent - PR Spain
+
+ES-PR-004 Investor Permanent Investor Permanent Larga Duración Investor Permanent 1Y+2Y+5Y = Larga Duración Investor Permanent - Investor 1Y + Renewal 2Y + 2Y + Residence 5 years + Investment maintained + Tax + Financial support + Investor permanent + Residence 5 years = Larga Duración eligible - Investor 1Y+2Y+2Y=5Y = Larga Duración - Investor permanent - Investment maintained - Golden visa 5Y = Larga Duración - Investor permanent
+
+ES-PR-005 Family Permanent Family Permanent Larga Duración Family Permanent - Family 5 years + Residence 5 years + Continuous 5 years + Tax + Financial support + Family permanent + Residence 5 years = Larga Duración eligible - Family 5Y = Larga Duración
+
+ES-PR-006 Work Permanent Work Permanent Larga Duración Work Permanent - Work 5 years + Residence 5 years + Continuous 5 years + Tax + Financial support + Work permanent + Residence 5 years = Larga Duración eligible - Work 5Y = Larga Duración
+
+ES-PR-007 Non-lucrative Permanent Non-lucrative Permanent Larga Duración Non-lucrative Permanent - Non-lucrative 5 years + Residence 5 years + Financial means 400% IPREM + Tax + Financial support + Non-lucrative permanent + Residence 5 years = Larga Duración eligible - Non-lucrative 5Y = Larga Duración
+
+ES-PR-008 Citizenship by Residence Nacionalidad por Residencia Citizenship by Residence 10 Years Residence Citizenship 2 Years Ibero-America - Residence 10 years general + 2 years Ibero-America Andorra Philippines Equatorial Guinea Portugal Sephardic + 1 year spouse Spanish? Actually 1 year spouse Spanish citizen + 5 years refugee + Italian language? Actually Spanish language DELE A2 + CCSE + Tax + Good conduct + Integration + Residence certificate + Tax certificate + Employment letter + Bank + Residence 10 years + Language DELE A2 + CCSE + Tax + Good conduct + Financial stability + Integration MOST IMPORTANT - Citizenship by residence - 10 years residence general + 2 years Ibero-America Andorra Philippines Equatorial Guinea Portugal Sephardic origin + 1 year spouse Spanish citizen + 5 years refugee + Language DELE A2 + CCSE - Spanish citizenship - Anytime apply after 10 years residence general - Ibero-America 2 years - Non-EU 10Y EU? Actually EU same 10Y but Ibero-America 2Y - Refugee 5Y - Spouse Spanish 1Y
+
+ES-PR-009 Citizenship by Marriage Nacionalidad por Matrimonio Citizenship by Marriage 1 Year Marriage + Residence Citizenship Marriage - Marriage Spanish citizen 1 year + Residence Spain 1 year + Spanish spouse DNI + Spanish spouse nationality certificate + Marriage certificate attested + Relationship proof + Language DELE A2 + CCSE + Marriage 1Y + Residence 1Y = Citizenship marriage eligible - Citizenship by marriage - Marriage 1Y + Residence 1Y - Spouse Spanish citizen 1Y marriage +1Y residence = Citizenship
+
+ES-PR-010 Citizenship by Birth Birth Spanish Citizenship Birth Hijo Ciudadano Español Citizenship Birth - Birth Spain + Parent Spanish OR Birth Spain + Residence 1 year + Birth certificate + Nationality certificate + Birth Spain citizenship birth - Citizenship by birth - Birth Spain + Parent Spanish OR Birth Spain + Residence 1 year - Jus soli limited
+
+ES-PR-011 Citizenship by Descent Descent Spanish Citizenship Descent Origen Citizenship Descent - Descent Spanish + Spanish parent grandparent + Birth certificate attested + Spanish ancestor DNI + Descent proof + Origen + Spanish ancestor + Descent - Citizenship by descent Origen - Spanish parent + Grandparent Spanish - No limit? Actually parent Spanish = Origen - Descent citizenship Spain
+
+ES-PR-012 Long-term Residence Extension Renewal Long-term Residence Prórroga Larga Duración 5 Years Renewal Extension Long-term Residence - Passport + Long-term Residence Larga Duración + Tax + Financial support + Long-term extension renewal - Larga Duración renewal 5Y
+
+ES-PR-013 Spanish Nationality by Value Value Nationality by Value Carta de Naturaleza - Value Spain + Contribution Spain + Value certificate + Value + Contribution + Nationality by value - Carta de Naturaleza - Value Spain - Contribution to Spain economy culture science
+
+ES-PR-014 Spanish Nationality by Option Option Nationality by Option - Option + Parent Spanish + Option certificate + Option + Parent Spanish + Option - Nationality by option - Option - Parent Spanish
+
+ES-PR-015 EU Long-term Residence EU Long-term Residence Larga Duración-UE EU Long-term Residence - EU long-term residence + Residence 5 years + Continuous 5 years EU + Financial stability + Tax + Good conduct + Integration - EU long-term residence - 5 years residence + Continuous 5 years - Can move to other EU country - Larga Duración-UE
+
+SECTION 09 - LONG-STAY OTHER EXCEPTIONAL 10 VISAS:
+ES-LTR-001 Arraigo Social Social Ties Arraigo Social D Visa Arraigo Social 1 Year Arraigo Social Social Ties Exceptional - Arraigo social + Residence Spain 2 years continuous + Empadronamiento 2 years + Employment contract 1 year + Integration + Social services informe arraigo social + Language? + Employment contract + Empadronamiento 2 years + Integration + Social services informe + Arraigo social authorization + Oficina de Extranjería - Arraigo social MOST IMPORTANT - Residence Spain 2 years + Empadronamiento 2 years + Employment contract 1 year + Social services informe + Integration - Arraigo social - Exceptional circumstances social ties
+
+ES-LTR-002 Arraigo Laboral Labour Ties Arraigo Laboral D Visa Arraigo Laboral 1 Year Arraigo Laboral Labour Ties Exceptional - Arraigo laboral + Residence Spain 2 years continuous + Empadronamiento 2 years + Employment 6 months irregular + Employment contract + Labour ties + Employment 6 months irregular proof + Employment contract + Empadronamiento 2 years + Arraigo laboral authorization + Oficina de Extranjería - Arraigo laboral - Residence Spain 2 years + Employment 6 months irregular
+
+ES-LTR-003 Arraigo Familiar Family Ties Arraigo Familiar D Visa Arraigo Familiar 1 Year Arraigo Familiar Family Ties Exceptional - Arraigo familiar + Family member Spanish + Parent Spanish minor OR Child Spanish OR Family ties + Family member Spanish DNI + Relationship proof + Family ties + Family member Spanish + Relationship proof + Arraigo familiar authorization + Oficina de Extranjería - Arraigo familiar - Parent Spanish minor OR Child Spanish - Family ties
+
+ES-LTR-004 Arraigo for Training Arraigo para Formación D Visa Arraigo Formación 1 Year Arraigo Training Exceptional - Arraigo formación + Residence Spain 2 years continuous + Empadronamiento 2 years + Training course enrollment + Training + Employment after training + Training course enrollment + Empadronamiento 2 years + Arraigo formación authorization + Oficina de Extranjería - Arraigo para la formación - Residence Spain 2 years + Training course enrollment
+
+ES-LTR-005 Humanitarian Reasons Humanitarian Razones Humanitarias D Visa Humanitarian 1 Year Humanitarian - Humanitarian + Humanitarian reasons + Humanitarian authorization + Extranjería + Humanitarian + Humanitarian reasons - Humanitarian
+
+ES-LTR-006 Exceptional Circumstances Circunstancias Excepcionales D Visa Exceptional Circumstances 1 Year Exceptional - Exceptional circumstances + Exceptional authorization + Extranjería + Exceptional + Exceptional reasons - Exceptional circumstances
+
+ES-LTR-007 Collaboration with Authorities Colaboración Autoridades D Visa Collaboration Authorities 1 Year Collaboration - Collaboration authorities + Authorities collaboration + Collaboration authorization + Extranjería + Collaboration + Authorities collaboration - Collaboration authorities
+
+ES-LTR-008 Gender Violence Violencia Género D Visa Gender Violence 1 Year Gender Violence - Gender violence + Gender violence victim + Gender violence authorization + Extranjería + Gender violence + Gender violence victim - Gender violence
+
+ES-LTR-009 Human Trafficking Trata Seres Humanos D Visa Human Trafficking 1 Year Human Trafficking - Human trafficking + Human trafficking victim + Human trafficking authorization + Extranjería + Human trafficking + Human trafficking victim - Human trafficking
+
+ES-LTR-010 Long-stay Other Other Long-stay D Visa Other Other Long-stay - Other long-stay + Relationship proof + Financial support + Other long-stay activities
+
+SECTION 10 - ENTRY PERMIT PROCEDURAL 10 VISAS:
+ES-EP-001 NIE Número Identidad Extranjero NIE Foreign Identity Number NIE Number - NIE application + Passport + NIE request letter + Purpose NIE + 【entity-Policía Nacional¦canonical_name=Policía Nacional】 + Oficina de Extranjería + Consulate + NIE MOST IMPORTANT - NIE = Número de Identidad de Extranjero = Foreign identity number - Required for all activities Spain - NIE = Tax ID + Residence + Work + Company + Bank + Property - NIE - 【entity-Policía Nacional¦canonical_name=Policía Nacional】 + Oficina de Extranjería + Consulate - NIE indefinite
+
+ES-EP-002 TIE Tarjeta Identidad Extranjero TIE Foreign Identity Card TIE Card - Passport + Visa + TIE application + Oficina de Extranjería + 【entity-Policía Nacional¦canonical_name=Policía Nacional】 + Empadronamiento + TIE MOST IMPORTANT - TIE = Tarjeta de Identidad de Extranjero = Foreign identity card - Residence card Spain - Must apply TIE 【entity-Policía Nacional¦canonical_name=Policía Nacional】 within 30 days arrival Spain if stay >6 months - TIE = Residence card - Must apply within 30 days arrival - 【entity-Policía Nacional¦canonical_name=Policía Nacional】 + Oficina de Extranjería - TIE
+
+ES-EP-003 Empadronamiento Empadronamiento Municipal Registration Empadronamiento Municipal Registration - Passport + NIE + Accommodation contract + Landlord DNI + Empadronamiento application + Ayuntamiento + Empadronamiento MOST IMPORTANT - Empadronamiento = Municipal registration = Town hall registration - Required for TIE + Residence + Arraigo + Healthcare + School + All activities Spain - Empadronamiento - Ayuntamiento - Municipal registration - Must register Ayuntamiento within days arrival - Empadronamiento 2 years validity + Renewal - Empadronamiento certificate
+
+ES-EP-004 Autorización de Residencia Autorización Residencia Residence Authorization Autorización Residencia Residence Authorization - Autorización residencia application + Sponsor + Relationship proof + Accommodation + Financial means + Autorización residencia + Oficina de Extranjería + UGE-CE + Autorización residencia MOST IMPORTANT - Autorización residencia = Residence authorization - Sponsor applies Oficina de Extranjería + UGE-CE - Autorización residencia - Required for work + Family reunification + Non-lucrative + Entrepreneur + Digital nomad + Highly qualified + EU Blue Card + ICT + Research + Golden visa
+
+ES-EP-005 Autorización de Trabajo Autorización Trabajo Work Authorization Autorización Trabajo Work Authorization - Autorización trabajo application + Employment contract + Company CIF + Company + Work authorization + Oficina de Extranjería + UGE-CE + Autorización trabajo MOST IMPORTANT - Autorización trabajo = Work authorization - Employer applies Oficina de Extranjería + UGE-CE - Autorización trabajo - Required for work cuenta ajena + cuenta propia + Highly qualified + EU Blue Card + ICT + Seasonal + Entrepreneur + Digital nomad
+
+ES-EP-006 Carta de Invitación Carta de Invitación Invitation Letter Carta de Invitación Invitation Letter Comisaría - Carta de invitación application + Host DNI NIE + Host empadronamiento + Host proof accommodation + Host proof income + Invitee passport copy + Relationship proof + Carta de invitación + Comisaría Nacional de Policía + Carta de invitación MOST IMPORTANT - Carta de Invitación = Invitation letter - Host applies Comisaría Nacional de Policía - Carta de invitación - Required for tourist family visit invitation - Host DNI NIE + Empadronamiento + Proof accommodation + Proof income + Invitee passport copy + Relationship proof - Carta de invitación - Comisaría - Invitation letter
+
+ES-EP-007 Informe de Vivienda Informe Vivienda Housing Report Informe Vivienda Housing Report - Accommodation + Informe vivienda + Ayuntamiento + Comunidad Autónoma + Accommodation housing report + Ayuntamiento + Comunidad Autónoma + Informe vivienda application + Ayuntamiento + Comunidad Autónoma - Informe vivienda - Housing report - Required for family reunification + Arraigo - Ayuntamiento + Comunidad Autónoma issues informe vivienda - Housing report
+
+ES-EP-008 Certificado de Empadronamiento Certificado Empadronamiento Empadronamiento Certificate Certificado Empadronamiento Empadronamiento Certificate - Empadronamiento + Certificado empadronamiento + Ayuntamiento + Empadronamiento certificate + Ayuntamiento + Certificado empadronamiento application + Ayuntamiento - Certificado empadronamiento - Empadronamiento certificate - Required for TIE + Residence + Arraigo + Healthcare + School - Ayuntamiento issues certificado empadronamiento - Empadronamiento certificate
+
+ES-EP-009 Seguridad Social Afiliación Seguridad Social Social Security Affiliation Seguridad Social Social Security Affiliation - Seguridad social + Afiliación seguridad social + Tesorería General de la Seguridad Social + Seguridad social application + Tesorería General Seguridad Social - Seguridad social - Social security - Required for work + Residence + Healthcare + All activities Spain - Seguridad social - Tesorería General de la Seguridad Social - Social security
+
+ES-EP-010 Padrón Municipal Padrón Municipal Municipal Register Padrón Municipal Municipal Register - Padrón + Padrón municipal + Ayuntamiento + Padrón municipal application + Ayuntamiento - Padrón municipal - Municipal register - Same as empadronamiento - Padrón municipal = Empadronamiento - Municipal register
+
+SECTION 11 - SUPPORTING DOCUMENTS AUTHORITIES 5 VISAS:
+ES-DOC-001 Company Registration CIF NIF Company Registration CIF NIF Company Registration CIF NIF - Company registration CIF NIF - Agencia Tributaria - Company registration CIF NIF - CIF = Certificado de Identificación Fiscal - NIF = Número de Identificación Fiscal - Company registration - CIF NIF = Company tax ID Spain - Company registration
+
+ES-DOC-002 Oficina de Extranjería Authority Oficina de Extranjería Authority Oficina de Extranjería Authority - Oficina de Extranjería - Oficina de Extranjería = Foreigners office - Residence + Work + Family reunification + Autorización + Non-lucrative + Cuenta propia + Arraigo + Seasonal + Highly qualified + EU Blue Card + ICT + Research + Golden visa - Oficina de Extranjería authority
+
+ES-DOC-003 UGE-CE Authority UGE-CE Authority Unidad Grandes Empresas Colectivos Estratégicos Authority - UGE-CE - Unidad de Grandes Empresas y Colectivos Estratégicos = Large companies and strategic groups unit - Entrepreneur + Digital nomad + Highly qualified + EU Blue Card + ICT + Research + Golden visa + Investor + Entrepreneur + Digital nomad - UGE-CE authority - Large companies and strategic groups unit
+
+ES-DOC-004 Policía Nacional Authority Policía Nacional Authority Policía Nacional Authority - Policía Nacional - Policía Nacional = National police - NIE + TIE + Carta de Invitación + Empadronamiento + TIE + NIE + Carta de Invitación + Policía Nacional authority
+
+ES-DOC-005 Ayuntamiento Authority Ayuntamiento Authority Ayuntamiento Authority - Ayuntamiento - Ayuntamiento = Town hall = Municipality - Empadronamiento + Padrón municipal + Certificado empadronamiento + Informe vivienda + Housing report + Empadronamiento + Padrón municipal + Ayuntamiento authority
+
+SECTION 12 - ARRAIGO EXCEPTIONAL GOLDEN 5 VISAS:
+ES-ARR-001 Arraigo Social Social Ties Arraigo Social 2 Years Residence + Employment Contract + Social Report Arraigo Social - Arraigo social = Social ties exceptional circumstances - Residence Spain 2 years continuous + Empadronamiento 2 years + Employment contract 1 year + Integration + Social services informe arraigo social + Language? + Employment contract + Empadronamiento 2 years + Integration + Social services informe + Arraigo social authorization + Oficina de Extranjería - Arraigo social MOST IMPORTANT - Residence Spain 2 years + Empadronamiento 2 years + Employment contract 1 year + Social services informe + Integration - Arraigo social - Exceptional circumstances social ties - Most common arraigo
+
+ES-ARR-002 Arraigo Laboral Labour Ties Arraigo Laboral 2 Years Residence + 6 Months Irregular Work Arraigo Laboral - Arraigo laboral = Labour ties exceptional circumstances - Residence Spain 2 years continuous + Empadronamiento 2 years + Employment 6 months irregular + Employment contract + Labour ties + Employment 6 months irregular proof + Employment contract + Empadronamiento 2 years + Arraigo laboral authorization + Oficina de Extranjería - Arraigo laboral - Residence Spain 2 years + Employment 6 months irregular - Labour ties
+
+ES-ARR-003 Arraigo Familiar Family Ties Arraigo Familiar Parent Spanish Minor OR Child Spanish Arraigo Familiar - Arraigo familiar = Family ties exceptional circumstances - Family member Spanish + Parent Spanish minor OR Child Spanish OR Family ties + Family member Spanish DNI + Relationship proof + Family ties + Family member Spanish + Relationship proof + Arraigo familiar authorization + Oficina de Extranjería - Arraigo familiar - Parent Spanish minor OR Child Spanish - Family ties
+
+ES-ARR-004 Golden Visa Closed April 2025 Golden Visa Closed April 3 2025 Golden Visa Spain Closed April 2025 - Golden visa closed April 3 2025 - Law 14/2013 golden visa investor closed April 3 2025 - No new golden visa investor applications after April 3 2025 - Existing holders can renew + Family can renew + Can get Larga Duración after 5 years - Golden visa closed - Investor visa closed - Real estate 500k + Capital 1M + Government bonds 2M + Business project 1M closed - Golden visa closed April 2025 - Spain golden visa ended - Similar Portugal golden visa real estate closed 2023 but funds still - Spain golden visa fully closed April 2025
+
+ES-ARR-005 Beckham Law Special Tax Regime Ley Beckham Special Tax Regime Beckham Law Special Tax Regime - Beckham Law = Special tax regime for inbound expats - Law 14/2013 + Beckham Law - Special tax regime 24% flat tax up to 600k EUR income + 47% above 600k EUR - 6 years Beckham Law - For highly qualified + Digital nomad + Entrepreneur + EU Blue Card + ICT + Research + Highly qualified professional - Beckham Law - Special tax regime - 24% flat tax - 6 years - Beckham Law - Special tax regime for inbound expats - Highly qualified + Digital nomad + Entrepreneur + EU Blue Card + ICT + Research
+
+SECTION 13 - LEGACY CLOSED 5 VISAS:
+ES-LEG-001 Golden Visa Real Estate Old Golden Visa Real Estate 500k Old Golden Visa Real Estate 500k Closed April 2025 - Old golden visa real estate 500k closed April 3 2025 new golden visa closed - Old golden visa real estate 500k old rules closed new golden visa closed April 2025 - Old golden visa real estate old rules closed - Golden visa closed April 2025
+
+ES-LEG-002 Work Visa Old System Old Work Old System Old Work Closed - Old work visa system closed new work visa system updated - Old residencia trabajo cuenta ajena old rules closed new residencia trabajo cuenta ajena new rules - Old work old rules closed
+
+ES-LEG-003 Student Visa Old System Old Student Old System Old Student Closed - Old student system closed new student system updated - Old estancia estudios old rules closed new estancia estudios new rules - Old student old rules closed
+
+ES-LEG-004 Non-lucrative Old System Old Non-lucrative Old System Old Non-lucrative Closed - Old non-lucrative system closed new non-lucrative system updated - Old residencia no lucrativa old rules closed new residencia no lucrativa new rules - Old non-lucrative old rules closed
+
+ES-LEG-005 Entrepreneur Old System Old Entrepreneur Old System Old Entrepreneur Closed - Old entrepreneur system closed new entrepreneur system updated - Old emprendedor old rules closed new emprendedor new rules - Old entrepreneur old rules closed
+
+OUTPUT FORMAT - FOR EACH VISA CREATE JSON OBJECT WITH:
+{
+  code: "ES-VIS-001",
+  name: "Short-stay Schengen Tourist 90/180 Days C Visa Turismo 90/180 Single Double Multiple",
+  category: "TOURIST",
+  type: "TOURIST_VISA",
+  fee: "EUR 80 + BLS 18 = INR 9000 + BLS 1600",
+  validity: "90/180 days short-stay C visa turismo 90 days within 180 days single double multiple 6M 1Y 2Y 5Y validity",
+  duration: "90/180 days",
+  eligibility: "Indian passport holder + Financial means + Accommodation + Insurance",
+  documents: ["Passport 3M 2 blank", "Photo 35x45 white 80% face", "Flight return", "Hotel OR Invitation Letter Carta de Invitación Comisaría", "Host DNI NIE", "Host empadronamiento", "Host proof accommodation", "Bank 6 months genuine", "ITR 2-3 years", "Employment letter", "NOC", "Cover letter", "Itinerary", "Insurance 30000 EUR", "Invitation letter carta de invitación", "Carta de invitación Comisaría", "Hotel booking - Invitation Letter Carta de Invitación Comisaría OR Hotel Booking MOST IMPORTANT ⭐ + Bank 6 months genuine + ITR 3 years + Insurance 30000 EUR + Medios económicos 108 EUR/day"],
+  fundsBox: {minimum: "...", recommended: "...", warning: "❌ GALAT: ...", correct: "✅ SAHI: ..."},
+  itrBox: {years: "3 years", income: "..."},
+  bankBox: {months: "6 months", warning: "❌ 1 day before deposit = REJECT", correct: "✅ SAHI: 6 months genuine"},
+  mostImportant: "Invitation Letter Carta de Invitación Comisaría OR Hotel Booking MOST IMPORTANT ⭐",
+  status: "ACTIVE",
+  recordType: "VISA",
+  notes: "Tourist Schengen C visa 90/180 days - Carta de Invitación Comisaría OR Hotel Booking MOST IMPORTANT - Medios económicos 108 EUR/day",
+  officialSource: "Ministerio de Asuntos Exteriores Spain + Oficina de Extranjería + Consulate Spain + BLS Spain",
+  lastVerified: "2026-05-13"
+}
+
+CREATE FILES:
+1. Spain-130-Official-Visas.json - Full 130 visas JSON array with FULL_VISA_DB dual-access structure
+2. Spain-130-Official-Visas.js - JS export const FULL_VISA_DB = {...} + BASE_COUNTRY_VISAS + ES_VISA_COUNT = 130 + ES_LIVE_COUNT = 110
+3. Spain-130-Official-Visas.txt - Human readable 130 visas table
+
+FINAL VERIFICATION:
+- 130 visas total - 12+8+10+10+10+15+10+15+10+10+5+5+5 = 130
+- Live visa = 110 - Procedural/supporting/legacy = 20 = 130 total directory
+- No duplicate counting - Each visa code unique ES-VIS-001 to ES-LEG-005
+- Dual-access structure mandatory - FULL_VISA_DB['ES'][category] + FULL_VISA_DB['IN']['ES'][category] + BASE_COUNTRY_VISAS['ES']
+- FundsBox + ITRBox + BankBox + Warning boxes + MOST IMPORTANT ⭐ marking mandatory for each visa
+- Total site count = 1967 entries after Spain
+- No Australia DAMA postcode system - Spain has no regional DAMA - But has NIE + TIE + Empadronamiento + Autorización Residencia + Autorización Trabajo + Carta de Invitación + Informe Vivienda + Certificado Empadronamiento + Seguridad Social + Padron Municipal + Oficina de Extranjería + UGE-CE + Policía Nacional + Ayuntamiento + Arraigo Social 2Y + Employment Contract + Social Report + Arraigo Laboral 2Y + 6M Irregular Work + Arraigo Familiar + Golden Visa Closed April 2025 + Beckham Law 24% flat tax 6Y - Explain clearly
