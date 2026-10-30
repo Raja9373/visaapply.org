@@ -1477,10 +1477,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     {country.flag}
                   </div>
                   <div className="flex flex-col">
-                    <span className="font-bold text-sm tracking-wider flex items-center gap-1.5 text-slate-900 group-hover:text-[#0B3D91]">
-                      {country.code.toUpperCase()} <span className="text-base">{country.flag}</span>
+                    <span className="font-bold text-sm text-slate-900 group-hover:text-[#0B3D91]">
+                      {country.name}
                     </span>
-                    <span className="text-xs text-gray-500">{country.name}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
