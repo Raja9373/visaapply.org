@@ -1,0 +1,197 @@
+FINAL UPGRADE UK 222 COMPLETE - PDF 111 + Missing 111 - ChatGPT Additional List Included - No Australia DAMA - Keep Dual-Access + 17 Master Categories Architecture
+
+CRITICAL: UK mein Australia ke DAMA ya designated regional visa-subclass system jaisa alag immigration programme nahi hai. Lekin regional salary rules, eligible sponsor locations, occupation requirements aur devolved/nation-specific schemes ko supporting data ke roop mein rakhna useful hai. Regional location apne aap visa eligibility nahi banata. Skilled Worker salary calculation occupation going rate, general threshold, working hours aur permitted salary options par depend karti hai. Official rules going rates ko 37.5-hour week basis par calculate/pro-rate karte hain. Regional sponsor directory ko separate visa category mat samajhna.
+
+For TO=GB for all 30 FROM - Update to 222 entries (111 previous official + 111 new) with record_type classification to avoid duplicate and 17 master categories:
+
+KEEP ALL PREVIOUS 111 FROM PDF (UKV-STD LTV MED ACA PLS MAR CHV GRP, UKT-AIR VIS EXM, UKW-SWK HCW GBM-SSW GT UEW SS SW SCU ISP T2M, UKTW-SEA CHA CRE GAE REL IAW, UKWO-GT HPI GRAD YMS IYPS ANC ODW REP PRT, UKB-IF START INNOV T1E T1I T1GE, UKS-STU CHS PCH SST STD TIER4, UKF-PART FIANCE CHILD PARENT ADULT DEPEND PRIVATE SETL, UKEU-EUSS PRE FP FW SUR, UKH-BNO UEP HF UFS UKR, UKC-ANC BNO RIGHT ROA-CTR, UKP-ASY REF HUM DLR HP AR RESET, UKR-ILR LR SETL FAM PRIVATE RETURN ROA, UKN-NAT REG CHILD DESC REN BOC, UKX-ETA TRP TRP2 VIP S2 EXM ATAS, UKL-T1G T1E T1I T1GE T2G T2ICT T2M T2S T4 T5 ICT SUR UKFAM DV etc)
+
+ADD MISSING 111 - With record_type and 17 master categories:
+
+1. WORK SPONSORSHIP SALARY REGIONAL CLASSIFICATIONS (11 New) - record_type: REGIONAL_CLASSIFICATION / SALARY_CLASSIFICATION / SPONSOR_CLASSIFICATION / Supporting classification, not visa - Master Category 14 Regional Jobs & Sponsorship
+- in-to-gb-reg-ukw-reg-sp Regional Sponsor Location Classification UKW-REG-SP - Supporting classification visa nahi - Active data classification - record_type: REGIONAL_CLASSIFICATION - Note: Regional sponsor address/location record - UKVI separate regional visa nahi
+- in-to-gb-reg-ukw-reg-sal Regional Salary Going-Rate Assessment UKW-REG-SAL - Salary rule visa nahi - Active - SALARY_CLASSIFICATION
+- in-to-gb-reg-ukw-isl Immigration Salary List ISL Occupation Classification UKW-ISL - Occupation/salary classification - Active rules subject to change - SALARY_CLASSIFICATION - GOV.UK Appendix Skilled Occupations
+- in-to-gb-reg-ukw-tsl Temporary Shortage List TSL Occupation Classification UKW-TSL - Occupation classification - Rules-dependent verify current Appendix - SALARY_CLASSIFICATION
+- in-to-gb-reg-ukw-new-ent New Entrant Salary Option UKW-NEW-ENT - Skilled Worker salary option - Active eligibility-limited - SALARY_CLASSIFICATION
+- in-to-gb-reg-ukw-phd Relevant PhD Salary Option UKW-PHD - Active eligibility-limited - SALARY_CLASSIFICATION
+- in-to-gb-reg-ukw-trade Tradeable Points Salary Options UKW-TRADE - Skilled Worker assessment - Active - SALARY_CLASSIFICATION
+- in-to-gb-reg-ukw-health National Pay Scale Salary Option UKW-HEALTH - Health/education occupation salary assessment - Active occupation-specific - SALARY_CLASSIFICATION
+- in-to-gb-reg-ukw-sponsor Sponsor Licence Certificate of Sponsorship CoS Classification UKW-SPONSOR - Employer sponsorship permission visa nahi - Active - SPONSOR_CLASSIFICATION
+- in-to-gb-reg-ukw-gbm-ext GBM Extension Maximum-Stay Classification UKW-GBM-EXT - Existing GBM permission extension/limit - Active route-specific - IMMIGRATION_PERMISSION
+- in-to-gb-reg-ukw-scu-uns Unsponsored Scale-up Period UKW-SCU-UNS - Scale-up permission after sponsored period - Active subject to conditions - IMMIGRATION_PERMISSION
+
+2. FAMILY RELATIONSHIP BREAKDOWN SPECIAL SETTLEMENT (6 New) - record_type: SETTLEMENT_ROUTE / IMMIGRATION_PERMISSION / Case classification - Master Category 4 Family & Dependants + 6 Settlement
+- in-to-gb-family-ukf-bereaved Bereaved Partner Route UKF-BEREAVED - Settlement route - Active - Bereaved Partner route eligible partner death ke baad settlement - SETTLEMENT_ROUTE - GOV.UK Appendix Bereaved Partner
+- in-to-gb-family-ukf-dv-set Settlement for Victims of Domestic Abuse UKF-DV-SET - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-family-ukf-dv-leave Domestic Abuse Destitution Domestic Violence DDV Concession UKF-DV-LEAVE - Temporary permission concession - Active eligibility-limited - HUMANITARIAN_SCHEME
+- in-to-gb-family-ukf-rel-break Relationship Breakdown Family Route Variation UKF-REL-BREAK - Case classification standalone visa nahi - Active rules - APPLICATION_PROCEDURE
+- in-to-gb-family-ukf-gurkha-fam Gurkha Family Settlement UKF-GURKHA-FAM - Settlement route - Active eligibility-limited - SETTLEMENT_ROUTE
+- in-to-gb-family-ukf-hk-vet-fam Hong Kong Military Unit Veteran Family Settlement UKF-HK-VET-FAM - Active eligibility-limited - SETTLEMENT_ROUTE
+
+3. EU SETTLEMENT SCHEME ADDITIONAL ROUTES (8 New) - record_type: EUSS permission route / Family-right classification / Application classification - Master Category 7 EU Settlement Scheme - Note: Technical legal classifications, general-purpose new visa ke roop mein market mat karo - Official Appendix EU dekhein
+- in-to-gb-eu-ukeu-jfm Joining Family Member of Relevant EEA Citizen UKEU-JFM - EUSS permission route - Active eligibility/date restrictions - FAMILY_ROUTE
+- in-to-gb-eu-ukeu-ret Retained Right of Residence UKEU-RET - EUSS family-right classification - Active qualifying cases - FAMILY_ROUTE
+- in-to-gb-eu-ukeu-der Derivative Right of Residence UKEU-DER - EUSS-related residence right - Restricted transitional - FAMILY_ROUTE
+- in-to-gb-eu-ukeu-zam Zambrano Primary Carer Route UKEU-ZAM - EUSS-related derivative route - Restricted transitional - FAMILY_ROUTE
+- in-to-gb-eu-ukeu-late Late EUSS Application UKEU-LATE - Application classification - Active where reasonable grounds accepted - APPLICATION_PROCEDURE
+- in-to-gb-eu-ukeu-child EUSS Child Child Born or Adopted in UK UKEU-CHILD - EUSS family/child route - Active eligibility-limited - FAMILY_ROUTE
+- in-to-gb-eu-ukeu-fam-ret EUSS Family Member Retained Rights Relationship Change UKEU-FAM-RET - Family-right classification - Active qualifying cases - FAMILY_ROUTE
+- in-to-gb-eu-ukeu-qual-br Qualifying British Citizen Family Member under Appendix EU UKEU-QUAL-BR - EUSS family route - Narrow eligibility - FAMILY_ROUTE
+
+4. HONG KONG BN(O) ADDITIONAL ROUTES (5 New) - record_type: SETTLEMENT_ROUTE / Dependant permission / Application classification - Master Category 9 Humanitarian & Special Schemes
+- in-to-gb-hk-ukh-bno-set BN(O) Settlement 5-Year Route UKH-BNO-SET - Settlement route - Active qualifying BN(O) permission holders - SETTLEMENT_ROUTE
+- in-to-gb-hk-ukh-bno-depend BN(O) Adult Dependant Relative UKH-BNO-DEPEND - Dependant permission - Active narrow eligibility - FAMILY_ROUTE
+- in-to-gb-hk-ukh-bno-child BN(O) Child Family Member Route UKH-BNO-CHILD - Dependant permission - Active eligibility-limited - FAMILY_ROUTE
+- in-to-gb-hk-ukh-bno-child-set BN(O) Child Settlement UKH-BNO-CHILD-SET - Settlement route - Active eligibility-limited - SETTLEMENT_ROUTE
+- in-to-gb-hk-ukh-bno-late BN(O) Late Exceptional Application Classification UKH-BNO-LATE - Application classification - Case-specific verify rules - APPLICATION_PROCEDURE
+
+5. UKRAINE ADDITIONAL CLASSIFICATIONS (6 New) - record_type: Temporary permission / Exceptional permission - Master Category 9 Humanitarian & Special Schemes - Note: Ukraine Family Scheme and Ukraine Extension Scheme closed - Ukraine Permission Extension existing eligible holders ke liye extension mechanism - Ukraine schemes not settlement route
+- in-to-gb-ukr-ukh-hf-ext Homes for Ukraine Permission Extension Cases UKH-HF-EXT - Temporary permission - Existing permission cases - IMMIGRATION_PERMISSION
+- in-to-gb-ukr-ukh-upe-1 Ukraine Permission Extension Initial Grant UKH-UPE-1 - Temporary permission - Active eligible existing Ukraine-scheme holders - IMMIGRATION_PERMISSION - GOV.UK Ukraine Permission Extension guidance
+- in-to-gb-ukr-ukh-upe-2 Ukraine Permission Extension Further Extension UKH-UPE-2 - Temporary permission extension - Active eligibility-limited - IMMIGRATION_PERMISSION
+- in-to-gb-ukr-ukh-child-born UK-Born Child of Ukraine Scheme Permission Holder UKH-CHILD-BORN - Temporary permission - Active eligibility-limited - FAMILY_ROUTE
+- in-to-gb-ukr-ukh-upe-depend Ukraine Permission Extension Eligible Family Member UKH-UPE-DEPEND - Temporary permission - Active qualifying cases - FAMILY_ROUTE
+- in-to-gb-ukr-ukh-lotr-ukr Ukraine-Related Leave Outside the Rules UKH-LOTR-UKR - Exceptional permission - Case-specific - IMMIGRATION_PERMISSION
+
+6. PROTECTION STATELESSNESS HUMANITARIAN PERMISSION (8 New) - record_type: PROTECTION_ROUTE / SETTLEMENT_ROUTE / Review procedure - Master Category 8 Protection & Asylum - Statelessness route particularly important missing entry - Current Appendix Statelessness eligible stateless person 5-year permission leading to settlement
+- in-to-gb-prot-ukp-stateless Stateless Person Route Appendix Statelessness UKP-STATELESS - Temporary permission leading to settlement - Active - PROTECTION_ROUTE - GOV.UK Appendix Statelessness
+- in-to-gb-prot-ukp-stateless-fam Partner Child of Stateless Person UKP-STATELESS-FAM - Family permission and settlement - Active eligibility-limited - FAMILY_ROUTE
+- in-to-gb-prot-ukp-stateless-set Settlement as Stateless Person UKP-STATELESS-SET - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-prot-ukp-hp-set Settlement after Humanitarian Protection UKP-HP-SET - Settlement route - Active qualifying cases - SETTLEMENT_ROUTE
+- in-to-gb-prot-ukp-ref-set Settlement after Refugee Permission UKP-REF-SET - Settlement route - Active qualifying cases - SETTLEMENT_ROUTE
+- in-to-gb-prot-ukp-ar-review Administrative Review Protection Immigration Decision UKP-AR-REVIEW - Review procedure visa nahi - Active where permitted - APPLICATION_PROCEDURE
+- in-to-gb-prot-ukp-asy-appeal Asylum Appeal Further Submissions UKP-ASY-APPEAL - Legal procedure visa nahi - Active where applicable - APPLICATION_PROCEDURE
+- in-to-gb-prot-ukp-reset-gr Refugee Resettlement Government-Supported Pathway Classification UKP-RESET-GR - Resettlement programme - Programme-dependent - HUMANITARIAN_SCHEME
+
+7. SETTLEMENT ADDITIONAL ROUTES (11 New) - record_type: SETTLEMENT_ROUTE - Master Category 6 Permanent Residence & Settlement - Note: Long Residence already PDF me hai duplicate nahi - 10-year family settlement and private-life settlement separate route records
+- in-to-gb-settle-ukr-bereaved Bereaved Partner Settlement UKR-BEREAVED - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-dv Domestic Abuse Settlement UKR-DV - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-stateless Stateless Person Settlement UKR-STATELESS - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-hmf HM Armed Forces Service Leaver Settlement UKR-HMF - Settlement route - Active - SETTLEMENT_ROUTE - GOV.UK Appendix HM Armed Forces
+- in-to-gb-settle-ukr-hmf-fam HM Armed Forces Partner Child Settlement UKR-HMF-FAM - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-gurkha Gurkha Settlement UKR-GURKHA - Settlement route - Active eligibility-limited - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-hk-vet Hong Kong Military Unit Veteran Settlement UKR-HK-VET - Settlement route - Active eligibility-limited - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-private-child Private Life Child Settlement UKR-PRIVATE-CHILD - Settlement route - Active qualifying cases - SETTLEMENT_ROUTE - GOV.UK Appendix Private Life
+- in-to-gb-settle-ukr-10yr-fam 10-Year Family Settlement UKR-10YR-FAM - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-10yr-private 10-Year Private Life Settlement UKR-10YR-PRIVATE - Settlement route - Active - SETTLEMENT_ROUTE
+- in-to-gb-settle-ukr-set-armed Armed Forces Settlement qualifying service route UKR-SET-ARMED - Settlement route - Active - SETTLEMENT_ROUTE
+
+8. COMMONWEALTH BRITISH NATIONALITY CITIZENSHIP MISSING CLASSIFICATIONS (13 New) - record_type: British nationality status / NATIONALITY_ROUTE / Status-documentation scheme - Master Category 11 British Nationality & Citizenship - Important distinction: BOC BOTC British Subject British Protected Person alag nationality classes - Automatically UK rehne kaam right nahi hota - Official rights conditions alag
+- in-to-gb-nat-ukn-boc British Overseas Citizen BOC UKN-BOC - British nationality status - Existing nationality class - NATIONALITY_ROUTE - GOV.UK
+- in-to-gb-nat-ukn-botc British Overseas Territories Citizen BOTC UKN-BOTC - British nationality status - Existing nationality class - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-bs British Subject UKN-BS - British nationality status - Existing nationality class - NATIONALITY_ROUTE - GOV.UK British Subject nationality
+- in-to-gb-nat-ukn-bpp British Protected Person UKN-BPP - British nationality status - Existing nationality class - NATIONALITY_ROUTE - GOV.UK British Protected Person nationality
+- in-to-gb-nat-ukn-bn-o British National Overseas Nationality Status UKN-BN-O - British nationality status - Existing nationality class - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-ukc British Citizen Registration under Special Provisions UKN-UKC - Nationality route - Active eligibility-specific - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-stat Stateless Person British Nationality Registration UKN-STAT - Nationality route - Active eligibility-specific - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-wind Windrush Scheme Proof of Status Citizenship Documentation UKN-WIND - Status-documentation scheme - Active - STATUS_DOCUMENT - GOV.UK Windrush Scheme guidance - Note: Visa ya citizenship route ke roop mein label na karein - Eligible people ke liye UK immigration status proof/documentation scheme
+- in-to-gb-nat-ukn-child-born Child Born in UK British Citizenship Registration Assessment UKN-CHILD-BORN - Nationality route - Active depends on parents status dates - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-adopt British Citizenship through Adoption UKN-ADOPT - Nationality route - Active qualifying adoption cases - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-mn1 Child Registration Form MN1 Route UKN-MN1 - Nationality application classification - Active - APPLICATION_PROCEDURE
+- in-to-gb-nat-ukn-ard Registration under Section 4L Historical Legislative Injustice Special Circumstances UKN-ARD - Nationality route - Active exceptional eligibility - NATIONALITY_ROUTE
+- in-to-gb-nat-ukn-s2 Stateless Person Nationality Registration Form S UKN-S2 - Nationality route - Active eligibility-specific - NATIONALITY_ROUTE - GOV.UK Form S nationality guidance
+
+9. ENTRY PERMISSION IMMIGRATION STATUS SPECIAL PERMISSIONS (13 New) - record_type: IMMIGRATION_PERMISSION / ENTRY_AUTHORISATION / STATUS_DOCUMENT / APPLICATION_PROCEDURE - Master Category 12 Entry Permission & Electronic Authorisation + 17 Immigration Documents & Procedures - Note: Permission & Status Documents subcategory, not Tourist/Work visa count - eVisa digital proof of immigration status, share code status verify mechanism, independent visa nahi
+- in-to-gb-entry-ukx-ec Entry Clearance UKX-EC - Entry permission visa decision - Active - ENTRY_AUTHORISATION
+- in-to-gb-entry-ukx-pt Permission to Enter UKX-PT - Immigration permission - Active - IMMIGRATION_PERMISSION
+- in-to-gb-entry-ukx-ps Permission to Stay UKX-PS - Immigration permission - Active - IMMIGRATION_PERMISSION
+- in-to-gb-entry-ukx-ile Indefinite Leave to Enter ILE UKX-ILE - Settlement permission - Active status limited application contexts - SETTLEMENT_ROUTE
+- in-to-gb-entry-ukx-lotr Leave Outside the Immigration Rules LOTR UKX-LOTR - Exceptional permission - Active discretionary - IMMIGRATION_PERMISSION
+- in-to-gb-entry-ukx-lotr-ext Extension of Leave Outside the Rules UKX-LOTR-EXT - Exceptional permission extension - Case-specific - IMMIGRATION_PERMISSION
+- in-to-gb-entry-ukx-exc Immigration Exemption Diplomatic Official UKX-EXC - Exemption from immigration control - Active qualifying persons - IMMIGRATION_PERMISSION
+- in-to-gb-entry-ukx-evisa eVisa Digital Immigration Status Record UKX-EVISA - Digital status evidence visa nahi - Active - STATUS_DOCUMENT
+- in-to-gb-entry-ukx-status View and Prove Immigration Status Share Code UKX-STATUS - Status-verification service visa nahi - Active - STATUS_DOCUMENT
+- in-to-gb-entry-ukx-vign Entry Clearance Vignette Travel Document Evidence UKX-VIGN - Entry evidence visa route nahi - Active where issued - TRAVEL_DOCUMENT
+- in-to-gb-entry-ukx-admin Administrative Review UKX-ADMIN - Decision-review procedure - Active where available - APPLICATION_PROCEDURE
+- in-to-gb-entry-ukx-recon Reconsideration Request UKX-RECON - Administrative procedure - Case-specific - APPLICATION_PROCEDURE
+- in-to-gb-entry-ukx-rest Restoration Correction of Digital Status Record UKX-REST - Status-record correction - Case-specific - APPLICATION_PROCEDURE
+
+10. ARMED FORCES GURKHA INTERNATIONAL OFFICIAL CASES (7 New) - record_type: Work/service-related immigration route / Special permission route / Dependant permission / Settlement route - Master Category 15 Special Cases & Armed Forces - Note: HM Armed Forces service-leaver route settlement tak lead kar sakta hai - International Armed Forces International Civilian Employees route NATO forces and Australian Department of Defence specified personnel/family members - Normal Skilled Worker category me merge mat karo
+- in-to-gb-armed-ukw-hmf HM Armed Forces Service Leaver Route UKW-HMF - Work/service-related immigration route - Active - VISA - GOV.UK Appendix HM Armed Forces
+- in-to-gb-armed-ukw-afi International Armed Forces International Civilian Employees UKW-AFI - Special permission route - Active - VISA - GOV.UK Appendix International Armed Forces
+- in-to-gb-armed-ukw-afi-dep International Armed Forces Partner Child UKW-AFI-DEP - Dependant permission - Active - FAMILY_ROUTE
+- in-to-gb-armed-ukr-hmf HM Armed Forces Service Leaver Settlement UKR-HMF - Settlement route - Active - SETTLEMENT_ROUTE - Duplicate of UKR-HMF but keep one
+- in-to-gb-armed-ukr-gurkha Gurkha and Hong Kong Military Unit Veteran Settlement UKR-GURKHA - Settlement route - Active eligibility-limited - SETTLEMENT_ROUTE - GOV.UK +2
+- in-to-gb-armed-ukf-hmf-dep HM Armed Forces Partner Child UKF-HMF-DEP - Family/dependant permission - Active - FAMILY_ROUTE
+- in-to-gb-armed-ukf-afi-dep International Armed Forces Partner Child UKF-AFI-DEP - Family/dependant permission - Active - FAMILY_ROUTE
+
+11. LEGACY CLOSED ROUTES PDF MEIN NAHI DIYE GAYE ADDITIONAL RECORDS (23 New) - record_type: LEGACY_ROUTE - Master Category 16 Legacy & Closed Routes - Note: Historical programme names and old route names - Website par visa currently open mat dikhana - Legacy record mein closed_to_new_applicants, transitional_only, replaced_by, last_verified_at fields rakhein
+- in-to-gb-legacy-ukl-hsmp Highly Skilled Migrant Programme HSMP UKL-HSMP - Legacy work route - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-segs Science and Engineering Graduates Scheme SEGS UKL-SEGS - Legacy post-study work - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-igs International Graduates Scheme IGS UKL-IGS - Legacy post-study work - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-psw Post-Study Work Route UKL-PSW - Legacy graduate work route - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t1psw Tier 1 Post-Study Work UKL-T1PSW - Legacy work route - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t1ps Tier 1 Post-Study Work Graduate-related legacy permission UKL-T1PS - Legacy work route - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-fresh Fresh Talent Working in Scotland Scheme UKL-FRESH - Legacy regional work scheme - Closed - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-swiss Swiss Service Provider Swiss Posted Worker transitional arrangements UKL-SWISS - Transitional permission - Restricted transitional - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-turk Turkish ECAA Worker Route UKL-TURK - Legacy work permission - Closed to new applicants transitional cases - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-turk-biz Turkish ECAA Businessperson Route UKL-TURK-BIZ - Legacy business permission - Closed to new applicants transitional cases - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-dom Domestic Worker in Private Household Legacy Route UKL-DOM - Legacy work route - Historic restricted - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-sole Sole Representative of Overseas Business UKL-SOLE - Legacy business/work route - Closed to new applicants - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t1-tal Tier 1 Exceptional Talent UKL-T1-TAL - Legacy talent route - Replaced by Global Talent - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t1-inv Tier 1 Investor Extension Settlement Transitional Cases UKL-T1-INV - Legacy settlement cases - Closed to new applicants - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t2-ict-lt Tier 2 ICT Long-Term Staff UKL-T2-ICT-LT - Legacy work subroute - Replaced - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t2-ict-gt Tier 2 ICT Graduate Trainee UKL-T2-ICT-GT - Legacy work subroute - Replaced - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-mob Tier 5 Temporary Worker Government Authorised Exchange historic naming UKL-T5-MOB - Legacy naming - Replaced by current route - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-yms Tier 5 Youth Mobility Scheme historic naming UKL-T5-YMS - Legacy naming - Replaced by current route - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-ia Tier 5 International Agreement historic naming UKL-T5-IA - Legacy naming - Replaced by current route - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-char Tier 5 Charity Worker historic naming UKL-T5-CHAR - Legacy naming - Replaced by current route - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-rel Tier 5 Religious Worker historic naming UKL-T5-REL - Legacy naming - Replaced by current route - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-cre Tier 5 Creative and Sporting historic naming UKL-T5-CRE - Legacy naming - Replaced by current routes - LEGACY_ROUTE
+- in-to-gb-legacy-ukl-t5-seas Tier 5 Seasonal Worker historic naming UKL-T5-SEAS - Legacy naming - Replaced by current route - LEGACY_ROUTE
+
+12. REGIONAL MIGRATION DAMA - UK MEIN KYA RAKHNA CHAHIYE? - Recommendation: Separate visa category nahi - Regional Jobs & Sponsorship Directory - Master Category 14 Regional Jobs & Sponsorship - Supporting data, not visa category - Table:
+Website section | Kya data rakhna chahiye? | Visa category ya supporting data?
+Regional Sponsor Directory | Approved sponsor location address sponsor status | Supporting data
+Regional Salary Rules | Occupation going rate salary threshold working hours | Supporting data
+Immigration Salary List | Eligible occupation salary concession rules | Supporting data
+Temporary Shortage List | Eligible occupation relevant restrictions | Supporting data
+Health & Care Jobs by Region | NHS trusts care employers eligible sponsor locations | Supporting data
+Scotland Immigration & Jobs | Scotland-based employers jobs sponsor data | Supporting data
+Wales Immigration & Jobs | Wales-based employers jobs sponsor data | Supporting data
+Northern Ireland Immigration & Jobs | Northern Ireland employers job data | Supporting data
+Scale-up Employers | Eligible Scale-up sponsors by location | Supporting data
+Seasonal Work Locations | Eligible seasonal employers work locations | Supporting data
+
+Implementation: Create new file src/data/ukRegionalJobs.ts with above directory structure - Regional location does not create visa eligibility - Skilled Worker salary occupation rules official Immigration Rules through apply - GOV.UK +1 references
+
+13. DATABASE STRUCTURE - Very important - Visa and non-visa records ek hi type mein count nahi karna - Suggested database fields:
+category_code | route_code | official_name | record_type | status | application_status OPEN/CLOSED/RESTRICTED | replaced_by current route code if applicable | eligibility_summary short official eligibility summary | official_source_url GOV.UK URL | last_verified_at verification date | country_region England Scotland Wales Northern Ireland UK-wide
+
+Suggested record_type values:
+VISA, WORK_PERMIT, STUDY_PERMISSION, FAMILY_ROUTE, SETTLEMENT_ROUTE, NATIONALITY_ROUTE, IMMIGRATION_PERMISSION, ENTRY_AUTHORISATION, PROTECTION_ROUTE, HUMANITARIAN_SCHEME, REGIONAL_CLASSIFICATION, SALARY_CLASSIFICATION, SPONSOR_CLASSIFICATION, TRAVEL_DOCUMENT, STATUS_DOCUMENT, LEGACY_ROUTE, APPLICATION_PROCEDURE
+
+For fundsBox itrBox bankBox for new routes:
+- Regional Salary ISL TSL New Entrant PhD Tradeable Points Health National Pay Scale Sponsor Licence: No funds visa nahi supporting classification - Salary rule explanation - Going rate 37.5-hour week basis calculate pro-rate - GOV.UK Appendix Skilled Occupations
+- Bereaved Partner DV Settlement Gurkha Family: Settlement route - No funds but continuous residence + English + accommodation - Sponsor not required
+- EUSS JFM RET DER ZAM LATE CHILD FAM-RET QUAL-BR: No funds, EUSS permission route - Eligibility date restrictions - Appendix EU
+- BN(O) Settlement Dependant: Settlement route - Funds IHS + Accommodation - Dependant eligibility narrow
+- Ukraine HF-EXT UPE-1 UPE-2 CHILD-BORN UPE-DEPEND LOTR-UKR: Temporary permission - Existing permission cases - Not settlement route - Ukraine Family Scheme Extension Scheme closed - Ukraine Permission Extension existing eligible holders extension mechanism
+- Statelessness Stateless Person Partner Child Settlement: Temporary permission 5-year leading to settlement - Protection route - Appendix Statelessness
+- Settlement Bereaved DV Stateless HMF Gurkha HK-VET PRIVATE-CHILD 10YR-FAM 10YR-PRIVATE SET-ARMED: Settlement route - No funds but residence + English + Life in UK
+- Nationality BOC BOTC BS BPP BN-O UKC STAT WIND CHILD-BORN ADOPT MN1 ARD S2: British nationality status not visa - No UK residence work right automatically - Official rights conditions different - Windrush status-documentation scheme not visa citizenship route
+- Entry Permission EC PT PS ILE LOTR LOTR-EXT EXC EVISA STATUS VIGN ADMIN RECON REST: Permission & Status Documents subcategory not Tourist Work visa count - eVisa digital proof immigration status, share code status verify mechanism independent visa nahi
+- Armed Forces HMF AFI AFI-DEP GURKHA: Work/service-related immigration route settlement lead - Special permission route NATO forces Australian Department Defence specified personnel family - Normal Skilled Worker category merge mat karo
+- Legacy HSMP SEGS IGS PSW T1PSW T1PS FRESH SWISS TURK TURK-BIZ DOM SOLE T1-TAL T1-INV T2-ICT-LT GT T5-MOB YMS IA CHAR REL CRE SEAS: Legacy route closed to new applicants transitional only replaced_by current route - Show last_verified_at closed_to_new_applicants transitional_only
+
+Update VISA_COUNTS: Keep official visa count 111 for visas permissions (VISA WORK_PERMIT STUDY_PERMISSION FAMILY_ROUTE SETTLEMENT_ROUTE etc) - Add 111 missing as separate with record_type - Total entries 222 - For audit show: UK Visa & Immigration Documents 111 + Additional Routes Classifications 111 = 222 - Breakdown: Work Sponsorship Salary Regional 11, Family 6, EUSS 8, BN(O) 5, Ukraine 6, Protection Statelessness 8, Settlement 11, Nationality 13, Entry Permission 13, Armed Forces 7, Legacy 23 = 111 new
+
+Grand Total site: Previous total 1098 (AU 135 US 201 CA 199 GB 111 = 1098? Actually 135+201+199+111=646 + base other countries 452 =1098) Now new GB 222-111=111 more - So new total 1098+111=1209
+
+Update AuditPage: Show Total 1209+ Total Records LIVE, UK section split: Directory 1 UK Visa & Immigration Documents 111 (Tourist 13 Work 32 Student 10 Family 27 Business 9 PR 20) vs Old 111, Directory 2 Additional Routes Classifications 111 - Show breakdown: Regional Salary 11, Family 6, EUSS 8, BN(O) 5, Ukraine 6, Protection 8, Settlement 11, Nationality 13, Entry Permission 13, Armed Forces 7, Legacy 23 = 111 new - Show status Active Closed Legacy Restricted - Show last verified date
+
+Update SitemapPage: Show two sections for UK: 1. UK Visa & Immigration Documents - 111 Visa Types grouped by 6 categories + 11 additional master categories, 2. Additional UK Routes & Classifications - 111 entries grouped by Regional Jobs & Sponsorship (11), Family (6), EUSS (8), BN(O) (5), Ukraine (6), Protection Statelessness (8), Settlement (11), Nationality (13), Entry Permission (13), Armed Forces (7), Legacy (23) = 111 with record_type badges VISA SETTLEMENT_ROUTE NATIONALITY_ROUTE IMMIGRATION_PERMISSION ENTRY_AUTHORISATION PROTECTION_ROUTE HUMANITARIAN_SCHEME REGIONAL_CLASSIFICATION SALARY_CLASSIFICATION SPONSOR_CLASSIFICATION TRAVEL_DOCUMENT STATUS_DOCUMENT LEGACY_ROUTE APPLICATION_PROCEDURE FAMILY_ROUTE and Active Closed Legacy Restricted tags, Official Source links GOV.UK
+
+Add warning boxes on UK pages:
+- Regional: "UK mein Australia ke DAMA jaisa general regional migration agreement/visa subclass system nahi hai. Regional location apne aap visa eligibility nahi banata. Skilled Worker salary occupation rules official Immigration Rules ke through apply hote hain. Going rates 37.5-hour week basis par calculate/pro-rate hote hain. Regional Sponsor Directory supporting data hai, separate regional visa nahi hai."
+- EUSS: "EUSS derivative rights, Zambrano and retained rights are technical legal classifications. Inko general-purpose new visa ke roop mein market mat karein. EUSS rules and transitional conditions ke liye official Appendix EU dekhein."
+- BN(O): "BN(O) route ko sirf ek visa record tak limit na rakhein. Permission, dependant eligibility aur settlement ko separate linked records banayein."
+- Ukraine: "Ukraine Family Scheme and Ukraine Extension Scheme closed hain; Ukraine Permission Extension existing eligible holders ke liye extension mechanism hai. Ukraine schemes khud settlement route nahi hain."
+- Nationality: "British Overseas Citizen, British Overseas Territories Citizen, British Subject and British Protected Person alag nationality classes hain. In sabke paas automatically UK mein rehne/kaam karne ka right nahi hota. Windrush Scheme visa ya citizenship route nahi, eligible people ke liye UK immigration status proof/documentation scheme hai."
+- Entry Permission: "eVisa digital proof of immigration status hai; share code status verify karne ka mechanism hai, independent visa nahi. Permission & Status Documents subcategory hai, Tourist/Work visa count mein include na karein."
+- Legacy: "Legacy routes closed to new applicants, transitional only, replaced_by current route - Website par visa currently open mat dikhana."
+
+Keep dual-access structure, keep all previous features: Back buttons, Breadcrumbs, Embassy, Footer Sitemap (1209+ Pages), Audit admin only, AdSense, Contact email, Multilingual
+
+Build and Push - Check /in-to-gb-reg-ukw-isl should show Immigration Salary List occupation classification, /in-to-gb-family-ukf-bereaved should show Bereaved Partner settlement, /in-to-gb-eu-ukeu-jfm should show Joining Family Member, /in-to-gb-hk-ukh-bno-set should show BN(O) Settlement 5-Year Route, /in-to-gb-ukr-ukh-upe-1 should show Ukraine Permission Extension Initial Grant, /in-to-gb-prot-ukp-stateless should show Stateless Person Route Appendix Statelessness, /in-to-gb-settle-ukr-bereaved should show Bereaved Partner Settlement, /in-to-gb-nat-ukn-boc should show British Overseas Citizen nationality status, /in-to-gb-entry-ukx-evisa should show eVisa Digital Immigration Status Record status-document, /in-to-gb-armed-ukw-hmf should show HM Armed Forces Service Leaver Route, /in-to-gb-legacy-ukl-hsmp should show HSMP Legacy work route Closed, /audit Total 1209+, /sitemap UK 111 visas + 111 additional = 222 UK entries

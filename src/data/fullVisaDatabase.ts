@@ -178,11 +178,24 @@ export const CA_OFFICIAL_VISA_COUNTS = {
   totalEntries: 199
 };
 
-// Target counts per country from official matrix (1098 Total with US 201 [164 Visas + 37 Programmes], CA 199 [102 Visas + 66 Programmes + 20 Communities + 11 Forms], AU 135 & GB 111)
+// Official UK Breakdown: 111 Official UKVI Visas & Permits + 111 Additional Routes & Classifications = 222 Total UK Entries
+export const UK_OFFICIAL_VISA_COUNTS = {
+  tourist: 13,
+  work: 43,
+  student: 10,
+  family: 41,
+  business: 14,
+  pr: 101,
+  totalVisas: 111,
+  totalAdditional: 111,
+  totalEntries: 222
+};
+
+// Target counts per country from official matrix (1209 Total with US 201, CA 199, GB 222, AU 135)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
   US: { tourist: 16, work: 49, student: 11, family: 35, business: 18, pr: 72 }, // 201 (164 Official Visas + 37 Programmes/Set-Asides/Forms/Travel Auth)
   CA: { tourist: 21, work: 41, student: 14, family: 23, business: 12, pr: 88 }, // 199 (102 Official Visas/Permits + 66 Programmes/Pathways + 20 Regional Communities + 11 IRCC Forms)
-  GB: { tourist: 13, work: 32, student: 10, family: 27, business: 9, pr: 20 }, // 111
+  GB: { tourist: 13, work: 43, student: 10, family: 41, business: 14, pr: 101 }, // 222 (111 Official Visas + 111 Additional Routes & Classifications)
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   DE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   FR: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
