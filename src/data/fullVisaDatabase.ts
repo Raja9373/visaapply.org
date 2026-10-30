@@ -11,6 +11,8 @@ import { FRANCE_127_VISAS } from './franceVisas';
 import { ITALY_130_VISAS } from './italyVisas';
 import { SPAIN_130_VISAS } from './spainVisas';
 import { INDIA_130_VISAS } from './indiaVisas';
+import { SWITZERLAND_96_VISAS } from './switzerlandVisas';
+import { NEW_ZEALAND_88_VISAS } from './newZealandVisas';
 
 export interface VisaItem {
   id: string;
@@ -244,9 +246,9 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   IT: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Italy Entries
   ES: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Spain Entries
   NL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  NZ: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 4 }, // 18
+  NZ: { tourist: 15, work: 22, student: 12, family: 15, business: 12, pr: 12 }, // 88 New Zealand Live Visas (Official INZ / DIA)
   SE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  CH: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  CH: { tourist: 12, work: 20, student: 15, family: 15, business: 15, pr: 19 }, // 96 Switzerland Live Visas (Official SEM FDFA ch.ch)
   IE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   NO: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   PT: { tourist: 4, work: 4, student: 3, family: 2, business: 3, pr: 5 }, // 21
@@ -582,6 +584,14 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
     BASE_COUNTRY_VISAS['IN'] = INDIA_130_VISAS;
     return;
   }
+  if (code === 'CH') {
+    BASE_COUNTRY_VISAS['CH'] = SWITZERLAND_96_VISAS;
+    return;
+  }
+  if (code === 'NZ') {
+    BASE_COUNTRY_VISAS['NZ'] = NEW_ZEALAND_88_VISAS;
+    return;
+  }
   const cVisas: CountryVisas = {
     tourist: [],
     work: [],
@@ -678,3 +688,51 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
 
 // Auto-run logger on load
 verifyNoVisaMissed();
+
+// Dynamic count helper function - fixes 130 glitch
+export function getLiveVisaCount(countryCode: string): number {
+  const code = countryCode.toUpperCase();
+  const cData = BASE_COUNTRY_VISAS[code];
+  if (!cData) return 0;
+  
+  let total = 0;
+  const categories: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
+  categories.forEach(cat => {
+    total += (cData[cat] || []).length;
+  });
+  return total;
+}
+
+export function getTotalRecordsCount(countryCode: string): number {
+  return getLiveVisaCount(countryCode);
+}
+
+// Dual-access non-overwrite insert function - fixes 0 types bug
+export function addVisasNoOverwrite(toCode: string, fromCode: string, category: keyof CountryVisas, visas: VisaItem[]) {
+  const to = toCode.toUpperCase();
+  const from = fromCode.toUpperCase();
+
+  if (!BASE_COUNTRY_VISAS[to]) {
+    BASE_COUNTRY_VISAS[to] = { tourist: [], work: [], student: [], family: [], business: [], pr: [] };
+  }
+  if (!BASE_COUNTRY_VISAS[to][category]) {
+    BASE_COUNTRY_VISAS[to][category] = [];
+  }
+
+  visas.forEach(newVisa => {
+    const exists = BASE_COUNTRY_VISAS[to][category].some(v => v.id === newVisa.id);
+    if (!exists) {
+      BASE_COUNTRY_VISAS[to][category].push(newVisa);
+    }
+  });
+
+  if (!FULL_VISA_DB[to]) FULL_VISA_DB[to] = {};
+  if (!FULL_VISA_DB[to][category]) FULL_VISA_DB[to][category] = [];
+  visas.forEach(newVisa => {
+    const exists = FULL_VISA_DB[to][category].some((v: any) => v.id === newVisa.id);
+    if (!exists) FULL_VISA_DB[to][category].push(newVisa);
+  });
+
+  if (!FULL_VISA_DB[from]) FULL_VISA_DB[from] = {};
+  if (!FULL_VISA_DB[from][to]) FULL_VISA_DB[from][to] = BASE_COUNTRY_VISAS[to];
+}
