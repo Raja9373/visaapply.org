@@ -1,4 +1,5 @@
 import { AUSTRALIA_135_VISAS } from './australiaVisas';
+import { USA_145_VISAS } from './usaVisas';
 
 export interface VisaItem {
   id: string;
@@ -92,9 +93,9 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" }
 };
 
-// Target counts per country from official matrix (653 Total with AU 135: 118 tourist, 138 work, 93 student, 97 family, 73 business, 134 pr)
+// Target counts per country from official matrix (769 Total with AU 135 & US 145)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
-  US: { tourist: 5, work: 6, student: 5, family: 5, business: 3, pr: 5 }, // 29
+  US: { tourist: 12, work: 48, student: 11, family: 35, business: 18, pr: 21 }, // 145
   CA: { tourist: 2, work: 4, student: 3, family: 3, business: 2, pr: 4 }, // 18
   GB: { tourist: 4, work: 5, student: 3, family: 2, business: 2, pr: 3 }, // 19
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
@@ -392,10 +393,14 @@ function createVisaItem(
 // Base database mapping: TO country code -> CountryVisas
 export const BASE_COUNTRY_VISAS: Record<string, CountryVisas> = {};
 
-// Populate base database to match exact matrix (653 Total with AU 135)
+// Populate base database to match exact matrix (769 Total with AU 135 & US 145)
 Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (code === 'AU') {
     BASE_COUNTRY_VISAS['AU'] = AUSTRALIA_135_VISAS;
+    return;
+  }
+  if (code === 'US') {
+    BASE_COUNTRY_VISAS['US'] = USA_145_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
@@ -479,10 +484,10 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
     });
   });
 
-  const isValid = issues.length === 0 && totalCount === 653;
-  const report = `Total Visas in Database: ${totalCount} across ${Object.keys(BASE_COUNTRY_VISAS).length} countries. Status: ${isValid ? 'PASSED - EXACT 653 VISAS MATCHED!' : 'COUNT MISMATCH'}`;
+  const isValid = issues.length === 0 && totalCount === 769;
+  const report = `Total Visas in Database: ${totalCount} across ${Object.keys(BASE_COUNTRY_VISAS).length} countries. Status: ${isValid ? 'PASSED - EXACT 769 VISAS MATCHED!' : 'COUNT MISMATCH'}`;
   
-  console.log(`Total visas created: 653+`);
+  console.log(`Total visas created: 769+`);
   console.log(`[VisaApply Database Check] ${report}`);
 
   return { totalVisas: totalCount, isValid, report };

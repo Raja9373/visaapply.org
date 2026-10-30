@@ -106,6 +106,16 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       🏛️ Official Home Affairs Register ↗
                     </a>
                   )}
+                  {code === 'US' && (
+                    <a
+                      href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/all-visa-categories.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 hover:underline"
+                    >
+                      🏛️ Official U.S. State Dept Register ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}

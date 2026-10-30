@@ -758,8 +758,12 @@ export default function App() {
     return s === cleanPathSlug || r === cleanPathSlug || ('/' + s) === currentPath.toLowerCase();
   });
 
-  const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isLevel1Match && !isLevel2Match && !isLevel3Match && (
-    Boolean(matchedBlogArticle) || cleanPathSlug.includes('-to-') || cleanPathSlug.includes('guide') || cleanPathSlug.includes('visa')
+  const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && (
+    Boolean(matchedBlogArticle) || (
+      !isLevel1Match && !isLevel2Match && !isLevel3Match && (
+        cleanPathSlug.includes('-to-') || cleanPathSlug.includes('guide') || cleanPathSlug.includes('visa')
+      )
+    )
   );
 
   return (
@@ -911,20 +915,20 @@ export default function App() {
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (653+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (769+ Pages)</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-500">653+ Visa Guides across 30 Destination Countries</li>
+              <li className="text-xs text-slate-500">769+ Visa Guides across 30 Destination Countries</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 653+ Visa Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 769+ Visa Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -1772,6 +1776,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
                   <option value="">⚡ Jump to Section...</option>
                   <option value="section-overview">📌 1. Overview & Fees</option>
                   {toCode === 'AU' && <option value="section-subclass">🇦🇺 2. Official Subclass Registry</option>}
+                  {toCode === 'US' && <option value="section-subclass">🇺🇸 2. Official U.S. Visa Registry</option>}
                   <option value="section-financial">💼 3. Funds, ITR & Bank Rules</option>
                   <option value="section-info-req">📋 4. Mandatory Application Data</option>
                   <option value="section-docs">📄 5. Document Checklist ({docsList.length} docs)</option>
@@ -1926,6 +1931,55 @@ function ArticleView({ match, articles = [], navigate }: any) {
             ) : (
               <p className="leading-relaxed text-[11px]">
                 Active official Australian visa subclass verified against the Department of Home Affairs legislation (Migration Regulations 1994).
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* USA OFFICIAL VISA CLASSIFICATION & STATE DEPARTMENT REGISTER STATUS */}
+        {toCode === 'US' && (
+          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2 scroll-mt-28 ${
+            dbVisaItem?.isLegacy ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-blue-50 border-blue-200 text-blue-950'
+          }`}>
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-current/20">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                <span>🇺🇸</span>
+                <span>U.S. Official Visa Classification: {dbVisaItem?.officialName || dbVisaItem?.name}</span>
+                {dbVisaItem?.officialCode && (
+                  <span className="bg-[#0B3D91] text-white font-mono text-xs px-2 py-0.5 rounded font-black">
+                    Class {dbVisaItem.officialCode}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {dbVisaItem?.isLegacy ? (
+                  <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    ⚠️ Legacy / Special Waiver Class
+                  </span>
+                ) : (
+                  <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    🟢 Official Active INA Classification
+                  </span>
+                )}
+                <a
+                  href={dbVisaItem?.officialSource || "https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/all-visa-categories.html"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold underline flex items-center gap-1 text-[11px] hover:opacity-80"
+                >
+                  <span>State Department Directory</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+
+            {dbVisaItem?.isLegacy ? (
+              <p className="leading-relaxed text-[11px]">
+                <strong>Important Notice:</strong> Classification {dbVisaItem?.officialCode || subtypeCode} is a legacy, specialized waiver, or limited-scope visa class under the Immigration and Nationality Act (INA). Verify active eligibility and filing guidelines on the official U.S. Department of State or USCIS directory before submitting Form DS-160 or Form DS-260.
+              </p>
+            ) : (
+              <p className="leading-relaxed text-[11px]">
+                Official active United States visa classification verified under the Immigration and Nationality Act (INA) and Department of State Foreign Affairs Manual (FAM).
               </p>
             )}
           </div>
