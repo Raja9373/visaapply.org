@@ -15,6 +15,7 @@ import { SWITZERLAND_96_VISAS } from './switzerlandVisas';
 import { NEW_ZEALAND_88_VISAS } from './newZealandVisas';
 import { BRAZIL_72_VISAS } from './brazilVisas';
 import { MEXICO_74_VISAS } from './mexicoVisas';
+import { SOUTH_KOREA_94_VISAS } from './southKoreaVisas';
 
 export interface VisaItem {
   id: string;
@@ -166,7 +167,8 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   TR: { name: "Turkey", currency: "USD ($) / EUR (€)", flag: "🇹🇷" },
   ZA: { name: "South Africa", currency: "ZAR (R)", flag: "🇿🇦" },
   SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" },
-  MX: { name: "Mexico", currency: "MXN ($) / USD ($)", flag: "🇲🇽" }
+  MX: { name: "Mexico", currency: "MXN ($) / USD ($)", flag: "🇲🇽" },
+  KR: { name: "South Korea", currency: "KRW (₩) / USD ($)", flag: "🇰🇷" }
 };
 
 // Official USA Breakdown: 164 Official Visa Classification Codes + 37 Non-Visa Immigration Programmes/Set-Asides/Forms/Travel Authorizations = 201 Total US Entries
@@ -265,7 +267,8 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   TR: { tourist: 4, work: 3, student: 2, family: 2, business: 2, pr: 3 }, // 16
   ZA: { tourist: 3, work: 3, student: 2, family: 2, business: 2, pr: 3 }, // 15
   SA: { tourist: 6, work: 3, student: 2, family: 2, business: 2, pr: 4 }, // 19
-  MX: { tourist: 10, work: 10, student: 8, family: 8, business: 8, pr: 30 }  // 74 Mexico Live Visas (Official INM / SRE)
+  MX: { tourist: 10, work: 10, student: 8, family: 8, business: 8, pr: 30 }, // 74 Mexico Live Visas (Official INM / SRE)
+  KR: { tourist: 14, work: 18, student: 8, family: 7, business: 16, pr: 11 }  // 74 South Korea Live Visas (Official HiKorea / Korea Immigration Service)
 };
 
 // Function to generate complete document lists meeting ALL category rules
@@ -602,6 +605,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'MX') {
     BASE_COUNTRY_VISAS['MX'] = MEXICO_74_VISAS;
+    return;
+  }
+  if (code === 'KR') {
+    BASE_COUNTRY_VISAS['KR'] = SOUTH_KOREA_94_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
