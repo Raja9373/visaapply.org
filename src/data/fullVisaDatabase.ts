@@ -2,6 +2,7 @@ import { AUSTRALIA_135_VISAS } from './australiaVisas';
 import { USA_145_VISAS } from './usaVisas';
 import { CANADA_102_VISAS } from './canadaVisas';
 import { UK_111_VISAS } from './ukVisas';
+import { UAE_135_VISAS } from './uaeVisas';
 
 export interface VisaItem {
   id: string;
@@ -191,15 +192,25 @@ export const UK_OFFICIAL_VISA_COUNTS = {
   totalEntries: 222
 };
 
-// Target counts per country from official matrix (1209 Total with US 201, CA 199, GB 222, AU 135)
+// Official UAE Breakdown: 135 Exhaustive Entries (Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38) = 135 Total UAE Entries
+export const UAE_OFFICIAL_VISA_COUNTS = {
+  tourist: 28,
+  work: 32,
+  business: 18,
+  student: 5,
+  family: 14,
+  pr: 38,
+  totalEntries: 135
+};
+
+// Target counts per country from official matrix (1344 Total with US 201, CA 199, GB 222, AU 135, AE 135)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
   US: { tourist: 16, work: 49, student: 11, family: 35, business: 18, pr: 72 }, // 201 (164 Official Visas + 37 Programmes/Set-Asides/Forms/Travel Auth)
   CA: { tourist: 21, work: 41, student: 14, family: 23, business: 12, pr: 88 }, // 199 (102 Official Visas/Permits + 66 Programmes/Pathways + 20 Regional Communities + 11 IRCC Forms)
   GB: { tourist: 13, work: 43, student: 10, family: 41, business: 14, pr: 101 }, // 222 (111 Official Visas + 111 Additional Routes & Classifications)
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
-  DE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  AE: { tourist: 28, work: 32, student: 5, family: 14, business: 18, pr: 38 }, // 135 (Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38)
   FR: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  AE: { tourist: 10, work: 3, student: 2, family: 2, business: 2, pr: 5 }, // 24
   SG: { tourist: 4, work: 3, student: 2, family: 2, business: 2, pr: 3 }, // 16
   JP: { tourist: 3, work: 3, student: 3, family: 2, business: 2, pr: 2 }, // 15
   IN: { tourist: 5, work: 4, student: 3, family: 2, business: 3, pr: 3 }, // 20
@@ -507,6 +518,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'GB') {
     BASE_COUNTRY_VISAS['GB'] = UK_111_VISAS;
+    return;
+  }
+  if (code === 'AE') {
+    BASE_COUNTRY_VISAS['AE'] = UAE_135_VISAS;
     return;
   }
   const cVisas: CountryVisas = {

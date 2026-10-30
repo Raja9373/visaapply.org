@@ -1,0 +1,219 @@
+FINAL UPGRADE UAE 135 COMPLETE - 6 categories + Golden/Green + Free Zone + Mainland + Investment + Medical + Regional GDRFA/ICP - No duplicate - 135 unique - Keep Dual-Access + FULL_VISA_DB
+
+CRITICAL: UAE mein Australia ke DAMA jaisa postcode-based regional visa system nahi hai, lekin alag tarah ka regional system hai: 1. Emirate-wise GDRFA Dubai vs ICP (Federal Authority other 6 Emirates Abu Dhabi Sharjah Ajman UAQ RAK Fujairah), 2. Mainland vs Free Zone (3000+ Free Zones but visa type same - Free Zone Employment + Free Zone Investor - Authority name DMCC JAFZA DAFZA DIFC ADGM SAIF RAKEZ etc different but visa type same, do not duplicate), 3. Entry Permit (eVisa 60 days) vs Residence Permit (2-3 years) vs Emirates ID. Do not duplicate same visa for each Free Zone or each emirate - Count as one.
+
+For TO=AE for all 30 FROM - Update to 135 entries (82 previous + 53 new exhaustive) with record_type classification to avoid duplicate:
+
+135 LIST - Use these exact codes - No duplicate - Each with fee validity stay entry purpose eligibility documents fundsBox itrBox bankBox:
+
+TOURIST VISIT ENTRY PERMIT 28 TYPES:
+- in-to-ae-tour-30s Tourist 30 Days Single - ENTRY_PERMIT - Fee AED 200-300 - Validity 60 days - Stay 30 days - Single entry - Sponsor airline/hotel/agent - Most Important: Passport 6 months + Photo + Flight + Hotel or Invitation
+- in-to-ae-tour-30m Tourist 30 Days Multiple - ENTRY_PERMIT - Fee AED 300-400 - 60 days validity - 30 days stay multiple
+- in-to-ae-tour-60s Tourist 60 Days Single - ENTRY_PERMIT - Fee AED 300-500 - 60 days validity - 60 days stay single - Most common India to UAE - Most Important: Passport + Photo + Flight + Hotel booking + Bank statement 6 months
+- in-to-ae-tour-60m Tourist 60 Days Multiple - ENTRY_PERMIT - Fee AED 500-800 - 60 days validity - 60 days multiple
+- in-to-ae-tour-5y-90 5-Year Multiple Entry Tourist 90 days per stay - ENTRY_PERMIT - Fee AED 650 + Insurance - Validity 5 years - Each stay max 90 days total 180 days/year - Bank balance $4000 or AED 14700 + Health insurance + Flight + Hotel + 6 months bank statement - Introduced 2021 - Most Important: Bank statement $4000 6 months genuine no sudden deposit + Insurance + Passport
+- in-to-ae-tour-gcc-res-30s GCC Resident eVisa 30 Days Single - E_VISA - Fee AED 250 - 30 days - Single - For GCC Iqama holders (Saudi Kuwait etc) with listed professions - ICP - Most Important: GCC residence 6 months validity + Passport
+- in-to-ae-tour-gcc-res-60m GCC Resident eVisa 60 Days Multiple - E_VISA - Fee AED 500 - 60 days multiple
+- in-to-ae-tour-gcc-comp GCC Resident Companion eVisa - E_VISA - For domestic workers traveling with GCC sponsor - Sponsor GCC resident
+- in-to-ae-tour-voa-30 Visa on Arrival 30 Days - VISA - Fee Free - 30 days - For 70+ countries USA UK EU Australia Japan etc - Free at airport
+- in-to-ae-tour-voa-90 Visa on Arrival 90 Days - VISA - Free - 90 days - For UK EU etc
+- in-to-ae-tour-voa-14-ind Visa on Arrival 14 Days Indian Passport Holders with US/EU/UK visa/residence - VISA - Fee AED 120 - 14 days extendable 14 days - Indian with valid US/EU/UK visa/residence 6 months + - Most Important: Indian passport + US/EU/UK visa copy + Flight
+- in-to-ae-tour-voa-14-gcc Visa on Arrival GCC Resident 14 Days - VISA - GCC residence 6 months
+- in-to-ae-trans-48 Transit Visa 48 Hours Free - TRANSIT_VISA - Fee Free - 48 hours - Single - Airline sponsored - Onward ticket must - Non-extendable
+- in-to-ae-trans-96 Transit Visa 96 Hours AED 50 - TRANSIT_VISA - Fee AED 50 - 96 hours - Single - Airline sponsored - Extendable
+- in-to-ae-tour-cruise Cruise Tourist Visa - TRANSIT_VISA - Per cruise - Multiple entry UAE ports - Cruise company sponsor
+- in-to-ae-tour-med-entry Medical Treatment Entry Permit 60 Days - MEDICAL_VISA - Fee AED 500 - 60 days single - MOH approved hospital sponsor - Most Important: Hospital appointment letter + Medical report
+- in-to-ae-tour-med-comp-entry Medical Companion Entry Permit - MEDICAL_VISA - Fee AED 500 - 60 days - Attendant of patient
+- in-to-ae-job-60 Job Seeker Visit Visa 60 Days No sponsor - E_VISA - Fee AED 200-400 - 60 days - Bachelor degree + MOHRE classification Level 1-2-3 - New 2022 - Most Important: Degree attested + CV + Bank statement
+- in-to-ae-job-90 Job Seeker Visit Visa 90 Days - E_VISA - Fee AED 300-500 - 90 days - Same
+- in-to-ae-job-120 Job Seeker Visit Visa 120 Days - E_VISA - Fee AED 400-600 - 120 days - Same
+- in-to-ae-biz-explore-60 Business Exploration Entry 60 Days No sponsor - E_VISA - Fee AED 300 - 60 days - Explore business/investment opportunities - No sponsor - Most Important: Bank statement + Business plan
+- in-to-ae-biz-explore-90 Business Exploration Entry 90 Days - E_VISA - 90 days
+- in-to-ae-biz-explore-120 Business Exploration Entry 120 Days - E_VISA - 120 days
+- in-to-ae-visit-friend-30 Visit Visa Friend 30 Days Sponsored - ENTRY_PERMIT - Fee AED 300 - 30 days - Friend sponsor Ejari + 4000 salary + Affidavit + Relationship proof
+- in-to-ae-visit-family-30 Visit Visa Relative 30 Days Sponsored - ENTRY_PERMIT - Relative sponsor - Salary 4000+ + Accommodation
+- in-to-ae-visit-family-60 Visit Visa Relative 60 Days - ENTRY_PERMIT - 60 days
+- in-to-ae-visit-family-90 Visit Visa Relative 90 Days - ENTRY_PERMIT - 90 days
+- in-to-ae-visit-conf Conference Exhibition Festival Visit - ENTRY_PERMIT - Event organizer sponsor
+
+WORK EMPLOYMENT MAINLAND FREE ZONE DOMESTIC 12 - 32 TYPES:
+- in-to-ae-work-main-2y Mainland Private Company Employment Residence 2 Years - RESIDENCE_PERMIT - Fee AED 3000-5000 - Validity 2 years - Residence - MOHRE labour contract + Work permit + Entry permit 60 days then residence - Most Important: Job offer letter + Degree attested + Passport + MOHRE approval - Mainland LLC
+- in-to-ae-work-main-gov Government Sector Employment - RESIDENCE_PERMIT - Federal/Local govt
+- in-to-ae-work-fz-emp Free Zone Employment Residence 2-3 Years - FREE_ZONE_VISA - Sponsored by Free Zone Authority DMCC JAFZA DAFZA DIFC ADGM SAIF RAKEZ etc - 2-3 years - Most Important: Free Zone employment contract + Passport - Note: Authority name different but visa type same, do not duplicate for each Free Zone
+- in-to-ae-work-fz-difc DIFC Employment Dubai International Financial Centre - FREE_ZONE_VISA - Special
+- in-to-ae-work-fz-adgm ADGM Employment Abu Dhabi Global Market - FREE_ZONE_VISA - Special
+- in-to-ae-work-dom-hm Domestic Worker Housemaid - RESIDENCE_PERMIT - Tadbeer center - 2 years - Salary 1500+ - Most Important: Employer salary certificate + Tadbeer contract
+- in-to-ae-work-dom-nanny Domestic Worker Nanny Babysitter - RESIDENCE_PERMIT
+- in-to-ae-work-dom-cook Domestic Worker Cook - RESIDENCE_PERMIT
+- in-to-ae-work-dom-driver Domestic Worker Private Driver - RESIDENCE_PERMIT
+- in-to-ae-work-dom-garden Domestic Worker Gardener - RESIDENCE_PERMIT
+- in-to-ae-work-dom-watch Domestic Worker Watchman Guard - RESIDENCE_PERMIT
+- in-to-ae-work-dom-farmer Domestic Worker Private Agriculturist Farmer - RESIDENCE_PERMIT
+- in-to-ae-work-dom-nurse Domestic Worker Private Nurse - RESIDENCE_PERMIT - DHA/HAAD license if nurse
+- in-to-ae-work-dom-tutor Domestic Worker Private Tutor Teacher - RESIDENCE_PERMIT
+- in-to-ae-work-dom-pro Domestic Worker Private PRO - RESIDENCE_PERMIT
+- in-to-ae-work-dom-sailor Domestic Worker Private Sailor - RESIDENCE_PERMIT
+- in-to-ae-work-dom-falcon Domestic Worker Falcon Care Private Trainer - RESIDENCE_PERMIT - 12 categories total - All domestic 12
+- in-to-ae-work-temp-90 Temporary Work Mission Permit 90 Days - WORK_PERMIT - Company mission non-renewable
+- in-to-ae-work-temp-6m Temporary Work Permit 6 Months - WORK_PERMIT - Project-based
+- in-to-ae-work-mission-180 Mission Work Permit 180 Days Extension - WORK_PERMIT
+- in-to-ae-work-pt Part-Time Work Permit - WORK_PERMIT - Can work for 2nd employer with NOC - MOHRE permit
+- in-to-ae-work-teen Juvenile Work Permit 15-18 Years - WORK_PERMIT - Special conditions
+- in-to-ae-work-train-nat UAE National Trainee Permit 6 Months - WORK_PERMIT - For Emirati training
+- in-to-ae-work-train-for Foreign Student Training Permit - WORK_PERMIT - Training in company
+- in-to-ae-work-freelance-dubai Dubai Freelance Permit Talent Pass - FREE_ZONE_VISA - Via Dubai Culture Media City Internet City Design District Knowledge Park - Media Tech Education Design - Most Important: Portfolio + Freelance license
+- in-to-ae-work-freelance-ad Abu Dhabi Freelancer License - FREE_ZONE_VISA - Via ADDED
+- in-to-ae-work-remote-1y Remote Work Virtual Work Residence 1 Year - RESIDENCE_PERMIT - Work for foreign company Salary $3500+ proof - Dubai Virtual Work + Abu Dhabi remote - Most Important: Employment contract foreign company + Salary $3500 6 months bank + Passport + Insurance
+- in-to-ae-work-transfer In-Country Employment Transfer Without Exit - PROCEDURAL - Status change AED 600-1000
+- in-to-ae-work-gcc-no-visa GCC Citizen No Visa Required - STATUS_DOCUMENT - Only Emirates ID
+- in-to-ae-work-dom-transfer Domestic Worker Transfer Inside UAE - PROCEDURAL
+- in-to-ae-work-on-demand On-Demand Labour Permit MOHRE - WORK_PERMIT - For hourly work
+- in-to-ae-work-flexi Flexible Work Permit - WORK_PERMIT - Multiple employers
+
+INVESTMENT BUSINESS PARTNER FREE ZONE INVESTOR 18 TYPES - Investment visa yahi hai:
+- in-to-ae-biz-main-investor Mainland Investor Residence 2 Years LLC Investor - INVESTOR_VISA - Trade license + MOA + Capital 72k+ varies emirate - Most Important: Trade license + MOA + Passport
+- in-to-ae-biz-main-partner Mainland Partner Residence 2-3 Years Partner in LLC - INVESTOR_VISA
+- in-to-ae-biz-fz-investor Free Zone Investor Residence 2-3 Years Free Zone company owner - FREE_ZONE_VISA - DMCC JAFZA etc - Most Important: Free Zone license + Lease + Passport - Note: Do not duplicate for each Free Zone, count as one
+- in-to-ae-biz-fz-partner Free Zone Partner Residence Partner in Free Zone company - FREE_ZONE_VISA
+- in-to-ae-biz-prof-inv Professional Investor Service License Consultancy/service company investor - INVESTOR_VISA
+- in-to-ae-biz-comm-inv Commercial Investor Trading License Trading company - INVESTOR_VISA
+- in-to-ae-biz-ind-inv Industrial Investor Industrial License Factory/industrial - INVESTOR_VISA
+- in-to-ae-biz-virtual Virtual Company License Dubai Economy For non-resident Can get residence via this - INVESTOR_VISA
+- in-to-ae-biz-startup-entry Startup Entrepreneur Entry Permit Hub71 Abu Dhabi 【entity-Dubai Future Foundation¦canonical_name=Dubai Future Foundation】 Dubai Startup Hub - ENTRY_PERMIT
+- in-to-ae-biz-freelance-permit Freelance Permit Permit only not residence Via Free Zone Annual - FREE_ZONE_VISA
+- in-to-ae-biz-e-commerce E-Trader License Residence Dubai DED E-Trader - INVESTOR_VISA
+- in-to-ae-biz-agri Agricultural Investor Residence Farm investment - INVESTOR_VISA
+- in-to-ae-biz-real-estate-trader Real Estate Investor Trader License Property trading company - INVESTOR_VISA
+- in-to-ae-biz-gold-prop-2m GOLDEN Property Investor 2M AED 10 Years - GOLDEN_RESIDENCE - Fee AED 2800 + - Validity 10 years - Stay unlimited (can stay outside more than 6 months for Golden) - Eligibility: Property 2M+ AED ~4.6Cr INR - Can be mortgaged - Multiple properties allowed - Off-plan allowed if 50% paid + developer approved + Oqood - Most Important: Title deed 2M+ ⭐ - Passport - Photo - Health insurance - Bank statement optional - Funds: Property 2M AED minimum - Documents: Title deed 2M + Passport + Photo + Insurance + Ejari if needed
+- in-to-ae-biz-gold-public-2m GOLDEN Public Investment 2M AED 10 Years - GOLDEN_RESIDENCE - Deposit 2M in investment fund or company capital 2M - Akama 2M - Fee AED 2800 - Most Important: Investment fund letter 2M or Company MOA 2M capital ⭐
+- in-to-ae-biz-gold-entre-500k GOLDEN Entrepreneur Project 500k AED 10 Years - GOLDEN_RESIDENCE - Project 500k + Approval from incubator/MOE + Trade license - Most Important: Project valuation 500k + Incubator approval letter ⭐
+- in-to-ae-biz-gold-exec-30k GOLDEN Executive Director 30k Salary 10 Years - GOLDEN_RESIDENCE - Bachelor + Salary 30k+ AED + Manager position + Company recommendation - Executive role - Most Important: Salary certificate 30k+ 6 months + Degree attested + Company NOC ⭐
+- in-to-ae-biz-green-inv-prop GREEN Investor Property/Business 5 Years - GREEN_RESIDENCE - Investment proof + No sponsor needed Self-sponsored - 5 years - Most Important: Investment proof
+
+GOLDEN VISA 10-YEAR TALENT SCIENTIST HUMANITARIAN STUDENT 10 TYPES:
+- in-to-ae-gold-talent-culture Golden Exceptional Talent Culture Art 10 Years - GOLDEN_RESIDENCE - Dubai Culture + Ministry approval - Artists Writers Musicians - Most Important: Recommendation letter Dubai Culture ⭐ + Portfolio
+- in-to-ae-gold-talent-sports Golden Exceptional Talent Sports - GOLDEN_RESIDENCE - Dubai Sports Council approval - Athletes Coaches - Recommendation letter
+- in-to-ae-gold-talent-digital Golden Exceptional Talent Digital Tech - GOLDEN_RESIDENCE - Coders AI specialists - Ministry AI approval - Recommendation
+- in-to-ae-gold-talent-innov Golden Innovator Inventor - GOLDEN_RESIDENCE - Patent + Ministry approval - Patent certificate
+- in-to-ae-gold-scientist Golden Scientist Researcher 10 Years - GOLDEN_RESIDENCE - PhD + 20 years experience + Recommendation Emirates Scientists Council + Published research - Most Important: PhD + Council recommendation ⭐
+- in-to-ae-gold-doctor Golden Frontline Heroes Doctor Nurse 10 Years - GOLDEN_RESIDENCE - Health Authority recommendation - During COVID and beyond - Doctors Nurses Paramedics - DHA/HAAD license + Recommendation
+- in-to-ae-gold-human Golden Humanitarian Pioneer 10 Years - GOLDEN_RESIDENCE - Humanitarian work 5+ years + Recommendation + Awards - Recommendation
+- in-to-ae-gold-student-hs-95 Golden Outstanding High School Student 95% 10 Years - GOLDEN_RESIDENCE - 95%+ + Ministry of Education recommendation + Top school - Most Important: 95% certificate + Ministry recommendation ⭐
+- in-to-ae-gold-student-uni-3.5 Golden Outstanding University Graduate GPA 3.5 10 Years - GOLDEN_RESIDENCE - UAE uni GPA 3.5+ or Top 100 global uni + Within 2 years graduation - Most Important: Degree GPA 3.5+ + Top 100 proof ⭐
+- in-to-ae-gold-parent-student Golden Parent of Outstanding Student 10 Years - GOLDEN_RESIDENCE - Parent of Golden student can also get Golden - Child Golden visa copy
+
+GREEN RESIDENCE 5-YEAR 5 TYPES New 2022:
+- in-to-ae-green-skilled-15k Green Skilled Employee 15k Salary 5 Years - GREEN_RESIDENCE - Salary 15k+ AED + Bachelor + MOHRE Level 1-2 + 6 months contract - Most Important: Salary certificate 15k+ 6 months ⭐ + Degree attested + MOHRE classification
+- in-to-ae-green-freelance-250k Green Freelancer Self-Employed 250k 5 Years - GREEN_RESIDENCE - Freelance permit + Annual income 250k AED for 2 years proof + Bachelor or Diploma - Most Important: Freelance permit + 250k income proof 2 years ⭐
+- in-to-ae-green-investor Green Investor Business Property 5 Years - GREEN_RESIDENCE - Investment proof - Self-sponsored
+- in-to-ae-green-family Green Residence Family Members 5 Years - FAMILY_RESIDENCE - Spouse Children Parents under Green holder Same duration
+- in-to-ae-green-parent? Actually Green Family already
+
+STUDENT EDUCATION 5 TYPES:
+- in-to-ae-stu-res-1y Student Residence 1 Year Renewable Sponsored by UAE university school 1 year renewable - STUDENT_VISA - Most Important: University admission letter ⭐ + Passport + Insurance
+- in-to-ae-stu-parent-spon Student Under Parent Sponsorship Till 25 Male Marriage Female Parent sponsor student - STUDENT_VISA
+- in-to-ae-stu-train-voc Vocational Training Residence Course duration Institute sponsor - STUDENT_VISA
+- in-to-ae-stu-gold-hs Already counted in Golden - Do not duplicate
+- in-to-ae-stu-gold-uni Already counted
+
+FAMILY DEPENDENT 14 TYPES:
+- in-to-ae-fam-spouse Family Residence Spouse - FAMILY_RESIDENCE - Husband sponsor wife Salary 4000+ accommodation Abu Dhabi 4000+ Wife sponsor husband Special approval + 4000+ + Attested marriage certificate - 2-3 years - Most Important: Marriage certificate attested ⭐ + Salary certificate 4000+ + Ejari + Passport
+- in-to-ae-fam-child-18 Family Residence Child 0-18 Male till 25 if student Female till marriage Birth certificate attested - FAMILY_RESIDENCE
+- in-to-ae-fam-newborn-120 Newborn Residence Inside UAE 120 Days Rule Must apply within 120 days of birth else fine AED 100/day Passport + Birth certificate - FAMILY_RESIDENCE - Most Important: Birth certificate + Passport within 120 days
+- in-to-ae-fam-parent-20k Family Residence Parent 1 Year Salary 20000+ Deposit 2500 per parent Insurance mandatory Ejari 1 year renewable - FAMILY_RESIDENCE - Most Important: Salary 20k+ certificate ⭐ + Deposit + Insurance
+- in-to-ae-fam-mother-spon Mother Sponsor Child Special Divorced/widow mother sponsor child with NOC from father/court Salary 4000+ - FAMILY_RESIDENCE
+- in-to-ae-fam-beyond-25 Family Residence Beyond 18/25 Unmarried Daughter Special 1-2 years - FAMILY_RESIDENCE
+- in-to-ae-fam-widow-1y Widow Divorced Woman Residence Extension 1 Year After husband death/divorce 1 year extension without sponsor No salary condition - FAMILY_RESIDENCE
+- in-to-ae-fam-gold-fam Golden Visa Family Members Spouse Children unlimited Parents 10 years same as main - FAMILY_RESIDENCE - Golden holder passport
+- in-to-ae-fam-green-fam Green Residence Family Members 5 years same - FAMILY_RESIDENCE
+- in-to-ae-fam-human-widow Humanitarian Residence Widow with Kids Special - HUMANITARIAN_VISA
+- in-to-ae-fam-gcc-fam GCC Citizen Family Residence Family of GCC citizen - FAMILY_RESIDENCE
+- in-to-ae-fam-student-parent Parent of Student? Already
+
+MEDICAL 4 TYPES - Medical visa yahi hai:
+- in-to-ae-med-treat-res Medical Treatment Residence Permit Sponsored by hospital As per treatment duration MOH approved hospital - MEDICAL_VISA - Fee AED 1000+ - Validity as per treatment - Stay as per treatment - Purpose Medical treatment - Eligibility Patient with confirmed appointment in MOH/DHA approved hospital - Most Important: Hospital appointment letter ⭐ + Medical report + Passport + Insurance + Bank statement 6 months genuine no sudden deposit - ITR 2 years
+- in-to-ae-med-comp-res Medical Companion Escort Residence Permit Attendant of patient Same duration as patient - MEDICAL_VISA - Most Important: Hospital letter + Relationship proof + Insurance
+- in-to-ae-med-entry Medical Treatment Entry Permit eVisa 60 Days Single Before residence Convert to residence after entry - MEDICAL_VISA - Entry permit
+- in-to-ae-med-comp-entry Medical Companion Entry Permit - MEDICAL_VISA - Entry permit
+
+RETIREMENT LONG-TERM SPECIAL 8 TYPES:
+- in-to-ae-retire-dubai-5y Retirement Residence Dubai 5 Years Age 55+ Property 1M OR Savings 1M OR Monthly income 15k 180k/year OR Property + Savings 1M Dubai GDRFA Retirement - RETIREMENT_VISA - Most Important: Age 55+ proof + Property 1M or Income 15k ⭐ - Fee AED 3000
+- in-to-ae-retire-ad-5y Retirement Residence Abu Dhabi 5 Years Similar Abu Dhabi Residents Office - RETIREMENT_VISA
+- in-to-ae-pr-diplo Diplomatic Residence MOFA sponsor For diplomats + family As per posting - DIPLOMATIC_VISA
+- in-to-ae-pr-un UN Official Residence UN employees - DIPLOMATIC_VISA
+- in-to-ae-pr-gcc-citizen GCC Citizen Residence Lifetime No visa Only Emirates ID GCC passport - STATUS_DOCUMENT
+- in-to-ae-pr-mission-un UN Mission International Organization Special - DIPLOMATIC_VISA
+- in-to-ae-pr-human-traf Humanitarian Residence Victim of Trafficking Special protection - HUMANITARIAN_VISA
+- in-to-ae-pr-widow-special Special Humanitarian Widow with Property Special - HUMANITARIAN_VISA
+
+ENTRY PERMIT PROCEDURAL STATUS CHANGE 11 TYPES Procedural but visa counting important:
+- in-to-ae-entry-emp-60 Entry Permit Employment 60 Days Before employment residence Single entry Must convert within 60 days - ENTRY_PERMIT
+- in-to-ae-entry-fam-60 Entry Permit Family Joining 60 Days Before family residence - ENTRY_PERMIT
+- in-to-ae-entry-inv-60 Entry Permit Investor Partner 60 Days Before investor residence - ENTRY_PERMIT
+- in-to-ae-entry-gold-6m Entry Permit Golden Visa 6 Months Multiple To complete Golden procedures inside UAE 6 months multiple entry - ENTRY_PERMIT - Fee AED 1000 - Most Important: Golden approval letter ⭐
+- in-to-ae-entry-green-60 Entry Permit Green Residence 60 Days To complete Green procedures - ENTRY_PERMIT
+- in-to-ae-entry-stu-60 Entry Permit Student 60 Days Before student residence - ENTRY_PERMIT
+- in-to-ae-entry-med-60 Entry Permit Medical 60 Days Already in medical - ENTRY_PERMIT
+- in-to-ae-evisa-icp ICP Smart Services eVisa Portal For all other Emirates except Dubai Online system Status document not visa - STATUS_DOCUMENT
+- in-to-ae-evisa-gdrfa GDRFA Dubai eVisa Portal Dubai specific portal - STATUS_DOCUMENT
+- in-to-ae-emirates-id Emirates ID Mandatory Same as residence Biometric ID Required for all residents Status document - STATUS_DOCUMENT
+- in-to-ae-medical-fit Medical Fitness Test Mandatory For residence issuance/renewal Not visa but procedural - STATUS_DOCUMENT
+- in-to-ae-status-change In-Country Status Change Without Exit Change status inside UAE AED 600-1000 Procedural - STATUS_DOCUMENT
+- in-to-ae-visa-extension Visa Extension Inside UAE 30 days extension for tourist/visit AED 600-1000 - STATUS_DOCUMENT
+
+For fundsBox itrBox bankBox for all 135:
+- Tourist 30/60: No fixed funds but hotel + flight + bank 6 months genuine 3000-4000 USD balance recommended - ITR not required but bank 6 months - Invitation Letter OR Hotel Booking + Flight = MOST IMPORTANT for tourist
+- Tourist 5Y: Bank $4000 6 months genuine no sudden 1-day deposit - ITR not required - Insurance mandatory - Most Important bank statement $4000 6 months
+- GCC Resident eVisa: GCC residence 6 months + Passport + Profession must be listed - No funds
+- VOA: Passport 6 months + US/EU/UK visa copy for Indian - No funds - Free or AED 120
+- Transit 48/96: Onward ticket + Airline sponsor + Passport 6 months - No funds - Free or AED 50
+- Medical Entry/Residence: No funds fixed but treatment cost proof + Hospital appointment = MOST IMPORTANT - Bank 6 months + Insurance - ITR 2 years recommended
+- Job Seeker 60/90/120: No funds fixed but Bachelor degree attested + MOHRE Level 1-2-3 + Bank statement - Most Important degree attested
+- Business Exploration: No funds fixed but bank statement + Business plan
+- Work Mainland Free Zone: Job offer letter MOST IMPORTANT + Degree attested + Passport + MOHRE/Free Zone approval - No funds but salary certificate - Bank not required but passport
+- Domestic 12: Employer salary certificate + Tadbeer contract + Passport + Insurance - Salary 1500+ - Most Important employer salary certificate
+- Investment Mainland Free Zone: Trade license + MOA + Passport + Bank statement + Capital proof - Most Important trade license + MOA - Funds: Capital 72k+ varies
+- Golden Property 2M: Title deed 2M AED = MOST IMPORTANT + Passport + Photo + Insurance - Funds: Property 2M AED ~4.6Cr INR minimum - Can be mortgaged - Multiple properties allowed - Off-plan if 50% paid + developer approved - Fee AED 2800 - Validity 10 years - Stay unlimited can stay outside >6 months
+- Golden Public 2M: Investment fund letter 2M or Company MOA 2M capital = MOST IMPORTANT - 10 years
+- Golden Entrepreneur 500k: Project valuation 500k + Incubator approval = MOST IMPORTANT - 10 years
+- Golden Executive 30k: Salary certificate 30k+ 6 months + Degree attested + Company NOC = MOST IMPORTANT - Bachelor + Manager position - 10 years
+- Golden Talent Culture Sports Digital Innovator: Recommendation letter Dubai Culture/Sports Council/Ministry AI = MOST IMPORTANT + Portfolio/Patent - 10 years
+- Golden Scientist: PhD + Emirates Scientists Council recommendation = MOST IMPORTANT - 10 years
+- Golden Doctor Frontline: DHA/HAAD license + Health Authority recommendation = MOST IMPORTANT - 10 years
+- Golden Humanitarian: Humanitarian work 5+ years + Recommendation + Awards - 10 years
+- Golden Student HS 95%: 95% certificate + Ministry recommendation = MOST IMPORTANT - 10 years
+- Golden Student Uni 3.5: Degree GPA 3.5+ + Top 100 proof = MOST IMPORTANT - 10 years - Within 2 years graduation
+- Green Skilled 15k: Salary certificate 15k+ 6 months = MOST IMPORTANT + Bachelor attested + MOHRE Level 1-2 + 6 months contract - 5 years - Self-sponsored - No sponsor needed
+- Green Freelance 250k: Freelance permit + 250k income proof 2 years = MOST IMPORTANT + Bachelor/Diploma - 5 years - Self-sponsored
+- Green Investor: Investment proof = MOST IMPORTANT - Self-sponsored - 5 years
+- Student Residence: University admission letter = MOST IMPORTANT + Passport + Insurance - 1 year renewable
+- Family Spouse: Marriage certificate attested = MOST IMPORTANT + Salary certificate 4000+ + Ejari + Passport - 2-3 years - Funds: Salary 4000+ accommodation
+- Family Child: Birth certificate attested = MOST IMPORTANT - Till 25 male if student female till marriage
+- Newborn 120 Days: Birth certificate + Passport within 120 days = MOST IMPORTANT - Must apply within 120 days else fine 100/day
+- Parent 20k: Salary 20k+ certificate = MOST IMPORTANT + Deposit 2500 per parent + Insurance + Ejari - 1 year renewable - Funds: Salary 20k+ + Deposit
+- Retirement 5Y: Age 55+ proof + Property 1M or Savings 1M or Monthly income 15k = MOST IMPORTANT - 5 years - Funds: Property 1M or Income 15k/month
+- Medical Treatment Residence: Hospital appointment letter = MOST IMPORTANT + Medical report + Passport + Insurance + Bank 6 months genuine no sudden deposit - ITR 2 years
+- Medical Companion: Hospital letter + Relationship proof + Insurance
+- Entry Permit Employment Family Investor Golden Green Student Medical: Approval letter = MOST IMPORTANT - 60 days single except Golden 6M multiple - Must convert to residence within validity
+- GCC Citizen: GCC passport = MOST IMPORTANT - Lifetime - Only Emirates ID
+
+Update VISA_COUNTS: UAE 135 - Tourist 28, Work 32, Investment Business 18, Golden Talent 10, Green 5, Student 5, Family 14, Medical 4, Retirement Special 8, Entry Permit Procedural 11 = 135 - Grand Total site: Previous 1209 + 135 = 1344 - Update FULL_VISA_DB with 135 UAE entries - Dual-access structure keep
+
+Update AuditPage: Show Total 1344+ Total Records LIVE - UAE section: Tourist 28, Work 32, Investment Business 18, Golden 10, Green 5, Student 5, Family 14, Medical 4, Retirement Special 8, Entry Permit Procedural 11 = 135 - Show breakdown with record_type badges VISA ENTRY_PERMIT RESIDENCE_PERMIT GOLDEN_RESIDENCE GREEN_RESIDENCE FREE_ZONE_VISA MAINLAND_VISA INVESTOR_VISA FAMILY_RESIDENCE TRANSIT_VISA E_VISA MEDICAL_VISA RETIREMENT_VISA DIPLOMATIC_VISA STATUS_DOCUMENT LEGACY_VISA SUPPORTING_CLASSIFICATION and Active status - Show last verified Oct 30 2026 - Show official sources GDRFA Dubai ICP u.ae MOHRE Free Zone Authorities DMCC JAFZA DIFC ADGM SAIF RAKEZ etc
+
+Update SitemapPage: Show UAE 135 Visa Types grouped by 10 groups: Tourist Visit Entry Permit 28, Work Employment 32, Investment Business Partner 18, Golden Talent 10, Green 5, Student 5, Family 14, Medical 4, Retirement Special 8, Entry Permit Procedural 11 = 135 with record_type badges and Active tags, Official Source links GDRFA Dubai ICP u.ae MOHRE
+
+Add warning boxes on UAE pages:
+- Regional: "UAE mein Australia ke DAMA jaisa postcode-based regional visa system nahi hai. UAE mein regional system hai: 1. Emirate-wise GDRFA Dubai vs ICP (Federal Authority other 6 Emirates Abu Dhabi Sharjah Ajman UAQ RAK Fujairah), 2. Mainland vs Free Zone (3000+ Free Zones but visa type same - Free Zone Employment + Free Zone Investor - Authority name DMCC JAFZA DAFZA DIFC ADGM SAIF RAKEZ etc different but visa type same, do not duplicate), 3. Entry Permit (eVisa 60 days) vs Residence Permit (2-3 years) vs Emirates ID. Do not duplicate same visa for each Free Zone or each emirate - Count as one."
+- Golden: "Golden Visa 10 years - Property 2M AED ~4.6Cr INR minimum - Can be mortgaged - Multiple properties allowed - Off-plan allowed if 50% paid + developer approved + Oqood - Public Investment 2M AED - Entrepreneur Project 500k AED + Incubator approval - Executive Director 30k Salary + Bachelor + Manager position - Talent Culture Sports Digital Tech Innovator Patent + Recommendation - Scientist PhD + Emirates Scientists Council recommendation - Doctor Frontline Heroes DHA/HAAD license + Health Authority recommendation - Humanitarian Pioneer 5+ years + Recommendation - Student 95% high school + Ministry recommendation, University GPA 3.5+ Top 100 global uni within 2 years graduation - Can stay outside UAE more than 6 months for Golden - Fee AED 2800"
+- Green: "Green Residence 5 years new 2022 - Skilled Employee Salary 15k+ AED + Bachelor + MOHRE Level 1-2 + 6 months contract - Freelancer Self-Employed Freelance permit + Annual income 250k AED for 2 years proof + Bachelor/Diploma - Investor Property/Business investment proof - Self-sponsored no sponsor needed - Family can be sponsored same duration"
+- Investment: "Investment visa - Mainland Investor Trade license + MOA + Capital 72k+ varies emirate - Free Zone Investor Free Zone license + Lease + Passport - Do not duplicate for each Free Zone - Count as one - Authority name different but visa type same"
+- Medical: "Medical Treatment Residence - Hospital sponsor letter = MOST IMPORTANT + Medical report + Passport + Insurance + Bank 6 months genuine no sudden deposit - ITR 2 years - Purpose medical treatment - MOH/DHA approved hospital - Companion 1 escort allowed 2 in critical cases"
+- Tourist 5Y: "5-Year Multiple Entry Tourist Visa 2021 introduced - Each stay max 90 days total 180 days/year - Bank balance $4000 or AED 14700 6 months genuine no sudden 1-day deposit + Health insurance + Flight + Hotel - Insurance mandatory - Bank statement $4000 6 months = MOST IMPORTANT"
+- VOA Indian: "Visa on Arrival 14 Days for Indian passport holders with valid US/EU/UK visa/residence 6 months - Fee AED 120 - 14 days extendable 14 days - Indian passport + US/EU/UK visa copy + Flight - Most Important US/EU/UK visa copy"
+- Domestic 12: "Domestic Worker 12 categories - Housemaid, Nanny, Cook, Driver, Gardener, Watchman, Farmer, Nurse, Tutor, PRO, Sailor, Falcon Care - Tadbeer center - Salary 1500+ - Employer salary certificate + Tadbeer contract + Passport + Insurance = MOST IMPORTANT"
+- Entry Permit: "Entry Permit 60 days single except Golden 6M multiple - Must convert to residence within validity inside UAE - Status change AED 600-1000 without exit - If not converted within 60 days fine AED 25/day"
+
+Keep dual-access structure, keep all previous features: Back buttons, Breadcrumbs, Embassy (UAE Embassy New Delhi + Consulate Mumbai + GDRFA Dubai + ICP Abu Dhabi), Footer Sitemap (1344+ Pages), Audit admin only, AdSense pub-9048615701580913 and ads.txt, Contact email contact@visaapply.org, Multilingual (EN, HI, AR, etc - Site language auto-detects from user's country/IP AE->Arabic/English, IN->Hindi/English)
+
+Build and Push - Check /in-to-ae-tour-5y-90 should show 5-Year Multiple Entry Tourist 90 days per stay bank $4000 6 months genuine no sudden deposit insurance mandatory, /in-to-ae-work-dom-hm should show Domestic Worker Housemaid Tadbeer, /in-to-ae-biz-gold-prop-2m should show Golden Property Investor 2M AED Title deed 2M MOST IMPORTANT 10 years fee AED 2800, /in-to-ae-gold-talent-culture should show Golden Exceptional Talent Culture Art Dubai Culture recommendation, /in-to-ae-green-skilled-15k should show Green Skilled Employee 15k salary certificate MOST IMPORTANT 5 years self-sponsored, /in-to-ae-fam-spouse should show Family Residence Spouse marriage certificate attested MOST IMPORTANT salary 4000+, /in-to-ae-med-treat-res should show Medical Treatment Residence hospital appointment letter MOST IMPORTANT, /in-to-ae-retire-dubai-5y should show Retirement Residence Dubai 5 Years Age 55+ Property 1M or Savings 1M or Income 15k, /in-to-ae-entry-gold-6m should show Entry Permit Golden Visa 6 Months Multiple approval letter MOST IMPORTANT, /audit Total 1344+, /sitemap UAE 135 entries grouped by 10 groups

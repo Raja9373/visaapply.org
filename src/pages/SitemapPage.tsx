@@ -147,6 +147,16 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       🏛️ Official GOV.UK Visas & Immigration ↗
                     </a>
                   )}
+                  {code === 'AE' && (
+                    <a
+                      href="https://u.ae/en/information-and-services/visa-and-emirates-id"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200 hover:underline"
+                    >
+                      🏛️ Official UAE ICP & GDRFA Dubai ↗
+                    </a>
+                  )}
                   <a
                     href={`/in-to-${code.toLowerCase()}`}
                     onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/in-to-${code.toLowerCase()}`); } }}
@@ -219,6 +229,24 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
                       Subclass 489 (Provisional Closed), Subclass 887 (Legacy PR Stage), Subclass 187 (RSMS Transitional)
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* UAE Dual-Authority & Regional Clarification Banner */}
+              {code === 'AE' && (
+                <div className="p-4 bg-cyan-50/80 border border-cyan-200 rounded-xl text-xs space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-extrabold text-cyan-950 flex items-center gap-1.5">
+                      <span>🇦🇪</span>
+                      <span>UAE 135 Exhaustive Architecture: Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38 = 135 Total Entries</span>
+                    </span>
+                    <span className="text-[11px] font-bold bg-cyan-800 text-white px-2 py-0.5 rounded">
+                      GDRFA Dubai vs ICP Federal + Mainland vs Free Zone
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed">
+                    <strong>Clarification:</strong> UAE mein Australia jaisa postcode-based regional visa system nahi hai, lekin alag regional system hai: 1. Emirate-wise GDRFA Dubai vs ICP (Federal Authority for Abu Dhabi, Sharjah, Ajman, UAQ, RAK, Fujairah), 2. Mainland vs Free Zone (3000+ Free Zones where visa type is identical — Free Zone Employment / Investor — with authority names like DMCC, JAFZA, DAFZA, DIFC, ADGM, RAKEZ, etc. counted as one per type), 3. Entry Permit (eVisa 60 days) vs Residence Permit (2-3 years) vs Emirates ID.
+                  </p>
                 </div>
               )}
 

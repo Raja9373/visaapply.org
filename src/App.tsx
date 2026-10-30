@@ -468,7 +468,7 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
         </p>
 
         {/* Filter Toolbar for Active vs Legacy subclasses */}
-        {(toCode === 'AU' || toCode === 'US' || toCode === 'CA' || toCode === 'GB') && (
+        {(toCode === 'AU' || toCode === 'US' || toCode === 'CA' || toCode === 'GB' || toCode === 'AE') && (
           <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-200">
             <span className="text-xs font-semibold text-slate-500">Filter by Status:</span>
             <button
@@ -495,6 +495,35 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
             >
               Legacy / Repealed ({categoryVisas.filter((v: any) => v.isLegacy === true).length})
             </button>
+          </div>
+        )}
+
+        {/* UAE Dual-Authority & Exhaustive 135 Architecture Banner */}
+        {toCode === 'AE' && (
+          <div className="mt-4 p-5 bg-gradient-to-r from-cyan-50 via-blue-50/70 to-indigo-50 border border-cyan-200 rounded-2xl space-y-3 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="font-extrabold text-cyan-950 flex items-center gap-2">
+                <span>🇦🇪</span>
+                <span>UAE 135 Exhaustive Architecture: GDRFA Dubai vs ICP Federal + Mainland vs Free Zone</span>
+              </span>
+              <span className="bg-cyan-800 text-white font-bold px-2.5 py-0.5 rounded text-[11px]">
+                135 Unique UAE Entries (Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38)
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px]">
+              <div className="bg-white p-3 rounded-xl border border-cyan-200">
+                <strong className="block text-cyan-900 font-bold mb-1">🏛️ Dual-Authority System:</strong>
+                GDRFA Dubai (Dubai) vs ICP Smart Services (Federal Authority for Abu Dhabi, Sharjah, Ajman, UAQ, RAK, Fujairah).
+              </div>
+              <div className="bg-white p-3 rounded-xl border border-cyan-200">
+                <strong className="block text-blue-900 font-bold mb-1">💼 Mainland vs Free Zone:</strong>
+                3,000+ Free Zones (DMCC, JAFZA, DAFZA, DIFC, ADGM, RAKEZ, etc.) share uniform visa structures (Free Zone Employment / Investor). Do not duplicate per zone.
+              </div>
+              <div className="bg-white p-3 rounded-xl border border-cyan-200">
+                <strong className="block text-indigo-900 font-bold mb-1">⭐ Golden & Green Visas:</strong>
+                10-Year Golden (Property AED 2M+, Public 2M, Entrepreneur 500k, Executive 30k, Talent, Scientist, Doctor, Humanitarian, Students) & 5-Year Green (Skilled 15k, Freelance 250k).
+              </div>
+            </div>
           </div>
         )}
 
