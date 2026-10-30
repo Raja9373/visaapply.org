@@ -28,6 +28,11 @@ import { INDONESIA_82_VISAS } from './indonesiaVisas';
 import { PHILIPPINES_68_VISAS } from './philippinesVisas';
 import { SCHENGEN_96_VISAS } from './schengenVisas';
 import { SWEDEN_94_VISAS } from './swedenVisas';
+import { DENMARK_92_VISAS } from './denmarkVisas';
+import { FINLAND_28_VISAS } from './finlandVisas';
+import { BELGIUM_22_VISAS } from './belgiumVisas';
+import { AUSTRIA_92_VISAS } from './austriaVisas';
+import { POLAND_92_VISAS } from './polandVisas';
 import { NORWAY_92_VISAS } from './norwayVisas';
 import { PORTUGAL_94_VISAS } from './portugalVisas';
 
@@ -199,10 +204,15 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   PT: { name: "Portugal", currency: "EUR (€)", flag: "🇵🇹" },
   pt: { name: "Portugal", currency: "EUR (€)", flag: "🇵🇹" },
   DK: { name: "Denmark", currency: "DKK", flag: "🇩🇰" },
+  dk: { name: "Denmark", currency: "DKK", flag: "🇩🇰" },
   FI: { name: "Finland", currency: "EUR (€)", flag: "🇫🇮" },
-  BE: { name: "Belgium", currency: "EUR (€)", flag: "🇧🇪" },
+  fi: { name: "Finland", currency: "EUR (€)", flag: "🇫🇮" },
   AT: { name: "Austria", currency: "EUR (€)", flag: "🇦🇹" },
+  at: { name: "Austria", currency: "EUR (€)", flag: "🇦🇹" },
+  BE: { name: "Belgium", currency: "EUR (€)", flag: "🇧🇪" },
+  be: { name: "Belgium", currency: "EUR (€)", flag: "🇧🇪" },
   PL: { name: "Poland", currency: "PLN", flag: "🇵🇱" },
+  pl: { name: "Poland", currency: "PLN", flag: "🇵🇱" },
   MY: { name: "Malaysia", currency: "MYR", flag: "🇲🇾" },
   TH: { name: "Thailand", currency: "THB (฿)", flag: "🇹🇭" },
   TR: { name: "Turkey", currency: "USD ($) / EUR (€)", flag: "🇹🇷" },
@@ -305,11 +315,16 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   no: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 34 },
   PT: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 36 }, // 94 Portugal Live Visas (Official AIMA / VFS / Conservatória / IEFP)
   pt: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 36 },
-  DK: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  FI: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  BE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  AT: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
-  PL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
+  DK: { tourist: 12, work: 10, student: 4, family: 3, business: 5, pr: 3 }, // 37 Denmark Live Visas (Official SIRI / VFS)
+  dk: { tourist: 12, work: 10, student: 4, family: 3, business: 5, pr: 3 },
+  FI: { tourist: 8, work: 7, student: 3, family: 3, business: 3, pr: 4 }, // 28 Finland Live Visas (Official Migri / Business Finland)
+  fi: { tourist: 8, work: 7, student: 3, family: 3, business: 3, pr: 4 },
+  BE: { tourist: 6, work: 5, student: 1, family: 2, business: 2, pr: 2 }, // 18 Belgium Live Visas (Official Immigration Office / VFS)
+  be: { tourist: 6, work: 5, student: 1, family: 2, business: 2, pr: 2 },
+  AT: { tourist: 20, work: 20, student: 15, family: 15, business: 10, pr: 12 }, // 92 Austria Live Visas (Official VFS / BMI)
+  at: { tourist: 20, work: 20, student: 15, family: 15, business: 10, pr: 12 },
+  PL: { tourist: 5, work: 5, student: 2, family: 1, business: 2, pr: 2 }, // 17 Poland Live Visas (Official VFS / Urząd)
+  pl: { tourist: 5, work: 5, student: 2, family: 1, business: 2, pr: 2 },
   MY: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 24 }, // 84 Malaysia Live Visas (Official Immigration Department / ESD / EMGS / MDEC / MM2H / PVIP)
   ID: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 22 }, // 82 Indonesia Live Visas (Official Directorate General of Immigration / Kemnaker / Molina)
   PH: { tourist: 12, work: 16, student: 6, family: 6, business: 8, pr: 20 }, // 68 Philippines Live Visas (Official Bureau of Immigration / DOLE / PRA / BOI)
@@ -723,6 +738,31 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (code === 'PT' || code === 'pt') {
     BASE_COUNTRY_VISAS['PT'] = PORTUGAL_94_VISAS;
     BASE_COUNTRY_VISAS['pt'] = PORTUGAL_94_VISAS;
+    return;
+  }
+  if (code === 'DK' || code === 'dk') {
+    BASE_COUNTRY_VISAS['DK'] = DENMARK_92_VISAS;
+    BASE_COUNTRY_VISAS['dk'] = DENMARK_92_VISAS;
+    return;
+  }
+  if (code === 'FI' || code === 'fi') {
+    BASE_COUNTRY_VISAS['FI'] = FINLAND_28_VISAS;
+    BASE_COUNTRY_VISAS['fi'] = FINLAND_28_VISAS;
+    return;
+  }
+  if (code === 'BE' || code === 'be') {
+    BASE_COUNTRY_VISAS['BE'] = BELGIUM_22_VISAS;
+    BASE_COUNTRY_VISAS['be'] = BELGIUM_22_VISAS;
+    return;
+  }
+  if (code === 'AT' || code === 'at') {
+    BASE_COUNTRY_VISAS['AT'] = AUSTRIA_92_VISAS;
+    BASE_COUNTRY_VISAS['at'] = AUSTRIA_92_VISAS;
+    return;
+  }
+  if (code === 'PL' || code === 'pl') {
+    BASE_COUNTRY_VISAS['PL'] = POLAND_92_VISAS;
+    BASE_COUNTRY_VISAS['pl'] = POLAND_92_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
