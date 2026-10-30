@@ -285,6 +285,29 @@ const AU_TOURIST_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-417",
+    regionalCategory: "AUS-REG-06",
+    categoryName: "Regional Working Holiday Pathway",
+    regionalPathways: [
+      {
+        code: "AUS-417-2Y",
+        name: "Second Working Holiday Visa (Subclass 417) via specified regional work",
+        description: "Complete at least 3 months (88 calendar days) of eligible specified Subclass 417 work in designated regional Australia during your first 417 visa.",
+        eligibilityDiff: "Requires 3 months (88 days) of specified regional work (plant/animal cultivation, fishing, forestry, mining, construction, or bushfire/flood recovery) in designated regional postcodes.",
+        isCurrent: true
+      },
+      {
+        code: "AUS-417-3Y",
+        name: "Third Working Holiday Visa (Subclass 417) via specified regional work",
+        description: "Complete at least 6 months (179 calendar days) of eligible specified Subclass 417 work in designated regional Australia during your second 417 visa.",
+        eligibilityDiff: "Requires 6 months (179 days) of specified regional work carried out while holding your second Subclass 417 visa (or bridging visa between 1st and 2nd 417).",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "Specified regional work (88 days for 2nd year AUS-417-2Y / 179 days for 3rd year AUS-417-3Y) must be remunerated in accordance with Australian workplace awards and verified with payslips, bank statements, and employer ABN records.",
     ...getMicroDetails('417', 'tourist', 'Working Holiday'),
     docs: getOfficialDocs('417', 'tourist', 'Working Holiday')
   },
@@ -308,6 +331,29 @@ const AU_TOURIST_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462",
+    regionalCategory: "AUS-REG-06",
+    categoryName: "Regional Working Holiday Pathway",
+    regionalPathways: [
+      {
+        code: "AUS-462-2Y",
+        name: "Second Work and Holiday Visa (Subclass 462) via specified regional work",
+        description: "Complete at least 3 months (88 calendar days) of eligible specified Subclass 462 work in northern or designated regional Australia during your first 462 visa.",
+        eligibilityDiff: "Requires 3 months (88 days) of specified Subclass 462 work (tourism & hospitality in northern/remote Australia, plant/animal cultivation, forestry, fishing, construction in regional areas, or disaster recovery).",
+        isCurrent: true
+      },
+      {
+        code: "AUS-462-3Y",
+        name: "Third Work and Holiday Visa (Subclass 462) via specified regional work",
+        description: "Complete at least 6 months (179 calendar days) of eligible specified Subclass 462 work in northern or designated regional Australia during your second 462 visa.",
+        eligibilityDiff: "Requires 6 months (179 days) of specified Subclass 462 regional/northern work carried out while holding your second Subclass 462 visa.",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "Specified regional work (88 days for 2nd year AUS-462-2Y / 179 days for 3rd year AUS-462-3Y) allows Indian and partner-country youth to extend their stay up to 3 years total.",
     ...getMicroDetails('462', 'tourist', 'Work and Holiday'),
     docs: getOfficialDocs('462', 'tourist', 'Work and Holiday')
   },
@@ -470,6 +516,33 @@ const AU_WORK_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-skill-shortage-482",
+    regionalCategory: "AUS-REG-05",
+    categoryName: "Regional Employer Labour Agreement / DAMA",
+    damaPathways: [
+      {
+        code: "AUS-DAMA-482",
+        name: "Skills in Demand Visa Subclass 482 under DAMA",
+        description: "DAMA agreement lets approved regional employers sponsor under 482 - Additional occupations + concessions per regional agreement",
+        isCurrent: true
+      },
+      {
+        code: "AUS-DAMA-494",
+        name: "Skilled Employer Sponsored Regional Subclass 494 under DAMA",
+        description: "494 under DAMA - Regional employer sponsorship with DAMA concessions",
+        isCurrent: true
+      },
+      {
+        code: "AUS-DAMA-186",
+        name: "Employer Nomination Scheme Subclass 186 under eligible DAMA arrangements",
+        description: "186 under DAMA arrangements where eligible",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "DAMA itself is not a visa subclass — it is a formal Designated Area Migration Agreement framework under which endorsed regional employers sponsor workers via Subclass 482, 494, or 186 with occupation, age, English, and TSMIT concessions.",
     ...getMicroDetails('482', 'work', 'Skills in Demand'),
     docs: getOfficialDocs('482', 'work', 'Skills in Demand')
   },
@@ -493,6 +566,33 @@ const AU_WORK_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/employer-nomination-scheme-186",
+    regionalCategory: "AUS-REG-05",
+    categoryName: "Regional Employer Labour Agreement / DAMA",
+    damaPathways: [
+      {
+        code: "AUS-DAMA-482",
+        name: "Skills in Demand Visa Subclass 482 under DAMA",
+        description: "DAMA agreement lets approved regional employers sponsor under 482 - Additional occupations + concessions per regional agreement",
+        isCurrent: true
+      },
+      {
+        code: "AUS-DAMA-494",
+        name: "Skilled Employer Sponsored Regional Subclass 494 under DAMA",
+        description: "494 under DAMA - Regional employer sponsorship with DAMA concessions",
+        isCurrent: true
+      },
+      {
+        code: "AUS-DAMA-186",
+        name: "Employer Nomination Scheme Subclass 186 under eligible DAMA arrangements",
+        description: "186 under DAMA arrangements where eligible",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "DAMA itself is not a visa subclass — under the Subclass 186 Labour Agreement stream, workers sponsored under a regional DAMA (482/494) can transition to Permanent Residency with regional age and English concessions.",
     ...getMicroDetails('186', 'work', 'Employer Nomination'),
     docs: getOfficialDocs('186', 'work', 'Employer Nomination')
   },
@@ -515,7 +615,30 @@ const AU_WORK_VISAS: VisaItem[] = [
     popular: true,
     isActive: true,
     isLegacy: false,
-    officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-work-regional-491",
+    officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing",
+    regionalCategory: "AUS-REG-01",
+    categoryName: "Skilled Regional Provisional Visa",
+    regionalPathways: [
+      {
+        code: "AUS-491-SN",
+        name: "Subclass 491 – State or Territory Nominated pathway",
+        description: "State/Territory nominated - Live work study in designated regional Australia up to 5 years, pathway to 191",
+        eligibilityDiff: "Nominated by an Australian State or Territory government agency (+15 points). Occupation can be on MLTSSL, STSOL, or ROL (Regional Occupation List), subject to state nomination criteria.",
+        isCurrent: true
+      },
+      {
+        code: "AUS-491-FS",
+        name: "Subclass 491 – Family Sponsored pathway",
+        description: "Family sponsored in regional area - Same 5 years, pathway to 191",
+        eligibilityDiff: "Sponsored by an eligible relative (parent, child, sibling, aunt/uncle, niece/nephew, grandparent, or first cousin) aged 18+ who is an Australian citizen, PR, or eligible NZ citizen usually resident in a designated regional area (+15 points). Occupation must be on the MLTSSL.",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "Both AUS-491-SN (State/Territory Nominated) and AUS-491-FS (Family Sponsored) grant a 5-year regional provisional visa with mandatory regional conditions (8578, 8579, 8580, 8581) and lead to Subclass 191 PR after 3 years.",
     ...getMicroDetails('491', 'work', 'Skilled Regional'),
     docs: getOfficialDocs('491', 'work', 'Skilled Regional')
   },
@@ -538,6 +661,29 @@ const AU_WORK_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/permanent-residence-skilled-regional-191",
+    regionalCategory: "AUS-REG-03",
+    categoryName: "Regional Permanent Residence Visa",
+    regionalPathways: [
+      {
+        code: "AUS-191-RP",
+        name: "Subclass 191 – Regional Provisional stream",
+        description: "For holders of Subclass 491 or 494 who have lived, worked, and studied in designated regional Australia for at least 3 years.",
+        eligibilityDiff: "Must hold Subclass 491 or 494 for at least 3 years, have complied with regional visa conditions, and provide ATO Notices of Assessment for 3 income years out of the 5-year provisional period.",
+        isCurrent: true
+      },
+      {
+        code: "AUS-191-HK",
+        name: "Subclass 191 – Hong Kong stream",
+        description: "Regional permanent residency pathway for eligible Hong Kong (HKSAR) or British National (Overseas) passport holders.",
+        eligibilityDiff: "Must hold a Hong Kong or BNO passport and have lived, worked, and studied exclusively in designated regional Australia for at least 3 years on an eligible 485, 457, or 482 visa.",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "Primary permanent residence stage (AUS-REG-03) for Subclass 491 and Subclass 494 holders after 3 years of regional residence and tax assessment compliance.",
     ...getMicroDetails('191', 'work', 'Permanent Regional'),
     docs: getOfficialDocs('191', 'work', 'Permanent Regional')
   },
@@ -560,6 +706,49 @@ const AU_WORK_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-employer-sponsored-regional-494",
+    regionalCategory: "AUS-REG-02",
+    categoryName: "Employer Sponsored Regional Visa",
+    regionalPathways: [
+      {
+        code: "AUS-494-ES",
+        name: "Subclass 494 – Employer Sponsored stream",
+        description: "Eligible regional employers sponsor skilled overseas workers - Employer Sponsored stream",
+        eligibilityDiff: "Standard regional employer sponsorship for occupations on the MLTSSL or ROL. Requires Regional Certifying Body (RCB) advice, positive skills assessment, 3+ years relevant experience, under age 45, and Competent English.",
+        isCurrent: true
+      },
+      {
+        code: "AUS-494-LA",
+        name: "Subclass 494 – Labour Agreement stream",
+        description: "Labour Agreement stream under regional agreement",
+        eligibilityDiff: "For workers nominated by a regional employer party to a Labour Agreement or Designated Area Migration Agreement (DAMA). Allows negotiated concessions on occupation lists, age (up to 50/55), English, and TSMIT salary.",
+        isCurrent: true
+      }
+    ],
+    damaPathways: [
+      {
+        code: "AUS-DAMA-482",
+        name: "Skills in Demand Visa Subclass 482 under DAMA",
+        description: "DAMA agreement lets approved regional employers sponsor under 482 - Additional occupations + concessions per regional agreement",
+        isCurrent: true
+      },
+      {
+        code: "AUS-DAMA-494",
+        name: "Skilled Employer Sponsored Regional Subclass 494 under DAMA",
+        description: "494 under DAMA - Regional employer sponsorship with DAMA concessions",
+        isCurrent: true
+      },
+      {
+        code: "AUS-DAMA-186",
+        name: "Employer Nomination Scheme Subclass 186 under eligible DAMA arrangements",
+        description: "186 under DAMA arrangements where eligible",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "DAMA itself is not a visa subclass — it is an official agreement framework under which approved regional employers sponsor workers via Subclass 482, 494, or 186.",
     ...getMicroDetails('494', 'work', 'Employer Regional 494'),
     docs: getOfficialDocs('494', 'work', 'Employer Regional 494')
   },
@@ -583,6 +772,29 @@ const AU_WORK_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485",
+    regionalCategory: "AUS-REG-04",
+    categoryName: "Regional Graduate Pathway",
+    regionalPathways: [
+      {
+        code: "AUS-485-2PSW",
+        name: "Second Temporary Graduate (Subclass 485) – Post-Study Work stream",
+        description: "Additional 1 to 2 years of post-study work rights for international graduates who completed their degree at a regional campus and lived in a designated regional area.",
+        eligibilityDiff: "Category 2 regional centres (Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart) grant +1 extra year; Category 3 regional areas grant +2 extra years.",
+        isCurrent: true
+      },
+      {
+        code: "AUS-485-REG",
+        name: "Regional study / graduate extension pathway",
+        description: "Requires graduating from an eligible CRICOS regional institution and residing continuously in a designated regional area for at least 2 years immediately before applying.",
+        eligibilityDiff: "Holders of a Second 485 regional extension must continue to live, work, and study only in a designated regional area (Condition 8610).",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "Not a separate visa subclass — additional post-study stay for regional graduates under Subclass 485.",
     ...getMicroDetails('485', 'work', 'Temporary Graduate'),
     docs: getOfficialDocs('485', 'work', 'Temporary Graduate')
   },
@@ -1797,6 +2009,23 @@ const AU_PR_VISAS: VisaItem[] = [
     isActive: false,
     isLegacy: true,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-regional-489",
+    regionalCategory: "AUS-REG-07",
+    categoryName: "Closed / Legacy Regional Visa Routes",
+    regionalPathways: [
+      {
+        code: "AUS-489-LEGACY",
+        name: "Subclass 489 – Skilled Regional (Provisional) Visa (Closed)",
+        description: "Closed to new primary applications on 16 November 2019 (replaced by Subclass 491). Existing holders transition to PR via Subclass 887.",
+        isCurrent: false
+      },
+      {
+        code: "AUS-887-LEGACY",
+        name: "Subclass 887 – Skilled Regional (Permanent) Visa (Legacy pathway)",
+        description: "Permanent residence transition stage for Subclass 489, 495, 496, 475, and 487 regional provisional visa holders.",
+        isCurrent: false
+      }
+    ],
+    regionalNote: "Closed to new applications; transitional cases remain (replaced by Subclass 491).",
     ...getMicroDetails('489', 'pr', 'Skilled Regional 489'),
     docs: getOfficialDocs('489', 'pr', 'Skilled Regional 489')
   },
@@ -1804,7 +2033,7 @@ const AU_PR_VISAS: VisaItem[] = [
     id: "in-to-au-pr-887",
     code: "887",
     officialCode: "887",
-    officialName: "Skilled Regional Visa (Permanent)",
+    officialName: "Skilled Regional Visa (Permanent - Legacy Pathway)",
     categoryCode: "REGIONAL",
     subcategoryCode: "REGIONAL_SKILLED_PR",
     name: "Skilled Regional Permanent Visa (Subclass 887)",
@@ -1814,12 +2043,23 @@ const AU_PR_VISAS: VisaItem[] = [
     validity: "Permanent Residency",
     stay: "Permanent",
     processing: "12 - 24 months",
-    purpose: "Permanent residency stage for people who have lived and worked in regional Australia on eligible provisional visas.",
-    eligibility: "Lived in regional Australia for at least 2 years and worked full time for at least 1 year.",
-    popular: true,
-    isActive: true,
-    isLegacy: false,
+    purpose: "Legacy permanent residency stage for people who have lived and worked in regional Australia on eligible legacy provisional visas (489, 495, 496, 475, 487).",
+    eligibility: "Lived in regional Australia for at least 2 years and worked full time for at least 1 year on a legacy provisional visa (489/495/496/475/487).",
+    popular: false,
+    isActive: false,
+    isLegacy: true,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-regional-887",
+    regionalCategory: "AUS-REG-07",
+    categoryName: "Closed / Legacy Regional Visa Routes",
+    regionalPathways: [
+      {
+        code: "AUS-887-LEGACY",
+        name: "Subclass 887 – Skilled Regional (Permanent) Visa (Legacy pathway)",
+        description: "Legacy permanent residence pathway exclusively for holders of provisional Subclasses 489, 495, 496, 475, or 487. Replaced by Subclass 191 for 491/494 holders.",
+        isCurrent: false
+      }
+    ],
+    regionalNote: "Legacy pathway (for eligible Subclass 489, 495, 496, 475, and 487 provisional holders; current 491/494 regional holders use Subclass 191).",
     ...getMicroDetails('887', 'pr', 'Regional PR 887'),
     docs: getOfficialDocs('887', 'pr', 'Regional PR 887')
   },
@@ -1842,6 +2082,29 @@ const AU_PR_VISAS: VisaItem[] = [
     isActive: true,
     isLegacy: false,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/permanent-residence-skilled-regional-191",
+    regionalCategory: "AUS-REG-03",
+    categoryName: "Regional Permanent Residence Visa",
+    regionalPathways: [
+      {
+        code: "AUS-191-RP",
+        name: "Subclass 191 – Regional Provisional stream",
+        description: "For holders of Subclass 491 or 494 who have lived, worked, and studied in designated regional Australia for at least 3 years.",
+        eligibilityDiff: "Must hold Subclass 491 or 494 for at least 3 years, have complied with regional visa conditions, and provide ATO Notices of Assessment for 3 income years out of the 5-year provisional period.",
+        isCurrent: true
+      },
+      {
+        code: "AUS-191-HK",
+        name: "Subclass 191 – Hong Kong stream",
+        description: "Regional permanent residency pathway for eligible Hong Kong (HKSAR) or British National (Overseas) passport holders.",
+        eligibilityDiff: "Must hold a Hong Kong or BNO passport and have lived, worked, and studied exclusively in designated regional Australia for at least 3 years on an eligible 485, 457, or 482 visa.",
+        isCurrent: true
+      }
+    ],
+    regionalAreas: [
+      "Category 2 - Cities and Major Regional Centres: Perth, Adelaide, Gold Coast, Sunshine Coast, Canberra, Newcastle, Wollongong, Geelong, Hobart",
+      "Category 3 - Regional Centres and Other Regional Areas - Exact eligibility via postcode check - Department designated postcodes list"
+    ],
+    regionalNote: "Primary permanent residence stage (AUS-REG-03) for Subclass 491 and Subclass 494 holders after 3 years of regional residence and tax assessment compliance.",
     ...getMicroDetails('191', 'pr', 'Permanent Regional 191'),
     docs: getOfficialDocs('191', 'pr', 'Permanent Regional 191')
   },
@@ -1864,6 +2127,17 @@ const AU_PR_VISAS: VisaItem[] = [
     isActive: false,
     isLegacy: true,
     officialSource: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/regional-sponsor-migration-scheme-187",
+    regionalCategory: "AUS-REG-07",
+    categoryName: "Closed / Legacy Regional Visa Routes",
+    regionalPathways: [
+      {
+        code: "AUS-187-LEGACY",
+        name: "Subclass 187 – Regional Sponsored Migration Scheme (RSMS - Closed/Transitional)",
+        description: "Closed to new Direct Entry applications on 16 November 2019 (replaced by Subclass 494 & 191). Open only to eligible transitional Temporary Residence Transition (TRT) cohort workers.",
+        isCurrent: false
+      }
+    ],
+    regionalNote: "Closed to new applications; transitional cases remain.",
     ...getMicroDetails('187', 'pr', 'RSMS 187'),
     docs: getOfficialDocs('187', 'pr', 'RSMS 187')
   },

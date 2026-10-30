@@ -8,6 +8,16 @@ import {
 } from 'lucide-react';
 import { FULL_VISA_DB, CountryVisas } from '../data/fullVisaDatabase';
 import { getEmbassyInfo } from '../data/embassyAddresses';
+import { fetchWithRetry } from '../utils/fetchWithRetry';
+import {
+  DEFAULT_PUBLISHED_GUIDES,
+  findDefaultGuideMatch,
+  hydrateArticleWithCacheAndFallback,
+  isRichContent,
+  normalizeBlogSlug,
+  buildFallbackMarkdownForArticle,
+  getArticleRichnessScore
+} from '../data/defaultArticles';
 
 export interface Article {
   slug: string;
@@ -138,13 +148,75 @@ interface BlogArticleViewProps {
   navigate: (path: string) => void;
 }
 
+function resolveArticleCacheFirst(
+  rawSlug: string,
+  passedArticle?: Article | null,
+  articlesList: Article[] = []
+): Article | null {
+  const cleanSlug = normalizeBlogSlug(rawSlug || passedArticle?.slug || (passedArticle as any)?.route);
+  const parsed = parseBlogSlug(cleanSlug);
+
+  // 1. Check in-memory articles prop
+  const fromPropList = articlesList.find(a => {
+    const s = normalizeBlogSlug(a?.slug || (a as any)?.route);
+    return s && s === cleanSlug;
+  });
+
+  // 2. Check localStorage cache ('publishedGuides')
+  let fromLocalStorage: Article | undefined;
+  try {
+    const cachedRaw = localStorage.getItem('publishedGuides');
+    if (cachedRaw) {
+      const parsedCache = JSON.parse(cachedRaw);
+      if (Array.isArray(parsedCache)) {
+        fromLocalStorage = parsedCache.find((a: any) => {
+          const s = normalizeBlogSlug(a?.slug || a?.route || a?.id);
+          return s && s === cleanSlug;
+        });
+      }
+    }
+  } catch {
+    // ignore storage errors
+  }
+
+  // 3. Check DEFAULT_PUBLISHED_GUIDES fallback
+  const fromDefaults = findDefaultGuideMatch(
+    cleanSlug || passedArticle?.title || fromPropList?.title || fromLocalStorage?.title,
+    passedArticle?.from || fromPropList?.from || fromLocalStorage?.from || parsed.fromCode,
+    passedArticle?.to || fromPropList?.to || fromLocalStorage?.to || parsed.toCode,
+    passedArticle?.type || fromPropList?.type || fromLocalStorage?.type || parsed.category
+  );
+
+  const combinedExisting = {
+    ...fromDefaults,
+    ...fromLocalStorage,
+    ...fromPropList
+  };
+
+  return hydrateArticleWithCacheAndFallback(
+    passedArticle || fromPropList || fromLocalStorage || fromDefaults || {
+      slug: cleanSlug,
+      from: parsed.fromCode,
+      to: parsed.toCode,
+      type: parsed.category
+    },
+    combinedExisting
+  );
+}
+
 export function BlogArticleView({ article, pathSlug, articles = [], countries = FALLBACK_COUNTRIES, navigate }: BlogArticleViewProps) {
-  const slug = pathSlug || article?.slug || '';
+  const slug = normalizeBlogSlug(pathSlug || article?.slug || '');
   const parsed = parseBlogSlug(slug);
-  
-  const fromCode = (article?.from || parsed.fromCode || 'IN').toUpperCase();
-  const toCode = (article?.to || parsed.toCode || 'CA').toUpperCase();
-  const categoryCode = (article?.type || parsed.category || 'work').toLowerCase();
+
+  const [hydratedArticle, setHydratedArticle] = useState<Article | null>(() =>
+    resolveArticleCacheFirst(slug, article, articles)
+  );
+
+  const activeArticle = hydratedArticle || article || findDefaultGuideMatch(slug, parsed.fromCode, parsed.toCode, parsed.category);
+
+  const fromCode = (activeArticle?.from || parsed.fromCode || 'IN').toUpperCase();
+  const toCode = (activeArticle?.to || parsed.toCode || 'CA').toUpperCase();
+  const categoryCode = (activeArticle?.type || parsed.category || 'work').toLowerCase();
   
   const fromCountry = countries.find(c => c.code === fromCode) || FALLBACK_COUNTRIES.find(c => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
   const toCountry = countries.find(c => c.code === toCode) || FALLBACK_COUNTRIES.find(c => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
@@ -154,9 +226,11 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
   const categoryVisas = countryData?.[categoryCode as keyof CountryVisas] || countryData?.['tourist'] || [];
   const dbVisaItem = categoryVisas[0];
 
-  const title = article?.title || `${fromCountry.name} to ${toCountry.name} ${categoryCode.toUpperCase()} Visa (2026 Complete Guide)`;
-  const dateStr = article?.date || new Date().toISOString().split('T')[0];
-  const feesStr = article?.fees || dbVisaItem?.fee || (categoryCode === 'work' ? '$155-250 Govt Fee' : categoryCode === 'student' ? '$185-350 Govt Fee' : '$90-185 Govt Fee');
+  const title = activeArticle?.title || `${fromCountry.name} to ${toCountry.name} ${categoryCode.toUpperCase()} Visa (2026 Complete Guide)`;
+  const dateStr = activeArticle?.date || new Date().toISOString().split('T')[0];
+  const feesStr = (activeArticle?.fees && activeArticle.fees !== 'Standard Govt Fees')
+    ? activeArticle.fees
+    : (dbVisaItem?.fee || (categoryCode === 'work' ? '$155-250 Govt Fee' : categoryCode === 'student' ? '$185-350 Govt Fee' : '$90-185 Govt Fee'));
   const validityStr = dbVisaItem?.validity || (categoryCode === 'work' ? '1 to 2 Years' : categoryCode === 'student' ? 'Course Duration + 60 Days' : 'Up to 10 Years');
   const stayStr = dbVisaItem?.stay || (categoryCode === 'work' ? 'Authorized Employment' : categoryCode === 'student' ? 'Full-Time Academic Term' : '90-180 Days/Visit');
 
@@ -165,6 +239,65 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
   const [faqs, setFaqs] = useState<any[]>([]);
   const [faqSearchQuery, setFaqSearchQuery] = useState('');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  // Cache-first hydration effect with background server check and DEFAULT_PUBLISHED_GUIDES fallback
+  useEffect(() => {
+    const localResolved = resolveArticleCacheFirst(slug, article, articles);
+    setHydratedArticle(localResolved);
+
+    if (!slug) return;
+
+    const hasIncomingRichBody = isRichContent(
+      article?.content || article?.rawContent || article?.contentHtml
+    );
+    if (hasIncomingRichBody && localResolved) {
+      return;
+    }
+
+    const articleController = new AbortController();
+    fetchWithRetry<Article | null>(
+      `/api/articles/${encodeURIComponent(slug)}`,
+      { signal: articleController.signal },
+      {
+        retries: 4,
+        initialDelay: 1000,
+        maxDelay: 15000,
+        backoffMultiplier: 2,
+        backoffIncrement500: 1500,
+        backoffIncrement503: 3000,
+        timeoutMs: 30000,
+        fallback: null
+      }
+    ).then(remoteData => {
+      if (remoteData && !(remoteData as any).error) {
+        if (!localResolved || getArticleRichnessScore(remoteData) > getArticleRichnessScore(localResolved)) {
+          const merged = hydrateArticleWithCacheAndFallback(remoteData, localResolved);
+          if (merged) {
+            setHydratedArticle(merged);
+            try {
+              const cachedRaw = localStorage.getItem('publishedGuides');
+              const cachedList: Article[] = cachedRaw ? JSON.parse(cachedRaw) : [...DEFAULT_PUBLISHED_GUIDES];
+              if (Array.isArray(cachedList)) {
+                const idx = cachedList.findIndex(a => normalizeBlogSlug(a?.slug) === normalizeBlogSlug(merged.slug));
+                if (idx >= 0) {
+                  cachedList[idx] = merged;
+                } else {
+                  cachedList.unshift(merged);
+                }
+                localStorage.setItem('publishedGuides', JSON.stringify(cachedList));
+              }
+            } catch {
+              // ignore storage quota errors
+            }
+          }
+        }
+      }
+    }).catch(() => {});
+
+    return () => {
+      articleController.abort();
+    };
+  }, [slug, article, articles]);
 
   const handleJumpToSection = (sectionId: string) => {
     if (!sectionId) return;
@@ -187,33 +320,49 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
     document.title = `${title} | VisaApply.org`;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', article?.excerpt || `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${fromCountry.name} citizens applying for a ${categoryCode} visa to ${toCountry.name}.`);
+      metaDesc.setAttribute('content', activeArticle?.excerpt || `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${fromCountry.name} citizens applying for a ${categoryCode} visa to ${toCountry.name}.`);
     }
 
-    // Set FAQs from dbVisaItem
-    if (dbVisaItem?.faq && Array.isArray(dbVisaItem.faq)) {
-      setFaqs(dbVisaItem.faq);
-    } else {
-      // Fallback FAQs
-      setFaqs([
-        {
-          q: `What is the official government fee for a ${categoryCode} visa from ${fromCountry.name} to ${toCountry.name}?`,
-          a: `The standard visa processing fee is approximately ${feesStr}. Additional charges may include biometric collection fees, visa application centre (VFS) service fees, and optional express courier delivery.`
-        },
-        {
-          q: `How much bank balance is required to be shown for ${toCountry.name}?`,
-          a: `Applicants should maintain liquid funds of minimum ₹3-5 Lakhs (tourist) or ₹20-35 Lakhs (student/work) in seasoned savings accounts for at least 3 to 6 months. Sudden unverified deposits made days before application risk refusal.`
-        },
-        {
-          q: `Are Income Tax Returns (ITR) mandatory for ${fromCountry.name} applicants?`,
-          a: `Yes, submitting ITR-V acknowledgment copies for the last 2 to 3 financial years along with Computation of Income is highly recommended. The income reported must reconcile with bank statement salary credits.`
-        },
-        {
-          q: `Can I work on a visitor/tourist visa in ${toCountry.name}?`,
-          a: `No. Working in ${toCountry.name} on a visitor visa is strictly prohibited under immigration law and leads to immediate deportation, detention, and a multi-year entry ban.`
-        }
-      ]);
-    }
+    // Set initial FAQs from dbVisaItem immediately, then synchronize via /api/faq with 30s timeout & exponential backoff
+    const initialFaqs = (dbVisaItem?.faq && Array.isArray(dbVisaItem.faq) && dbVisaItem.faq.length > 0)
+      ? dbVisaItem.faq
+      : [
+          {
+            q: `What is the official government fee for a ${categoryCode} visa from ${fromCountry.name} to ${toCountry.name}?`,
+            a: `The standard visa processing fee is approximately ${feesStr}. Additional charges may include biometric collection fees, visa application centre (VFS) service fees, and optional express courier delivery.`
+          },
+          {
+            q: `How much bank balance is required to be shown for ${toCountry.name}?`,
+            a: `Applicants should maintain liquid funds of minimum ₹3-5 Lakhs (tourist) or ₹20-35 Lakhs (student/work) in seasoned savings accounts for at least 3 to 6 months. Sudden unverified deposits made days before application risk refusal.`
+          },
+          {
+            q: `Are Income Tax Returns (ITR) mandatory for ${fromCountry.name} applicants?`,
+            a: `Yes, submitting ITR-V acknowledgment copies for the last 2 to 3 financial years along with Computation of Income is highly recommended. The income reported must reconcile with bank statement salary credits.`
+          },
+          {
+            q: `Can I work on a visitor/tourist visa in ${toCountry.name}?`,
+            a: `No. Working in ${toCountry.name} on a visitor visa is strictly prohibited under immigration law and leads to immediate deportation, detention, and a multi-year entry ban.`
+          }
+        ];
+    setFaqs(initialFaqs);
+
+    const faqController = new AbortController();
+    fetchWithRetry<{ success?: boolean; faqs?: any[] }>(
+      `/api/faq?from=${encodeURIComponent(fromCode)}&to=${encodeURIComponent(toCode)}&type=${encodeURIComponent(categoryCode)}`,
+      { signal: faqController.signal },
+      {
+        retries: 4,
+        initialDelay: 1000,
+        maxDelay: 12000,
+        backoffMultiplier: 2,
+        timeoutMs: 30000,
+        fallback: { success: true, faqs: initialFaqs }
+      }
+    ).then(data => {
+      if (data?.faqs && Array.isArray(data.faqs) && data.faqs.length > 0) {
+        setFaqs(data.faqs);
+      }
+    }).catch(() => {});
 
     const sectionIds = [
       'section-overview',
@@ -243,7 +392,10 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      faqController.abort();
+    };
   }, [title, fromCode, toCode, categoryCode, dbVisaItem]);
 
   const docsList: string[] = (dbVisaItem?.docs && Array.isArray(dbVisaItem.docs) && dbVisaItem.docs.length > 0)
@@ -293,18 +445,43 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
     return q.includes(query) || a.includes(query);
   });
 
-  // Render markdown content if provided
-  const parsedMarkdownContent = article?.contentHtml 
-    ? article.contentHtml 
-    : article?.content 
-      ? marked.parse(article.content) 
-      : (article?.rawContent ? marked.parse(article.rawContent) : null);
+  // Render markdown content with cache-first activeArticle and synthesized fallback guarantee
+  const parsedMarkdownContent = (() => {
+    if (activeArticle?.contentHtml && isRichContent(activeArticle.contentHtml)) {
+      return activeArticle.contentHtml;
+    }
+    const rawMd = activeArticle?.content || activeArticle?.rawContent;
+    if (rawMd && isRichContent(rawMd)) {
+      return String(marked.parse(rawMd));
+    }
+    const defaultGuide = findDefaultGuideMatch(slug, fromCode, toCode, categoryCode);
+    if (defaultGuide?.contentHtml) {
+      return defaultGuide.contentHtml;
+    }
+    if (defaultGuide?.content) {
+      return String(marked.parse(defaultGuide.content));
+    }
+    return String(
+      marked.parse(
+        buildFallbackMarkdownForArticle({
+          slug,
+          title,
+          from: fromCode,
+          to: toCode,
+          type: categoryCode,
+          fees: feesStr,
+          docs: docsList.join(', ')
+        })
+      )
+    );
+  })();
 
   const embassyData = getEmbassyInfo(toCode, fromCode);
 
   // Other related guides to show at the bottom
-  const relatedArticles = articles
-    .filter(a => a.slug !== slug && (a.from === fromCode || a.to === toCode || a.type === categoryCode))
+  const relatedSource = articles.length > 0 ? articles : DEFAULT_PUBLISHED_GUIDES;
+  const relatedArticles = relatedSource
+    .filter(a => normalizeBlogSlug(a.slug) !== slug && (a.from === fromCode || a.to === toCode || a.type === categoryCode))
     .slice(0, 3);
 
   return (
@@ -341,7 +518,7 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
               <span className="capitalize text-[#0B3D91] shrink-0 font-bold">{categoryCode}</span>
               <span className="text-slate-300 shrink-0">/</span>
               <span className="truncate font-bold text-slate-900" title={title}>
-                {article?.title || title}
+                {activeArticle?.title || title}
               </span>
             </div>
           </div>
@@ -426,7 +603,7 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
           </h1>
 
           <p className="text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            {article?.excerpt || `Comprehensive 2026 consular guide detailing official eligibility criteria, fee structures, financial proof benchmarks, and step-by-step document submission for ${fromCountry.name} passport holders.`}
+            {activeArticle?.excerpt || `Comprehensive 2026 consular guide detailing official eligibility criteria, fee structures, financial proof benchmarks, and step-by-step document submission for ${fromCountry.name} passport holders.`}
           </p>
 
           {/* Quick Metrics Bar */}

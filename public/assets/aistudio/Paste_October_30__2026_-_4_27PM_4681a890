@@ -1,0 +1,200 @@
+FINAL UPGRADE CANADA 102 OFFICIAL VISAS - IRCC Official List Complete + Funds/ITR/Bank Micro Details - KEEP DUAL-ACCESS STRUCTURE
+
+CRITICAL: Keep FULL_VISA_DB[toCode][category] AND FULL_VISA_DB[fromCode][toCode][category] both working - Do NOT break. Update ONLY TO=CA.
+
+1. Refer to IRCC Official Source https://www.canada.ca/en/immigration-refugees-citizenship/services/come-canada.html - All 102 visas - No Miss
+
+2. For every FROM country (IN, US, GB, CA, AU, DE, FR, SG, JP, BR, IT, ES, NL, NZ, SE, CH, IE, NO, PT, DK, FI, BE, AT, PL, MY, TH, TR, ZA, SA - all 30 FROM), for TO=CA, replace 6 categories with 102 visas:
+
+TOURIST (14 Types) - Category TOURIST:
+- in-to-ca-tourist-trv Visitor Visa Temporary Resident Visa TRV - $100 CAD - 10 years multiple - Purpose: Tourism family - Most Popular Tourist ⭐
+- in-to-ca-tourist-supervisa Super Visa Parents Grandparents Super Visa - $100 - 5 years per entry - Parents 5 years stay - Most Popular Parent Tourist
+- in-to-ca-tourist-business Business Visitor Visa - $100 - Business meetings conferences - Business visitor
+- in-to-ca-tourist-transit Transit Visa - Free - Transit Canada 48 hours
+- in-to-ca-tourist-eta Electronic Travel Authorization eTA - $7 CAD - 5 years - VWP countries - Most Popular eTA
+- in-to-ca-tourist-eta-x Transit eTA - $7 - Transit eTA
+- in-to-ca-tourist-trp Temporary Resident Permit TRP - $200 - Inadmissible persons
+- in-to-ca-tourist-visitor-record Visitor Record - $100 - Extend stay
+- in-to-ca-tourist-visitor-extension Extension Visitor Extension - $100 - Extend visitor status
+- in-to-ca-tourist-biometrics Biometrics Visitor - $85 - Biometrics
+- in-to-ca-tourist-single Single Entry Visitor - $100 - Single entry
+- in-to-ca-tourist-multiple Multiple Entry Visitor - $100 - Multiple 10 years - Most Popular Multiple
+- in-to-ca-tourist-v-1 Counterfoil V-1 Visitor - $100 - Visa sticker
+- in-to-ca-tourist-eta-business eTA Business Visitor - $7 - Business eTA
+
+WORK (30 Types) - Category WORK:
+LMIA Based:
+- in-to-ca-work-lmia-work-permit Work Permit LMIA Required - $155 + $100 open - 2 years - LMIA approved job - Most Popular Work
+- in-to-ca-work-global-talent Global Talent Stream GTS - $155 - 2 weeks processing - Tech talent - Most Popular Tech
+- in-to-ca-work-high-wage High-Wage LMIA - $155 - High wage position
+- in-to-ca-work-low-wage Low-Wage LMIA - $155 - Low wage
+- in-to-ca-work-primary-agriculture Primary Agriculture LMIA - $155 - Farm workers
+- in-to-ca-work-seasonal Seasonal Agricultural Worker SAWP - $155 - Seasonal farm
+
+LMIA Exempt:
+- in-to-ca-work-lmia-exempt LMIA Exempt Work Permit - $155 - LMIA exempt codes
+- in-to-ca-work-intra-company Intra-Company Transfer ICT - $155 - Manager executive specialized knowledge - Most Popular ICT
+- in-to-ca-work-c10 Significant Benefit C10 - $155 - Significant benefit Canada
+- in-to-ca-work-c11 Entrepreneurs Self-employed C11 - $155 - Entrepreneurs
+- in-to-ca-work-c12 Intra-company Transfer C12 - $155 - Intra-company
+- in-to-ca-work-c20 Reciprocal Employment C20 - $155 - Reciprocal
+- in-to-ca-work-c21 International Experience Canada Working Holiday C21 - $172 - IEC Working Holiday - Most Popular IEC
+
+IEC:
+- in-to-ca-work-iec-working-holiday IEC Working Holiday - $172 + $100 - 12-24 months - Most Popular IEC
+- in-to-ca-work-iec-young-professionals IEC Young Professionals - $172 + $100 - Young professionals
+- in-to-ca-work-iec-international-coop IEC International Co-op Internship - $172 + $100 - Co-op internship
+
+Open Work Permit:
+- in-to-ca-work-pgwp Post-Graduation Work Permit PGWP - $155 + $100 - 8 months to 3 years - Most Popular Student Work - Study then work
+- in-to-ca-work-spouse-open Spouse Open Work Permit SOWP - $255 - Spouse of student worker - Most Popular Spouse Work
+- in-to-ca-work-bridging Bridging Open Work Permit BOWP - $255 - PR applicant bridging
+- in-to-ca-work-post-graduation-open PGWP Open - $255 - Open PGWP
+- in-to-ca-work-vulnerable Vulnerable Workers Open Work Permit - Free - Vulnerable workers abuse
+
+Caregiver Work:
+- in-to-ca-work-home-child-care Home Child Care Provider Pilot - $155 + PR pathway - Child care - 24 months
+- in-to-ca-work-home-support Home Support Worker Pilot - $155 + PR pathway - Home support
+- in-to-ca-work-caregiver-interim Interim Pathway Caregivers - $155 - Interim caregiver
+
+Other Work:
+- in-to-ca-work-atlantic Atlantic Immigration Program Work - $155 - Atlantic Canada
+- in-to-ca-work-rural Rural Community Immigration Pilot RCIP Work - $155 - Rural pilot
+- in-to-ca-work-francophone Francophone Mobility Work - $155 - French speakers outside Quebec
+- in-to-ca-work-quebec Quebec Work Permit - $155 - Quebec
+- in-to-ca-work-performers Performing Artists Work - $155 - Artists
+- in-to-ca-work-charity Charity Religious Work - $155 - Charity religious
+
+STUDENT (12 Types) - Category STUDENT:
+- in-to-ca-student-study-permit Study Permit Outside Canada - $150 + $85 bio - Study college university - Most Popular Student ⭐
+- in-to-ca-student-study-permit-inside Study Permit Inside Canada - $150 - Inside Canada
+- in-to-ca-student-study-extension Study Permit Extension - $150 - Extend study
+- in-to-ca-student-sds Student Direct Stream SDS - $150 - 20 days processing - India Pakistan etc - Most Popular Fast Track - Requires GIC + IELTS 6.0
+- in-to-ca-student-sds-niagara SDS Nigeria? Actually Non-SDS - Regular
+- in-to-ca-student-quebec CAQ Quebec Acceptance Certificate + Study Permit - $150 + $120 CAQ - Quebec study
+- in-to-ca-student-coop Co-op Work Permit Co-op - $155 - Co-op work as part of study
+- in-to-ca-student-coop-intern Co-op Intern Work Permit - $155 - Intern co-op
+- in-to-ca-student-post-graduation PGWP already in work but duplicate as student pathway - $155
+- in-to-ca-student-open-study Open Study Permit - $150 - Open
+- in-to-ca-student-minor Minor Child Study Permit - $150 - Minor child school
+- in-to-ca-student-phd PhD Research Study Permit - $150 - PhD
+
+FAMILY (22 Types) - Category FAMILY:
+Spouse Partner:
+- in-to-ca-family-spouse-outside Spouse Common-law Partner Sponsorship Outside Canada - $1080 + $85 bio - Spouse outside - Most Popular Spouse
+- in-to-ca-family-spouse-inside Spouse Common-law Partner Sponsorship Inside Canada + Open Work Permit - $1080 - Spouse inside Canada
+- in-to-ca-family-conjugal Conjugal Partner Sponsorship - $1080 - Conjugal
+- in-to-ca-family-spouse-open-work Spouse Open Work Permit Inside - $255 - Spouse work while PR pending
+- in-to-ca-family-dependent-child Dependent Child Sponsorship - $150 per child - Dependent child
+
+Parent Grandparent:
+- in-to-ca-family-pgp Parents Grandparents Sponsorship PGP - $1080 - Parents grandparents PR - Lottery - Most Popular Parent PR
+- in-to-ca-family-supervisa Super Visa Parents Grandparents - $100 - Super visa 5 years per entry - Most Popular Super Visa ⭐
+- in-to-ca-family-supervisa-extension Super Visa Extension - $100 - Extend super visa
+- in-to-ca-family-parents-visitor Parents Visitor Visa - $100 - Parents visitor
+
+Child Other:
+- in-to-ca-family-adopted Adopted Child Sponsorship - $150 - Adoption
+- in-to-ca-family-orphaned Orphaned Brother Sister Nephew Niece Grandchild Sponsorship - $150 - Orphaned
+- in-to-ca-family-other-relative Other Relative Sponsorship - $150 - Lonely Canadian other relative
+- in-to-ca-family-biological Biological Child - $150 - Biological
+- in-to-ca-family-custody Custody Child Sponsorship - $150 - Custody
+
+Humanitarian Family:
+- in-to-ca-family-hc Humanitarian Compassionate H&C - $550 - Humanitarian compassionate
+- in-to-ca-family-trp-family TRP Family Member - $200 - TRP family
+- in-to-ca-family-restoration Restoration Family - $200 - Restoration family status
+- in-to-ca-family-refugee-family Refugee Family Reunification - Free - Refugee family
+- in-to-ca-family-protected Protected Person Family - Free - Protected person family
+- in-to-ca-family-vulnerable-family Vulnerable Family - Free - Vulnerable family
+- in-to-ca-family-pr-card-family PR Card Family - $50 - PR card renewal family
+- in-to-ca-family-travel-document-family Travel Document Family - $50 - Travel document
+
+BUSINESS (10 Types) - Category BUSINESS:
+- in-to-ca-business-startup Start-up Visa SUV - $1540 + $500 PR - Start-up innovation - Most Popular Business PR ⭐
+- in-to-ca-business-self-employed Self-Employed Persons Program - $1540 - Self-employed cultural athletic - Federal
+- in-to-ca-business-self-employed-quebec Self-Employed Quebec - $1540 - Quebec self-employed
+- in-to-ca-business-investor-quebec Investor Quebec QIIP - $1176 - Quebec investor - Investment $1.2M CAD - Currently paused? Mark isActive false isLegacy true with note paused
+- in-to-ca-business-entrepreneur-quebec Entrepreneur Quebec - $1176 - Quebec entrepreneur
+- in-to-ca-business-intra-company Intra-Company Transfer Business - $155 - ICT business
+- in-to-ca-business-significant-benefit Significant Benefit Business C10 - $155 - Significant benefit
+- in-to-ca-business-entrepreneurs-self-employed Entrepreneurs Self-employed C11 - $155 - Entrepreneurs business
+- in-to-ca-business-business-visitor Business Visitor Visa - $100 - Business visitor meetings conferences
+- in-to-ca-business-owner-operator Owner Operator LMIA Work Permit - $155 - Owner operator LMIA - Business owner
+
+PR/GOLDEN (14 Types) - Category PR:
+Express Entry:
+- in-to-ca-pr-fsw Federal Skilled Worker FSW - $1365 - Express Entry FSW - Most Popular PR - Points CRS
+- in-to-ca-pr-fst Federal Skilled Trades FST - $1365 - Federal skilled trades
+- in-to-ca-pr-cec Canadian Experience Class CEC - $1365 - Canadian experience - Most Popular CEC
+- in-to-ca-pr-pnp Express Entry PNP - $1365 + $500 PNP - Provincial Nominee Express Entry - Most Popular PNP
+
+PNP Base:
+- in-to-ca-pr-pnp-base Provincial Nominee Program Base PNP Non-Express - $1365 + $500 - Base PNP
+- in-to-ca-pr-pnp-paper Paper PNP - $1365 - Paper based PNP
+- in-to-ca-pr-atlantic Atlantic Immigration Program AIP - $1365 - Atlantic PR
+- in-to-ca-pr-rural Rural Community Immigration Pilot RCIP PR - $1365 - Rural PR
+- in-to-ca-pr-francophone Francophone Community Immigration Pilot FCIP PR - $1365 - Francophone PR
+- in-to-ca-pr-quebec-skilled Quebec Skilled Worker QSW - $1176 + $1520 Quebec - Quebec skilled
+- in-to-ca-pr-quebec-experience Quebec Experience Program PEQ - $1176 - PEQ
+
+Caregiver PR:
+- in-to-ca-pr-home-child-care Home Child Care Provider Pilot PR - $1080 - Child care PR pathway
+- in-to-ca-pr-home-support Home Support Worker Pilot PR - $1080 - Home support PR pathway
+- in-to-ca-pr-caregiver-interim Interim Pathway Caregivers PR - $1080 - Interim caregiver PR
+
+Other PR:
+- in-to-ca-pr-agri-food Agri-Food Pilot PR - $1365 - Agri-food pilot
+
+Total CA per FROM = 14+30+12+22+10+14 = 102
+
+For each visa object structure MUST have fundsBox itrBox bankBox + documents 12-18 with MOST IMPORTANT ⭐ as per USA Australia logic but Canada specific:
+
+CANADA FUNDS/ITR/BANK MICRO DETAILS FOR EACH CATEGORY:
+
+Box 1 - Funds - Canada Specific:
+- TRV Visitor: Minimum 3-5 lakhs INR regular bank 6 months - Not 1 day 10 lakh deposit. Per day Canada cost $150-200 CAD = 9k-12k INR per day. 10 days trip = 1.5-2 lakhs expenses + flight $800-1000 CAD + hotel $120/day CAD. Funds: 5 lakhs regular + salary slips. ❌ 1 din pehle 5 lakh daal ke mat dikhao - 6 mahine purana balance. Large deposit >1 lakh ka source proof. Super Visa: Insurance $100k CAD 1 year + Sponsor income LICO + $25k-30k CAD funds + Sponsor NOA. Example: Super Visa parents: Sponsor income $30k+ for family of 4, insurance $1500-2000 CAD/year, parents bank 3-5 lakhs. Invitation letter must show accommodation food.
+- Study Permit: Funds = 1 year tuition + living $20,635 CAD (2024 updated from $10k to $20,635) + travel $2k = Total $30k-50k CAD = 18-30 lakhs INR. SDS: GIC $20,635 + 1 year tuition paid + IELTS 6.0 + Medical upfront + SOP. Bank 6 months, last 4 months genuine access, 4 months old funds, GIC $20,635 must be from Canadian bank (Scotia, 【entity-ICICI¦canonical_name=ICICI】 Canada etc). Loan sanction + disbursement, FD 4 months old. Education loan best - Shows genuine access. Funds 1 day before not allowed - Need 4 months old. Example: Study permit 2 years diploma $16k/year = Show $16k + $20,635 = $36,635 CAD = 22 lakhs + tuition receipt + GIC. ❌ 1 din pehle 22 lakh loan disburse mat dikhao - 1 month old disbursement + GIC purchase receipt.
+- Work Permit LMIA: No funds needed, job offer + LMIA is funds - LMIA salary $20-35/hr CAD - But personal bank 3 months 2-3 lakhs regular for ties + visa officer ties. PGWP: No funds, completion letter + transcript. IEC: Funds $2,500 CAD + Insurance.
+- PR Express Entry: Settlement funds proof required: For single $15,263 CAD (2024), Family of 2 $19,001 CAD, Family of 3 $23,471 CAD, Family of 4 $28,362 CAD etc - 6 months average balance - Not 1 day deposit. Bank 6 months letter with average balance + Account opening date. Funds must be unencumbered, no loan. Gift deed + Donor affidavit if gift + Donor bank + Donor ITR. Property sale not ideal, bank funds best. POF letter format: Bank letterhead, account number, opening date, current balance, average balance 6 months, no debt against.
+- Family Sponsorship: Sponsor income LICO - For PGP family of 4 sponsor income $48k CAD (2024 LICO) + 3 years NOA + T4 + Employment letter + Payslips. Super visa LICO + Insurance $100k 1 year + Sponsor NOA 1 year. Spouse sponsorship no income requirement but sponsor must not be on social assistance + Sponsor NOA + Employment.
+
+Box 2 - ITR - Canada Specific:
+- TRV: ITR 2-3 years + Form 16 + Computation + Balance Sheet if business - Most Important for ties - No ITR = Weak case 60% reject. ITR income and bank credit match - ITR 10 lakh, bank credit 50 lakh = Mismatch = Reject. Business: Company ITR 2-3 years + GST Returns 2 years + Personal ITR 2-3 years + Balance Sheet. Agricultural Income J Form + Land proof + ITR.
+- Study: Student ITR if employed 2 years + Sponsor parents ITR 2-3 years + Form 16 + Computation + Balance Sheet + GST if business. ITR and bank match - ITR 10 lakh, bank 40 lakh = Need source. SDS requires ITR not mandatory but GIC + Tuition + IELTS mandatory. Non-SDS ITR 2 years strong.
+- Work: Work experience proof ITR 2-3 years + Form 16 + Salary Slips + Experience Letters - All same company - ITR company name, Form 16 same, Salary slip same, Experience letter same - Mismatch = Refusal. LMIA job NOC must match experience NOC.
+- PR: No ITR for Canada PR but source of funds POF 6 months bank + If employed: ITR India 2 years + Salary slips + Experience letters + WES ECA + IELTS + Reference letters NOC duties - All same.
+
+Box 3 - Bank - Canada Specific:
+- TRV: 6 months bank, last 4 months genuine access, salary credit monthly 5-10 tarikh ko regular - 10k,20k, fir 5 lakh ek din me = Fake = Refuse. Large deposit >50k source: Bonus letter + Salary slip / Property sale deed + Buyer payment + Bank credit / Loan sanction + Disbursement / Gift deed + Donor ITR + Donor Bank. FDs 4 months old, lien free. Credit card se bank me paisa daal ke mat dikhao. Borrowed money without gift deed nahi. Agricultural Income J Form + Land proof + ITR. Property Sale Sale deed + Buyer payment proof + Bank credit. Loan Sanction + Disbursement. Gift Gift deed + Donor ITR + Donor Bank. Bank letter format for POF: Average balance 6 months + Opening date + Current balance + No lien + Bank stamp signature letterhead.
+- Study: Bank 6 months, GIC $20,635 receipt, loan disbursement 1 month old, FD 4 months old, sponsor bank 6 months regular, large deposit source explanation. GIC from Canadian banks only (Scotia, 【entity-ICICI¦canonical_name=ICICI】 Canada, SBI Canada, CIBC). GIC purchase date must be before application.
+- Work: Personal bank 4 months regular salary credit, large deposit source.
+- PR: Bank 6 months POF letter average balance + Opening date + Current balance + Account type + Bank stamp.
+
+For documents array Canada specific with MOST IMPORTANT ⭐:
+
+TRV: 16 docs - Passport valid 6 months beyond stay, Photo Canada specs 35x45 white background, IMM5257 Application Form (MOST IMPORTANT), IMM5707 Family Information Form, IMM5713 Use of Representative if applicable, Travel History Form IMM5562 (MOST IMPORTANT), Invitation Letter OR Hotel Booking Entire Stay 【entity-Booking.com¦canonical_name=Booking.com】 free cancellation (MOST IMPORTANT), Flight Reservation Not mandatory purchase but reservation PNR, Funds Bank 6 months 3-5 lakhs regular + Salary Slips 6 months (MOST IMPORTANT), ITR 2-3 years + Form 16 + Computation (MOST IMPORTANT), Employment Letter NOC Leave Approval Salary Designation Joining Date (MOST IMPORTANT), Business Visitor Business Invitation Letter + Sponsor Letter + Indian Company Letter if business visitor, Property Docs House Shop Land, Family Ties Marriage Child Birth, Previous Canada Travel Old passports Canada visas Entry Exit stamps, If Sponsored Sponsor Letter + Sponsor Passport PR Citizenship + NOA T4 Bank Relationship + Affidavit, Travel Insurance $100k Super Visa mandatory 1 year, PCC if requested, Purpose of Travel Letter Cover Letter Purpose Itinerary Funding Return (MOST IMPORTANT), Biometrics Letter, Medical if stay >6 months or super visa
+
+Study Permit: 18 docs - Passport, Photo, IMM1294 Study Permit Application Form (MOST IMPORTANT ⭐ - Most Important), IMM5707 Family Info, IMM5257 Schedule 1 if applicable, LOA Letter of Acceptance DLI Institution (MOST IMPORTANT), Provincial Attestation Letter PAL (2024 new requirement) (MOST IMPORTANT), Tuition Fee Receipt 1 year (MOST IMPORTANT), GIC $20,635 Receipt Scotia 【entity-ICICI¦canonical_name=ICICI】 Canada (MOST IMPORTANT for SDS - Most Important), Funds Bank 6 months + Loan Sanction Disbursement + Sponsor Affidavit 18-30 lakhs (MOST IMPORTANT - GIC + tuition), Sponsor Docs Parents ID Employment ITR 2 years Bank 6 months Property Affidavit, ITR 2-3 years Student + Sponsor, Funds Source Proof Large deposit source, SOP Statement of Purpose Study Plan (MOST IMPORTANT), CV Resume, Work Experience if any Experience Letters, Academic 10th 12th Degree Transcripts WES ECA, English IELTS 6.0 overall 6.0 each for SDS / 6.0 overall non-SDS PTE 60 【entity-TOEFL¦canonical_name=TOEFL】 83 (MOST IMPORTANT), Medical Upfront Panel Physician, PCC, Previous Canada visas refusals explanation, CAQ if Quebec, Co-op Letter if co-op, Custodian Declaration if minor
+
+Work Permit: 18 docs - Passport, Photo, IMM1295 Work Permit Application (MOST IMPORTANT), IMM5707 Family Info, LMIA Approval Letter Copy (MOST IMPORTANT - LMIA based), Job Offer Letter Canadian Employer NOC Salary $20-35/hr Full-time LMIA number (MOST IMPORTANT), Employment Contract (MOST IMPORTANT), Employer Compliance Fee Receipt $230, Work Permit Fee $155 + Open Work Permit Holder Fee $100 if open, Educational Degree Transcripts WES Evaluation (MOST IMPORTANT), Work Experience Experience Letters 1-3 years NOC match (MOST IMPORTANT), Funds Personal Bank 4 months Salary Slips (MOST IMPORTANT for ties), ITR 2-3 years + Form 16 + Salary Slips + Experience Letters match NOC, Resume CV NOC duties, Previous Work Permits I-94 if applicable, Marriage Certificate Child Birth if spouse open work permit, Employer docs Canada Company Registration CRA Business Number, Client Letter if applicable, Proof of Qualifications Certificates, Language IELTS if required, Medical PCC if required, Explanation Letter if gaps
+
+Family Sponsorship: 18 docs - Passport Photo Old passports, IMM1344 Sponsorship Agreement + IMM5532 Relationship Information + IMM5533 Document Checklist (MOST IMPORTANT), Relationship Proof Marriage Certificate Attested Translated + 20+ Photos Wedding Travel Family Daily life + Joint Bank Account + De facto 12 months proof Joint lease Bills Photos Chat history Call logs Joint travel bookings (MOST IMPORTANT for spouse), Sponsor Docs Canadian Citizen PR Passport Citizenship Certificate PR Card NOA 3 years T4 Employment Letter Paystubs Address Proof Tenancy Utility bills (MOST IMPORTANT), Invitation Sponsor Letter Relationship history Future plans Financial support (MOST IMPORTANT), Funds Sponsor Bank 6 months Personal Bank 3-5 lakhs Sponsor NOA LICO income proof, ITR Sponsor Canada 3 years NOA T4 + Applicant India 2 years ITR, Birth Certificate Family Tree, Divorce Certificate if previous marriage Decree, PCC India + Canada + Any country lived 12+ months RCMP, Medical Panel Physician upfront, Joint Financial Docs Joint bank Joint lease Joint bills Joint travel, Police Clearance, IMM5409 Statutory Declaration Common-law if common-law, IMM5532 Relationship Questionnaire, Cover Letter Relationship timeline Genuine, Child Birth Custody if dependent child, Super Visa Insurance $100k 1 year receipt if super visa, PGP Lottery Invitation if PGP
+
+Business: 18 docs - Passport Photo IMM Forms, Business Invitation Letter Canadian Company letterhead stamp signature purpose duration itinerary expenses bearer inviting person name designation phone email (MOST IMPORTANT), Sponsor Letter Email Chain (MOST IMPORTANT), Indian Company Letter Deputation Letter (MOST IMPORTANT), Company Registration Incorporation GST MOA PAN Trade License Business Card, Company Financials Bank 6 months + ITR 2 years + Balance Sheet Turnover 5CR + P/L + GST Returns (MOST IMPORTANT), Funds Personal Bank 6 months 5-10 lakhs + Company Bank (MOST IMPORTANT), ITR Personal 2 years + Company 2 years + Form 16 + GST Returns (MOST IMPORTANT), Previous Business Correspondence Emails Contracts Invoices 2 years, Business Plan Investment Proposal Start-up Visa $200k investment + Support Letter Designated Organization, Employment Letter Salary Slips Contract, Personal Property Docs Family Ties, Cover Letter Detailed Purpose Meetings Business history Return intent Company turnover, Insurance Flight Hotel, Previous Travel History Business visas, Tax Returns NOA, Investor Source of Funds 5 years ITR + Bank + Property Sale + Gift if Quebec investor, Language IELTS if required, Net Worth Statement, Designated Organization Support Letter if SUV
+
+For each visa show isActive true for active visas, isActive false isLegacy true for repealed legacy: Quebec Investor paused, some old caregiver interim etc - Mark with note
+
+3. Keep dual-access: FULL_VISA_DB[toCode][category] = array AND FULL_VISA_DB[fromCode][toCode][category] = array both must work. Update BASE_COUNTRY_VISAS similarly.
+
+4. Update VISA_COUNTS_FROM_EXCEL for CA: tourist 14, work 30, student 12, family 22, business 10, pr 14 = Total CA 102 per FROM - Grand Total 769-18+102=853 (If Australia 135 + USA 145 already, else 540-18+102=624 - Handle dynamically: Calculate total = previous total - old CA count + new CA count)
+
+5. Update AuditPage (/audit): Show Total 853+ Total Visa Records LIVE (or 624+ etc), Country-wise breakdown: CA 102 (Tourist 14 Work 30 Student 12 Family 22 Business 10 PR 14) vs Old 18, Category-wise: Tourist 126-5+14=135 (or 119-5+14=128), Work 181-6+30=205 (or 158-6+30=182), Student 101-3+12=110 (or 92-3+12=101), Family 129-4+22=147 (or 97-4+22=115), Business 89-3+10=96 (or 78-3+10=85), PR 150-4+14=160 (or 117-4+14=127), Grand Total 853 (or 624 etc), Document completeness 100% with LOA, PAL, GIC, LMIA, IMM Forms, Sponsor NOA etc, Active vs Repealed breakdown (Active ~90, Repealed/Legacy ~12), Searchable live URLs
+
+6. Update SitemapPage (/sitemap): Visa Guides for Canada - 102 Visa Types grouped by VISIT (TRV Super Visa Business Visitor Transit eTA TRP Visitor Record Extension Single Multiple V-1 eTA Business), WORK (LMIA Work Permit Global Talent High-Wage Low-Wage Primary Agriculture Seasonal SAWP LMIA Exempt Intra-Company C10 C11 C12 C20 C21 IEC Working Holiday Young Professionals International Co-op PGWP Spouse Open Bridging PGWP Open Vulnerable Home Child Care Home Support Caregiver Interim Atlantic Rural Francophone Quebec Performing Artists Charity), STUDENT (Study Permit Outside Inside Extension SDS Non-SDS Quebec CAQ Co-op Co-op Intern PGWP Open Minor PhD), FAMILY (Spouse Outside Inside Conjugal Spouse Open Dependent Child PGP Super Visa Super Visa Extension Parents Visitor Adopted Orphaned Other Relative Biological Custody H&C TRP Family Restoration Refugee Family Protected Person Vulnerable Family PR Card Travel Document), BUSINESS (Start-up Self-employed Self-employed Quebec Investor Quebec Entrepreneur Quebec Intra-Company Significant Benefit Entrepreneurs Business Visitor Owner Operator), PR (FSW FST CEC PNP PNP Base Paper PNP Atlantic Rural Francophone Quebec Skilled Quebec Experience Home Child Care Home Support Caregiver Interim Agri-Food) = 102 with Visa Code badges and Active/Legacy tags, Official Source link https://www.canada.ca/en/immigration-refugees-citizenship/services/come-canada.html
+
+7. Keep all existing: Back buttons at every level, Breadcrumbs Home > India to Canada > Tourist > TRV, Language selector EN JA DE FR ES HI, Embassy 870 combos universalEmbassyDatabase Canada High Commission Delhi Chandigarh Mumbai for IN to CA, Footer Sitemap (853+ Pages) for SEO + contact@visaapply.org, Audit admin only (Verification Tools section in /admin), AdSense pub-9048615701580913, Contact email, Multilingual auto-detect via navigator.language not middleware, Fix 500 error middleware.ts delete, api/index.ts delete, vercel.json rewrites only
+
+8. For each visa detail page Level 3 (/in-to-ca-tourist-trv etc): Show 3 micro boxes: Funds Box (Minimum kitna, bank kitne mahine, sudden deposit rule with ❌ ✅ examples Canada specific - TRV 3-5 lakhs, Study GIC $20,635 + tuition, Super Visa insurance $100k + LICO, PR POF $15k-28k 6 months average), ITR Box (Kitne saal, kaunsi ITR, match rule Canada specific - TRV 2-3 years + Form 16, Study student + sponsor 2-3 years, Work ITR + Form 16 + Salary Slips + Experience Letters NOC match, Family sponsor Canada 3 years NOA T4), Bank Box (Kitne mahine, regular credit, FD, source, credit card rule Canada specific - TRV 6 months average balance letter, Study 6 months + GIC receipt, Work 4 months regular, PR 6 months POF letter average balance + Opening date + Current balance) in Hindi+English mix, plus Tabs Overview/Documents (12-18 docs with MOST IMPORTANT ⭐ + checkboxes)/Info Required 8 sections IMM style/Steps 7 steps with icons/Embassy/FAQs/Tips, Bottom Back buttons, Sticky back mobile
+
+Build and Push to 【entity-GitHub¦canonical_name=GitHub】 - Vercel auto deploy - Check /in-to-ca-tourist should show 14 Types (not 0), /in-to-ca-work 30 Types, /in-to-ca-student 12 Types, /in-to-ca-family 22 Types, /in-to-ca-business 10 Types, /in-to-ca-pr 14 Types, Total CA 102, /audit Total 853+ (or 624+), /sitemap Canada 102 Types

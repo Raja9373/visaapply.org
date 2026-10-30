@@ -1,5 +1,7 @@
 import { AUSTRALIA_135_VISAS } from './australiaVisas';
 import { USA_145_VISAS } from './usaVisas';
+import { CANADA_102_VISAS } from './canadaVisas';
+import { UK_111_VISAS } from './ukVisas';
 
 export interface VisaItem {
   id: string;
@@ -48,6 +50,26 @@ export interface VisaItem {
   name_ja?: string;
   docs_ja?: string[];
   purpose_ja?: string;
+  regionalCategory?: string;
+  categoryName?: string;
+  regionalPathways?: {
+    code: string;
+    name: string;
+    description: string;
+    eligibilityDiff?: string;
+    isCurrent: boolean;
+  }[];
+  damaPathways?: {
+    code: string;
+    name: string;
+    description: string;
+    isCurrent: boolean;
+  }[];
+  regionalAreas?: string[];
+  regionalNote?: string;
+  isVisa?: boolean;
+  programmeCategory?: string;
+  programmeNote?: string;
 }
 
 export interface CountryVisas {
@@ -93,11 +115,24 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" }
 };
 
-// Target counts per country from official matrix (769 Total with AU 135 & US 145)
+// Official USA Breakdown: 164 Official Visa Classification Codes + 37 Non-Visa Immigration Programmes/Set-Asides/Forms/Travel Authorizations = 201 Total US Entries
+export const US_OFFICIAL_VISA_COUNTS = {
+  tourist: 12,
+  work: 49,
+  student: 11,
+  family: 35,
+  business: 18,
+  pr: 39,
+  totalVisas: 164,
+  totalProgrammes: 37,
+  totalEntries: 201
+};
+
+// Target counts per country from official matrix (1001 Total with US 201 [164 Visas + 37 Programmes], AU 135, GB 111 & CA 102)
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
-  US: { tourist: 12, work: 48, student: 11, family: 35, business: 18, pr: 21 }, // 145
-  CA: { tourist: 2, work: 4, student: 3, family: 3, business: 2, pr: 4 }, // 18
-  GB: { tourist: 4, work: 5, student: 3, family: 2, business: 2, pr: 3 }, // 19
+  US: { tourist: 16, work: 49, student: 11, family: 35, business: 18, pr: 72 }, // 201 (164 Official Visas + 37 Programmes/Set-Asides/Forms/Travel Auth)
+  CA: { tourist: 14, work: 30, student: 12, family: 22, business: 10, pr: 14 }, // 102
+  GB: { tourist: 13, work: 32, student: 10, family: 27, business: 9, pr: 20 }, // 111
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   DE: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
   FR: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
@@ -393,7 +428,7 @@ function createVisaItem(
 // Base database mapping: TO country code -> CountryVisas
 export const BASE_COUNTRY_VISAS: Record<string, CountryVisas> = {};
 
-// Populate base database to match exact matrix (769 Total with AU 135 & US 145)
+// Populate base database to match exact matrix (945 Total with US 145, AU 135, GB 111 & CA 102)
 Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (code === 'AU') {
     BASE_COUNTRY_VISAS['AU'] = AUSTRALIA_135_VISAS;
@@ -401,6 +436,14 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'US') {
     BASE_COUNTRY_VISAS['US'] = USA_145_VISAS;
+    return;
+  }
+  if (code === 'CA') {
+    BASE_COUNTRY_VISAS['CA'] = CANADA_102_VISAS;
+    return;
+  }
+  if (code === 'GB') {
+    BASE_COUNTRY_VISAS['GB'] = UK_111_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
@@ -484,10 +527,14 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
     });
   });
 
-  const isValid = issues.length === 0 && totalCount === 769;
-  const report = `Total Visas in Database: ${totalCount} across ${Object.keys(BASE_COUNTRY_VISAS).length} countries. Status: ${isValid ? 'PASSED - EXACT 769 VISAS MATCHED!' : 'COUNT MISMATCH'}`;
+  const expectedTotal = Object.values(COUNTRY_VISA_COUNTS).reduce(
+    (sum, c) => sum + c.tourist + c.work + c.student + c.family + c.business + c.pr,
+    0
+  );
+  const isValid = issues.length === 0 && totalCount === expectedTotal;
+  const report = `Total Visas in Database: ${totalCount} across ${Object.keys(BASE_COUNTRY_VISAS).length} countries. Status: ${isValid ? `PASSED - EXACT ${expectedTotal} VISAS MATCHED!` : 'COUNT MISMATCH'}`;
   
-  console.log(`Total visas created: 769+`);
+  console.log(`Total visas created: ${totalCount}+`);
   console.log(`[VisaApply Database Check] ${report}`);
 
   return { totalVisas: totalCount, isValid, report };

@@ -4,8 +4,14 @@ import path from 'path';
 import fs from 'fs';
 import matter from 'gray-matter';
 import { marked } from 'marked';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import handleFaqRequest from './src/api/faq.js';
+import {
+  DEFAULT_PUBLISHED_GUIDES,
+  findDefaultGuideMatch,
+  hydrateArticleWithCacheAndFallback,
+  mergeArticleCollections
+} from './src/data/defaultArticles.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -189,44 +195,67 @@ app.get('/api/visa-types', (req, res) => {
   res.json(VISA_TYPES);
 });
 
-// Get all published articles
+// Get all published articles (hydrated with full content + DEFAULT_PUBLISHED_GUIDES fallback)
 app.get('/api/articles', (req, res) => {
   try {
     const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
-    const articles = files.map(file => {
+    const diskArticles = files.map(file => {
       const filePath = path.join(CONTENT_DIR, file);
       const raw = fs.readFileSync(filePath, 'utf-8');
       const parsed = matter(raw);
       const slug = file.replace('.md', '');
+      const htmlContent = String(marked.parse(parsed.content || ''));
       return {
         slug,
         ...parsed.data,
-        excerpt: parsed.content.substring(0, 160).replace(/[#*`]/g, '') + '...'
+        excerpt: parsed.content.substring(0, 160).replace(/[#*`]/g, '').trim() + '...',
+        content: parsed.content,
+        rawContent: parsed.content,
+        contentHtml: htmlContent
       };
     });
-    res.json(articles);
+    const merged = mergeArticleCollections(DEFAULT_PUBLISHED_GUIDES, diskArticles);
+    res.json(merged);
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    res.json(DEFAULT_PUBLISHED_GUIDES);
   }
 });
 
-// Get single article by slug
+// Get single article by slug (checks disk first, then DEFAULT_PUBLISHED_GUIDES fallback)
 app.get('/api/articles/:slug', (req, res) => {
   try {
     const { slug } = req.params;
-    const filePath = path.join(CONTENT_DIR, `${slug}.md`);
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'Article not found' });
+    const cleanSlug = (slug || '').replace(/\.md$/i, '').trim();
+    const filePath = path.join(CONTENT_DIR, `${cleanSlug}.md`);
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const parsed = matter(raw);
+      const htmlContent = String(marked.parse(parsed.content || ''));
+      const hydrated = hydrateArticleWithCacheAndFallback({
+        slug: cleanSlug,
+        ...parsed.data,
+        content: parsed.content,
+        rawContent: parsed.content,
+        contentHtml: htmlContent
+      });
+      return res.json(hydrated);
     }
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const parsed = matter(raw);
-    const htmlContent = marked.parse(parsed.content);
-    res.json({
-      slug,
-      ...parsed.data,
-      contentHtml: htmlContent,
-      rawContent: parsed.content
-    });
+
+    const fallbackGuide = findDefaultGuideMatch(cleanSlug);
+    if (fallbackGuide) {
+      const hydrated = hydrateArticleWithCacheAndFallback({
+        ...fallbackGuide,
+        slug: cleanSlug
+      }, fallbackGuide);
+      return res.json(hydrated);
+    }
+
+    const synthesized = hydrateArticleWithCacheAndFallback({ slug: cleanSlug });
+    if (synthesized) {
+      return res.json(synthesized);
+    }
+
+    return res.status(404).json({ error: 'Article not found' });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -257,20 +286,25 @@ app.post('/api/admin/auth', (req, res) => {
 app.get('/api/guides', (req, res) => {
   try {
     const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
-    const published = files.map(file => {
+    const diskPublished = files.map(file => {
       const filePath = path.join(CONTENT_DIR, file);
       const raw = fs.readFileSync(filePath, 'utf-8');
       const parsed = matter(raw);
       const slug = file.replace('.md', '');
+      const htmlContent = String(marked.parse(parsed.content || ''));
       return {
         slug,
         ...parsed.data,
-        excerpt: parsed.content.substring(0, 160).replace(/[#*`]/g, '') + '...'
+        excerpt: parsed.content.substring(0, 160).replace(/[#*`]/g, '').trim() + '...',
+        content: parsed.content,
+        rawContent: parsed.content,
+        contentHtml: htmlContent
       };
     });
+    const published = mergeArticleCollections(DEFAULT_PUBLISHED_GUIDES, diskPublished);
     res.json({ published, drafts: [], total: published.length });
   } catch (err: any) {
-    res.json({ published: [], drafts: [], total: 0 });
+    res.json({ published: DEFAULT_PUBLISHED_GUIDES, drafts: [], total: DEFAULT_PUBLISHED_GUIDES.length });
   }
 });
 
@@ -394,17 +428,23 @@ Format: Markdown with clean headings.`;
 
       let articleText = `# ${sourceCountry.name} to ${targetCountry.name} ${vType.name} Guide\n\n## 1. Overview\nComprehensive guide for ${sourceCountry.name} citizens.\n\n## 2. Fees\nStandard government processing fees apply.\n\n## 3. Documents\nPassport, bank statements, photos.`;
       
-      const maxRetries = 3;
-      const timeoutMs = 15000;
+      const maxRetries = 4;
+      const timeoutMs = 30000;
+      const maxDelayMs = 12000;
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         let timeoutHandle: any;
         try {
           const timeoutPromise = new Promise<never>((_, reject) => {
-            timeoutHandle = setTimeout(() => reject(new Error(`Timeout after ${Math.round(timeoutMs / 1000)}s`)), timeoutMs);
+            timeoutHandle = setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
           });
           const apiPromise = ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-3.8-flash',
             contents: prompt,
+            config: {
+              thinkingConfig: {
+                thinkingLevel: ThinkingLevel.LOW
+              }
+            }
           });
           const response: any = await Promise.race([apiPromise, timeoutPromise]);
           clearTimeout(timeoutHandle);
@@ -412,12 +452,10 @@ Format: Markdown with clean headings.`;
             articleText = response.text;
             break;
           }
-        } catch (aiErr: any) {
+        } catch {
           clearTimeout(timeoutHandle);
-          if (attempt >= maxRetries) {
-            console.warn(`[Cron Gemini] Retries exhausted for ${slug}:`, aiErr?.message || aiErr);
-          } else {
-            const delay = Math.round(1000 * Math.pow(2, attempt - 1) + Math.random() * 250);
+          if (attempt < maxRetries) {
+            const delay = Math.min(maxDelayMs, Math.round(1000 * Math.pow(2, attempt - 1) + Math.random() * 350));
             await new Promise(r => setTimeout(r, delay));
           }
         }

@@ -1,0 +1,203 @@
+FINAL UPGRADE UK 111 OFFICIAL VISAS - PDF A to Z Complete (UKV to UKL) + Funds/ITR/Bank Micro Details - KEEP DUAL-ACCESS STRUCTURE
+
+CRITICAL: Keep FULL_VISA_DB[toCode][category] AND FULL_VISA_DB[fromCode][toCode][category] both working - Do NOT break. Update ONLY TO=GB (UK).
+
+1. Refer to uploaded PDF uk_immigration_visa_categories_a_to_z.pdf - All 111 visas from UKV to UKL - No Miss - Official Source https://www.gov.uk/browse/visas-immigration + https://www.gov.uk/guidance/immigration-rules/immigration-rules-index
+
+2. For every FROM country (IN, US, GB, CA, AU, DE, FR, SG, JP, BR, IT, ES, NL, NZ, SE, CH, IE, NO, PT, DK, FI, BE, AT, PL, MY, TH, TR, ZA, SA - all 30 FROM), for TO=GB, replace 6 categories with 111 visas:
+
+TOURIST (13 Types) - Category TOURIST:
+- in-to-gb-tourist-ukv-std Standard Visitor 【entity-Visa¦canonical_name=Visa】 - £115 - 6 months - Tourism family business short study medical - Most Popular Tourist ⭐ - Tourism, family visits, permitted business activities, short study and medical visits
+- in-to-gb-tourist-ukv-ltv Long-term Standard Visitor 【entity-Visa¦canonical_name=Visa】 - £200-£1100 - 2,5,10 years validity each visit 6 months max - Long term visitor
+- in-to-gb-tourist-ukv-med Private Medical Treatment Visitor - £115 - Private medical treatment in UK - Medical treatment
+- in-to-gb-tourist-ukv-aca Academic Visitor - £115 - Permitted academic activities under visitor rules - Academic visitor
+- in-to-gb-tourist-ukv-pls Permitted Paid Engagement Visitor - £115 - Eligible paid engagement normally within visitor framework - Paid engagement
+- in-to-gb-tourist-ukv-mar Marriage Visitor 【entity-Visa¦canonical_name=Visa】 - £115 - Marry or register civil partnership in UK without settling - Marriage visitor
+- in-to-gb-tourist-ukv-chv Child Visitor - £115 - Child visiting UK - Child visitor
+- in-to-gb-tourist-ukv-grp Visit for Permitted Group Activity - £115 - School tour other permitted group visits under visitor rules - Group visitor
+- in-to-gb-tourist-ukt-air Direct Airside Transit 【entity-Visa¦canonical_name=Visa】 DATV - £35 - Transit through international area of UK airport - Airside transit
+- in-to-gb-tourist-ukt-vis Visitor in Transit 【entity-Visa¦canonical_name=Visa】 - £64 - Pass through UK border control to continue journey - Visitor transit
+- in-to-gb-tourist-ukt-exm Transit Without 【entity-Visa¦canonical_name=Visa】 Exemptions - Free - Limited exemption arrangements eligibility depends on nationality circumstances - Transit exemption
+- in-to-gb-tourist-ukx-eta Electronic Travel Authorisation ETA - £10 - Pre-travel authorisation for eligible non-【entity-visa¦canonical_name=Visa】 nationals not a 【entity-visa¦canonical_name=Visa】 - ETA 2024 new - Most Popular ETA
+- in-to-gb-tourist-uks-std Standard Visitor Short Study - £115 - Permitted short study up to 6 months under visitor rules - Short study visitor
+
+WORK (32 Types) - Category WORK:
+UKW Sponsored Work:
+- in-to-gb-work-ukw-swk Skilled Worker 【entity-Visa¦canonical_name=Visa】 - £464-£1420 + IHS £1035/year - 5 years - Eligible sponsored job with approved UK employer - Most Popular Work ⭐ - UKW-SWK
+- in-to-gb-work-ukw-hcw Health and Care Worker 【entity-Visa¦canonical_name=Visa】 - £284-£551 + IHS exempt - 5 years - Eligible health adult social care roles subject to occupation sponsor rules - Health Care
+- in-to-gb-work-ukw-gbm-ssw Global Business Mobility Senior Specialist Worker - £464-£1420 - 5 years - Transfer to UK branch group company in eligible senior specialist role - Senior Specialist
+- in-to-gb-work-ukw-gbm-gt Global Business Mobility Graduate Trainee - £298-£551 - 1 year - Overseas graduate trainee placement in UK linked business - Graduate Trainee
+- in-to-gb-work-ukw-gbm-uew Global Business Mobility UK Expansion Worker - £298-£551 - 1-2 years - Establish UK presence for overseas business not yet trading in UK - Expansion Worker - Most Popular Business Expansion
+- in-to-gb-work-ukw-gbm-ss Global Business Mobility Service Supplier - £298-£551 - 6-12 months - Temporary provision of services under eligible trade agreement contract - Service Supplier
+- in-to-gb-work-ukw-gbm-sw Global Business Mobility Secondment Worker - £298-£551 - 12 months - High-value contract or investment-related secondment - Secondment Worker
+- in-to-gb-work-ukw-scu Scale-up Worker 【entity-Visa¦canonical_name=Visa】 - £464-£715 - 2 years - Sponsored job with eligible fast-growing UK business later work flexibility - Scale-up
+- in-to-gb-work-ukw-isp International Sportsperson 【entity-Visa¦canonical_name=Visa】 - £298-£551 - 1-3 years - Elite sportsperson and qualified coaches endorsed by relevant governing body - Sportsperson
+- in-to-gb-work-ukw-t2m T2 Minister of Religion - £464-£551 - 3 years - Minister of religion undertaking eligible long-term religious work - Minister
+
+UKTW Temporary Work:
+- in-to-gb-work-uktw-sea Seasonal Worker 【entity-Visa¦canonical_name=Visa】 - £298 - 6 months - Eligible horticulture or poultry seasonal work - Seasonal Worker
+- in-to-gb-work-uktw-cha Charity Worker 【entity-Visa¦canonical_name=Visa】 - £298 - 12 months - Unpaid voluntary work for eligible charitable organisation - Charity Worker
+- in-to-gb-work-uktw-cre Creative Worker 【entity-Visa¦canonical_name=Visa】 - £298 - 12 months - Temporary work in creative industries - Creative Worker - Most Popular Creative
+- in-to-gb-work-uktw-gae Government Authorised Exchange 【entity-Visa¦canonical_name=Visa】 - £298 - 12-24 months - Approved work experience training research fellowship scheme - GAE
+- in-to-gb-work-uktw-rel Religious Worker 【entity-Visa¦canonical_name=Visa】 - £298 - 24 months - Temporary non-pastoral religious work - Religious Worker
+- in-to-gb-work-uktw-iaw International Agreement Worker 【entity-Visa¦canonical_name=Visa】 - £298 - 6-12 months - Work covered by international law or agreement - Agreement Worker
+
+UKWO Other Work & Talent:
+- in-to-gb-work-ukwo-gt Global Talent 【entity-Visa¦canonical_name=Visa】 - £716 - 5 years - Recognised leaders or potential leaders in academia research arts culture digital technology - Most Popular Talent ⭐ - UKWO-GT
+- in-to-gb-work-ukwo-hpi High Potential Individual HPI 【entity-Visa¦canonical_name=Visa】 - £822 - 2-3 years - Eligible recent graduate of qualifying top global university - HPI
+- in-to-gb-work-ukwo-yms Youth Mobility Scheme 【entity-Visa¦canonical_name=Visa】 - £298 + IHS £1035/year - 24 months - Eligible young nationals under participating country arrangements - Youth Mobility - Most Popular Youth
+- in-to-gb-work-ukwo-iyps India Young Professionals Scheme 【entity-Visa¦canonical_name=Visa】 - £298 - 24 months - Indian citizens selected through ballot and meeting scheme conditions - India YPS ⭐
+- in-to-gb-work-ukwo-anc UK Ancestry 【entity-Visa¦canonical_name=Visa】 - £637 - 5 years - Eligible Commonwealth citizens with qualifying UK-born grandparent - Ancestry
+- in-to-gb-work-ukwo-odw Overseas Domestic Worker 【entity-Visa¦canonical_name=Visa】 - £637 - 6 months - Eligible domestic workers accompanying employer on UK visit - Domestic Worker
+- in-to-gb-work-ukl-t1g Tier 1 General - Legacy - Mark isActive false isLegacy true - Closed
+- in-to-gb-work-ukl-t2g Tier 2 General - Replaced by Skilled Worker - Mark false legacy
+- in-to-gb-work-ukl-t2ict Tier 2 Intra-company Transfer - Replaced by GBM routes - Mark false legacy
+- in-to-gb-work-ukl-t2m Tier 2 Minister of Religion - Legacy naming current route T2 Minister of Religion - Mark false legacy
+- in-to-gb-work-ukl-t2s Tier 2 Sportsperson - Replaced by International Sportsperson - Mark false legacy
+- in-to-gb-work-ukl-t5 Tier 5 Temporary Worker - Replaced by current Temporary Work routes - Mark false legacy
+- in-to-gb-work-ukl-ict Intra-company Transfer - Legacy route Current Global Business Mobility routes apply - Mark false legacy
+- in-to-gb-work-ukl-sur Surinder Singh Route - Legacy transitional cases only - Mark false legacy
+
+STUDENT (10 Types) - Category STUDENT:
+- in-to-gb-student-uks-stu Student 【entity-Visa¦canonical_name=Visa】 - £490 + IHS £1035/year - Duration of course + 4-6 months - Eligible adult student sponsored by licensed education provider - Most Popular Student ⭐ - UKS-STU
+- in-to-gb-student-uks-chs Child Student 【entity-Visa¦canonical_name=Visa】 - £490 + IHS - Children aged 4-17 studying at independent school - Child Student
+- in-to-gb-student-uks-pch Parent of Child Student 【entity-Visa¦canonical_name=Visa】 - £637 - One parent accompanying child aged 4-11 studying at independent school - Parent Child Student
+- in-to-gb-student-uks-sst Short-term Study 【entity-Visa¦canonical_name=Visa】 English Language - £200 - English language course lasting more than 6 months and up to 11 months - Short-term Study
+- in-to-gb-student-ukwo-grad Graduate Visa - £822 + IHS £1035/year - 2-3 years - Eligible graduates who completed qualifying UK course - Graduate - Most Popular Post-Study ⭐
+- in-to-gb-student-ukl-t4 Tier 4 General Student - Legacy - Replaced by Student route - Mark false legacy
+- in-to-gb-student-ukx-atas ATAS Requirement - Free - Academic Technology Approval Scheme clearance not a visa - ATAS - For sensitive subjects
+- in-to-gb-student-ukx-s2 S2 Healthcare Visitor - £115 - Eligible planned healthcare visitor under specific arrangements - Healthcare Visitor
+- in-to-gb-student-ukx-exm Exempt Persons Diplomatic Official Status - Free - Special immigration treatment not ordinary visa - Exempt
+- in-to-gb-student-uks-tier4 Tier 4 Student legacy duplicate - Mark false legacy
+
+FAMILY (27 Types) - Category FAMILY:
+UKF Family & Dependants:
+- in-to-gb-family-ukf-part Family Visa Partner Spouse - £1846 + IHS £1035/year - 33 months - Partner spouse of British or settled person or qualifying sponsor - Partner Spouse - Most Popular Family ⭐
+- in-to-gb-family-ukf-fiance Family Visa Fiance(e) Proposed Civil Partner - £1846 - 6 months - Entry to marry or form civil partnership then apply to extend where eligible - Fiance
+- in-to-gb-family-ukf-child Family Visa Child - £1846 + IHS - Child joining or staying with qualifying parent - Child
+- in-to-gb-family-ukf-parent Family Visa Parent - £1846 + IHS - Parent of child in UK subject to detailed eligibility rules - Parent
+- in-to-gb-family-ukf-adult Family Visa Adult Dependent Relative - £3250 - Long-term care need where required care unavailable affordable overseas - Adult Dependent Relative
+- in-to-gb-family-ukf-depend Dependant Partner Child on Work Study Route - £464-£637 + IHS - Dependants of eligible main applicants route-specific restrictions apply - Dependant
+- in-to-gb-family-ukf-private Private Life Route - £1048 + IHS - Permission settlement based on private life in UK - Private Life
+- in-to-gb-family-ukf-setl Family Route Settlement ILR - £2885 - Settlement after meeting applicable family route requirements - Family Settlement
+
+UKEU EU EEA Swiss:
+- in-to-gb-family-ukeu-euss EU Settlement Scheme Settled Status - Free - Indefinite permission for eligible EEA Swiss citizens and family members - EUSS Settled ⭐
+- in-to-gb-family-ukeu-pre EU Settlement Scheme Pre-settled Status - Free - Limited permission for eligible applicants not yet qualifying for settled status - EUSS Pre-settled
+- in-to-gb-family-ukeu-fp EU Settlement Scheme Family Permit - Free - Eligible family member joining accompanying an EUSS qualifying person - EUSS Family Permit
+- in-to-gb-family-ukeu-fw Frontier Worker Permit - Free - Eligible EU EEA Swiss citizens working in UK while resident elsewhere - Frontier Worker
+- in-to-gb-family-ukeu-sur Surinder Singh Retained Rights Cases - Free - Legacy transitional family rights cases where applicable - Surinder Singh Retained
+
+UKH Hong Kong BNO Ukraine:
+- in-to-gb-family-ukh-bno Hong Kong British National Overseas Visa - £180-£250 + IHS - 30 months to 5 years - Eligible BN(O) status holders and qualifying family members - BN(O) ⭐
+- in-to-gb-family-ukh-uep Ukraine Permission Extension Scheme - Free - Eligible people previously granted permission under Ukraine schemes - Ukraine Extension
+- in-to-gb-family-ukh-hf Homes for Ukraine Sponsorship Scheme - Free - Permission under Ukraine humanitarian sponsorship route - Homes for Ukraine
+- in-to-gb-family-ukh-ufs Ukraine Family Scheme - Legacy - Closed to new applications historic permission and extension matters - Mark false legacy - Ukraine Family
+- in-to-gb-family-ukh-ukr Ukraine Extension Transitional Permission Cases - Free - Applicable legacy Ukraine scheme provisions - Ukraine Extension
+
+UKC Commonwealth Ancestry:
+- in-to-gb-family-ukc-anc UK Ancestry Visa - £637 - 5 years - Commonwealth citizen with qualifying UK-born grandparent - Ancestry - duplicate but Family
+- in-to-gb-family-ukc-bno British National Overseas Visa - £637 - BN(O) route for eligible Hong Kong applicants - BNO
+- in-to-gb-family-ukc-right Right of Abode - Free - Status allowing person to live and work in UK without immigration restrictions - Right of Abode
+- in-to-gb-family-ukc-roa-ctr Certificate of Entitlement to Right of Abode - £550 - Evidence of existing right of abode - Certificate Entitlement
+
+UKL Legacy Family:
+- in-to-gb-family-ukl-ukfam UK Family Permit Old EEA Rules - Legacy transitional cases only - Mark false legacy
+- in-to-gb-family-ukl-dv Domestic Violence Concession Settlement Provisions - Free - Historic and current protection settlement provisions depend on facts - Domestic Violence
+
+BUSINESS (9 Types) - Category BUSINESS:
+- in-to-gb-business-ukb-if Innovator Founder Visa - £1020-£1284 + IHS - 3 years - Establish innovative viable scalable business with endorsement - Innovator Founder ⭐ - Most Popular Business
+- in-to-gb-business-ukb-start Start-up Visa - Legacy - Closed to new applicants historic route - Mark isActive false isLegacy true - Start-up
+- in-to-gb-business-ukb-innov Innovator Visa - Legacy - Closed replaced by Innovator Founder historic route - Mark false legacy - Innovator Old
+- in-to-gb-business-ukb-t1e Tier 1 Entrepreneur - Legacy - Closed route historic cases only - Mark false legacy
+- in-to-gb-business-ukb-t1i Tier 1 Investor - Legacy - Closed route historic cases only - Mark false legacy - Investor Closed
+- in-to-gb-business-ukb-t1ge Tier 1 Graduate Entrepreneur - Legacy - Closed route historic cases only - Mark false legacy
+- in-to-gb-business-ukwo-rep Representative of Overseas Business - Legacy - Closed to new applicants subject to transitional provisions - Mark false legacy - Sole Rep Legacy
+- in-to-gb-business-ukwo-prt Private Servant in Diplomatic Household - £637 - Private servants accompanying eligible diplomatic employers route rules restricted - Private Servant Diplomatic
+- in-to-gb-business-ukx-vip VIP Delegate Visa - Free - Route for qualifying official delegates accompanying Head of State or government minister - VIP Delegate
+
+PR/GOLDEN (20 Types) - Category PR:
+UKP Protection Humanitarian:
+- in-to-gb-pr-ukp-asy Asylum Claim - Free - Claim for international protection in UK - Asylum
+- in-to-gb-pr-ukp-ref Refugee Permission Refugee Status - Free - Protection granted following successful asylum claim - Refugee
+- in-to-gb-pr-ukp-hum Humanitarian Protection - Free - Permission granted where humanitarian protection criteria are met - Humanitarian Protection
+- in-to-gb-pr-ukp-dlr Discretionary Leave - Free - Exceptional limited leave outside standard routes - Discretionary Leave
+- in-to-gb-pr-ukp-hp Human Rights Claim - Free - Claim based on human rights grounds including family private life - Human Rights
+- in-to-gb-pr-ukp-ar Asylum Protection Appeal Further Submissions - Free - Procedural protection-related applications not standalone entry visa - Appeal Further Submissions
+- in-to-gb-pr-ukp-reset Resettlement Routes - Free - Government-supported refugee resettlement schemes subject to programme availability - Resettlement
+
+UKR Settlement Long Residence:
+- in-to-gb-pr-ukr-ilr Indefinite Leave to Remain ILR - £2885 - Settlement after qualifying work family protection or other route - ILR ⭐ - Most Popular Settlement
+- in-to-gb-pr-ukr-lr Long Residence ILR - £2885 - Settlement based on qualifying continuous lawful residence - Long Residence 10 years
+- in-to-gb-pr-ukr-setl Settlement on Work Route - £2885 - ILR under eligible Skilled Worker Global Talent Innovator Founder and other routes - Settlement Work
+- in-to-gb-pr-ukr-fam Settlement on Family Route - £2885 - ILR under applicable partner parent or child route - Settlement Family
+- in-to-gb-pr-ukr-private Settlement on Private Life Route - £2885 - Settlement where private-life requirements are met - Settlement Private Life
+- in-to-gb-pr-ukr-return Returning Resident Visa - £637 - For certain former settled residents returning to UK - Returning Resident
+- in-to-gb-pr-ukr-roa Right of Abode - Free - Immigration status not a visa included for directory completeness - Right of Abode
+
+UKN Nationality Citizenship:
+- in-to-gb-pr-ukn-nat British Citizenship by Naturalisation - £1500 - Application by eligible adults - Naturalisation
+- in-to-gb-pr-ukn-reg British Citizenship by Registration - £1200-£1500 - Registration for eligible adults or children - Registration
+- in-to-gb-pr-ukn-child Child Citizenship Registration - £1012 - Child-specific nationality registration routes - Child Citizenship
+- in-to-gb-pr-ukn-desc British Citizenship by Descent - Free - Citizenship acquired through qualifying British parent - Citizenship Descent
+- in-to-gb-pr-ukn-ren Renunciation Resumption of British Nationality - £372 - Nationality status procedures not visas - Renunciation Resumption
+- in-to-gb-pr-ukn-boc British Overseas Territories Other British Nationality Status - £1000 - Nationality categories and registration routes - BOT Other Status
+
+UKX Entry Permission Special:
+- in-to-gb-pr-ukx-trp Temporary Worker Temporary Permission Extensions - £1000 - In-country permission applications under relevant route rules - TRP Extension
+- in-to-gb-pr-ukx-trp2 Temporary Permission to Stay Leave Outside Rules - £1000 - Exceptional permission not standard visa category - Leave Outside Rules
+- in-to-gb-pr-ukx-exm Exempt Persons Diplomatic Official Status - Free - Special immigration treatment not ordinary visa - Exempt Status
+
+Total GB per FROM = 13+32+10+27+9+20 = 111
+
+For each visa object structure MUST have fundsBox itrBox bankBox + documents 12-18 with MOST IMPORTANT ⭐ as per previous logic but UK specific:
+
+UK FUNDS/ITR/BANK MICRO DETAILS FOR EACH CATEGORY:
+
+Box 1 - Funds - UK Specific:
+- Standard Visitor: Minimum 3-5 lakhs INR regular bank 6 months - Not 1 day 10 lakh deposit. Per day UK cost £100-150 = 10k-15k INR per day. 10 days trip = 1-1.5 lakhs expenses + flight £400-600 + hotel £80/day. Funds: 5 lakhs regular + salary slips. ❌ 1 din pehle 5 lakh daal ke mat dikhao - 6 mahine purana balance. Large deposit >1 lakh source proof. UK visitor most refusal reason: Insufficient funds + No ties. Bank 6 months with regular salary. Hotel booking entire stay 【entity-Booking.com¦canonical_name=Booking.com】 free cancellation. Flight reservation not mandatory purchase but reservation. Cover letter must explain purpose itinerary funding return.
+- Student: Funds = 1 year tuition + living £1,023 per month outside London £1,334 per month London for 9 months = £9,207 outside London £12,006 London + tuition = Total £20k-30k = 20-30 lakhs INR. Official UKVI: Funds must be held for 28 days continuous ending max 31 days before application - 28-day rule most important. Bank 28 days old balance, not 1 day. Example: Student London £25k tuition + £12,006 living = £37,006 = 38 lakhs. Bank statement 28 days old showing £37k+ continuously, not dropped below. Education loan: Sanction letter + Disbursement + 28 days held? Loan disbursement must be in account 28 days. FD not acceptable unless disbursal in savings. Funds must be in cash savings, not shares bonds. Sponsor parents funds + Affidavit + Birth certificate. ❌ 1 din pehle 38 lakh loan disburse mat dikhao - 28 days old continuous balance required. Officer checks every day balance in 28 days window - One day drop below required = Refuse.
+- Skilled Worker: No maintenance if sponsor certifies maintenance (Tick in CoS) - Sponsor is A-rated and certifies. If not certified, funds £1,270 held for 28 days + £285 partner + £315 child + £600 additional? Official: £1,270 main applicant + £285 partner + £315 first child + £200 other children held for 28 days. Most employers certify, so funds not needed but personal bank 3 months 2-3 lakhs regular for ties.
+- Innovator Founder: Funds £1,270 maintenance 28 days + Investment funds? No fixed investment but business plan viable - Endorsement body must endorse - No fixed investment amount but £50k recommended business funds + maintenance. Bank 28 days.
+- Family Spouse: Minimum Income Requirement MIR £29,000 (2024 increased from £18,600 to £29,000, going to £38,700) - Sponsor UK income £29k+ for partner - For child first £3,800 additional £2,400 each. Funds route: Savings £88,500 for partner alone if income not met ( £16k + 2.5 * £29k shortfall). Savings held 6 months. Bank 6 months + employment 6 months + payslips 6 months + employer letter. Sponsor UK employment letter + P60 + Bank. Applicant India bank 2-3 lakhs + ITR 2 years.
+- ILR Settlement: No funds but continuous residence proof + employment + tax.
+
+Box 2 - ITR - UK Specific:
+- Visitor: ITR 2-3 years + Form 16 + Computation + Balance Sheet if business - Most Important for ties - No ITR = Weak case 70% refuse UK visitor high refusal if no ITR. ITR income and bank credit match - ITR 10 lakh, bank credit 50 lakh = Mismatch = Refuse - UKVI checks genuineness. Business: Company ITR 2-3 years + GST Returns 2 years + Personal ITR 2-3 years + Balance Sheet. Agricultural Income J Form + Land proof + ITR. UK visitor requires strong home ties: Job + Property + Family.
+- Student: Student ITR if employed 2 years + Sponsor parents ITR 2-3 years + Form 16 + Computation + Balance Sheet + GST if business. ITR and bank match - ITR 10 lakh, bank 40 lakh = Need source. UK Student funds 28-day rule + CAS + Academic. ITR not mandatory but sponsor ITR 2 years strong. CAS is most important.
+- Skilled Worker: Work experience proof ITR 2-3 years + Form 16 + Salary Slips + Experience Letters - All same company - ITR company name, Form 16 same, Salary slip same, Experience letter same, CoS same - Mismatch = Refuse. CoS is most important.
+- Family: Sponsor UK income £29k: 6 months payslips + employer letter + P60 + bank statements 6 months showing salary credit + employment contract. If self-employed: SA302 + Tax year overview + Business bank 12 months + Accountant letter. Applicant India ITR 2 years.
+
+Box 3 - Bank - UK Specific:
+- Visitor: 6 months bank, last 3 months genuine access, salary credit monthly 5-10 tarikh ko regular - 10k,20k, fir 5 lakh ek din me = Fake = Refuse. Large deposit >50k source: Bonus letter + Salary slip / Property sale deed + Buyer payment + Bank credit / Loan sanction + Disbursement / Gift deed + Donor ITR + Donor Bank. FDs 3 months old, lien free. Credit card se bank me paisa daal ke mat dikhao. Borrowed money without gift deed nahi. UKVI specific: Bank must be from regulated financial institution - List of approved banks - India all major banks approved - Statements must be original stamped or online with bank letter. 6 months bank must show regular transactions, not just balance. Closing balance 3-5 lakhs regular. No large unexplained deposits.
+- Student: Bank 28-day rule - Funds must be held continuously for 28 days ending within 31 days before application - Most important UK rule. Bank statement must show account number, name, bank logo, balance every day in 28 days not below required. If one day below = Refuse. Bank letter must confirm 28 days. Funds in savings account only, not fixed deposit unless instant access + letter confirming instant access. Loan: Disbursement letter + Loan sanction + Bank showing disbursement + 28 days held? Actually loan funds must be in account 28 days unless loan is from government regulated loan? UKVI: Loan must be from regulated financial institution and disbursed or sanctioned? Official: Student loan letter must be dated within 6 months before application and funds available. Better to show loan disbursed in account 28 days. Sponsor bank 28 days + Affidavit + Birth certificate proving relationship + Sponsor ID + Employment + ITR.
+- Skilled Worker: If maintenance not certified, bank 28 days £1,270 + dependants. Personal bank 28 days regular salary credit.
+- Family: Sponsor UK bank 6 months showing salary credit £29k, savings route savings 6 months £88,500 continuous, no drop. Applicant bank 6 months 2-3 lakhs.
+
+For documents array UK specific with MOST IMPORTANT ⭐:
+
+Standard Visitor: 16 docs - Passport valid 6 months beyond stay with 2 blank pages, Photo UK specs 45x35 white background, Online Application Form Access UK confirmation (MOST IMPORTANT), Appointment Letter VFS TLS, Fee Receipt £115, Cover Letter Purpose Itinerary Funding Return Home Ties Job Property Family (MOST IMPORTANT), Invitation Letter OR Hotel Booking Entire Stay 【entity-Booking.com¦canonical_name=Booking.com】 free cancellation with address (MOST IMPORTANT), Flight Reservation Not mandatory purchase but reservation PNR, Funds Bank 6 months 3-5 lakhs regular + Salary Slips 6 months (MOST IMPORTANT), ITR 2-3 years + Form 16 + Computation + Balance Sheet (MOST IMPORTANT), Employment Letter NOC Leave Approval Salary Designation Joining Date Company letterhead stamp signature (MOST IMPORTANT), Business Visitor Business Invitation Letter + Sponsor Letter Email Chain + Indian Company Letter if business visitor, Property Docs House Shop Land Registry, Family Ties Marriage Child Birth School, Previous UK Travel Old passports UK visas Entry Exit stamps BRP, If Sponsored Sponsor Letter + Sponsor Passport BRP ILR + Bank 6 months + Employment + Relationship proof + Affidavit, Travel Insurance £50k recommended, PCC if long stay, Invitation Sponsor Documents if family visitor
+
+Student Visa: 18 docs - Passport, Photo, Online Application Access UK, CAS Confirmation of Acceptance for Studies CAS number (MOST IMPORTANT ⭐ - Most Important - From licensed sponsor university), Academic Technology Approval Scheme ATAS Certificate if required for sensitive subjects (MOST IMPORTANT), Academic 10th 12th Degree Transcripts IELTS UKVI Degree Certificate WES, English IELTS UKVI 6.0-6.5 overall 5.5 each PTE UKVI 59 TOEFL not accepted for UKVI unless? (MOST IMPORTANT), Funds Bank 28 days £20k-30k continuous + Tuition + Living £1,023-£1,334 per month 9 months (MOST IMPORTANT - 28-day rule), Sponsor Docs Parents ID Employment ITR 2 years Bank 28 days Property Affidavit + Birth Certificate Relationship proof, ITR 2-3 years Student + Sponsor, Funds Source Proof Large deposit source 28 days, SOP Statement Purpose Course Why UK Why this university Future plans, CV Resume, Work Experience if any Experience Letters, Previous UK visas refusals explanation + Previous immigration history, Medical TB Test Certificate from approved clinic if India (MOST IMPORTANT), TB test valid 6 months, Maintenance Funds Letter if scholarship, Parental Consent if under 18, Financial Sponsor Letter if official sponsor, CAS Documents listed in CAS (Certificates used to get CAS), Credibility Interview preparation, Immigration Health Surcharge IHS £1035/year receipt
+
+Skilled Worker: 18 docs - Passport, Photo, Online Application, CoS Certificate of Sponsorship CoS number (MOST IMPORTANT ⭐ - From A-rated sponsor), Job Offer Letter UK Employer SOC Code Salary £26,200-£38,700+ depending SOC (MOST IMPORTANT), Employment Contract, Employer Sponsor Licence Proof A-rated, Educational Degree Transcripts English NARIC Ecctis Evaluation (MOST IMPORTANT), Work Experience Experience Letters 2-3 years SOC relevant (MOST IMPORTANT), Funds Personal Bank 28 days £1,270 if maintenance not certified or Sponsor certifies maintenance tick (MOST IMPORTANT), ITR 2-3 years + Form 16 + Salary Slips + Experience Letters match SOC, Resume CV SOC duties, Previous UK visas BRP I-94, Marriage Certificate Child Birth if dependant, Company docs UK Company Sponsor Licence, English IELTS UKVI 4.0-5.5 B1 CEFR (MOST IMPORTANT), TB Test if applicable, Maintenance Certificate in CoS, SOC Code and Salary meets threshold, Immigration Skills Charge Receipt, Criminal Record Certificate if required for certain SOC (Education Health), Dependant docs if dependant partner child, Accommodation proof UK address, Cover Letter SOC duties and genuineness
+
+Family Spouse: 18 docs - Passport Photo Old passports, Online Application Appendix FM, Relationship Proof Marriage Certificate Attested Translated + 20+ Photos Wedding Travel Family Daily life + Joint Bank Account + De facto 2 years proof Joint lease Bills Photos Chat history Call logs Joint travel bookings Joint tenancy council tax utility bills (MOST IMPORTANT for spouse), Sponsor Docs British Citizen Settled Person Passport Citizenship Certificate ILR BRP Income Proof £29k+ Employment Letter 6 months P60 Bank 6 months Address Proof Tenancy Utility bills Council tax (MOST IMPORTANT), Invitation Sponsor Letter Relationship history Future plans Financial support Accommodation (MOST IMPORTANT), Funds Sponsor Bank 6 months Personal Bank 3-5 lakhs Sponsor Income £29k MIR or Savings £88,500 route, ITR Sponsor UK SA302 Tax Year Overview + P60 + Bank 6 months + Payslips 6 months + Employer letter, Birth Certificate Family Tree, Divorce Decree if previous marriage, PCC India + UK + Any country lived 12+ months ACRO Police Certificate, Medical TB Test + IHS, English IELTS Life Skills A1 for entry A2 for extension B1 for ILR (MOST IMPORTANT), Accommodation Proof Tenancy Agreement Council tax Property inspection report if required, Joint Financial Docs Joint bank Joint lease Joint bills Joint travel, Police Clearance, Financial Requirement Category A/B Savings, Cover Letter Relationship timeline Genuine subsisting relationship, Child Birth Custody if dependent child, Immigration History Previous refusals
+
+Innovator Founder: 18 docs - Passport Photo Online Application, Endorsement Letter from Endorsing Body (MOST IMPORTANT ⭐ - From approved endorsing body), Business Plan Innovative Viable Scalable 10-20 pages (MOST IMPORTANT), Business Invitation Letter UK Endorser, Sponsor Letter, Indian Company Letter if existing business, Company Registration Incorporation GST MOA PAN Trade License Business Card, Company Financials Bank 6 months + ITR 2 years + Balance Sheet Turnover + P/L + GST Returns (MOST IMPORTANT), Funds Personal Bank 28 days £1,270 + Business funds £50k+ recommended (MOST IMPORTANT), ITR Personal 2 years + Company 2 years + Form 16 + GST Returns (MOST IMPORTANT), Previous Business Correspondence Emails Contracts Invoices 2 years, Employment Letter Salary Slips Contract, Personal Property Docs Family Ties, Cover Letter Detailed Purpose Business Innovation Viability Scalability Return intent, Insurance Flight Hotel, Previous Travel History Business visas, Tax Returns, English B2 CEFR IELTS UKVI 5.5, Endorsing Body fees, Maintenance funds, Business premises UK address, Source of Funds proof
+
+For each visa show isActive true for active visas, isActive false isLegacy true for repealed legacy: UKB-START, UKB-INNOV, UKB-T1E, UKB-T1I, UKB-T1GE, UKWO-REP partially closed, UKL-T1G, UKL-T1E, UKL-T1I, UKL-T1GE, UKL-T2G, UKL-T2ICT, UKL-T2M, UKL-T2S, UKL-T4, UKL-T5, UKL-ICT, UKL-SUR, UKL-UKFAM, UKL-DV, UKS-TIER4, UKS-STD? Actually UKS-STD active, UKH-UFS closed - Mark with note
+
+3. Keep dual-access: FULL_VISA_DB[toCode][category] = array AND FULL_VISA_DB[fromCode][toCode][category] = array both must work. Update BASE_COUNTRY_VISAS similarly.
+
+4. Update VISA_COUNTS_FROM_EXCEL for GB: tourist 13, work 32, student 10, family 27, business 9, pr 20 = Total GB 111 per FROM - Grand Total 853-19+111=945 (If Australia 135 + USA 145 + Canada 102 already, else 540-19+111=632 - Handle dynamically: Calculate total = previous total - old GB count + new GB count)
+
+5. Update AuditPage (/audit): Show Total 945+ Total Visa Records LIVE (or 632+ etc), Country-wise breakdown: GB 111 (Tourist 13 Work 32 Student 10 Family 27 Business 9 PR 20) vs Old 19, Category-wise: Tourist 135-5+13=143 (or 119-5+13=127), Work 205-6+32=231 (or 182-6+32=208), Student 110-3+10=117 (or 101-3+10=108), Family 147-4+27=170 (or 115-4+27=138), Business 96-3+9=102 (or 85-3+9=91), PR 160-4+20=176 (or 127-4+20=143), Grand Total 945 (or 632 etc), Document completeness 100% with CAS, CoS, Endorsement Letter, 28-day funds rule, MIR £29k etc, Active vs Repealed breakdown (Active ~85, Repealed/Legacy ~26), Searchable live URLs
+
+6. Update SitemapPage (/sitemap): Visa Guides for UK - 111 Visa Types grouped by VISIT TOURISM (UKV-STD UKV-LTV UKV-MED UKV-ACA UKV-PLS UKV-MAR UKV-CHV UKV-GRP UKT-AIR UKT-VIS UKT-EXM UKX-ETA UKS-STD), WORK (UKW-SWK UKW-HCW UKW-GBM-SSW UKW-GBM-GT UKW-GBM-UEW UKW-GBM-SS UKW-GBM-SW UKW-SCU UKW-ISP UKW-T2M UKTW-SEA UKTW-CHA UKTW-CRE UKTW-GAE UKTW-REL UKTW-IAW UKWO-GT UKWO-HPI UKWO-YMS UKWO-IYPS UKWO-ANC UKWO-ODW UKL-T1G UKL-T2G UKL-T2ICT UKL-T2M UKL-T2S UKL-T5 UKL-ICT UKL-SUR), STUDENT (UKS-STU UKS-CHS UKS-PCH UKS-SST UKWO-GRAD UKL-T4 UKX-ATAS UKX-S2 UKS-TIER4), FAMILY (UKF-PART UKF-FIANCE UKF-CHILD UKF-PARENT UKF-ADULT UKF-DEPEND UKF-PRIVATE UKF-SETL UKEU-EUSS UKEU-PRE UKEU-FP UKEU-FW UKEU-SUR UKH-BNO UKH-UEP UKH-HF UKH-UFS UKH-UKR UKC-ANC UKC-BNO UKC-RIGHT UKC-ROA-CTR UKL-UKFAM UKL-DV), BUSINESS (UKB-IF UKB-START UKB-INNOV UKB-T1E UKB-T1I UKB-T1GE UKWO-REP UKWO-PRT UKX-VIP), PR (UKP-ASY UKP-REF UKP-HUM UKP-DLR UKP-HP UKP-AR UKP-RESET UKR-ILR UKR-LR UKR-SETL UKR-FAM UKR-PRIVATE UKR-RETURN UKR-ROA UKN-NAT UKN-REG UKN-CHILD UKN-DESC UKN-REN UKN-BOC UKX-TRP UKX-TRP2 UKX-EXM) = 111 with Visa Code badges and Active/Legacy tags, Official Source link https://www.gov.uk/browse/visas-immigration
+
+7. Keep all existing: Back buttons at every level, Breadcrumbs Home > India to UK > Tourist > Standard Visitor, Language selector EN JA DE FR ES HI, Embassy 870 combos universalEmbassyDatabase British High Commission Delhi Mumbai Chennai Hyderabad Kolkata for IN to GB, Footer Sitemap (945+ Pages) for SEO + contact@visaapply.org, Audit admin only (Verification Tools section in /admin), AdSense pub-9048615701580913, Contact email, Multilingual auto-detect via navigator.language not middleware, Fix 500 error middleware.ts delete, api/index.ts delete, vercel.json rewrites only
+
+8. For each visa detail page Level 3 (/in-to-gb-tourist-ukv-std etc): Show 3 micro boxes: Funds Box (Minimum kitna, bank kitne mahine, sudden deposit rule with ❌ ✅ examples UK specific - Visitor 3-5 lakhs 6 months, Student £20k-30k 28 days continuous £1,023-£1,334 per month 9 months + tuition, Skilled Worker £1,270 28 days if not certified + dependants £285/£315, Innovator Founder £1,270 + £50k business, Family £29k income or £88,500 savings 6 months), ITR Box (Kitne saal, kaunsi ITR, match rule UK specific - Visitor 2-3 years + Form 16 + Ties, Student student + sponsor 2-3 years + CAS, Work ITR + Form 16 + Salary Slips + Experience Letters CoS match, Family sponsor UK 6 months payslips + P60 + SA302 + Bank), Bank Box (Kitne mahine, regular credit, FD, source, credit card rule UK specific - Visitor 6 months original stamped + regular salary, Student 28-day rule continuous balance every day not below + bank letter + savings only + loan regulated, Work 28 days £1,270 if not certified, Family 6 months salary credit £29k or savings 6 months £88,500 continuous) in Hindi+English mix, plus Tabs Overview/Documents (12-18 docs with MOST IMPORTANT ⭐ + checkboxes)/Info Required 8 sections UKVI style/Steps 7 steps with icons/Embassy/FAQs/Tips, Bottom Back buttons, Sticky back mobile
+
+Build and Push to GitHub - Vercel auto deploy - Check /in-to-gb-tourist should show 13 Types (not 0), /in-to-gb-work 32 Types, /in-to-gb-student 10 Types, /in-to-gb-family 27 Types, /in-to-gb-business 9 Types, /in-to-gb-pr 20 Types, Total GB 111, /audit Total 945+ (or 632+), /sitemap UK 111 Types

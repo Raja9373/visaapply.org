@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas } from './data/fullVisaDatabase';
+import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
 import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
@@ -8,7 +9,14 @@ import { AuditPage } from './pages/AuditPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { AdSenseBanner } from './components/AdSenseBanner';
 import { BlogArticleView } from './components/BlogArticleView';
-import { DEFAULT_PUBLISHED_GUIDES } from './data/defaultArticles';
+import {
+  DEFAULT_PUBLISHED_GUIDES,
+  mergeArticleCollections,
+  hydrateArticleWithCacheAndFallback,
+  findDefaultGuideMatch,
+  normalizeBlogSlug,
+  hasRicherRemoteArticles
+} from './data/defaultArticles';
 import { fetchWithRetry } from './utils/fetchWithRetry';
 
 import { JP_TO_IN_VISA } from './data/jpToInDetailed';
@@ -322,6 +330,14 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   const categoryVisas = countryVisas[category] || [];
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'legacy'>('all');
+  const [regionalFilter, setRegionalFilter] = useState<'all' | 'regional' | 'dama' | '491-sn-fs' | '494-es-la' | '191-pathways' | '417-462-ext'>('all');
+  const [usTypeFilter, setUsTypeFilter] = useState<'all' | 'official-visas' | 'programmes' | 'eb5-tea' | 'humanitarian' | 'travel-auth'>('all');
+  const [showRegionalOverview, setShowRegionalOverview] = useState<boolean>(false);
+
+  useEffect(() => {
+    setRegionalFilter('all');
+    setUsTypeFilter('all');
+  }, [toCode, category]);
 
   const sortedVisas = [...categoryVisas].sort((a: any, b: any) => {
     if (a.popular && !b.popular) return -1;
@@ -332,8 +348,48 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   });
 
   const displayedVisas = sortedVisas.filter((v: any) => {
-    if (statusFilter === 'active') return v.isActive !== false;
-    if (statusFilter === 'legacy') return v.isLegacy === true;
+    if (statusFilter === 'active' && v.isActive === false) return false;
+    if (statusFilter === 'legacy' && v.isLegacy !== true) return false;
+
+    if (toCode === 'US' && usTypeFilter !== 'all') {
+      if (usTypeFilter === 'official-visas') {
+        return v.isVisa !== false;
+      }
+      if (usTypeFilter === 'programmes') {
+        return v.isVisa === false;
+      }
+      if (usTypeFilter === 'eb5-tea') {
+        return v.programmeCategory === 'EB-5 Set-Aside' || v.programmeCategory === 'EB-5 USCIS Form' || v.programmeCategory === 'Regional Equivalent Programme';
+      }
+      if (usTypeFilter === 'humanitarian') {
+        return v.programmeCategory === 'Humanitarian & Relief Programme';
+      }
+      if (usTypeFilter === 'travel-auth') {
+        return v.programmeCategory === 'Travel Authorization';
+      }
+    }
+
+    if (toCode === 'AU' && regionalFilter !== 'all') {
+      const code = String(v.officialCode || v.code || '');
+      if (regionalFilter === 'regional') {
+        return Boolean(v.regionalCategory || v.regionalPathways || v.damaPathways);
+      }
+      if (regionalFilter === 'dama') {
+        return Boolean(v.damaPathways && v.damaPathways.length > 0);
+      }
+      if (regionalFilter === '491-sn-fs') {
+        return code === '491';
+      }
+      if (regionalFilter === '494-es-la') {
+        return code === '494';
+      }
+      if (regionalFilter === '191-pathways') {
+        return code === '191' || code === '887' || code === '489' || code === '187';
+      }
+      if (regionalFilter === '417-462-ext') {
+        return ['417', '462', '485'].includes(code);
+      }
+    }
     return true;
   });
 
@@ -402,8 +458,8 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
         </p>
 
         {/* Filter Toolbar for Active vs Legacy subclasses */}
-        {toCode === 'AU' && (
-          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-200">
+        {(toCode === 'AU' || toCode === 'US' || toCode === 'CA' || toCode === 'GB') && (
+          <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-200">
             <span className="text-xs font-semibold text-slate-500">Filter by Status:</span>
             <button
               onClick={() => setStatusFilter('all')}
@@ -431,26 +487,240 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
             </button>
           </div>
         )}
+
+        {/* Australia Regional Migration Filter Chips & 7-Category Guide */}
+        {toCode === 'AU' && (
+          <div className="mt-4 p-4 bg-gradient-to-r from-teal-50 via-emerald-50/70 to-blue-50 border border-teal-200 rounded-2xl space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🌄</span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-teal-950">
+                    {REGIONAL_MIGRATION_INFO.title} — Sub-Pathway Filter (AUS-REG-01 to AUS-REG-07)
+                  </h3>
+                  <p className="text-[11px] text-teal-800">
+                    Main regional visas: <strong>491, 494, 191</strong> · Related pathways: <strong>DAMA (482/494/186), 485 Regional, 417/462 Extensions</strong> · Legacy: <strong>489, 887, 187</strong>
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowRegionalOverview(!showRegionalOverview)}
+                className="px-3 py-1.5 bg-white hover:bg-teal-100 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0 self-start sm:self-auto"
+              >
+                {showRegionalOverview ? 'Hide 7 Regional Categories ▲' : 'View 7 Regional Categories & Postcodes ▼'}
+              </button>
+            </div>
+
+            {/* Regional Filter Chips */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <button
+                onClick={() => setRegionalFilter('all')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === 'all' ? 'bg-teal-900 text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setRegionalFilter('regional')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === 'regional' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                🌄 Regional Migration ({categoryVisas.filter((v: any) => Boolean(v.regionalCategory || v.regionalPathways || v.damaPathways)).length})
+              </button>
+              <button
+                onClick={() => setRegionalFilter('dama')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === 'dama' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                🤝 DAMA (482 / 494 / 186)
+              </button>
+              <button
+                onClick={() => setRegionalFilter('491-sn-fs')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === '491-sn-fs' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                🏛️ 491 State vs Family
+              </button>
+              <button
+                onClick={() => setRegionalFilter('494-es-la')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === '494-es-la' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                🚜 494 Employer vs Labour Agreement
+              </button>
+              <button
+                onClick={() => setRegionalFilter('191-pathways')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === '191-pathways' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                🏠 191 Pathways & Legacy (489/887/187)
+              </button>
+              <button
+                onClick={() => setRegionalFilter('417-462-ext')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  regionalFilter === '417-462-ext' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                }`}
+              >
+                🎒 417/462 & 485 Extensions
+              </button>
+            </div>
+
+            {/* Expandable 7-Category Regional Overview */}
+            {showRegionalOverview && (
+              <div className="pt-3 border-t border-teal-200/80 space-y-3 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                  {REGIONAL_MIGRATION_INFO.mainCategories.map((catItem) => (
+                    <div key={catItem.code} className="bg-white p-3 rounded-xl border border-teal-200 shadow-2xs space-y-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-mono font-black text-[11px] bg-teal-900 text-white px-2 py-0.5 rounded">
+                          {catItem.code}
+                        </span>
+                        <span className="text-[11px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                          Subclass {catItem.subclass}
+                        </span>
+                      </div>
+                      <div className="font-bold text-slate-900">{catItem.name}</div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed">{catItem.summary}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 bg-white p-3 rounded-xl border border-teal-200">
+                  <div>
+                    <span className="font-bold text-teal-950 block">📍 Category 2 – Cities & Major Regional Centres:</span>
+                    <p className="text-[11px] text-slate-700 mt-0.5">{REGIONAL_MIGRATION_INFO.regionalAreas.category2}</p>
+                  </div>
+                  <div>
+                    <span className="font-bold text-teal-950 block">🗺️ Category 3 – Regional Centres & Other Regional Areas:</span>
+                    <p className="text-[11px] text-slate-700 mt-0.5">{REGIONAL_MIGRATION_INFO.regionalAreas.category3}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* USA Regional Clarification & Official Visa vs Programme Filter Bar */}
+        {toCode === 'US' && (
+          <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 via-indigo-50/70 to-slate-50 border border-blue-200 rounded-2xl space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🇺🇸</span>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-[#0B3D91]">
+                    USA Visa Classifications (164 Official Visas) vs Immigration Programmes, Set-Asides & Travel Authorizations (37 Entries)
+                  </h3>
+                </div>
+                <p className="text-[11px] text-slate-700 leading-relaxed">
+                  <strong>Clarification:</strong> USA mein Australia jaisa Regional Migration, Designated Regional Areas/Postcodes ya DAMA visa system nahi hai. Ye Australian programmes hain. USA mein iske closest concepts <strong>EB-5 Targeted Employment Area (TEA: Rural / High-Unemployment / Infrastructure)</strong>, <strong>H-2A/H-2B labour certification areas</strong>, aur <strong>EB-5 Regional Center Programme</strong> hain — ye alag visa subclasses nahi hain, balki investment set-aside, geographical designation, ya programme hain.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <button
+                onClick={() => setUsTypeFilter('all')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  usTypeFilter === 'all' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-blue-100 border border-blue-200'
+                }`}
+              >
+                All Entries ({categoryVisas.length})
+              </button>
+              <button
+                onClick={() => setUsTypeFilter('official-visas')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  usTypeFilter === 'official-visas' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-[#0B3D91] hover:bg-blue-100 border border-blue-200'
+                }`}
+              >
+                🛂 Official Visa Classifications ({categoryVisas.filter((v: any) => v.isVisa !== false).length})
+              </button>
+              {categoryVisas.some((v: any) => v.isVisa === false) && (
+                <button
+                  onClick={() => setUsTypeFilter('programmes')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                    usTypeFilter === 'programmes' ? 'bg-purple-800 text-white shadow-xs' : 'bg-white text-purple-900 hover:bg-purple-100 border border-purple-200'
+                  }`}
+                >
+                  📋 Non-Visa Programmes / Set-Asides / Forms ({categoryVisas.filter((v: any) => v.isVisa === false).length})
+                </button>
+              )}
+              {categoryVisas.some((v: any) => v.programmeCategory === 'EB-5 Set-Aside' || v.programmeCategory === 'EB-5 USCIS Form' || v.programmeCategory === 'Regional Equivalent Programme') && (
+                <button
+                  onClick={() => setUsTypeFilter('eb5-tea')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                    usTypeFilter === 'eb5-tea' ? 'bg-indigo-800 text-white shadow-xs' : 'bg-white text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
+                  }`}
+                >
+                  🏛️ EB-5 TEA Set-Asides, Forms & Regional Equiv ({categoryVisas.filter((v: any) => v.programmeCategory === 'EB-5 Set-Aside' || v.programmeCategory === 'EB-5 USCIS Form' || v.programmeCategory === 'Regional Equivalent Programme').length})
+                </button>
+              )}
+              {categoryVisas.some((v: any) => v.programmeCategory === 'Humanitarian & Relief Programme') && (
+                <button
+                  onClick={() => setUsTypeFilter('humanitarian')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                    usTypeFilter === 'humanitarian' ? 'bg-teal-800 text-white shadow-xs' : 'bg-white text-teal-900 hover:bg-teal-100 border border-teal-200'
+                  }`}
+                >
+                  🕊️ Humanitarian / Asylum / Refugee / Parole ({categoryVisas.filter((v: any) => v.programmeCategory === 'Humanitarian & Relief Programme').length})
+                </button>
+              )}
+              {categoryVisas.some((v: any) => v.programmeCategory === 'Travel Authorization') && (
+                <button
+                  onClick={() => setUsTypeFilter('travel-auth')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                    usTypeFilter === 'travel-auth' ? 'bg-emerald-800 text-white shadow-xs' : 'bg-white text-emerald-900 hover:bg-emerald-100 border border-emerald-200'
+                  }`}
+                >
+                  ✈️ ESTA / VWP Travel Authorizations ({categoryVisas.filter((v: any) => v.programmeCategory === 'Travel Authorization').length})
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Grid of Visa Type Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {displayedVisas.map((v: any) => (
+        {displayedVisas.map((v: any) => {
+          const prefixRegex = new RegExp(`^[a-z]{2,3}-to-${toCode.toLowerCase()}-${category}-`, 'i');
+          const shortId = String(v.id || '').replace(prefixRegex, '');
+          return (
           <div
             key={v.id}
-            onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${category}-${v.id}`)}
+            onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${category}-${shortId}`)}
             className={`p-6 rounded-2xl border transition-all duration-200 cursor-pointer bg-white flex flex-col justify-between group shadow-sm hover:shadow-md ${
               v.highlight ? 'border-[#0B3D91] ring-1 ring-[#0B3D91]' : 'border-slate-200 hover:border-[#0B3D91]'
             }`}
           >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-3xl">{v.icon || '📄'}</span>
                   {v.officialCode && (
                     <span className="bg-blue-100 text-[#0B3D91] font-mono text-xs font-black px-2 py-0.5 rounded shadow-xs">
-                      Subclass {v.officialCode}
+                      {toCode === 'AU' ? `Subclass ${v.officialCode}` : v.officialCode}
                     </span>
+                  )}
+                  {v.regionalCategory && (
+                    <span className="bg-teal-100 text-teal-900 font-mono text-[10px] font-black px-2 py-0.5 rounded border border-teal-300">
+                      {v.regionalCategory}
+                    </span>
+                  )}
+                  {toCode === 'US' && (
+                    v.isVisa === false ? (
+                      <span className="bg-purple-100 text-purple-900 text-[10px] font-extrabold px-2 py-0.5 rounded border border-purple-300">
+                        {v.programmeCategory || 'US Programme / Non-Visa'}
+                      </span>
+                    ) : (
+                      <span className="bg-blue-50 text-[#0B3D91] text-[10px] font-bold px-2 py-0.5 rounded border border-blue-200">
+                        Official Visa
+                      </span>
+                    )
                   )}
                 </div>
                 <div className="flex items-center gap-1.5 flex-wrap justify-end">
@@ -477,6 +747,26 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
                 {(isJa && v.purpose_ja) ? v.purpose_ja : v.purpose}
               </p>
 
+              {/* Sub-pathway pills on Level 2 card for Australia Regional Migration */}
+              {(v.regionalPathways || v.damaPathways) && (
+                <div className="mt-3 flex flex-wrap gap-1">
+                  {v.regionalPathways?.map((rp: any) => (
+                    <span
+                      key={rp.code}
+                      className="text-[10px] font-bold bg-teal-50 text-teal-900 border border-teal-200 px-2 py-0.5 rounded-md"
+                      title={rp.name}
+                    >
+                      {rp.code}
+                    </span>
+                  ))}
+                  {v.damaPathways && v.damaPathways.length > 0 && (
+                    <span className="text-[10px] font-bold bg-indigo-50 text-indigo-900 border border-indigo-200 px-2 py-0.5 rounded-md">
+                      DAMA (482/494/186)
+                    </span>
+                  )}
+                </div>
+              )}
+
               <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
                 <div>
                   <span className="text-slate-400 block font-medium">{t.fee}</span>
@@ -496,7 +786,8 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Suggest Missing Visa CTA */}
@@ -526,7 +817,20 @@ export default function App() {
   const [visaTypes, setVisaTypes] = useState<VisaType[]>([]);
   const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
   const [selectedOrigin, setSelectedOrigin] = useState<Country | null>(null);
-  const [articles, setArticles] = useState<Article[]>(DEFAULT_PUBLISHED_GUIDES);
+  const [articles, setArticles] = useState<Article[]>(() => {
+    try {
+      const localPub = localStorage.getItem('publishedGuides');
+      if (localPub) {
+        const parsed = JSON.parse(localPub);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return mergeArticleCollections(DEFAULT_PUBLISHED_GUIDES, parsed);
+        }
+      }
+    } catch {
+      // ignore localStorage read errors
+    }
+    return mergeArticleCollections(DEFAULT_PUBLISHED_GUIDES);
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -557,97 +861,132 @@ export default function App() {
   };
 
   const safeFetchJson = async (url: string, options?: RequestInit, fallback: any = null) => {
-    try {
-      const res = await fetch(url, options);
-      const text = await res.text();
-      const trimmed = text.trim();
-      if (!text || trimmed.startsWith('<') || trimmed.startsWith('export')) {
-        console.warn(`API ${url} returned non-JSON response`);
-        return fallback;
-      }
-      return JSON.parse(text);
-    } catch (err) {
-      console.error(`Fetch error for ${url}:`, err);
-      return fallback;
-    }
+    return fetchWithRetry(url, options || {}, {
+      retries: 4,
+      initialDelay: 1000,
+      maxDelay: 15000,
+      backoffMultiplier: 2,
+      backoffIncrement500: 1500,
+      backoffIncrement503: 3000,
+      timeoutMs: 30000,
+      fallback
+    });
   };
 
   useEffect(() => {
-    // Load pending drafts & published guides from localStorage, plus app data with exponential backoff retry
-    const loadAppData = async () => {
-      let parsedPub: Article[] = [];
-      try {
-        const localDrafts = localStorage.getItem('pendingDrafts');
-        if (localDrafts) {
-          const parsed = JSON.parse(localDrafts);
-          if (Array.isArray(parsed) && parsed.length > 0) setDrafts(parsed);
+    const abortController = new AbortController();
+
+    // 1. Cache-First Immediate Hydration: read localStorage + DEFAULT_PUBLISHED_GUIDES and update state synchronously
+    let parsedPub: Article[] = [];
+    try {
+      const localDrafts = localStorage.getItem('pendingDrafts');
+      if (localDrafts) {
+        const parsed = JSON.parse(localDrafts);
+        if (Array.isArray(parsed) && parsed.length > 0) setDrafts(parsed);
+      }
+      const localPub = localStorage.getItem('publishedGuides');
+      if (localPub) {
+        const parsed = JSON.parse(localPub);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          parsedPub = parsed;
         }
-        const localPub = localStorage.getItem('publishedGuides');
-        if (localPub) {
-          const parsed = JSON.parse(localPub);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            parsedPub = parsed;
+      }
+    } catch {
+      // ignore localStorage read errors
+    }
+
+    const cachedHydrated = mergeArticleCollections(DEFAULT_PUBLISHED_GUIDES, parsedPub);
+    setArticles(cachedHydrated);
+    try {
+      localStorage.setItem('publishedGuides', JSON.stringify(cachedHydrated));
+    } catch {
+      // ignore quota errors
+    }
+
+    // 2. Background Network Sync for Blogs: non-blocking request that updates state ONLY if remote payload has richer content
+    void fetchWithRetry<Article[] | { published?: Article[] } | null>(
+      '/api/articles',
+      { signal: abortController.signal },
+      {
+        retries: 4,
+        initialDelay: 1000,
+        maxDelay: 15000,
+        backoffMultiplier: 2,
+        backoffIncrement500: 1500,
+        backoffIncrement503: 3000,
+        timeoutMs: 30000,
+        fallback: null
+      }
+    )
+      .then(remoteArticles => {
+        if (abortController.signal.aborted || !remoteArticles) return;
+
+        const serverList: Article[] = Array.isArray(remoteArticles)
+          ? remoteArticles
+          : Array.isArray((remoteArticles as any)?.published)
+            ? (remoteArticles as any).published
+            : [];
+
+        if (serverList.length > 0 && hasRicherRemoteArticles(cachedHydrated, serverList)) {
+          const finalArticles = mergeArticleCollections(DEFAULT_PUBLISHED_GUIDES, parsedPub, serverList);
+          setArticles(finalArticles);
+          try {
+            localStorage.setItem('publishedGuides', JSON.stringify(finalArticles));
+          } catch {
+            // ignore quota errors
           }
         }
-      } catch (e) {
-        console.warn('Error reading from localStorage in loadAppData:', e);
-      }
+      })
+      .catch(() => {});
 
-      // Fetch server articles with 3-attempt exponential backoff and 15s timeout
-      const remoteArticles = await fetchWithRetry<Article[] | { published?: Article[] }>('/api/articles', {}, {
-        retries: 3,
-        initialDelay: 1000,
-        backoffMultiplier: 2,
-        timeoutMs: 15000,
-        fallback: []
-      });
+    // 3. Fetch countries & visa types in parallel
+    const loadMetadata = async () => {
+      const [countriesData, visaData] = await Promise.all([
+        fetchWithRetry<Country[]>(
+          '/api/countries',
+          { signal: abortController.signal },
+          {
+            retries: 4,
+            initialDelay: 1000,
+            maxDelay: 15000,
+            backoffMultiplier: 2,
+            backoffIncrement500: 1500,
+            backoffIncrement503: 3000,
+            timeoutMs: 30000,
+            fallback: FALLBACK_COUNTRIES
+          }
+        ),
+        fetchWithRetry<VisaType[]>(
+          '/api/visa-types',
+          { signal: abortController.signal },
+          {
+            retries: 4,
+            initialDelay: 1000,
+            maxDelay: 15000,
+            backoffMultiplier: 2,
+            backoffIncrement500: 1500,
+            backoffIncrement503: 3000,
+            timeoutMs: 30000,
+            fallback: []
+          }
+        )
+      ]);
 
-      const serverList: Article[] = Array.isArray(remoteArticles) 
-        ? remoteArticles 
-        : (Array.isArray((remoteArticles as any)?.published) ? (remoteArticles as any).published : []);
-
-      // Merge backend articles, localStorage articles, and DEFAULT_PUBLISHED_GUIDES deduplicated by slug
-      const mergedBySlug = new Map<string, Article>();
-      DEFAULT_PUBLISHED_GUIDES.forEach(a => mergedBySlug.set(a.slug.toLowerCase(), a));
-      parsedPub.forEach(a => {
-        if (a?.slug) mergedBySlug.set(a.slug.toLowerCase(), a);
-      });
-      serverList.forEach(a => {
-        if (a?.slug) mergedBySlug.set(a.slug.toLowerCase(), a);
-      });
-
-      const finalArticles = Array.from(mergedBySlug.values());
-      setArticles(finalArticles);
-      try {
-        localStorage.setItem('publishedGuides', JSON.stringify(finalArticles));
-      } catch (e) {
-        // quota ignore
-      }
-
-      const countriesData = await fetchWithRetry<Country[]>('/api/countries', {}, {
-        retries: 3,
-        initialDelay: 1000,
-        backoffMultiplier: 2,
-        timeoutMs: 15000,
-        fallback: FALLBACK_COUNTRIES
-      });
-      if (Array.isArray(countriesData) && countriesData.length > 0) {
-        setCountries(countriesData);
-      }
-
-      const visaData = await fetchWithRetry<VisaType[]>('/api/visa-types', {}, {
-        retries: 3,
-        initialDelay: 1000,
-        backoffMultiplier: 2,
-        timeoutMs: 15000,
-        fallback: []
-      });
-      if (Array.isArray(visaData)) {
-        setVisaTypes(visaData);
+      if (!abortController.signal.aborted) {
+        if (Array.isArray(countriesData) && countriesData.length > 0) {
+          setCountries(countriesData);
+        }
+        if (Array.isArray(visaData)) {
+          setVisaTypes(visaData);
+        }
       }
     };
 
-    loadAppData();
+    void loadMetadata();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const handleTriggerCron = async () => {
@@ -655,11 +994,12 @@ export default function App() {
     setCronResult(null);
     try {
       const data = await fetchWithRetry<any>('/api/cron', { method: 'POST' }, {
-        retries: 3,
+        retries: 4,
         initialDelay: 1000,
+        maxDelay: 12000,
         backoffMultiplier: 2,
         timeoutMs: 30000,
-        fallback: { success: false, drafts: [], message: 'Cron request failed after 3 retries' }
+        fallback: { success: false, drafts: [], message: 'Cron request failed after 4 retries' }
       });
       if (data?.success && Array.isArray(data.drafts) && data.drafts.length > 0) {
         setDrafts(data.drafts);
@@ -749,14 +1089,23 @@ export default function App() {
   const isLevel3Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i) || 
                         (!isLevel2Match && currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i));
 
-  const cleanPathSlug = currentPath.replace(/^\//, '').toLowerCase().trim();
+  const cleanPathSlug = normalizeBlogSlug(currentPath);
 
   // 4. Published Blog Articles: e.g. /india-to-canada-work-visa-atlxt or any custom article slug
-  const matchedBlogArticle = articles.find((a: Article) => {
-    const s = (a.slug || '').toLowerCase().trim();
-    const r = ((a as any).route || '').toLowerCase().trim();
-    return s === cleanPathSlug || r === cleanPathSlug || ('/' + s) === currentPath.toLowerCase();
-  });
+  // Cache-first lookup: check in-memory articles -> localStorage cache -> DEFAULT_PUBLISHED_GUIDES fallback
+  const matchedBlogArticle = (() => {
+    if (!cleanPathSlug) return undefined;
+    const fromState = articles.find((a: Article) => {
+      const s = normalizeBlogSlug(a.slug);
+      const r = normalizeBlogSlug((a as any).route);
+      return s === cleanPathSlug || r === cleanPathSlug;
+    });
+    const fromDefault = findDefaultGuideMatch(cleanPathSlug);
+    if (fromState || fromDefault) {
+      return hydrateArticleWithCacheAndFallback(fromState || { slug: cleanPathSlug }, fromDefault) || fromState || fromDefault;
+    }
+    return undefined;
+  })();
 
   const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && (
     Boolean(matchedBlogArticle) || (
@@ -915,20 +1264,20 @@ export default function App() {
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (769+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (1001+ Pages)</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-500">769+ Visa Guides across 30 Destination Countries</li>
+              <li className="text-xs text-slate-500">1001+ Visa & Programme Guides across 30 Destination Countries</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 769+ Visa Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 1001+ Visa & Programme Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -1086,10 +1435,12 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {articles.map((art: Article) => (
+              {articles.map((art: Article, idx: number) => {
+                const targetSlug = normalizeBlogSlug(art.slug || (art as any).route || art.title);
+                return (
                 <div 
-                  key={art.slug}
-                  onClick={() => navigate(`/${art.slug}`)}
+                  key={targetSlug || idx}
+                  onClick={() => navigate(`/${targetSlug}`)}
                   className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group"
                 >
                   <div className="space-y-3">
@@ -1109,7 +1460,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     <span className="text-[#0B3D91] flex items-center gap-1 group-hover:underline">Read Guide <ArrowRight className="w-3.5 h-3.5" /></span>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -1569,6 +1921,11 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const [checkedDocs, setCheckedDocs] = useState<Record<number, boolean>>({});
   const [faqSearchQuery, setFaqSearchQuery] = useState('');
   const [activeSection, setActiveSection] = useState<string>('');
+  const [activePathwayTab, setActivePathwayTab] = useState<number>(0);
+
+  useEffect(() => {
+    setActivePathwayTab(0);
+  }, [fromCode, toCode, categoryCode, subtypeCode]);
 
   const handleJumpToSection = (sectionId: string) => {
     if (!sectionId) return;
@@ -1594,15 +1951,43 @@ function ArticleView({ match, articles = [], navigate }: any) {
     : (FULL_VISA_DB[fromCode]?.[toCode] || FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
   const categoryVisas = countryData?.[categoryCode as keyof CountryVisas] || countryData?.['tourist'] || [];
   
-  // Find matching subtype visa in database
-  const dbVisaItem = categoryVisas.find((v: any) => v.id.toLowerCase() === subtypeCode) ||
-                     categoryVisas.find((v: any) => v.id.toLowerCase().includes(subtypeCode)) ||
-                     categoryVisas[0];
+  // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus cross-category lookup for subclasses like /in-to-au-work-187 -> 187)
+  const expectedFullId = `in-to-${toCode.toLowerCase()}-${categoryCode}-${subtypeCode}`;
+  const allCountryVisasFlat: any[] = countryData
+    ? [
+        ...(countryData.tourist || []),
+        ...(countryData.work || []),
+        ...(countryData.student || []),
+        ...(countryData.family || []),
+        ...(countryData.business || []),
+        ...(countryData.pr || [])
+      ]
+    : [];
+
+  const dbVisaItem =
+    categoryVisas.find((v: any) => {
+      const vid = String(v.id || '').toLowerCase();
+      const vcode = String(v.officialCode || '').toLowerCase();
+      return (
+        vid === subtypeCode ||
+        vid === expectedFullId ||
+        vid.endsWith(`-${categoryCode}-${subtypeCode}`) ||
+        vcode === subtypeCode
+      );
+    }) ||
+    allCountryVisasFlat.find((v: any) => {
+      const vid = String(v.id || '').toLowerCase();
+      const vcode = String(v.officialCode || '').toLowerCase();
+      return vcode === subtypeCode || vid.endsWith(`-${subtypeCode}`);
+    }) ||
+    categoryVisas.find((v: any) => String(v.id || '').toLowerCase().includes(subtypeCode)) ||
+    categoryVisas[0];
 
   useEffect(() => {
     const sectionIds = [
       'section-overview',
       'section-subclass',
+      'section-regional',
       'section-financial',
       'section-info-req',
       'section-docs',
@@ -1632,19 +2017,26 @@ function ArticleView({ match, articles = [], navigate }: any) {
   }, [toCode, dbVisaItem]);
 
   useEffect(() => {
+    const controller = new AbortController();
     let isMounted = true;
-    setFaqLoading(true);
+    if (dbVisaItem?.faq && Array.isArray(dbVisaItem.faq) && dbVisaItem.faq.length > 0) {
+      setFaqs(dbVisaItem.faq);
+      setFaqLoading(false);
+    } else {
+      setFaqLoading(true);
+    }
 
     const queryUrl = `/api/faq?from=${encodeURIComponent(fromCode)}&to=${encodeURIComponent(toCode)}&type=${encodeURIComponent(subtypeCode)}`;
 
     fetchWithRetry<{ success?: boolean; faqs?: any[] }>(
       queryUrl,
-      {},
+      { signal: controller.signal },
       {
-        retries: 3,
+        retries: 4,
         initialDelay: 1000,
+        maxDelay: 12000,
         backoffMultiplier: 2,
-        timeoutMs: 15000, // Timeout increased beyond 6s to 15s
+        timeoutMs: 30000, // Increased from 6s to 30s to accommodate complex FAQ generations
         fallback: { success: true, faqs: dbVisaItem?.faq || [] }
       }
     )
@@ -1665,6 +2057,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
     return () => {
       isMounted = false;
+      controller.abort();
     };
   }, [fromCode, toCode, subtypeCode, dbVisaItem]);
 
@@ -1776,7 +2169,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
                   <option value="">⚡ Jump to Section...</option>
                   <option value="section-overview">📌 1. Overview & Fees</option>
                   {toCode === 'AU' && <option value="section-subclass">🇦🇺 2. Official Subclass Registry</option>}
+                  {toCode === 'AU' && (dbVisaItem?.regionalCategory || dbVisaItem?.regionalPathways || dbVisaItem?.damaPathways) && (
+                    <option value="section-regional">🌄 2B. Regional Migration Pathways & Areas</option>
+                  )}
                   {toCode === 'US' && <option value="section-subclass">🇺🇸 2. Official U.S. Visa Registry</option>}
+                  {toCode === 'CA' && <option value="section-subclass">🇨🇦 2. Official IRCC Program Registry</option>}
+                  {toCode === 'GB' && <option value="section-subclass">🇬🇧 2. Official GOV.UK UKVI Route Registry</option>}
                   <option value="section-financial">💼 3. Funds, ITR & Bank Rules</option>
                   <option value="section-info-req">📋 4. Mandatory Application Data</option>
                   <option value="section-docs">📄 5. Document Checklist ({docsList.length} docs)</option>
@@ -1869,7 +2267,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
             </div>
             <div className="bg-purple-50/70 p-3 rounded-xl border border-purple-100 text-center">
               <span className="text-slate-500 block font-medium">{t.processing}</span>
-              <span className="font-bold text-purple-800 text-sm mt-0.5 block">3-5 Days</span>
+              <span className="font-bold text-purple-800 text-sm mt-0.5 block">{dbVisaItem?.processing || '3-5 Weeks'}</span>
             </div>
           </div>
         </div>
@@ -1936,29 +2334,41 @@ function ArticleView({ match, articles = [], navigate }: any) {
           </div>
         )}
 
-        {/* USA OFFICIAL VISA CLASSIFICATION & STATE DEPARTMENT REGISTER STATUS */}
+        {/* USA OFFICIAL VISA CLASSIFICATION & STATE DEPARTMENT / USCIS REGISTER STATUS */}
         {toCode === 'US' && (
-          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2 scroll-mt-28 ${
-            dbVisaItem?.isLegacy ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-blue-50 border-blue-200 text-blue-950'
+          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2.5 scroll-mt-28 ${
+            dbVisaItem?.isVisa === false
+              ? 'bg-purple-50 border-purple-300 text-purple-950'
+              : dbVisaItem?.isLegacy
+                ? 'bg-amber-50 border-amber-300 text-amber-900'
+                : 'bg-blue-50 border-blue-200 text-blue-950'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-current/20">
-              <div className="flex items-center gap-2 font-bold text-sm">
+              <div className="flex items-center gap-2 font-bold text-sm flex-wrap">
                 <span>🇺🇸</span>
-                <span>U.S. Official Visa Classification: {dbVisaItem?.officialName || dbVisaItem?.name}</span>
+                <span>
+                  {dbVisaItem?.isVisa === false
+                    ? `U.S. Immigration Programme / Pathway: ${dbVisaItem?.officialName || dbVisaItem?.name}`
+                    : `U.S. Official Visa Classification: ${dbVisaItem?.officialName || dbVisaItem?.name}`}
+                </span>
                 {dbVisaItem?.officialCode && (
                   <span className="bg-[#0B3D91] text-white font-mono text-xs px-2 py-0.5 rounded font-black">
-                    Class {dbVisaItem.officialCode}
+                    {dbVisaItem?.isVisa === false ? `Code ${dbVisaItem.officialCode}` : `Class ${dbVisaItem.officialCode}`}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                {dbVisaItem?.isLegacy ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                {dbVisaItem?.isVisa === false ? (
+                  <span className="bg-purple-200 text-purple-950 font-bold px-2 py-0.5 rounded text-[11px]">
+                    📋 {dbVisaItem?.programmeCategory || 'Non-Visa Programme / Set-Aside / Form'}
+                  </span>
+                ) : dbVisaItem?.isLegacy ? (
                   <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
-                    ⚠️ Legacy / Special Waiver Class
+                    ⚠️ Legacy / Historical Visa Class
                   </span>
                 ) : (
                   <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
-                    🟢 Official Active INA Classification
+                    🟢 Official Active INA Visa Classification
                   </span>
                 )}
                 <a
@@ -1967,7 +2377,66 @@ function ArticleView({ match, articles = [], navigate }: any) {
                   rel="noopener noreferrer"
                   className="font-bold underline flex items-center gap-1 text-[11px] hover:opacity-80"
                 >
-                  <span>State Department Directory</span>
+                  <span>{dbVisaItem?.isVisa === false ? 'Official USCIS / DHS Portal' : 'State Department Directory'}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+
+            {dbVisaItem?.isVisa === false && (
+              <div className="p-2.5 bg-white/80 rounded-lg border border-purple-200 text-[11px] leading-relaxed">
+                <strong>Important Distinction (Not a Standalone Visa Subclass):</strong> {dbVisaItem?.programmeNote || 'This entry is an official United States immigration programme, EB-5 reserved visa set-aside, USCIS petition form, humanitarian relief status, or visa-exempt travel authorization — it is NOT a standalone consular visa subclass.'}
+              </div>
+            )}
+
+            {dbVisaItem?.isLegacy ? (
+              <p className="leading-relaxed text-[11px]">
+                <strong>Important Notice:</strong> {dbVisaItem?.programmeNote || `Classification ${dbVisaItem?.officialCode || subtypeCode} is a historical, legacy, or sunset category under the Immigration and Nationality Act (INA), not active for new general filings.`}
+              </p>
+            ) : (
+              <p className="leading-relaxed text-[11px]">
+                Verified against the Immigration and Nationality Act (INA), U.S. Citizenship and Immigration Services (USCIS) policy manual, and U.S. Department of State Foreign Affairs Manual (9 FAM).
+              </p>
+            )}
+
+            <div className="pt-2 border-t border-current/15 text-[11px] text-slate-700 leading-relaxed">
+              <strong>Clarification on Regional Migration:</strong> USA mein Australia jaisa Regional Migration, Designated Regional Areas/Postcodes ya DAMA visa system nahi hai. Ye Australian programmes hain. USA mein iske closest concepts <strong>EB-5 Targeted Employment Area (TEA: Rural / High-Unemployment / Infrastructure)</strong>, <strong>H-2A/H-2B labour certification areas</strong>, aur <strong>EB-5 Regional Center Programme</strong> hain — ye alag visa subclasses nahi hain.
+            </div>
+          </div>
+        )}
+
+        {/* CANADA OFFICIAL IRCC STREAM & IMMIGRATION PROGRAM REGISTER STATUS */}
+        {toCode === 'CA' && (
+          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2 scroll-mt-28 ${
+            dbVisaItem?.isLegacy ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-blue-50 border-blue-200 text-blue-950'
+          }`}>
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-current/20">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                <span>🇨🇦</span>
+                <span>Official IRCC Immigration Program: {dbVisaItem?.officialName || dbVisaItem?.name}</span>
+                {dbVisaItem?.officialCode && (
+                  <span className="bg-[#0B3D91] text-white font-mono text-xs px-2 py-0.5 rounded font-black">
+                    Code {dbVisaItem.officialCode}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {dbVisaItem?.isLegacy ? (
+                  <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    ⚠️ Paused / Legacy Stream
+                  </span>
+                ) : (
+                  <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    🟢 Official Active IRCC Stream
+                  </span>
+                )}
+                <a
+                  href={dbVisaItem?.officialSource || "https://www.canada.ca/en/immigration-refugees-citizenship/services/come-canada.html"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold underline flex items-center gap-1 text-[11px] hover:opacity-80"
+                >
+                  <span>IRCC Official Portal</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
@@ -1975,12 +2444,229 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
             {dbVisaItem?.isLegacy ? (
               <p className="leading-relaxed text-[11px]">
-                <strong>Important Notice:</strong> Classification {dbVisaItem?.officialCode || subtypeCode} is a legacy, specialized waiver, or limited-scope visa class under the Immigration and Nationality Act (INA). Verify active eligibility and filing guidelines on the official U.S. Department of State or USCIS directory before submitting Form DS-160 or Form DS-260.
+                <strong>Important Notice:</strong> Program {dbVisaItem?.officialCode || subtypeCode} is currently paused, closed to new applications, or under ministerial review by Immigration, Refugees and Citizenship Canada (IRCC) / MIDI Quebec. Verify current replacement streams on the official Canada.ca immigration portal.
               </p>
             ) : (
               <p className="leading-relaxed text-[11px]">
-                Official active United States visa classification verified under the Immigration and Nationality Act (INA) and Department of State Foreign Affairs Manual (FAM).
+                Active official Canadian visa/immigration stream verified under the Immigration and Refugee Protection Act (IRPA) and Immigration, Refugees and Citizenship Canada (IRCC) regulations.
               </p>
+            )}
+          </div>
+        )}
+
+        {/* UK OFFICIAL GOV.UK UKVI IMMIGRATION ROUTE & APPENDIX REGISTER STATUS */}
+        {toCode === 'GB' && (
+          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2 scroll-mt-28 ${
+            dbVisaItem?.isLegacy ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-indigo-50 border-indigo-200 text-indigo-950'
+          }`}>
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-current/20">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                <span>🇬🇧</span>
+                <span>Official GOV.UK UKVI Route: {dbVisaItem?.officialName || dbVisaItem?.name}</span>
+                {dbVisaItem?.officialCode && (
+                  <span className="bg-[#0B3D91] text-white font-mono text-xs px-2 py-0.5 rounded font-black">
+                    Code {dbVisaItem.officialCode}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {dbVisaItem?.isLegacy ? (
+                  <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    ⚠️ Legacy / Closed UKVI Route
+                  </span>
+                ) : (
+                  <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                    🟢 Official Active GOV.UK Route
+                  </span>
+                )}
+                <a
+                  href={dbVisaItem?.officialSource || "https://www.gov.uk/browse/visas-immigration"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold underline flex items-center gap-1 text-[11px] hover:opacity-80"
+                >
+                  <span>GOV.UK Immigration Rules</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+
+            {dbVisaItem?.isLegacy ? (
+              <p className="leading-relaxed text-[11px]">
+                <strong>Important Notice:</strong> Route {dbVisaItem?.officialCode || subtypeCode} is a closed or legacy UK immigration category (replaced under the modern Points-Based System and Appendix rules). Retained for historical status verification, transitional extensions, and ILR settlement calculations. Verify current replacement routes on GOV.UK.
+              </p>
+            ) : (
+              <p className="leading-relaxed text-[11px]">
+                Active official United Kingdom immigration route verified against UK Visas and Immigration (UKVI) guidance and the GOV.UK Immigration Rules Index.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* AUSTRALIA REGIONAL MIGRATION PATHWAYS, DAMA & DESIGNATED REGIONAL AREAS SECTION */}
+        {toCode === 'AU' && (dbVisaItem?.regionalCategory || dbVisaItem?.regionalPathways || dbVisaItem?.damaPathways) && (
+          <div id="section-regional" className="bg-gradient-to-br from-teal-50/90 via-emerald-50/50 to-white border-2 border-teal-500/80 rounded-2xl p-5 sm:p-6 space-y-5 scroll-mt-28 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-teal-200">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xl">🌄</span>
+                  <h2 className="text-base sm:text-lg font-extrabold text-teal-950">
+                    Regional Migration Pathways — {dbVisaItem?.categoryName || 'Australian Regional Migration'}
+                  </h2>
+                  {dbVisaItem?.regionalCategory && (
+                    <span className="bg-teal-900 text-white font-mono text-xs font-black px-2.5 py-0.5 rounded">
+                      {dbVisaItem.regionalCategory}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-teal-800">
+                  Official Department of Home Affairs regional sub-pathways, eligibility differences, DAMA agreements, and designated postcode zones.
+                </p>
+              </div>
+              <a
+                href={dbVisaItem?.officialSource || REGIONAL_MIGRATION_INFO.officialSource}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-teal-900 bg-white hover:bg-teal-100 border border-teal-300 px-3 py-1.5 rounded-xl shrink-0 self-start sm:self-auto"
+              >
+                <span>Official Visa Listing</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Regional Pathways Tabs & Cards (e.g. AUS-491-SN vs AUS-491-FS, AUS-494-ES vs AUS-494-LA, AUS-191-RP vs AUS-191-HK, AUS-485-2PSW, AUS-417/462, or Legacy 489/887/187) */}
+            {dbVisaItem?.regionalPathways && dbVisaItem.regionalPathways.length > 0 && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-teal-900">
+                    Official Sub-Pathways ({dbVisaItem.regionalPathways.length} Streams)
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {dbVisaItem.regionalPathways.map((p: any, idx: number) => (
+                      <button
+                        key={p.code}
+                        onClick={() => setActivePathwayTab(idx)}
+                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                          activePathwayTab === idx
+                            ? 'bg-teal-900 text-white shadow-xs'
+                            : 'bg-white text-teal-900 border border-teal-300 hover:bg-teal-100'
+                        }`}
+                      >
+                        {p.code}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* All Sub-Pathways Comparison Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {dbVisaItem.regionalPathways.map((pathway: any, idx: number) => {
+                    const isFocused = activePathwayTab === idx;
+                    return (
+                      <div
+                        key={pathway.code}
+                        onClick={() => setActivePathwayTab(idx)}
+                        className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
+                          isFocused
+                            ? 'bg-white border-2 border-teal-700 shadow-sm'
+                            : 'bg-white/80 border-teal-200 hover:border-teal-400'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-mono text-xs font-black bg-teal-100 text-teal-950 px-2.5 py-0.5 rounded border border-teal-300">
+                            {pathway.code}
+                          </span>
+                          {pathway.isCurrent ? (
+                            <span className="text-[11px] font-bold bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded">
+                              🟢 Current Active Pathway
+                            </span>
+                          ) : (
+                            <span className="text-[11px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded">
+                              📜 Closed / Legacy Route
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="font-bold text-sm text-slate-900">{pathway.name}</h3>
+                        <p className="text-xs text-slate-700 leading-relaxed">{pathway.description}</p>
+                        {pathway.eligibilityDiff && (
+                          <div className="p-2.5 bg-teal-50/90 border border-teal-200 rounded-lg text-[11px] text-teal-950 leading-relaxed">
+                            <strong className="block text-teal-900 mb-0.5">Key Eligibility & Stream Difference:</strong>
+                            {pathway.eligibilityDiff}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* DAMA (Designated Area Migration Agreement) Pathways Block */}
+            {dbVisaItem?.damaPathways && dbVisaItem.damaPathways.length > 0 && (
+              <div className="bg-indigo-50/80 border border-indigo-200 rounded-xl p-4 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🤝</span>
+                    <h3 className="font-extrabold text-xs sm:text-sm text-indigo-950">
+                      Designated Area Migration Agreement (DAMA) Pathways (AUS-REG-05)
+                    </h3>
+                  </div>
+                  <span className="text-[11px] font-bold bg-indigo-100 text-indigo-900 px-2.5 py-0.5 rounded border border-indigo-300">
+                    DAMA = Regional Agreement (Not a Separate Visa Subclass)
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {dbVisaItem.damaPathways.map((dama: any) => (
+                    <div key={dama.code} className="bg-white p-3 rounded-xl border border-indigo-200 space-y-1.5 shadow-2xs">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-mono text-[11px] font-black bg-indigo-900 text-white px-2 py-0.5 rounded">
+                          {dama.code}
+                        </span>
+                        <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                          Current
+                        </span>
+                      </div>
+                      <div className="font-bold text-xs text-slate-900">{dama.name}</div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed">{dama.description}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="text-[11px] text-indigo-950 bg-white/90 p-2.5 rounded-lg border border-indigo-200">
+                  <strong>Active Australian DAMA Regions:</strong> {REGIONAL_MIGRATION_INFO.damaRegionsList.join(' · ')}
+                </div>
+              </div>
+            )}
+
+            {/* Designated Regional Areas (Category 2 vs Category 3) */}
+            {dbVisaItem?.regionalAreas && dbVisaItem.regionalAreas.length > 0 && (
+              <div className="bg-white border border-teal-200 rounded-xl p-4 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-extrabold text-xs sm:text-sm text-teal-950 flex items-center gap-1.5">
+                    <span>📍</span>
+                    <span>Designated Regional Australia Areas (Category 2 & Category 3)</span>
+                  </h3>
+                  <span className="text-[11px] font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                    Excludes Sydney, Melbourne & Brisbane
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  {dbVisaItem.regionalAreas.map((areaText: string, i: number) => (
+                    <div key={i} className="p-3 bg-teal-50/60 border border-teal-200 rounded-lg text-slate-800 leading-relaxed">
+                      <span className="font-bold text-teal-950 block mb-0.5">
+                        {i === 0 ? '🏙️ Category 2 – Cities & Major Regional Centres:' : '🗺️ Category 3 – Regional Centres & Other Regional Areas:'}
+                      </span>
+                      {areaText}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Regional Note */}
+            {dbVisaItem?.regionalNote && (
+              <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-950 leading-relaxed">
+                <strong>📌 Official Regional Migration Note:</strong> {dbVisaItem.regionalNote}
+              </div>
             )}
           </div>
         )}
@@ -2850,7 +3536,7 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
           <span>🛠️ Verification & SEO Infrastructure Tools</span>
         </h2>
         <p className="text-xs text-blue-200 mb-6">
-          Access real-time audit reporting and public sitemap indices for 540+ visa records.
+          Access real-time audit reporting and public sitemap indices for 1001+ visa and immigration programme records (USA: 164 Official Visas + 37 Programmes = 201).
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div 
@@ -2859,8 +3545,8 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
           >
             <div>
               <div className="text-2xl mb-2">🔍</div>
-              <h3 className="font-extrabold text-base text-emerald-300">Live Audit (540+ Visas) – Admin Only</h3>
-              <p className="text-xs text-slate-200 mt-1">Real-time database count, document completeness checks, country-wise matrix vs Excel targets.</p>
+              <h3 className="font-extrabold text-base text-emerald-300">Live Audit (1001+ Records) – Admin Only</h3>
+              <p className="text-xs text-slate-200 mt-1">Real-time database count, USA 164 Visas + 37 Programmes split, document completeness checks, country-wise matrix.</p>
             </div>
             <span className="text-xs font-bold text-emerald-300 mt-4 inline-flex items-center gap-1">Open Live Audit Report →</span>
           </div>
@@ -2871,8 +3557,8 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
           >
             <div>
               <div className="text-2xl mb-2">🗺️</div>
-              <h3 className="font-extrabold text-base text-blue-200">Sitemap (540+ Pages) – Public + Admin</h3>
-              <p className="text-xs text-slate-200 mt-1">Indexed links for all 540+ visa guides across 30 destination countries for search crawler optimization.</p>
+              <h3 className="font-extrabold text-base text-blue-200">Sitemap (1001+ Pages) – Public + Admin</h3>
+              <p className="text-xs text-slate-200 mt-1">Indexed links for all 1001+ visa & programme guides across 30 destination countries for search crawler optimization.</p>
             </div>
             <span className="text-xs font-bold text-blue-200 mt-4 inline-flex items-center gap-1">Open Public Sitemap →</span>
           </div>

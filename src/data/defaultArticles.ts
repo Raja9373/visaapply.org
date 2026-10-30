@@ -1,3 +1,4 @@
+import { marked } from 'marked';
 import { Article } from '../components/BlogArticleView';
 
 export const DEFAULT_PUBLISHED_GUIDES: Article[] = [
@@ -11,8 +12,7 @@ export const DEFAULT_PUBLISHED_GUIDES: Article[] = [
     fees: 'CAD $155 + $85 Biometrics',
     docs: 'LMIA Number, Job Offer Letter, Police Clearance Certificate, Upfront Medical Exam, Bank Proof',
     excerpt: 'Comprehensive 2026 guide for Indian skilled workers applying for employer-specific work permits in Canada. Includes LMIA requirements, prevailing wage standards, documentation checklist, and biometrics processing times.',
-    content: `
-# India to Canada Work Visa 2026 – Official Complete Guide
+    content: `# India to Canada Work Visa 2026 – Official Complete Guide
 
 Applying for a Canadian work permit from India in 2026 requires understanding the exact dual-track immigration framework administered by Immigration, Refugees and Citizenship Canada (IRCC) and Employment and Social Development Canada (ESDC).
 
@@ -53,8 +53,7 @@ To work legally in Canada as an Indian citizen, you typically require an employe
 4. Upload high-resolution PDF scans of all supporting credentials.
 5. Pay CAD $155 + $85 online via international credit card.
 6. Book VFS Global biometrics appointment and submit digital fingerprints.
-7. Track application status online and submit passport for visa counterfoil stamp upon receipt of Original Passport Request (OPR).
-`
+7. Track application status online and submit passport for visa counterfoil stamp upon receipt of Original Passport Request (OPR).`
   },
   {
     slug: 'usa-to-schengen-tourist-visa-2026-complete-guide-7d0ed',
@@ -66,8 +65,7 @@ To work legally in Canada as an Indian citizen, you typically require an employe
     fees: '€90 Consular Fee',
     docs: 'US Green Card / I-797, Travel Insurance €30,000, Flight Itinerary, Hotel Booking, 3 Months US Bank Statements',
     excerpt: 'Step-by-step roadmap for US green card holders and foreign residents applying for Schengen tourist visa entry across 29 European member states. Covering 90/180-day limits and VFS appointments.',
-    content: `
-# USA to Schengen Tourist Visa 2026 – Complete Application Guide
+    content: `# USA to Schengen Tourist Visa 2026 – Complete Application Guide
 
 Non-US citizens residing in the United States (such as permanent residents, H-1B, L-1, F-1, and O-1 visa holders) require a Uniform Schengen Short-Stay Visa (Type C) to enter the 29 Schengen area member nations for tourism or business.
 
@@ -87,8 +85,7 @@ Under Schengen Visa Code rules, submit your application to the consulate or visa
 ## 3. Fees & Timelines
 - Standard Adult Consular Fee: €90 (~$98 USD)
 - Children aged 6-12: €45
-- Processing Timeline: 15 calendar days (extendable to 45 days during peak summer travel).
-`
+- Processing Timeline: 15 calendar days (extendable to 45 days during peak summer travel).`
   },
   {
     slug: 'india-to-uk-visitor-visa-2026-complete-guide-157ax',
@@ -100,8 +97,7 @@ Under Schengen Visa Code rules, submit your application to the consulate or visa
     fees: '£115 (Standard Visitor)',
     docs: 'Passport, 6 Months Bank Statement, Salary Slips, Employer NOC, Property/Ties Proof, Accommodation Booking',
     excerpt: 'Essential UK Standard Visitor Visa requirements for tourism, family visits, and business meetings. Comprehensive breakdown of the 6-month financial requirement, source of funds verification, and refusal risk mitigation.',
-    content: `
-# India to UK Visitor Visa 2026 – Official Complete Guide
+    content: `# India to UK Visitor Visa 2026 – Official Complete Guide
 
 The UK Standard Visitor Visa allows Indian citizens to visit England, Scotland, Wales, and Northern Ireland for up to 6 months for tourism, holidays, visiting family or friends, and permitted business activities.
 
@@ -121,8 +117,7 @@ UK Visas and Immigration (UKVI) refuses applications under Immigration Rule V 4.
 - **2-Year Long-Term:** £432
 - **5-Year Long-Term:** £771
 - **10-Year Long-Term:** £963
-- **Priority Visa Service:** £500 additional (decision within 5 working days)
-`
+- **Priority Visa Service:** £500 additional (decision within 5 working days)`
   },
   {
     slug: 'india-to-usa-student-visa-2026-complete-guide-8432s',
@@ -134,8 +129,7 @@ UK Visas and Immigration (UKVI) refuses applications under Immigration Rule V 4.
     fees: '$185 MRV + $350 SEVIS',
     docs: 'Form I-20, SEVIS Fee Receipt, DS-160 Confirmation, Bank Statements ₹25-35L, Academic Transcripts & Degree',
     excerpt: 'Ultimate F-1 student visa guide from university admission offer letter and I-20 verification to US Embassy consular interview preparation, 214(b) non-immigrant intent, and financial sponsorship.',
-    content: `
-# India to USA Student Visa (F-1) 2026 – Complete Roadmap
+    content: `# India to USA Student Visa (F-1) 2026 – Complete Roadmap
 
 Securing a US F-1 student visa from India requires navigating the Student and Exchange Visitor Program (SEVP), paying the SEVIS fee, and demonstrating non-immigrant intent during the in-person consular visa interview.
 
@@ -151,8 +145,7 @@ Securing a US F-1 student visa from India requires navigating the Student and Ex
 Consular officers expect liquid proof covering 1 year of total estimated expenses listed on Section 7 of Form I-20, plus viable funding plans for subsequent years:
 - **Liquid Savings:** ₹25-35 Lakhs in savings accounts and fixed deposits.
 - **Sanctioned Education Loans:** Verifiable nationalized or NBFC education loan sanction letter.
-- **Affidavit of Support (Form I-134):** Signed by financial sponsors along with their 3-year ITRs.
-`
+- **Affidavit of Support (Form I-134):** Signed by financial sponsors along with their 3-year ITRs.`
   },
   {
     slug: 'india-to-uae-dubai-tourist-visa-2026-complete-guide-7o1ju',
@@ -164,8 +157,7 @@ Consular officers expect liquid proof covering 1 year of total estimated expense
     fees: '$90-150 (30/60 Days)',
     docs: 'Passport Color Scan, Passport Photo, Confirmed Return Air Ticket, Hotel Booking, OK to Board',
     excerpt: 'Fast-track Dubai and UAE tourist eVisa instructions, 30-day and 60-day single/multiple entry options, OK to Board protocols, and airport immigration clearance.',
-    content: `
-# India to UAE Dubai Tourist Visa 2026 – Complete Guide
+    content: `# India to UAE Dubai Tourist Visa 2026 – Complete Guide
 
 Indian passport holders can visit Dubai, Abu Dhabi, Sharjah, and other emirates using pre-arranged electronic tourist visas or visa on arrival for eligible US/UK/EU visa holders.
 
@@ -179,7 +171,433 @@ Indian passport holders can visit Dubai, Abu Dhabi, Sharjah, and other emirates 
 2. Confirmed round-trip flight booking with return or onward ticket.
 3. Confirmed hotel booking or tenancy contract and invitation from host in UAE.
 4. Sufficient financial funds (minimum AED 3,000 cash or credit card limit).
-5. OK to Board (OTB) verification completed with airlines where required.
-`
+5. OK to Board (OTB) verification completed with airlines where required.`
+  },
+  {
+    slug: 'in-to-ca-tourist',
+    title: 'India to Canada Tourist Visa Guide (Visitor Visa)',
+    from: 'IN',
+    to: 'CA',
+    type: 'tourist',
+    date: '2026-10-30',
+    fees: 'CAD $100 + CAD $85 Biometrics',
+    docs: 'Valid Passport, Bank Statements ($10,000+ CAD), Return Flight Itinerary, Travel Insurance, Cover Letter',
+    excerpt: 'Planning a trip from India to Canada? This comprehensive guide covers everything you need to successfully apply for a Canadian Visitor Visa (Temporary Resident Visa - TRV).',
+    content: `# India to Canada Tourist Visa (Visitor Visa) Complete Guide
+
+Planning a trip from India to Canada? This comprehensive guide covers everything you need to successfully apply for a Canadian Visitor Visa (Temporary Resident Visa - TRV).
+
+## 1. Overview & Eligibility
+Citizens of India holding an ordinary passport require a TRV to enter Canada for tourism, visiting family, or short business trips. You must prove you will leave Canada at the end of your authorized stay.
+
+## 2. Official Visa Fees
+* **Application Processing Fee:** CAD $100 per person
+* **Biometric Fee:** CAD $85 per person (mandatory for applicants aged 14-79)
+* **Total Estimated Cost:** CAD $185 (~₹11,500 INR)
+
+## 3. Required Document Checklist
+1. **Valid Passport:** Must be valid for at least 6 months beyond your planned departure from Canada.
+2. **Proof of Financial Support:** Recent bank statements for the last 4-6 months showing at least CAD $10,000 (~₹6 Lakhs INR) for personal maintenance.
+3. **Travel Itinerary:** Flight reservations, hotel bookings, and a detailed day-by-day travel plan.
+4. **Employment / Ties to Home Country:** Leave sanction letter, salary slips (last 3 months), tax returns (ITR for past 2 years), and business ownership proof if self-employed.
+5. **Cover Letter:** Explaining the purpose of your visit and your itinerary.
+6. **Medical & Police Clearance:** If requested by the visa officer.
+
+## 4. Application Process (Step-by-Step)
+1. **Create an IRCC Account:** Register online on the official Government of Canada Immigration portal.
+2. **Complete Application Forms:** Fill out IMM 5257 and supporting questionnaires.
+3. **Upload Documents:** Scan and upload all required PDFs (passport, financials, itinerary).
+4. **Pay Fees Online:** Pay CAD $185 securely via credit card.
+5. **Biometric Appointment:** Book and attend your biometrics collection at the nearest VFS Global center in India (New Delhi, Mumbai, Bengaluru, Chennai, etc.).
+6. **Passport Submission:** Once approved, submit your physical passport for visa stamping.`
+  },
+  {
+    slug: 'us-to-uk-tourist',
+    title: 'United States to United Kingdom Standard Visitor Visa',
+    from: 'US',
+    to: 'GB',
+    type: 'tourist',
+    date: '2026-10-30',
+    fees: '£115 (Standard 6 Months)',
+    docs: 'Valid US Passport or Green Card, Proof of Employment/Funds, Travel Itinerary',
+    excerpt: 'Traveling from the United States to the United Kingdom? Complete guide to UK ETA and Standard Visitor Visa requirements, fees, and biometric appointments for US residents.',
+    content: `# US to UK Standard Visitor Visa Guide
+
+Traveling from the United States to the United Kingdom? US passport holders visiting for under 6 months can travel with an Electronic Travel Authorisation (ETA), while US permanent residents (Green Card holders) and foreign nationals residing in the US may require a Standard Visitor Visa.
+
+## 1. Visa Fees & Options
+* **UK ETA (for US Citizens):** £10 online authorization
+* **6-Month Standard Visitor:** £115
+* **2-Year Long-Term Visitor:** £432
+* **5-Year Long-Term Visitor:** £771
+* **10-Year Long-Term Visitor:** £963
+
+## 2. Required Documents
+* Valid Passport and US Green Card / US Visa stamp (I-797 / I-20)
+* Proof of funds (last 3-6 months US bank statements)
+* Accommodation and round-trip flight booking details
+* Employer verification letter confirming leave of absence and salary
+
+## 3. Step-by-Step Application Process
+1. Apply online via official GOV.UK portal.
+2. Pay visa fee online.
+3. Book biometrics appointment at a USCIS Application Support Center (ASC) or VFS Global Premium Application Centre.
+4. Mail or submit passport with UPS return label for vignette sticker.`
   }
-];
+].map(item => ({
+  ...item,
+  rawContent: item.content,
+  contentHtml: String(marked.parse(item.content || ''))
+}));
+
+/**
+ * Checks whether an article body or excerpt is rich (non-stub) content.
+ */
+export function isRichContent(text?: string | null): boolean {
+  if (!text || typeof text !== 'string') return false;
+  const trimmed = text.trim();
+  if (trimmed.length < 120) return false;
+  if (/^sample guide for/i.test(trimmed)) return false;
+  return true;
+}
+
+/**
+ * Checks whether an excerpt is valid and not a "Sample guide for..." placeholder.
+ */
+export function isRichExcerpt(text?: string | null): boolean {
+  if (!text || typeof text !== 'string') return false;
+  const trimmed = text.trim();
+  if (trimmed.length < 30) return false;
+  if (/^sample guide for/i.test(trimmed)) return false;
+  return true;
+}
+
+/**
+ * Normalizes a slug by stripping leading/trailing slashes and lowercasing.
+ */
+export function normalizeBlogSlug(slug?: string | null): string {
+  if (!slug || typeof slug !== 'string') return '';
+  return slug.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
+}
+
+/**
+ * Strips trailing 5-char random suffix (e.g. "-7d0ed", "-atlxt") or "-2026-complete-guide" for fuzzy matching.
+ */
+function getBaseSlugPattern(slug: string): string {
+  return normalizeBlogSlug(slug)
+    .replace(/-[a-z0-9]{5}$/i, '')
+    .replace(/-2026-complete-guide$/i, '')
+    .replace(/-complete-guide$/i, '');
+}
+
+/**
+ * Finds the best matching guide from DEFAULT_PUBLISHED_GUIDES by slug, base slug pattern, title, or route tuple.
+ */
+export function findDefaultGuideMatch(
+  slugOrTitle?: string | null,
+  fromCode?: string | null,
+  toCode?: string | null,
+  visaType?: string | null
+): Article | undefined {
+  const cleanSlug = normalizeBlogSlug(slugOrTitle);
+  if (cleanSlug) {
+    // 1. Exact slug match
+    const exact = DEFAULT_PUBLISHED_GUIDES.find(
+      g => normalizeBlogSlug(g.slug) === cleanSlug
+    );
+    if (exact) return exact;
+
+    // 2. Base slug match (handles slugs with or without random 5-char suffixes like -atlxt, -7d0ed, etc.)
+    const baseTarget = getBaseSlugPattern(cleanSlug);
+    if (baseTarget) {
+      const byBase = DEFAULT_PUBLISHED_GUIDES.find(g => {
+        const gNorm = normalizeBlogSlug(g.slug);
+        const gBase = getBaseSlugPattern(gNorm);
+        return (
+          gBase === baseTarget ||
+          gNorm.startsWith(baseTarget) ||
+          baseTarget.startsWith(gBase)
+        );
+      });
+      if (byBase) return byBase;
+    }
+
+    // 3. Title match
+    const cleanTitle = slugOrTitle!.toLowerCase().replace(/\([a-z0-9]{5}\)/gi, '').trim();
+    const byTitle = DEFAULT_PUBLISHED_GUIDES.find(g => {
+      const gTitle = g.title.toLowerCase().replace(/\([a-z0-9]{5}\)/gi, '').trim();
+      return gTitle === cleanTitle || gTitle.includes(cleanTitle) || cleanTitle.includes(gTitle);
+    });
+    if (byTitle) return byTitle;
+  }
+
+  // 4. Match by (from, to, type) tuple if provided
+  if (fromCode && toCode) {
+    const f = fromCode.toUpperCase();
+    const t = toCode.toUpperCase() === 'UK' ? 'GB' : toCode.toUpperCase();
+    const v = (visaType || '').toLowerCase();
+    const byTuple = DEFAULT_PUBLISHED_GUIDES.find(
+      g => g.from.toUpperCase() === f && g.to.toUpperCase() === t && (!v || g.type.toLowerCase() === v)
+    );
+    if (byTuple) return byTuple;
+  }
+
+  return undefined;
+}
+
+/**
+ * Synthesizes a complete markdown body when an article has no markdown body of its own.
+ */
+export function buildFallbackMarkdownForArticle(art: Partial<Article>): string {
+  const title = art.title || '2026 Official Visa Guide & Application Requirements';
+  const from = (art.from || 'IN').toUpperCase();
+  const to = (art.to || 'US').toUpperCase();
+  const type = (art.type || 'tourist').toLowerCase();
+  const fees = art.fees && art.fees !== 'Standard Govt Fees' ? art.fees : '$160 - $190 Official Consular Fee';
+  const docs = art.docs || 'Valid Passport (6+ months), 6 Months Bank Statements, ITR-V (3 Years), Confirmed Itinerary, Biometric Photos';
+
+  return `# ${title}
+
+This 2026 official consular guide provides verified requirements, fee schedules, mandatory documentation, and step-by-step application procedures for **${from}** citizens applying for a **${type.toUpperCase()}** visa to **${to}**.
+
+## 1. Eligibility & Consular Assessment
+Applicants traveling from **${from}** to **${to}** under the **${type}** category must demonstrate clear travel purpose, sufficient seasoned financial resources, and strong socio-economic ties to their country of residence.
+
+## 2. Official Visa Fee & Processing Standards
+- **Consular Visa Fee:** ${fees}
+- **Biometrics & VAC Service Charge:** Mandatory digital fingerprint and photo enrollment at designated VFS Global / Embassy Visa Application Center
+- **Standard Processing Window:** 15 to 30 working days (apply at least 6–8 weeks prior to planned departure)
+
+## 3. Financial, Bank Statement & ITR Verification Rules
+- **Bank Statements:** Submit past 6 months original bank statements with official bank stamp and signature.
+- **Avoid Sudden Lump-Sum Deposits:** Unexplained large deposits made shortly before filing trigger immediate consular refusal.
+- **Tax Compliance:** Include last 2–3 years Income Tax Returns (ITR-V) matching regular salary or business credits.
+
+## 4. Mandatory Document Summary
+- ${docs.split(',').map(d => d.trim()).filter(Boolean).join('\n- ')}
+
+## 5. Step-by-Step Application Procedure
+1. Complete the online government visa application form and verify passport details.
+2. Pay the mandatory visa application and biometric fee online.
+3. Schedule your biometric appointment at the official Visa Application Center (VAC).
+4. Submit your physical passport, supporting financial proofs, and checklist documents.
+5. Track your application status online and collect your passport upon visa issuance.`;
+}
+
+/**
+ * Hydrates a raw/partial article object using a cache-first strategy with fallback to DEFAULT_PUBLISHED_GUIDES.
+ * Ensures that shallow server summaries or stale "Sample guide for..." stubs never overwrite rich markdown content.
+ */
+export function hydrateArticleWithCacheAndFallback(
+  incoming: any,
+  cachedOrExisting?: Partial<Article> | null
+): Article | null {
+  if (!incoming && !cachedOrExisting) return null;
+
+  const rawSlug = normalizeBlogSlug(
+    incoming?.slug || incoming?.route || incoming?.id || cachedOrExisting?.slug || (cachedOrExisting as any)?.route
+  );
+  if (!rawSlug) return null;
+
+  const defaultMatch = findDefaultGuideMatch(
+    rawSlug || incoming?.title || cachedOrExisting?.title,
+    incoming?.from || cachedOrExisting?.from,
+    incoming?.to || cachedOrExisting?.to,
+    incoming?.type || incoming?.visaType || cachedOrExisting?.type
+  );
+
+  // Determine best raw markdown content (prefer rich incoming -> rich cached -> defaultMatch -> synthesized)
+  const incomingRaw = incoming?.rawContent || incoming?.content || '';
+  const cachedRaw = cachedOrExisting?.rawContent || cachedOrExisting?.content || '';
+  const defaultRaw = defaultMatch?.rawContent || defaultMatch?.content || '';
+
+  const bestRawContent = isRichContent(incomingRaw)
+    ? incomingRaw
+    : isRichContent(cachedRaw)
+      ? cachedRaw
+      : isRichContent(defaultRaw)
+        ? defaultRaw
+        : buildFallbackMarkdownForArticle({
+            ...defaultMatch,
+            ...cachedOrExisting,
+            ...incoming,
+            slug: rawSlug
+          });
+
+  const incomingHtml = incoming?.contentHtml || '';
+  const cachedHtml = cachedOrExisting?.contentHtml || '';
+  const bestContentHtml = isRichContent(incomingHtml)
+    ? incomingHtml
+    : isRichContent(cachedHtml)
+      ? cachedHtml
+      : String(marked.parse(bestRawContent));
+
+  const incomingExcerpt = incoming?.excerpt || '';
+  const cachedExcerpt = cachedOrExisting?.excerpt || '';
+  const defaultExcerpt = defaultMatch?.excerpt || '';
+  const bestExcerpt = isRichExcerpt(incomingExcerpt)
+    ? incomingExcerpt
+    : isRichExcerpt(cachedExcerpt)
+      ? cachedExcerpt
+      : isRichExcerpt(defaultExcerpt)
+        ? defaultExcerpt
+        : bestRawContent
+            .replace(/^#+\s+.*$/gm, '')
+            .replace(/[#*`>-]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .substring(0, 180) + '...';
+
+  const incomingFees = incoming?.fees || '';
+  const cachedFees = cachedOrExisting?.fees || '';
+  const bestFees =
+    incomingFees && incomingFees !== 'Standard Govt Fees'
+      ? incomingFees
+      : cachedFees && cachedFees !== 'Standard Govt Fees'
+        ? cachedFees
+        : defaultMatch?.fees || incomingFees || cachedFees || '$185 Official Govt Fee';
+
+  const incomingDocs = incoming?.docs || '';
+  const cachedDocs = cachedOrExisting?.docs || '';
+  const bestDocs =
+    incomingDocs && incomingDocs !== 'Passport, Financial Proofs'
+      ? incomingDocs
+      : cachedDocs && cachedDocs !== 'Passport, Financial Proofs'
+        ? cachedDocs
+        : defaultMatch?.docs || incomingDocs || cachedDocs || 'Valid Passport, 6 Months Bank Statements, ITR-V, Confirmed Itinerary';
+
+  const rawType = String(
+    incoming?.type || incoming?.visaType || cachedOrExisting?.type || defaultMatch?.type || 'tourist'
+  )
+    .replace(/\s+visa$/i, '')
+    .trim()
+    .toLowerCase();
+
+  return {
+    slug: rawSlug,
+    title: incoming?.title || cachedOrExisting?.title || defaultMatch?.title || rawSlug,
+    from: (incoming?.from || cachedOrExisting?.from || defaultMatch?.from || 'IN').toUpperCase(),
+    to: (incoming?.to || cachedOrExisting?.to || defaultMatch?.to || 'US').toUpperCase(),
+    type: rawType,
+    date: incoming?.date || cachedOrExisting?.date || defaultMatch?.date || new Date().toISOString().split('T')[0],
+    fees: bestFees,
+    docs: bestDocs,
+    excerpt: bestExcerpt,
+    content: bestRawContent,
+    rawContent: bestRawContent,
+    contentHtml: bestContentHtml
+  };
+}
+
+/**
+ * Merges multiple lists of articles (cache-first + DEFAULT_PUBLISHED_GUIDES fallback),
+ * deduplicating by normalized slug and ensuring every article has full hydrated content.
+ */
+export function mergeArticleCollections(...collections: Array<any[] | undefined | null>): Article[] {
+  const bySlug = new Map<string, Article>();
+
+  // Always seed with DEFAULT_PUBLISHED_GUIDES first so they are guaranteed to be present
+  for (const def of DEFAULT_PUBLISHED_GUIDES) {
+    const hydrated = hydrateArticleWithCacheAndFallback(def, null);
+    if (hydrated) {
+      bySlug.set(normalizeBlogSlug(hydrated.slug), hydrated);
+    }
+  }
+
+  for (const list of collections) {
+    if (!Array.isArray(list)) continue;
+    for (const item of list) {
+      if (!item) continue;
+      const slug = normalizeBlogSlug(item.slug || item.route || item.id);
+      if (!slug) continue;
+      const existing = bySlug.get(slug);
+      const hydrated = hydrateArticleWithCacheAndFallback(item, existing);
+      if (hydrated) {
+        bySlug.set(slug, hydrated);
+      }
+    }
+  }
+
+  return Array.from(bySlug.values());
+}
+
+/**
+ * Calculates a deterministic richness score for an article object based on its
+ * markdown body, HTML body, excerpt, fees, and checklist documentation.
+ */
+export function getArticleRichnessScore(article?: Partial<Article> | any | null): number {
+  if (!article) return 0;
+
+  let score = 0;
+  const rawBody = String(article.rawContent || article.content || '').trim();
+  const htmlBody = String(article.contentHtml || '').trim();
+  const excerpt = String(article.excerpt || '').trim();
+  const fees = String(article.fees || '').trim();
+  const docs = String(article.docs || '').trim();
+
+  if (isRichContent(rawBody)) {
+    score += 1000 + rawBody.length;
+  }
+  if (isRichContent(htmlBody)) {
+    score += 500 + Math.min(htmlBody.length, 2000);
+  }
+  if (isRichExcerpt(excerpt)) {
+    score += 150 + Math.min(excerpt.length, 300);
+  }
+  if (fees && fees !== 'Standard Govt Fees') {
+    score += 75;
+  }
+  if (docs && docs !== 'Passport, Financial Proofs') {
+    score += 75;
+  }
+
+  return score;
+}
+
+/**
+ * Evaluates whether a remote article payload contains either newly published slugs
+ * or richer content/metadata for any existing slug compared to the current cached state.
+ */
+export function hasRicherRemoteArticles(
+  cachedArticles: Article[],
+  remoteList: any[] | undefined | null
+): boolean {
+  if (!Array.isArray(remoteList) || remoteList.length === 0) {
+    return false;
+  }
+
+  const cachedBySlug = new Map<string, Article>();
+  for (const cached of cachedArticles) {
+    if (!cached) continue;
+    const slug = normalizeBlogSlug(cached.slug || (cached as any).route || (cached as any).id);
+    if (slug) {
+      cachedBySlug.set(slug, cached);
+    }
+  }
+
+  for (const remoteItem of remoteList) {
+    if (!remoteItem) continue;
+    const slug = normalizeBlogSlug(remoteItem.slug || remoteItem.route || remoteItem.id);
+    if (!slug) continue;
+
+    const existing = cachedBySlug.get(slug);
+    if (!existing) {
+      // Remote payload has a brand-new published guide not yet in cache
+      return true;
+    }
+
+    const remoteRaw = String(remoteItem.rawContent || remoteItem.content || '').trim();
+    const existingRaw = String(existing.rawContent || existing.content || '').trim();
+
+    if (isRichContent(remoteRaw) && (!isRichContent(existingRaw) || remoteRaw.length > existingRaw.length)) {
+      return true;
+    }
+
+    if (getArticleRichnessScore(remoteItem) > getArticleRichnessScore(existing)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+

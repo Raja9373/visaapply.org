@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,9 +10,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const GEMINI_KEY = process.env.GEMINI_API_KEY;
-    if (!GEMINI_KEY) {
+    if (!GEMINI_KEY || GEMINI_KEY === 'dummy_key') {
       return res.status(200).json({ success: false, message: 'GEMINI_API_KEY missing in env' });
     }
+
+    const ai = new GoogleGenAI({
+      apiKey: GEMINI_KEY,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
+      }
+    });
 
     // Trending visa topics for today
     const topics = [
@@ -29,37 +39,37 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const topic = topics[i];
       const prompt = `Write a detailed 800-word SEO visa guide for ${topic.from} to ${topic.to} ${topic.type} 2026. Include: fees, documents, processing time, eligibility, application steps, tips. Use markdown. Make it helpful, accurate, human-like. Title: ${topic.from} to ${topic.to} ${topic.type} Guide 2026`;
 
-      // Call Gemini API with exponential backoff and timeout beyond 6s (15s)
       let content = `Sample guide for ${topic.from} to ${topic.to} ${topic.type}`;
-      const maxRetries = 3;
-      const timeoutMs = 15000;
+      const maxRetries = 4;
+      const timeoutMs = 30000;
+      const maxDelayMs = 12000;
 
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), timeoutMs);
+        let timeoutHandle: any;
         try {
-          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }]
-            }),
-            signal: controller.signal
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            timeoutHandle = setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
           });
-          clearTimeout(timeout);
-
-          if (geminiRes.ok) {
-            const geminiData = await geminiRes.json();
-            const generated = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (generated) {
-              content = generated;
-              break;
+          const apiPromise = ai.models.generateContent({
+            model: 'gemini-3.8-flash',
+            contents: prompt,
+            config: {
+              thinkingConfig: {
+                thinkingLevel: ThinkingLevel.LOW
+              }
             }
+          });
+          const response: any = await Promise.race([apiPromise, timeoutPromise]);
+          clearTimeout(timeoutHandle);
+
+          if (response?.text) {
+            content = response.text;
+            break;
           }
-        } catch (err: any) {
-          clearTimeout(timeout);
+        } catch {
+          clearTimeout(timeoutHandle);
           if (attempt < maxRetries) {
-            const delay = Math.round(1000 * Math.pow(2, attempt - 1) + Math.random() * 200);
+            const delay = Math.min(maxDelayMs, Math.round(1000 * Math.pow(2, attempt - 1) + Math.random() * 350));
             await new Promise(r => setTimeout(r, delay));
           }
         }
