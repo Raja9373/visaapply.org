@@ -14,6 +14,7 @@ import { INDIA_130_VISAS } from './indiaVisas';
 import { SWITZERLAND_96_VISAS } from './switzerlandVisas';
 import { NEW_ZEALAND_88_VISAS } from './newZealandVisas';
 import { BRAZIL_72_VISAS } from './brazilVisas';
+import { MEXICO_74_VISAS } from './mexicoVisas';
 
 export interface VisaItem {
   id: string;
@@ -164,7 +165,8 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   TH: { name: "Thailand", currency: "THB (฿)", flag: "🇹🇭" },
   TR: { name: "Turkey", currency: "USD ($) / EUR (€)", flag: "🇹🇷" },
   ZA: { name: "South Africa", currency: "ZAR (R)", flag: "🇿🇦" },
-  SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" }
+  SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" },
+  MX: { name: "Mexico", currency: "MXN ($) / USD ($)", flag: "🇲🇽" }
 };
 
 // Official USA Breakdown: 164 Official Visa Classification Codes + 37 Non-Visa Immigration Programmes/Set-Asides/Forms/Travel Authorizations = 201 Total US Entries
@@ -262,7 +264,8 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   TH: { tourist: 15, work: 15, student: 8, family: 15, business: 20, pr: 40 }, // 113 Thailand Entries (93 Live Visas + 20 Procedural/Supporting/Legacy)
   TR: { tourist: 4, work: 3, student: 2, family: 2, business: 2, pr: 3 }, // 16
   ZA: { tourist: 3, work: 3, student: 2, family: 2, business: 2, pr: 3 }, // 15
-  SA: { tourist: 6, work: 3, student: 2, family: 2, business: 2, pr: 4 }  // 19
+  SA: { tourist: 6, work: 3, student: 2, family: 2, business: 2, pr: 4 }, // 19
+  MX: { tourist: 10, work: 10, student: 8, family: 8, business: 8, pr: 30 }  // 74 Mexico Live Visas (Official INM / SRE)
 };
 
 // Function to generate complete document lists meeting ALL category rules
@@ -595,6 +598,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'BR') {
     BASE_COUNTRY_VISAS['BR'] = BRAZIL_72_VISAS;
+    return;
+  }
+  if (code === 'MX') {
+    BASE_COUNTRY_VISAS['MX'] = MEXICO_74_VISAS;
     return;
   }
   const cVisas: CountryVisas = {

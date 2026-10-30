@@ -184,6 +184,9 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                       {c.code === 'BR' && (
                         <span className="bg-emerald-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">72 Brazil Live Visas</span>
                       )}
+                      {c.code === 'MX' && (
+                        <span className="bg-green-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">74 Mexico Live Visas</span>
+                      )}
                     </td>
                     <td className="p-2 text-center text-slate-600">{c.tourist}</td>
                     <td className="p-2 text-center text-slate-600">{c.work}</td>
