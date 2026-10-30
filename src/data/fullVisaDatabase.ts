@@ -13,6 +13,7 @@ import { SPAIN_130_VISAS } from './spainVisas';
 import { INDIA_130_VISAS } from './indiaVisas';
 import { SWITZERLAND_96_VISAS } from './switzerlandVisas';
 import { NEW_ZEALAND_88_VISAS } from './newZealandVisas';
+import { BRAZIL_72_VISAS } from './brazilVisas';
 
 export interface VisaItem {
   id: string;
@@ -242,7 +243,7 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   SG: { tourist: 11, work: 31, student: 6, family: 13, business: 14, pr: 34 }, // 109 Singapore Visas, Passes & Programmes
   JP: { tourist: 12, work: 45, student: 6, family: 15, business: 10, pr: 40 }, // 128 Japan Entries (100 Live Visas + 28 Supporting/Procedural/Legacy)
   IN: { tourist: 20, work: 25, student: 15, family: 25, business: 15, pr: 30 }, // 130 India Inbound Visas
-  BR: { tourist: 3, work: 3, student: 2, family: 2, business: 2, pr: 2 }, // 14
+  BR: { tourist: 10, work: 16, student: 10, family: 10, business: 12, pr: 14 }, // 72 Brazil Live Visas (Official MRE / Policia Federal / Ministry of Labor)
   IT: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Italy Entries
   ES: { tourist: 12, work: 20, student: 10, family: 23, business: 10, pr: 55 }, // 130 Spain Entries
   NL: { tourist: 3, work: 4, student: 3, family: 2, business: 2, pr: 3 }, // 17
@@ -590,6 +591,10 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'NZ') {
     BASE_COUNTRY_VISAS['NZ'] = NEW_ZEALAND_88_VISAS;
+    return;
+  }
+  if (code === 'BR') {
+    BASE_COUNTRY_VISAS['BR'] = BRAZIL_72_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
