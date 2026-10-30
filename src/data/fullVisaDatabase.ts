@@ -26,6 +26,7 @@ import { VIETNAM_76_VISAS } from './vietnamVisas';
 import { MALAYSIA_84_VISAS } from './malaysiaVisas';
 import { INDONESIA_82_VISAS } from './indonesiaVisas';
 import { PHILIPPINES_68_VISAS } from './philippinesVisas';
+import { SCHENGEN_96_VISAS } from './schengenVisas';
 
 export interface VisaItem {
   id: string;
@@ -204,7 +205,9 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   MX: { name: "Mexico", currency: "MXN ($) / USD ($)", flag: "🇲🇽" },
   KR: { name: "South Korea", currency: "KRW (₩) / USD ($)", flag: "🇰🇷" },
   CN: { name: "China", currency: "CNY (¥) / USD ($)", flag: "🇨🇳" },
-  VN: { name: "Vietnam", currency: "VND (₫) / USD ($)", flag: "🇻🇳" }
+  VN: { name: "Vietnam", currency: "VND (₫) / USD ($)", flag: "🇻🇳" },
+  SC: { name: "Schengen Area (29 EU States)", currency: "EUR (€)", flag: "🇪🇺" },
+  schengen: { name: "Schengen Area (29 EU States)", currency: "EUR (€)", flag: "🇪🇺" }
 };
 
 // Official USA Breakdown: 164 Official Visa Classification Codes + 37 Non-Visa Immigration Programmes/Set-Asides/Forms/Travel Authorizations = 201 Total US Entries
@@ -308,7 +311,9 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   MX: { tourist: 10, work: 10, student: 8, family: 8, business: 8, pr: 30 }, // 74 Mexico Live Visas (Official INM / SRE)
   KR: { tourist: 14, work: 18, student: 8, family: 7, business: 16, pr: 11 }, // 74 South Korea Live Visas (Official HiKorea / Korea Immigration Service)
   CN: { tourist: 19, work: 15, student: 10, family: 15, business: 17, pr: 6 }, // 82 China Live Visas (108 Total / Official NIA / MFA)
-  VN: { tourist: 14, work: 16, student: 8, family: 8, business: 10, pr: 16 }  // 76 Vietnam Live Visas (Official Xuất Nhập Cảnh / MOLISA)
+  VN: { tourist: 14, work: 16, student: 8, family: 8, business: 10, pr: 16 }, // 76 Vietnam Live Visas (Official Xuất Nhập Cảnh / MOLISA)
+  SC: { tourist: 16, work: 18, student: 8, family: 8, business: 12, pr: 44 }, // 96 Schengen Area Live Visas (Official VFS / ETIAS / EU Blue Card)
+  schengen: { tourist: 16, work: 18, student: 8, family: 8, business: 12, pr: 44 }
 };
 
 // Function to generate complete document lists meeting ALL category rules
@@ -689,6 +694,11 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   }
   if (code === 'PH') {
     BASE_COUNTRY_VISAS['PH'] = PHILIPPINES_68_VISAS;
+    return;
+  }
+  if (code === 'SC' || code === 'schengen') {
+    BASE_COUNTRY_VISAS['SC'] = SCHENGEN_96_VISAS;
+    BASE_COUNTRY_VISAS['schengen'] = SCHENGEN_96_VISAS;
     return;
   }
   const cVisas: CountryVisas = {
