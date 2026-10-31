@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount } from './data/fullVisaDatabase';
+import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem } from './data/fullVisaDatabase';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
@@ -1323,7 +1323,7 @@ export default function App() {
           />
         ) : (
           <HomeView 
-            countries={countries} 
+            countries={deduplicateCountries(countries)} 
             detectedCountry={detectedCountry}
             selectedOrigin={selectedOrigin}
             setSelectedOrigin={setSelectedOrigin}
@@ -1387,11 +1387,30 @@ export default function App() {
 }
 
 // ----------------------------------------------------
+// Helper Function: Deduplicate Countries by Code (Map/Set)
+// ----------------------------------------------------
+export function deduplicateCountries(countryList: Country[]): Country[] {
+  const countryMap = new Map<string, Country>();
+  for (const country of countryList || []) {
+    if (!country || !country.code) continue;
+    const normalizedCode = country.code.trim().toUpperCase();
+    if (!countryMap.has(normalizedCode)) {
+      countryMap.set(normalizedCode, {
+        ...country,
+        code: normalizedCode
+      });
+    }
+  }
+  return Array.from(countryMap.values());
+}
+
+// ----------------------------------------------------
 // Home View Component
 // ----------------------------------------------------
 function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate }: any) {
   const [targetSearch, setTargetSearch] = useState('');
-  const filteredCountries = countries.filter((c: Country) => 
+  const uniqueCountries = deduplicateCountries(countries);
+  const filteredCountries = uniqueCountries.filter((c: Country) => 
     c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
     c.code.toLowerCase().includes(targetSearch.toLowerCase())
   );
@@ -1419,12 +1438,12 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               <select 
                 value={selectedOrigin?.code || 'IN'}
                 onChange={(e) => {
-                  const found = countries.find((c: Country) => c.code === e.target.value);
+                  const found = uniqueCountries.find((c: Country) => c.code === e.target.value);
                   if (found) setSelectedOrigin(found);
                 }}
                 className="bg-transparent font-semibold text-slate-900 focus:outline-none cursor-pointer"
               >
-                {countries.map((c: Country) => (
+                {uniqueCountries.map((c: Country) => (
                   <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
                 ))}
               </select>
@@ -1478,7 +1497,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   </div>
                   <div className="flex flex-col">
                     <span className="font-bold text-sm text-slate-900 group-hover:text-[#0B3D91]">
-                      {country.name}
+                      {country.code.toUpperCase()} · {country.name}
                     </span>
                   </div>
                 </div>
@@ -2054,6 +2073,10 @@ function ArticleView({ match, articles = [], navigate }: any) {
   };
 
   const categoryVisas = getVisasFixed(fromCode, toCode, categoryCode);
+  const isJpToIn = fromCode === 'JP' && toCode === 'IN';
+  const countryData = isJpToIn
+    ? JP_TO_IN_VISA["IN"]
+    : (FULL_VISA_DB[fromCode]?.[toCode] || FULL_VISA_DB[toCode] || BASE_COUNTRY_VISAS[toCode] || FULL_VISA_DB["US"]);
   
   // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus cross-category lookup for subclasses like /in-to-au-work-187 -> 187)
   const expectedFullId = `in-to-${toCode.toLowerCase()}-${categoryCode}-${subtypeCode}`;
