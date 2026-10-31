@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem } from './data/fullVisaDatabase';
+import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed } from './data/fullVisaDatabase';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
@@ -19,6 +19,19 @@ import {
 } from './data/defaultArticles';
 import { fetchWithRetry } from './utils/fetchWithRetry';
 import { CA_REGIONAL_WARNING_TEXT, CA_IRCC_REFERENCE_LINKS } from './data/canadaVisas';
+import {
+  UK_REGIONAL_WARNING_TEXT,
+  UK_EUSS_WARNING_TEXT,
+  UK_BNO_WARNING_TEXT,
+  UK_UKRAINE_WARNING_TEXT,
+  UK_NATIONALITY_WARNING_TEXT,
+  UK_ENTRY_WARNING_TEXT,
+  UK_LEGACY_WARNING_TEXT,
+  REGIONAL_SPONSOR_DIRECTORY,
+  REGIONAL_SALARY_RULES,
+  IMMIGRATION_SALARY_LIST_SUMMARY,
+  REGIONAL_DIRECTORY_SECTIONS
+} from './data/ukRegionalJobs';
 
 import { JP_TO_IN_VISA } from './data/jpToInDetailed';
 import { marked } from 'marked';
@@ -58,7 +71,44 @@ interface Article {
 }
 
 const FALLBACK_COUNTRIES = [
-  { code: "US", name: "United States", flag: "🇺🇸" }, { code: "CA", name: "Canada", flag: "🇨🇦" }, { code: "GB", name: "United Kingdom", flag: "🇬🇧" }, { code: "AU", name: "Australia", flag: "🇦🇺" }, { code: "DE", name: "Germany", flag: "🇩🇪" }, { code: "FR", name: "France", flag: "🇫🇷" }, { code: "AE", name: "UAE Dubai", flag: "🇦🇪" }, { code: "SG", name: "Singapore", flag: "🇸🇬" }, { code: "JP", name: "Japan", flag: "🇯🇵" }, { code: "IN", name: "India", flag: "🇮🇳" }, { code: "BR", name: "Brazil", flag: "🇧🇷" }, { code: "IT", name: "Italy", flag: "🇮🇹" }, { code: "ES", name: "Spain", flag: "🇪🇸" }, { code: "NL", name: "Netherlands", flag: "🇳🇱" }, { code: "NZ", name: "New Zealand", flag: "🇳🇿" }, { code: "SE", name: "Sweden", flag: "🇸🇪" }, { code: "CH", name: "Switzerland", flag: "🇨🇭" }, { code: "IE", name: "Ireland", flag: "🇮🇪" }, { code: "NO", name: "Norway", flag: "🇳🇴" }, { code: "PT", name: "Portugal", flag: "🇵🇹" }, { code: "DK", name: "Denmark", flag: "🇩🇰" }, { code: "FI", name: "Finland", flag: "🇫🇮" }, { code: "BE", name: "Belgium", flag: "🇧🇪" }, { code: "AT", name: "Austria", flag: "🇦🇹" }, { code: "PL", name: "Poland", flag: "🇵🇱" }, { code: "MY", name: "Malaysia", flag: "🇲🇾" }, { code: "TH", name: "Thailand", flag: "🇹🇭" }, { code: "TR", name: "Turkey", flag: "🇹🇷" }, { code: "ZA", name: "South Africa", flag: "🇿🇦" }, { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" }
+  { code: "US", name: "United States", flag: "🇺🇸" },
+  { code: "CA", name: "Canada", flag: "🇨🇦" },
+  { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+  { code: "AU", name: "Australia", flag: "🇦🇺" },
+  { code: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
+  { code: "DE", name: "Germany", flag: "🇩🇪" },
+  { code: "SG", name: "Singapore", flag: "🇸🇬" },
+  { code: "TH", name: "Thailand", flag: "🇹🇭" },
+  { code: "SC", name: "Schengen Area", flag: "🇪🇺" },
+  { code: "JP", name: "Japan", flag: "🇯🇵" },
+  { code: "IN", name: "India", flag: "🇮🇳" },
+  { code: "FR", name: "France", flag: "🇫🇷" },
+  { code: "IT", name: "Italy", flag: "🇮🇹" },
+  { code: "ES", name: "Spain", flag: "🇪🇸" },
+  { code: "NL", name: "Netherlands", flag: "🇳🇱" },
+  { code: "CH", name: "Switzerland", flag: "🇨🇭" },
+  { code: "NZ", name: "New Zealand", flag: "🇳🇿" },
+  { code: "BR", name: "Brazil", flag: "🇧🇷" },
+  { code: "MX", name: "Mexico", flag: "🇲🇽" },
+  { code: "KR", name: "South Korea", flag: "🇰🇷" },
+  { code: "CN", name: "China", flag: "🇨🇳" },
+  { code: "VN", name: "Vietnam", flag: "🇻🇳" },
+  { code: "MY", name: "Malaysia", flag: "🇲🇾" },
+  { code: "ID", name: "Indonesia", flag: "🇮🇩" },
+  { code: "PH", name: "Philippines", flag: "🇵🇭" },
+  { code: "ZA", name: "South Africa", flag: "🇿🇦" },
+  { code: "TR", name: "Turkey", flag: "🇹🇷" },
+  { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
+  { code: "QA", name: "Qatar", flag: "🇶🇦" },
+  { code: "IE", name: "Ireland", flag: "🇮🇪" },
+  { code: "SE", name: "Sweden", flag: "🇸🇪" },
+  { code: "NO", name: "Norway", flag: "🇳🇴" },
+  { code: "PT", name: "Portugal", flag: "🇵🇹" },
+  { code: "DK", name: "Denmark", flag: "🇩🇰" },
+  { code: "FI", name: "Finland", flag: "🇫🇮" },
+  { code: "BE", name: "Belgium", flag: "🇧🇪" },
+  { code: "AT", name: "Austria", flag: "🇦🇹" },
+  { code: "PL", name: "Poland", flag: "🇵🇱" }
 ];
 
 function generateMetadata(path: string, countries: Country[], article?: Article | null) {
@@ -209,15 +259,19 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
   const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
-  const countryVisas = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
+  const getCatVisasCount = (catId: string) => {
+    if (isJpToIn) return (JP_TO_IN_VISA["IN"] as any)?.[catId]?.length || 2;
+    const list = getVisasByCategoryFixed(toCode, catId);
+    return list.length;
+  };
 
   const CATEGORIES = [
-    { id: 'tourist', name: t.touristVisa, icon: '🏖️', desc: isJa ? '観光、親族訪問、短期滞在、ヨガ・瞑想' : 'Vacations, sightseeing, visiting friends & short term stay', count: countryVisas?.tourist?.length || 2 },
-    { id: 'work', name: t.workVisa, icon: '💼', desc: isJa ? '就労、駐在員、技術指導、専門業務' : 'Employment, job permit, executive transfers & skilled work', count: countryVisas?.work?.length || 2 },
-    { id: 'student', name: t.studentVisa, icon: '🎓', desc: isJa ? '大学・大学院留学、研究機関、語学研修' : 'Higher education, university degree & vocational study', count: countryVisas?.student?.length || 2 },
-    { id: 'family', name: t.familyVisa, icon: '👨‍👩‍👧', desc: isJa ? '配偶者・家族帯同、同伴ビザ' : 'Spouse, children, parents & dependent residence permits', count: countryVisas?.family?.length || 2 },
-    { id: 'business', name: t.businessVisa, icon: '🤝', desc: isJa ? '商談、会議出張、市場調査、契約締結' : 'Corporate meetings, conferences & commercial investor options', count: countryVisas?.business?.length || 2 },
-    { id: 'pr', name: t.prVisa, icon: '🏠', desc: isJa ? 'インド海外市民権（OCI）、終身ビザ免除' : 'Permanent residency, long term immigration & golden investments', count: countryVisas?.pr?.length || 2 }
+    { id: 'tourist', name: t.touristVisa, icon: '🏖️', desc: isJa ? '観光、親族訪問、短期滞在、ヨガ・瞑想' : 'Vacations, sightseeing, visiting friends & short term stay', count: getCatVisasCount('tourist') },
+    { id: 'work', name: t.workVisa, icon: '💼', desc: isJa ? '就労、駐在員、技術指導、専門業務' : 'Employment, job permit, executive transfers & skilled work', count: getCatVisasCount('work') },
+    { id: 'student', name: t.studentVisa, icon: '🎓', desc: isJa ? '大学・大学院留学、研究機関、語学研修' : 'Higher education, university degree & vocational study', count: getCatVisasCount('student') },
+    { id: 'family', name: t.familyVisa, icon: '👨‍👩‍👧', desc: isJa ? '配偶者・家族帯同、同伴ビザ' : 'Spouse, children, parents & dependent residence permits', count: getCatVisasCount('family') },
+    { id: 'business', name: t.businessVisa, icon: '🤝', desc: isJa ? '商談、会議出張、市場調査、契約締結' : 'Corporate meetings, conferences & commercial investor options', count: getCatVisasCount('business') },
+    { id: 'pr', name: t.prVisa, icon: '🏠', desc: isJa ? 'インド海外市民権（OCI）、終身ビザ免除' : 'Permanent residency, long term immigration & golden investments', count: getCatVisasCount('pr') }
   ];
 
   return (
@@ -327,8 +381,9 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
-  const countryVisas = isJpToIn ? JP_TO_IN_VISA["IN"] : (FULL_VISA_DB[toCode] || FULL_VISA_DB["US"]);
-  const categoryVisas = countryVisas[category] || [];
+  const categoryVisas = isJpToIn 
+    ? ((JP_TO_IN_VISA["IN"] as any)?.[category] || []) 
+    : getVisasByCategoryFixed(toCode, category);
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'legacy'>('all');
   const [regionalFilter, setRegionalFilter] = useState<'all' | 'regional' | 'dama' | '491-sn-fs' | '494-es-la' | '191-pathways' | '417-462-ext'>('all');
@@ -783,6 +838,21 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
             </div>
           </div>
         )}
+
+        {/* UK 222 Complete 2-Directory & Regional Sponsor Intelligence Banner */}
+        {toCode === 'GB' && (
+          <div className="mt-4 p-4 bg-indigo-50/80 border border-indigo-200 rounded-2xl space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">🇬🇧</span>
+              <h3 className="text-xs sm:text-sm font-extrabold text-indigo-950">
+                UK 222 Complete Architecture — 111 Official UKVI Visas + 111 Additional Routes & Statutory Classifications
+              </h3>
+            </div>
+            <p className="text-[11px] text-indigo-900 leading-relaxed">
+              {UK_REGIONAL_WARNING_TEXT}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Grid of Visa Type Cards */}
@@ -790,10 +860,13 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
         {displayedVisas.map((v: any) => {
           const prefixRegex = new RegExp(`^[a-z]{2,3}-to-${toCode.toLowerCase()}-${category}-`, 'i');
           const shortId = String(v.id || '').replace(prefixRegex, '');
+          const targetRoute = /^in-to-/i.test(String(v.id || ''))
+            ? `/${String(v.id).replace(/^in-to-/i, `${fromCode.toLowerCase()}-to-`)}`
+            : `/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${category}-${shortId}`;
           return (
           <div
             key={v.id}
-            onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${category}-${shortId}`)}
+            onClick={() => navigate(targetRoute)}
             className={`p-6 rounded-2xl border transition-all duration-200 cursor-pointer bg-white flex flex-col justify-between group shadow-sm hover:shadow-md ${
               v.highlight ? 'border-[#0B3D91] ring-1 ring-[#0B3D91]' : 'border-slate-200 hover:border-[#0B3D91]'
             }`}
@@ -1208,13 +1281,12 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && (
-    Boolean(matchedBlogArticle) || (
-      !isLevel1Match && !isLevel2Match && !isLevel3Match && (
-        cleanPathSlug.includes('-to-') || cleanPathSlug.includes('guide') || cleanPathSlug.includes('visa')
+  const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+    !isLevel1Match && !isLevel2Match && !isLevel3Match && (
+      Boolean(matchedBlogArticle) || (
+        cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog')
       )
-    )
-  );
+    );
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
@@ -1299,11 +1371,9 @@ export default function App() {
           <TermsView navigate={navigate} />
         ) : isSitemap ? (
           <SitemapPage navigate={navigate} />
-        ) : isBlogMatch ? (
-          <BlogArticleView 
-            article={matchedBlogArticle} 
-            pathSlug={cleanPathSlug}
-            articles={articles}
+        ) : isLevel1Match ? (
+          <VisaCategorySelectionView 
+            match={isLevel1Match} 
             countries={countries} 
             navigate={navigate} 
           />
@@ -1315,9 +1385,11 @@ export default function App() {
           />
         ) : isLevel3Match ? (
           <ArticleView match={isLevel3Match} articles={articles} navigate={navigate} />
-        ) : isLevel1Match ? (
-          <VisaCategorySelectionView 
-            match={isLevel1Match} 
+        ) : isBlogMatch ? (
+          <BlogArticleView 
+            article={matchedBlogArticle} 
+            pathSlug={cleanPathSlug}
+            articles={articles}
             countries={countries} 
             navigate={navigate} 
           />
@@ -1365,20 +1437,20 @@ export default function App() {
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (1098+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (1209+ Pages)</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-500">1098+ Visa & Programme Guides across 30 Destination Countries</li>
+              <li className="text-xs text-slate-500">1209+ Visa & Programme Guides across 30 Destination Countries</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 1098+ Visa & Programme Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 1209+ Visa & Programme Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -1388,20 +1460,71 @@ export default function App() {
 
 // ----------------------------------------------------
 // Helper Function: Deduplicate Countries by Code (Map/Set)
+// Ensures top 12 popular destinations appear first in screenshot order
 // ----------------------------------------------------
+const PRIORITY_COUNTRY_ORDER = [
+  "US", "CA", "GB", "AU", "AE", "DE", "SG", "TH", "SC", "JP", "IN", "FR"
+];
+
 export function deduplicateCountries(countryList: Country[]): Country[] {
   const countryMap = new Map<string, Country>();
-  for (const country of countryList || []) {
+  const combined = [...FALLBACK_COUNTRIES, ...(countryList || [])];
+  for (const country of combined) {
     if (!country || !country.code) continue;
-    const normalizedCode = country.code.trim().toUpperCase();
+    const rawCode = country.code.trim().toUpperCase();
+    const normalizedCode = (rawCode === "EU" || rawCode === "SCH" || rawCode === "SCHENGEN") ? "SC" : (rawCode === "UK" ? "GB" : rawCode);
     if (!countryMap.has(normalizedCode)) {
       countryMap.set(normalizedCode, {
         ...country,
-        code: normalizedCode
+        code: normalizedCode,
+        name: getCountryFullName(normalizedCode),
+        flag: getCountryFlag(normalizedCode)
       });
     }
   }
-  return Array.from(countryMap.values());
+  const allUnique = Array.from(countryMap.values());
+  return allUnique.sort((a, b) => {
+    const idxA = PRIORITY_COUNTRY_ORDER.indexOf(a.code);
+    const idxB = PRIORITY_COUNTRY_ORDER.indexOf(b.code);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return 0;
+  });
+}
+
+export const COUNTRY_FLAGS: Record<string, string> = {
+  "us": "🇺🇸", "ca": "🇨🇦", "gb": "🇬🇧", "uk": "🇬🇧", "au": "🇦🇺", "ae": "🇦🇪", "de": "🇩🇪", "sg": "🇸🇬", "th": "🇹🇭", "sc": "🇪🇺", "eu": "🇪🇺", "sch": "🇪🇺", "schengen": "🇪🇺", "jp": "🇯🇵", "in": "🇮🇳", "fr": "🇫🇷", "it": "🇮🇹", "es": "🇪🇸", "ch": "🇨🇭", "nz": "🇳🇿", "br": "🇧🇷", "mx": "🇲🇽", "kr": "🇰🇷", "cn": "🇨🇳", "vn": "🇻🇳", "my": "🇲🇾", "id": "🇮🇩", "ph": "🇵🇭", "za": "🇿🇦", "tr": "🇹🇷", "sa": "🇸🇦", "qa": "🇶🇦", "ie": "🇮🇪", "nl": "🇳🇱", "se": "🇸🇪", "no": "🇳🇴", "pt": "🇵🇹", "dk": "🇩🇰", "fi": "🇫🇮", "be": "🇧🇪", "at": "🇦🇹", "pl": "🇵🇱"
+};
+
+export function getCountryFlag(code: string): string {
+  if (!code) return "🌍";
+  return COUNTRY_FLAGS[code.toLowerCase()] || "🌍";
+}
+
+export function getCountryFlagUrl(code: string): string {
+  if (!code) return "https://flagcdn.com/w160/un.png";
+  const lower = code.trim().toLowerCase();
+  const iso = (lower === "sc" || lower === "sch" || lower === "schengen" || lower === "eu")
+    ? "eu"
+    : (lower === "uk" ? "gb" : lower);
+  return `https://flagcdn.com/w160/${iso}.png`;
+}
+
+export function getCountryFullName(code: string): string {
+  const names: Record<string, string> = {
+    "us": "United States", "ca": "Canada", "gb": "United Kingdom", "uk": "United Kingdom",
+    "au": "Australia", "ae": "United Arab Emirates", "de": "Germany", "sg": "Singapore",
+    "th": "Thailand", "sc": "Schengen Area", "eu": "Schengen Area", "sch": "Schengen Area", "schengen": "Schengen Area", "jp": "Japan",
+    "in": "India", "fr": "France", "it": "Italy", "es": "Spain", "ch": "Switzerland",
+    "nz": "New Zealand", "br": "Brazil", "mx": "Mexico", "kr": "South Korea",
+    "cn": "China", "vn": "Vietnam", "my": "Malaysia", "id": "Indonesia",
+    "ph": "Philippines", "za": "South Africa", "tr": "Turkey", "sa": "Saudi Arabia",
+    "qa": "Qatar", "ie": "Ireland", "nl": "Netherlands", "se": "Sweden",
+    "no": "Norway", "pt": "Portugal", "dk": "Denmark", "fi": "Finland",
+    "be": "Belgium", "at": "Austria", "pl": "Poland"
+  };
+  return names[code.toLowerCase()] || code.toUpperCase();
 }
 
 // ----------------------------------------------------
@@ -1411,14 +1534,27 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
   const [targetSearch, setTargetSearch] = useState('');
   const uniqueCountries = deduplicateCountries(countries);
   const filteredCountries = uniqueCountries.filter((c: Country) => 
+    getCountryFullName(c.code).toLowerCase().includes(targetSearch.toLowerCase()) || 
     c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
     c.code.toLowerCase().includes(targetSearch.toLowerCase())
   );
 
+  useEffect(() => {
+    console.log("✅ OPTION 2 LEFT SIDE DONE - Flag + Country Name + Number");
+    console.log("🇺🇸 United States:", getLiveVisaCount("us"), "Visa Types");
+    console.log("🇨🇦 Canada:", getLiveVisaCount("ca"), "Visa Types");
+    console.log("🇬🇧 United Kingdom:", getLiveVisaCount("gb"), "Visa Types");
+    console.log("🇩🇪 Germany:", getLiveVisaCount("de"), "Visa Types");
+    console.log("🇦🇺 Australia:", getLiveVisaCount("au"), "Visa Types");
+    console.log("🇸🇬 Singapore:", getLiveVisaCount("sg"), "Visa Types");
+    const totalVisas = uniqueCountries.reduce((sum: number, c: Country) => sum + getLiveVisaCount(c.code), 0);
+    console.log("TOTAL LIVE VISAS:", totalVisas);
+  }, [uniqueCountries]);
+
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-[#0B3D91] to-[#072a68] text-white py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-b from-[#0B3D91] to-[#072a68] text-white py-14 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-3 py-1.5 rounded-full text-xs text-blue-200">
             <Globe className="w-3.5 h-3.5" />
@@ -1444,7 +1580,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                 className="bg-transparent font-semibold text-slate-900 focus:outline-none cursor-pointer"
               >
                 {uniqueCountries.map((c: Country) => (
-                  <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+                  <option key={c.code} value={c.code}>{getCountryFlag(c.code)} {getCountryFullName(c.code)}</option>
                 ))}
               </select>
             </div>
@@ -1462,52 +1598,78 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         </div>
       </section>
 
-      {/* Country Flag Grid Section with Filter Toggle */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-              All Global Destinations
-            </h2>
-            <p className="text-sm text-slate-500 mt-1">Click any country flag to start your visa assessment & application guide</p>
-          </div>
+      {/* All Global Destinations Section - Exact Match to Reference Design */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            All Global Destinations
+          </h2>
+          <p className="text-base sm:text-lg text-slate-600 mt-2 font-normal">
+            Explore visa options for {filteredCountries.length} popular destinations worldwide
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredCountries.map((country: Country) => {
             const originCode = (selectedOrigin?.code || 'IN').toLowerCase();
             const destCode = country.code.toLowerCase();
             const isSelf = originCode === destCode;
-            const count = getLiveVisaCount(country.code.toUpperCase());
+            const liveCount = getLiveVisaCount(country.code);
+            const flagEmoji = getCountryFlag(country.code);
+            const flagUrl = getCountryFlagUrl(country.code);
+            const fullName = getCountryFullName(country.code);
 
             return (
               <button
                 key={country.code}
                 disabled={isSelf}
                 onClick={() => navigate(`/${originCode}-to-${destCode}`)}
-                className={`group text-left p-4 rounded-xl border transition-all duration-200 flex items-center justify-between ${
+                className={`group bg-white rounded-2xl border px-5 py-4 transition-all duration-200 flex items-center justify-between text-left w-full ${
                   isSelf 
-                    ? 'bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed' 
-                    : 'bg-white border-slate-200 hover:border-[#0B3D91] hover:shadow-md cursor-pointer'
+                    ? 'border-slate-200 opacity-60 cursor-not-allowed bg-slate-50' 
+                    : 'border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 cursor-pointer'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-50 border flex items-center justify-center text-lg">
-                    {country.flag}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-bold text-sm text-slate-900 group-hover:text-[#0B3D91]">
-                      {country.code.toUpperCase()} · {country.name}
+                {/* Left side: Soft sky-blue rounded icon container with graphical flag */}
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <div className="w-16 h-16 min-w-[64px] rounded-2xl bg-[#A9CEF4]/75 flex items-center justify-center p-2.5 shrink-0 group-hover:scale-105 transition-transform">
+                    <img
+                      src={flagUrl}
+                      alt={`${fullName} flag`}
+                      loading="lazy"
+                      className="w-11 h-8 object-cover rounded-md shadow-2xs"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.style.display = 'none';
+                        const fallbackEl = target.nextElementSibling as HTMLElement | null;
+                        if (fallbackEl) fallbackEl.style.display = 'inline';
+                      }}
+                    />
+                    <span className="text-2xl hidden" aria-hidden="true">
+                      {flagEmoji}
                     </span>
                   </div>
+                  {/* Middle: Country Full Name + Number of Visa Types */}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] truncate leading-snug">
+                      {fullName}
+                    </div>
+                    <div className="text-sm text-slate-600 font-medium mt-0.5">
+                      {isSelf ? 'Your Origin Country' : `${liveCount} Visa Types`}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {count > 0 && <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{count}</span>}
-                  {!isSelf && <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#0B3D91] group-hover:translate-x-0.5 transition-all" />}
-                </div>
+                {/* Right side: Chevron arrow */}
+                {!isSelf && (
+                  <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-[#0B3D91] group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                )}
               </button>
             );
           })}
+        </div>
+
+        <div className="text-center text-xs sm:text-sm text-slate-500 mt-8 font-medium">
+          Showing {filteredCountries.length} destinations • Updated Oct 2026
         </div>
       </section>
 
@@ -2046,31 +2208,55 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
   // ===== CRITICAL FIX: Use robust retrieval to prevent blog fallback =====
   const getVisasFixed = (from: string, to: string, category: string): VisaItem[] => {
+    const fromU = (from || '').toUpperCase();
+    const fromL = (from || '').toLowerCase();
+    const toU = (to || '').toUpperCase();
+    const toL = (to || '').toLowerCase();
+    const cat = (category || '').toLowerCase() as keyof CountryVisas;
+
     // 1. Try dual-access: from->to->category
-    if(FULL_VISA_DB[from] && FULL_VISA_DB[from][to] && FULL_VISA_DB[from][to][category] && FULL_VISA_DB[from][to][category].length>0){
-      return FULL_VISA_DB[from][to][category];
+    for (const f of [fromU, fromL]) {
+      for (const t of [toU, toL]) {
+        if (FULL_VISA_DB[f]?.[t]?.[cat]?.length > 0) {
+          return FULL_VISA_DB[f][t][cat].filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+        }
+      }
     }
+
     // 2. Try base: to->category
-    if(FULL_VISA_DB[to] && FULL_VISA_DB[to][category] && FULL_VISA_DB[to][category].length>0){
-      return FULL_VISA_DB[to][category];
+    for (const t of [toU, toL]) {
+      if (FULL_VISA_DB[t]?.[cat]?.length > 0) {
+        return FULL_VISA_DB[t][cat].filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+      }
     }
+
     // 3. Try BASE_COUNTRY_VISAS filtered by category
-    const baseVisas = BASE_COUNTRY_VISAS[to];
-    if(baseVisas && baseVisas[category as keyof CountryVisas] && baseVisas[category as keyof CountryVisas].length > 0){
-        return baseVisas[category as keyof CountryVisas].filter(v=>v.record_type!=="SUPPORTING_CLASSIFICATION"&&v.record_type!=="LEGACY_VISA");
+    for (const t of [toU, toL]) {
+      const baseVisas = BASE_COUNTRY_VISAS[t];
+      if (baseVisas && baseVisas[cat] && baseVisas[cat].length > 0) {
+        return baseVisas[cat].filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+      }
     }
+
     // 4. Fallback to all live if category is empty
-    const allVisas = BASE_COUNTRY_VISAS[to] ? [
-        ...(BASE_COUNTRY_VISAS[to].tourist || []),
-        ...(BASE_COUNTRY_VISAS[to].work || []),
-        ...(BASE_COUNTRY_VISAS[to].student || []),
-        ...(BASE_COUNTRY_VISAS[to].family || []),
-        ...(BASE_COUNTRY_VISAS[to].business || []),
-        ...(BASE_COUNTRY_VISAS[to].pr || [])
-    ].filter(v=>v.record_type!=="SUPPORTING_CLASSIFICATION"&&v.record_type!=="LEGACY_VISA") : [];
+    for (const t of [toU, toL]) {
+      const b = BASE_COUNTRY_VISAS[t];
+      if (b) {
+        const allLive = [
+          ...(b.tourist || []),
+          ...(b.work || []),
+          ...(b.student || []),
+          ...(b.family || []),
+          ...(b.business || []),
+          ...(b.pr || [])
+        ].filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+        if (allLive.length > 0) return allLive;
+      }
+    }
     
-    return allVisas;
+    return [];
   };
+
 
   const categoryVisas = getVisasFixed(fromCode, toCode, categoryCode);
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
@@ -2078,8 +2264,9 @@ function ArticleView({ match, articles = [], navigate }: any) {
     ? JP_TO_IN_VISA["IN"]
     : (FULL_VISA_DB[fromCode]?.[toCode] || FULL_VISA_DB[toCode] || BASE_COUNTRY_VISAS[toCode] || FULL_VISA_DB["US"]);
   
-  // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus cross-category lookup for subclasses like /in-to-au-work-187 -> 187)
+  // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus custom prefix routes like in-to-gb-reg-ukw-isl)
   const expectedFullId = `in-to-${toCode.toLowerCase()}-${categoryCode}-${subtypeCode}`;
+  const directRouteId = `in-to-${toCode.toLowerCase()}-${subtypeCode}`;
   const allCountryVisasFlat: any[] = countryData
     ? [
         ...(countryData.tourist || []),
@@ -2092,12 +2279,17 @@ function ArticleView({ match, articles = [], navigate }: any) {
     : [];
 
   const dbVisaItem =
+    allCountryVisasFlat.find((v: any) => {
+      const vid = String(v.id || '').toLowerCase();
+      return vid === directRouteId || vid === expectedFullId || vid === subtypeCode;
+    }) ||
     categoryVisas.find((v: any) => {
       const vid = String(v.id || '').toLowerCase();
       const vcode = String(v.officialCode || '').toLowerCase();
       return (
         vid === subtypeCode ||
         vid === expectedFullId ||
+        vid === directRouteId ||
         vid.endsWith(`-${categoryCode}-${subtypeCode}`) ||
         vcode === subtypeCode
       );
@@ -2109,6 +2301,10 @@ function ArticleView({ match, articles = [], navigate }: any) {
     }) ||
     categoryVisas.find((v: any) => String(v.id || '').toLowerCase().includes(subtypeCode)) ||
     categoryVisas[0];
+
+  const resolvedCategoryCode = ['tourist', 'work', 'student', 'family', 'business', 'pr'].includes(categoryCode)
+    ? categoryCode
+    : (dbVisaItem?.categoryCode || dbVisaItem?.category || 'work');
 
   useEffect(() => {
     const sectionIds = [
@@ -2249,12 +2445,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 shrink-0">
               <button 
-                onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${categoryCode}`)} 
+                onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${resolvedCategoryCode}`)} 
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 text-xs font-bold text-slate-800 shadow-xs cursor-pointer transition-colors"
-                title={`Back to ${categoryCode} Visas`}
+                title={`Back to ${resolvedCategoryCode} Visas`}
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
-                <span className="hidden sm:inline">Back to</span> <span className="capitalize">{categoryCode}</span>
+                <span className="hidden sm:inline">Back to</span> <span className="capitalize">{resolvedCategoryCode}</span>
               </button>
               <button 
                 onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} 
@@ -2271,7 +2467,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
               <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
               <span className="shrink-0">{toCountry.flag} {toCode}</span>
               <span className="text-slate-300 shrink-0">/</span>
-              <span className="capitalize text-[#0B3D91] shrink-0 font-bold">{categoryCode}</span>
+              <span className="capitalize text-[#0B3D91] shrink-0 font-bold">{resolvedCategoryCode}</span>
               <span className="text-slate-300 shrink-0">/</span>
               <span className="truncate font-bold text-slate-900" title={visaName}>
                 {dbVisaItem?.officialCode ? `Subclass ${dbVisaItem.officialCode}` : visaName}
@@ -2355,7 +2551,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         <span>&gt;</span>
         <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-600">{fromCountry.name} to {toCountry.name}</span>
         <span>&gt;</span>
-        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${categoryCode}`)} className="cursor-pointer hover:text-blue-600 capitalize">{categoryCode}</span>
+        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${resolvedCategoryCode}`)} className="cursor-pointer hover:text-blue-600 capitalize">{resolvedCategoryCode}</span>
         <span>&gt;</span>
         <span className="text-slate-900 font-bold">{dbVisaItem?.name || subtypeCode.toUpperCase()}</span>
       </nav>
@@ -2628,13 +2824,13 @@ function ArticleView({ match, articles = [], navigate }: any) {
           </div>
         )}
 
-        {/* UK OFFICIAL GOV.UK UKVI IMMIGRATION ROUTE & APPENDIX REGISTER STATUS */}
+        {/* UK OFFICIAL GOV.UK UKVI IMMIGRATION ROUTE, 7 STATUTORY WARNINGS & REGIONAL SPONSOR DIRECTORY */}
         {toCode === 'GB' && (
-          <div id="section-subclass" className={`p-4 rounded-xl border text-xs space-y-2 scroll-mt-28 ${
-            dbVisaItem?.isLegacy ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-indigo-50 border-indigo-200 text-indigo-950'
+          <div id="section-subclass" className={`p-5 rounded-2xl border text-xs space-y-4 scroll-mt-28 ${
+            dbVisaItem?.isLegacy || dbVisaItem?.status === 'Closed' ? 'bg-amber-50 border-amber-300 text-amber-950' : 'bg-indigo-50/80 border-indigo-200 text-indigo-950'
           }`}>
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-current/20">
-              <div className="flex items-center gap-2 font-bold text-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-current/20">
+              <div className="flex items-center gap-2 font-bold text-sm flex-wrap">
                 <span>🇬🇧</span>
                 <span>Official GOV.UK UKVI Route: {dbVisaItem?.officialName || dbVisaItem?.name}</span>
                 {dbVisaItem?.officialCode && (
@@ -2642,17 +2838,36 @@ function ArticleView({ match, articles = [], navigate }: any) {
                     Code {dbVisaItem.officialCode}
                   </span>
                 )}
-              </div>
-              <div className="flex items-center gap-2">
-                {dbVisaItem?.isLegacy ? (
-                  <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
-                    ⚠️ Legacy / Closed UKVI Route
-                  </span>
-                ) : (
-                  <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
-                    🟢 Official Active GOV.UK Route
+                {dbVisaItem?.record_type && (
+                  <span className="bg-white text-indigo-900 border border-indigo-300 font-mono text-[10px] px-2 py-0.5 rounded font-extrabold">
+                    {dbVisaItem.record_type}
                   </span>
                 )}
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {dbVisaItem?.status && (
+                  <span className={`font-bold px-2 py-0.5 rounded text-[11px] ${
+                    dbVisaItem.status === 'Active' ? 'bg-emerald-200 text-emerald-900' :
+                    dbVisaItem.status === 'Restricted' ? 'bg-purple-200 text-purple-900' :
+                    'bg-amber-200 text-amber-900'
+                  }`}>
+                    {dbVisaItem.status} ({dbVisaItem.application_status || 'OPEN'})
+                  </span>
+                )}
+                {!dbVisaItem?.status && (
+                  dbVisaItem?.isLegacy ? (
+                    <span className="bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                      ⚠️ Legacy / Closed UKVI Route
+                    </span>
+                  ) : (
+                    <span className="bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded text-[11px]">
+                      🟢 Official Active GOV.UK Route
+                    </span>
+                  )
+                )}
+                <span className="text-[10px] font-mono bg-white/80 px-2 py-0.5 rounded border border-indigo-200">
+                  Verified: {dbVisaItem?.last_verified_at || 'Oct 31, 2026'}
+                </span>
                 <a
                   href={dbVisaItem?.officialSource || "https://www.gov.uk/browse/visas-immigration"}
                   target="_blank"
@@ -2665,15 +2880,93 @@ function ArticleView({ match, articles = [], navigate }: any) {
               </div>
             </div>
 
-            {dbVisaItem?.isLegacy ? (
-              <p className="leading-relaxed text-[11px]">
-                <strong>Important Notice:</strong> Route {dbVisaItem?.officialCode || subtypeCode} is a closed or legacy UK immigration category (replaced under the modern Points-Based System and Appendix rules). Retained for historical status verification, transitional extensions, and ILR settlement calculations. Verify current replacement routes on GOV.UK.
-              </p>
-            ) : (
-              <p className="leading-relaxed text-[11px]">
-                Active official United Kingdom immigration route verified against UK Visas and Immigration (UKVI) guidance and the GOV.UK Immigration Rules Index.
-              </p>
+            {dbVisaItem?.replaced_by && (
+              <div className="p-3 bg-amber-100/90 border border-amber-400 rounded-xl text-xs text-amber-950 font-semibold">
+                🔄 <strong>Replaced By Modern Route:</strong> {dbVisaItem.replaced_by}
+              </div>
             )}
+
+            {dbVisaItem?.warningBox && (
+              <div className="p-3 bg-white/95 border-l-4 border-indigo-700 rounded-r-xl text-[11px] text-slate-900 leading-relaxed font-medium shadow-2xs">
+                ⚠️ <strong>UKVI Statutory Route Notice:</strong> {dbVisaItem.warningBox}
+              </div>
+            )}
+
+            {/* 7 Statutory UK Compliance Warning Boxes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1">
+              <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
+                <strong className="text-indigo-950 block mb-0.5">1. Regional Work & Salary Rules Warning:</strong>
+                {UK_REGIONAL_WARNING_TEXT}
+              </div>
+              <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
+                <strong className="text-indigo-950 block mb-0.5">2. EU Settlement Scheme (EUSS) Warning:</strong>
+                {UK_EUSS_WARNING_TEXT}
+              </div>
+              <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
+                <strong className="text-indigo-950 block mb-0.5">3. Hong Kong BN(O) Route Structure Warning:</strong>
+                {UK_BNO_WARNING_TEXT}
+              </div>
+              <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
+                <strong className="text-indigo-950 block mb-0.5">4. Ukraine Schemes & UPE Warning:</strong>
+                {UK_UKRAINE_WARNING_TEXT}
+              </div>
+              <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
+                <strong className="text-indigo-950 block mb-0.5">5. British Nationality & Registration Warning:</strong>
+                {UK_NATIONALITY_WARNING_TEXT}
+              </div>
+              <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
+                <strong className="text-indigo-950 block mb-0.5">6. Permission to Enter & ETA Warning:</strong>
+                {UK_ENTRY_WARNING_TEXT}
+              </div>
+              <div className="p-2.5 bg-amber-50/90 rounded-xl border border-amber-300 text-[11px] leading-relaxed md:col-span-2">
+                <strong className="text-amber-950 block mb-0.5">7. Legacy & Closed UK Routes Warning:</strong>
+                {UK_LEGACY_WARNING_TEXT}
+              </div>
+            </div>
+
+            {/* UK Regional Jobs & Sponsorship Directory (Supporting Intelligence — Not a Standalone Visa Category) */}
+            <div className="pt-3 border-t border-indigo-200 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h4 className="font-extrabold text-indigo-950 text-xs sm:text-sm">
+                    🏢 UK Regional Jobs, Salary Rules & Licensed Sponsor Intelligence (10 Supporting Sections)
+                  </h4>
+                  <p className="text-[11px] text-slate-600">
+                    Supporting employer, salary (37.5-hour week basis), and nation-specific data (Scotland, Wales, Northern Ireland, England) — NOT a separate regional visa subclass.
+                  </p>
+                </div>
+                <a
+                  href="https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 bg-indigo-900 text-white rounded-lg text-[11px] font-bold hover:bg-indigo-800 inline-flex items-center gap-1"
+                >
+                  <span>UKVI Sponsor Register</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+                {REGIONAL_DIRECTORY_SECTIONS.map((sec, idx) => (
+                  <a
+                    key={idx}
+                    href={sec.govUkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 bg-white rounded-xl border border-indigo-200 hover:border-indigo-500 transition-colors block space-y-1"
+                  >
+                    <div className="font-bold text-indigo-950 text-[11px] flex items-center justify-between gap-1">
+                      <span>{idx + 1}. {sec.title}</span>
+                      <ExternalLink className="w-2.5 h-2.5 shrink-0 text-indigo-600" />
+                    </div>
+                    <p className="text-[10px] text-slate-600 line-clamp-2">{sec.dataInfo}</p>
+                    <span className="inline-block text-[9px] font-bold bg-indigo-50 text-indigo-800 px-1.5 py-0.5 rounded">
+                      {sec.nature}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 

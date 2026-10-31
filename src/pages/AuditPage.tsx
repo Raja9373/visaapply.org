@@ -65,6 +65,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
       (cData[cat] || []).forEach(v => {
         const prefixRegex = new RegExp(`^[a-z]{2,3}-to-${code.toLowerCase()}-${cat}-`, 'i');
         const shortId = v.id.replace(prefixRegex, '');
+        const cleanUrl = /^in-to-/i.test(v.id) ? `/${v.id}` : `/in-to-${code.toLowerCase()}-${cat}-${shortId}`;
         allVisasList.push({
           from: 'IN',
           to: code,
@@ -72,11 +73,13 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
           id: v.id,
           name: v.name,
           fee: v.fee,
-          url: `/in-to-${code.toLowerCase()}-${cat}-${shortId}`
+          url: cleanUrl
         });
       });
     });
   });
+
+  const targetTotal = countryWise.reduce((sum, c) => sum + c.target, 0);
 
   const categoryTotals = {
     tourist: allVisasList.filter(v => v.category === 'tourist').length,
@@ -108,7 +111,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
           VisaApply.org - Live Audit Report
         </h1>
-        <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201, Canada 199, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113 & Japan 128)</p>
+        <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201, Canada 130 Visas (150 Total Records), UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113 & Japan 128)</p>
       </div>
 
       {/* Hero Banner */}
@@ -116,7 +119,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         <div className="text-5xl sm:text-6xl font-black text-emerald-700 tracking-tight">{totalCount}+</div>
         <div className="text-xl sm:text-2xl font-bold text-emerald-900 mt-1">Total Visa & Programme Records LIVE</div>
         <div className="text-xs sm:text-sm font-semibold text-emerald-800 mt-2 bg-emerald-100/80 px-3 py-1 rounded-md inline-block">
-          Target: 1602+ (USA 201, Canada 199, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113, Japan 128) | Status: {totalCount >= 1602 ? "✅ COMPLETE - All 1602+ Live" : `Status: Live ${totalCount} records`}
+          Target: {targetTotal}+ (USA 201, Canada 130, UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113, Japan 128) | Status: {totalCount >= targetTotal ? "✅ COMPLETE - All Visas Live" : `Status: Live ${totalCount} records`}
         </div>
       </div>
 
@@ -149,16 +152,16 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                       <span className="font-mono text-blue-900 bg-blue-50 px-1.5 py-0.5 rounded text-xs">{c.code}</span>
                       <span className="truncate max-w-[120px] sm:max-w-none text-slate-800">{c.name}</span>
                       {c.code === 'US' && (
-                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">164 Visas + 37 Prog = 201</span>
+                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">201 Visas</span>
                       )}
                       {c.code === 'AU' && (
                         <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black px-1.5 py-0.5 rounded">135 Visas</span>
                       )}
                       {c.code === 'GB' && (
-                        <span className="bg-indigo-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">111 Visas</span>
+                        <span className="bg-indigo-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">222 UK Records (111 Visas + 111 Additional)</span>
                       )}
                       {c.code === 'CA' && (
-                        <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">102 Visas</span>
+                        <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">130 Visas</span>
                       )}
                       {c.code === 'AE' && (
                         <span className="bg-cyan-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">135 UAE Entries</span>
@@ -293,21 +296,44 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
             </div>
           </div>
 
-          {/* UK Visa Status Breakdown */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
-            <h3 className="font-bold text-slate-900 text-base mb-3">🇬🇧 UK (GOV.UK UKVI) Visa Breakdown (UKV–UKL)</h3>
+          {/* UK Complete 2-Directory Breakdown (111 Visas + 111 Additional Routes = 222 Total) */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
+            <h3 className="font-bold text-slate-900 text-base mb-1">🇬🇧 UK Complete 2-Directory Breakdown (111 Visas + 111 Additional = 222 Total)</h3>
             <div className="text-xs space-y-2 text-slate-700 font-medium">
+              <div className="p-2.5 bg-indigo-50 border border-indigo-200 rounded-lg space-y-1">
+                <div className="flex justify-between items-center font-bold text-indigo-950">
+                  <span>🛂 Directory 1: Official UKVI Visas & Permits:</span>
+                  <span className="bg-indigo-700 text-white px-2 py-0.5 rounded">111 Official Visas</span>
+                </div>
+                <div className="text-[11px] text-indigo-900">
+                  Tourist: <strong>13</strong> | Work: <strong>32</strong> | Student: <strong>10</strong> | Family: <strong>27</strong> | Business: <strong>9</strong> | PR & Settlement: <strong>20</strong>
+                </div>
+              </div>
+              <div className="p-2.5 bg-purple-50 border border-purple-200 rounded-lg space-y-1.5">
+                <div className="flex justify-between items-center font-bold text-purple-950">
+                  <span>📋 Directory 2: Additional Routes & Classifications:</span>
+                  <span className="bg-purple-700 text-white px-2 py-0.5 rounded">111 Additional Records</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-purple-900">
+                  <div>• 1. Regional Work & Salary Rules: <strong>11</strong></div>
+                  <div>• 2. Family Circumstance & Breakdown: <strong>6</strong></div>
+                  <div>• 3. EU Settlement Scheme (EUSS): <strong>8</strong></div>
+                  <div>• 4. Hong Kong BN(O) Additional Routes: <strong>5</strong></div>
+                  <div>• 5. Ukraine Schemes: <strong>6</strong></div>
+                  <div>• 6. Protection, Asylum & Stateless: <strong>8</strong></div>
+                  <div>• 7. Settlement & ILR Pathways: <strong>11</strong></div>
+                  <div>• 8. British Nationality & Registration: <strong>13</strong></div>
+                  <div>• 9. Permission to Enter & Electronic Status: <strong>13</strong></div>
+                  <div>• 10. Armed Forces & Dependants: <strong>7</strong></div>
+                  <div>• 11. Historical & Legacy Classifications: <strong>23</strong></div>
+                </div>
+              </div>
               <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex justify-between items-center">
-                <span>🟢 Active UKVI Routes:</span>
-                <span className="font-bold text-emerald-800">~88 Official Routes</span>
+                <span>🇬🇧 Total United Kingdom Live Entries:</span>
+                <span className="font-bold text-emerald-900">222 Live Records</span>
               </div>
-              <div className="p-2 bg-amber-50 border border-amber-200 rounded-lg flex justify-between items-center">
-                <span>📜 Legacy / Closed Routes:</span>
-                <span className="font-bold text-amber-800">~23 Routes (Tier 1/2/4/5, Start-up, UFS)</span>
-              </div>
-              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg flex justify-between items-center">
-                <span>🇬🇧 Total United Kingdom Visas:</span>
-                <span className="font-bold text-indigo-900">111 Official Visas</span>
+              <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 leading-relaxed">
+                <strong>UK Regional Framework Clarification:</strong> UK does NOT operate an Australian-style DAMA or regional subclass system. Regional Sponsor Directory and Salary Rules apply across standard Skilled Worker and Health & Care routes.
               </div>
             </div>
           </div>

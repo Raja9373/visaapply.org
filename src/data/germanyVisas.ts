@@ -1105,7 +1105,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Chambers of Commerce and Industry (IHK) supporting business founders and foreign investors",
       eligibility: "Registered business or startup",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://www.dihk.de/",
       ...getGermanyMicroDetails("DE", "business", "IHK Chambers of Commerce"),
       docs: ["Business proposal ⭐"]
@@ -1121,7 +1121,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Official economic development agency of the Federal Republic of Germany",
       eligibility: "Foreign investors",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://www.gtai.de/",
       ...getGermanyMicroDetails("DE", "business", "GTAI Agency"),
       docs: ["Investment inquiry"]
@@ -1137,7 +1137,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Official federal economic guidelines and startup funding support (EXIST programme)",
       eligibility: "Innovative founders",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://www.bmwk.de/",
       ...getGermanyMicroDetails("DE", "business", "BMWK Ministry"),
       docs: ["Startup application"]
@@ -1153,7 +1153,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Official portal for skilled workers and business founders migrating to Germany",
       eligibility: "Prospective migrants",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://www.make-it-in-germany.com/",
       ...getGermanyMicroDetails("DE", "business", "Make it in Germany Portal"),
       docs: ["Online guidance"]
@@ -1169,7 +1169,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Mandatory tax registration for freelancers, self-employed persons, and corporations",
       eligibility: "Business establishment in Germany",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://www.bzst.de/",
       ...getGermanyMicroDetails("DE", "business", "Finanzamt Tax Registration"),
       docs: ["Tax questionnaire (Fragebogen zur steuerlichen Erfassung) ⭐"]
@@ -1185,7 +1185,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Official public register listing all commercial enterprises (GmbH, AG, KG)",
       eligibility: "Company incorporation",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://www.handelsregister.de/",
       ...getGermanyMicroDetails("DE", "business", "Handelsregister"),
       docs: ["Notarised incorporation deed ⭐"]
@@ -1201,7 +1201,7 @@ export const GERMANY_138_VISAS: CountryVisas = {
       purpose: "Mandatory trade registration (Gewerbeanmeldung) for commercial businesses",
       eligibility: "Local business operation",
       isActive: true,
-      record_type: "INVESTOR_VISA",
+      record_type: "SUPPORTING_CLASSIFICATION",
       officialSource: "https://service.berlin.de/",
       ...getGermanyMicroDetails("DE", "business", "Gewerbeamt Trade Registration"),
       docs: ["Trade registration form (Gewerbeanmeldung) ⭐"]
@@ -2470,6 +2470,42 @@ export const GERMANY_138_VISAS: CountryVisas = {
       officialSource: "https://www.bamf.de/",
       ...getGermanyMicroDetails("DE", "pr", "Legacy Temporary Protection"),
       docs: ["Replaced by §24"]
+    },
+    {
+      id: "in-to-de-pr-vocational",
+      name: "Permanent Residence for Vocational Training Graduates (§18c Abs. 1)",
+      officialCode: "DER-VOC",
+      officialName: "Niederlassungserlaubnis für Absolventen einer Berufsausbildung",
+      categoryCode: "pr",
+      fee: "EUR 113",
+      validity: "Permanent",
+      stay: "Permanent settlement",
+      purpose: "Fast-track settlement permit after completing qualified vocational training in Germany and 2 years skilled employment",
+      eligibility: "German vocational qualification + 24 months statutory pension + B1 German",
+      popular: true,
+      isActive: true,
+      record_type: "RESIDENCE_PERMIT",
+      officialSource: "https://www.make-it-in-germany.com/",
+      ...getGermanyMicroDetails("DE", "pr", "Vocational Graduate Settlement"),
+      docs: ["German vocational certificate (IHK/HWK) ⭐", "24 months pension proof ⭐", "B1 German certificate"]
+    },
+    {
+      id: "in-to-de-pr-civil-service",
+      name: "Settlement Permit for Civil Servants & Public Sector Personnel (§19c)",
+      officialCode: "DER-CIV",
+      officialName: "Niederlassungserlaubnis für den öffentlichen Dienst",
+      categoryCode: "pr",
+      fee: "EUR 113",
+      validity: "Permanent",
+      stay: "Permanent settlement",
+      purpose: "Settlement permit for foreign civil servants, judges, and researchers employed in the German public sector",
+      eligibility: "Appointment as civil servant (Beamter) or 3 years public service contract",
+      popular: false,
+      isActive: true,
+      record_type: "RESIDENCE_PERMIT",
+      officialSource: "https://www.make-it-in-germany.com/",
+      ...getGermanyMicroDetails("DE", "pr", "Public Sector Settlement"),
+      docs: ["Public sector employment / civil servant appointment letter ⭐", "Official Dienstausweis"]
     }
   ]
 };

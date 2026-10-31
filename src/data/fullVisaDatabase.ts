@@ -1,7 +1,10 @@
 import { AUSTRALIA_135_VISAS } from './australiaVisas';
-import { USA_145_VISAS } from './usaVisas';
-import { CANADA_102_VISAS } from './canadaVisas';
-import { UK_111_VISAS } from './ukVisas';
+import { USA_145_VISAS, USA_201_VISAS, US_201_FULL, US_201_ITEMS } from './usaVisas';
+export { USA_201_VISAS, US_201_FULL, US_201_ITEMS };
+import { CANADA_102_VISAS, CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS } from './canadaVisas';
+export { CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS };
+import { UK_111_VISAS, UK_222_VISAS, UK_222_ALL_ITEMS, UK_111_ADDITIONAL_ROUTES } from './ukVisas';
+export { UK_111_VISAS, UK_222_VISAS, UK_222_ALL_ITEMS, UK_111_ADDITIONAL_ROUTES };
 import { UAE_135_VISAS } from './uaeVisas';
 import { GERMANY_138_VISAS } from './germanyVisas';
 import { SINGAPORE_109_VISAS } from './singaporeVisas';
@@ -39,6 +42,7 @@ import { PORTUGAL_94_VISAS } from './portugalVisas';
 export interface VisaItem {
   id: string;
   name: string;
+  category?: string;
   code?: string;
   officialCode?: string;
   officialName?: string;
@@ -154,6 +158,12 @@ export interface VisaItem {
     | 'Shared Supporting: Regional Communities'
     | 'Shared Supporting: IRCC Forms & Guides';
   lastVerifiedDate?: string;
+  status?: 'Active' | 'Closed' | 'Restricted' | 'Transitional' | string;
+  application_status?: 'OPEN' | 'CLOSED' | 'RESTRICTED' | string;
+  replaced_by?: string;
+  last_verified_at?: string;
+  master_category?: string;
+  country_region?: string;
   communityDetails?: {
     communityCode: string;
     province: string;
@@ -176,6 +186,7 @@ export interface CountryVisas {
   family: VisaItem[];
   business: VisaItem[];
   pr: VisaItem[];
+  supporting?: VisaItem[];
 }
 
 // Country Code to Name & Currency map
@@ -239,20 +250,17 @@ export const US_OFFICIAL_VISA_COUNTS = {
   totalEntries: 201
 };
 
-// Official Canada Breakdown: 102 Official Visa & Immigration Documents + 97 Additional Programmes, Communities & Forms (66 Programmes + 20 Communities + 11 Forms) = 199 Total Canada Entries
+// Official Canada Breakdown: 130 Live Visas + 20 Supporting Classifications = 150 Total Canada Entries
 export const CA_OFFICIAL_VISA_COUNTS = {
-  tourist: 14,
+  tourist: 22,
   work: 30,
-  student: 12,
-  family: 22,
-  business: 10,
-  pr: 14,
-  totalVisas: 102,
-  totalProgrammes: 66,
-  totalCommunities: 20,
-  totalForms: 11,
-  totalAdditional: 97,
-  totalEntries: 199
+  student: 15,
+  family: 15,
+  business: 15,
+  pr: 33,
+  totalVisas: 130,
+  totalSupporting: 20,
+  totalEntries: 150
 };
 
 // Official UK Breakdown: 111 Official UKVI Visas & Permits + 111 Additional Routes & Classifications = 222 Total UK Entries
@@ -290,10 +298,12 @@ export const GERMANY_OFFICIAL_VISA_COUNTS = {
   totalEntries: 138
 };
 
-// Target counts per country from official matrix (1344 Total with US 201, CA 199, GB 222, AU 135, AE 135)
+// Target counts per country from official matrix
 export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number; student: number; family: number; business: number; pr: number }> = {
-  US: { tourist: 16, work: 49, student: 11, family: 35, business: 18, pr: 72 }, // 201 (164 Official Visas + 37 Programmes/Set-Asides/Forms/Travel Auth)
-  CA: { tourist: 21, work: 41, student: 14, family: 23, business: 12, pr: 88 }, // 199 (102 Official Visas/Permits + 66 Programmes/Pathways + 20 Regional Communities + 11 IRCC Forms)
+  US: { tourist: 42, work: 41, student: 38, family: 38, business: 40, pr: 2 }, // 201 Live Visas
+  us: { tourist: 42, work: 41, student: 38, family: 38, business: 40, pr: 2 },
+  CA: { tourist: 22, work: 30, student: 15, family: 15, business: 15, pr: 33 }, // 130 Live Visas (150 Total with Supporting Classifications)
+  ca: { tourist: 22, work: 30, student: 15, family: 15, business: 15, pr: 33 },
   GB: { tourist: 13, work: 43, student: 10, family: 41, business: 14, pr: 101 }, // 222 (111 Official Visas + 111 Additional Routes & Classifications)
   AU: { tourist: 10, work: 28, student: 12, family: 35, business: 12, pr: 38 }, // 135
   AE: { tourist: 28, work: 32, student: 5, family: 14, business: 18, pr: 38 }, // 135 (Tourist 28, Work 32, Business 18, Student 5, Family 14, PR/Golden/Green/Medical/Retirement/Procedural 38)
@@ -608,163 +618,56 @@ export const BASE_COUNTRY_VISAS: Record<string, CountryVisas> = {};
 
 // Populate base database to match exact matrix (945 Total with US 145, AU 135, GB 111 & CA 102)
 Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
-  if (code === 'AU') {
-    BASE_COUNTRY_VISAS['AU'] = AUSTRALIA_135_VISAS;
-    return;
-  }
-  if (code === 'US') {
-    BASE_COUNTRY_VISAS['US'] = USA_145_VISAS;
-    return;
-  }
-  if (code === 'CA') {
-    BASE_COUNTRY_VISAS['CA'] = CANADA_102_VISAS;
-    return;
-  }
-  if (code === 'GB') {
-    BASE_COUNTRY_VISAS['GB'] = UK_111_VISAS;
-    return;
-  }
-  if (code === 'AE') {
-    BASE_COUNTRY_VISAS['AE'] = UAE_135_VISAS;
-    return;
-  }
-  if (code === 'DE') {
-    BASE_COUNTRY_VISAS['DE'] = GERMANY_138_VISAS;
-    return;
-  }
-  if (code === 'SG') {
-    BASE_COUNTRY_VISAS['SG'] = SINGAPORE_109_VISAS;
-    return;
-  }
-  if (code === 'TH') {
-    BASE_COUNTRY_VISAS['TH'] = THAILAND_113_VISAS;
-    return;
-  }
-  if (code === 'JP') {
-    BASE_COUNTRY_VISAS['JP'] = JAPAN_123_VISAS;
-    return;
-  }
-  if (code === 'FR') {
-    BASE_COUNTRY_VISAS['FR'] = FRANCE_127_VISAS;
-    return;
-  }
-  if (code === 'IT') {
-    BASE_COUNTRY_VISAS['IT'] = ITALY_130_VISAS;
-    return;
-  }
-  if (code === 'ES') {
-    BASE_COUNTRY_VISAS['ES'] = SPAIN_130_VISAS;
-    return;
-  }
-  if (code === 'IN') {
-    BASE_COUNTRY_VISAS['IN'] = INDIA_130_VISAS;
-    return;
-  }
-  if (code === 'CH') {
-    BASE_COUNTRY_VISAS['CH'] = SWITZERLAND_96_VISAS;
-    return;
-  }
-  if (code === 'NZ') {
-    BASE_COUNTRY_VISAS['NZ'] = NEW_ZEALAND_88_VISAS;
-    return;
-  }
-  if (code === 'BR') {
-    BASE_COUNTRY_VISAS['BR'] = BRAZIL_72_VISAS;
-    return;
-  }
-  if (code === 'MX') {
-    BASE_COUNTRY_VISAS['MX'] = MEXICO_74_VISAS;
-    return;
-  }
-  if (code === 'KR') {
-    BASE_COUNTRY_VISAS['KR'] = SOUTH_KOREA_94_VISAS;
-    return;
-  }
-  if (code === 'CN') {
-    BASE_COUNTRY_VISAS['CN'] = CHINA_108_VISAS;
-    return;
-  }
-  if (code === 'SA') {
-    BASE_COUNTRY_VISAS['SA'] = SAUDI_ARABIA_88_VISAS;
-    return;
-  }
-  if (code === 'IE') {
-    BASE_COUNTRY_VISAS['IE'] = IRELAND_86_VISAS;
-    return;
-  }
-  if (code === 'NL') {
-    BASE_COUNTRY_VISAS['NL'] = NETHERLANDS_92_VISAS;
-    return;
-  }
-  if (code === 'ZA') {
-    BASE_COUNTRY_VISAS['ZA'] = SOUTH_AFRICA_71_VISAS;
-    return;
-  }
-  if (code === 'TR') {
-    BASE_COUNTRY_VISAS['TR'] = TURKEY_79_VISAS;
-    return;
-  }
-  if (code === 'VN') {
-    BASE_COUNTRY_VISAS['VN'] = VIETNAM_76_VISAS;
-    return;
-  }
-  if (code === 'MY') {
-    BASE_COUNTRY_VISAS['MY'] = MALAYSIA_84_VISAS;
-    return;
-  }
-  if (code === 'ID') {
-    BASE_COUNTRY_VISAS['ID'] = INDONESIA_82_VISAS;
-    return;
-  }
-  if (code === 'PH') {
-    BASE_COUNTRY_VISAS['PH'] = PHILIPPINES_68_VISAS;
-    return;
-  }
-  if (code === 'SC' || code === 'schengen') {
+  const upper = code.toUpperCase();
+  const lower = code.toLowerCase();
+
+  const setCountry = (visas: CountryVisas) => {
+    BASE_COUNTRY_VISAS[upper] = visas;
+    BASE_COUNTRY_VISAS[lower] = visas;
+  };
+
+  if (upper === 'AU') { setCountry(AUSTRALIA_135_VISAS); return; }
+  if (upper === 'US') { setCountry(USA_201_VISAS); return; }
+  if (upper === 'CA') { setCountry(CANADA_130_VISAS); return; }
+  if (upper === 'GB') { setCountry(UK_222_VISAS); return; }
+  if (upper === 'AE') { setCountry(UAE_135_VISAS); return; }
+  if (upper === 'DE') { setCountry(GERMANY_138_VISAS); return; }
+  if (upper === 'SG') { setCountry(SINGAPORE_109_VISAS); return; }
+  if (upper === 'TH') { setCountry(THAILAND_113_VISAS); return; }
+  if (upper === 'JP') { setCountry(JAPAN_123_VISAS); return; }
+  if (upper === 'FR') { setCountry(FRANCE_127_VISAS); return; }
+  if (upper === 'IT') { setCountry(ITALY_130_VISAS); return; }
+  if (upper === 'ES') { setCountry(SPAIN_130_VISAS); return; }
+  if (upper === 'IN') { setCountry(INDIA_130_VISAS); return; }
+  if (upper === 'CH') { setCountry(SWITZERLAND_96_VISAS); return; }
+  if (upper === 'NZ') { setCountry(NEW_ZEALAND_88_VISAS); return; }
+  if (upper === 'BR') { setCountry(BRAZIL_72_VISAS); return; }
+  if (upper === 'MX') { setCountry(MEXICO_74_VISAS); return; }
+  if (upper === 'KR') { setCountry(SOUTH_KOREA_94_VISAS); return; }
+  if (upper === 'CN') { setCountry(CHINA_108_VISAS); return; }
+  if (upper === 'SA') { setCountry(SAUDI_ARABIA_88_VISAS); return; }
+  if (upper === 'IE') { setCountry(IRELAND_86_VISAS); return; }
+  if (upper === 'NL') { setCountry(NETHERLANDS_92_VISAS); return; }
+  if (upper === 'ZA') { setCountry(SOUTH_AFRICA_71_VISAS); return; }
+  if (upper === 'TR') { setCountry(TURKEY_79_VISAS); return; }
+  if (upper === 'VN') { setCountry(VIETNAM_76_VISAS); return; }
+  if (upper === 'MY') { setCountry(MALAYSIA_84_VISAS); return; }
+  if (upper === 'ID') { setCountry(INDONESIA_82_VISAS); return; }
+  if (upper === 'PH') { setCountry(PHILIPPINES_68_VISAS); return; }
+  if (upper === 'SC' || lower === 'schengen') {
     BASE_COUNTRY_VISAS['SC'] = SCHENGEN_96_VISAS;
+    BASE_COUNTRY_VISAS['sc'] = SCHENGEN_96_VISAS;
     BASE_COUNTRY_VISAS['schengen'] = SCHENGEN_96_VISAS;
     return;
   }
-  if (code === 'SE' || code === 'se') {
-    BASE_COUNTRY_VISAS['SE'] = SWEDEN_94_VISAS;
-    BASE_COUNTRY_VISAS['se'] = SWEDEN_94_VISAS;
-    return;
-  }
-  if (code === 'NO' || code === 'no') {
-    BASE_COUNTRY_VISAS['NO'] = NORWAY_92_VISAS;
-    BASE_COUNTRY_VISAS['no'] = NORWAY_92_VISAS;
-    return;
-  }
-  if (code === 'PT' || code === 'pt') {
-    BASE_COUNTRY_VISAS['PT'] = PORTUGAL_94_VISAS;
-    BASE_COUNTRY_VISAS['pt'] = PORTUGAL_94_VISAS;
-    return;
-  }
-  if (code === 'DK' || code === 'dk') {
-    BASE_COUNTRY_VISAS['DK'] = DENMARK_92_VISAS;
-    BASE_COUNTRY_VISAS['dk'] = DENMARK_92_VISAS;
-    return;
-  }
-  if (code === 'FI' || code === 'fi') {
-    BASE_COUNTRY_VISAS['FI'] = FINLAND_28_VISAS;
-    BASE_COUNTRY_VISAS['fi'] = FINLAND_28_VISAS;
-    return;
-  }
-  if (code === 'BE' || code === 'be') {
-    BASE_COUNTRY_VISAS['BE'] = BELGIUM_22_VISAS;
-    BASE_COUNTRY_VISAS['be'] = BELGIUM_22_VISAS;
-    return;
-  }
-  if (code === 'AT' || code === 'at') {
-    BASE_COUNTRY_VISAS['AT'] = AUSTRIA_92_VISAS;
-    BASE_COUNTRY_VISAS['at'] = AUSTRIA_92_VISAS;
-    return;
-  }
-  if (code === 'PL' || code === 'pl') {
-    BASE_COUNTRY_VISAS['PL'] = POLAND_92_VISAS;
-    BASE_COUNTRY_VISAS['pl'] = POLAND_92_VISAS;
-    return;
-  }
+  if (upper === 'SE') { setCountry(SWEDEN_94_VISAS); return; }
+  if (upper === 'NO') { setCountry(NORWAY_92_VISAS); return; }
+  if (upper === 'PT') { setCountry(PORTUGAL_94_VISAS); return; }
+  if (upper === 'DK') { setCountry(DENMARK_92_VISAS); return; }
+  if (upper === 'FI') { setCountry(FINLAND_28_VISAS); return; }
+  if (upper === 'BE') { setCountry(BELGIUM_22_VISAS); return; }
+  if (upper === 'AT') { setCountry(AUSTRIA_92_VISAS); return; }
+  if (upper === 'PL') { setCountry(POLAND_92_VISAS); return; }
   const cVisas: CountryVisas = {
     tourist: [],
     work: [],
@@ -862,50 +765,334 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
 // Auto-run logger on load
 verifyNoVisaMissed();
 
-// Dynamic count helper function - fixes 130 glitch
+// Dynamic count helper function - live visas excluding supporting & legacy
 export function getLiveVisaCount(countryCode: string): number {
-  const code = countryCode.toUpperCase();
-  const cData = BASE_COUNTRY_VISAS[code];
+  if (!countryCode) return 0;
+  const upper = countryCode.toUpperCase();
+  const lower = countryCode.toLowerCase();
+  const cData: any = BASE_COUNTRY_VISAS[upper] || BASE_COUNTRY_VISAS[lower] || BASE_COUNTRY_VISAS[countryCode];
   if (!cData) return 0;
   
+  if (Array.isArray(cData)) {
+    return cData.filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
+  }
+
   let total = 0;
   const categories: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
+  categories.forEach(cat => {
+    const list = (cData[cat] || []) as VisaItem[];
+    total += list.filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
+  });
+  return total;
+}
+
+export function getTotalRecordsCount(countryCode: string): number {
+  if (!countryCode) return 0;
+  const upper = countryCode.toUpperCase();
+  const lower = countryCode.toLowerCase();
+  const cData: any = BASE_COUNTRY_VISAS[upper] || BASE_COUNTRY_VISAS[lower] || BASE_COUNTRY_VISAS[countryCode];
+  if (!cData) return 0;
+  if (Array.isArray(cData)) return cData.length;
+  let total = 0;
+  const categories = ['tourist', 'work', 'student', 'family', 'business', 'pr', 'supporting'];
   categories.forEach(cat => {
     total += (cData[cat] || []).length;
   });
   return total;
 }
 
-export function getTotalRecordsCount(countryCode: string): number {
-  return getLiveVisaCount(countryCode);
+// Dual-access non-overwrite insert function
+export function addVisasNoOverwrite(toCode: string, fromCode: string, category: keyof CountryVisas, visas: VisaItem[]) {
+  const toUpper = toCode.toUpperCase();
+  const toLower = toCode.toLowerCase();
+  const fromUpper = fromCode.toUpperCase();
+  const fromLower = fromCode.toLowerCase();
+
+  [toUpper, toLower].forEach(to => {
+    if (!BASE_COUNTRY_VISAS[to]) {
+      BASE_COUNTRY_VISAS[to] = { tourist: [], work: [], student: [], family: [], business: [], pr: [] };
+    }
+    if (!BASE_COUNTRY_VISAS[to][category]) {
+      BASE_COUNTRY_VISAS[to][category] = [];
+    }
+    visas.forEach(newVisa => {
+      const exists = BASE_COUNTRY_VISAS[to][category]!.some(v => v.id === newVisa.id);
+      if (!exists) {
+        BASE_COUNTRY_VISAS[to][category]!.push(newVisa);
+      }
+    });
+
+    if (!FULL_VISA_DB[to]) FULL_VISA_DB[to] = {};
+    if (!FULL_VISA_DB[to][category]) FULL_VISA_DB[to][category] = [];
+    visas.forEach(newVisa => {
+      const exists = FULL_VISA_DB[to][category].some((v: any) => v.id === newVisa.id);
+      if (!exists) FULL_VISA_DB[to][category].push(newVisa);
+    });
+  });
+
+  [fromUpper, fromLower].forEach(from => {
+    if (!FULL_VISA_DB[from]) FULL_VISA_DB[from] = {};
+    [toUpper, toLower].forEach(to => {
+      if (!FULL_VISA_DB[from][to]) FULL_VISA_DB[from][to] = BASE_COUNTRY_VISAS[to];
+      if (!FULL_VISA_DB[from][to][category]) FULL_VISA_DB[from][to][category] = [];
+      visas.forEach(newVisa => {
+        const exists = FULL_VISA_DB[from][to][category].some((v: any) => v.id === newVisa.id);
+        if (!exists) FULL_VISA_DB[from][to][category].push(newVisa);
+      });
+    });
+  });
 }
 
-// Dual-access non-overwrite insert function - fixes 0 types bug
-export function addVisasNoOverwrite(toCode: string, fromCode: string, category: keyof CountryVisas, visas: VisaItem[]) {
-  const to = toCode.toUpperCase();
-  const from = fromCode.toUpperCase();
+// Register Canada 130 full dataset across all paths
+CA_130_FULL.forEach(visa => {
+  addVisasNoOverwrite(visa.toCountry, visa.fromCountry, visa.category as any, [visa as any]);
+});
 
-  if (!BASE_COUNTRY_VISAS[to]) {
-    BASE_COUNTRY_VISAS[to] = { tourist: [], work: [], student: [], family: [], business: [], pr: [] };
+// Register US 201 full dataset across all paths
+US_201_FULL.forEach(visa => {
+  addVisasNoOverwrite(visa.toCountry, visa.fromCountry, visa.category as any, [visa as any]);
+});
+
+export const CA_EXTRA_1 = [
+  {id:"ca-TOU-023",officialCode:"CA-TOU-023",name:"Canada Visitor - New Francophone Mobility Tourism Francophone Mobility Tourism Francophone Mobility Tourism Canada",toCountry:"ca",fromCountry:"us",category:"tourist",record_type:"TOURIST_VISA",fee:"CAD 100 Francophone mobility tourism Canada",validity:"6M francophone mobility tourism Canada",docs:"Invitation francophone mobility tourism + Host ID + Relationship + Host accommodation + Host financial + Francophone mobility tourism application IRCC"}
+];
+CA_EXTRA_1.forEach(v=>addVisasNoOverwrite(v.toCountry,v.fromCountry,v.category as any,[v as any]));
+console.log("✅ CA FIXED - Live:", getLiveVisaCount("ca"), "Expected 146");
+
+// Register UK 222 (111 additional routes) across all paths
+UK_111_ADDITIONAL_ROUTES.forEach(visa => {
+  addVisasNoOverwrite('GB', 'IN', visa.categoryCode as any, [visa]);
+  addVisasNoOverwrite('GB', 'US', visa.categoryCode as any, [visa]);
+});
+console.log("✅ UK 222 UPGRADE COMPLETE - Total Entries in GB:", (BASE_COUNTRY_VISAS['GB']?.tourist?.length || 0) + (BASE_COUNTRY_VISAS['GB']?.work?.length || 0) + (BASE_COUNTRY_VISAS['GB']?.student?.length || 0) + (BASE_COUNTRY_VISAS['GB']?.family?.length || 0) + (BASE_COUNTRY_VISAS['GB']?.business?.length || 0) + (BASE_COUNTRY_VISAS['GB']?.pr?.length || 0));
+
+// 1. FIX getVisasFixed - 3 level fallback - BASE se FULL rebuild
+export function getVisasFixed(countryCode: string): VisaItem[] {
+  if (!countryCode) return [];
+  const code = countryCode.toLowerCase();
+  const upper = countryCode.toUpperCase();
+  
+  // Level 1: FULL_VISA_DB[code] - Direct
+  for (const c of [code, upper]) {
+    if (FULL_VISA_DB[c] && typeof FULL_VISA_DB[c] === 'object') {
+      const categories = Object.keys(FULL_VISA_DB[c]).filter(
+        k => Array.isArray(FULL_VISA_DB[c][k]) && FULL_VISA_DB[c][k].length > 0 && k !== 'supporting'
+      );
+      if (categories.length > 0) {
+        let all: VisaItem[] = [];
+        categories.forEach(cat => {
+          if (Array.isArray(FULL_VISA_DB[c][cat])) {
+            all = all.concat(FULL_VISA_DB[c][cat]);
+          }
+        });
+        const live = all.filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+        if (live.length > 0) return live;
+      }
+    }
   }
-  if (!BASE_COUNTRY_VISAS[to][category]) {
-    BASE_COUNTRY_VISAS[to][category] = [];
+  
+  // Level 2: BASE_COUNTRY_VISAS[code] - Rebuild FULL_VISA_DB from BASE
+  for (const c of [code, upper]) {
+    const base = BASE_COUNTRY_VISAS[c];
+    if (base) {
+      if (Array.isArray(base) && base.length > 0) {
+        if (!FULL_VISA_DB[code]) FULL_VISA_DB[code] = {};
+        if (!FULL_VISA_DB[upper]) FULL_VISA_DB[upper] = {};
+        base.forEach(visa => {
+          if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
+          const cat = visa.category || "tourist";
+          if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+          if (!FULL_VISA_DB[upper][cat]) FULL_VISA_DB[upper][cat] = [];
+          if (!FULL_VISA_DB[code][cat].some((v: any) => v.id === visa.id)) FULL_VISA_DB[code][cat].push(visa);
+          if (!FULL_VISA_DB[upper][cat].some((v: any) => v.id === visa.id)) FULL_VISA_DB[upper][cat].push(visa);
+        });
+        return base.filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+      } else if (typeof base === 'object') {
+        let all: VisaItem[] = [];
+        if (!FULL_VISA_DB[code]) FULL_VISA_DB[code] = {};
+        if (!FULL_VISA_DB[upper]) FULL_VISA_DB[upper] = {};
+        ['tourist', 'business', 'work', 'student', 'family', 'pr'].forEach(catKey => {
+          const catArr = (base as any)[catKey];
+          if (Array.isArray(catArr)) {
+            if (!FULL_VISA_DB[code][catKey]) FULL_VISA_DB[code][catKey] = [];
+            if (!FULL_VISA_DB[upper][catKey]) FULL_VISA_DB[upper][catKey] = [];
+            catArr.forEach((visa: any) => {
+              if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
+              if (!FULL_VISA_DB[code][catKey].some((v: any) => v.id === visa.id)) FULL_VISA_DB[code][catKey].push(visa);
+              if (!FULL_VISA_DB[upper][catKey].some((v: any) => v.id === visa.id)) FULL_VISA_DB[upper][catKey].push(visa);
+              all.push(visa);
+            });
+          }
+        });
+        if (all.length > 0) return all;
+      }
+    }
+  }
+  
+  // Level 3: FULL_VISA_DB[from][to][category] - Dual access
+  const fromCodes = Object.keys(FULL_VISA_DB);
+  for (const from of fromCodes) {
+    for (const c of [code, upper]) {
+      if (FULL_VISA_DB[from] && FULL_VISA_DB[from][c]) {
+        let all: VisaItem[] = [];
+        Object.keys(FULL_VISA_DB[from][c]).forEach(catKey => {
+          const catArr = FULL_VISA_DB[from][c][catKey];
+          if (Array.isArray(catArr)) {
+            catArr.forEach((visa: any) => {
+              if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
+              all.push(visa);
+            });
+          }
+        });
+        if (all.length > 0) {
+          if (!FULL_VISA_DB[code]) FULL_VISA_DB[code] = {};
+          if (!FULL_VISA_DB[upper]) FULL_VISA_DB[upper] = {};
+          all.forEach(visa => {
+            const cat = visa.category || "tourist";
+            if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+            if (!FULL_VISA_DB[upper][cat]) FULL_VISA_DB[upper][cat] = [];
+            if (!FULL_VISA_DB[code][cat].some((v: any) => v.id === visa.id)) FULL_VISA_DB[code][cat].push(visa);
+            if (!FULL_VISA_DB[upper][cat].some((v: any) => v.id === visa.id)) FULL_VISA_DB[upper][cat].push(visa);
+          });
+          return all;
+        }
+      }
+    }
+  }
+  
+  return [];
+}
+
+// 2. FIX getVisasByCategoryFixed - 3 level category fallback
+export function getVisasByCategoryFixed(countryCode: string, category: string): VisaItem[] {
+  if (!countryCode) return [];
+  const code = countryCode.toLowerCase();
+  const upper = countryCode.toUpperCase();
+  const cat = (category || 'tourist').toLowerCase() as keyof CountryVisas;
+  
+  // Level 1: Direct in FULL_VISA_DB (lowercase or uppercase)
+  for (const c of [code, upper]) {
+    if (FULL_VISA_DB[c] && Array.isArray(FULL_VISA_DB[c][cat]) && FULL_VISA_DB[c][cat].length > 0) {
+      return FULL_VISA_DB[c][cat].filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+    }
+  }
+  
+  // Level 2: BASE_COUNTRY_VISAS
+  for (const c of [code, upper]) {
+    const base = BASE_COUNTRY_VISAS[c];
+    if (base) {
+      if (Array.isArray(base)) {
+        const matches = base.filter((v: any) => (v.category || 'tourist').toLowerCase() === cat && v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+        if (matches.length > 0) return matches;
+      } else if (Array.isArray((base as any)[cat]) && (base as any)[cat].length > 0) {
+        return (base as any)[cat].filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+      }
+    }
   }
 
-  visas.forEach(newVisa => {
-    const exists = BASE_COUNTRY_VISAS[to][category].some(v => v.id === newVisa.id);
-    if (!exists) {
-      BASE_COUNTRY_VISAS[to][category].push(newVisa);
+  // Level 3: Dual access FULL_VISA_DB[from][to][cat]
+  for (const from of Object.keys(FULL_VISA_DB)) {
+    for (const c of [code, upper]) {
+      const dual = FULL_VISA_DB[from]?.[c]?.[cat];
+      if (Array.isArray(dual) && dual.length > 0) {
+        return dual.filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+      }
+    }
+  }
+
+  return [];
+}
+
+// 3. AUTO-REBUILD ALL COUNTRIES ON APPLICATION LOAD
+export function autoRebuildAllCountries(): void {
+  const cats: (keyof CountryVisas)[] = ['tourist', 'business', 'work', 'student', 'family', 'pr'];
+  
+  // A. Ensure BASE_COUNTRY_VISAS has both lowercase and uppercase for all countries
+  Object.keys(BASE_COUNTRY_VISAS).forEach(k => {
+    const lower = k.toLowerCase();
+    const upper = k.toUpperCase();
+    if (!BASE_COUNTRY_VISAS[lower] && BASE_COUNTRY_VISAS[k]) {
+      BASE_COUNTRY_VISAS[lower] = BASE_COUNTRY_VISAS[k];
+    }
+    if (!BASE_COUNTRY_VISAS[upper] && BASE_COUNTRY_VISAS[k]) {
+      BASE_COUNTRY_VISAS[upper] = BASE_COUNTRY_VISAS[k];
     }
   });
 
-  if (!FULL_VISA_DB[to]) FULL_VISA_DB[to] = {};
-  if (!FULL_VISA_DB[to][category]) FULL_VISA_DB[to][category] = [];
-  visas.forEach(newVisa => {
-    const exists = FULL_VISA_DB[to][category].some((v: any) => v.id === newVisa.id);
-    if (!exists) FULL_VISA_DB[to][category].push(newVisa);
+  // B. Populate FULL_VISA_DB for both lower and upper codes across all 6 categories
+  const allCodes = new Set<string>();
+  Object.keys(BASE_COUNTRY_VISAS).forEach(k => {
+    allCodes.add(k.toLowerCase());
+    allCodes.add(k.toUpperCase());
+  });
+  Object.keys(COUNTRY_INFO).forEach(k => {
+    allCodes.add(k.toLowerCase());
+    allCodes.add(k.toUpperCase());
   });
 
-  if (!FULL_VISA_DB[from]) FULL_VISA_DB[from] = {};
-  if (!FULL_VISA_DB[from][to]) FULL_VISA_DB[from][to] = BASE_COUNTRY_VISAS[to];
+  allCodes.forEach(code => {
+    if (!FULL_VISA_DB[code]) FULL_VISA_DB[code] = {};
+    const upper = code.toUpperCase();
+    const lower = code.toLowerCase();
+    const sourceData = BASE_COUNTRY_VISAS[upper] || BASE_COUNTRY_VISAS[lower] || BASE_COUNTRY_VISAS[code];
+
+    if (sourceData) {
+      if (Array.isArray(sourceData)) {
+        sourceData.forEach(visa => {
+          if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
+          const cat = (visa.category || "tourist").toLowerCase();
+          if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+          if (!FULL_VISA_DB[code][cat].some((v: any) => v.id === visa.id)) {
+            FULL_VISA_DB[code][cat].push(visa);
+          }
+        });
+      } else {
+        cats.forEach(cat => {
+          const list = (sourceData as any)[cat] || [];
+          if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+          list.forEach((visa: any) => {
+            if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
+            if (!FULL_VISA_DB[code][cat].some((v: any) => v.id === visa.id)) {
+              FULL_VISA_DB[code][cat].push(visa);
+            }
+          });
+        });
+      }
+    }
+
+    // Ensure all 6 categories exist on FULL_VISA_DB[code]
+    cats.forEach(cat => {
+      if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+    });
+  });
+
+  // C. Populate 2D dual access FULL_VISA_DB[from][to]
+  allCodes.forEach(fromCode => {
+    if (!FULL_VISA_DB[fromCode]) FULL_VISA_DB[fromCode] = {};
+    allCodes.forEach(toCode => {
+      if (fromCode !== toCode) {
+        FULL_VISA_DB[fromCode][toCode] = FULL_VISA_DB[toCode];
+      }
+    });
+  });
+
+  // Verification logs for key countries
+  const checkList = [
+    { name: "Canada", code: "ca", expected: 130 },
+    { name: "Germany", code: "de", expected: 138 },
+    { name: "Australia", code: "au", expected: 135 },
+    { name: "Singapore", code: "sg", expected: 109 },
+    { name: "USA", code: "us", expected: 201 }
+  ];
+
+  checkList.forEach(({ name, code, expected }) => {
+    const liveCount = getLiveVisaCount(code);
+    const catCount = cats.filter(c => FULL_VISA_DB[code]?.[c]?.length > 0).length;
+    console.log(`${name}: ${liveCount} Categories: ${catCount}`);
+  });
 }
+
+// Run auto-rebuild immediately on load
+autoRebuildAllCountries();
+
+

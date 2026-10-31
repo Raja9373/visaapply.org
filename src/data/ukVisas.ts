@@ -2313,4 +2313,71 @@ export const UK_111_VISAS: CountryVisas = {
   pr: buildUkVisaItems(prVisasRaw, 'pr')
 };
 
-export const UK_VISAS = UK_111_VISAS;
+import { 
+  UK_111_ADDITIONAL_ROUTES, 
+  UK_GROUP_1_REGIONAL_WORK, 
+  UK_GROUP_2_FAMILY_SPECIAL, 
+  UK_GROUP_3_EUSS_ROUTES, 
+  UK_GROUP_4_BNO_ROUTES, 
+  UK_GROUP_5_UKRAINE_SCHEMES, 
+  UK_GROUP_6_PROTECTION_STATELESS, 
+  UK_GROUP_7_SETTLEMENT_ROUTES, 
+  UK_GROUP_8_NATIONALITY_CITIZENSHIP, 
+  UK_GROUP_9_ENTRY_STATUS, 
+  UK_GROUP_10_ARMED_FORCES, 
+  UK_GROUP_11_LEGACY_ROUTES,
+  UK_EUSS_WARNING_TEXT,
+  UK_BNO_WARNING_TEXT,
+  UK_UKRAINE_WARNING_TEXT,
+  UK_NATIONALITY_WARNING_TEXT,
+  UK_ENTRY_WARNING_TEXT,
+  UK_LEGACY_WARNING_TEXT
+} from './ukAdditionalRoutes';
+
+export { 
+  UK_111_ADDITIONAL_ROUTES, 
+  UK_EUSS_WARNING_TEXT, 
+  UK_BNO_WARNING_TEXT, 
+  UK_UKRAINE_WARNING_TEXT, 
+  UK_NATIONALITY_WARNING_TEXT, 
+  UK_ENTRY_WARNING_TEXT, 
+  UK_LEGACY_WARNING_TEXT 
+};
+
+export { UK_REGIONAL_WARNING_TEXT } from './ukRegionalJobs';
+
+const additionalWork = UK_GROUP_1_REGIONAL_WORK; // 11
+const additionalFamily = [...UK_GROUP_2_FAMILY_SPECIAL, ...UK_GROUP_3_EUSS_ROUTES]; // 6 + 8 = 14
+const additionalBiz = UK_GROUP_11_LEGACY_ROUTES.filter(v => v.categoryCode === 'business'); // 5 (HSMP, TURK-BIZ, SOLE, T1-TAL, T1-INV)
+const additionalPr = [
+  ...UK_GROUP_4_BNO_ROUTES, // 5
+  ...UK_GROUP_5_UKRAINE_SCHEMES, // 6
+  ...UK_GROUP_6_PROTECTION_STATELESS, // 8
+  ...UK_GROUP_7_SETTLEMENT_ROUTES, // 11
+  ...UK_GROUP_8_NATIONALITY_CITIZENSHIP, // 13
+  ...UK_GROUP_9_ENTRY_STATUS, // 13
+  ...UK_GROUP_10_ARMED_FORCES, // 7
+  ...UK_GROUP_11_LEGACY_ROUTES.filter(v => v.categoryCode !== 'business') // 18
+]; // 5+6+8+11+13+13+7+18 = 81
+
+export const UK_222_VISAS: CountryVisas = {
+  tourist: [...UK_111_VISAS.tourist], // 13
+  work: [...UK_111_VISAS.work, ...additionalWork], // 32 + 11 = 43
+  student: [...UK_111_VISAS.student], // 10
+  family: [...UK_111_VISAS.family, ...additionalFamily], // 27 + 14 = 41
+  business: [...UK_111_VISAS.business, ...additionalBiz], // 9 + 5 = 14
+  pr: [...UK_111_VISAS.pr, ...additionalPr], // 20 + 81 = 101
+  supporting: UK_111_ADDITIONAL_ROUTES
+};
+
+export const UK_VISAS = UK_222_VISAS;
+
+export const UK_222_ALL_ITEMS: VisaItem[] = [
+  ...UK_222_VISAS.tourist,
+  ...UK_222_VISAS.work,
+  ...UK_222_VISAS.student,
+  ...UK_222_VISAS.family,
+  ...UK_222_VISAS.business,
+  ...UK_222_VISAS.pr
+];
+

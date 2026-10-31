@@ -255,7 +255,7 @@ function getUsaDocs(code: string, cat: string, name: string): string[] {
 // 145 OFFICIAL USA VISAS DEFINITIONS (POINTS 1-19 PDF COMPLETE)
 // -------------------------------------------------------------------------------------------------
 
-export const USA_145_VISAS: CountryVisas = {
+const USA_LEGACY_145_VISAS: CountryVisas = {
   // =========================================================================
   // 1. TOURIST (12 Types)
   // =========================================================================
@@ -4478,4 +4478,9 @@ export const USA_145_VISAS: CountryVisas = {
     }
   ]
 };
+export { US_201_FULL, US_201_ITEMS, USA_201_VISAS } from './usa201Visas';
+import { USA_201_VISAS } from './usa201Visas';
+
+export const USA_145_VISAS: CountryVisas = USA_201_VISAS;
+
 
