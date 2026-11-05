@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed } from './data/fullVisaDatabase';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
@@ -42,6 +42,8 @@ import {
   Mail, Copy, Send, MapPin, Phone, ChevronDown, ArrowUp, Navigation
 } from 'lucide-react';
 
+import { ALL_249_ISO_FORCED } from './data/all249Countries';
+
 interface Country {
   code: string;
   name: string;
@@ -70,108 +72,7 @@ interface Article {
   content?: string;
 }
 
-const FALLBACK_COUNTRIES = [
-  { code: "US", name: "United States", flag: "🇺🇸" },
-  { code: "CA", name: "Canada", flag: "🇨🇦" },
-  { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
-  { code: "AU", name: "Australia", flag: "🇦🇺" },
-  { code: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
-  { code: "DE", name: "Germany", flag: "🇩🇪" },
-  { code: "SG", name: "Singapore", flag: "🇸🇬" },
-  { code: "TH", name: "Thailand", flag: "🇹🇭" },
-  { code: "SC", name: "Schengen Area", flag: "🇪🇺" },
-  { code: "JP", name: "Japan", flag: "🇯🇵" },
-  { code: "IN", name: "India", flag: "🇮🇳" },
-  { code: "FR", name: "France", flag: "🇫🇷" },
-  { code: "IT", name: "Italy", flag: "🇮🇹" },
-  { code: "ES", name: "Spain", flag: "🇪🇸" },
-  { code: "NL", name: "Netherlands", flag: "🇳🇱" },
-  { code: "CH", name: "Switzerland", flag: "🇨🇭" },
-  { code: "NZ", name: "New Zealand", flag: "🇳🇿" },
-  { code: "BR", name: "Brazil", flag: "🇧🇷" },
-  { code: "MX", name: "Mexico", flag: "🇲🇽" },
-  { code: "KR", name: "South Korea", flag: "🇰🇷" },
-  { code: "CN", name: "China", flag: "🇨🇳" },
-  { code: "VN", name: "Vietnam", flag: "🇻🇳" },
-  { code: "MY", name: "Malaysia", flag: "🇲🇾" },
-  { code: "ID", name: "Indonesia", flag: "🇮🇩" },
-  { code: "PH", name: "Philippines", flag: "🇵🇭" },
-  { code: "ZA", name: "South Africa", flag: "🇿🇦" },
-  { code: "TR", name: "Turkey", flag: "🇹🇷" },
-  { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
-  { code: "QA", name: "Qatar", flag: "🇶🇦" },
-  { code: "IE", name: "Ireland", flag: "🇮🇪" },
-  { code: "SE", name: "Sweden", flag: "🇸🇪" },
-  { code: "NO", name: "Norway", flag: "🇳🇴" },
-  { code: "PT", name: "Portugal", flag: "🇵🇹" },
-  { code: "DK", name: "Denmark", flag: "🇩🇰" },
-  { code: "FI", name: "Finland", flag: "🇫🇮" },
-  { code: "BE", name: "Belgium", flag: "🇧🇪" },
-  { code: "AT", name: "Austria", flag: "🇦🇹" },
-  { code: "PL", name: "Poland", flag: "🇵🇱" },
-  { code: "HK", name: "Hong Kong", flag: "🇭🇰" },
-  { code: "TW", name: "Taiwan", flag: "🇹🇼" },
-  { code: "KH", name: "Cambodia", flag: "🇰🇭" },
-  { code: "LA", name: "Laos", flag: "🇱🇦" },
-  { code: "MM", name: "Myanmar", flag: "🇲🇲" },
-  { code: "BN", name: "Brunei", flag: "🇧🇳" },
-  { code: "PK", name: "Pakistan", flag: "🇵🇰" },
-  { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
-  { code: "LK", name: "Sri Lanka", flag: "🇱🇰" },
-  { code: "NP", name: "Nepal", flag: "🇳🇵" },
-  { code: "MN", name: "Mongolia", flag: "🇲🇳" },
-  { code: "KZ", name: "Kazakhstan", flag: "🇰🇿" },
-  { code: "OM", name: "Oman", flag: "🇴🇲" },
-  { code: "KW", name: "Kuwait", flag: "🇰🇼" },
-  { code: "BH", name: "Bahrain", flag: "🇧🇭" },
-  { code: "JO", name: "Jordan", flag: "🇯🇴" },
-  { code: "LB", name: "Lebanon", flag: "🇱🇧" },
-  { code: "EG", name: "Egypt", flag: "🇪🇬" },
-  { code: "MA", name: "Morocco", flag: "🇲🇦" },
-  { code: "KE", name: "Kenya", flag: "🇰🇪" },
-  { code: "NG", name: "Nigeria", flag: "🇳🇬" },
-  { code: "GH", name: "Ghana", flag: "🇬🇭" },
-  { code: "ET", name: "Ethiopia", flag: "🇪🇹" },
-  { code: "TZ", name: "Tanzania", flag: "🇹🇿" },
-  { code: "UG", name: "Uganda", flag: "🇺🇬" },
-  { code: "RW", name: "Rwanda", flag: "🇷🇼" },
-  { code: "MU", name: "Mauritius", flag: "🇲🇺" },
-  { code: "AR", name: "Argentina", flag: "🇦🇷" },
-  { code: "CL", name: "Chile", flag: "🇨🇱" },
-  { code: "CO", name: "Colombia", flag: "🇨🇴" },
-  { code: "PE", name: "Peru", flag: "🇵🇪" },
-  { code: "UY", name: "Uruguay", flag: "🇺🇾" },
-  { code: "PA", name: "Panama", flag: "🇵🇦" },
-  { code: "CR", name: "Costa Rica", flag: "🇨🇷" },
-  { code: "DO", name: "Dominican Republic", flag: "🇩🇴" },
-  { code: "JM", name: "Jamaica", flag: "🇯🇲" },
-  { code: "IS", name: "Iceland", flag: "🇮🇸" },
-  { code: "LU", name: "Luxembourg", flag: "🇱🇺" },
-  { code: "CZ", name: "Czech Republic", flag: "🇨🇿" },
-  { code: "HU", name: "Hungary", flag: "🇭🇺" },
-  { code: "GR", name: "Greece", flag: "🇬🇷" },
-  { code: "HR", name: "Croatia", flag: "🇭🇷" },
-  { code: "RO", name: "Romania", flag: "🇷🇴" },
-  { code: "UA", name: "Ukraine", flag: "🇺🇦" },
-  { code: "CY", name: "Cyprus", flag: "🇨🇾" },
-  { code: "MT", name: "Malta", flag: "🇲🇹" },
-  { code: "UZ", name: "Uzbekistan", flag: "🇺🇿" },
-  { code: "AZ", name: "Azerbaijan", flag: "🇦🇿" },
-  { code: "BT", name: "Bhutan", flag: "🇧🇹" },
-  { code: "MV", name: "Maldives", flag: "🇲🇻" },
-  { code: "SC", name: "Seychelles", flag: "🇸🇨" },
-  { code: "FJ", name: "Fiji", flag: "🇫🇯" },
-  { code: "BW", name: "Botswana", flag: "🇧🇼" },
-  { code: "ZM", name: "Zambia", flag: "🇿🇲" },
-  { code: "ZW", name: "Zimbabwe", flag: "🇿🇼" },
-  { code: "NA", name: "Namibia", flag: "🇳🇦" },
-  { code: "MZ", name: "Mozambique", flag: "🇲🇿" },
-  { code: "AD", name: "Andorra", flag: "🇦🇩" },
-  { code: "MC", name: "Monaco", flag: "🇲🇨" },
-  { code: "LI", name: "Liechtenstein", flag: "🇱🇮" },
-  { code: "SM", name: "San Marino", flag: "🇸🇲" },
-  { code: "TN", name: "Tunisia", flag: "🇹🇳" }
-];
+const FALLBACK_COUNTRIES = ALL_249_ISO_FORCED;
 
 // COUNTRY NAME MAP - FIX KH -> CAMBODIA etc
 export const COUNTRY_NAMES: Record<string, string> = {
@@ -310,8 +211,9 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/);
 
+  const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length);
   let title = 'VisaApply.org – Global Visa Requirements & Guides';
-  let description = 'Official global visa information, 2-step visa type quiz, fees, documents, and application guides for all 1,170 possible visa routes worldwide.';
+  let description = `Official global visa information, 2-step visa type quiz, fees, documents, and application guides for 14,084+ live visas across ${totalCountryCount} global destination countries worldwide.`;
 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
@@ -327,7 +229,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     description = 'Terms of Service for VisaApply.org. Contact: contact@visaapply.org.';
   } else if (isSitemap) {
     title = 'All Visa Guides – Global Itineraries & Requirements | VisaApply.org';
-    description = 'Explore complete visa requirements, official fees, and document checklists across all 30 global destination countries and visa categories.';
+    description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and visa categories.`;
   } else if (article && article.title) {
     title = `${article.title} | VisaApply.org`;
     description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find fees, documents, processing time, and FAQs.`;
@@ -1189,9 +1091,59 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   );
 }
 
+const countryIndexCache = new Map<string, any[]>();
+
+const getAllCountriesFromDB = () => {
+  try {
+    const base = (typeof window !== 'undefined' ? (window as any).BASE_COUNTRY_VISAS : null) || (typeof BASE_COUNTRY_VISAS !== 'undefined' ? BASE_COUNTRY_VISAS : {});
+    const codes = Object.keys(base);
+    if (codes.length === 0) return [];
+    
+    const cacheKey = 'all_countries_' + codes.length;
+    if (countryIndexCache.has(cacheKey)) {
+      return countryIndexCache.get(cacheKey)!;
+    }
+
+    const flagMap = FLAG_MAP;
+    const nameMap = COUNTRY_NAMES;
+    
+    const all = codes.map(code => {
+      const c = code.toLowerCase();
+      const visas = base[c];
+      let live = 0;
+      if (Array.isArray(visas)) {
+        live = visas.filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
+      } else if (visas && typeof visas === 'object') {
+        live = Object.values(visas).flat().filter((v: any) => v && v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
+      }
+      return { code: c.toUpperCase(), name: nameMap[c] || c.toUpperCase(), flag: flagMap[c] || "🏳️", count: live };
+    }).filter(x => x.count > 0).sort((a, b) => b.count - a.count);
+
+    countryIndexCache.set(cacheKey, all);
+    return all;
+  } catch (e) { 
+    console.error(e); 
+    return []; 
+  }
+};
+
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [countries, setCountries] = useState<Country[]>(FALLBACK_COUNTRIES);
+  const [forceUpdate, setForceUpdate] = useState(0);
+
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      const count = Object.keys((window as any).BASE_COUNTRY_VISAS || BASE_COUNTRY_VISAS || {}).length;
+      if(count > 99){
+        console.log("DB loaded with", count, "countries, forcing re-render");
+        setForceUpdate(x => x + 1);
+        clearInterval(interval);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const [visaTypes, setVisaTypes] = useState<VisaType[]>([]);
   const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
   const [selectedOrigin, setSelectedOrigin] = useState<Country | null>(null);
@@ -1211,6 +1163,19 @@ export default function App() {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    const checkHydration = () => {
+      const dbCount = Object.keys(BASE_COUNTRY_VISAS || {}).length;
+      if (dbCount > 50) {
+        setIsHydrated(true);
+      } else {
+        setTimeout(checkHydration, 50);
+      }
+    };
+    checkHydration();
+  }, []);
 
   // Quiz state for /[from]-to-[to]
   const [quizStep, setQuizStep] = useState<1 | 2>(1);
@@ -1493,6 +1458,16 @@ export default function App() {
       )
     );
 
+  if (!isHydrated) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <h2 className="text-xl font-bold tracking-tight">Loading Global Visa Portal...</h2>
+        <p className="text-sm text-slate-400 mt-2">Hydrating 249 ISO Countries & 14,084+ Live Visas</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
       {/* Official VFS-Style Top Header */}
@@ -1608,6 +1583,7 @@ export default function App() {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             navigate={navigate}
+            forceUpdate={forceUpdate}
           />
         )}
       </main>
@@ -1642,20 +1618,20 @@ export default function App() {
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (1209+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (14000+ Pages)</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-500">1209+ Visa & Programme Guides across 30 Destination Countries</li>
+              <li className="text-xs text-slate-500">14,084+ Visa & Programme Guides across 150+ Destination Countries</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 1209+ Visa & Programme Guides 30 Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 14,084+ Visa & Programme Guides across 150+ Destination Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -1673,7 +1649,18 @@ const PRIORITY_COUNTRY_ORDER = [
 
 export function deduplicateCountries(countryList: Country[]): Country[] {
   const countryMap = new Map<string, Country>();
-  const combined = [...FALLBACK_COUNTRIES, ...(countryList || [])];
+  const dbCodes = Object.keys(BASE_COUNTRY_VISAS || {});
+  const baseFromDb: Country[] = dbCodes.map(code => {
+    const norm = code.trim().toUpperCase();
+    const finalNorm = (norm === "EU" || norm === "SCH" || norm === "SCHENGEN") ? "SC" : (norm === "UK" ? "GB" : norm);
+    return {
+      code: finalNorm,
+      name: getCountryFullName(finalNorm),
+      flag: getCountryFlag(finalNorm)
+    };
+  });
+
+  const combined = [...FALLBACK_COUNTRIES, ...baseFromDb, ...(countryList || [])];
   for (const country of combined) {
     if (!country || !country.code) continue;
     const rawCode = country.code.trim().toUpperCase();
@@ -1694,7 +1681,7 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
     if (idxA !== -1 && idxB !== -1) return idxA - idxB;
     if (idxA !== -1) return -1;
     if (idxB !== -1) return 1;
-    return 0;
+    return a.name.localeCompare(b.name);
   });
 }
 
@@ -1703,9 +1690,15 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
 // ----------------------------------------------------
 // Home View Component
 // ----------------------------------------------------
-function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate }: any) {
+function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate, forceUpdate }: any) {
   const [targetSearch, setTargetSearch] = useState('');
-  const uniqueCountries = deduplicateCountries(countries);
+  const dynamicCountries = useMemo(() => {
+    const dbList = getAllCountriesFromDB();
+    if (dbList.length > 0) return dbList;
+    return countries;
+  }, [forceUpdate, countries]);
+
+  const uniqueCountries = deduplicateCountries(dynamicCountries);
   const filteredCountries = uniqueCountries.filter((c: Country) => 
     getCountryFullName(c.code).toLowerCase().includes(targetSearch.toLowerCase()) || 
     c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
@@ -1777,7 +1770,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             All Global Destinations
           </h2>
           <p className="text-base sm:text-lg text-slate-600 mt-2 font-normal">
-            Explore visa options for {filteredCountries.length} popular destinations worldwide • {filteredCountries.length} flags • 6552+ LIVE visas • World's largest visa portal
+            Explore visa options for {filteredCountries.length} popular destinations worldwide • {filteredCountries.length} flags • 14,084+ LIVE visas • World's largest visa portal
           </p>
         </div>
 
