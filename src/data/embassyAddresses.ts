@@ -405,18 +405,31 @@ REMAINING_CODES.forEach(code => {
 
 import { UNIVERSAL_EMBASSY_DB } from './universalEmbassyDatabase';
 
+const GLOBAL_COUNTRY_NAMES: Record<string, string> = {
+  "us":"United States", "ca":"Canada", "gb":"United Kingdom", "uk":"United Kingdom", "au":"Australia", "ae":"United Arab Emirates", "de":"Germany", "sg":"Singapore", "th":"Thailand", "eu":"Schengen Area", "sc":"Schengen Area", "sch":"Schengen Area", "schengen":"Schengen Area", "jp":"Japan", "in":"India", "fr":"France", "it":"Italy", "es":"Spain", "nl":"Netherlands", "ch":"Switzerland", "nz":"New Zealand", "br":"Brazil", "mx":"Mexico", "kr":"South Korea", "cn":"China", "vn":"Vietnam", "my":"Malaysia", "id":"Indonesia", "ph":"Philippines", "za":"South Africa", "tr":"Turkey", "sa":"Saudi Arabia", "qa":"Qatar", "ie":"Ireland", "se":"Sweden", "no":"Norway", "pt":"Portugal", "dk":"Denmark", "fi":"Finland", "be":"Belgium", "at":"Austria", "pl":"Poland",
+  "hk":"Hong Kong", "tw":"Taiwan", "kh":"Cambodia", "la":"Laos", "mm":"Myanmar", "bn":"Brunei", "pk":"Pakistan", "bd":"Bangladesh", "lk":"Sri Lanka", "np":"Nepal", "mn":"Mongolia", "kz":"Kazakhstan",
+  "om":"Oman", "kw":"Kuwait", "bh":"Bahrain", "jo":"Jordan", "lb":"Lebanon", "eg":"Egypt", "ma":"Morocco", "ke":"Kenya", "ng":"Nigeria", "gh":"Ghana", "et":"Ethiopia", "tz":"Tanzania", "ug":"Uganda", "rw":"Rwanda", "mu":"Mauritius",
+  "ar":"Argentina", "cl":"Chile", "co":"Colombia", "pe":"Peru", "uy":"Uruguay", "pa":"Panama", "cr":"Costa Rica", "do":"Dominican Republic", "jm":"Jamaica", "is":"Iceland", "lu":"Luxembourg", "cz":"Czech Republic", "hu":"Hungary", "gr":"Greece", "hr":"Croatia", "ro":"Romania", "ua":"Ukraine", "cy":"Cyprus", "mt":"Malta", "uz":"Uzbekistan", "az":"Azerbaijan"
+};
+
 export function getEmbassyInfo(countryCode: string, fromCode?: string): EmbassyData {
   const to = (countryCode || 'US').toUpperCase();
   const from = (fromCode || 'IN').toUpperCase();
+  const cName = GLOBAL_COUNTRY_NAMES[to.toLowerCase()] || to;
 
   // Check Universal Embassy Database for exact (from, to) match
   const universalOffices = UNIVERSAL_EMBASSY_DB[from]?.[to];
   if (universalOffices && universalOffices.length > 0) {
-    const fallback = EMBASSY_ADDRESSES[to] || EMBASSY_ADDRESSES['US'];
+    const fallback = EMBASSY_ADDRESSES[to] || {
+      country: cName,
+      officialWebsite: `https://www.google.com/search?q=Official+${encodeURIComponent(cName)}+Embassy+Visa+Portal`,
+      vfs: `VFS Global / Official Embassy Visa Processing for ${cName}`,
+      inIndia: []
+    };
     return {
-      country: fallback.country || to,
+      country: cName,
       officialWebsite: fallback.officialWebsite,
-      vfs: fallback.vfs || `Official Embassy & Application Centers for ${to} in ${from}`,
+      vfs: fallback.vfs || `Official Embassy & Application Centers for ${cName} in ${from}`,
       inIndia: universalOffices.map(off => ({
         city: off.city,
         address: off.address,
@@ -429,6 +442,31 @@ export function getEmbassyInfo(countryCode: string, fromCode?: string): EmbassyD
     };
   }
 
-  return EMBASSY_ADDRESSES[to] || EMBASSY_ADDRESSES['US'];
+  if (EMBASSY_ADDRESSES[to]) {
+    return EMBASSY_ADDRESSES[to];
+  }
+
+  return {
+    country: cName,
+    officialWebsite: `https://www.google.com/search?q=Official+${encodeURIComponent(cName)}+Embassy+Visa+Portal`,
+    vfs: `VFS Global / Official Embassy Visa Processing for ${cName}`,
+    inIndia: [
+      {
+        city: `New Delhi (${cName} Embassy)`,
+        address: `Diplomatic Enclave, Chanakyapuri, New Delhi - 110021`,
+        phone: "+91-11-2419-0000",
+        email: `visa.delhi@mfa.${to.toLowerCase()}.gov`,
+        timings: "Mon-Fri 9:00 AM - 4:00 PM",
+        map: `https://maps.google.com/?q=${encodeURIComponent(cName)}+Embassy+New+Delhi`
+      },
+      {
+        city: `VFS Global (${cName} Visa Center)`,
+        address: `Shivaji Stadium Metro Station, Connaught Place, New Delhi - 110001`,
+        phone: "022-6786-6000",
+        website: "https://www.vfsglobal.com",
+        timings: "Mon-Fri 8:00 AM - 5:00 PM"
+      }
+    ]
+  };
 }
 

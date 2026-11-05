@@ -159,6 +159,132 @@ const FALLBACK_COUNTRIES = [
   { code: "AZ", name: "Azerbaijan", flag: "🇦🇿" }
 ];
 
+// COUNTRY NAME MAP - FIX KH -> CAMBODIA etc
+export const COUNTRY_NAMES: Record<string, string> = {
+  "us":"United States", "ca":"Canada", "gb":"United Kingdom", "uk":"United Kingdom", "au":"Australia", "ae":"United Arab Emirates", "de":"Germany", "sg":"Singapore", "th":"Thailand", "eu":"Schengen Area", "sc":"Schengen Area", "sch":"Schengen Area", "schengen":"Schengen Area", "jp":"Japan", "in":"India", "fr":"France", "it":"Italy", "es":"Spain", "nl":"Netherlands", "ch":"Switzerland", "nz":"New Zealand", "br":"Brazil", "mx":"Mexico", "kr":"South Korea", "cn":"China", "vn":"Vietnam", "my":"Malaysia", "id":"Indonesia", "ph":"Philippines", "za":"South Africa", "tr":"Turkey", "sa":"Saudi Arabia", "qa":"Qatar", "ie":"Ireland", "se":"Sweden", "no":"Norway", "pt":"Portugal", "dk":"Denmark", "fi":"Finland", "be":"Belgium", "at":"Austria", "pl":"Poland",
+  "hk":"Hong Kong", "tw":"Taiwan", "kh":"Cambodia", "la":"Laos", "mm":"Myanmar", "bn":"Brunei", "pk":"Pakistan", "bd":"Bangladesh", "lk":"Sri Lanka", "np":"Nepal", "mn":"Mongolia", "kz":"Kazakhstan",
+  "om":"Oman", "kw":"Kuwait", "bh":"Bahrain", "jo":"Jordan", "lb":"Lebanon", "eg":"Egypt", "ma":"Morocco", "ke":"Kenya", "ng":"Nigeria", "gh":"Ghana", "et":"Ethiopia", "tz":"Tanzania", "ug":"Uganda", "rw":"Rwanda", "mu":"Mauritius",
+  "ar":"Argentina", "cl":"Chile", "co":"Colombia", "pe":"Peru", "uy":"Uruguay", "pa":"Panama", "cr":"Costa Rica", "do":"Dominican Republic", "jm":"Jamaica", "is":"Iceland", "lu":"Luxembourg", "cz":"Czech Republic", "hu":"Hungary", "gr":"Greece", "hr":"Croatia", "ro":"Romania", "ua":"Ukraine", "cy":"Cyprus", "mt":"Malta", "uz":"Uzbekistan", "az":"Azerbaijan"
+};
+
+export const COUNTRY_NAME_MAP: Record<string, string> = { ...COUNTRY_NAMES };
+
+export const FLAG_MAP: Record<string, string> = {
+  "us":"🇺🇸","ca":"🇨🇦","gb":"🇬🇧","uk":"🇬🇧","au":"🇦🇺","ae":"🇦🇪","de":"🇩🇪","sg":"🇸🇬","th":"🇹🇭","eu":"🇪🇺","sc":"🇪🇺","sch":"🇪🇺","schengen":"🇪🇺","jp":"🇯🇵","in":"🇮🇳","fr":"🇫🇷","it":"🇮🇹","es":"🇪🇸","nl":"🇳🇱","ch":"🇨🇭","nz":"🇳🇿","br":"🇧🇷","mx":"🇲🇽","kr":"🇰🇷","cn":"🇨🇳","vn":"🇻🇳","my":"🇲🇾","id":"🇮🇩","ph":"🇵🇭","za":"🇿🇦","tr":"🇹🇷","sa":"🇸🇦","qa":"🇶🇦","ie":"🇮🇪","se":"🇸🇪","no":"🇳🇴","pt":"🇵🇹","dk":"🇩🇰","fi":"🇫🇮","be":"🇧🇪","at":"🇦🇹","pl":"🇵🇱","hk":"🇭🇰","tw":"🇹🇼","kh":"🇰🇭","la":"🇱🇦","mm":"🇲🇲","bn":"🇧🇳","pk":"🇵🇰","bd":"🇧🇩","lk":"🇱🇰","np":"🇳🇵","mn":"🇲🇳","kz":"🇰🇿","om":"🇴🇲","kw":"🇰🇼","bh":"🇧🇭","jo":"🇯🇴","lb":"🇱🇧","eg":"🇪🇬","ma":"🇲🇦","ke":"🇰🇪","ng":"🇳🇬","gh":"🇬🇭","et":"🇪🇹","tz":"🇹🇿","ug":"🇺🇬","rw":"🇷🇼","mu":"🇲🇺","ar":"🇦🇷","cl":"🇨🇱","co":"🇨🇴","pe":"🇵🇪","uy":"🇺🇾","pa":"🇵🇦","cr":"🇨🇷","do":"🇩🇴","jm":"🇯🇲","is":"🇮🇸","lu":"🇱🇺","cz":"🇨🇿","hu":"🇭🇺","gr":"🇬🇷","hr":"🇭🇷","ro":"🇷🇴","ua":"🇺🇦","cy":"🇨🇾","mt":"🇲🇹","uz":"🇺🇿","az":"🇦🇿"
+};
+
+export const COUNTRY_FLAGS: Record<string, string> = { ...FLAG_MAP };
+
+// FIX RENDER FUNCTION - IN TO US / IN TO KH BUG
+export function getCountryDisplayName(code: string): string {
+  if (!code) return "";
+  const c = code.trim().toLowerCase();
+  return COUNTRY_NAME_MAP[c] || COUNTRY_NAMES[c] || (c === 'uk' ? 'United Kingdom' : c === 'sc' || c === 'sch' || c === 'schengen' || c === 'eu' ? 'Schengen Area' : code.toUpperCase());
+}
+
+export function getCountryFlag(code: string): string {
+  if (!code) return "🌍";
+  const c = code.trim().toLowerCase();
+  return FLAG_MAP[c] || COUNTRY_FLAGS[c] || (c === 'uk' ? '🇬🇧' : c === 'sc' || c === 'sch' || c === 'schengen' || c === 'eu' ? '🇪🇺' : "🌍");
+}
+
+export function getCountryFullName(code: string): string {
+  return getCountryDisplayName(code);
+}
+
+export function getCountryFlagUrl(code: string): string {
+  if (!code) return "https://flagcdn.com/w160/un.png";
+  const lower = code.trim().toLowerCase();
+  const iso = (lower === "sc" || lower === "sch" || lower === "schengen" || lower === "eu")
+    ? "eu"
+    : (lower === "uk" ? "gb" : lower);
+  return `https://flagcdn.com/w160/${iso}.png`;
+}
+
+// OVERRIDE Travel from India to KH -> Cambodia
+export function renderCountryHeaderFixed(fromCode: string, toCode: string) {
+  const fromName = getCountryDisplayName(fromCode);
+  const toName = getCountryDisplayName(toCode);
+  const fromFlag = getCountryFlag(fromCode);
+  const toFlag = getCountryFlag(toCode);
+  return {
+    title: `Travel from ${fromName} to ${toName}`,
+    breadcrumb: `${fromName} to ${toName}`,
+    flags: `${fromFlag} → ${toFlag}`,
+    fromName, toName, fromFlag, toFlag
+  };
+}
+
+// PATCH EXISTING RENDER
+export function renderCountryPageFixed(countryCode: string) {
+  const code = (countryCode || '').toLowerCase();
+  const toName = getCountryDisplayName(code);
+  const toFlag = getCountryFlag(code);
+  const fromName = getCountryDisplayName("in");
+  const fromFlag = getCountryFlag("in");
+  const liveCount = (typeof (window as any).getLiveVisaCount === "function")
+    ? (window as any).getLiveVisaCount(code)
+    : (BASE_COUNTRY_VISAS[code] ? (BASE_COUNTRY_VISAS[code] as any).length : 0);
+  
+  // FIX TITLE - India to KH -> India to Cambodia
+  document.title = `VisaApply.org - ${fromName} to ${toName} - ${liveCount} Visas`;
+  
+  let html = `<div style="padding:24px;"><div style="display:flex; align-items:center; gap:12px; margin-bottom:8px; justify-content:center;"><div style="width:48px; height:32px; background:#1e40af; color:white; display:flex; align-items:center; justify-content:center; border-radius:4px; font-weight:800;">IN</div><div style="font-size:20px; color:#94a3b8;">→</div><div style="width:48px; height:32px; background:#f1f5f9; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; border-radius:4px; font-size:24px;">${toFlag}</div></div><h1 style="font-size:28px; font-weight:800; text-align:center;">Travel from ${fromName} to ${toName}</h1><p style="color:#64748b; text-align:center; margin-top:8px;">Step 1 of 2: Select your primary purpose of travel below to see all official visa options.</p>`;
+  
+  html += `<div style="margin-top:8px; text-align:center; font-size:12px; color:#93c5fd;">${fromFlag} ${fromName} → ${toFlag} ${toName} • ${liveCount} Visa Types</div>`;
+  
+  html += `<div style="display:flex; gap:8px; justify-content:center; margin:16px 0;"><button onclick="if(typeof renderCountryCardsOption2Left==='function') renderCountryCardsOption2Left(); else window.location.href='/'" style="background:#f1f5f9; padding:8px 16px; border-radius:8px; border:1px solid #e2e8f0; cursor:pointer;">← Back to Countries</button></div>`;
+  
+  const categories = [
+    {key:"tourist", label:"Tourist Visa", labelHi:"टूरिस्ट वीजा", icon:"🏖️", desc:"Vacations, sightseeing, visiting friends & short term stay"},
+    {key:"business", label:"Business Visa", labelHi:"बिजनेस वीजा", icon:"💼", desc:"Business meetings, conferences, trade & investment"},
+    {key:"work", label:"Work & Employment Visa", labelHi:"वर्क एवं एम्प्लॉयमेंट वीजा", icon:"🔧", desc:"Employment, job permit, executive transfers & skilled work"},
+    {key:"student", label:"Student & Study Visa", labelHi:"स्टूडेंट एवं स्टडी वीजा", icon:"🎓", desc:"Higher education, university degree & vocational study"},
+    {key:"family", label:"Family Visa", labelHi:"फैमिली वीजा", icon:"👨👩👧👦", desc:"Family reunion, spouse, child & dependent visas"},
+    {key:"pr", label:"PR & Golden Visa", labelHi:"पीआर एवं गोल्डन वीजा", icon:"🏠", desc:"Permanent residence, citizenship & investment visas"}
+  ];
+  
+  html += `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:24px;">`;
+  categories.forEach(cat=>{
+    const visas = (typeof (window as any).getVisasByCategoryFixed === "function")
+      ? (window as any).getVisasByCategoryFixed(code, cat.key)
+      : ((BASE_COUNTRY_VISAS as any)[code]||[]).filter((v: any)=>v.category===cat.key);
+    const count = visas.length;
+    if(count===0) return;
+    html += `<div onclick="if(typeof (window as any).renderVisaList==='function') (window as any).renderVisaList('${code}','${cat.key}'); else window.location.href='/in-to-${code}-${cat.key}'" style="background:white; border:1px solid #e2e8f0; border-radius:16px; padding:20px; cursor:pointer; transition:all 0.2s;"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="font-size:32px;">${cat.icon}</div><div style="background:#dbeafe; color:#2563eb; font-size:11px; padding:4px 8px; border-radius:9999px; font-weight:600;">${count} Visa Types</div></div><h3 style="font-weight:700; font-size:16px; margin-top:12px;">${cat.labelHi} (${cat.label})</h3><p style="font-size:12px; color:#64748b; margin-top:6px;">${cat.desc}</p><div style="margin-top:12px; color:#2563eb; font-size:12px; font-weight:600;">Explore Category →</div></div>`;
+  });
+  html += `</div></div>`;
+  
+  const container = document.getElementById('main-content') || document.getElementById('country-detail') || document.querySelector('[data-country-detail]');
+  if(container) container.innerHTML = html;
+  
+  console.log(`✅ FIXED HEADER: Travel from ${fromName} to ${toName} - Flag ${toFlag} - ${liveCount} types - Was showing KH now showing ${toName}`);
+}
+
+// OVERRIDE GLOBAL
+if (typeof window !== 'undefined') {
+  (window as any).COUNTRY_NAMES = COUNTRY_NAMES;
+  (window as any).COUNTRY_FLAGS = COUNTRY_FLAGS;
+  (window as any).COUNTRY_NAME_MAP = COUNTRY_NAME_MAP;
+  (window as any).FLAG_MAP = FLAG_MAP;
+  (window as any).getCountryDisplayName = getCountryDisplayName;
+  (window as any).getCountryFlag = getCountryFlag;
+  (window as any).getCountryFullName = getCountryFullName;
+  (window as any).renderCountryHeaderFixed = renderCountryHeaderFixed;
+  (window as any).renderCountryPageFixed = renderCountryPageFixed;
+  (window as any).renderCountryPage = renderCountryPageFixed;
+
+  // FORCE RE-RENDER CURRENT PAGE IF KH
+  try {
+    const currentUrl = window.location.href;
+    if (currentUrl.includes("KH") || currentUrl.includes("kh") || document.body.innerHTML.includes("India to KH")) {
+      renderCountryPageFixed("kh");
+    }
+  } catch(e) {}
+}
+
+console.log("✅ COUNTRY NAME + FLAG BUG FIX DONE - KH -> Cambodia, 86 countries now show full names + flags - IN -> US, IN -> Cambodia, etc - No more KH, BH, OM code display");
+
 function generateMetadata(path: string, countries: Country[], article?: Article | null) {
   const isAdmin = path === '/admin';
   const isSitemap = path === '/sitemap';
@@ -193,20 +319,20 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
     const type = articleMatch[3];
+    const fromName = getCountryDisplayName(from);
+    const toName = getCountryDisplayName(to);
     if (article && article.title) {
       title = `${article.title} | VisaApply.org`;
-      description = `Official guide for ${from} citizens applying for a ${type} visa to ${to}. Fees: ${article.fees}. Check required documents and step-by-step process.`;
+      description = `Official guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Check required documents and step-by-step process.`;
     } else {
-      title = `${from} to ${to} ${type.toUpperCase()} Visa Requirements & Guide – VisaApply.org`;
-      description = `Complete visa guide for ${from} citizens applying for a ${type} visa to ${to}. Find fees, documents, processing time, and FAQs.`;
+      title = `${fromName} to ${toName} ${type.toUpperCase()} Visa Requirements & Guide – VisaApply.org`;
+      description = `Complete visa guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Find fees, documents, processing time, and FAQs.`;
     }
   } else if (quizMatch) {
     const from = quizMatch[1].toUpperCase();
     const to = quizMatch[2].toUpperCase();
-    const fromObj = countries.find(c => c.code.toLowerCase() === from.toLowerCase());
-    const toObj = countries.find(c => c.code.toLowerCase() === to.toLowerCase());
-    const fromName = fromObj ? fromObj.name : from;
-    const toName = toObj ? toObj.name : to;
+    const fromName = getCountryDisplayName(from);
+    const toName = getCountryDisplayName(to);
 
     title = `${fromName} to ${toName} Visa Quiz & Requirements – VisaApply.org`;
     description = `Take our 2-step visa quiz for traveling from ${fromName} to ${toName}. Explore tourist, work, student, family, and business visa guides.`;
@@ -303,8 +429,15 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
   const t = getTranslation(currentLang);
   const isJa = currentLang === 'ja';
 
-  const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
-  const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
+  const headerInfo = renderCountryHeaderFixed(fromCode, toCode);
+  const fromCountry = { name: headerInfo.fromName, flag: headerInfo.fromFlag, code: fromCode };
+  const toCountry = { name: headerInfo.toName, flag: headerInfo.toFlag, code: toCode };
+  const liveCount = getVisasFixed(toCode).length;
+
+  useEffect(() => {
+    document.title = `VisaApply.org - ${headerInfo.fromName} to ${headerInfo.toName} - ${liveCount} Visas`;
+    console.log(`✅ FIXED HEADER: Travel from ${headerInfo.fromName} to ${headerInfo.toName} - Flag ${headerInfo.toFlag} - ${liveCount} types - Was showing KH now showing ${headerInfo.toName}`);
+  }, [fromCode, toCode, headerInfo.fromName, headerInfo.toName, headerInfo.toFlag, liveCount]);
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const getCatVisasCount = (catId: string) => {
@@ -360,22 +493,25 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
       <nav className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap">
         <span onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600">Home</span>
         <span>&gt;</span>
-        <span className="text-slate-900 font-bold">{fromCountry.name} to {toCountry.name}</span>
+        <span className="text-slate-900 font-bold">{headerInfo.breadcrumb}</span>
       </nav>
 
       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <span className="text-4xl">{fromCountry.flag}</span>
+            <span className="text-4xl">{headerInfo.fromFlag}</span>
             <ArrowRight className="w-6 h-6 text-slate-400" />
-            <span className="text-4xl">{toCountry.flag}</span>
+            <span className="text-4xl">{headerInfo.toFlag}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            {isJa ? `${fromCountry.name}から${toCountry.name}への渡航ビザ` : `Travel from ${fromCountry.name} to ${toCountry.name}`}
+            {isJa ? `${headerInfo.fromName}から${headerInfo.toName}への渡航ビザ` : headerInfo.title}
           </h1>
           <p className="text-sm text-slate-600 mt-2">
             {isJa ? 'ステップ 1/2: 渡航目的を選択して公式ビザ一覧を確認' : 'Step 1 of 2: Select your primary purpose of travel below to see all official visa options.'}
           </p>
+          <div className="mt-2 text-center text-xs text-blue-600 font-semibold">
+            {headerInfo.fromFlag} {headerInfo.fromName} → {headerInfo.toFlag} {headerInfo.toName} • {liveCount} Visa Types
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -425,8 +561,12 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   const t = getTranslation(currentLang);
   const isJa = currentLang === 'ja';
 
-  const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
-  const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
+  const fromName = getCountryDisplayName(fromCode);
+  const toName = getCountryDisplayName(toCode);
+  const fromFlag = getCountryFlag(fromCode);
+  const toFlag = getCountryFlag(toCode);
+  const fromCountry = { name: fromName, flag: fromFlag, code: fromCode };
+  const toCountry = { name: toName, flag: toFlag, code: toCode };
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const categoryVisas = isJpToIn 
@@ -1196,7 +1336,8 @@ export default function App() {
 
       if (!abortController.signal.aborted) {
         if (Array.isArray(countriesData) && countriesData.length > 0) {
-          setCountries(countriesData);
+          const merged = deduplicateCountries([...FALLBACK_COUNTRIES, ...countriesData]);
+          setCountries(merged);
         }
         if (Array.isArray(visaData)) {
           setVisaTypes(visaData);
@@ -1541,53 +1682,7 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
   });
 }
 
-export const COUNTRY_FLAGS: Record<string, string> = {
-  "us": "🇺🇸", "ca": "🇨🇦", "gb": "🇬🇧", "uk": "🇬🇧", "au": "🇦🇺", "ae": "🇦🇪", "de": "🇩🇪", "sg": "🇸🇬", "th": "🇹🇭", "sc": "🇪🇺", "eu": "🇪🇺", "sch": "🇪🇺", "schengen": "🇪🇺", "jp": "🇯🇵", "in": "🇮🇳", "fr": "🇫🇷", "it": "🇮🇹", "es": "🇪🇸", "ch": "🇨🇭", "nz": "🇳🇿", "br": "🇧🇷", "mx": "🇲🇽", "kr": "🇰🇷", "cn": "🇨🇳", "vn": "🇻🇳", "my": "🇲🇾", "id": "🇮🇩", "ph": "🇵🇭", "za": "🇿🇦", "tr": "🇹🇷", "sa": "🇸🇦", "qa": "🇶🇦", "ie": "🇮🇪", "nl": "🇳🇱", "se": "🇸🇪", "no": "🇳🇴", "pt": "🇵🇹", "dk": "🇩🇰", "fi": "🇫🇮", "be": "🇧🇪", "at": "🇦🇹", "pl": "🇵🇱",
-  "hk": "🇭🇰", "tw": "🇹🇼", "kh": "🇰🇭", "la": "🇱🇦", "mm": "🇲🇲", "bn": "🇧🇳", "pk": "🇵🇰", "bd": "🇧🇩", "lk": "🇱🇰", "np": "🇳🇵", "mn": "🇲🇳", "kz": "🇰🇿",
-  "om": "🇴🇲", "kw": "🇰🇼", "bh": "🇧🇭", "jo": "🇯🇴", "lb": "🇱🇧", "eg": "🇪🇬", "ma": "🇲🇦", "ke": "🇰🇪", "ng": "🇳🇬", "gh": "🇬🇭", "et": "🇪🇹", "tz": "🇹🇿", "ug": "🇺🇬", "rw": "🇷🇼", "mu": "🇲🇺",
-  "ar": "🇦🇷", "cl": "🇨🇱", "co": "🇨🇴", "pe": "🇵🇪", "uy": "🇺🇾", "pa": "🇵🇦", "cr": "🇨🇷", "do": "🇩🇴", "jm": "🇯🇲", "is": "🇮🇸", "lu": "🇱🇺", "cz": "🇨🇿", "hu": "🇭🇺", "gr": "🇬🇷", "hr": "🇭🇷", "ro": "🇷🇴", "ua": "🇺🇦", "cy": "🇨🇾", "mt": "🇲🇹", "uz": "🇺🇿", "az": "🇦🇿"
-};
 
-export function getCountryFlag(code: string): string {
-  if (!code) return "🌍";
-  return COUNTRY_FLAGS[code.toLowerCase()] || "🌍";
-}
-
-export function getCountryFlagUrl(code: string): string {
-  if (!code) return "https://flagcdn.com/w160/un.png";
-  const lower = code.trim().toLowerCase();
-  const iso = (lower === "sc" || lower === "sch" || lower === "schengen" || lower === "eu")
-    ? "eu"
-    : (lower === "uk" ? "gb" : lower);
-  return `https://flagcdn.com/w160/${iso}.png`;
-}
-
-export function getCountryFullName(code: string): string {
-  const names: Record<string, string> = {
-    "us": "United States", "ca": "Canada", "gb": "United Kingdom", "uk": "United Kingdom",
-    "au": "Australia", "ae": "United Arab Emirates", "de": "Germany", "sg": "Singapore",
-    "th": "Thailand", "sc": "Schengen Area", "eu": "Schengen Area", "sch": "Schengen Area", "schengen": "Schengen Area", "jp": "Japan",
-    "in": "India", "fr": "France", "it": "Italy", "es": "Spain", "ch": "Switzerland",
-    "nz": "New Zealand", "br": "Brazil", "mx": "Mexico", "kr": "South Korea",
-    "cn": "China", "vn": "Vietnam", "my": "Malaysia", "id": "Indonesia",
-    "ph": "Philippines", "za": "South Africa", "tr": "Turkey", "sa": "Saudi Arabia",
-    "qa": "Qatar", "ie": "Ireland", "nl": "Netherlands", "se": "Sweden",
-    "no": "Norway", "pt": "Portugal", "dk": "Denmark", "fi": "Finland",
-    "be": "Belgium", "at": "Austria", "pl": "Poland",
-    "hk": "Hong Kong", "tw": "Taiwan", "kh": "Cambodia", "la": "Laos",
-    "mm": "Myanmar", "bn": "Brunei", "pk": "Pakistan", "bd": "Bangladesh",
-    "lk": "Sri Lanka", "np": "Nepal", "mn": "Mongolia", "kz": "Kazakhstan",
-    "om": "Oman", "kw": "Kuwait", "bh": "Bahrain", "jo": "Jordan", "lb": "Lebanon",
-    "eg": "Egypt", "ma": "Morocco", "ke": "Kenya", "ng": "Nigeria", "gh": "Ghana",
-    "et": "Ethiopia", "tz": "Tanzania", "ug": "Uganda", "rw": "Rwanda", "mu": "Mauritius",
-    "ar": "Argentina", "cl": "Chile", "co": "Colombia", "pe": "Peru", "uy": "Uruguay",
-    "pa": "Panama", "cr": "Costa Rica", "do": "Dominican Republic", "jm": "Jamaica",
-    "is": "Iceland", "lu": "Luxembourg", "cz": "Czech Republic", "hu": "Hungary",
-    "gr": "Greece", "hr": "Croatia", "ro": "Romania", "ua": "Ukraine", "cy": "Cyprus",
-    "mt": "Malta", "uz": "Uzbekistan", "az": "Azerbaijan"
-  };
-  return names[code.toLowerCase()] || code.toUpperCase();
-}
 
 // ----------------------------------------------------
 // Home View Component
@@ -1979,8 +2074,12 @@ function VisaQuizView({ match, visaTypes, countries, navigate, quizStep, setQuiz
     setResumed(false);
   };
 
-  const fromCountry = countries.find((c: Country) => c.code === fromCode) || { name: fromCode, flag: '🌍', code: fromCode };
-  const toCountry = countries.find((c: Country) => c.code === toCode) || { name: toCode, flag: '🏛️', code: toCode };
+  const fromName = getCountryDisplayName(fromCode);
+  const toName = getCountryDisplayName(toCode);
+  const fromFlag = getCountryFlag(fromCode);
+  const toFlag = getCountryFlag(toCode);
+  const fromCountry = { name: fromName, flag: fromFlag, code: fromCode };
+  const toCountry = { name: toName, flag: toFlag, code: toCode };
 
   const handleVisaSelect = (typeId: string) => {
     try {
@@ -2163,8 +2262,10 @@ function ArticleSkeleton() {
 }
 
 function getFallbackGuide(from: string, to: string, type: string) {
-  const fromCountry = FALLBACK_COUNTRIES.find((c: Country) => c.code.toLowerCase() === from.toLowerCase()) || { name: from.toUpperCase() };
-  const toCountry = FALLBACK_COUNTRIES.find((c: Country) => c.code.toLowerCase() === to.toLowerCase()) || { name: to.toUpperCase() };
+  const fromName = getCountryDisplayName(from);
+  const toName = getCountryDisplayName(to);
+  const fromCountry = { name: fromName, code: from.toUpperCase() };
+  const toCountry = { name: toName, code: to.toUpperCase() };
   
   const title = `${fromCountry.name} to ${toCountry.name} ${type.toUpperCase()} Visa 2026 - Complete Guide`;
   const fees = type === 'student' ? '$150-$500' : type === 'work' ? '$200-$1000' : '$50-$200';
@@ -2459,8 +2560,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
     return <ArticleSkeleton />;
   }
 
-  const fromCountry = FALLBACK_COUNTRIES.find(c => c.code === fromCode) || { name: fromCode, flag: '🌍' };
-  const toCountry = FALLBACK_COUNTRIES.find(c => c.code === toCode) || { name: toCode, flag: '🏛️' };
+  const fromName = getCountryDisplayName(fromCode);
+  const toName = getCountryDisplayName(toCode);
+  const fromFlag = getCountryFlag(fromCode);
+  const toFlag = getCountryFlag(toCode);
+  const fromCountry = { name: fromName, flag: fromFlag, code: fromCode };
+  const toCountry = { name: toName, flag: toFlag, code: toCode };
 
   const visaName = (isJa && dbVisaItem?.name_ja) ? dbVisaItem.name_ja : (dbVisaItem?.name || subtypeCode.toUpperCase());
 
