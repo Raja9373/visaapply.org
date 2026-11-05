@@ -530,15 +530,24 @@ docs: "Passport, Financial Proofs, Application Forms"
   }
 });
 
-// Dynamic Sitemap XML
-app.get('/api/sitemap.xml', (req, res) => {
+// Dynamic & Static Sitemap XML (/sitemap.xml, /sitemap_index.xml, /api/sitemap.xml, /api/sitemap)
+const handleSitemapXml = (req: any, res: any) => {
   try {
+    const publicSitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+    if (fs.existsSync(publicSitemapPath)) {
+      const xml = fs.readFileSync(publicSitemapPath, 'utf-8');
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+      return res.status(200).send(xml);
+    }
+
     const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
-    const baseUrl = process.env.APP_URL || 'https://visaapply.org';
+    const baseUrl = process.env.APP_URL || 'https://www.visaapply.org';
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     xml += `  <url><loc>${baseUrl}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/admin</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/sitemap</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/audit</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
 
     files.forEach(file => {
       const slug = file.replace('.md', '');
@@ -546,11 +555,25 @@ app.get('/api/sitemap.xml', (req, res) => {
     });
 
     xml += `</urlset>`;
-    res.header('Content-Type', 'application/xml');
-    res.send(xml);
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.status(200).send(xml);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
+};
+
+app.get('/sitemap.xml', handleSitemapXml);
+app.get('/sitemap_index.xml', handleSitemapXml);
+app.get('/api/sitemap.xml', handleSitemapXml);
+app.get('/api/sitemap', handleSitemapXml);
+
+app.get('/robots.txt', (req, res) => {
+  const robotsPath = path.join(__dirname, 'public', 'robots.txt');
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  if (fs.existsSync(robotsPath)) {
+    return res.status(200).send(fs.readFileSync(robotsPath, 'utf-8'));
+  }
+  res.status(200).send(`User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: https://www.visaapply.org/sitemap.xml\nSitemap: https://visaapply.org/sitemap.xml\n`);
 });
 
 // Vite middleware for development

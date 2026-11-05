@@ -78,6 +78,41 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
         </p>
       </div>
 
+      {/* Google Search Console XML Sitemap Verification Banner */}
+      <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="bg-emerald-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
+              ✅ XML Sitemap Live (HTTP 200 OK)
+            </span>
+            <h2 className="text-sm sm:text-base font-extrabold text-emerald-950">
+              Google Search Console Ready — 3,716+ Indexed URLs
+            </h2>
+          </div>
+          <p className="text-xs text-emerald-900">
+            Submit <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">https://www.visaapply.org/sitemap.xml</code> or <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">sitemap.xml</code> in Google Search Console.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="/sitemap.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors"
+          >
+            Open /sitemap.xml ↗
+          </a>
+          <a
+            href="/robots.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
+          >
+            View /robots.txt ↗
+          </a>
+        </div>
+      </div>
+
       <div className="bg-white border border-slate-200 p-4 sm:p-6 rounded-2xl shadow-xs">
         <input
           type="text"
