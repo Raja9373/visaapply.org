@@ -35,9 +35,12 @@ import { DENMARK_92_VISAS } from './denmarkVisas';
 import { FINLAND_28_VISAS } from './finlandVisas';
 import { BELGIUM_22_VISAS } from './belgiumVisas';
 import { AUSTRIA_92_VISAS } from './austriaVisas';
-import { POLAND_92_VISAS } from './polandVisas';
+import { POLAND_92_VISAS, PL_92 } from './polandVisas';
+export { POLAND_92_VISAS, PL_92 };
 import { NORWAY_92_VISAS } from './norwayVisas';
 import { PORTUGAL_94_VISAS } from './portugalVisas';
+import { QATAR_66_VISAS, QA_66 } from './qatarVisas';
+export { QATAR_66_VISAS, QA_66 };
 
 export interface VisaItem {
   id: string;
@@ -229,6 +232,8 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   TR: { name: "Turkey", currency: "USD ($) / EUR (€)", flag: "🇹🇷" },
   ZA: { name: "South Africa", currency: "ZAR (R)", flag: "🇿🇦" },
   SA: { name: "Saudi Arabia", currency: "SAR", flag: "🇸🇦" },
+  QA: { name: "Qatar", currency: "QAR", flag: "🇶🇦" },
+  qa: { name: "Qatar", currency: "QAR", flag: "🇶🇦" },
   MX: { name: "Mexico", currency: "MXN ($) / USD ($)", flag: "🇲🇽" },
   KR: { name: "South Korea", currency: "KRW (₩) / USD ($)", flag: "🇰🇷" },
   CN: { name: "China", currency: "CNY (¥) / USD ($)", flag: "🇨🇳" },
@@ -333,8 +338,8 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   be: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 },
   AT: { tourist: 20, work: 20, student: 15, family: 15, business: 10, pr: 12 }, // 92 Austria Live Visas (Official VFS / BMI)
   at: { tourist: 20, work: 20, student: 15, family: 15, business: 10, pr: 12 },
-  PL: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 }, // 92 Poland Live Visas (Official VFS / Urząd)
-  pl: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 },
+  PL: { tourist: 18, work: 28, student: 12, family: 12, business: 10, pr: 12 }, // 92 Poland Live Visas (Official VFS / Urząd Wojewódzki)
+  pl: { tourist: 18, work: 28, student: 12, family: 12, business: 10, pr: 12 },
   MY: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 24 }, // 84 Malaysia Live Visas (Official Immigration Department / ESD / EMGS / MDEC / MM2H / PVIP)
   ID: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 22 }, // 82 Indonesia Live Visas (Official Directorate General of Immigration / Kemnaker / Molina)
   PH: { tourist: 12, work: 16, student: 6, family: 6, business: 8, pr: 20 }, // 68 Philippines Live Visas (Official Bureau of Immigration / DOLE / PRA / BOI)
@@ -342,6 +347,8 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   TR: { tourist: 12, work: 20, student: 8, family: 8, business: 8, pr: 23 }, // 79 Turkey Live Visas (Official MFA / Göç İdaresi)
   ZA: { tourist: 10, work: 16, student: 8, family: 8, business: 8, pr: 21 }, // 71 South Africa Live Visas (Official DHA / VFS)
   SA: { tourist: 19, work: 12, student: 7, family: 8, business: 20, pr: 7 }, // 73 Saudi Arabia Live Visas (88 Total Records / MOFA / MISA / Qiwa)
+  QA: { tourist: 11, work: 20, student: 8, family: 12, business: 5, pr: 10 }, // 66 Qatar Live Visas (Official Hayya / Metrash2 / MOI Qatar)
+  qa: { tourist: 11, work: 20, student: 8, family: 12, business: 5, pr: 10 },
   MX: { tourist: 10, work: 10, student: 8, family: 8, business: 8, pr: 30 }, // 74 Mexico Live Visas (Official INM / SRE)
   KR: { tourist: 14, work: 18, student: 8, family: 7, business: 16, pr: 11 }, // 74 South Korea Live Visas (Official HiKorea / Korea Immigration Service)
   CN: { tourist: 19, work: 15, student: 10, family: 15, business: 17, pr: 6 }, // 82 China Live Visas (108 Total / Official NIA / MFA)
@@ -646,6 +653,7 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (upper === 'KR') { setCountry(SOUTH_KOREA_94_VISAS); return; }
   if (upper === 'CN') { setCountry(CHINA_108_VISAS); return; }
   if (upper === 'SA') { setCountry(SAUDI_ARABIA_88_VISAS); return; }
+  if (upper === 'QA') { setCountry(QATAR_66_VISAS); return; }
   if (upper === 'IE') { setCountry(IRELAND_86_VISAS); return; }
   if (upper === 'NL') { setCountry(NETHERLANDS_92_VISAS); return; }
   if (upper === 'ZA') { setCountry(SOUTH_AFRICA_71_VISAS); return; }
@@ -1082,7 +1090,9 @@ export function autoRebuildAllCountries(): void {
     { name: "Germany", code: "de", expected: 138 },
     { name: "Australia", code: "au", expected: 135 },
     { name: "Singapore", code: "sg", expected: 109 },
-    { name: "USA", code: "us", expected: 201 }
+    { name: "USA", code: "us", expected: 201 },
+    { name: "Qatar", code: "qa", expected: 66 },
+    { name: "Poland", code: "pl", expected: 92 }
   ];
 
   checkList.forEach(({ name, code, expected }) => {

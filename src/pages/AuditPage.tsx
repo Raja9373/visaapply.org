@@ -199,6 +199,9 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                       {c.code === 'SA' && (
                         <span className="bg-emerald-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">88 Saudi Arabia Visas (73 Live)</span>
                       )}
+                      {(c.code === 'QA' || c.code === 'qa') && (
+                        <span className="bg-rose-900 text-white text-[10px] font-black px-1.5 py-0.5 rounded">66 Qatar Visas (66 Live)</span>
+                      )}
                       {c.code === 'IE' && (
                         <span className="bg-green-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">86 Ireland Visas (86 Live)</span>
                       )}
@@ -248,7 +251,7 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                         <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Austria Visas (92 Live)</span>
                       )}
                       {(c.code === 'PL' || c.code === 'pl') && (
-                        <span className="bg-purple-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">17 Poland Visas (17 Live)</span>
+                        <span className="bg-purple-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Poland Visas (92 Live)</span>
                       )}
                     </td>
                     <td className="p-2 text-center text-slate-600">{c.tourist}</td>
