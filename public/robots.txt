@@ -3,4 +3,5 @@ Allow: /
 Disallow: /admin
 
 Sitemap: https://www.visaapply.org/sitemap.xml
+Sitemap: https://www.visaapply.org/sitemap_index.xml
 Sitemap: https://visaapply.org/sitemap.xml

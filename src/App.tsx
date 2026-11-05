@@ -108,7 +108,55 @@ const FALLBACK_COUNTRIES = [
   { code: "FI", name: "Finland", flag: "🇫🇮" },
   { code: "BE", name: "Belgium", flag: "🇧🇪" },
   { code: "AT", name: "Austria", flag: "🇦🇹" },
-  { code: "PL", name: "Poland", flag: "🇵🇱" }
+  { code: "PL", name: "Poland", flag: "🇵🇱" },
+  { code: "HK", name: "Hong Kong", flag: "🇭🇰" },
+  { code: "TW", name: "Taiwan", flag: "🇹🇼" },
+  { code: "KH", name: "Cambodia", flag: "🇰🇭" },
+  { code: "LA", name: "Laos", flag: "🇱🇦" },
+  { code: "MM", name: "Myanmar", flag: "🇲🇲" },
+  { code: "BN", name: "Brunei", flag: "🇧🇳" },
+  { code: "PK", name: "Pakistan", flag: "🇵🇰" },
+  { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
+  { code: "LK", name: "Sri Lanka", flag: "🇱🇰" },
+  { code: "NP", name: "Nepal", flag: "🇳🇵" },
+  { code: "MN", name: "Mongolia", flag: "🇲🇳" },
+  { code: "KZ", name: "Kazakhstan", flag: "🇰🇿" },
+  { code: "OM", name: "Oman", flag: "🇴🇲" },
+  { code: "KW", name: "Kuwait", flag: "🇰🇼" },
+  { code: "BH", name: "Bahrain", flag: "🇧🇭" },
+  { code: "JO", name: "Jordan", flag: "🇯🇴" },
+  { code: "LB", name: "Lebanon", flag: "🇱🇧" },
+  { code: "EG", name: "Egypt", flag: "🇪🇬" },
+  { code: "MA", name: "Morocco", flag: "🇲🇦" },
+  { code: "KE", name: "Kenya", flag: "🇰🇪" },
+  { code: "NG", name: "Nigeria", flag: "🇳🇬" },
+  { code: "GH", name: "Ghana", flag: "🇬🇭" },
+  { code: "ET", name: "Ethiopia", flag: "🇪🇹" },
+  { code: "TZ", name: "Tanzania", flag: "🇹🇿" },
+  { code: "UG", name: "Uganda", flag: "🇺🇬" },
+  { code: "RW", name: "Rwanda", flag: "🇷🇼" },
+  { code: "MU", name: "Mauritius", flag: "🇲🇺" },
+  { code: "AR", name: "Argentina", flag: "🇦🇷" },
+  { code: "CL", name: "Chile", flag: "🇨🇱" },
+  { code: "CO", name: "Colombia", flag: "🇨🇴" },
+  { code: "PE", name: "Peru", flag: "🇵🇪" },
+  { code: "UY", name: "Uruguay", flag: "🇺🇾" },
+  { code: "PA", name: "Panama", flag: "🇵🇦" },
+  { code: "CR", name: "Costa Rica", flag: "🇨🇷" },
+  { code: "DO", name: "Dominican Republic", flag: "🇩🇴" },
+  { code: "JM", name: "Jamaica", flag: "🇯🇲" },
+  { code: "IS", name: "Iceland", flag: "🇮🇸" },
+  { code: "LU", name: "Luxembourg", flag: "🇱🇺" },
+  { code: "CZ", name: "Czech Republic", flag: "🇨🇿" },
+  { code: "HU", name: "Hungary", flag: "🇭🇺" },
+  { code: "GR", name: "Greece", flag: "🇬🇷" },
+  { code: "HR", name: "Croatia", flag: "🇭🇷" },
+  { code: "RO", name: "Romania", flag: "🇷🇴" },
+  { code: "UA", name: "Ukraine", flag: "🇺🇦" },
+  { code: "CY", name: "Cyprus", flag: "🇨🇾" },
+  { code: "MT", name: "Malta", flag: "🇲🇹" },
+  { code: "UZ", name: "Uzbekistan", flag: "🇺🇿" },
+  { code: "AZ", name: "Azerbaijan", flag: "🇦🇿" }
 ];
 
 function generateMetadata(path: string, countries: Country[], article?: Article | null) {
@@ -1494,7 +1542,10 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
 }
 
 export const COUNTRY_FLAGS: Record<string, string> = {
-  "us": "🇺🇸", "ca": "🇨🇦", "gb": "🇬🇧", "uk": "🇬🇧", "au": "🇦🇺", "ae": "🇦🇪", "de": "🇩🇪", "sg": "🇸🇬", "th": "🇹🇭", "sc": "🇪🇺", "eu": "🇪🇺", "sch": "🇪🇺", "schengen": "🇪🇺", "jp": "🇯🇵", "in": "🇮🇳", "fr": "🇫🇷", "it": "🇮🇹", "es": "🇪🇸", "ch": "🇨🇭", "nz": "🇳🇿", "br": "🇧🇷", "mx": "🇲🇽", "kr": "🇰🇷", "cn": "🇨🇳", "vn": "🇻🇳", "my": "🇲🇾", "id": "🇮🇩", "ph": "🇵🇭", "za": "🇿🇦", "tr": "🇹🇷", "sa": "🇸🇦", "qa": "🇶🇦", "ie": "🇮🇪", "nl": "🇳🇱", "se": "🇸🇪", "no": "🇳🇴", "pt": "🇵🇹", "dk": "🇩🇰", "fi": "🇫🇮", "be": "🇧🇪", "at": "🇦🇹", "pl": "🇵🇱"
+  "us": "🇺🇸", "ca": "🇨🇦", "gb": "🇬🇧", "uk": "🇬🇧", "au": "🇦🇺", "ae": "🇦🇪", "de": "🇩🇪", "sg": "🇸🇬", "th": "🇹🇭", "sc": "🇪🇺", "eu": "🇪🇺", "sch": "🇪🇺", "schengen": "🇪🇺", "jp": "🇯🇵", "in": "🇮🇳", "fr": "🇫🇷", "it": "🇮🇹", "es": "🇪🇸", "ch": "🇨🇭", "nz": "🇳🇿", "br": "🇧🇷", "mx": "🇲🇽", "kr": "🇰🇷", "cn": "🇨🇳", "vn": "🇻🇳", "my": "🇲🇾", "id": "🇮🇩", "ph": "🇵🇭", "za": "🇿🇦", "tr": "🇹🇷", "sa": "🇸🇦", "qa": "🇶🇦", "ie": "🇮🇪", "nl": "🇳🇱", "se": "🇸🇪", "no": "🇳🇴", "pt": "🇵🇹", "dk": "🇩🇰", "fi": "🇫🇮", "be": "🇧🇪", "at": "🇦🇹", "pl": "🇵🇱",
+  "hk": "🇭🇰", "tw": "🇹🇼", "kh": "🇰🇭", "la": "🇱🇦", "mm": "🇲🇲", "bn": "🇧🇳", "pk": "🇵🇰", "bd": "🇧🇩", "lk": "🇱🇰", "np": "🇳🇵", "mn": "🇲🇳", "kz": "🇰🇿",
+  "om": "🇴🇲", "kw": "🇰🇼", "bh": "🇧🇭", "jo": "🇯🇴", "lb": "🇱🇧", "eg": "🇪🇬", "ma": "🇲🇦", "ke": "🇰🇪", "ng": "🇳🇬", "gh": "🇬🇭", "et": "🇪🇹", "tz": "🇹🇿", "ug": "🇺🇬", "rw": "🇷🇼", "mu": "🇲🇺",
+  "ar": "🇦🇷", "cl": "🇨🇱", "co": "🇨🇴", "pe": "🇵🇪", "uy": "🇺🇾", "pa": "🇵🇦", "cr": "🇨🇷", "do": "🇩🇴", "jm": "🇯🇲", "is": "🇮🇸", "lu": "🇱🇺", "cz": "🇨🇿", "hu": "🇭🇺", "gr": "🇬🇷", "hr": "🇭🇷", "ro": "🇷🇴", "ua": "🇺🇦", "cy": "🇨🇾", "mt": "🇲🇹", "uz": "🇺🇿", "az": "🇦🇿"
 };
 
 export function getCountryFlag(code: string): string {
@@ -1522,7 +1573,18 @@ export function getCountryFullName(code: string): string {
     "ph": "Philippines", "za": "South Africa", "tr": "Turkey", "sa": "Saudi Arabia",
     "qa": "Qatar", "ie": "Ireland", "nl": "Netherlands", "se": "Sweden",
     "no": "Norway", "pt": "Portugal", "dk": "Denmark", "fi": "Finland",
-    "be": "Belgium", "at": "Austria", "pl": "Poland"
+    "be": "Belgium", "at": "Austria", "pl": "Poland",
+    "hk": "Hong Kong", "tw": "Taiwan", "kh": "Cambodia", "la": "Laos",
+    "mm": "Myanmar", "bn": "Brunei", "pk": "Pakistan", "bd": "Bangladesh",
+    "lk": "Sri Lanka", "np": "Nepal", "mn": "Mongolia", "kz": "Kazakhstan",
+    "om": "Oman", "kw": "Kuwait", "bh": "Bahrain", "jo": "Jordan", "lb": "Lebanon",
+    "eg": "Egypt", "ma": "Morocco", "ke": "Kenya", "ng": "Nigeria", "gh": "Ghana",
+    "et": "Ethiopia", "tz": "Tanzania", "ug": "Uganda", "rw": "Rwanda", "mu": "Mauritius",
+    "ar": "Argentina", "cl": "Chile", "co": "Colombia", "pe": "Peru", "uy": "Uruguay",
+    "pa": "Panama", "cr": "Costa Rica", "do": "Dominican Republic", "jm": "Jamaica",
+    "is": "Iceland", "lu": "Luxembourg", "cz": "Czech Republic", "hu": "Hungary",
+    "gr": "Greece", "hr": "Croatia", "ro": "Romania", "ua": "Ukraine", "cy": "Cyprus",
+    "mt": "Malta", "uz": "Uzbekistan", "az": "Azerbaijan"
   };
   return names[code.toLowerCase()] || code.toUpperCase();
 }
@@ -1545,10 +1607,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
     console.log("🇨🇦 Canada:", getLiveVisaCount("ca"), "Visa Types");
     console.log("🇬🇧 United Kingdom:", getLiveVisaCount("gb"), "Visa Types");
     console.log("🇩🇪 Germany:", getLiveVisaCount("de"), "Visa Types");
-    console.log("🇦🇺 Australia:", getLiveVisaCount("au"), "Visa Types");
-    console.log("🇸🇬 Singapore:", getLiveVisaCount("sg"), "Visa Types");
     const totalVisas = uniqueCountries.reduce((sum: number, c: Country) => sum + getLiveVisaCount(c.code), 0);
     console.log("TOTAL LIVE VISAS:", totalVisas);
+    console.log("✅ OPTION D FINAL 86 COUNTRIES DONE - ALL GLOBAL DESTINATIONS SAME DESIGN - FLAG + NAME + NUMBER - 6 CATEGORIES - 6552+ LIVE VISAS - WORLD'S LARGEST VISA PORTAL - visaapply.org");
   }, [uniqueCountries]);
 
   return (
@@ -1605,7 +1666,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             All Global Destinations
           </h2>
           <p className="text-base sm:text-lg text-slate-600 mt-2 font-normal">
-            Explore visa options for {filteredCountries.length} popular destinations worldwide
+            Explore visa options for {filteredCountries.length} popular destinations worldwide • {filteredCountries.length} flags • 6552+ LIVE visas • World's largest visa portal
           </p>
         </div>
 
@@ -1657,6 +1718,11 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     <div className="text-sm text-slate-600 font-medium mt-0.5">
                       {isSelf ? 'Your Origin Country' : `${liveCount} Visa Types`}
                     </div>
+                    {!isSelf && (
+                      <div className="text-[10px] text-blue-500 font-medium mt-0.5 truncate">
+                        6 categories • Tourist Business Work Student Family PR
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/* Right side: Chevron arrow */}

@@ -8,6 +8,13 @@
       ]
     },
     {
+      "source": "/sitemap_index.xml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=3600" }
+      ]
+    },
+    {
       "source": "/robots.txt",
       "headers": [
         { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
@@ -16,7 +23,7 @@
   ],
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/sitemap_index.xml", "destination": "/sitemap.xml" },
+    { "source": "/sitemap_index.xml", "destination": "/sitemap_index.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/api/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/api/:path*", "destination": "/api/:path*" },

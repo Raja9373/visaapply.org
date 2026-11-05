@@ -45,6 +45,12 @@ import { NORWAY_92_VISAS } from './norwayVisas';
 import { PORTUGAL_94_VISAS } from './portugalVisas';
 import { QATAR_66_VISAS, QA_66 } from './qatarVisas';
 export { QATAR_66_VISAS, QA_66 };
+import { ASIA_OPTION_A_COUNTRIES, ALL_ASIA_OPTION_A_DATA } from './asiaOptionAVisas';
+export { ASIA_OPTION_A_COUNTRIES, ALL_ASIA_OPTION_A_DATA };
+import { OPTION_B_COUNTRIES, ALL_OPTION_B_DATA } from './optionBVisas';
+export { OPTION_B_COUNTRIES, ALL_OPTION_B_DATA };
+import { OPTION_D_COUNTRIES, ALL_OPTION_D_DATA } from './optionDVisas';
+export { OPTION_D_COUNTRIES, ALL_OPTION_D_DATA };
 
 export interface VisaItem {
   id: string;
@@ -243,7 +249,103 @@ export const COUNTRY_INFO: Record<string, { name: string; currency: string; flag
   CN: { name: "China", currency: "CNY (¥) / USD ($)", flag: "🇨🇳" },
   VN: { name: "Vietnam", currency: "VND (₫) / USD ($)", flag: "🇻🇳" },
   SC: { name: "Schengen Area (29 EU States)", currency: "EUR (€)", flag: "🇪🇺" },
-  schengen: { name: "Schengen Area (29 EU States)", currency: "EUR (€)", flag: "🇪🇺" }
+  schengen: { name: "Schengen Area (29 EU States)", currency: "EUR (€)", flag: "🇪🇺" },
+  HK: { name: "Hong Kong", currency: "HKD ($)", flag: "🇭🇰" },
+  hk: { name: "Hong Kong", currency: "HKD ($)", flag: "🇭🇰" },
+  TW: { name: "Taiwan", currency: "TWD (NT$)", flag: "🇹🇼" },
+  tw: { name: "Taiwan", currency: "TWD (NT$)", flag: "🇹🇼" },
+  KH: { name: "Cambodia", currency: "KHR (៛) / USD ($)", flag: "🇰🇭" },
+  kh: { name: "Cambodia", currency: "KHR (៛) / USD ($)", flag: "🇰🇭" },
+  LA: { name: "Laos", currency: "LAK (₭) / USD ($)", flag: "🇱🇦" },
+  la: { name: "Laos", currency: "LAK (₭) / USD ($)", flag: "🇱🇦" },
+  MM: { name: "Myanmar", currency: "MMK (K) / USD ($)", flag: "🇲🇲" },
+  mm: { name: "Myanmar", currency: "MMK (K) / USD ($)", flag: "🇲🇲" },
+  BN: { name: "Brunei", currency: "BND ($)", flag: "🇧🇳" },
+  bn: { name: "Brunei", currency: "BND ($)", flag: "🇧🇳" },
+  PK: { name: "Pakistan", currency: "PKR (₨)", flag: "🇵🇰" },
+  pk: { name: "Pakistan", currency: "PKR (₨)", flag: "🇵🇰" },
+  BD: { name: "Bangladesh", currency: "BDT (৳)", flag: "🇧🇩" },
+  bd: { name: "Bangladesh", currency: "BDT (৳)", flag: "🇧🇩" },
+  LK: { name: "Sri Lanka", currency: "LKR (Rs)", flag: "🇱🇰" },
+  lk: { name: "Sri Lanka", currency: "LKR (Rs)", flag: "🇱🇰" },
+  NP: { name: "Nepal", currency: "NPR (रू)", flag: "🇳🇵" },
+  np: { name: "Nepal", currency: "NPR (रू)", flag: "🇳🇵" },
+  MN: { name: "Mongolia", currency: "MNT (₮)", flag: "🇲🇳" },
+  mn: { name: "Mongolia", currency: "MNT (₮)", flag: "🇲🇳" },
+  KZ: { name: "Kazakhstan", currency: "KZT (₸)", flag: "🇰🇿" },
+  kz: { name: "Kazakhstan", currency: "KZT (₸)", flag: "🇰🇿" },
+  OM: { name: "Oman", currency: "OMR (ر.ع.)", flag: "🇴🇲" },
+  om: { name: "Oman", currency: "OMR (ر.ع.)", flag: "🇴🇲" },
+  KW: { name: "Kuwait", currency: "KWD (د.ك)", flag: "🇰🇼" },
+  kw: { name: "Kuwait", currency: "KWD (د.ك)", flag: "🇰🇼" },
+  BH: { name: "Bahrain", currency: "BHD (.د.ب)", flag: "🇧🇭" },
+  bh: { name: "Bahrain", currency: "BHD (.د.ب)", flag: "🇧🇭" },
+  JO: { name: "Jordan", currency: "JOD (د.ا)", flag: "🇯🇴" },
+  jo: { name: "Jordan", currency: "JOD (د.ا)", flag: "🇯🇴" },
+  LB: { name: "Lebanon", currency: "LBP (ل.ل)", flag: "🇱🇧" },
+  lb: { name: "Lebanon", currency: "LBP (ل.ل)", flag: "🇱🇧" },
+  EG: { name: "Egypt", currency: "EGP (E£)", flag: "🇪🇬" },
+  eg: { name: "Egypt", currency: "EGP (E£)", flag: "🇪🇬" },
+  MA: { name: "Morocco", currency: "MAD (د.م.)", flag: "🇲🇦" },
+  ma: { name: "Morocco", currency: "MAD (د.م.)", flag: "🇲🇦" },
+  KE: { name: "Kenya", currency: "KES (KSh)", flag: "🇰🇪" },
+  ke: { name: "Kenya", currency: "KES (KSh)", flag: "🇰🇪" },
+  NG: { name: "Nigeria", currency: "NGN (₦)", flag: "🇳🇬" },
+  ng: { name: "Nigeria", currency: "NGN (₦)", flag: "🇳🇬" },
+  GH: { name: "Ghana", currency: "GHS (GH₵)", flag: "🇬🇭" },
+  gh: { name: "Ghana", currency: "GHS (GH₵)", flag: "🇬🇭" },
+  ET: { name: "Ethiopia", currency: "ETB (Br)", flag: "🇪🇹" },
+  et: { name: "Ethiopia", currency: "ETB (Br)", flag: "🇪🇹" },
+  TZ: { name: "Tanzania", currency: "TZS (TSh)", flag: "🇹🇿" },
+  tz: { name: "Tanzania", currency: "TZS (TSh)", flag: "🇹🇿" },
+  UG: { name: "Uganda", currency: "UGX (USh)", flag: "🇺🇬" },
+  ug: { name: "Uganda", currency: "UGX (USh)", flag: "🇺🇬" },
+  RW: { name: "Rwanda", currency: "RWF (RF)", flag: "🇷🇼" },
+  rw: { name: "Rwanda", currency: "RWF (RF)", flag: "🇷🇼" },
+  MU: { name: "Mauritius", currency: "MUR (Rs)", flag: "🇲🇺" },
+  mu: { name: "Mauritius", currency: "MUR (Rs)", flag: "🇲🇺" },
+  AR: { name: "Argentina", currency: "ARS ($) / USD ($)", flag: "🇦🇷" },
+  ar: { name: "Argentina", currency: "ARS ($) / USD ($)", flag: "🇦🇷" },
+  CL: { name: "Chile", currency: "CLP ($) / USD ($)", flag: "🇨🇱" },
+  cl: { name: "Chile", currency: "CLP ($) / USD ($)", flag: "🇨🇱" },
+  CO: { name: "Colombia", currency: "COP ($) / USD ($)", flag: "🇨🇴" },
+  co: { name: "Colombia", currency: "COP ($) / USD ($)", flag: "🇨🇴" },
+  PE: { name: "Peru", currency: "PEN (S/.) / USD ($)", flag: "🇵🇪" },
+  pe: { name: "Peru", currency: "PEN (S/.) / USD ($)", flag: "🇵🇪" },
+  UY: { name: "Uruguay", currency: "UYU ($U) / USD ($)", flag: "🇺🇾" },
+  uy: { name: "Uruguay", currency: "UYU ($U) / USD ($)", flag: "🇺🇾" },
+  PA: { name: "Panama", currency: "USD ($) / PAB", flag: "🇵🇦" },
+  pa: { name: "Panama", currency: "USD ($) / PAB", flag: "🇵🇦" },
+  CR: { name: "Costa Rica", currency: "CRC (₡) / USD ($)", flag: "🇨🇷" },
+  cr: { name: "Costa Rica", currency: "CRC (₡) / USD ($)", flag: "🇨🇷" },
+  DO: { name: "Dominican Republic", currency: "DOP (RD$) / USD ($)", flag: "🇩🇴" },
+  do: { name: "Dominican Republic", currency: "DOP (RD$) / USD ($)", flag: "🇩🇴" },
+  JM: { name: "Jamaica", currency: "JMD (J$) / USD ($)", flag: "🇯🇲" },
+  jm: { name: "Jamaica", currency: "JMD (J$) / USD ($)", flag: "🇯🇲" },
+  IS: { name: "Iceland", currency: "ISK (kr) / EUR (€)", flag: "🇮🇸" },
+  is: { name: "Iceland", currency: "ISK (kr) / EUR (€)", flag: "🇮🇸" },
+  LU: { name: "Luxembourg", currency: "EUR (€)", flag: "🇱🇺" },
+  lu: { name: "Luxembourg", currency: "EUR (€)", flag: "🇱🇺" },
+  CZ: { name: "Czech Republic", currency: "CZK (Kč) / EUR (€)", flag: "🇨🇿" },
+  cz: { name: "Czech Republic", currency: "CZK (Kč) / EUR (€)", flag: "🇨🇿" },
+  HU: { name: "Hungary", currency: "HUF (Ft) / EUR (€)", flag: "🇭🇺" },
+  hu: { name: "Hungary", currency: "HUF (Ft) / EUR (€)", flag: "🇭🇺" },
+  GR: { name: "Greece", currency: "EUR (€)", flag: "🇬🇷" },
+  gr: { name: "Greece", currency: "EUR (€)", flag: "🇬🇷" },
+  HR: { name: "Croatia", currency: "EUR (€)", flag: "🇭🇷" },
+  hr: { name: "Croatia", currency: "EUR (€)", flag: "🇭🇷" },
+  RO: { name: "Romania", currency: "RON (lei) / EUR (€)", flag: "🇷🇴" },
+  ro: { name: "Romania", currency: "RON (lei) / EUR (€)", flag: "🇷🇴" },
+  UA: { name: "Ukraine", currency: "UAH (₴) / USD ($)", flag: "🇺🇦" },
+  ua: { name: "Ukraine", currency: "UAH (₴) / USD ($)", flag: "🇺🇦" },
+  CY: { name: "Cyprus", currency: "EUR (€)", flag: "🇨🇾" },
+  cy: { name: "Cyprus", currency: "EUR (€)", flag: "🇨🇾" },
+  MT: { name: "Malta", currency: "EUR (€)", flag: "🇲🇹" },
+  mt: { name: "Malta", currency: "EUR (€)", flag: "🇲🇹" },
+  UZ: { name: "Uzbekistan", currency: "UZS (so'm) / USD ($)", flag: "🇺🇿" },
+  uz: { name: "Uzbekistan", currency: "UZS (so'm) / USD ($)", flag: "🇺🇿" },
+  AZ: { name: "Azerbaijan", currency: "AZN (₼) / USD ($)", flag: "🇦🇿" },
+  az: { name: "Azerbaijan", currency: "AZN (₼) / USD ($)", flag: "🇦🇿" }
 };
 
 // Official USA Breakdown: 164 Official Visa Classification Codes + 37 Non-Visa Immigration Programmes/Set-Asides/Forms/Travel Authorizations = 201 Total US Entries
@@ -358,7 +460,103 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   CN: { tourist: 19, work: 15, student: 10, family: 15, business: 17, pr: 6 }, // 82 China Live Visas (108 Total / Official NIA / MFA)
   VN: { tourist: 14, work: 16, student: 8, family: 8, business: 10, pr: 16 }, // 76 Vietnam Live Visas (Official Xuất Nhập Cảnh / MOLISA)
   SC: { tourist: 16, work: 18, student: 8, family: 8, business: 12, pr: 44 }, // 96 Schengen Area Live Visas (Official VFS / ETIAS / EU Blue Card)
-  schengen: { tourist: 16, work: 18, student: 8, family: 8, business: 12, pr: 44 }
+  schengen: { tourist: 16, work: 18, student: 8, family: 8, business: 12, pr: 44 },
+  HK: { tourist: 10, work: 14, student: 6, family: 5, business: 5, pr: 5 }, // 45 Hong Kong Live Visas
+  hk: { tourist: 10, work: 14, student: 6, family: 5, business: 5, pr: 5 },
+  TW: { tourist: 12, work: 16, student: 8, family: 5, business: 6, pr: 5 }, // 52 Taiwan Live Visas
+  tw: { tourist: 12, work: 16, student: 8, family: 5, business: 6, pr: 5 },
+  KH: { tourist: 12, work: 14, student: 6, family: 5, business: 6, pr: 5 }, // 48 Cambodia Live Visas
+  kh: { tourist: 12, work: 14, student: 6, family: 5, business: 6, pr: 5 },
+  LA: { tourist: 10, work: 12, student: 5, family: 5, business: 5, pr: 5 }, // 42 Laos Live Visas
+  la: { tourist: 10, work: 12, student: 5, family: 5, business: 5, pr: 5 },
+  MM: { tourist: 11, work: 14, student: 6, family: 5, business: 5, pr: 5 }, // 46 Myanmar Live Visas
+  mm: { tourist: 11, work: 14, student: 6, family: 5, business: 5, pr: 5 },
+  BN: { tourist: 8, work: 12, student: 5, family: 5, business: 4, pr: 4 }, // 38 Brunei Live Visas
+  bn: { tourist: 8, work: 12, student: 5, family: 5, business: 4, pr: 4 },
+  PK: { tourist: 14, work: 18, student: 8, family: 8, business: 7, pr: 7 }, // 62 Pakistan Live Visas
+  pk: { tourist: 14, work: 18, student: 8, family: 8, business: 7, pr: 7 },
+  BD: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 }, // 58 Bangladesh Live Visas
+  bd: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 },
+  LK: { tourist: 14, work: 18, student: 8, family: 8, business: 7, pr: 7 }, // 62 Sri Lanka Live Visas
+  lk: { tourist: 14, work: 18, student: 8, family: 8, business: 7, pr: 7 },
+  NP: { tourist: 8, work: 10, student: 5, family: 4, business: 4, pr: 4 }, // 35 Nepal Live Visas
+  np: { tourist: 8, work: 10, student: 5, family: 4, business: 4, pr: 4 },
+  MN: { tourist: 10, work: 13, student: 6, family: 5, business: 5, pr: 5 }, // 44 Mongolia Live Visas
+  mn: { tourist: 10, work: 13, student: 6, family: 5, business: 5, pr: 5 },
+  KZ: { tourist: 12, work: 18, student: 8, family: 6, business: 6, pr: 6 }, // 56 Kazakhstan Live Visas
+  kz: { tourist: 12, work: 18, student: 8, family: 6, business: 6, pr: 6 },
+  OM: { tourist: 15, work: 20, student: 8, family: 7, business: 7, pr: 7 }, // 64 Oman Live Visas
+  om: { tourist: 15, work: 20, student: 8, family: 7, business: 7, pr: 7 },
+  KW: { tourist: 14, work: 20, student: 8, family: 7, business: 6, pr: 7 }, // 62 Kuwait Live Visas
+  kw: { tourist: 14, work: 20, student: 8, family: 7, business: 6, pr: 7 },
+  BH: { tourist: 14, work: 18, student: 8, family: 7, business: 6, pr: 7 }, // 60 Bahrain Live Visas
+  bh: { tourist: 14, work: 18, student: 8, family: 7, business: 6, pr: 7 },
+  JO: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 }, // 58 Jordan Live Visas
+  jo: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 },
+  LB: { tourist: 12, work: 15, student: 7, family: 6, business: 5, pr: 7 }, // 52 Lebanon Live Visas
+  lb: { tourist: 12, work: 15, student: 7, family: 6, business: 5, pr: 7 },
+  EG: { tourist: 16, work: 22, student: 10, family: 9, business: 7, pr: 8 }, // 72 Egypt Live Visas
+  eg: { tourist: 16, work: 22, student: 10, family: 9, business: 7, pr: 8 },
+  MA: { tourist: 14, work: 18, student: 9, family: 8, business: 6, pr: 7 }, // 62 Morocco Live Visas
+  ma: { tourist: 14, work: 18, student: 9, family: 8, business: 6, pr: 7 },
+  KE: { tourist: 15, work: 20, student: 10, family: 9, business: 6, pr: 8 }, // 68 Kenya Live Visas
+  ke: { tourist: 15, work: 20, student: 10, family: 9, business: 6, pr: 8 },
+  NG: { tourist: 14, work: 19, student: 9, family: 9, business: 6, pr: 8 }, // 65 Nigeria Live Visas
+  ng: { tourist: 14, work: 19, student: 9, family: 9, business: 6, pr: 8 },
+  GH: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 }, // 58 Ghana Live Visas
+  gh: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 },
+  ET: { tourist: 14, work: 18, student: 9, family: 8, business: 6, pr: 7 }, // 62 Ethiopia Live Visas
+  et: { tourist: 14, work: 18, student: 9, family: 8, business: 6, pr: 7 },
+  TZ: { tourist: 13, work: 18, student: 8, family: 8, business: 6, pr: 7 }, // 60 Tanzania Live Visas
+  tz: { tourist: 13, work: 18, student: 8, family: 8, business: 6, pr: 7 },
+  UG: { tourist: 12, work: 17, student: 8, family: 7, business: 5, pr: 7 }, // 56 Uganda Live Visas
+  ug: { tourist: 12, work: 17, student: 8, family: 7, business: 5, pr: 7 },
+  RW: { tourist: 11, work: 16, student: 7, family: 6, business: 5, pr: 7 }, // 52 Rwanda Live Visas
+  rw: { tourist: 11, work: 16, student: 7, family: 6, business: 5, pr: 7 },
+  MU: { tourist: 10, work: 15, student: 6, family: 6, business: 5, pr: 6 }, // 48 Mauritius Live Visas
+  mu: { tourist: 10, work: 15, student: 6, family: 6, business: 5, pr: 6 },
+  AR: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 }, // 58 Argentina Live Visas
+  ar: { tourist: 13, work: 17, student: 8, family: 7, business: 6, pr: 7 },
+  CL: { tourist: 12, work: 16, student: 8, family: 7, business: 5, pr: 7 }, // 55 Chile Live Visas
+  cl: { tourist: 12, work: 16, student: 8, family: 7, business: 5, pr: 7 },
+  CO: { tourist: 12, work: 15, student: 7, family: 6, business: 5, pr: 7 }, // 52 Colombia Live Visas
+  co: { tourist: 12, work: 15, student: 7, family: 6, business: 5, pr: 7 },
+  PE: { tourist: 11, work: 14, student: 7, family: 6, business: 5, pr: 7 }, // 50 Peru Live Visas
+  pe: { tourist: 11, work: 14, student: 7, family: 6, business: 5, pr: 7 },
+  UY: { tourist: 10, work: 13, student: 6, family: 6, business: 4, pr: 6 }, // 45 Uruguay Live Visas
+  uy: { tourist: 10, work: 13, student: 6, family: 6, business: 4, pr: 6 },
+  PA: { tourist: 10, work: 14, student: 6, family: 6, business: 5, pr: 7 }, // 48 Panama Live Visas
+  pa: { tourist: 10, work: 14, student: 6, family: 6, business: 5, pr: 7 },
+  CR: { tourist: 10, work: 13, student: 6, family: 6, business: 4, pr: 7 }, // 46 Costa Rica Live Visas
+  cr: { tourist: 10, work: 13, student: 6, family: 6, business: 4, pr: 7 },
+  DO: { tourist: 10, work: 12, student: 6, family: 6, business: 4, pr: 6 }, // 44 Dominican Republic Live Visas
+  do: { tourist: 10, work: 12, student: 6, family: 6, business: 4, pr: 6 },
+  JM: { tourist: 9, work: 12, student: 5, family: 6, business: 4, pr: 6 }, // 42 Jamaica Live Visas
+  jm: { tourist: 9, work: 12, student: 5, family: 6, business: 4, pr: 6 },
+  IS: { tourist: 11, work: 15, student: 7, family: 7, business: 5, pr: 7 }, // 52 Iceland Live Visas
+  is: { tourist: 11, work: 15, student: 7, family: 7, business: 5, pr: 7 },
+  LU: { tourist: 10, work: 14, student: 6, family: 7, business: 4, pr: 7 }, // 48 Luxembourg Live Visas
+  lu: { tourist: 10, work: 14, student: 6, family: 7, business: 4, pr: 7 },
+  CZ: { tourist: 13, work: 18, student: 9, family: 8, business: 6, pr: 8 }, // 62 Czech Republic Live Visas
+  cz: { tourist: 13, work: 18, student: 9, family: 8, business: 6, pr: 8 },
+  HU: { tourist: 13, work: 17, student: 8, family: 8, business: 6, pr: 8 }, // 60 Hungary Live Visas
+  hu: { tourist: 13, work: 17, student: 8, family: 8, business: 6, pr: 8 },
+  GR: { tourist: 14, work: 20, student: 9, family: 9, business: 7, pr: 9 }, // 68 Greece Live Visas
+  gr: { tourist: 14, work: 20, student: 9, family: 9, business: 7, pr: 9 },
+  HR: { tourist: 12, work: 17, student: 8, family: 7, business: 6, pr: 8 }, // 58 Croatia Live Visas
+  hr: { tourist: 12, work: 17, student: 8, family: 7, business: 6, pr: 8 },
+  RO: { tourist: 13, work: 18, student: 9, family: 8, business: 6, pr: 8 }, // 62 Romania Live Visas
+  ro: { tourist: 13, work: 18, student: 9, family: 8, business: 6, pr: 8 },
+  UA: { tourist: 12, work: 17, student: 8, family: 7, business: 6, pr: 8 }, // 58 Ukraine Live Visas
+  ua: { tourist: 12, work: 17, student: 8, family: 7, business: 6, pr: 8 },
+  CY: { tourist: 11, work: 15, student: 7, family: 7, business: 5, pr: 7 }, // 52 Cyprus Live Visas
+  cy: { tourist: 11, work: 15, student: 7, family: 7, business: 5, pr: 7 },
+  MT: { tourist: 10, work: 14, student: 7, family: 7, business: 5, pr: 7 }, // 50 Malta Live Visas
+  mt: { tourist: 10, work: 14, student: 7, family: 7, business: 5, pr: 7 },
+  UZ: { tourist: 11, work: 14, student: 6, family: 6, business: 5, pr: 6 }, // 48 Uzbekistan Live Visas
+  uz: { tourist: 11, work: 14, student: 6, family: 6, business: 5, pr: 6 },
+  AZ: { tourist: 11, work: 15, student: 7, family: 7, business: 5, pr: 7 }, // 52 Azerbaijan Live Visas
+  az: { tourist: 11, work: 15, student: 7, family: 7, business: 5, pr: 7 }
 };
 
 // Function to generate complete document lists meeting ALL category rules
@@ -680,6 +878,9 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (upper === 'BE') { setCountry(BELGIUM_92_VISAS); return; }
   if (upper === 'AT') { setCountry(AUSTRIA_92_VISAS); return; }
   if (upper === 'PL') { setCountry(POLAND_92_VISAS); return; }
+  if (ALL_ASIA_OPTION_A_DATA[upper]) { setCountry(ALL_ASIA_OPTION_A_DATA[upper]); return; }
+  if (ALL_OPTION_B_DATA[upper]) { setCountry(ALL_OPTION_B_DATA[upper]); return; }
+  if (ALL_OPTION_D_DATA[upper]) { setCountry(ALL_OPTION_D_DATA[upper]); return; }
   const cVisas: CountryVisas = {
     tourist: [],
     work: [],
@@ -1100,7 +1301,54 @@ export function autoRebuildAllCountries(): void {
     { name: "Denmark", code: "dk", expected: 92 },
     { name: "Finland", code: "fi", expected: 92 },
     { name: "Belgium", code: "be", expected: 92 },
-    { name: "Austria", code: "at", expected: 92 }
+    { name: "Austria", code: "at", expected: 92 },
+    { name: "Hong Kong", code: "hk", expected: 45 },
+    { name: "Taiwan", code: "tw", expected: 52 },
+    { name: "Cambodia", code: "kh", expected: 48 },
+    { name: "Laos", code: "la", expected: 42 },
+    { name: "Myanmar", code: "mm", expected: 46 },
+    { name: "Brunei", code: "bn", expected: 38 },
+    { name: "Pakistan", code: "pk", expected: 62 },
+    { name: "Bangladesh", code: "bd", expected: 58 },
+    { name: "Sri Lanka", code: "lk", expected: 62 },
+    { name: "Nepal", code: "np", expected: 35 },
+    { name: "Mongolia", code: "mn", expected: 44 },
+    { name: "Kazakhstan", code: "kz", expected: 56 },
+    { name: "Oman", code: "om", expected: 64 },
+    { name: "Kuwait", code: "kw", expected: 62 },
+    { name: "Bahrain", code: "bh", expected: 60 },
+    { name: "Jordan", code: "jo", expected: 58 },
+    { name: "Lebanon", code: "lb", expected: 52 },
+    { name: "Egypt", code: "eg", expected: 72 },
+    { name: "Morocco", code: "ma", expected: 62 },
+    { name: "Kenya", code: "ke", expected: 68 },
+    { name: "Nigeria", code: "ng", expected: 65 },
+    { name: "Ghana", code: "gh", expected: 58 },
+    { name: "Ethiopia", code: "et", expected: 62 },
+    { name: "Tanzania", code: "tz", expected: 60 },
+    { name: "Uganda", code: "ug", expected: 56 },
+    { name: "Mauritius", code: "mu", expected: 48 },
+    { name: "Argentina", code: "ar", expected: 58 },
+    { name: "Chile", code: "cl", expected: 55 },
+    { name: "Colombia", code: "co", expected: 52 },
+    { name: "Peru", code: "pe", expected: 50 },
+    { name: "Uruguay", code: "uy", expected: 45 },
+    { name: "Panama", code: "pa", expected: 48 },
+    { name: "Costa Rica", code: "cr", expected: 46 },
+    { name: "Dominican Republic", code: "do", expected: 44 },
+    { name: "Jamaica", code: "jm", expected: 42 },
+    { name: "Iceland", code: "is", expected: 52 },
+    { name: "Luxembourg", code: "lu", expected: 48 },
+    { name: "Czech Republic", code: "cz", expected: 62 },
+    { name: "Hungary", code: "hu", expected: 60 },
+    { name: "Greece", code: "gr", expected: 68 },
+    { name: "Croatia", code: "hr", expected: 58 },
+    { name: "Romania", code: "ro", expected: 62 },
+    { name: "Ukraine", code: "ua", expected: 58 },
+    { name: "Cyprus", code: "cy", expected: 52 },
+    { name: "Malta", code: "mt", expected: 50 },
+    { name: "Uzbekistan", code: "uz", expected: 48 },
+    { name: "Azerbaijan", code: "az", expected: 52 }
   ];
 
   checkList.forEach(({ name, code, expected }) => {

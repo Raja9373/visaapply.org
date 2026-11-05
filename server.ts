@@ -562,8 +562,33 @@ const handleSitemapXml = (req: any, res: any) => {
   }
 };
 
+const handleSitemapIndexXml = (req: any, res: any) => {
+  try {
+    const indexPath = path.join(__dirname, 'public', 'sitemap_index.xml');
+    if (fs.existsSync(indexPath)) {
+      const xml = fs.readFileSync(indexPath, 'utf-8');
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+      return res.status(200).send(xml);
+    }
+    const baseUrl = process.env.APP_URL || 'https://www.visaapply.org';
+    const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${baseUrl}/sitemap.xml</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+  </sitemap>
+</sitemapindex>`;
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.status(200).send(indexXml);
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+};
+
 app.get('/sitemap.xml', handleSitemapXml);
-app.get('/sitemap_index.xml', handleSitemapXml);
+app.get('/sitemap_index.xml', handleSitemapIndexXml);
+app.get('/sitemap-index.xml', handleSitemapIndexXml);
 app.get('/api/sitemap.xml', handleSitemapXml);
 app.get('/api/sitemap', handleSitemapXml);
 

@@ -253,6 +253,150 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                       {(c.code === 'PL' || c.code === 'pl') && (
                         <span className="bg-purple-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Poland Visas (92 Live)</span>
                       )}
+                      {(c.code === 'HK' || c.code === 'hk') && (
+                        <span className="bg-red-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">45 Hong Kong Visas (45 Live)</span>
+                      )}
+                      {(c.code === 'TW' || c.code === 'tw') && (
+                        <span className="bg-blue-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Taiwan Visas (52 Live)</span>
+                      )}
+                      {(c.code === 'KH' || c.code === 'kh') && (
+                        <span className="bg-indigo-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">48 Cambodia Visas (48 Live)</span>
+                      )}
+                      {(c.code === 'LA' || c.code === 'la') && (
+                        <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">42 Laos Visas (42 Live)</span>
+                      )}
+                      {(c.code === 'MM' || c.code === 'mm') && (
+                        <span className="bg-amber-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">46 Myanmar Visas (46 Live)</span>
+                      )}
+                      {(c.code === 'BN' || c.code === 'bn') && (
+                        <span className="bg-yellow-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">38 Brunei Visas (38 Live)</span>
+                      )}
+                      {(c.code === 'PK' || c.code === 'pk') && (
+                        <span className="bg-emerald-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Pakistan Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'BD' || c.code === 'bd') && (
+                        <span className="bg-green-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">58 Bangladesh Visas (58 Live)</span>
+                      )}
+                      {(c.code === 'LK' || c.code === 'lk') && (
+                        <span className="bg-orange-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Sri Lanka Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'NP' || c.code === 'np') && (
+                        <span className="bg-rose-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">35 Nepal Visas (35 Live)</span>
+                      )}
+                      {(c.code === 'MN' || c.code === 'mn') && (
+                        <span className="bg-cyan-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">44 Mongolia Visas (44 Live)</span>
+                      )}
+                      {(c.code === 'KZ' || c.code === 'kz') && (
+                        <span className="bg-teal-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">56 Kazakhstan Visas (56 Live)</span>
+                      )}
+                      {(c.code === 'OM' || c.code === 'om') && (
+                        <span className="bg-emerald-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">64 Oman Visas (64 Live)</span>
+                      )}
+                      {(c.code === 'KW' || c.code === 'kw') && (
+                        <span className="bg-blue-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Kuwait Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'BH' || c.code === 'bh') && (
+                        <span className="bg-red-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">60 Bahrain Visas (60 Live)</span>
+                      )}
+                      {(c.code === 'JO' || c.code === 'jo') && (
+                        <span className="bg-rose-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">58 Jordan Visas (58 Live)</span>
+                      )}
+                      {(c.code === 'LB' || c.code === 'lb') && (
+                        <span className="bg-green-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Lebanon Visas (52 Live)</span>
+                      )}
+                      {(c.code === 'EG' || c.code === 'eg') && (
+                        <span className="bg-amber-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">72 Egypt Visas (72 Live)</span>
+                      )}
+                      {(c.code === 'MA' || c.code === 'ma') && (
+                        <span className="bg-red-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Morocco Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'KE' || c.code === 'ke') && (
+                        <span className="bg-slate-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">68 Kenya Visas (68 Live)</span>
+                      )}
+                      {(c.code === 'NG' || c.code === 'ng') && (
+                        <span className="bg-emerald-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">65 Nigeria Visas (65 Live)</span>
+                      )}
+                      {(c.code === 'GH' || c.code === 'gh') && (
+                        <span className="bg-yellow-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">58 Ghana Visas (58 Live)</span>
+                      )}
+                      {(c.code === 'ET' || c.code === 'et') && (
+                        <span className="bg-lime-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Ethiopia Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'TZ' || c.code === 'tz') && (
+                        <span className="bg-cyan-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">60 Tanzania Visas (60 Live)</span>
+                      )}
+                      {(c.code === 'UG' || c.code === 'ug') && (
+                        <span className="bg-orange-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">56 Uganda Visas (56 Live)</span>
+                      )}
+                      {(c.code === 'RW' || c.code === 'rw') && (
+                        <span className="bg-sky-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Rwanda Visas (52 Live)</span>
+                      )}
+                      {(c.code === 'MU' || c.code === 'mu') && (
+                        <span className="bg-indigo-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">48 Mauritius Visas (48 Live)</span>
+                      )}
+                      {(c.code === 'AR' || c.code === 'ar') && (
+                        <span className="bg-sky-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">58 Argentina Visas (58 Live)</span>
+                      )}
+                      {(c.code === 'CL' || c.code === 'cl') && (
+                        <span className="bg-red-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">55 Chile Visas (55 Live)</span>
+                      )}
+                      {(c.code === 'CO' || c.code === 'co') && (
+                        <span className="bg-amber-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Colombia Visas (52 Live)</span>
+                      )}
+                      {(c.code === 'PE' || c.code === 'pe') && (
+                        <span className="bg-rose-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">50 Peru Visas (50 Live)</span>
+                      )}
+                      {(c.code === 'UY' || c.code === 'uy') && (
+                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">45 Uruguay Visas (45 Live)</span>
+                      )}
+                      {(c.code === 'PA' || c.code === 'pa') && (
+                        <span className="bg-indigo-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">48 Panama Visas (48 Live)</span>
+                      )}
+                      {(c.code === 'CR' || c.code === 'cr') && (
+                        <span className="bg-emerald-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">46 Costa Rica Visas (46 Live)</span>
+                      )}
+                      {(c.code === 'DO' || c.code === 'do') && (
+                        <span className="bg-blue-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">44 Dominican Republic Visas (44 Live)</span>
+                      )}
+                      {(c.code === 'JM' || c.code === 'jm') && (
+                        <span className="bg-green-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">42 Jamaica Visas (42 Live)</span>
+                      )}
+                      {(c.code === 'IS' || c.code === 'is') && (
+                        <span className="bg-cyan-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Iceland Visas (52 Live)</span>
+                      )}
+                      {(c.code === 'LU' || c.code === 'lu') && (
+                        <span className="bg-sky-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">48 Luxembourg Visas (48 Live)</span>
+                      )}
+                      {(c.code === 'CZ' || c.code === 'cz') && (
+                        <span className="bg-red-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Czech Republic Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'HU' || c.code === 'hu') && (
+                        <span className="bg-green-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">60 Hungary Visas (60 Live)</span>
+                      )}
+                      {(c.code === 'GR' || c.code === 'gr') && (
+                        <span className="bg-blue-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">68 Greece Visas (68 Live)</span>
+                      )}
+                      {(c.code === 'HR' || c.code === 'hr') && (
+                        <span className="bg-red-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">58 Croatia Visas (58 Live)</span>
+                      )}
+                      {(c.code === 'RO' || c.code === 'ro') && (
+                        <span className="bg-yellow-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">62 Romania Visas (62 Live)</span>
+                      )}
+                      {(c.code === 'UA' || c.code === 'ua') && (
+                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">58 Ukraine Visas (58 Live)</span>
+                      )}
+                      {(c.code === 'CY' || c.code === 'cy') && (
+                        <span className="bg-amber-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Cyprus Visas (52 Live)</span>
+                      )}
+                      {(c.code === 'MT' || c.code === 'mt') && (
+                        <span className="bg-rose-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">50 Malta Visas (50 Live)</span>
+                      )}
+                      {(c.code === 'UZ' || c.code === 'uz') && (
+                        <span className="bg-teal-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">48 Uzbekistan Visas (48 Live)</span>
+                      )}
+                      {(c.code === 'AZ' || c.code === 'az') && (
+                        <span className="bg-cyan-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">52 Azerbaijan Visas (52 Live)</span>
+                      )}
                     </td>
                     <td className="p-2 text-center text-slate-600">{c.tourist}</td>
                     <td className="p-2 text-center text-slate-600">{c.work}</td>

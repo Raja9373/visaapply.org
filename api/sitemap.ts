@@ -3,15 +3,39 @@ import path from 'path';
 
 export default function handler(req: any, res: any) {
   try {
-    const sitemapPath = path.join(process.cwd(), 'public', 'sitemap.xml');
-    if (fs.existsSync(sitemapPath)) {
-      const xml = fs.readFileSync(sitemapPath, 'utf-8');
-      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
-      return res.status(200).send(xml);
+    const isIndex = (req.url || '').includes('index');
+    const targetFileName = isIndex ? 'sitemap_index.xml' : 'sitemap.xml';
+
+    const candidatePaths = [
+      path.join(process.cwd(), 'public', targetFileName),
+      path.join(process.cwd(), 'dist', targetFileName),
+      path.join(__dirname, '..', 'public', targetFileName),
+      path.join(__dirname, '..', 'dist', targetFileName),
+      path.join(process.cwd(), targetFileName)
+    ];
+
+    for (const p of candidatePaths) {
+      if (fs.existsSync(p)) {
+        const xml = fs.readFileSync(p, 'utf-8');
+        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+        return res.status(200).send(xml);
+      }
     }
 
     const baseUrl = 'https://www.visaapply.org';
+    if (isIndex) {
+      const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${baseUrl}/sitemap.xml</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+  </sitemap>
+</sitemapindex>`;
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      return res.status(200).send(indexXml);
+    }
+
     const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
