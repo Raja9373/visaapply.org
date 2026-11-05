@@ -239,13 +239,13 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
                         <span className="bg-emerald-800 text-white text-[10px] font-black px-1.5 py-0.5 rounded">94 Portugal Visas (94 Live)</span>
                       )}
                       {(c.code === 'DK' || c.code === 'dk') && (
-                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">37 Denmark Visas (37 Live)</span>
+                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Denmark Visas (92 Live)</span>
                       )}
                       {(c.code === 'FI' || c.code === 'fi') && (
-                        <span className="bg-sky-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">28 Finland Visas (28 Live)</span>
+                        <span className="bg-sky-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Finland Visas (92 Live)</span>
                       )}
                       {(c.code === 'BE' || c.code === 'be') && (
-                        <span className="bg-orange-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">18 Belgium Visas (18 Live)</span>
+                        <span className="bg-orange-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Belgium Visas (92 Live)</span>
                       )}
                       {(c.code === 'AT' || c.code === 'at') && (
                         <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">92 Austria Visas (92 Live)</span>

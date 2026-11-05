@@ -31,10 +31,14 @@ import { INDONESIA_82_VISAS } from './indonesiaVisas';
 import { PHILIPPINES_68_VISAS } from './philippinesVisas';
 import { SCHENGEN_96_VISAS } from './schengenVisas';
 import { SWEDEN_94_VISAS } from './swedenVisas';
-import { DENMARK_92_VISAS } from './denmarkVisas';
-import { FINLAND_28_VISAS } from './finlandVisas';
-import { BELGIUM_22_VISAS } from './belgiumVisas';
-import { AUSTRIA_92_VISAS } from './austriaVisas';
+import { DENMARK_92_VISAS, DK_92 } from './denmarkVisas';
+export { DENMARK_92_VISAS, DK_92 };
+import { FINLAND_28_VISAS, FINLAND_92_VISAS, FI_92 } from './finlandVisas';
+export { FINLAND_28_VISAS, FINLAND_92_VISAS, FI_92 };
+import { BELGIUM_22_VISAS, BELGIUM_92_VISAS, BE_92 } from './belgiumVisas';
+export { BELGIUM_22_VISAS, BELGIUM_92_VISAS, BE_92 };
+import { AUSTRIA_92_VISAS, AT_92 } from './austriaVisas';
+export { AUSTRIA_92_VISAS, AT_92 };
 import { POLAND_92_VISAS, PL_92 } from './polandVisas';
 export { POLAND_92_VISAS, PL_92 };
 import { NORWAY_92_VISAS } from './norwayVisas';
@@ -330,14 +334,14 @@ export const COUNTRY_VISA_COUNTS: Record<string, { tourist: number; work: number
   no: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 34 },
   PT: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 36 }, // 94 Portugal Live Visas (Official AIMA / VFS / Conservatória / IEFP)
   pt: { tourist: 14, work: 20, student: 8, family: 8, business: 8, pr: 36 },
-  DK: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 }, // 92 Denmark Live Visas (Official SIRI / VFS)
-  dk: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 },
-  FI: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 }, // 92 Finland Live Visas (Official Migri / Business Finland)
-  fi: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 },
-  BE: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 }, // 92 Belgium Live Visas (Official Immigration Office / VFS)
-  be: { tourist: 20, work: 20, student: 15, family: 15, business: 12, pr: 10 },
-  AT: { tourist: 20, work: 20, student: 15, family: 15, business: 10, pr: 12 }, // 92 Austria Live Visas (Official VFS / BMI)
-  at: { tourist: 20, work: 20, student: 15, family: 15, business: 10, pr: 12 },
+  DK: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 }, // 92 Denmark Live Visas (Official SIRI / VFS)
+  dk: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 },
+  FI: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 }, // 92 Finland Live Visas (Official Migri / Business Finland)
+  fi: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 },
+  BE: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 }, // 92 Belgium Live Visas (Official Immigration Office / VFS)
+  be: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 },
+  AT: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 }, // 92 Austria Live Visas (Official VFS / BMI)
+  at: { tourist: 18, work: 26, student: 14, family: 14, business: 8, pr: 12 },
   PL: { tourist: 18, work: 28, student: 12, family: 12, business: 10, pr: 12 }, // 92 Poland Live Visas (Official VFS / Urząd Wojewódzki)
   pl: { tourist: 18, work: 28, student: 12, family: 12, business: 10, pr: 12 },
   MY: { tourist: 14, work: 20, student: 8, family: 8, business: 10, pr: 24 }, // 84 Malaysia Live Visas (Official Immigration Department / ESD / EMGS / MDEC / MM2H / PVIP)
@@ -673,7 +677,7 @@ Object.entries(COUNTRY_VISA_COUNTS).forEach(([code, counts]) => {
   if (upper === 'PT') { setCountry(PORTUGAL_94_VISAS); return; }
   if (upper === 'DK') { setCountry(DENMARK_92_VISAS); return; }
   if (upper === 'FI') { setCountry(FINLAND_28_VISAS); return; }
-  if (upper === 'BE') { setCountry(BELGIUM_22_VISAS); return; }
+  if (upper === 'BE') { setCountry(BELGIUM_92_VISAS); return; }
   if (upper === 'AT') { setCountry(AUSTRIA_92_VISAS); return; }
   if (upper === 'PL') { setCountry(POLAND_92_VISAS); return; }
   const cVisas: CountryVisas = {
@@ -1092,7 +1096,11 @@ export function autoRebuildAllCountries(): void {
     { name: "Singapore", code: "sg", expected: 109 },
     { name: "USA", code: "us", expected: 201 },
     { name: "Qatar", code: "qa", expected: 66 },
-    { name: "Poland", code: "pl", expected: 92 }
+    { name: "Poland", code: "pl", expected: 92 },
+    { name: "Denmark", code: "dk", expected: 92 },
+    { name: "Finland", code: "fi", expected: 92 },
+    { name: "Belgium", code: "be", expected: 92 },
+    { name: "Austria", code: "at", expected: 92 }
   ];
 
   checkList.forEach(({ name, code, expected }) => {
