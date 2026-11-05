@@ -1829,11 +1829,6 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     <div className="text-sm text-slate-600 font-medium mt-0.5">
                       {isSelf ? 'Your Origin Country' : `${liveCount} Visa Types`}
                     </div>
-                    {!isSelf && (
-                      <div className="text-[10px] text-blue-500 font-medium mt-0.5 truncate">
-                        6 categories • Tourist Business Work Student Family PR
-                      </div>
-                    )}
                   </div>
                 </div>
                 {/* Right side: Chevron arrow */}
