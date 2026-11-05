@@ -156,7 +156,21 @@ const FALLBACK_COUNTRIES = [
   { code: "CY", name: "Cyprus", flag: "🇨🇾" },
   { code: "MT", name: "Malta", flag: "🇲🇹" },
   { code: "UZ", name: "Uzbekistan", flag: "🇺🇿" },
-  { code: "AZ", name: "Azerbaijan", flag: "🇦🇿" }
+  { code: "AZ", name: "Azerbaijan", flag: "🇦🇿" },
+  { code: "BT", name: "Bhutan", flag: "🇧🇹" },
+  { code: "MV", name: "Maldives", flag: "🇲🇻" },
+  { code: "SC", name: "Seychelles", flag: "🇸🇨" },
+  { code: "FJ", name: "Fiji", flag: "🇫🇯" },
+  { code: "BW", name: "Botswana", flag: "🇧🇼" },
+  { code: "ZM", name: "Zambia", flag: "🇿🇲" },
+  { code: "ZW", name: "Zimbabwe", flag: "🇿🇼" },
+  { code: "NA", name: "Namibia", flag: "🇳🇦" },
+  { code: "MZ", name: "Mozambique", flag: "🇲🇿" },
+  { code: "AD", name: "Andorra", flag: "🇦🇩" },
+  { code: "MC", name: "Monaco", flag: "🇲🇨" },
+  { code: "LI", name: "Liechtenstein", flag: "🇱🇮" },
+  { code: "SM", name: "San Marino", flag: "🇸🇲" },
+  { code: "TN", name: "Tunisia", flag: "🇹🇳" }
 ];
 
 // COUNTRY NAME MAP - FIX KH -> CAMBODIA etc
@@ -164,13 +178,15 @@ export const COUNTRY_NAMES: Record<string, string> = {
   "us":"United States", "ca":"Canada", "gb":"United Kingdom", "uk":"United Kingdom", "au":"Australia", "ae":"United Arab Emirates", "de":"Germany", "sg":"Singapore", "th":"Thailand", "eu":"Schengen Area", "sc":"Schengen Area", "sch":"Schengen Area", "schengen":"Schengen Area", "jp":"Japan", "in":"India", "fr":"France", "it":"Italy", "es":"Spain", "nl":"Netherlands", "ch":"Switzerland", "nz":"New Zealand", "br":"Brazil", "mx":"Mexico", "kr":"South Korea", "cn":"China", "vn":"Vietnam", "my":"Malaysia", "id":"Indonesia", "ph":"Philippines", "za":"South Africa", "tr":"Turkey", "sa":"Saudi Arabia", "qa":"Qatar", "ie":"Ireland", "se":"Sweden", "no":"Norway", "pt":"Portugal", "dk":"Denmark", "fi":"Finland", "be":"Belgium", "at":"Austria", "pl":"Poland",
   "hk":"Hong Kong", "tw":"Taiwan", "kh":"Cambodia", "la":"Laos", "mm":"Myanmar", "bn":"Brunei", "pk":"Pakistan", "bd":"Bangladesh", "lk":"Sri Lanka", "np":"Nepal", "mn":"Mongolia", "kz":"Kazakhstan",
   "om":"Oman", "kw":"Kuwait", "bh":"Bahrain", "jo":"Jordan", "lb":"Lebanon", "eg":"Egypt", "ma":"Morocco", "ke":"Kenya", "ng":"Nigeria", "gh":"Ghana", "et":"Ethiopia", "tz":"Tanzania", "ug":"Uganda", "rw":"Rwanda", "mu":"Mauritius",
-  "ar":"Argentina", "cl":"Chile", "co":"Colombia", "pe":"Peru", "uy":"Uruguay", "pa":"Panama", "cr":"Costa Rica", "do":"Dominican Republic", "jm":"Jamaica", "is":"Iceland", "lu":"Luxembourg", "cz":"Czech Republic", "hu":"Hungary", "gr":"Greece", "hr":"Croatia", "ro":"Romania", "ua":"Ukraine", "cy":"Cyprus", "mt":"Malta", "uz":"Uzbekistan", "az":"Azerbaijan"
+  "ar":"Argentina", "cl":"Chile", "co":"Colombia", "pe":"Peru", "uy":"Uruguay", "pa":"Panama", "cr":"Costa Rica", "do":"Dominican Republic", "jm":"Jamaica", "is":"Iceland", "lu":"Luxembourg", "cz":"Czech Republic", "hu":"Hungary", "gr":"Greece", "hr":"Croatia", "ro":"Romania", "ua":"Ukraine", "cy":"Cyprus", "mt":"Malta", "uz":"Uzbekistan", "az":"Azerbaijan",
+  "bt":"Bhutan", "mv":"Maldives", "fj":"Fiji", "bw":"Botswana", "zm":"Zambia", "zw":"Zimbabwe", "na":"Namibia", "mz":"Mozambique", "ad":"Andorra", "mc":"Monaco", "li":"Liechtenstein", "sm":"San Marino", "tn":"Tunisia"
 };
 
 export const COUNTRY_NAME_MAP: Record<string, string> = { ...COUNTRY_NAMES };
 
 export const FLAG_MAP: Record<string, string> = {
-  "us":"🇺🇸","ca":"🇨🇦","gb":"🇬🇧","uk":"🇬🇧","au":"🇦🇺","ae":"🇦🇪","de":"🇩🇪","sg":"🇸🇬","th":"🇹🇭","eu":"🇪🇺","sc":"🇪🇺","sch":"🇪🇺","schengen":"🇪🇺","jp":"🇯🇵","in":"🇮🇳","fr":"🇫🇷","it":"🇮🇹","es":"🇪🇸","nl":"🇳🇱","ch":"🇨🇭","nz":"🇳🇿","br":"🇧🇷","mx":"🇲🇽","kr":"🇰🇷","cn":"🇨🇳","vn":"🇻🇳","my":"🇲🇾","id":"🇮🇩","ph":"🇵🇭","za":"🇿🇦","tr":"🇹🇷","sa":"🇸🇦","qa":"🇶🇦","ie":"🇮🇪","se":"🇸🇪","no":"🇳🇴","pt":"🇵🇹","dk":"🇩🇰","fi":"🇫🇮","be":"🇧🇪","at":"🇦🇹","pl":"🇵🇱","hk":"🇭🇰","tw":"🇹🇼","kh":"🇰🇭","la":"🇱🇦","mm":"🇲🇲","bn":"🇧🇳","pk":"🇵🇰","bd":"🇧🇩","lk":"🇱🇰","np":"🇳🇵","mn":"🇲🇳","kz":"🇰🇿","om":"🇴🇲","kw":"🇰🇼","bh":"🇧🇭","jo":"🇯🇴","lb":"🇱🇧","eg":"🇪🇬","ma":"🇲🇦","ke":"🇰🇪","ng":"🇳🇬","gh":"🇬🇭","et":"🇪🇹","tz":"🇹🇿","ug":"🇺🇬","rw":"🇷🇼","mu":"🇲🇺","ar":"🇦🇷","cl":"🇨🇱","co":"🇨🇴","pe":"🇵🇪","uy":"🇺🇾","pa":"🇵🇦","cr":"🇨🇷","do":"🇩🇴","jm":"🇯🇲","is":"🇮🇸","lu":"🇱🇺","cz":"🇨🇿","hu":"🇭🇺","gr":"🇬🇷","hr":"🇭🇷","ro":"🇷🇴","ua":"🇺🇦","cy":"🇨🇾","mt":"🇲🇹","uz":"🇺🇿","az":"🇦🇿"
+  "us":"🇺🇸","ca":"🇨🇦","gb":"🇬🇧","uk":"🇬🇧","au":"🇦🇺","ae":"🇦🇪","de":"🇩🇪","sg":"🇸🇬","th":"🇹🇭","eu":"🇪🇺","sc":"🇪🇺","sch":"🇪🇺","schengen":"🇪🇺","jp":"🇯🇵","in":"🇮🇳","fr":"🇫🇷","it":"🇮🇹","es":"🇪🇸","nl":"🇳🇱","ch":"🇨🇭","nz":"🇳🇿","br":"🇧🇷","mx":"🇲🇽","kr":"🇰🇷","cn":"🇨🇳","vn":"🇻🇳","my":"🇲🇾","id":"🇮🇩","ph":"🇵🇭","za":"🇿🇦","tr":"🇹🇷","sa":"🇸🇦","qa":"🇶🇦","ie":"🇮🇪","se":"🇸🇪","no":"🇳🇴","pt":"🇵🇹","dk":"🇩🇰","fi":"🇫🇮","be":"🇧🇪","at":"🇦🇹","pl":"🇵🇱","hk":"🇭🇰","tw":"🇹🇼","kh":"🇰🇭","la":"🇱🇦","mm":"🇲🇲","bn":"🇧🇳","pk":"🇵🇰","bd":"🇧🇩","lk":"🇱🇰","np":"🇳🇵","mn":"🇲🇳","kz":"🇰🇿","om":"🇴🇲","kw":"🇰🇼","bh":"🇧🇭","jo":"🇯🇴","lb":"🇱🇧","eg":"🇪🇬","ma":"🇲🇦","ke":"🇰🇪","ng":"🇳🇬","gh":"🇬🇭","et":"🇪🇹","tz":"🇹🇿","ug":"🇺🇬","rw":"🇷🇼","mu":"🇲🇺","ar":"🇦🇷","cl":"🇨🇱","co":"🇨🇴","pe":"🇵🇪","uy":"🇺🇾","pa":"🇵🇦","cr":"🇨🇷","do":"🇩🇴","jm":"🇯🇲","is":"🇮🇸","lu":"🇱🇺","cz":"🇨🇿","hu":"🇭🇺","gr":"🇬🇷","hr":"🇭🇷","ro":"🇷🇴","ua":"🇺🇦","cy":"🇨🇾","mt":"🇲🇹","uz":"🇺🇿","az":"🇦🇿",
+  "bt":"🇧🇹","mv":"🇲🇻","fj":"🇫🇯","bw":"🇧🇼","zm":"🇿🇲","zw":"🇿🇼","na":"🇳🇦","mz":"🇲🇿","ad":"🇦🇩","mc":"🇲🇨","li":"🇱🇮","sm":"🇸🇲","tn":"🇹🇳"
 };
 
 export const COUNTRY_FLAGS: Record<string, string> = { ...FLAG_MAP };
