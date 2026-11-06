@@ -1,0 +1,11 @@
+{
+  "visaTypes": "签证类型",
+  "liveTime": "当地时间",
+  "processing": "办理周期",
+  "hotelFrom": "酒店起价",
+  "searchFlights": "搜索机票",
+  "eligibility": "签证资格检测",
+  "fromPassport": "出发地 (护照 / 居住国)",
+  "toDestination": "目的地 (目标国家)",
+  "swapRoute": "互换路线"
+}

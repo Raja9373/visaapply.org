@@ -1,0 +1,11 @@
+{
+  "visaTypes": "ビザの種類",
+  "liveTime": "現地時間",
+  "processing": "審査期間",
+  "hotelFrom": "ホテル最安値",
+  "searchFlights": "航空券を検索",
+  "eligibility": "ビザ申請資格",
+  "fromPassport": "出発国 (パスポート / 居住国)",
+  "toDestination": "渡航先 (目的地)",
+  "swapRoute": "入れ替え"
+}

@@ -19,8 +19,13 @@ import { BlogsPage, FeaturedBlogsCarousel } from './components/AutoBlogger';
 import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogGenerator';
 import { VisaChatbot } from './components/VisaChatbot';
 import { InterviewPrepFull, get20InterviewQuestions } from './components/InterviewPrepFull';
-import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
+import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
 import { FlightsPage } from './pages/FlightsPage';
+import { RoutesPage } from './pages/RoutesPage';
+import { ImmigrationUpdatesPage } from './pages/ImmigrationUpdatesPage';
+import { calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
+import { SUPPORTED_LANGUAGES_10, SupportedLangCode } from './i18n/config';
+import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, injectTenLanguageHreflangTags } from './utils/autoLanguage';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   mergeArticleCollections,
@@ -214,8 +219,13 @@ if (typeof window !== 'undefined') {
 
 console.log("✅ COUNTRY NAME + FLAG BUG FIX DONE - KH -> Cambodia, 86 countries now show full names + flags - IN -> US, IN -> Cambodia, etc - No more KH, BH, OM code display");
 
-function generateMetadata(path: string, countries: Country[], article?: Article | null) {
+function generateMetadata(rawPath: string, countries: Country[], article?: Article | null) {
+  const { strippedPath: path } = getLangFromUrlPath(rawPath);
+  injectTenLanguageHreflangTags(rawPath);
+
   const isAdmin = path === '/admin';
+  const isAdminUpdates = path === '/admin/updates' || path === '/admin/updates/';
+  const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
   const isContact = path === '/contact';
@@ -228,26 +238,32 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
-  let title = 'VisaApply.org – 2026 Global Visa Requirements, Fees in ₹ INR & Free PDF Checklists (249 Countries)';
-  let description = `Check 2026 official visa requirements for Indians across ${totalCountryCount} countries & 14,084+ visa subclasses. Instant 30-sec eligibility check, fees in ₹ INR, processing time, embassy addresses & free PDF checklist.`;
+  let title = 'VisaApply.org – 2026 Global Visa Requirements, 61,752 Routes, Fees & Free PDF Checklists (249 Countries)';
+  let description = `Check 2026 official visa requirements across ${totalCountryCount} countries, 61,752 Any-to-Any bilateral routes & 14,084+ visa subclasses in 10 languages. Instant 30-sec eligibility check, fees, processing time, embassy addresses & free PDF checklist.`;
 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
+  } else if (isAdminUpdates) {
+    title = 'Last 30 Days Immigration Changes (Auto-Synced Daily) – VisaApply.org';
+    description = 'Real-time immigration policy changes, visa fee updates, processing time shifts, and new visa announcements across 249 official government portals.';
+  } else if (isRoutes) {
+    title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
+    description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
   } else if (isAbout) {
     title = 'About Us, Editorial Policy & Free Visa Backlink Widget – VisaApply.org';
     description = 'Learn about VisaApply.org editorial verification standards, E-E-A-T immigration research methodology, and embed our free live 249-country visa status widget on your website.';
   } else if (isFlights) {
-    title = 'Cheap Flights from India to 249 Countries (2026) – Compare 100+ Airlines | VisaApply Flights';
-    description = 'Search 100+ airlines and compare the cheapest flights from India across 249 countries. Powered by Travelpayouts ID 801550, Aviasales & Skyscanner 8131850.';
+    title = 'Cheap Flights Across 249 Countries (2026) – Compare 100+ Airlines | VisaApply Flights';
+    description = 'Search 100+ airlines and compare the cheapest flights across 249 countries. Powered by Travelpayouts ID 801550, Aviasales & Skyscanner 8131850.';
   } else if (isBlogs) {
     title = '2026 Global Visa Blogs & Travel Guides (2,490+ Official Articles) – VisaApply.org';
-    description = 'Explore 2,490+ SEO visa blogs across 249 countries for Indian travelers: fees in INR, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
+    description = 'Explore 2,490+ SEO visa blogs across 249 countries: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
   } else if (interviewMatch) {
     const code = interviewMatch[1].toLowerCase();
     const cName = getCountryDisplayName(code);
-    title = `${cName} Visa Interview Questions & Winning Answers for Indians [2026 Updated] – VisaApply.org`;
-    description = `Master the top 20 ${cName} consular interview questions and ideal answers for Indian passport holders, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
+    title = `${cName} Visa Interview Questions & Winning Answers [2026 Updated] – VisaApply.org`;
+    description = `Master the top 20 ${cName} consular interview questions and ideal answers, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
   } else if (isContact) {
     title = 'Contact Us & Consular Support Desk – VisaApply.org';
     description = 'Get in touch with VisaApply.org editorial and consular research team. Email contact@visaapply.org for visa inquiries, partnerships, or advertising.';
@@ -258,11 +274,11 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     title = 'Terms of Service & Editorial Disclaimer – VisaApply.org';
     description = 'Terms of Service and non-governmental consular disclaimer for VisaApply.org.';
   } else if (isSitemap) {
-    title = 'All 14,084+ Visa Guides & 249 Countries Directory [2026] | VisaApply.org';
+    title = 'All 14,084+ Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org';
     description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and 6 visa categories.`;
   } else if (article && article.title) {
     title = `${article.title} [2026 Fees & Checklist] | VisaApply.org`;
-    description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find official fees in INR, mandatory documents, processing time, and FAQs.`;
+    description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find official fees, mandatory documents, processing time, and FAQs.`;
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
@@ -270,12 +286,14 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     const fromName = getCountryDisplayName(from);
     const toName = getCountryDisplayName(to);
     const meta = getCountryMeta(to);
+    const vCount = calculateVisaCount(from, to);
+    const proc = getBilateralProcessingTime(from, to);
     if (article && article.title) {
       title = `${article.title} [2026 Updated] | VisaApply.org`;
-      description = `Official 2026 guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Processing: ${meta.processing}. Download free PDF document checklist.`;
+      description = `Official 2026 guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Processing: ${proc}. Download free PDF document checklist.`;
     } else {
-      title = `${toName} ${type.charAt(0).toUpperCase() + type.slice(1)} Visa for ${fromName} Citizens [2026]: Fees, Processing (${meta.processing}) & PDF Checklist`;
-      description = `Apply for ${toName} ${type} visa from ${fromName} in 2026. Check ${getLiveVisaCount(to)} official subclasses, fees in INR, ${meta.processing} processing time, ${meta.successRate} approval tips & free PDF checklist.`;
+      title = `${toName} ${type.charAt(0).toUpperCase() + type.slice(1)} Visa for ${fromName} Citizens [2026]: Fees, Processing (${proc}) & PDF Checklist`;
+      description = `Apply for ${toName} ${type} visa from ${fromName} in 2026. Check ${vCount} official subclasses, fees, ${proc} processing time, ${meta.successRate} approval tips & free PDF checklist.`;
     }
   } else if (quizMatch) {
     const from = (quizMatch[1] || 'IN').toUpperCase();
@@ -283,10 +301,11 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     const fromName = getCountryDisplayName(from);
     const toName = getCountryDisplayName(to);
     const meta = getCountryMeta(to);
-    const vCount = getLiveVisaCount(to);
+    const vCount = calculateVisaCount(from, to);
+    const proc = getBilateralProcessingTime(from, to);
 
-    title = `${toName} Visa for ${fromName} Citizens [2026]: ${vCount} Visas, Fees, ${meta.processing} Processing & Checklist`;
-    description = `Complete 2026 ${toName} visa guide for ${fromName} passport holders. Compare ${vCount} official Tourist, Work, Student, Business & PR subclasses. Processing: ${meta.processing}, Approval Rate: ${meta.successRate}.`;
+    title = `${toName} Visa for ${fromName} Citizens [2026]: ${vCount} Visas, Fees, ${proc} Processing & Checklist`;
+    description = `Complete 2026 ${toName} visa guide for ${fromName} passport holders & residents. Compare ${vCount} official Tourist, Work, Student, Business & PR subclasses. Processing: ${proc}, Approval Rate: ${meta.successRate}.`;
   } else if (path !== '/' && path.includes('-to-')) {
     const clean = path.replace(/^\//, '').replace(/-/g, ' ');
     const formatted = clean.charAt(0).toUpperCase() + clean.slice(1);
@@ -312,7 +331,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
 
   // Dynamic Canonical & OG URL for SEO deduplication
   const canonicalBase = 'https://www.visaapply.org';
-  const cleanCanonicalPath = path === '/' ? '/' : path.replace(/\/+$/, '');
+  const cleanCanonicalPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
   const canonicalHref = `${canonicalBase}${cleanCanonicalPath}`;
 
   let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -563,16 +582,37 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
         <div className="text-[56px] sm:text-[64px] leading-none shrink-0">{toFlag}</div>
         <div className="flex-1 w-full min-w-0">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h1 className="text-2xl sm:text-[32px] font-black text-slate-900 tracking-[-0.5px] leading-tight">
-              {toName} - {count} Visa Types
-            </h1>
+            <div>
+              <h1 className="text-2xl sm:text-[32px] font-black text-slate-900 tracking-[-0.5px] leading-tight">
+                {toName} - {count} Visa Types
+              </h1>
+              <div className="text-xs font-bold text-[#0B3D91] mt-1 flex items-center gap-2 flex-wrap">
+                <span>
+                  {getCountryFlag(fromCode)} From {getCountryDisplayName(fromCode)} → {toFlag} To {toName} ({count} Visas)
+                </span>
+                {fromCode.toLowerCase() !== toCode.toLowerCase() && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const swapTarget = `/${codeLower}-to-${fromLower}`;
+                      if (navigate) navigate(swapTarget);
+                      else window.location.href = swapTarget;
+                    }}
+                    className="bg-white hover:bg-blue-50 text-[#0B3D91] border border-blue-200 px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold cursor-pointer transition-colors"
+                  >
+                    ⇄ Swap ({toCode.toUpperCase()} → {fromCode.toUpperCase()})
+                  </button>
+                )}
+              </div>
+            </div>
             <button
               onClick={() =>
                 generateChecklistPDF({
-                  visaName: `${toName} All Visa Categories`,
+                  visaName: `${toName} All Visa Categories (From ${getCountryDisplayName(fromCode)})`,
                   countryName: toName,
                   countryCode: toCode,
-                  processing: meta.processing
+                  fromCountryName: getCountryDisplayName(fromCode),
+                  processing: getBilateralProcessingTime(fromCode, toCode)
                 })
               }
               className="bg-[#0f172a] hover:bg-slate-800 text-white px-4 py-2.5 rounded-[10px] font-bold text-[13px] cursor-pointer transition-colors shrink-0 shadow-xs"
@@ -616,7 +656,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
             </div>
             <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#fde68a]">
               <span className="text-[11px] text-[#92400e] font-bold block">⏱ PROCESSING</span>
-              <span className="font-bold text-sm text-slate-900 mt-0.5 block truncate">{meta.processing}</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block truncate">{getBilateralProcessingTime(fromCode, toCode)}</span>
             </div>
             <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#bbf7d0]">
               <span className="text-[11px] text-[#15803d] font-bold block">💰 SUCCESS RATE</span>
@@ -651,7 +691,8 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
 
         {/* Column 2: Flight Price - Travelpayouts ID 801550 + Skyscanner 8131850 */}
         {(() => {
-          const flight = getFlightLinkForCountry(codeLower);
+          const flight = getFlightLinkForCountry(codeLower, fromLower);
+          const fromIata = AIRPORT_IATA_MAP[fromLower] || 'DEL';
           return (
             <div
               style={{
@@ -664,7 +705,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
             >
               <div>
                 <div style={{ fontSize: '11px', fontWeight: 800, color: '#0369a1' }}>
-                  ✈ FLIGHT PRICE - LIVE
+                  ✈ FLIGHT PRICE - LIVE ({flight.route})
                 </div>
                 <div style={{ fontSize: '15px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>
                   {flight.route} From {flight.priceINR}
@@ -677,7 +718,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
                 <button
                   type="button"
                   onClick={() => {
-                    const target = `/flights?from=DEL&to=${flight.iata}`;
+                    const target = `/flights?from=${fromIata}&to=${flight.iata}`;
                     if (navigate) navigate(target);
                     else window.location.href = target;
                   }}
@@ -742,7 +783,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
         {/* Column 3: Indian Community & More */}
         <div className="bg-white rounded-2xl p-4 border border-[#e2e8f0] flex flex-col justify-between">
           <div>
-            <div className="text-xs font-extrabold text-[#475569]">📊 INDIAN COMMUNITY & MORE</div>
+            <div className="text-xs font-extrabold text-[#475569]">📊 DIASPORA COMMUNITY & MORE</div>
             <div className="text-[13px] text-slate-800 mt-2 leading-[1.8]">
               👥 <b>{meta.indians}</b> Indians in {toName}
               <br />
@@ -795,8 +836,8 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
                 <b>$50-$500</b>
               </div>
               <div className="flex justify-between">
-                <span>Flight ({getFlightLinkForCountry(codeLower).route}):</span>
-                <b>{getFlightLinkForCountry(codeLower).priceINR}</b>
+                <span>Flight ({getFlightLinkForCountry(codeLower, fromLower).route}):</span>
+                <b>{getFlightLinkForCountry(codeLower, fromLower).priceINR}</b>
               </div>
               <div className="flex justify-between">
                 <span>Hotel ({tripNights} nights):</span>
@@ -827,8 +868,8 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
       onNavigate={navigate}
     />
 
-    {/* Phase 3 Tool 3: Embassy Finder + Consular Interview Prep */}
-    <EmbassyFinder countryCode={toCode} countryName={toName} onNavigate={navigate} />
+    {/* Phase 3 Tool 3: Embassy Finder + Consular Interview Prep (Any-to-Any Origin Aware) */}
+    <EmbassyFinder countryCode={toCode} countryName={toName} fromCode={fromCode} onNavigate={navigate} />
     </>
   );
 }
@@ -853,7 +894,7 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
   const headerInfo = renderCountryHeaderFixed(fromCode, toCode);
   const fromCountry = { name: headerInfo.fromName, flag: headerInfo.fromFlag, code: fromCode };
   const toCountry = { name: headerInfo.toName, flag: headerInfo.toFlag, code: toCode };
-  const liveCount = getVisasFixed(toCode).length;
+  const liveCount = calculateVisaCount(fromCode, toCode);
 
   useEffect(() => {
     document.title = `VisaApply.org - ${headerInfo.fromName} to ${headerInfo.toName} - ${liveCount} Visas`;
@@ -863,7 +904,7 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const getCatVisasCount = (catId: string) => {
     if (isJpToIn) return (JP_TO_IN_VISA["IN"] as any)?.[catId]?.length || 2;
-    const list = getVisasByCategoryFixed(toCode, catId);
+    const list = getVisasForAnyRoute(fromCode, toCode, catId);
     return list.length;
   };
 
@@ -879,7 +920,7 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Sticky Back Button Bar */}
-      <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 py-2.5 border-b md:border-0 mb-4">
+      <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 py-2.5 border-b md:border-0 mb-4 flex items-center justify-between gap-2">
         <button 
           onClick={() => navigate('/')} 
           className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 shadow-xs cursor-pointer"
@@ -887,13 +928,19 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           Back to Countries
         </button>
+        <button
+          onClick={() => navigate('/routes')}
+          className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-[#0B3D91] border border-blue-200 rounded-lg text-xs font-extrabold cursor-pointer"
+        >
+          🌍 Browse All 61,752 Routes →
+        </button>
       </div>
 
-      {/* Language Bar */}
+      {/* 10-Language Bar */}
       <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
         <div className="flex items-center gap-2 font-bold text-slate-800">
           <Globe className="w-4 h-4 text-[#0B3D91]" />
-          <span>Language / 言語:</span>
+          <span>Language (10 Auto-Detected):</span>
           {isJpToIn && (
             <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
               🇯🇵 日本人向け特別ガイド
@@ -901,12 +948,22 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
           )}
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
-          <button onClick={() => setCurrentLang('en')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'en' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇺🇸 English</button>
-          <button onClick={() => setCurrentLang('ja')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'ja' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇯🇵 日本語</button>
-          <button onClick={() => setCurrentLang('de')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'de' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇩🇪 Deutsch</button>
-          <button onClick={() => setCurrentLang('fr')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'fr' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇫🇷 Français</button>
-          <button onClick={() => setCurrentLang('es')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'es' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇪🇸 Español</button>
-          <button onClick={() => setCurrentLang('hi')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'hi' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇮🇳 हिन्दी</button>
+          {SUPPORTED_LANGUAGES_10.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => {
+                setCurrentLang(l.code);
+                setSavedLanguage(l.code);
+              }}
+              className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${
+                currentLang === l.code
+                  ? 'bg-[#0B3D91] text-white shadow-xs'
+                  : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+              }`}
+            >
+              {l.flag} {l.nativeName}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -1002,7 +1059,7 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const categoryVisas = isJpToIn 
     ? ((JP_TO_IN_VISA["IN"] as any)?.[category] || []) 
-    : getVisasByCategoryFixed(toCode, category);
+    : getVisasForAnyRoute(fromCode, toCode, category);
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'legacy'>('all');
   const [regionalFilter, setRegionalFilter] = useState<'all' | 'regional' | 'dama' | '491-sn-fs' | '494-es-la' | '191-pathways' | '417-462-ext'>('all');
@@ -1092,11 +1149,11 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
         </button>
       </div>
 
-      {/* Language Bar */}
+      {/* 10-Language Bar */}
       <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
         <div className="flex items-center gap-2 font-bold text-slate-800">
           <Globe className="w-4 h-4 text-[#0B3D91]" />
-          <span>Language / 言語:</span>
+          <span>Language (10 Auto-Detected):</span>
           {isJpToIn && (
             <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
               🇯🇵 日本人向け特別ガイド
@@ -1104,12 +1161,22 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
           )}
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
-          <button onClick={() => setCurrentLang('en')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'en' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇺🇸 English</button>
-          <button onClick={() => setCurrentLang('ja')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'ja' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇯🇵 日本語</button>
-          <button onClick={() => setCurrentLang('de')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'de' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇩🇪 Deutsch</button>
-          <button onClick={() => setCurrentLang('fr')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'fr' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇫🇷 Français</button>
-          <button onClick={() => setCurrentLang('es')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'es' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇪🇸 Español</button>
-          <button onClick={() => setCurrentLang('hi')} className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${currentLang === 'hi' ? 'bg-[#0B3D91] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'}`}>🇮🇳 हिन्दी</button>
+          {SUPPORTED_LANGUAGES_10.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => {
+                setCurrentLang(l.code);
+                setSavedLanguage(l.code);
+              }}
+              className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-colors cursor-pointer ${
+                currentLang === l.code
+                  ? 'bg-[#0B3D91] text-white shadow-xs'
+                  : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+              }`}
+            >
+              {l.flag} {l.nativeName}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -1128,7 +1195,8 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
         toCode={toCode}
         toName={toCountry.name}
         toFlag={toCountry.flag}
-        count={getLiveVisaCount(toCode)}
+        count={calculateVisaCount(fromCode, toCode)}
+        navigate={navigate}
       />
 
       <div className="mb-8">
@@ -1696,6 +1764,36 @@ export default function App() {
   const [visaTypes, setVisaTypes] = useState<VisaType[]>([]);
   const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
   const [selectedOrigin, setSelectedOrigin] = useState<Country | null>(null);
+  const [uiLang, setUiLang] = useState<SupportedLangCode>(() => {
+    const fromUrl = getLangFromUrlPath(window.location.pathname).lang;
+    return fromUrl || getSavedLanguage() || 'en';
+  });
+
+  // Part B: Auto-detect user IP country & language on mount (ipapi.co/json/ -> navigator.language -> localStorage)
+  useEffect(() => {
+    let active = true;
+    detectUserCountryAndLanguage().then(({ countryCode, lang }) => {
+      if (!active) return;
+      const normCode = (countryCode || 'IN').toUpperCase();
+      const cObj: Country = {
+        code: normCode,
+        name: getCountryFullName(normCode),
+        flag: getCountryFlag(normCode)
+      };
+      setDetectedCountry(cObj);
+      setSelectedOrigin((prev) => prev || cObj);
+      const urlLang = getLangFromUrlPath(window.location.pathname).lang;
+      if (urlLang) {
+        setUiLang(urlLang);
+      } else {
+        setUiLang(lang);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const [articles, setArticles] = useState<Article[]>(() => {
     try {
       const localPub = localStorage.getItem('publishedGuides');
@@ -1740,7 +1838,12 @@ export default function App() {
   const [cronResult, setCronResult] = useState<string | null>(null);
 
   useEffect(() => {
-    const handlePopState = () => setCurrentPath(window.location.pathname);
+    const handlePopState = () => {
+      const p = window.location.pathname;
+      setCurrentPath(p);
+      const urlLang = getLangFromUrlPath(p).lang;
+      if (urlLang) setUiLang(urlLang);
+    };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
@@ -1752,7 +1855,17 @@ export default function App() {
   const navigate = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
+    const urlLang = getLangFromUrlPath(path).lang;
+    if (urlLang) setUiLang(urlLang);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLanguageChange = (nextLang: SupportedLangCode) => {
+    setUiLang(nextLang);
+    setSavedLanguage(nextLang);
+    const newPath = buildLocalizedUrl(currentPath, nextLang);
+    window.history.pushState({}, '', newPath);
+    setCurrentPath(newPath);
   };
 
   const safeFetchJson = async (url: string, options?: RequestInit, fallback: any = null) => {
@@ -1965,34 +2078,37 @@ export default function App() {
     }
   };
 
-  // Router parsing
-  const isHome = currentPath === '/';
-  const isAdmin = currentPath === '/admin';
-  const isAbout = currentPath === '/about' || currentPath === '/backlink-widget';
-  const isFlights = currentPath === '/flights' || currentPath === '/flights/' || currentPath.startsWith('/flights?');
-  const isBlogs = currentPath === '/blogs' || currentPath === '/blogs/';
-  const interviewMatch = currentPath.match(/^\/interview-prep\/([a-z]{2,3})$/i);
-  const isContact = currentPath === '/contact';
-  const isPrivacy = currentPath === '/privacy';
-  const isTerms = currentPath === '/terms';
-  const isSitemap = currentPath === '/sitemap';
-  const isAudit = currentPath === '/audit';
-  const isVerification = currentPath === '/verification';
+  // Router parsing (supports 10-language prefixes like /hi/in-to-us, /ar/ae-to-us, /de/de-to-us, etc.)
+  const { strippedPath: routePath } = getLangFromUrlPath(currentPath);
+  const isHome = routePath === '/';
+  const isAdmin = routePath === '/admin';
+  const isAdminUpdates = routePath === '/admin/updates' || routePath === '/admin/updates/';
+  const isRoutes = routePath === '/routes' || routePath === '/routes/';
+  const isAbout = routePath === '/about' || routePath === '/backlink-widget';
+  const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
+  const isBlogs = routePath === '/blogs' || routePath === '/blogs/';
+  const interviewMatch = routePath.match(/^\/interview-prep\/([a-z]{2,3})$/i);
+  const isContact = routePath === '/contact';
+  const isPrivacy = routePath === '/privacy';
+  const isTerms = routePath === '/terms';
+  const isSitemap = routePath === '/sitemap';
+  const isAudit = routePath === '/audit';
+  const isVerification = routePath === '/verification';
 
-  // 1. Level 1: /in-to-us or /us-visa
-  const shortCountryMatch = currentPath.match(/^\/([a-z]{2,3})-visa$/i);
+  // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
+  const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
   const isLevel1Match =
-    currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/i) ||
+    routePath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/i) ||
     (shortCountryMatch ? [shortCountryMatch[0], 'in', shortCountryMatch[1]] : null);
 
-  // 2. Level 2: /in-to-us-tourist, /in-to-us-work, etc.
-  const isLevel2Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)$/i);
+  // 2. Level 2: /in-to-us-tourist, /ae-to-us-work, etc.
+  const isLevel2Match = routePath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)$/i);
 
   // 3. Level 3: /in-to-us-tourist-b1b2 or /in-to-us-student
-  const isLevel3Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i) || 
-                        (!isLevel2Match && currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i));
+  const isLevel3Match = routePath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i) || 
+                        (!isLevel2Match && routePath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i));
 
-  const cleanPathSlug = normalizeBlogSlug(currentPath);
+  const cleanPathSlug = normalizeBlogSlug(routePath);
 
   // 4. Published Blog Articles & Auto-Generated 249-Country Blogs
   const matchedBlogArticle = (() => {
@@ -2012,7 +2128,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAdmin && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAdmin && !isAdminUpdates && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2023,7 +2139,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col text-slate-900 font-sans">
       {/* Official VFS-Style Top Header */}
       <header className="sticky top-0 z-50 bg-[#0B3D91] text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           {/* Brand Zone */}
           <div 
             onClick={() => navigate('/')} 
@@ -2034,34 +2150,52 @@ export default function App() {
             </div>
             <div>
               <span className="text-xl font-bold tracking-tight text-white block">VisaApply.org</span>
-              <span className="text-xs text-blue-200 tracking-wide font-medium">Global Visa Requirements & Guides</span>
+              <span className="text-xs text-blue-200 tracking-wide font-medium">61,752 Routes • 249 Countries</span>
             </div>
           </div>
 
           {/* Nav Links */}
-          <nav className="hidden md:flex items-center gap-5 text-sm font-medium text-blue-100">
-            <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
+          <nav className="hidden lg:flex items-center gap-4 text-xs xl:text-sm font-medium text-blue-100">
+            <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
+            <button onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>🌍 61,752 Routes</button>
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>✈ Flights</button>
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>📝 Blogs (2,490+)</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>🎤 Interview Prep</button>
+            <button onClick={() => navigate('/admin/updates')} className={`transition-colors cursor-pointer ${isAdminUpdates ? 'text-cyan-300 font-bold' : 'text-cyan-200 hover:text-white'}`}>🔄 Gov Auto-Sync</button>
             <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>About & Widget</button>
-            <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
-            <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
-              <Shield className="w-4 h-4 text-amber-300" /> Admin Portal
+            <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${isAdmin ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1`}>
+              <Shield className="w-3.5 h-3.5 text-amber-300" /> Admin
             </button>
           </nav>
 
-          {/* Primary Action / Geo Indicator */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Primary Action / 10-Language Switcher + Geo Indicator */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            {/* Part B: 10-Language Auto Switcher Dropdown */}
+            <div className="flex items-center gap-1 bg-white/10 hover:bg-white/15 px-2.5 py-1.5 rounded-xl border border-white/20 text-xs">
+              <span>🌐</span>
+              <select
+                aria-label="Select Language"
+                value={uiLang}
+                onChange={(e) => handleLanguageChange(e.target.value as SupportedLangCode)}
+                className="bg-transparent text-white font-bold text-xs focus:outline-none cursor-pointer"
+              >
+                {SUPPORTED_LANGUAGES_10.map((l) => (
+                  <option key={l.code} value={l.code} className="text-slate-900 font-semibold">
+                    {l.flag} {l.nativeName} ({l.name})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {detectedCountry && (
-              <div className="hidden sm:flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full text-xs text-blue-100 border border-white/15">
+              <div className="hidden sm:flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full text-xs text-blue-100 border border-white/15">
                 <span>{detectedCountry.flag}</span>
-                <span>Browsing from {detectedCountry.name}</span>
+                <span className="truncate max-w-[110px]">{detectedCountry.name}</span>
               </div>
             )}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg"
+              className="lg:hidden p-2 text-white hover:bg-white/10 rounded-lg"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -2070,11 +2204,13 @@ export default function App() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
+          <div className="lg:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
+            <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold">🌍 61,752 Any-to-Any Routes</button>
             <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">✈ Cheap Flights (249 Countries)</button>
             <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">📝 Visa Blogs (2,490+)</button>
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">🎤 Consular Interview Prep</button>
+            <button onClick={() => { navigate('/admin/updates'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-cyan-300 hover:text-white font-bold">🔄 30-Day Immigration Auto-Sync</button>
             <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">🌐 About Us & Free Backlink Widget</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
@@ -2084,7 +2220,11 @@ export default function App() {
 
       {/* Main Content Router */}
       <main className="flex-1">
-        {isAdmin ? (
+        {isAdminUpdates ? (
+          <ImmigrationUpdatesPage onNavigate={navigate} />
+        ) : isRoutes ? (
+          <RoutesPage onNavigate={navigate} />
+        ) : isAdmin ? (
           <AdminPortal 
             drafts={drafts} 
             articles={articles}
@@ -2150,6 +2290,7 @@ export default function App() {
             setSearchQuery={setSearchQuery}
             navigate={navigate}
             forceUpdate={forceUpdate}
+            uiLang={uiLang}
           />
         )}
       </main>
@@ -2264,8 +2405,9 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
 // ----------------------------------------------------
 // Home View Component
 // ----------------------------------------------------
-function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate, forceUpdate }: any) {
+function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate, forceUpdate, uiLang = 'en' }: any) {
   const [targetSearch, setTargetSearch] = useState('');
+  const [heroDestCode, setHeroDestCode] = useState<string>('US');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeContinent, setActiveContinent] = useState<string>('all');
   const [visaTypeFilter, setVisaTypeFilter] = useState<string>('All Visa Types');
@@ -2440,42 +2582,118 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         <div className="max-w-5xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-3 py-1.5 rounded-full text-xs text-blue-200">
             <Globe className="w-3.5 h-3.5" />
-            <span>Global Visa Intelligence & Answer Portal</span>
+            <span>Global Visa Intelligence • 61,752 Any-to-Any Routes • 10 Languages</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white balance">
-            {detectedCountry ? `We see you are browsing from ${detectedCountry.name}. Where do you want to go?` : 'Where do you want to travel?'}
+            {getUIString(uiLang).heroTitle}
           </h1>
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal">
-            Select your destination country below to launch our 2-step visa type quiz and access official fee schedules, document checklists, and application guides.
+            {getUIString(uiLang).heroSubtitle}
           </p>
 
-          {/* Origin Selector & Search Bar */}
-          <div className="max-w-xl mx-auto bg-white p-3 rounded-2xl shadow-xl flex flex-col sm:flex-row gap-3 items-center">
-            <div className="w-full sm:w-auto flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-xl text-slate-700 text-sm font-medium">
-              <span>Passport:</span>
-              <select 
+          {/* Part C: Any-to-Any FROM + Swap (⇄) + TO Selector Bar (61,752 Routes) */}
+          <div className="max-w-4xl mx-auto bg-white p-3.5 rounded-2xl shadow-xl flex flex-col md:flex-row gap-3 items-center text-slate-900">
+            {/* FROM Dropdown (249 Countries) */}
+            <div className="w-full md:flex-1 flex items-center gap-2 px-3.5 py-2.5 bg-slate-100 rounded-xl text-slate-700 text-sm font-medium border border-slate-200">
+              <span className="text-[11px] font-extrabold text-slate-500 uppercase shrink-0">
+                {getUIString(uiLang).fromPassport}:
+              </span>
+              <select
+                aria-label="Origin Country"
                 value={selectedOrigin?.code || 'IN'}
                 onChange={(e) => {
                   const found = uniqueCountries.find((c: Country) => c.code === e.target.value);
                   if (found) setSelectedOrigin(found);
                 }}
-                className="bg-transparent font-semibold text-slate-900 focus:outline-none cursor-pointer"
+                className="w-full bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
               >
                 {uniqueCountries.map((c: Country) => (
-                  <option key={c.code} value={c.code}>{getCountryFlag(c.code)} {getCountryFullName(c.code)}</option>
+                  <option key={c.code} value={c.code}>
+                    {getCountryFlag(c.code)} {getCountryFullName(c.code)} ({c.code})
+                  </option>
                 ))}
               </select>
             </div>
-            <div className="flex-1 w-full relative flex items-center">
-              <Search className="absolute left-3 w-4 h-4 text-slate-400" />
-              <input 
-                type="text"
-                placeholder="Search destination country..."
-                value={targetSearch}
-                onChange={(e) => setTargetSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-slate-100 text-slate-900 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-              />
+
+            {/* Swap ⇄ Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const currentOriginCode = selectedOrigin?.code || 'IN';
+                const currentDestCode = heroDestCode || 'US';
+                const newOrigin = uniqueCountries.find((c: Country) => c.code === currentDestCode) || {
+                  code: currentDestCode,
+                  name: getCountryFullName(currentDestCode),
+                  flag: getCountryFlag(currentDestCode)
+                };
+                setSelectedOrigin(newOrigin);
+                setHeroDestCode(currentOriginCode);
+              }}
+              title={getUIString(uiLang).swapRoute}
+              className="px-3.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#0B3D91] border border-blue-200 rounded-xl font-extrabold text-sm cursor-pointer transition-colors shrink-0"
+            >
+              {getUIString(uiLang).swapRoute}
+            </button>
+
+            {/* TO Dropdown (249 Countries) */}
+            <div className="w-full md:flex-1 flex items-center gap-2 px-3.5 py-2.5 bg-slate-100 rounded-xl text-slate-700 text-sm font-medium border border-slate-200">
+              <span className="text-[11px] font-extrabold text-slate-500 uppercase shrink-0">
+                {getUIString(uiLang).toDestination}:
+              </span>
+              <select
+                aria-label="Destination Country"
+                value={heroDestCode}
+                onChange={(e) => setHeroDestCode(e.target.value)}
+                className="w-full bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
+              >
+                {uniqueCountries.map((c: Country) => (
+                  <option key={c.code} value={c.code}>
+                    {getCountryFlag(c.code)} {getCountryFullName(c.code)} ({calculateVisaCount(selectedOrigin?.code || 'IN', c.code)} Visas)
+                  </option>
+                ))}
+              </select>
             </div>
+
+            {/* Explore Route CTA */}
+            <button
+              type="button"
+              onClick={() => {
+                const f = (selectedOrigin?.code || 'IN').toLowerCase();
+                const t = (heroDestCode || 'US').toLowerCase();
+                navigate(`/${f}-to-${t}`);
+              }}
+              className="w-full md:w-auto px-6 py-3 bg-[#10b981] hover:bg-[#059669] text-white font-black text-sm rounded-xl shadow-md cursor-pointer transition-colors shrink-0"
+            >
+              {getUIString(uiLang).viewRequirements} ({calculateVisaCount(selectedOrigin?.code || 'IN', heroDestCode)})
+            </button>
+          </div>
+
+          {/* Quick Popular Bilateral Routes Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-blue-100">
+            <span className="font-bold text-blue-200">Popular Any-to-Any Routes:</span>
+            {[
+              { from: 'IN', to: 'US', label: '🇮🇳 India → 🇺🇸 USA (278)' },
+              { from: 'AE', to: 'US', label: '🇦🇪 UAE → 🇺🇸 USA (45)' },
+              { from: 'US', to: 'IN', label: '🇺🇸 USA → 🇮🇳 India (65)' },
+              { from: 'US', to: 'AE', label: '🇺🇸 USA → 🇦🇪 UAE (30)' },
+              { from: 'GB', to: 'AU', label: '🇬🇧 UK → 🇦🇺 Australia (55)' },
+            ].map((r) => (
+              <button
+                key={`${r.from}-${r.to}`}
+                type="button"
+                onClick={() => navigate(`/${r.from.toLowerCase()}-to-${r.to.toLowerCase()}`)}
+                className="bg-white/10 hover:bg-white/20 border border-white/20 px-2.5 py-1 rounded-full font-semibold text-white cursor-pointer transition-colors"
+              >
+                {r.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => navigate('/routes')}
+              className="bg-amber-400/20 hover:bg-amber-400/30 border border-amber-300/40 px-3 py-1 rounded-full font-extrabold text-amber-200 cursor-pointer transition-colors"
+            >
+              🌍 All 61,752 Routes →
+            </button>
           </div>
         </div>
       </section>
@@ -2664,9 +2882,11 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredCountries.map((country: Country) => {
             const originCode = (selectedOrigin?.code || 'IN').toLowerCase();
+            const originName = getCountryFullName(originCode);
             const destCode = country.code.toLowerCase();
             const isSelf = originCode === destCode;
-            const liveCount = getLiveVisaCount(country.code);
+            const liveCount = calculateVisaCount(originCode, destCode);
+            const procTime = getBilateralProcessingTime(originCode, destCode);
             const flagEmoji = getCountryFlag(country.code);
             const flagUrl = getCountryFlagUrl(country.code);
             const fullName = getCountryFullName(country.code);
@@ -2718,10 +2938,10 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                         ) : (
                           <>
                             <span className="bg-[#f1f5f9] px-2 py-0.5 rounded-[10px] font-semibold text-[#475569]">
-                              {liveCount} Visas
+                              {liveCount} Visas {originCode !== 'in' ? `from ${originCode.toUpperCase()}` : ''}
                             </span>
                             <span className="text-[#94a3b8]">•</span>
-                            <span className="truncate">{contLabel}</span>
+                            <span className="truncate">{originCode !== 'in' ? `From ${originName}` : contLabel}</span>
                           </>
                         )}
                       </div>
@@ -2752,7 +2972,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                         PROCESSING
                       </div>
                       <div className="text-xs text-[#78350f] font-semibold mt-1 truncate">
-                        {meta.processing}
+                        {procTime}
                       </div>
                     </div>
                   </div>
@@ -5552,7 +5772,19 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
         <p className="text-xs text-blue-200 mb-6">
           Access real-time audit reporting and public sitemap indices for 1001+ visa and immigration programme records (USA: 164 Official Visas + 37 Programmes = 201).
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div 
+            onClick={() => navigate('/admin/updates')}
+            className="p-5 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all cursor-pointer flex flex-col justify-between"
+          >
+            <div>
+              <div className="text-2xl mb-2">🔄</div>
+              <h3 className="font-extrabold text-base text-cyan-300">Last 30 Days Immigration Auto-Sync</h3>
+              <p className="text-xs text-slate-200 mt-1">Daily 3:00 AM IST sync of 249 official gov portals + Manual Admin Override.</p>
+            </div>
+            <span className="text-xs font-bold text-cyan-300 mt-4 inline-flex items-center gap-1">Open Immigration Updates →</span>
+          </div>
+
           <div 
             onClick={() => navigate('/audit')}
             className="p-5 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all cursor-pointer flex flex-col justify-between"
@@ -5571,8 +5803,8 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
           >
             <div>
               <div className="text-2xl mb-2">🗺️</div>
-              <h3 className="font-extrabold text-base text-blue-200">Sitemap (1001+ Pages) – Public + Admin</h3>
-              <p className="text-xs text-slate-200 mt-1">Indexed links for all 1001+ visa & programme guides across 30 destination countries for search crawler optimization.</p>
+              <h3 className="font-extrabold text-base text-blue-200">Sitemap (61,752+ Routes) – Public + Admin</h3>
+              <p className="text-xs text-slate-200 mt-1">Indexed links for all 14,084+ visa guides & 61,752 bilateral routes across 249 countries.</p>
             </div>
             <span className="text-xs font-bold text-blue-200 mt-4 inline-flex items-center gap-1">Open Public Sitemap →</span>
           </div>

@@ -1,0 +1,11 @@
+{
+  "visaTypes": "Типы виз",
+  "liveTime": "Местное время",
+  "processing": "Срок оформления",
+  "hotelFrom": "Отели от",
+  "searchFlights": "Найти авиабилеты",
+  "eligibility": "Проверка на визу",
+  "fromPassport": "Откуда (Паспорт / Страна)",
+  "toDestination": "Куда (Страна назначения)",
+  "swapRoute": "Поменять"
+}

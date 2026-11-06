@@ -404,32 +404,98 @@ REMAINING_CODES.forEach(code => {
 });
 
 import { UNIVERSAL_EMBASSY_DB } from './universalEmbassyDatabase';
+import { getCountryMeta } from './countryMetaData';
+import { NAME_MAP_249 } from './fullVisaDatabase';
 
 const GLOBAL_COUNTRY_NAMES: Record<string, string> = {
   "us":"United States", "ca":"Canada", "gb":"United Kingdom", "uk":"United Kingdom", "au":"Australia", "ae":"United Arab Emirates", "de":"Germany", "sg":"Singapore", "th":"Thailand", "eu":"Schengen Area", "sc":"Schengen Area", "sch":"Schengen Area", "schengen":"Schengen Area", "jp":"Japan", "in":"India", "fr":"France", "it":"Italy", "es":"Spain", "nl":"Netherlands", "ch":"Switzerland", "nz":"New Zealand", "br":"Brazil", "mx":"Mexico", "kr":"South Korea", "cn":"China", "vn":"Vietnam", "my":"Malaysia", "id":"Indonesia", "ph":"Philippines", "za":"South Africa", "tr":"Turkey", "sa":"Saudi Arabia", "qa":"Qatar", "ie":"Ireland", "se":"Sweden", "no":"Norway", "pt":"Portugal", "dk":"Denmark", "fi":"Finland", "be":"Belgium", "at":"Austria", "pl":"Poland",
   "hk":"Hong Kong", "tw":"Taiwan", "kh":"Cambodia", "la":"Laos", "mm":"Myanmar", "bn":"Brunei", "pk":"Pakistan", "bd":"Bangladesh", "lk":"Sri Lanka", "np":"Nepal", "mn":"Mongolia", "kz":"Kazakhstan",
   "om":"Oman", "kw":"Kuwait", "bh":"Bahrain", "jo":"Jordan", "lb":"Lebanon", "eg":"Egypt", "ma":"Morocco", "ke":"Kenya", "ng":"Nigeria", "gh":"Ghana", "et":"Ethiopia", "tz":"Tanzania", "ug":"Uganda", "rw":"Rwanda", "mu":"Mauritius",
-  "ar":"Argentina", "cl":"Chile", "co":"Colombia", "pe":"Peru", "uy":"Uruguay", "pa":"Panama", "cr":"Costa Rica", "do":"Dominican Republic", "jm":"Jamaica", "is":"Iceland", "lu":"Luxembourg", "cz":"Czech Republic", "hu":"Hungary", "gr":"Greece", "hr":"Croatia", "ro":"Romania", "ua":"Ukraine", "cy":"Cyprus", "mt":"Malta", "uz":"Uzbekistan", "az":"Azerbaijan"
+  "ar":"Argentina", "cl":"Chile", "co":"Colombia", "pe":"Peru", "uy":"Uruguay", "pa":"Panama", "cr":"Costa Rica", "do":"Dominican Republic", "jm":"Jamaica", "is":"Iceland", "lu":"Luxembourg", "cz":"Czech Republic", "hu":"Hungary", "gr":"Greece", "hr":"Croatia", "ro":"Romania", "ua":"Ukraine", "cy":"Cyprus", "mt":"Malta", "uz":"Uzbekistan", "az":"Azerbaijan",
+  ...NAME_MAP_249
 };
 
 export function getEmbassyInfo(countryCode: string, fromCode?: string): EmbassyData {
   const to = (countryCode || 'US').toUpperCase();
   const from = (fromCode || 'IN').toUpperCase();
-  const cName = GLOBAL_COUNTRY_NAMES[to.toLowerCase()] || to;
+  const cName = GLOBAL_COUNTRY_NAMES[to.toLowerCase()] || NAME_MAP_249[to.toLowerCase()] || to;
+  const fromName = GLOBAL_COUNTRY_NAMES[from.toLowerCase()] || NAME_MAP_249[from.toLowerCase()] || from;
+  const fromMeta = getCountryMeta(from.toLowerCase());
+
+  // Special explicit bilateral missions for top non-India corridors
+  if (from === 'AE' && to === 'US') {
+    return {
+      country: 'United States',
+      officialWebsite: 'https://ae.usembassy.gov & https://ais.usvisa-info.com/en-ae',
+      vfs: 'US Visa Appointment Service UAE (Abu Dhabi Embassy & Dubai Consulate General)',
+      inIndia: [
+        {
+          city: 'Abu Dhabi (US Embassy in UAE)',
+          address: 'Embassies District, Plot 38, Sector W59-02, Street No. 4, Abu Dhabi, UAE',
+          phone: '+971-2-414-2200',
+          email: 'ais.usvisa-info.com/en-ae',
+          timings: 'Mon-Thu 7:30 AM - 5:00 PM, Fri 7:30 AM - 11:30 AM',
+          website: 'ae.usembassy.gov',
+          map: 'https://maps.google.com/?q=US+Embassy+Abu+Dhabi'
+        },
+        {
+          city: 'Dubai (US Consulate General)',
+          address: 'Corner of Al Seef Rd. and Sheikh Khalifa bin Zayed Rd, Bur Dubai, Dubai, UAE',
+          phone: '+971-4-309-4000',
+          email: 'DubaiVisaInquiry@state.gov',
+          timings: 'Mon-Thu 7:30 AM - 5:00 PM, Fri 7:30 AM - 11:30 AM',
+          website: 'ae.usembassy.gov',
+          map: 'https://maps.google.com/?q=US+Consulate+General+Dubai'
+        }
+      ]
+    };
+  }
+
+  if (from === 'US' && to === 'IN') {
+    return {
+      country: 'India',
+      officialWebsite: 'https://www.indianembassyusa.gov.in & https://indianvisaonline.gov.in',
+      vfs: 'VFS Global India Application Centers in Washington DC, New York, San Francisco, Chicago, Houston & Atlanta',
+      inIndia: [
+        {
+          city: 'Washington D.C. (Embassy of India)',
+          address: '2107 Massachusetts Ave NW, Washington, DC 20008, USA',
+          phone: '+1-202-939-7000',
+          timings: 'Mon-Fri 9:00 AM - 5:30 PM',
+          website: 'indianembassyusa.gov.in',
+          map: 'https://maps.google.com/?q=Embassy+of+India+Washington+DC'
+        },
+        {
+          city: 'New York (Consulate General of India)',
+          address: '3 East 64th Street (between 5th and Madison Ave), New York, NY 10065',
+          phone: '+1-212-774-0600',
+          timings: 'Mon-Fri 9:00 AM - 5:00 PM',
+          map: 'https://maps.google.com/?q=Consulate+General+of+India+New+York'
+        },
+        {
+          city: 'San Francisco (Consulate General of India)',
+          address: '540 Arguello Blvd, San Francisco, CA 94118',
+          phone: '+1-415-668-0662',
+          timings: 'Mon-Fri 9:00 AM - 5:00 PM',
+          map: 'https://maps.google.com/?q=Consulate+General+of+India+San+Francisco'
+        }
+      ]
+    };
+  }
 
   // Check Universal Embassy Database for exact (from, to) match
   const universalOffices = UNIVERSAL_EMBASSY_DB[from]?.[to];
   if (universalOffices && universalOffices.length > 0) {
     const fallback = EMBASSY_ADDRESSES[to] || {
       country: cName,
-      officialWebsite: `https://www.google.com/search?q=Official+${encodeURIComponent(cName)}+Embassy+Visa+Portal`,
-      vfs: `VFS Global / Official Embassy Visa Processing for ${cName}`,
+      officialWebsite: `https://www.google.com/search?q=Official+${encodeURIComponent(cName)}+Embassy+in+${encodeURIComponent(fromName)}`,
+      vfs: `VFS Global / Official Embassy Visa Processing for ${cName} in ${fromName}`,
       inIndia: []
     };
     return {
       country: cName,
       officialWebsite: fallback.officialWebsite,
-      vfs: fallback.vfs || `Official Embassy & Application Centers for ${cName} in ${from}`,
+      vfs: `Official Embassy & VFS Application Centers for ${cName} in ${fromName} (${fromMeta.capital})`,
       inIndia: universalOffices.map(off => ({
         city: off.city,
         address: off.address,
@@ -442,8 +508,36 @@ export function getEmbassyInfo(countryCode: string, fromCode?: string): EmbassyD
     };
   }
 
-  if (EMBASSY_ADDRESSES[to]) {
+  // If origin is India, return exact India embassy records
+  if (from === 'IN' && EMBASSY_ADDRESSES[to]) {
     return EMBASSY_ADDRESSES[to];
+  }
+
+  // Dynamic Any-to-Any Embassy in Origin Country's Capital
+  if (from !== 'IN') {
+    return {
+      country: cName,
+      officialWebsite: `https://www.google.com/search?q=Official+${encodeURIComponent(cName)}+Embassy+in+${encodeURIComponent(fromMeta.capital)}`,
+      vfs: `VFS Global & Official Consular Section in ${fromMeta.capital}, ${fromName}`,
+      inIndia: [
+        {
+          city: `${fromMeta.capital} (${cName} Embassy in ${fromName})`,
+          address: `Diplomatic Quarter / Embassy District, ${fromMeta.capital}, ${fromName}`,
+          phone: `Official Consular Desk (${fromMeta.capital})`,
+          email: `consular.${from.toLowerCase()}@mfa.${to.toLowerCase()}.gov`,
+          timings: 'Mon-Fri 9:00 AM - 4:30 PM',
+          map: `https://maps.google.com/?q=${encodeURIComponent(cName + ' Embassy ' + fromMeta.capital + ' ' + fromName)}`
+        },
+        {
+          city: `VFS Global ${fromMeta.capital} (${cName} Visa Application Center)`,
+          address: `Central Visa Application Center, Commercial District, ${fromMeta.capital}, ${fromName}`,
+          phone: 'VFS Global Helpline',
+          website: 'https://www.vfsglobal.com',
+          timings: 'Mon-Fri 8:30 AM - 5:00 PM',
+          map: `https://maps.google.com/?q=${encodeURIComponent('VFS Global ' + cName + ' ' + fromMeta.capital)}`
+        }
+      ]
+    };
   }
 
   return {

@@ -1,0 +1,11 @@
+{
+  "visaTypes": "Visumarten",
+  "liveTime": "Ortszeit",
+  "processing": "Bearbeitungszeit",
+  "hotelFrom": "Hotel Ab",
+  "searchFlights": "Flüge Suchen",
+  "eligibility": "Visumberechtigung",
+  "fromPassport": "Von (Reisepass / Wohnsitz)",
+  "toDestination": "Nach (Reiseziel)",
+  "swapRoute": "Tauschen"
+}

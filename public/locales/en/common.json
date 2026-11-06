@@ -1,0 +1,11 @@
+{
+  "visaTypes": "Visa Types",
+  "liveTime": "Live Time",
+  "processing": "Processing",
+  "hotelFrom": "Hotel From",
+  "searchFlights": "Search Flights",
+  "eligibility": "Eligibility",
+  "fromPassport": "From (Passport / Residence)",
+  "toDestination": "To (Destination Country)",
+  "swapRoute": "Swap Route"
+}

@@ -1,0 +1,11 @@
+{
+  "visaTypes": "Tipos de Visa",
+  "liveTime": "Hora Local",
+  "processing": "Tiempo de Trámite",
+  "hotelFrom": "Hotel Desde",
+  "searchFlights": "Buscar Vuelos",
+  "eligibility": "Elegibilidad de Visa",
+  "fromPassport": "Desde (Pasaporte / Residencia)",
+  "toDestination": "Hacia (Destino)",
+  "swapRoute": "Cambiar"
+}

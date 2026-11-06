@@ -1,0 +1,11 @@
+{
+  "visaTypes": "वीज़ा प्रकार",
+  "liveTime": "लाइव समय",
+  "processing": "प्रोसेसिंग समय",
+  "hotelFrom": "होटल किराया",
+  "searchFlights": "फ्लाइट खोजें",
+  "eligibility": "पात्रता जांचें",
+  "fromPassport": "कहाँ से (पासपोर्ट / देश)",
+  "toDestination": "कहाँ जाना है (गंतव्य देश)",
+  "swapRoute": "रूट बदलें"
+}

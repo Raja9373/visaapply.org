@@ -1,31 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { getCountryMeta } from '../data/countryMetaData';
+import { NAME_MAP_249 } from '../data/fullVisaDatabase';
 
 interface EmbassyFinderProps {
   countryCode: string;
   countryName: string;
+  fromCode?: string;
   onNavigate?: (path: string) => void;
 }
 
-export const EmbassyFinder: React.FC<EmbassyFinderProps> = ({ countryCode, countryName, onNavigate }) => {
+export const EmbassyFinder: React.FC<EmbassyFinderProps> = ({
+  countryCode,
+  countryName,
+  fromCode = 'IN',
+  onNavigate,
+}) => {
   const [selectedCityIdx, setSelectedCityIdx] = useState<number>(0);
   const [showFullQA, setShowFullQA] = useState<boolean>(false);
 
   const codeUpper = (countryCode || 'US').toUpperCase();
-  const embassy = getEmbassyInfo(codeUpper);
+  const fromUpper = (fromCode || 'IN').toUpperCase();
+  const fromName = NAME_MAP_249[fromUpper.toLowerCase()] || fromUpper;
+  const fromMeta = getCountryMeta(fromUpper.toLowerCase());
+  const embassy = getEmbassyInfo(codeUpper, fromUpper);
   const meta = getCountryMeta(countryCode);
+
+  useEffect(() => {
+    setSelectedCityIdx(0);
+  }, [codeUpper, fromUpper]);
+
   const missions =
     embassy.inIndia && embassy.inIndia.length > 0
       ? embassy.inIndia
       : [
           {
-            city: 'New Delhi (Main Embassy)',
-            address: 'Chanakyapuri Diplomatic Enclave, New Delhi - 110021',
+            city: `${fromMeta.capital} (Main Embassy)`,
+            address: `Diplomatic Enclave, ${fromMeta.capital}, ${fromName}`,
             phone: '+91-11-2688-0000',
-            email: `consular.${countryCode.toLowerCase()}@embassy-india.org`,
-            timings: 'Mon-Fri 9:00 AM - 5:00 PM'
-          }
+            email: `consular.${countryCode.toLowerCase()}@embassy.org`,
+            timings: 'Mon-Fri 9:00 AM - 5:00 PM',
+          },
         ];
 
   const activeMission = missions[selectedCityIdx] || missions[0];
@@ -34,35 +49,35 @@ export const EmbassyFinder: React.FC<EmbassyFinderProps> = ({ countryCode, count
   const fullQuestions = [
     {
       q: `1. Why do you want to visit ${countryName} at this time?`,
-      a: `State your exact travel purpose clearly (e.g., sightseeing in ${meta.capital}, attending a business meeting, or visiting family). Mention the best season (${meta.bestTime}) and your planned day-by-day itinerary.`
+      a: `State your exact travel purpose clearly (e.g., sightseeing in ${meta.capital}, attending a business meeting, or visiting family). Mention the best season (${meta.bestTime}) and your planned day-by-day itinerary.`,
     },
     {
       q: `2. How long will you stay in ${countryName} and when will you return?`,
-      a: `Specify your exact arrival and departure dates matching your flight reservation and approved leave letter from your employer in India.`
+      a: `Specify your exact arrival and departure dates matching your flight reservation and approved leave letter from your employer in ${fromName}.`,
     },
     {
       q: `3. Who is funding your trip and what is your annual income?`,
-      a: `Present your last 6 months bank statements and 3 years ITR. Mention your liquid savings covering flights (${meta.flightPrice}), hotels (${meta.hotelPrice} in ${meta.capital}), and daily expenses.`
+      a: `Present your last 6 months bank statements in ${fromMeta.currency}. Mention your liquid savings covering flights (${meta.flightPrice}), hotels (${meta.hotelPrice} in ${meta.capital}), and daily expenses.`,
     },
     {
-      q: `4. What are your strong ties to India that guarantee your return?`,
-      a: `Highlight your permanent job/business in India, Employer NOC with approved leave dates, property ownership, and immediate family responsibilities.`
+      q: `4. What are your strong ties to ${fromName} that guarantee your return?`,
+      a: `Highlight your permanent job/business in ${fromName}, Employer NOC with approved leave dates, property ownership, and immediate family responsibilities.`,
     },
     {
       q: `5. Have you traveled internationally before?`,
-      a: `Mention any prior visas (Schengen, UK, USA, UAE, Singapore, Thailand, etc.) and emphasize that you always complied with visa validity rules.`
+      a: `Mention any prior visas (Schengen, UK, USA, UAE, Singapore, Thailand, etc.) and emphasize that you always complied with visa validity rules.`,
     },
     {
       q: `6. Where will you stay in ${countryName}?`,
-      a: `Provide the name and address of your booked hotel in ${meta.capital} (or host's residential address and invitation letter).`
-    }
+      a: `Provide the name and address of your booked hotel in ${meta.capital} (or host's residential address and invitation letter).`,
+    },
   ];
 
   return (
     <div className="bg-white border border-[#e2e8f0] rounded-2xl p-4 sm:p-5 mb-6 shadow-xs">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-extrabold text-base text-slate-900">
-          🏛 Embassy & VFS Info for Indians — {countryName}
+          🏛 Embassy & VFS Info in {fromName} ({fromMeta.capital}) — {countryName}
         </h3>
         {missions.length > 1 && (
           <div className="flex items-center gap-1.5 flex-wrap">
