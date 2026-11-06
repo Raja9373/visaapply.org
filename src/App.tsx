@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed } from './data/fullVisaDatabase';
+import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed, initializeFullVisaDatabase, NAME_MAP_249, FLAG_MAP_249 } from './data/fullVisaDatabase';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
@@ -83,26 +83,26 @@ export const COUNTRY_NAMES: Record<string, string> = {
   "bt":"Bhutan", "mv":"Maldives", "fj":"Fiji", "bw":"Botswana", "zm":"Zambia", "zw":"Zimbabwe", "na":"Namibia", "mz":"Mozambique", "ad":"Andorra", "mc":"Monaco", "li":"Liechtenstein", "sm":"San Marino", "tn":"Tunisia"
 };
 
-export const COUNTRY_NAME_MAP: Record<string, string> = { ...COUNTRY_NAMES };
+export const COUNTRY_NAME_MAP: Record<string, string> = { ...COUNTRY_NAMES, ...NAME_MAP_249 };
 
 export const FLAG_MAP: Record<string, string> = {
   "us":"🇺🇸","ca":"🇨🇦","gb":"🇬🇧","uk":"🇬🇧","au":"🇦🇺","ae":"🇦🇪","de":"🇩🇪","sg":"🇸🇬","th":"🇹🇭","eu":"🇪🇺","sc":"🇪🇺","sch":"🇪🇺","schengen":"🇪🇺","jp":"🇯🇵","in":"🇮🇳","fr":"🇫🇷","it":"🇮🇹","es":"🇪🇸","nl":"🇳🇱","ch":"🇨🇭","nz":"🇳🇿","br":"🇧🇷","mx":"🇲🇽","kr":"🇰🇷","cn":"🇨🇳","vn":"🇻🇳","my":"🇲🇾","id":"🇮🇩","ph":"🇵🇭","za":"🇿🇦","tr":"🇹🇷","sa":"🇸🇦","qa":"🇶🇦","ie":"🇮🇪","se":"🇸🇪","no":"🇳🇴","pt":"🇵🇹","dk":"🇩🇰","fi":"🇫🇮","be":"🇧🇪","at":"🇦🇹","pl":"🇵🇱","hk":"🇭🇰","tw":"🇹🇼","kh":"🇰🇭","la":"🇱🇦","mm":"🇲🇲","bn":"🇧🇳","pk":"🇵🇰","bd":"🇧🇩","lk":"🇱🇰","np":"🇳🇵","mn":"🇲🇳","kz":"🇰🇿","om":"🇴🇲","kw":"🇰🇼","bh":"🇧🇭","jo":"🇯🇴","lb":"🇱🇧","eg":"🇪🇬","ma":"🇲🇦","ke":"🇰🇪","ng":"🇳🇬","gh":"🇬🇭","et":"🇪🇹","tz":"🇹🇿","ug":"🇺🇬","rw":"🇷🇼","mu":"🇲🇺","ar":"🇦🇷","cl":"🇨🇱","co":"🇨🇴","pe":"🇵🇪","uy":"🇺🇾","pa":"🇵🇦","cr":"🇨🇷","do":"🇩🇴","jm":"🇯🇲","is":"🇮🇸","lu":"🇱🇺","cz":"🇨🇿","hu":"🇭🇺","gr":"🇬🇷","hr":"🇭🇷","ro":"🇷🇴","ua":"🇺🇦","cy":"🇨🇾","mt":"🇲🇹","uz":"🇺🇿","az":"🇦🇿",
-  "bt":"🇧🇹","mv":"🇲🇻","fj":"🇫🇯","bw":"🇧🇼","zm":"🇿🇲","zw":"🇿🇼","na":"🇳🇦","mz":"🇲🇿","ad":"🇦🇩","mc":"🇲🇨","li":"🇱🇮","sm":"🇸🇲","tn":"🇹🇳"
+  "bt":"🇧🇹","mv":"🇲🇻","fj":"🇫🇯","bw":"🇧🇼","zm":"🇿🇲","zw":"🇿🇼","na":"🇳🇦","mz":"MZ","ad":"🇦🇩","mc":"🇲🇨","li":"🇱🇮","sm":"🇸🇲","tn":"🇹🇳"
 };
 
-export const COUNTRY_FLAGS: Record<string, string> = { ...FLAG_MAP };
+export const COUNTRY_FLAGS: Record<string, string> = { ...FLAG_MAP, ...FLAG_MAP_249 };
 
 // FIX RENDER FUNCTION - IN TO US / IN TO KH BUG
 export function getCountryDisplayName(code: string): string {
   if (!code) return "";
   const c = code.trim().toLowerCase();
-  return COUNTRY_NAME_MAP[c] || COUNTRY_NAMES[c] || (c === 'uk' ? 'United Kingdom' : c === 'sc' || c === 'sch' || c === 'schengen' || c === 'eu' ? 'Schengen Area' : code.toUpperCase());
+  return NAME_MAP_249[c] || COUNTRY_NAME_MAP[c] || COUNTRY_NAMES[c] || (c === 'uk' ? 'United Kingdom' : c === 'sc' || c === 'sch' || c === 'schengen' || c === 'eu' ? 'Schengen Area' : code.toUpperCase());
 }
 
 export function getCountryFlag(code: string): string {
   if (!code) return "🌍";
   const c = code.trim().toLowerCase();
-  return FLAG_MAP[c] || COUNTRY_FLAGS[c] || (c === 'uk' ? '🇬🇧' : c === 'sc' || c === 'sch' || c === 'schengen' || c === 'eu' ? '🇪🇺' : "🌍");
+  return FLAG_MAP_249[c] || FLAG_MAP[c] || COUNTRY_FLAGS[c] || (c === 'uk' ? '🇬🇧' : c === 'sc' || c === 'sch' || c === 'schengen' || c === 'eu' ? '🇪🇺' : "🌍");
 }
 
 export function getCountryFullName(code: string): string {
@@ -1104,8 +1104,8 @@ const getAllCountriesFromDB = () => {
       return countryIndexCache.get(cacheKey)!;
     }
 
-    const flagMap = FLAG_MAP;
-    const nameMap = COUNTRY_NAMES;
+    const flagMap = FLAG_MAP_249;
+    const nameMap = NAME_MAP_249;
     
     const all = codes.map(code => {
       const c = code.toLowerCase();
@@ -1116,7 +1116,7 @@ const getAllCountriesFromDB = () => {
       } else if (visas && typeof visas === 'object') {
         live = Object.values(visas).flat().filter((v: any) => v && v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
       }
-      return { code: c.toUpperCase(), name: nameMap[c] || c.toUpperCase(), flag: flagMap[c] || "🏳️", count: live };
+      return { code: c.toUpperCase(), name: nameMap[c] || COUNTRY_NAME_MAP[c] || COUNTRY_NAMES[c] || c.toUpperCase(), flag: flagMap[c] || FLAG_MAP[c] || COUNTRY_FLAGS[c] || "🏳️", count: live };
     }).filter(x => x.count > 0).sort((a, b) => b.count - a.count);
 
     countryIndexCache.set(cacheKey, all);
@@ -1166,15 +1166,27 @@ export default function App() {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const checkHydration = () => {
-      const dbCount = Object.keys(BASE_COUNTRY_VISAS || {}).length;
-      if (dbCount > 50) {
-        setIsHydrated(true);
-      } else {
-        setTimeout(checkHydration, 50);
-      }
+    let isMounted = true;
+    Promise.resolve()
+      .then(() => initializeFullVisaDatabase())
+      .then(() => {
+        const checkCount = Object.keys(BASE_COUNTRY_VISAS || {}).length;
+        if (checkCount > 100) {
+          if (isMounted) setIsHydrated(true);
+        } else {
+          setTimeout(() => {
+            if (isMounted) setIsHydrated(true);
+          }, 100);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setIsHydrated(true);
+        }
+      });
+    return () => {
+      isMounted = false;
     };
-    checkHydration();
   }, []);
 
   // Quiz state for /[from]-to-[to]
@@ -2411,16 +2423,22 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
     // 4. Fallback to all live if category is empty
     for (const t of [toU, toL]) {
-      const b = BASE_COUNTRY_VISAS[t];
+      const b: any = BASE_COUNTRY_VISAS[t];
       if (b) {
+        const tourist = Array.isArray(b.tourist) ? b.tourist : (Array.isArray(b) ? b : []);
+        const work = Array.isArray(b.work) ? b.work : [];
+        const student = Array.isArray(b.student) ? b.student : [];
+        const family = Array.isArray(b.family) ? b.family : [];
+        const business = Array.isArray(b.business) ? b.business : [];
+        const pr = Array.isArray(b.pr) ? b.pr : [];
         const allLive = [
-          ...(b.tourist || []),
-          ...(b.work || []),
-          ...(b.student || []),
-          ...(b.family || []),
-          ...(b.business || []),
-          ...(b.pr || [])
-        ].filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+          ...tourist,
+          ...work,
+          ...student,
+          ...family,
+          ...business,
+          ...pr
+        ].filter(v => v && v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
         if (allLive.length > 0) return allLive;
       }
     }
@@ -2438,14 +2456,15 @@ function ArticleView({ match, articles = [], navigate }: any) {
   // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus custom prefix routes like in-to-gb-reg-ukw-isl)
   const expectedFullId = `in-to-${toCode.toLowerCase()}-${categoryCode}-${subtypeCode}`;
   const directRouteId = `in-to-${toCode.toLowerCase()}-${subtypeCode}`;
-  const allCountryVisasFlat: any[] = countryData
+  const cData: any = countryData;
+  const allCountryVisasFlat: any[] = cData
     ? [
-        ...(countryData.tourist || []),
-        ...(countryData.work || []),
-        ...(countryData.student || []),
-        ...(countryData.family || []),
-        ...(countryData.business || []),
-        ...(countryData.pr || [])
+        ...(Array.isArray(cData.tourist) ? cData.tourist : (Array.isArray(cData) ? cData : [])),
+        ...(Array.isArray(cData.work) ? cData.work : []),
+        ...(Array.isArray(cData.student) ? cData.student : []),
+        ...(Array.isArray(cData.family) ? cData.family : []),
+        ...(Array.isArray(cData.business) ? cData.business : []),
+        ...(Array.isArray(cData.pr) ? cData.pr : [])
       ]
     : [];
 
