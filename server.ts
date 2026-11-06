@@ -577,6 +577,22 @@ import { createServer as createViteServer } from 'vite';
 const vite = await createViteServer({
   server: { middlewareMode: true }
 });
+
+// Ensure homepage HTML always has Impact verification tag as the exact first child inside <head>
+app.get(['/', '/index.html'], async (req, res, next) => {
+  try {
+    const indexPath = path.join(__dirname, 'index.html');
+    const rawHtml = fs.readFileSync(indexPath, 'utf-8');
+    let transformed = await vite.transformIndexHtml(req.originalUrl, rawHtml);
+    const impactTag = "<meta name='impact-site-verification' value='b1ae4431-d331-41dd-a031-905fa7d5844a'>";
+    transformed = transformed.replace(/<meta\s+name=['"]impact-site-verification['"][^>]*>\s*/gi, '');
+    transformed = transformed.replace(/<head>/i, `<head>\n    ${impactTag}`);
+    res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(transformed);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(vite.middlewares);
 
 const PORT = 3000;
