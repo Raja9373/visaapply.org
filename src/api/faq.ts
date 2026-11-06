@@ -65,15 +65,17 @@ export function getFallbackFaqs(destination: string, visaType: string, fromCount
     else if (vType.includes('business')) categoryKey = 'business';
     else if (vType.includes('pr') || vType.includes('golden')) categoryKey = 'pr';
 
+    const safeArray = (arr: any) => Array.isArray(arr) ? arr : [];
+    const baseObj = Array.isArray(countryVisas) ? { tourist: countryVisas } : countryVisas;
     const allVisas = [
-      ...(countryVisas.tourist || []),
-      ...(countryVisas.work || []),
-      ...(countryVisas.student || []),
-      ...(countryVisas.family || []),
-      ...(countryVisas.business || []),
-      ...(countryVisas.pr || []),
+      ...safeArray(baseObj.tourist),
+      ...safeArray(baseObj.work),
+      ...safeArray(baseObj.student),
+      ...safeArray(baseObj.family),
+      ...safeArray(baseObj.business),
+      ...safeArray(baseObj.pr),
     ];
-    const items = countryVisas[categoryKey] || countryVisas.tourist || [];
+    const items = (baseObj && safeArray(baseObj[categoryKey]).length > 0) ? safeArray(baseObj[categoryKey]) : safeArray(baseObj?.tourist);
     const matchedVisa =
       allVisas.find((v: any) => v.id.toLowerCase() === vType) ||
       items.find((v: any) => v.id.toLowerCase() === vType || v.id.toLowerCase().includes(vType)) ||

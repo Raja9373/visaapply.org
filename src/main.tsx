@@ -17,4 +17,18 @@ window.addEventListener('unhandledrejection', (event) => {
   }
 });
 
+// Ensure Impact.com verification tag is first child in <head>
+try {
+  let impactMeta = document.querySelector("meta[name='impact-site-verification']");
+  if (!impactMeta) {
+    impactMeta = document.createElement('meta');
+    impactMeta.setAttribute('name', 'impact-site-verification');
+    impactMeta.setAttribute('value', 'b1ae4431-d331-41dd-a031-905fa7d5844a');
+    document.head.insertBefore(impactMeta, document.head.firstChild);
+  } else {
+    impactMeta.setAttribute('value', 'b1ae4431-d331-41dd-a031-905fa7d5844a');
+  }
+  console.log("✅ Impact verification tag added - b1ae4431-d331-41dd-a031-905fa7d5844a - Ready for Add Website verification");
+} catch (e) {}
+
 createRoot(document.getElementById('root')!).render(<App />);

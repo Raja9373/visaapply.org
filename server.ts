@@ -582,4 +582,5 @@ app.use(vite.middlewares);
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`VisaApply.org running on http://localhost:${PORT}`);
+  console.log("✅ Impact verification tag added - b1ae4431-d331-41dd-a031-905fa7d5844a - Ready for Add Website verification");
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed, initializeFullVisaDatabase, NAME_MAP_249, FLAG_MAP_249 } from './data/fullVisaDatabase';
+import { CONTINENT_MAP_249, getContinentForCountry, isCountryInContinent } from './data/continentMap';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
@@ -1704,6 +1705,7 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
 // ----------------------------------------------------
 function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate, forceUpdate }: any) {
   const [targetSearch, setTargetSearch] = useState('');
+  const [activeContinent, setActiveContinent] = useState<string>('all');
   const dynamicCountries = useMemo(() => {
     const dbList = getAllCountriesFromDB();
     if (dbList.length > 0) return dbList;
@@ -1711,13 +1713,31 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
   }, [forceUpdate, countries]);
 
   const uniqueCountries = deduplicateCountries(dynamicCountries);
-  const filteredCountries = uniqueCountries.filter((c: Country) => 
-    getCountryFullName(c.code).toLowerCase().includes(targetSearch.toLowerCase()) || 
-    c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
-    c.code.toLowerCase().includes(targetSearch.toLowerCase())
-  );
+  const filteredCountries = uniqueCountries.filter((c: Country) => {
+    const matchesSearch =
+      getCountryFullName(c.code).toLowerCase().includes(targetSearch.toLowerCase()) || 
+      c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
+      c.code.toLowerCase().includes(targetSearch.toLowerCase());
+    const matchesContinent = isCountryInContinent(c.code, activeContinent);
+    return matchesSearch && matchesContinent;
+  });
+
+  const continentTabs = useMemo(() => [
+    { key: 'all', label: 'All', icon: '🌍', count: uniqueCountries.length },
+    { key: 'europe', label: 'Europe', icon: '🇪🇺', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'europe')).length },
+    { key: 'asia', label: 'Asia', icon: '🌏', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'asia')).length },
+    { key: 'middle_east', label: 'Middle East', icon: '🕌', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'middle_east')).length },
+    { key: 'africa', label: 'Africa', icon: '🌍', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'africa')).length },
+    { key: 'north_america', label: 'North America', icon: '🌎', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'north_america')).length },
+    { key: 'south_america', label: 'South America', icon: '🌎', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'south_america')).length },
+    { key: 'oceania', label: 'Oceania', icon: '🌊', count: uniqueCountries.filter((c: Country) => isCountryInContinent(c.code, 'oceania')).length }
+  ], [uniqueCountries]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).getContinent = getContinentForCountry;
+      (window as any).CONTINENT_MAP = CONTINENT_MAP_249;
+    }
     console.log("✅ OPTION 2 LEFT SIDE DONE - Flag + Country Name + Number");
     console.log("🇺🇸 United States:", getLiveVisaCount("us"), "Visa Types");
     console.log("🇨🇦 Canada:", getLiveVisaCount("ca"), "Visa Types");
@@ -1725,7 +1745,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
     console.log("🇩🇪 Germany:", getLiveVisaCount("de"), "Visa Types");
     const totalVisas = uniqueCountries.reduce((sum: number, c: Country) => sum + getLiveVisaCount(c.code), 0);
     console.log("TOTAL LIVE VISAS:", totalVisas);
-    console.log("✅ OPTION D FINAL 86 COUNTRIES DONE - ALL GLOBAL DESTINATIONS SAME DESIGN - FLAG + NAME + NUMBER - 6 CATEGORIES - 6552+ LIVE VISAS - WORLD'S LARGEST VISA PORTAL - visaapply.org");
+    console.log("✅ CONTINENT DIVIDE + EXACT VISA COUNTS DONE - 249 COUNTRIES");
   }, [uniqueCountries]);
 
   return (
@@ -1777,13 +1797,34 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
 
       {/* All Global Destinations Section - Exact Match to Reference Design */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             All Global Destinations
           </h2>
           <p className="text-base sm:text-lg text-slate-600 mt-2 font-normal">
-            Explore visa options for {filteredCountries.length} popular destinations worldwide • {filteredCountries.length} flags • 14,084+ LIVE visas • World's largest visa portal
+            Explore visa options for {uniqueCountries.length} destinations • {uniqueCountries.length} flags • 14,084+ LIVE visas • World's largest visa portal
           </p>
+        </div>
+
+        {/* Continent Divide Filter Bar */}
+        <div className="flex flex-wrap gap-2 justify-center mb-8">
+          {continentTabs.map((cont) => {
+            const isActive = activeContinent === cont.key;
+            return (
+              <button
+                key={cont.key}
+                onClick={() => setActiveContinent(cont.key)}
+                className={`px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  isActive
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-slate-900'
+                }`}
+              >
+                <span>{cont.icon}</span>
+                <span>{cont.label} ({cont.count})</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1795,6 +1836,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             const flagEmoji = getCountryFlag(country.code);
             const flagUrl = getCountryFlagUrl(country.code);
             const fullName = getCountryFullName(country.code);
+            const contKey = getContinentForCountry(country.code);
+            const contLabel = CONTINENT_MAP_249[contKey]?.label || contKey;
 
             return (
               <button
@@ -1831,8 +1874,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     <div className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] truncate leading-snug">
                       {fullName}
                     </div>
-                    <div className="text-sm text-slate-600 font-medium mt-0.5">
-                      {isSelf ? 'Your Origin Country' : `${liveCount} Visa Types`}
+                    <div className="text-sm text-slate-600 font-medium mt-0.5 truncate">
+                      {isSelf ? 'Your Origin Country' : `${liveCount} Visa Types • ${contLabel}`}
                     </div>
                   </div>
                 </div>
@@ -1846,7 +1889,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         </div>
 
         <div className="text-center text-xs sm:text-sm text-slate-500 mt-8 font-medium">
-          Showing {filteredCountries.length} destinations • Updated Oct 2026
+          Showing {filteredCountries.length} of {uniqueCountries.length} destinations • {activeContinent === 'all' ? 'All Continents' : (CONTINENT_MAP_249[activeContinent]?.label || activeContinent)} • Updated Oct 2026 • 249 ISO FULL
         </div>
       </section>
 
@@ -2596,35 +2639,50 @@ function ArticleView({ match, articles = [], navigate }: any) {
     ? `${fromCountry.name}から${toCountry.name}への${visaName} (2026年最新ガイド)`
     : `${fromCountry.name} to ${toCountry.name} ${visaName} (2026 Guide)`;
 
-  const docsList = (isJa && dbVisaItem?.docs_ja) ? dbVisaItem.docs_ja : (dbVisaItem?.docs || [
-    'Valid Passport (minimum 6 months validity)',
-    'Completed Official Visa Application Form',
-    'Passport-size photographs as per spec',
-    'Bank Statements for past 6 months showing regular income',
-    'Income Tax Return (ITR) / Tax assessment for past 2-3 years',
-    'Proof of Accommodation / Hotel Booking',
-    'Confirmed Travel Itinerary / Flight Ticket'
-  ]);
+  const rawDocs = (isJa && dbVisaItem?.docs_ja) ? dbVisaItem.docs_ja : dbVisaItem?.docs;
+  const docsList = Array.isArray(rawDocs) 
+    ? rawDocs 
+    : (typeof rawDocs === 'string' 
+        ? rawDocs.split(/\+|\n|,/).map(s => s.trim()).filter(Boolean) 
+        : [
+            'Valid Passport (minimum 6 months validity)',
+            'Completed Official Visa Application Form',
+            'Passport-size photographs as per spec',
+            'Bank Statements for past 6 months showing regular income',
+            'Income Tax Return (ITR) / Tax assessment for past 2-3 years',
+            'Proof of Accommodation / Hotel Booking',
+            'Confirmed Travel Itinerary / Flight Ticket'
+          ]);
 
-  const infoReqList = (isJa && dbVisaItem?.infoReq_ja) ? dbVisaItem.infoReq_ja : (dbVisaItem?.infoReq || [
-    'Full Name, DOB, Passport No, Issue & Expiry Date, Place of Issue',
-    'Father, Mother & Spouse Full Names & Dates of Birth',
-    'Host Address in Destination Country, Contact Name & Phone',
-    'Employer / Company Name, Business Address, Job Title & Monthly Income',
-    'Prior travel history to destination country, visa refusal dates & reasons',
-    'Security, Health & Criminal Background Declarations'
-  ]);
+  const rawInfoReq = (isJa && dbVisaItem?.infoReq_ja) ? dbVisaItem.infoReq_ja : dbVisaItem?.infoReq;
+  const infoReqList = Array.isArray(rawInfoReq) 
+    ? rawInfoReq 
+    : (typeof rawInfoReq === 'string' 
+        ? rawInfoReq.split(/\+|\n|,/).map(s => s.trim()).filter(Boolean) 
+        : [
+            'Full Name, DOB, Passport No, Issue & Expiry Date, Place of Issue',
+            'Father, Mother & Spouse Full Names & Dates of Birth',
+            'Host Address in Destination Country, Contact Name & Phone',
+            'Employer / Company Name, Business Address, Job Title & Monthly Income',
+            'Prior travel history to destination country, visa refusal dates & reasons',
+            'Security, Health & Criminal Background Declarations'
+          ]);
 
-  const stepsList = (isJa && dbVisaItem?.steps_ja) ? dbVisaItem.steps_ja : (dbVisaItem?.steps || [
-    'Check eligibility criteria and gather required documents',
-    'Fill official online visa application form',
-    'Pay required visa fee',
-    'Schedule appointment at VFS Global / Embassy',
-    'Attend biometrics & photo session',
-    'Attend consulate visa interview (if required)',
-    'Track visa application status online',
-    'Collect passport with visa stamp'
-  ]);
+  const rawSteps = (isJa && dbVisaItem?.steps_ja) ? dbVisaItem.steps_ja : dbVisaItem?.steps;
+  const stepsList = Array.isArray(rawSteps) 
+    ? rawSteps 
+    : (typeof rawSteps === 'string' 
+        ? rawSteps.split(/\+|\n|,/).map(s => s.trim()).filter(Boolean) 
+        : [
+            'Check eligibility criteria and gather required documents',
+            'Fill official online visa application form',
+            'Pay required visa fee',
+            'Schedule appointment at VFS Global / Embassy',
+            'Attend biometrics & photo session',
+            'Attend consulate visa interview (if required)',
+            'Track visa application status online',
+            'Collect passport with visa stamp'
+          ]);
 
   const toggleDocCheck = (idx: number) => {
     setCheckedDocs(prev => ({ ...prev, [idx]: !prev[idx] }));
