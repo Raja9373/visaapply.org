@@ -788,14 +788,95 @@ app.get('/robots.txt', (req, res) => {
   res.status(200).send(`User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: https://www.visaapply.org/sitemap.xml\nSitemap: https://visaapply.org/sitemap.xml\n`);
 });
 
+// Serve Open Graph 1200x630 images for homepage (/og-image.jpg), /og/flights.jpg, and all 249 countries (/og/:slug.jpg)
+app.get(['/og-image.jpg', '/og/:slug.jpg'], (req, res) => {
+  const slug = (req.params?.slug || '').toLowerCase().replace(/[^a-z0-9-_]/g, '');
+  const specificPath = slug ? path.join(__dirname, 'public', 'og', `${slug}.jpg`) : '';
+  const defaultPath = path.join(__dirname, 'public', 'og-image.jpg');
+
+  res.setHeader('Content-Type', 'image/jpeg');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+
+  if (specificPath && fs.existsSync(specificPath)) {
+    return res.sendFile(specificPath);
+  }
+  if (fs.existsSync(defaultPath)) {
+    return res.sendFile(defaultPath);
+  }
+  res.status(404).end();
+});
+
+// Helper to compute dynamic OG tags for server-rendered HTML (so Facebook & WhatsApp crawlers see exact OG tags without needing JS)
+const TOP_VISA_COUNTS_SSR: Record<string, number> = {
+  us: 278, gb: 222, uk: 222, ca: 151, de: 138, au: 135, ae: 135, sg: 109, fr: 112, jp: 109, th: 98, ch: 94, vn: 82
+};
+
+function getServerSideOgMeta(pathname: string) {
+  const clean = (pathname || '/').split('?')[0].replace(/\/+$/, '') || '/';
+  const langStripped = clean.replace(/^\/(en|hi|ar|fr|de|es|ru|zh|ja|pt)(\/|$)/i, '/') || '/';
+
+  let ogTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
+  let ogDesc = "249 countries, 14,084+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
+  let ogImage = "https://visaapply.org/og-image.jpg";
+  let ogUrl = `https://visaapply.org${clean === '/' ? '' : clean}`;
+  let twitterTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries";
+  let twitterDesc = "249 countries, 14,084+ visas, 61,752 routes, 10 languages, auto-update daily";
+
+  if (langStripped === '/flights') {
+    ogTitle = "Cheap Flights from India - 249 Countries - From ₹12,500 - VisaApply.org";
+    ogDesc = "Search 100+ airlines - Delhi to Dubai ₹14,800, Delhi to USA ₹45,200 - Travelpayouts 801550";
+    ogImage = "https://visaapply.org/og/flights.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else {
+    const routeMatch = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})(?:-([a-z]+))?$/i);
+    if (routeMatch) {
+      const fromCode = routeMatch[1].toLowerCase();
+      const toCode = routeMatch[2].toLowerCase();
+      const fromCountryObj = COUNTRIES.find((c) => c.code.toLowerCase() === fromCode);
+      const toCountryObj = COUNTRIES.find((c) => c.code.toLowerCase() === toCode);
+      const fromLabel = fromCode === 'in' ? 'Indians' : (fromCountryObj?.name || fromCode.toUpperCase());
+      const toName = toCode === 'us' ? 'USA' : toCode === 'gb' || toCode === 'uk' ? 'UK' : toCode === 'ae' ? 'UAE' : (toCountryObj?.name || toCode.toUpperCase());
+      const count = fromCode === 'in' ? (TOP_VISA_COUNTS_SSR[toCode] || 68) : (fromCode === 'ae' && toCode === 'us' ? 45 : 55);
+
+      if (fromCode === 'in' && toCode === 'us') {
+        ogTitle = "USA Visa for Indians 2026 - 278 Visa Types, $185, 15-20 Days - VisaApply.org";
+        ogDesc = "USA visa for Indians - 278 types, fees $185, processing 15-20 days, success 92%, hotel from $120/night Booking.com, flights from ₹45,200";
+      } else {
+        ogTitle = `${toName} Visa for ${fromLabel} 2026 - ${count} Visa Types - VisaApply.org`;
+        ogDesc = `${toName} visa for ${fromLabel} - ${count} types, official 2026 fees, fast processing, high approval rate, hotel deals on Booking.com & cheap flights via Travelpayouts 801550`;
+      }
+      ogImage = `https://visaapply.org/og/${toCode}.jpg`;
+      twitterTitle = ogTitle;
+      twitterDesc = ogDesc;
+    }
+  }
+
+  return { ogTitle, ogDesc, ogImage, ogUrl, twitterTitle, twitterDesc };
+}
+
 // Vite middleware for development
 import { createServer as createViteServer } from 'vite';
 const vite = await createViteServer({
   server: { middlewareMode: true }
 });
 
-// Ensure homepage HTML always has Impact verification tag as the exact first child inside <head>
-app.get(['/', '/index.html'], async (req, res, next) => {
+// Inject Impact verification tag + dynamic Open Graph & Twitter Card tags on HTML page requests
+app.use(async (req, res, next) => {
+  if (
+    req.method !== 'GET' ||
+    req.path.startsWith('/api') ||
+    req.path.startsWith('/src') ||
+    req.path.startsWith('/@') ||
+    req.path.startsWith('/node_modules') ||
+    req.path.startsWith('/assets') ||
+    req.path.startsWith('/og') ||
+    req.path.startsWith('/locales') ||
+    /\.(js|ts|tsx|css|png|jpg|jpeg|gif|svg|ico|json|xml|txt|woff2?)$/i.test(req.path)
+  ) {
+    return next();
+  }
+
   try {
     const indexPath = path.join(__dirname, 'index.html');
     const rawHtml = fs.readFileSync(indexPath, 'utf-8');
@@ -803,6 +884,21 @@ app.get(['/', '/index.html'], async (req, res, next) => {
     const impactTag = "<meta name='impact-site-verification' value='b1ae4431-d331-41dd-a031-905fa7d5844a'>";
     transformed = transformed.replace(/<meta\s+name=['"]impact-site-verification['"][^>]*>\s*/gi, '');
     transformed = transformed.replace(/<head>/i, `<head>\n    ${impactTag}`);
+
+    const og = getServerSideOgMeta(req.path);
+    const esc = (s: string) => s.replace(/"/g, '&quot;');
+    transformed = transformed
+      .replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(og.ogTitle)}</title>`)
+      .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${esc(og.ogDesc)}" />`)
+      .replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${esc(og.ogTitle)}" />`)
+      .replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${esc(og.ogDesc)}" />`)
+      .replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${esc(og.ogUrl)}" />`)
+      .replace(/<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image" content="${esc(og.ogImage)}" />`)
+      .replace(/<meta\s+property="og:image:secure_url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:secure_url" content="${esc(og.ogImage)}" />`)
+      .replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${esc(og.twitterTitle)}" />`)
+      .replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${esc(og.twitterDesc)}" />`)
+      .replace(/<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${esc(og.ogImage)}" />`);
+
     res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(transformed);
   } catch (err) {
     next(err);
@@ -814,5 +910,5 @@ app.use(vite.middlewares);
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`VisaApply.org running on http://localhost:${PORT}`);
-  console.log("✅ Impact verification tag added - b1ae4431-d331-41dd-a031-905fa7d5844a - Ready for Add Website verification");
+  console.log("✅ Impact verification tag + Dynamic Open Graph & Twitter Cards active across 249 countries");
 });

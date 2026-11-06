@@ -1,6 +1,6 @@
 {
   "name": "VisaApply.org - Global Visa Guides & AI Auto-Blogger",
-  "description": "Global visa info for all countries with 2-step quiz, Gemini AI auto-blogging cron, admin approval workflow, and VFS Global official styling.",
+  "description": "249 countries, 14,084+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

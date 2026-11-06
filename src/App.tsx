@@ -238,8 +238,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
-  let title = 'VisaApply.org – 2026 Global Visa Requirements, 61,752 Routes, Fees & Free PDF Checklists (249 Countries)';
-  let description = `Check 2026 official visa requirements across ${totalCountryCount} countries, 61,752 Any-to-Any bilateral routes & 14,084+ visa subclasses in 10 languages. Instant 30-sec eligibility check, fees, processing time, embassy addresses & free PDF checklist.`;
+  let title = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
+  let description = "249 countries, 14,084+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
+  let ogImageUrl = 'https://visaapply.org/og-image.jpg';
+  let ogImageAlt = 'VisaApply.org - 249 Countries, 61,752 Routes';
 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
@@ -254,8 +256,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     title = 'About Us, Editorial Policy & Free Visa Backlink Widget – VisaApply.org';
     description = 'Learn about VisaApply.org editorial verification standards, E-E-A-T immigration research methodology, and embed our free live 249-country visa status widget on your website.';
   } else if (isFlights) {
-    title = 'Cheap Flights Across 249 Countries (2026) – Compare 100+ Airlines | VisaApply Flights';
-    description = 'Search 100+ airlines and compare the cheapest flights across 249 countries. Powered by Travelpayouts ID 801550, Aviasales & Skyscanner 8131850.';
+    title = 'Cheap Flights from India - 249 Countries - From ₹12,500 - VisaApply.org';
+    description = 'Search 100+ airlines - Delhi to Dubai ₹14,800, Delhi to USA ₹45,200 - Travelpayouts 801550';
+    ogImageUrl = 'https://visaapply.org/og/flights.jpg';
+    ogImageAlt = 'Cheap Flights from India - 249 Countries - VisaApply.org';
   } else if (isBlogs) {
     title = '2026 Global Visa Blogs & Travel Guides (2,490+ Official Articles) – VisaApply.org';
     description = 'Explore 2,490+ SEO visa blogs across 249 countries: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
@@ -264,6 +268,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const cName = getCountryDisplayName(code);
     title = `${cName} Visa Interview Questions & Winning Answers [2026 Updated] – VisaApply.org`;
     description = `Master the top 20 ${cName} consular interview questions and ideal answers, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
+    ogImageUrl = `https://visaapply.org/og/${code}.jpg`;
+    ogImageAlt = `${cName} Visa Interview Prep - VisaApply.org`;
   } else if (isContact) {
     title = 'Contact Us & Consular Support Desk – VisaApply.org';
     description = 'Get in touch with VisaApply.org editorial and consular research team. Email contact@visaapply.org for visa inquiries, partnerships, or advertising.';
@@ -282,30 +288,41 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
+    const toLower = to.toLowerCase();
     const type = articleMatch[3];
-    const fromName = getCountryDisplayName(from);
-    const toName = getCountryDisplayName(to);
+    const fromName = from === 'IN' ? 'Indians' : getCountryDisplayName(from);
+    const toName = to === 'US' ? 'USA' : getCountryDisplayName(to);
     const meta = getCountryMeta(to);
     const vCount = calculateVisaCount(from, to);
     const proc = getBilateralProcessingTime(from, to);
+    ogImageUrl = `https://visaapply.org/og/${toLower}.jpg`;
+    ogImageAlt = `${toName} Visa for ${fromName} - ${vCount} Visa Types - VisaApply.org`;
     if (article && article.title) {
       title = `${article.title} [2026 Updated] | VisaApply.org`;
-      description = `Official 2026 guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Processing: ${proc}. Download free PDF document checklist.`;
+      description = `Official 2026 guide for ${fromName} applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Processing: ${proc}. Download free PDF document checklist.`;
     } else {
-      title = `${toName} ${type.charAt(0).toUpperCase() + type.slice(1)} Visa for ${fromName} Citizens [2026]: Fees, Processing (${proc}) & PDF Checklist`;
-      description = `Apply for ${toName} ${type} visa from ${fromName} in 2026. Check ${vCount} official subclasses, fees, ${proc} processing time, ${meta.successRate} approval tips & free PDF checklist.`;
+      title = `${toName} ${type.charAt(0).toUpperCase() + type.slice(1)} Visa for ${fromName} 2026 - ${vCount} Visa Types - VisaApply.org`;
+      description = `${toName} ${type} visa for ${fromName} - ${vCount} types, processing ${proc}, success ${meta.successRate}, hotel from ${meta.hotelPrice} Booking.com, flights from ${meta.flightPrice}`;
     }
   } else if (quizMatch) {
     const from = (quizMatch[1] || 'IN').toUpperCase();
     const to = quizMatch[2].toUpperCase();
-    const fromName = getCountryDisplayName(from);
-    const toName = getCountryDisplayName(to);
+    const toLower = to.toLowerCase();
+    const fromLabel = from === 'IN' ? 'Indians' : getCountryDisplayName(from);
+    const toName = to === 'US' ? 'USA' : getCountryDisplayName(to);
     const meta = getCountryMeta(to);
     const vCount = calculateVisaCount(from, to);
     const proc = getBilateralProcessingTime(from, to);
+    ogImageUrl = `https://visaapply.org/og/${toLower}.jpg`;
+    ogImageAlt = `${toName} Visa for ${fromLabel} 2026 - ${vCount} Visa Types`;
 
-    title = `${toName} Visa for ${fromName} Citizens [2026]: ${vCount} Visas, Fees, ${proc} Processing & Checklist`;
-    description = `Complete 2026 ${toName} visa guide for ${fromName} passport holders & residents. Compare ${vCount} official Tourist, Work, Student, Business & PR subclasses. Processing: ${proc}, Approval Rate: ${meta.successRate}.`;
+    if (from === 'IN' && to === 'US') {
+      title = 'USA Visa for Indians 2026 - 278 Visa Types, $185, 15-20 Days - VisaApply.org';
+      description = 'USA visa for Indians - 278 types, fees $185, processing 15-20 days, success 92%, hotel from $120/night Booking.com, flights from ₹45,200';
+    } else {
+      title = `${toName} Visa for ${fromLabel} 2026 - ${vCount} Visa Types - VisaApply.org`;
+      description = `${toName} visa for ${fromLabel} - ${vCount} types, processing ${proc}, success ${meta.successRate}, hotel from ${meta.hotelPrice} Booking.com, flights from ${meta.flightPrice}`;
+    }
   } else if (path !== '/' && path.includes('-to-')) {
     const clean = path.replace(/^\//, '').replace(/-/g, ' ');
     const formatted = clean.charAt(0).toUpperCase() + clean.slice(1);
@@ -314,25 +331,36 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   }
 
   document.title = title;
-  const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) metaDesc.setAttribute('content', description);
+  const setOrCreateMeta = (attrName: 'name' | 'property', attrVal: string, contentVal: string) => {
+    let el = document.querySelector(`meta[${attrName}="${attrVal}"]`) as HTMLMetaElement | null;
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attrName, attrVal);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', contentVal);
+  };
 
-  const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', title);
-
-  const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.setAttribute('content', description);
-
-  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-  if (twitterTitle) twitterTitle.setAttribute('content', title);
-
-  const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-  if (twitterDesc) twitterDesc.setAttribute('content', description);
-
-  // Dynamic Canonical & OG URL for SEO deduplication
-  const canonicalBase = 'https://www.visaapply.org';
-  const cleanCanonicalPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
+  const canonicalBase = 'https://visaapply.org';
+  const cleanCanonicalPath = rawPath === '/' ? '' : rawPath.replace(/\/+$/, '');
   const canonicalHref = `${canonicalBase}${cleanCanonicalPath}`;
+
+  setOrCreateMeta('name', 'description', description);
+  setOrCreateMeta('property', 'og:type', 'website');
+  setOrCreateMeta('property', 'og:site_name', 'VisaApply.org');
+  setOrCreateMeta('property', 'og:title', title);
+  setOrCreateMeta('property', 'og:description', description);
+  setOrCreateMeta('property', 'og:url', canonicalHref);
+  setOrCreateMeta('property', 'og:image', ogImageUrl);
+  setOrCreateMeta('property', 'og:image:secure_url', ogImageUrl);
+  setOrCreateMeta('property', 'og:image:width', '1200');
+  setOrCreateMeta('property', 'og:image:height', '630');
+  setOrCreateMeta('property', 'og:image:alt', ogImageAlt);
+
+  setOrCreateMeta('name', 'twitter:card', 'summary_large_image');
+  setOrCreateMeta('name', 'twitter:title', title);
+  setOrCreateMeta('name', 'twitter:description', description);
+  setOrCreateMeta('name', 'twitter:image', ogImageUrl);
 
   let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
   if (!canonicalLink) {
@@ -341,9 +369,6 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     document.head.appendChild(canonicalLink);
   }
   canonicalLink.setAttribute('href', canonicalHref);
-
-  const ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.setAttribute('content', canonicalHref);
 
   // Inject Schema.org JSON-LD for AEO, GEO & SEO Knowledge Graph (Organization, WebSite, WebApplication, BreadcrumbList, FAQPage, HowTo)
   let ldScript = document.getElementById('seo-ld-json');
