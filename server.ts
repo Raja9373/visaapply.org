@@ -504,22 +504,28 @@ docs: "Passport, Financial Proofs, Application Forms"
 // Dynamic & Static Sitemap XML (/sitemap.xml, /sitemap_index.xml, /api/sitemap.xml, /api/sitemap)
 const handleSitemapXml = (req: any, res: any) => {
   try {
-    const publicSitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
-    if (fs.existsSync(publicSitemapPath)) {
-      const xml = fs.readFileSync(publicSitemapPath, 'utf-8');
-      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, max-age=3600');
-      return res.status(200).send(xml);
-    }
-
     const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
     const baseUrl = process.env.APP_URL || 'https://www.visaapply.org';
+    const categories = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     xml += `  <url><loc>${baseUrl}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/blogs</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/sitemap</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/audit</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/audit</loc><changefreq>daily</changefreq><priority>0.8</priority></url>\n`;
 
+    // All 249 Countries + 6 Categories per Country + 249 Interview Prep Pages
+    for (const c of COUNTRIES) {
+      const code = (c.code || '').toLowerCase();
+      if (!code) continue;
+      xml += `  <url><loc>${baseUrl}/in-to-${code}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
+      xml += `  <url><loc>${baseUrl}/interview-prep/${code}</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
+      for (const cat of categories) {
+        xml += `  <url><loc>${baseUrl}/in-to-${code}-${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+      }
+    }
+
+    // Markdown & Published Blog Guides
     files.forEach(file => {
       const slug = file.replace('.md', '');
       xml += `  <url><loc>${baseUrl}/${slug}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
@@ -527,6 +533,7 @@ const handleSitemapXml = (req: any, res: any) => {
 
     xml += `</urlset>`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
     res.status(200).send(xml);
   } catch (err: any) {
     res.status(500).send(err.message);

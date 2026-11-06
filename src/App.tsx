@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed, initializeFullVisaDatabase, NAME_MAP_249, FLAG_MAP_249 } from './data/fullVisaDatabase';
 import { CONTINENT_MAP_249, getContinentForCountry, isCountryInContinent } from './data/continentMap';
+import { COUNTRY_META_249, getCountryMeta, getCapitalSlug } from './data/countryMetaData';
+import { getLiveLocalTime, getLiveWeather, getCurrencyRate, generateChecklistPDF, parseHotelPriceUSD, parseProcessingDays, parseSuccessRateNum } from './utils/countryLiveUtils';
 import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
@@ -10,6 +12,13 @@ import { AuditPage } from './pages/AuditPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { AdSenseBanner } from './components/AdSenseBanner';
 import { BlogArticleView } from './components/BlogArticleView';
+import { EligibilityChecker } from './components/EligibilityChecker';
+import { VisaComparison } from './components/VisaComparison';
+import { EmbassyFinder } from './components/EmbassyFinder';
+import { BlogsPage, FeaturedBlogsCarousel } from './components/AutoBlogger';
+import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogGenerator';
+import { VisaChatbot } from './components/VisaChatbot';
+import { InterviewPrepFull, get20InterviewQuestions } from './components/InterviewPrepFull';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   mergeArticleCollections,
@@ -209,8 +218,10 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const isContact = path === '/contact';
   const isPrivacy = path === '/privacy';
   const isTerms = path === '/terms';
+  const isBlogs = path === '/blogs' || path === '/blogs/';
+  const interviewMatch = path.match(/^\/interview-prep\/([a-z]{2,3})$/i);
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
-  const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/);
+  const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length);
   let title = 'VisaApply.org – Global Visa Requirements & Guides';
@@ -219,6 +230,14 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
+  } else if (isBlogs) {
+    title = '2026 Global Visa Blogs & Travel Guides (2,490+ Articles) – VisaApply.org';
+    description = 'Explore 2,490+ SEO visa blogs across 249 countries for Indian travelers: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
+  } else if (interviewMatch) {
+    const code = interviewMatch[1].toLowerCase();
+    const cName = getCountryDisplayName(code);
+    title = `${cName} Visa Interview Questions & Winning Answers for Indians (2026) – VisaApply.org`;
+    description = `Master the top 20 ${cName} consular interview questions and ideal answers for Indian passport holders, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
   } else if (isContact) {
     title = 'Contact Us – VisaApply.org';
     description = 'Get in touch with VisaApply.org. Email contact@visaapply.org for visa inquiries, partnerships, or support.';
@@ -248,7 +267,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
       description = `Complete visa guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Find fees, documents, processing time, and FAQs.`;
     }
   } else if (quizMatch) {
-    const from = quizMatch[1].toUpperCase();
+    const from = (quizMatch[1] || 'IN').toUpperCase();
     const to = quizMatch[2].toUpperCase();
     const fromName = getCountryDisplayName(from);
     const toName = getCountryDisplayName(to);
@@ -272,7 +291,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const ogDesc = document.querySelector('meta[property="og:description"]');
   if (ogDesc) ogDesc.setAttribute('content', description);
 
-  // Inject Schema.org JSON-LD for AEO & SEO Knowledge Graph
+  // Inject Schema.org JSON-LD for AEO & SEO Knowledge Graph (WebApplication, BreadcrumbList, FAQPage, HowTo)
   let ldScript = document.getElementById('seo-ld-json');
   if (!ldScript) {
     ldScript = document.createElement('script');
@@ -286,8 +305,17 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     { "@type": "ListItem", "position": 1, "name": "Home", "item": `${baseUrl}/` }
   ];
 
+  let targetCodeForSchema = 'us';
+
   if (isAdmin) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Admin Portal", "item": `${baseUrl}/admin` });
+  } else if (isBlogs) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Blogs", "item": `${baseUrl}/blogs` });
+  } else if (interviewMatch) {
+    targetCodeForSchema = interviewMatch[1].toLowerCase();
+    const cName = getCountryDisplayName(targetCodeForSchema);
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${cName} Visa`, "item": `${baseUrl}/in-to-${targetCodeForSchema}` });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": `${cName} Interview Prep`, "item": window.location.href });
   } else if (isContact) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Contact Us", "item": `${baseUrl}/contact` });
   } else if (isPrivacy) {
@@ -297,16 +325,89 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   } else if (isSitemap) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All Visa Guides", "item": `${baseUrl}/sitemap` });
   } else if (quizMatch) {
-    const from = quizMatch[1].toUpperCase();
+    const from = (quizMatch[1] || 'IN').toUpperCase();
     const to = quizMatch[2].toUpperCase();
+    targetCodeForSchema = to.toLowerCase();
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Visa Quiz`, "item": window.location.href });
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
+    targetCodeForSchema = to.toLowerCase();
     const type = articleMatch[3].toUpperCase();
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Guides`, "item": `${baseUrl}/${from.toLowerCase()}-to-${to.toLowerCase()}` });
     breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": `${type} Visa Guide`, "item": window.location.href });
+  } else if (article) {
+    targetCodeForSchema = (article.to || 'us').toLowerCase();
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Blogs", "item": `${baseUrl}/blogs` });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": article.title, "item": window.location.href });
   }
+
+  const schemaCountryName = getCountryDisplayName(targetCodeForSchema);
+  const schemaMeta = getCountryMeta(targetCodeForSchema);
+  const schemaCount = getLiveVisaCount(targetCodeForSchema);
+
+  const faqEntities = interviewMatch
+    ? get20InterviewQuestions(targetCodeForSchema, schemaCountryName).slice(0, 6).map((q) => ({
+        "@type": "Question",
+        "name": q.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": q.idealAnswer
+        }
+      }))
+    : [
+        {
+          "@type": "Question",
+          "name": `How many visa categories are available for ${schemaCountryName} in 2026?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `${schemaCountryName} offers ${schemaCount} official visa types across Tourist, Business, Work, Student, Family, and Permanent Residency categories.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `What is the ${schemaCountryName} visa processing time and approval rate for Indians?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Standard processing time for ${schemaCountryName} is ${schemaMeta.processing} with a ${schemaMeta.successRate} approval rate for Indian passport holders.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `What is the best time to visit ${schemaCountryName} and average hotel cost in ${schemaMeta.capital}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `The best season to visit ${schemaCountryName} is ${schemaMeta.bestTime}. Refundable hotels in ${schemaMeta.capital} start from ${schemaMeta.hotelPrice} on Booking.com.`
+          }
+        }
+      ];
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": `How to Apply for a ${schemaCountryName} Visa from India in 2026`,
+    "description": `Step-by-step official procedure to apply for a ${schemaCountryName} visa from India (${schemaMeta.processing} processing time).`,
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Select Visa Subclass & Verify Eligibility",
+        "text": `Choose the right subclass among ${schemaCount} official ${schemaCountryName} visa categories using our 30-second Eligibility Checker.`
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Gather Mandatory Financial & Travel Documents",
+        "text": `Prepare a valid passport (6+ months), 6 months bank statements, 3 years ITR, employer NOC, and verifiable hotel booking in ${schemaMeta.capital}.`
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Submit Online Application & Book VFS/Embassy Slot",
+        "text": `Complete the online application form, pay the consular fee, and attend biometrics/interview in New Delhi, Mumbai, Bengaluru, Chennai, Hyderabad, or Kolkata.`
+      }
+    ]
+  };
 
   const schemas = [
     {
@@ -326,9 +427,249 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": breadcrumbItems
-    }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqEntities
+    },
+    howToSchema
   ];
   ldScript.textContent = JSON.stringify(schemas);
+}
+
+// ----------------------------------------------------
+// Country Live Hero Component (Full 15 Features + Booking.com Hotel AID 8119919 + Cost Calculator)
+// ----------------------------------------------------
+function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: { fromCode: string; toCode: string; toName: string; toFlag: string; count: number; navigate?: (path: string) => void }) {
+  const codeLower = (toCode || 'us').toLowerCase();
+  const fromLower = (fromCode || 'in').toLowerCase();
+  const meta = getCountryMeta(codeLower);
+  const capitalSlug = getCapitalSlug(meta.capital);
+  const [liveTime, setLiveTime] = useState(() => getLiveLocalTime(meta.timeZone));
+  const [weatherStr, setWeatherStr] = useState<string>('Loading...');
+  const [currencyStr, setCurrencyStr] = useState<string>('Loading...');
+  const [tripNights, setTripNights] = useState<number>(7);
+  const [showCalcDetails, setShowCalcDetails] = useState<boolean>(false);
+
+  useEffect(() => {
+    setLiveTime(getLiveLocalTime(meta.timeZone));
+    setWeatherStr('Loading...');
+    setCurrencyStr('Loading...');
+
+    let active = true;
+    getLiveWeather(meta.lat, meta.lon).then((w) => {
+      if (active) {
+        setWeatherStr(`${w.emoji} ${w.temp} ${w.desc}`);
+      }
+    });
+    getCurrencyRate(meta.currency).then((r) => {
+      if (active) {
+        setCurrencyStr(r);
+      }
+    });
+
+    const timer = setInterval(() => {
+      if (active) setLiveTime(getLiveLocalTime(meta.timeZone));
+    }, 60000);
+
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [codeLower, meta.timeZone, meta.lat, meta.lon, meta.currency]);
+
+  const nightlyNum = parseHotelPriceUSD(meta.hotelPrice);
+  const hotelTotalEst = nightlyNum * tripNights;
+  const minTotalUSD = Math.round(hotelTotalEst + 350);
+  const maxTotalUSD = Math.round(hotelTotalEst + 1150);
+
+  return (
+    <>
+    <div className="bg-gradient-to-br from-[#eff6ff] via-[#dbeafe] to-[#fef3c7] rounded-[20px] p-5 sm:p-6 border border-[#bfdbfe] mb-6 shadow-xs">
+      {/* Row 1: Flag + Name + 8 Feature Boxes */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start">
+        <div className="text-[56px] sm:text-[64px] leading-none shrink-0">{toFlag}</div>
+        <div className="flex-1 w-full min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-2xl sm:text-[32px] font-black text-slate-900 tracking-[-0.5px] leading-tight">
+              {toName} - {count} Visa Types
+            </h1>
+            <button
+              onClick={() =>
+                generateChecklistPDF({
+                  visaName: `${toName} All Visa Categories`,
+                  countryName: toName,
+                  countryCode: toCode,
+                  processing: meta.processing
+                })
+              }
+              className="bg-[#0f172a] hover:bg-slate-800 text-white px-4 py-2.5 rounded-[10px] font-bold text-[13px] cursor-pointer transition-colors shrink-0 shadow-xs"
+            >
+              📄 Download Checklist PDF
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#e2e8f0]">
+              <span className="text-[11px] text-[#64748b] font-bold block">📍 CAPITAL</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block truncate">{meta.capital}</span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#e2e8f0]">
+              <span className="text-[11px] text-[#64748b] font-bold block">🗣 LANGUAGE</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block truncate">{meta.language}</span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#e2e8f0]">
+              <span className="text-[11px] text-[#64748b] font-bold block">💱 CURRENCY</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block">
+                {meta.currency} ({meta.currencySymbol})
+              </span>
+              <span id={`live-currency-${codeLower}`} className="text-[11px] text-[#059669] font-semibold block truncate">
+                {currencyStr}
+              </span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#dcfce7]">
+              <span className="text-[11px] text-[#15803d] font-bold block">🕐 LIVE TIME</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block">{liveTime.time}</span>
+              <span className="text-[11px] text-[#16a34a] font-semibold block">{liveTime.diffFromIST}</span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#fef3c7]">
+              <span className="text-[11px] text-[#92400e] font-bold block">🌤 WEATHER</span>
+              <span id={`weather-${codeLower}`} className="font-bold text-sm text-slate-900 mt-0.5 block truncate">
+                {weatherStr}
+              </span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#e0e7ff]">
+              <span className="text-[11px] text-[#4338ca] font-bold block">📅 BEST TIME</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block truncate">{meta.bestTime}</span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#fde68a]">
+              <span className="text-[11px] text-[#92400e] font-bold block">⏱ PROCESSING</span>
+              <span className="font-bold text-sm text-slate-900 mt-0.5 block truncate">{meta.processing}</span>
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#bbf7d0]">
+              <span className="text-[11px] text-[#15803d] font-bold block">💰 SUCCESS RATE</span>
+              <span className="font-extrabold text-sm text-[#16a34a] mt-0.5 block">{meta.successRate}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 2: Booking.com Hotel + Indian Community & More + Cost Calculator */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+        {/* Card 1: Booking.com Hotel Price */}
+        <div className="bg-white rounded-2xl p-4 border-2 border-[#003580] flex flex-col justify-between">
+          <div>
+            <div className="text-xs font-extrabold text-[#003580]">🏨 HOTEL PRICE - BOOKING.COM</div>
+            <div className="text-lg font-black text-slate-900 mt-1.5">
+              From {meta.hotelPrice} in {meta.capital}
+            </div>
+            <a
+              href={`https://www.booking.com/city/${codeLower}/${capitalSlug}.html?aid=8119919&label=${fromLower}-to-${codeLower}-hotel`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block mt-3 bg-[#003580] hover:bg-[#002860] text-white text-center py-2.5 px-3 rounded-[10px] font-bold text-xs no-underline transition-colors"
+            >
+              Check on Booking.com →
+            </a>
+          </div>
+          <div className="text-[10px] text-[#64748b] mt-2 text-center font-medium">
+            AID 8119919 • Free cancellation
+          </div>
+        </div>
+
+        {/* Card 2: Indian Community & More */}
+        <div className="bg-white rounded-2xl p-4 border border-[#e2e8f0] flex flex-col justify-between">
+          <div>
+            <div className="text-xs font-extrabold text-[#475569]">📊 INDIAN COMMUNITY & MORE</div>
+            <div className="text-[13px] text-slate-800 mt-2 leading-[1.8]">
+              👥 <b>{meta.indians}</b> Indians in {toName}
+              <br />
+              🎉 {meta.festivals}
+              <br />
+              💼 Top Jobs: {meta.topJobs}
+              <br />
+              🎓 {meta.topUnis}
+              <br />
+              🚨 Advisory:{' '}
+              <span
+                className={`px-2 py-0.5 rounded-lg font-bold text-xs ${
+                  meta.advisory === 'Safe' ? 'bg-[#dcfce7] text-emerald-900' : 'bg-[#fef3c7] text-amber-900'
+                }`}
+              >
+                {meta.advisory}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: Cost Calculator */}
+        <div className="bg-gradient-to-br from-[#f0fdf4] to-[#dcfce7] rounded-2xl p-4 border border-[#bbf7d0] flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-extrabold text-[#15803d]">🧮 COST CALCULATOR</div>
+              {showCalcDetails && (
+                <div className="flex items-center gap-1 text-[11px] font-bold text-[#15803d]">
+                  <button
+                    type="button"
+                    onClick={() => setTripNights(Math.max(1, tripNights - 1))}
+                    className="w-5 h-5 rounded bg-white border border-emerald-300 flex items-center justify-center cursor-pointer"
+                  >
+                    -
+                  </button>
+                  <span>{tripNights}N</span>
+                  <button
+                    type="button"
+                    onClick={() => setTripNights(Math.min(30, tripNights + 1))}
+                    className="w-5 h-5 rounded bg-white border border-emerald-300 flex items-center justify-center cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="mt-2 space-y-1 text-xs text-slate-800">
+              <div className="flex justify-between">
+                <span>Visa Fee:</span>
+                <b>$50-$500</b>
+              </div>
+              <div className="flex justify-between">
+                <span>Flight (DEL→):</span>
+                <b>{meta.flightPrice}</b>
+              </div>
+              <div className="flex justify-between">
+                <span>Hotel ({tripNights} nights):</span>
+                <b>{meta.hotelPrice} x {tripNights}</b>
+              </div>
+              <div className="border-t border-dashed border-[#86efac] mt-2 pt-2 flex justify-between font-extrabold text-slate-900 text-[13px]">
+                <span>Total Est.:</span>
+                <span>{showCalcDetails ? `$${minTotalUSD}-$${maxTotalUSD}` : '$800-$2000'}</span>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowCalcDetails((prev) => !prev)}
+            className="w-full mt-2.5 bg-[#16a34a] hover:bg-[#15803d] text-white py-2 px-3 rounded-lg font-bold text-xs cursor-pointer transition-colors"
+          >
+            {showCalcDetails ? `Adjust Nights (${tripNights} Nights) • ~$${minTotalUSD}` : 'Calculate My Trip →'}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* Phase 3 Tool 1: 30-Sec Visa Eligibility Checker */}
+    <EligibilityChecker
+      countryCode={toCode}
+      countryName={toName}
+      defaultFromCode={fromCode}
+      onNavigate={navigate}
+    />
+
+    {/* Phase 3 Tool 3: Embassy Finder + Consular Interview Prep */}
+    <EmbassyFinder countryCode={toCode} countryName={toName} onNavigate={navigate} />
+    </>
+  );
 }
 
 // ----------------------------------------------------
@@ -414,6 +755,16 @@ function VisaCategorySelectionView({ match, countries, navigate }: any) {
         <span>&gt;</span>
         <span className="text-slate-900 font-bold">{headerInfo.breadcrumb}</span>
       </nav>
+
+      {/* Phase 1.5 & 2 & 3: Full Country Hero + Eligibility + Embassy */}
+      <CountryLiveHero
+        fromCode={fromCode}
+        toCode={toCode}
+        toName={headerInfo.toName}
+        toFlag={headerInfo.toFlag}
+        count={liveCount}
+        navigate={navigate}
+      />
 
       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12">
         <div className="text-center max-w-2xl mx-auto mb-10">
@@ -609,6 +960,15 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
         <span>&gt;</span>
         <span className="text-slate-900 font-bold capitalize">{categoryTitle} Visas ({categoryVisas.length} types)</span>
       </nav>
+
+      {/* Phase 1.5: 8 Live Features + Booking.com Hotel Hero */}
+      <CountryLiveHero
+        fromCode={fromCode}
+        toCode={toCode}
+        toName={toCountry.name}
+        toFlag={toCountry.flag}
+        count={getLiveVisaCount(toCode)}
+      />
 
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
@@ -1062,9 +1422,36 @@ function VisaCategoryListView({ match, countries, navigate }: any) {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#0B3D91]">
-              <span>{isJa ? '必要書類と詳細を見る' : 'View Requirements & Docs'}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2 text-xs font-bold text-[#0B3D91]">
+              <span className="flex items-center gap-1">
+                {isJa ? '必要書類と詳細を見る' : 'View Requirements & Docs'}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const rawDocs = Array.isArray(v.docs)
+                    ? v.docs
+                    : typeof v.docs === 'string'
+                    ? v.docs.split(/\+|\n|,/).map((s: string) => s.trim()).filter(Boolean)
+                    : [];
+                  generateChecklistPDF({
+                    visaName: v.name,
+                    countryName: toCountry.name,
+                    countryCode: toCode,
+                    fromCountryName: fromCountry.name,
+                    fee: v.fee,
+                    validity: v.validity,
+                    processing: v.processing,
+                    docs: rawDocs
+                  });
+                }}
+                className="bg-[#0f172a] hover:bg-slate-800 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold cursor-pointer shrink-0 transition-colors"
+                title="Download Checklist PDF"
+              >
+                📄 PDF
+              </button>
             </div>
           </div>
           );
@@ -1429,6 +1816,8 @@ export default function App() {
   // Router parsing
   const isHome = currentPath === '/';
   const isAdmin = currentPath === '/admin';
+  const isBlogs = currentPath === '/blogs' || currentPath === '/blogs/';
+  const interviewMatch = currentPath.match(/^\/interview-prep\/([a-z]{2,3})$/i);
   const isContact = currentPath === '/contact';
   const isPrivacy = currentPath === '/privacy';
   const isTerms = currentPath === '/terms';
@@ -1436,8 +1825,11 @@ export default function App() {
   const isAudit = currentPath === '/audit';
   const isVerification = currentPath === '/verification';
 
-  // 1. Level 1: /in-to-us
-  const isLevel1Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/i);
+  // 1. Level 1: /in-to-us or /us-visa
+  const shortCountryMatch = currentPath.match(/^\/([a-z]{2,3})-visa$/i);
+  const isLevel1Match =
+    currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/i) ||
+    (shortCountryMatch ? [shortCountryMatch[0], 'in', shortCountryMatch[1]] : null);
 
   // 2. Level 2: /in-to-us-tourist, /in-to-us-work, etc.
   const isLevel2Match = currentPath.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)$/i);
@@ -1448,10 +1840,12 @@ export default function App() {
 
   const cleanPathSlug = normalizeBlogSlug(currentPath);
 
-  // 4. Published Blog Articles: e.g. /india-to-canada-work-visa-atlxt or any custom article slug
-  // Cache-first lookup: check in-memory articles -> localStorage cache -> DEFAULT_PUBLISHED_GUIDES fallback
+  // 4. Published Blog Articles & Auto-Generated 249-Country Blogs
   const matchedBlogArticle = (() => {
     if (!cleanPathSlug) return undefined;
+    const generated = findGeneratedBlogBySlug(cleanPathSlug);
+    if (generated) return generated as unknown as Article;
+
     const fromState = articles.find((a: Article) => {
       const s = normalizeBlogSlug(a.slug);
       const r = normalizeBlogSlug((a as any).route);
@@ -1464,10 +1858,10 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAdmin && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAdmin && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
-        cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog')
+        cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
       )
     );
 
@@ -1482,7 +1876,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col text-slate-900 font-sans">
       {/* Official VFS-Style Top Header */}
       <header className="sticky top-0 z-50 bg-[#0B3D91] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-8">
@@ -1504,6 +1898,8 @@ export default function App() {
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer hover:text-white`}>Countries</button>
+            <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>📝 Blogs (2,490+)</button>
+            <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>🎤 Interview Prep</button>
             <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
             <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
               <Shield className="w-4 h-4 text-amber-300" /> Admin Portal
@@ -1531,6 +1927,8 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
+            <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">📝 Visa Blogs (2,490+)</button>
+            <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">🎤 Consular Interview Prep</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
           </div>
@@ -1552,6 +1950,10 @@ export default function App() {
             onDelete={handleDeleteDraft}
             navigate={navigate}
           />
+        ) : isBlogs ? (
+          <BlogsPage navigate={navigate} />
+        ) : interviewMatch ? (
+          <InterviewPrepFull countryCode={interviewMatch[1]} onNavigate={navigate} />
         ) : isAudit ? (
           <AuditPage navigate={navigate} />
         ) : isVerification ? (
@@ -1601,6 +2003,9 @@ export default function App() {
         )}
       </main>
 
+      {/* Phase 4 Tool 2: Floating 249-Country Visa Assistant Chatbot */}
+      <VisaChatbot onNavigate={navigate} />
+
       {/* Google AdSense Banner */}
       <AdSenseBanner />
 
@@ -1628,6 +2033,8 @@ export default function App() {
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors cursor-pointer">About Us & Home</button></li>
+              <li><button onClick={() => navigate('/blogs')} className="hover:text-white transition-colors cursor-pointer">Visa Blogs (2,490+ Guides)</button></li>
+              <li><button onClick={() => navigate('/interview-prep/us')} className="hover:text-white transition-colors cursor-pointer">Consular Interview Prep</button></li>
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
@@ -1638,13 +2045,13 @@ export default function App() {
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-500">14,084+ Visa & Programme Guides across 150+ Destination Countries</li>
+              <li className="text-xs text-slate-500">14,084+ Visa & Programme Guides across 249 Destination Countries</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 14,084+ Visa & Programme Guides across 150+ Destination Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
+          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 14,084+ Visa & Programme Guides across 249 Destination Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-400 hover:underline">contact@visaapply.org</a></p>
           <p className="text-blue-400 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="hover:underline font-bold">contact@visaapply.org</a></p>
         </div>
       </footer>
@@ -1705,7 +2112,30 @@ export function deduplicateCountries(countryList: Country[]): Country[] {
 // ----------------------------------------------------
 function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigin, articles, searchQuery, setSearchQuery, navigate, forceUpdate }: any) {
   const [targetSearch, setTargetSearch] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeContinent, setActiveContinent] = useState<string>('all');
+  const [visaTypeFilter, setVisaTypeFilter] = useState<string>('All Visa Types');
+  const [processingFilter, setProcessingFilter] = useState<string>('Any Processing Time');
+  const [hotelFilter, setHotelFilter] = useState<string>('Any Hotel Price');
+  const [sortBy, setSortBy] = useState<string>('Sort by Visa Count (High to Low)');
+  const [compareCodes, setCompareCodes] = useState<string[]>([]);
+  const [showComparison, setShowComparison] = useState<boolean>(false);
+
+  const toggleCompareCountry = (code: string) => {
+    const norm = code.toLowerCase();
+    setCompareCodes((prev) => {
+      if (prev.includes(norm)) {
+        const next = prev.filter((c) => c !== norm);
+        if (next.length === 0) setShowComparison(false);
+        return next;
+      }
+      if (prev.length >= 3) {
+        return [...prev.slice(1), norm];
+      }
+      return [...prev, norm];
+    });
+  };
+
   const dynamicCountries = useMemo(() => {
     const dbList = getAllCountriesFromDB();
     if (dbList.length > 0) return dbList;
@@ -1713,14 +2143,122 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
   }, [forceUpdate, countries]);
 
   const uniqueCountries = deduplicateCountries(dynamicCountries);
-  const filteredCountries = uniqueCountries.filter((c: Country) => {
-    const matchesSearch =
-      getCountryFullName(c.code).toLowerCase().includes(targetSearch.toLowerCase()) || 
-      c.name.toLowerCase().includes(targetSearch.toLowerCase()) || 
-      c.code.toLowerCase().includes(targetSearch.toLowerCase());
-    const matchesContinent = isCountryInContinent(c.code, activeContinent);
-    return matchesSearch && matchesContinent;
-  });
+
+  // Advanced match helper across 9 metadata fields + reason badge
+  const getCountrySearchMatch = (c: Country, rawQuery: string): { matched: boolean; reason: string } => {
+    const q = (rawQuery || '').trim().toLowerCase();
+    if (!q) return { matched: true, reason: '' };
+
+    const fullName = getCountryFullName(c.code);
+    const meta = getCountryMeta(c.code);
+    const contKey = getContinentForCountry(c.code);
+    const contLabel = CONTINENT_MAP_249[contKey]?.label || contKey;
+    const isSchengen = CONTINENT_MAP_249.europe?.subregions?.schengen?.includes(c.code.toLowerCase());
+
+    if (fullName.toLowerCase().includes(q) || c.code.toLowerCase() === q) {
+      return { matched: true, reason: `${meta.capital} • ${getLiveVisaCount(c.code)} Visas` };
+    }
+    if (meta.capital.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Capital: ${meta.capital}` };
+    }
+    if (q.includes('schengen') && (isSchengen || meta.processing.toLowerCase().includes('schengen'))) {
+      return { matched: true, reason: `Schengen Zone • ${meta.processing}` };
+    }
+    if (meta.processing.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Processing: ${meta.processing}` };
+    }
+    if (meta.language.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Language: ${meta.language}` };
+    }
+    if (meta.currency.toLowerCase().includes(q) || meta.currencySymbol.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Currency: ${meta.currency} (${meta.currencySymbol})` };
+    }
+    if (contLabel.toLowerCase().includes(q) || contKey.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Continent: ${contLabel}` };
+    }
+    if (meta.bestTime.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Best Time: ${meta.bestTime}` };
+    }
+    if (meta.topJobs.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Top Jobs: ${meta.topJobs}` };
+    }
+    if (meta.topUnis.toLowerCase().includes(q)) {
+      return { matched: true, reason: `Universities: ${meta.topUnis}` };
+    }
+    return { matched: false, reason: '' };
+  };
+
+  const searchSuggestions = useMemo(() => {
+    const q = targetSearch.trim();
+    if (!q) return [];
+    const matches: { country: Country; reason: string }[] = [];
+    for (const c of uniqueCountries) {
+      const m = getCountrySearchMatch(c, q);
+      if (m.matched) {
+        matches.push({ country: c, reason: m.reason });
+        if (matches.length >= 12) break;
+      }
+    }
+    return matches;
+  }, [uniqueCountries, targetSearch]);
+
+  const filteredCountries = useMemo(() => {
+    const list = uniqueCountries.filter((c: Country) => {
+      const searchMatch = getCountrySearchMatch(c, targetSearch).matched;
+      if (!searchMatch) return false;
+
+      const matchesContinent = isCountryInContinent(c.code, activeContinent);
+      if (!matchesContinent) return false;
+
+      const meta = getCountryMeta(c.code);
+      const procLower = meta.processing.toLowerCase();
+      const isSchengen = CONTINENT_MAP_249.europe?.subregions?.schengen?.includes(c.code.toLowerCase());
+
+      // Visa Type Smart Filter
+      if (visaTypeFilter === 'e-Visa Only' && !procLower.includes('e-visa') && !procLower.includes('e-voa')) {
+        return false;
+      }
+      if (visaTypeFilter === 'Visa Free' && !procLower.includes('free') && !procLower.includes('instant')) {
+        return false;
+      }
+      if (visaTypeFilter === 'VOA' && !procLower.includes('voa') && !procLower.includes('arrival')) {
+        return false;
+      }
+      if (visaTypeFilter === 'Schengen' && !isSchengen && !procLower.includes('schengen')) {
+        return false;
+      }
+
+      // Processing Time Smart Filter
+      const procDays = parseProcessingDays(meta.processing);
+      if (processingFilter === '1-3 Days' && procDays > 3) return false;
+      if (processingFilter === '3-5 Days' && (procDays < 3 || procDays > 5)) return false;
+      if (processingFilter === '15 Days' && (procDays < 10 || procDays > 16)) return false;
+      if (processingFilter === '20-30 Days' && procDays < 18) return false;
+
+      // Hotel Price Smart Filter
+      const hotelNum = parseHotelPriceUSD(meta.hotelPrice);
+      if (hotelFilter === 'Under $50/night' && hotelNum > 50) return false;
+      if (hotelFilter === '$50-$100' && (hotelNum < 50 || hotelNum > 100)) return false;
+      if (hotelFilter === '$100-$150' && (hotelNum < 100 || hotelNum > 150)) return false;
+      if (hotelFilter === '$150+' && hotelNum < 140) return false;
+
+      return true;
+    });
+
+    const sorted = [...list];
+    if (sortBy === 'Sort by Visa Count (High to Low)') {
+      sorted.sort((a, b) => getLiveVisaCount(b.code) - getLiveVisaCount(a.code));
+    } else if (sortBy === 'Sort by Hotel Price (Low to High)') {
+      sorted.sort((a, b) => parseHotelPriceUSD(getCountryMeta(a.code).hotelPrice) - parseHotelPriceUSD(getCountryMeta(b.code).hotelPrice));
+    } else if (sortBy === 'Sort by Processing Time (Fast to Slow)') {
+      sorted.sort((a, b) => parseProcessingDays(getCountryMeta(a.code).processing) - parseProcessingDays(getCountryMeta(b.code).processing));
+    } else if (sortBy === 'Sort by Success Rate (High to Low)') {
+      sorted.sort((a, b) => parseSuccessRateNum(getCountryMeta(b.code).successRate) - parseSuccessRateNum(getCountryMeta(a.code).successRate));
+    } else if (sortBy === 'Sort by Name A-Z') {
+      sorted.sort((a, b) => getCountryFullName(a.code).localeCompare(getCountryFullName(b.code)));
+    }
+    return sorted;
+  }, [uniqueCountries, targetSearch, activeContinent, visaTypeFilter, processingFilter, hotelFilter, sortBy]);
 
   const continentTabs = useMemo(() => [
     { key: 'all', label: 'All', icon: '🌍', count: uniqueCountries.length },
@@ -1737,15 +2275,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
     if (typeof window !== 'undefined') {
       (window as any).getContinent = getContinentForCountry;
       (window as any).CONTINENT_MAP = CONTINENT_MAP_249;
+      (window as any).filterCountries = (val: string) => setTargetSearch(val);
     }
-    console.log("✅ OPTION 2 LEFT SIDE DONE - Flag + Country Name + Number");
-    console.log("🇺🇸 United States:", getLiveVisaCount("us"), "Visa Types");
-    console.log("🇨🇦 Canada:", getLiveVisaCount("ca"), "Visa Types");
-    console.log("🇬🇧 United Kingdom:", getLiveVisaCount("gb"), "Visa Types");
-    console.log("🇩🇪 Germany:", getLiveVisaCount("de"), "Visa Types");
-    const totalVisas = uniqueCountries.reduce((sum: number, c: Country) => sum + getLiveVisaCount(c.code), 0);
-    console.log("TOTAL LIVE VISAS:", totalVisas);
-    console.log("✅ CONTINENT DIVIDE + EXACT VISA COUNTS DONE - 249 COUNTRIES");
   }, [uniqueCountries]);
 
   return (
@@ -1795,8 +2326,29 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         </div>
       </section>
 
-      {/* All Global Destinations Section - Exact Match to Reference Design */}
+      {/* All Global Destinations Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        {/* Phase 3 Tool 1: 30-Sec Visa Eligibility Checker on Homepage */}
+        <EligibilityChecker
+          showDestinationPicker={true}
+          defaultFromCode={selectedOrigin?.code || 'IN'}
+          onNavigate={navigate}
+        />
+
+        {/* Phase 3 Tool 2: Side-by-Side Visa Comparison View */}
+        {showComparison && compareCodes.length > 0 && (
+          <div id="visa-comparison-section" className="scroll-mt-24">
+            <VisaComparison
+              selectedCodes={compareCodes}
+              onRemoveCountry={(code) => toggleCompareCountry(code)}
+              onAddCountry={(code) => toggleCompareCountry(code)}
+              onClose={() => setShowComparison(false)}
+              onNavigate={navigate}
+              fromCode={selectedOrigin?.code || 'IN'}
+            />
+          </div>
+        )}
+
         <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             All Global Destinations
@@ -1806,22 +2358,150 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           </p>
         </div>
 
-        {/* Continent Divide Filter Bar */}
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
+        {/* Phase 2 Step 1: Advanced Search Bar + Live Suggestions Dropdown */}
+        <div className="max-w-[800px] mx-auto mb-6 relative">
+          <div className="flex items-center bg-white border-2 border-[#e2e8f0] focus-within:border-[#3b82f6] rounded-2xl px-5 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-colors">
+            <span className="text-xl mr-3">🔍</span>
+            <input
+              id="country-search"
+              type="text"
+              value={targetSearch}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 180)}
+              onChange={(e) => {
+                setTargetSearch(e.target.value);
+                setShowSuggestions(true);
+              }}
+              placeholder="Search 249 countries, capitals, visas - e.g. USA, London, Schengen, e-Visa, 15 Days..."
+              className="flex-1 border-none outline-none text-[15px] font-medium text-slate-900 bg-transparent"
+            />
+            {targetSearch && (
+              <button
+                type="button"
+                onClick={() => setTargetSearch('')}
+                className="mr-2 text-xs font-bold text-slate-400 hover:text-slate-600 px-2 py-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            )}
+            <span className="bg-[#f1f5f9] px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#64748b] shrink-0">
+              249 COUNTRIES
+            </span>
+          </div>
+
+          {/* Search Suggestions Dropdown */}
+          <div
+            id="search-suggestions"
+            className={`absolute top-full left-0 right-0 bg-white rounded-xl border border-[#e2e8f0] shadow-[0_12px_24px_rgba(0,0,0,0.1)] mt-2 max-h-[300px] overflow-y-auto z-20 ${
+              showSuggestions && targetSearch.trim().length > 0 && searchSuggestions.length > 0 ? 'block' : 'hidden'
+            }`}
+          >
+            {searchSuggestions.map(({ country, reason }) => {
+              const originCode = (selectedOrigin?.code || 'IN').toLowerCase();
+              const destCode = country.code.toLowerCase();
+              return (
+                <button
+                  key={country.code}
+                  type="button"
+                  onMouseDown={() => navigate(`/${originCode}-to-${destCode}`)}
+                  className="w-full px-4 py-2.5 text-left hover:bg-blue-50/70 flex items-center justify-between border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-2xl">{getCountryFlag(country.code)}</span>
+                    <div className="min-w-0">
+                      <div className="font-bold text-sm text-slate-900 truncate">
+                        {getCountryFullName(country.code)}
+                      </div>
+                      <div className="text-xs text-slate-500 truncate">{reason}</div>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold text-[#2563eb] bg-blue-50 px-2.5 py-1 rounded-lg shrink-0">
+                    {getLiveVisaCount(country.code)} Visas →
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Phase 2 Step 2: Smart Filters & Sort Bar */}
+        <div className="flex gap-2 flex-wrap mb-5 justify-center">
+          <select
+            id="filter-visa-type"
+            value={visaTypeFilter}
+            onChange={(e) => setVisaTypeFilter(e.target.value)}
+            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500"
+          >
+            <option>All Visa Types</option>
+            <option>e-Visa Only</option>
+            <option>Visa Free</option>
+            <option>VOA</option>
+            <option>Schengen</option>
+          </select>
+
+          <select
+            id="filter-processing"
+            value={processingFilter}
+            onChange={(e) => setProcessingFilter(e.target.value)}
+            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500"
+          >
+            <option>Any Processing Time</option>
+            <option>1-3 Days</option>
+            <option>3-5 Days</option>
+            <option>15 Days</option>
+            <option>20-30 Days</option>
+          </select>
+
+          <select
+            id="filter-hotel"
+            value={hotelFilter}
+            onChange={(e) => setHotelFilter(e.target.value)}
+            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500"
+          >
+            <option>Any Hotel Price</option>
+            <option>Under $50/night</option>
+            <option>$50-$100</option>
+            <option>$100-$150</option>
+            <option>$150+</option>
+          </select>
+
+          <select
+            id="sort-by"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-3 py-2 rounded-[10px] border border-[#3b82f6] text-xs font-bold bg-[#eff6ff] text-[#2563eb] cursor-pointer focus:outline-none"
+          >
+            <option>Sort by Visa Count (High to Low)</option>
+            <option>Sort by Hotel Price (Low to High)</option>
+            <option>Sort by Processing Time (Fast to Slow)</option>
+            <option>Sort by Success Rate (High to Low)</option>
+            <option>Sort by Name A-Z</option>
+          </select>
+        </div>
+
+        {/* Continent Divide Filter Bar - Premium Design */}
+        <div className="flex flex-wrap gap-2.5 justify-center p-5 bg-white rounded-2xl border border-[#e2e8f0] mb-6 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
           {continentTabs.map((cont) => {
             const isActive = activeContinent === cont.key;
             return (
               <button
                 key={cont.key}
                 onClick={() => setActiveContinent(cont.key)}
-                className={`px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-[18px] py-2.5 rounded-[24px] border-2 text-[13px] font-bold cursor-pointer flex items-center gap-2 transition-all duration-200 ${
                   isActive
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-slate-900'
+                    ? 'border-[#3b82f6] bg-gradient-to-br from-[#3b82f6] to-[#2563eb] text-white shadow-[0_4px_12px_rgba(59,130,246,0.3)]'
+                    : 'border-[#f1f5f9] bg-white text-[#475569] hover:border-blue-200 hover:text-slate-900'
                 }`}
               >
-                <span>{cont.icon}</span>
-                <span>{cont.label} ({cont.count})</span>
+                <span className="text-base leading-none">{cont.icon}</span>
+                <span>{cont.label}</span>
+                <span
+                  className={`px-2 py-0.5 rounded-[10px] text-[11px] font-bold ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-[#f1f5f9] text-[#475569]'
+                  }`}
+                >
+                  {cont.count}
+                </span>
               </button>
             );
           })}
@@ -1838,60 +2518,187 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             const fullName = getCountryFullName(country.code);
             const contKey = getContinentForCountry(country.code);
             const contLabel = CONTINENT_MAP_249[contKey]?.label || contKey;
+            const meta = getCountryMeta(country.code);
+            const liveLocal = getLiveLocalTime(meta.timeZone);
 
             return (
               <button
                 key={country.code}
                 disabled={isSelf}
                 onClick={() => navigate(`/${originCode}-to-${destCode}`)}
-                className={`group bg-white rounded-2xl border px-5 py-4 transition-all duration-200 flex items-center justify-between text-left w-full ${
-                  isSelf 
-                    ? 'border-slate-200 opacity-60 cursor-not-allowed bg-slate-50' 
-                    : 'border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 cursor-pointer'
+                className={`group bg-white border rounded-[20px] p-4 text-left w-full flex flex-col gap-3 transition-all duration-300 ${
+                  isSelf
+                    ? 'border-slate-200 opacity-60 cursor-not-allowed bg-slate-50 shadow-none'
+                    : 'border-[#e8edf3] cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] hover:border-[#d0d7e3]'
                 }`}
               >
-                {/* Left side: Soft sky-blue rounded icon container with graphical flag */}
-                <div className="flex items-center gap-4 min-w-0 flex-1">
-                  <div className="w-16 h-16 min-w-[64px] rounded-2xl bg-[#A9CEF4]/75 flex items-center justify-center p-2.5 shrink-0 group-hover:scale-105 transition-transform">
-                    <img
-                      src={flagUrl}
-                      alt={`${fullName} flag`}
-                      loading="lazy"
-                      className="w-11 h-8 object-cover rounded-md shadow-2xs"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        target.style.display = 'none';
-                        const fallbackEl = target.nextElementSibling as HTMLElement | null;
-                        if (fallbackEl) fallbackEl.style.display = 'inline';
-                      }}
-                    />
-                    <span className="text-2xl hidden" aria-hidden="true">
-                      {flagEmoji}
-                    </span>
-                  </div>
-                  {/* Middle: Country Full Name + Number of Visa Types */}
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] truncate leading-snug">
-                      {fullName}
+                {/* Top Row - Flag + Name + Arrow */}
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="w-[52px] h-[52px] min-w-[52px] rounded-[14px] bg-gradient-to-br from-[#f0f7ff] to-[#e0eaff] flex items-center justify-center text-[28px] shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)] shrink-0">
+                      <img
+                        src={flagUrl}
+                        alt={`${fullName} flag`}
+                        loading="lazy"
+                        className="w-9 h-6 object-cover rounded-sm shadow-2xs"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = 'none';
+                          const fallbackEl = target.nextElementSibling as HTMLElement | null;
+                          if (fallbackEl) fallbackEl.style.display = 'inline';
+                        }}
+                      />
+                      <span className="text-[26px] hidden leading-none" aria-hidden="true">
+                        {flagEmoji}
+                      </span>
                     </div>
-                    <div className="text-sm text-slate-600 font-medium mt-0.5 truncate">
-                      {isSelf ? 'Your Origin Country' : `${liveCount} Visa Types • ${contLabel}`}
+                    <div className="min-w-0 flex-1">
+                      <div className="font-extrabold text-[15px] text-[#0f172a] tracking-[-0.2px] truncate group-hover:text-[#0B3D91] transition-colors">
+                        {fullName}
+                      </div>
+                      <div className="text-xs text-[#64748b] mt-1 flex items-center gap-1.5 flex-wrap">
+                        {isSelf ? (
+                          <span className="bg-slate-100 px-2 py-0.5 rounded-[10px] font-semibold text-slate-600">
+                            Your Origin Country
+                          </span>
+                        ) : (
+                          <>
+                            <span className="bg-[#f1f5f9] px-2 py-0.5 rounded-[10px] font-semibold text-[#475569]">
+                              {liveCount} Visas
+                            </span>
+                            <span className="text-[#94a3b8]">•</span>
+                            <span className="truncate">{contLabel}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-7 h-7 rounded-full bg-[#f8fafc] group-hover:bg-blue-50 flex items-center justify-center text-[#94a3b8] group-hover:text-[#0B3D91] text-base font-bold shrink-0 transition-colors">
+                    ›
+                  </div>
+                </div>
+
+                {/* Middle Row - 2 Pill Badges (LIVE TIME + PROCESSING) */}
+                <div className="flex gap-2 w-full">
+                  <div className="flex-1 min-w-0 bg-[#f0fdf4] border border-[#dcfce7] rounded-xl px-2.5 py-2 flex items-center gap-1.5">
+                    <span className="text-sm shrink-0">🕐</span>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-[#15803d] font-bold leading-none tracking-tight">
+                        LIVE TIME
+                      </div>
+                      <div className="text-xs text-[#166534] font-semibold mt-1 truncate">
+                        {liveLocal.time}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0 bg-[#fef3c7] border border-[#fde68a] rounded-xl px-2.5 py-2 flex items-center gap-1.5">
+                    <span className="text-sm shrink-0">⏱</span>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-[#92400e] font-bold leading-none tracking-tight">
+                        PROCESSING
+                      </div>
+                      <div className="text-xs text-[#78350f] font-semibold mt-1 truncate">
+                        {meta.processing}
+                      </div>
                     </div>
                   </div>
                 </div>
-                {/* Right side: Chevron arrow */}
-                {!isSelf && (
-                  <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-[#0B3D91] group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
-                )}
+
+                {/* Bottom Row - Hotel Price with Booking.com Blue + Compare Button */}
+                <div className="w-full bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] border border-[#bfdbfe] rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-8 h-8 shrink-0 bg-[#003580] rounded-lg flex items-center justify-center text-white text-sm font-extrabold">
+                      B
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-[#1e40af] font-bold leading-none">
+                        HOTEL FROM
+                      </div>
+                      <div className="text-[13px] text-[#1e3a8a] font-extrabold mt-0.5 truncate">
+                        {meta.hotelPrice} • Booking.com
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {!isSelf && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleCompareCountry(destCode);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.stopPropagation();
+                            toggleCompareCountry(destCode);
+                          }
+                        }}
+                        className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-colors cursor-pointer ${
+                          compareCodes.includes(destCode)
+                            ? 'bg-emerald-600 text-white border-emerald-600'
+                            : 'bg-white text-slate-700 border-blue-200 hover:bg-blue-50'
+                        }`}
+                      >
+                        {compareCodes.includes(destCode) ? '✓ Added' : '➕ Compare'}
+                      </span>
+                    )}
+                    <div className="bg-[#003580] group-hover:bg-[#002860] text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shrink-0 transition-colors">
+                      View →
+                    </div>
+                  </div>
+                </div>
               </button>
             );
           })}
         </div>
 
+        {/* Sticky Bottom Compare Bar when 2+ Countries Selected (or 1+ selected) */}
+        {compareCodes.length >= 1 && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-900/95 backdrop-blur-md text-white px-4 sm:px-6 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 sm:gap-4 max-w-[95vw]">
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
+              <span>⚖️ Selected ({compareCodes.length}/3):</span>
+              <div className="flex items-center gap-1.5">
+                {compareCodes.map((c) => (
+                  <span
+                    key={c}
+                    className="inline-flex items-center gap-1 bg-slate-800 border border-slate-600 px-2.5 py-1 rounded-lg text-xs"
+                  >
+                    <span>{getCountryFlag(c)}</span>
+                    <span className="hidden sm:inline">{getCountryFullName(c)}</span>
+                    <button
+                      type="button"
+                      onClick={() => toggleCompareCountry(c)}
+                      className="text-slate-400 hover:text-white ml-1 cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setShowComparison(true);
+                setTimeout(() => {
+                  document.getElementById('visa-comparison-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 80);
+              }}
+              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold cursor-pointer shrink-0 shadow-md transition-colors"
+            >
+              Compare {compareCodes.length} {compareCodes.length === 1 ? 'Country' : 'Countries'} →
+            </button>
+          </div>
+        )}
+
         <div className="text-center text-xs sm:text-sm text-slate-500 mt-8 font-medium">
           Showing {filteredCountries.length} of {uniqueCountries.length} destinations • {activeContinent === 'all' ? 'All Continents' : (CONTINENT_MAP_249[activeContinent]?.label || activeContinent)} • Updated Oct 2026 • 249 ISO FULL
         </div>
       </section>
+
+      {/* Phase 4 Tool 1: Featured 249-Country SEO Blogs Carousel */}
+      <FeaturedBlogsCarousel navigate={navigate} />
 
       {/* Recent Published Visa Guides Section */}
       <section className="bg-slate-100 py-16 border-t border-slate-200">
@@ -1901,6 +2708,12 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Recently Published Visa Guides</h2>
               <p className="text-sm text-slate-500 mt-1">Verified official requirements, fees, and document checklists</p>
             </div>
+            <button
+              onClick={() => navigate('/blogs')}
+              className="text-sm font-bold text-[#0B3D91] hover:underline cursor-pointer"
+            >
+              View All 2,490+ Blogs →
+            </button>
           </div>
 
           {articles.length === 0 ? (
@@ -1919,6 +2732,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((art: Article, idx: number) => {
                 const targetSlug = normalizeBlogSlug(art.slug || (art as any).route || art.title);
+                const preservedDate = (art as any).publishedDate || getPreservedPublishedDate(targetSlug, idx);
                 return (
                 <div 
                   key={targetSlug || idx}
@@ -1928,7 +2742,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
                       <span className="uppercase bg-blue-50 text-[#0B3D91] px-2.5 py-1 rounded-md font-semibold">{art.type} visa</span>
-                      <span>{art.date}</span>
+                      <span>{preservedDate}</span>
                     </div>
                     <h3 className="font-bold text-slate-900 text-lg group-hover:text-[#0B3D91] transition-colors line-clamp-2">
                       {art.title}
@@ -2808,6 +3622,15 @@ function ArticleView({ match, articles = [], navigate }: any) {
         <span className="text-slate-900 font-bold">{dbVisaItem?.name || subtypeCode.toUpperCase()}</span>
       </nav>
 
+      {/* Phase 1.5: 8 Live Features + Booking.com Hotel Hero */}
+      <CountryLiveHero
+        fromCode={fromCode}
+        toCode={toCode}
+        toName={toCountry.name}
+        toFlag={toCountry.flag}
+        count={getLiveVisaCount(toCode)}
+      />
+
       {/* Main Guide Container */}
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-10 space-y-8">
         {/* Header Title & Badges */}
@@ -2844,6 +3667,29 @@ function ArticleView({ match, articles = [], navigate }: any) {
               <span className="text-slate-500 block font-medium">{t.processing}</span>
               <span className="font-bold text-purple-800 text-sm mt-0.5 block">{dbVisaItem?.processing || '3-5 Weeks'}</span>
             </div>
+          </div>
+
+          {/* Phase 2 Step 4: Download Checklist PDF Button */}
+          <div className="pt-3 flex justify-center">
+            <button
+              type="button"
+              onClick={() =>
+                generateChecklistPDF({
+                  visaName,
+                  countryName: toCountry.name,
+                  countryCode: toCode,
+                  fromCountryName: fromCountry.name,
+                  fee: dbVisaItem?.fee || '$185',
+                  validity: dbVisaItem?.validity || 'Up to 10 yrs',
+                  processing: dbVisaItem?.processing || '3-5 Weeks',
+                  docs: docsList,
+                  steps: stepsList
+                })
+              }
+              className="bg-[#0f172a] hover:bg-slate-800 text-white px-4 py-2.5 rounded-[10px] font-bold text-[13px] cursor-pointer transition-colors shadow-xs"
+            >
+              📄 Download Checklist PDF
+            </button>
           </div>
         </div>
 

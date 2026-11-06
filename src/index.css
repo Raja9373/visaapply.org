@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+body {
+  background-color: #f8fafc;
+  background-image: radial-gradient(at 0% 0%, #dbeafe 0px, transparent 50%), radial-gradient(at 100% 0%, #fef3c7 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
 @media print {
   header, footer, nav, aside, .no-print, button {
     display: none !important;
