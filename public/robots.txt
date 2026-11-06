@@ -1,6 +1,33 @@
 User-agent: *
 Allow: /
+Allow: /ads.txt
+Allow: /llms.txt
+Allow: /sitemap.xml
 Disallow: /admin
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
 
 Sitemap: https://www.visaapply.org/sitemap.xml
 Sitemap: https://www.visaapply.org/sitemap_index.xml

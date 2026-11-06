@@ -217,6 +217,7 @@ console.log("✅ COUNTRY NAME + FLAG BUG FIX DONE - KH -> Cambodia, 86 countries
 function generateMetadata(path: string, countries: Country[], article?: Article | null) {
   const isAdmin = path === '/admin';
   const isSitemap = path === '/sitemap';
+  const isAbout = path === '/about' || path === '/backlink-widget';
   const isContact = path === '/contact';
   const isPrivacy = path === '/privacy';
   const isTerms = path === '/terms';
@@ -226,65 +227,71 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
-  const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length);
-  let title = 'VisaApply.org – Global Visa Requirements & Guides';
-  let description = `Official global visa information, 2-step visa type quiz, fees, documents, and application guides for 14,084+ live visas across ${totalCountryCount} global destination countries worldwide.`;
+  const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
+  let title = 'VisaApply.org – 2026 Global Visa Requirements, Fees in ₹ INR & Free PDF Checklists (249 Countries)';
+  let description = `Check 2026 official visa requirements for Indians across ${totalCountryCount} countries & 14,084+ visa subclasses. Instant 30-sec eligibility check, fees in ₹ INR, processing time, embassy addresses & free PDF checklist.`;
 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
+  } else if (isAbout) {
+    title = 'About Us, Editorial Policy & Free Visa Backlink Widget – VisaApply.org';
+    description = 'Learn about VisaApply.org editorial verification standards, E-E-A-T immigration research methodology, and embed our free live 249-country visa status widget on your website.';
   } else if (isFlights) {
-    title = 'Cheap Flights from India to 249 Countries – VisaApply Flights (ID 801550)';
+    title = 'Cheap Flights from India to 249 Countries (2026) – Compare 100+ Airlines | VisaApply Flights';
     description = 'Search 100+ airlines and compare the cheapest flights from India across 249 countries. Powered by Travelpayouts ID 801550, Aviasales & Skyscanner 8131850.';
   } else if (isBlogs) {
-    title = '2026 Global Visa Blogs & Travel Guides (2,490+ Articles) – VisaApply.org';
-    description = 'Explore 2,490+ SEO visa blogs across 249 countries for Indian travelers: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
+    title = '2026 Global Visa Blogs & Travel Guides (2,490+ Official Articles) – VisaApply.org';
+    description = 'Explore 2,490+ SEO visa blogs across 249 countries for Indian travelers: fees in INR, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
   } else if (interviewMatch) {
     const code = interviewMatch[1].toLowerCase();
     const cName = getCountryDisplayName(code);
-    title = `${cName} Visa Interview Questions & Winning Answers for Indians (2026) – VisaApply.org`;
+    title = `${cName} Visa Interview Questions & Winning Answers for Indians [2026 Updated] – VisaApply.org`;
     description = `Master the top 20 ${cName} consular interview questions and ideal answers for Indian passport holders, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
   } else if (isContact) {
-    title = 'Contact Us – VisaApply.org';
-    description = 'Get in touch with VisaApply.org. Email contact@visaapply.org for visa inquiries, partnerships, or support.';
+    title = 'Contact Us & Consular Support Desk – VisaApply.org';
+    description = 'Get in touch with VisaApply.org editorial and consular research team. Email contact@visaapply.org for visa inquiries, partnerships, or advertising.';
   } else if (isPrivacy) {
-    title = 'Privacy Policy – VisaApply.org';
-    description = 'Privacy Policy for VisaApply.org. Learn how we handle data. Contact: contact@visaapply.org.';
+    title = 'Privacy Policy, Cookie & Google AdSense Disclosure – VisaApply.org';
+    description = 'Official Privacy Policy, Google AdSense DART cookie disclosure, and GDPR/DPDP data protection terms for VisaApply.org.';
   } else if (isTerms) {
-    title = 'Terms of Service – VisaApply.org';
-    description = 'Terms of Service for VisaApply.org. Contact: contact@visaapply.org.';
+    title = 'Terms of Service & Editorial Disclaimer – VisaApply.org';
+    description = 'Terms of Service and non-governmental consular disclaimer for VisaApply.org.';
   } else if (isSitemap) {
-    title = 'All Visa Guides – Global Itineraries & Requirements | VisaApply.org';
-    description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and visa categories.`;
+    title = 'All 14,084+ Visa Guides & 249 Countries Directory [2026] | VisaApply.org';
+    description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and 6 visa categories.`;
   } else if (article && article.title) {
-    title = `${article.title} | VisaApply.org`;
-    description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find fees, documents, processing time, and FAQs.`;
+    title = `${article.title} [2026 Fees & Checklist] | VisaApply.org`;
+    description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find official fees in INR, mandatory documents, processing time, and FAQs.`;
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
     const type = articleMatch[3];
     const fromName = getCountryDisplayName(from);
     const toName = getCountryDisplayName(to);
+    const meta = getCountryMeta(to);
     if (article && article.title) {
-      title = `${article.title} | VisaApply.org`;
-      description = `Official guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Check required documents and step-by-step process.`;
+      title = `${article.title} [2026 Updated] | VisaApply.org`;
+      description = `Official 2026 guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Processing: ${meta.processing}. Download free PDF document checklist.`;
     } else {
-      title = `${fromName} to ${toName} ${type.toUpperCase()} Visa Requirements & Guide – VisaApply.org`;
-      description = `Complete visa guide for ${fromName} citizens applying for a ${type} visa to ${toName}. Find fees, documents, processing time, and FAQs.`;
+      title = `${toName} ${type.charAt(0).toUpperCase() + type.slice(1)} Visa for ${fromName} Citizens [2026]: Fees, Processing (${meta.processing}) & PDF Checklist`;
+      description = `Apply for ${toName} ${type} visa from ${fromName} in 2026. Check ${getLiveVisaCount(to)} official subclasses, fees in INR, ${meta.processing} processing time, ${meta.successRate} approval tips & free PDF checklist.`;
     }
   } else if (quizMatch) {
     const from = (quizMatch[1] || 'IN').toUpperCase();
     const to = quizMatch[2].toUpperCase();
     const fromName = getCountryDisplayName(from);
     const toName = getCountryDisplayName(to);
+    const meta = getCountryMeta(to);
+    const vCount = getLiveVisaCount(to);
 
-    title = `${fromName} to ${toName} Visa Quiz & Requirements – VisaApply.org`;
-    description = `Take our 2-step visa quiz for traveling from ${fromName} to ${toName}. Explore tourist, work, student, family, and business visa guides.`;
+    title = `${toName} Visa for ${fromName} Citizens [2026]: ${vCount} Visas, Fees, ${meta.processing} Processing & Checklist`;
+    description = `Complete 2026 ${toName} visa guide for ${fromName} passport holders. Compare ${vCount} official Tourist, Work, Student, Business & PR subclasses. Processing: ${meta.processing}, Approval Rate: ${meta.successRate}.`;
   } else if (path !== '/' && path.includes('-to-')) {
     const clean = path.replace(/^\//, '').replace(/-/g, ' ');
     const formatted = clean.charAt(0).toUpperCase() + clean.slice(1);
-    title = `${formatted} (2026 Guide) | VisaApply.org`;
-    description = `Official 2026 comprehensive visa requirements, application process, and documentation guide for ${formatted}.`;
+    title = `${formatted} [2026 Official Guide & PDF Checklist] | VisaApply.org`;
+    description = `Official 2026 comprehensive visa requirements, fee schedule, embassy appointment process, and downloadable PDF checklist for ${formatted}.`;
   }
 
   document.title = title;
@@ -297,7 +304,29 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const ogDesc = document.querySelector('meta[property="og:description"]');
   if (ogDesc) ogDesc.setAttribute('content', description);
 
-  // Inject Schema.org JSON-LD for AEO & SEO Knowledge Graph (WebApplication, BreadcrumbList, FAQPage, HowTo)
+  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twitterTitle) twitterTitle.setAttribute('content', title);
+
+  const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+  if (twitterDesc) twitterDesc.setAttribute('content', description);
+
+  // Dynamic Canonical & OG URL for SEO deduplication
+  const canonicalBase = 'https://www.visaapply.org';
+  const cleanCanonicalPath = path === '/' ? '/' : path.replace(/\/+$/, '');
+  const canonicalHref = `${canonicalBase}${cleanCanonicalPath}`;
+
+  let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!canonicalLink) {
+    canonicalLink = document.createElement('link');
+    canonicalLink.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonicalLink);
+  }
+  canonicalLink.setAttribute('href', canonicalHref);
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', canonicalHref);
+
+  // Inject Schema.org JSON-LD for AEO, GEO & SEO Knowledge Graph (Organization, WebSite, WebApplication, BreadcrumbList, FAQPage, HowTo)
   let ldScript = document.getElementById('seo-ld-json');
   if (!ldScript) {
     ldScript = document.createElement('script');
@@ -315,6 +344,10 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
 
   if (isAdmin) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Admin Portal", "item": `${baseUrl}/admin` });
+  } else if (isAbout) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "About Us & Editorial Policy", "item": `${baseUrl}/about` });
+  } else if (isFlights) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Cheap Flights (249 Countries)", "item": `${baseUrl}/flights` });
   } else if (isBlogs) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Blogs", "item": `${baseUrl}/blogs` });
   } else if (interviewMatch) {
@@ -334,7 +367,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     const from = (quizMatch[1] || 'IN').toUpperCase();
     const to = quizMatch[2].toUpperCase();
     targetCodeForSchema = to.toLowerCase();
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Visa Quiz`, "item": window.location.href });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Visa Guide`, "item": window.location.href });
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
@@ -367,7 +400,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
           "name": `How many visa categories are available for ${schemaCountryName} in 2026?`,
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": `${schemaCountryName} offers ${schemaCount} official visa types across Tourist, Business, Work, Student, Family, and Permanent Residency categories.`
+            "text": `${schemaCountryName} offers ${schemaCount} official visa types across Tourist, Business, Work, Student, Family, and Permanent Residency categories on VisaApply.org.`
           }
         },
         {
@@ -375,7 +408,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
           "name": `What is the ${schemaCountryName} visa processing time and approval rate for Indians?`,
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": `Standard processing time for ${schemaCountryName} is ${schemaMeta.processing} with a ${schemaMeta.successRate} approval rate for Indian passport holders.`
+            "text": `Standard processing time for ${schemaCountryName} is ${schemaMeta.processing} with a ${schemaMeta.successRate} approval rate for Indian passport holders who submit verified bank statements, ITR, and accommodation proof.`
           }
         },
         {
@@ -383,7 +416,15 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
           "name": `What is the best time to visit ${schemaCountryName} and average hotel cost in ${schemaMeta.capital}?`,
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": `The best season to visit ${schemaCountryName} is ${schemaMeta.bestTime}. Refundable hotels in ${schemaMeta.capital} start from ${schemaMeta.hotelPrice} on Booking.com.`
+            "text": `The best season to visit ${schemaCountryName} is ${schemaMeta.bestTime}. Refundable visa-compliant hotels in ${schemaMeta.capital} start from ${schemaMeta.hotelPrice} on Booking.com.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `Which countries offer easy e-Visa or Visa on Arrival for Indian passport holders in 2026?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Top fast-track destinations for Indian citizens in 2026 include Thailand (Visa Free / e-Visa), UAE Dubai (3-4 Days e-Visa), Singapore (3-5 Days e-Visa), Vietnam (3 Days e-Visa), Malaysia (Visa Free / MDAC), Indonesia Bali (e-VOA), Maldives (Free VOA), and Mauritius (Visa Free).`
           }
         }
       ];
@@ -393,6 +434,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
     "@type": "HowTo",
     "name": `How to Apply for a ${schemaCountryName} Visa from India in 2026`,
     "description": `Step-by-step official procedure to apply for a ${schemaCountryName} visa from India (${schemaMeta.processing} processing time).`,
+    "totalTime": "PT30M",
     "step": [
       {
         "@type": "HowToStep",
@@ -416,6 +458,29 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   };
 
   const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "VisaApply.org",
+      "url": "https://www.visaapply.org",
+      "email": "contact@visaapply.org",
+      "description": "Global Visa Intelligence & Consular Guide Portal covering 14,084+ live visa pathways across 249 countries and territories.",
+      "sameAs": [
+        "https://www.visaapply.org/about",
+        "https://www.visaapply.org/sitemap"
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "VisaApply.org",
+      "url": "https://www.visaapply.org",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.visaapply.org/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -1647,26 +1712,17 @@ export default function App() {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
     Promise.resolve()
       .then(() => initializeFullVisaDatabase())
       .then(() => {
-        const checkCount = Object.keys(BASE_COUNTRY_VISAS || {}).length;
-        if (checkCount > 100) {
-          if (isMounted) setIsHydrated(true);
-        } else {
-          setTimeout(() => {
-            if (isMounted) setIsHydrated(true);
-          }, 100);
-        }
+        if (isMounted) setIsHydrated(true);
       })
       .catch(() => {
-        if (isMounted) {
-          setIsHydrated(true);
-        }
+        if (isMounted) setIsHydrated(true);
       });
     return () => {
       isMounted = false;
@@ -1912,6 +1968,7 @@ export default function App() {
   // Router parsing
   const isHome = currentPath === '/';
   const isAdmin = currentPath === '/admin';
+  const isAbout = currentPath === '/about' || currentPath === '/backlink-widget';
   const isFlights = currentPath === '/flights' || currentPath === '/flights/' || currentPath.startsWith('/flights?');
   const isBlogs = currentPath === '/blogs' || currentPath === '/blogs/';
   const interviewMatch = currentPath.match(/^\/interview-prep\/([a-z]{2,3})$/i);
@@ -1955,22 +2012,12 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAdmin && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAdmin && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
       )
     );
-
-  if (!isHydrated) {
-    return (
-      <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6">
-        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <h2 className="text-xl font-bold tracking-tight">Loading Global Visa Portal...</h2>
-        <p className="text-sm text-slate-400 mt-2">Hydrating 249 ISO Countries & 14,084+ Live Visas</p>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col text-slate-900 font-sans">
@@ -1994,10 +2041,10 @@ export default function App() {
           {/* Nav Links */}
           <nav className="hidden md:flex items-center gap-5 text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
-            <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer hover:text-white`}>Countries</button>
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>✈ Flights</button>
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>📝 Blogs (2,490+)</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>🎤 Interview Prep</button>
+            <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>About & Widget</button>
             <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
             <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${currentPath === '/admin' ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1.5`}>
               <Shield className="w-4 h-4 text-amber-300" /> Admin Portal
@@ -2028,6 +2075,7 @@ export default function App() {
             <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">✈ Cheap Flights (249 Countries)</button>
             <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">📝 Visa Blogs (2,490+)</button>
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">🎤 Consular Interview Prep</button>
+            <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">🌐 About Us & Free Backlink Widget</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
             <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
           </div>
@@ -2049,6 +2097,8 @@ export default function App() {
             onDelete={handleDeleteDraft}
             navigate={navigate}
           />
+        ) : isAbout ? (
+          <AboutView navigate={navigate} />
         ) : isFlights ? (
           <FlightsPage onNavigate={navigate} />
         ) : isBlogs ? (
@@ -2119,10 +2169,10 @@ export default function App() {
               <span className="font-bold text-lg">VisaApply.org</span>
             </div>
             <p className="text-sm text-slate-400 max-w-md leading-relaxed">
-              VisaApply.org is an independent global visa information portal providing accurate requirements, documentation checklists, and step-by-step application guidance worldwide.
+              VisaApply.org is an independent global visa information portal providing accurate requirements, documentation checklists, and step-by-step application guidance across 249 countries and 14,084+ visa subclasses worldwide.
             </p>
             <p className="text-xs text-slate-500">
-              Disclaimer: We are not affiliated with VFS Global, IRCC, USCIS, or any government embassy. Official applications must be submitted through official government portals.
+              Disclaimer: We are not affiliated with VFS Global, IRCC, USCIS, UKVI, or any government embassy. Official applications must be submitted through official government portals.
             </p>
             <div className="pt-2 text-xs text-slate-300 font-medium flex items-center gap-2">
               <Mail className="w-4 h-4 text-blue-400" />
@@ -2131,15 +2181,17 @@ export default function App() {
             </div>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Links</h4>
+            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Links & Tools</h4>
             <ul className="space-y-2 text-sm">
-              <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors cursor-pointer">About Us & Home</button></li>
+              <li><button onClick={() => navigate('/about')} className="hover:text-white transition-colors cursor-pointer">About Us & Editorial Policy</button></li>
+              <li><button onClick={() => navigate('/about')} className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors cursor-pointer">🔗 Free Visa Widget (Backlink)</button></li>
+              <li><button onClick={() => navigate('/flights')} className="hover:text-white transition-colors cursor-pointer">✈ Cheap Flights (249 Countries)</button></li>
               <li><button onClick={() => navigate('/blogs')} className="hover:text-white transition-colors cursor-pointer">Visa Blogs (2,490+ Guides)</button></li>
               <li><button onClick={() => navigate('/interview-prep/us')} className="hover:text-white transition-colors cursor-pointer">Consular Interview Prep</button></li>
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
-              <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
+              <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy & AdSense</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (14000+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-300 font-semibold text-blue-400 transition-colors cursor-pointer">Sitemap (14,084+ Pages)</button></li>
             </ul>
           </div>
           <div>
@@ -2147,6 +2199,7 @@ export default function App() {
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-400 font-semibold hover:underline">contact@visaapply.org</a></li>
               <li className="text-xs text-slate-500">14,084+ Visa & Programme Guides across 249 Destination Countries</li>
+              <li className="text-xs text-slate-500">AdSense Publisher: pub-9048615701580913</li>
               <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-400 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
@@ -2795,6 +2848,78 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
 
         <div className="text-center text-xs sm:text-sm text-slate-500 mt-8 font-medium">
           Showing {filteredCountries.length} of {uniqueCountries.length} destinations • {activeContinent === 'all' ? 'All Continents' : (CONTINENT_MAP_249[activeContinent]?.label || activeContinent)} • Updated Oct 2026 • 249 ISO FULL
+        </div>
+
+        {/* AEO (Answer Engine Optimization) & High-CTR 2026 Quick Comparison Cheat-Sheet */}
+        <div className="mt-12 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wide">
+                ⚡ 2026 Official Consular Quick-Answer Matrix (AEO & Featured Snippet Ready)
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+                Top 12 High-Demand Destinations for Indian Citizens (2026 Fees, Processing & Success Rate)
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                Direct comparison of official visa counts, standard consular processing times, approval rates, and refundable hotel rates for visa applications.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/about')}
+              className="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#0B3D91] font-bold text-xs rounded-xl border border-blue-200 transition-colors cursor-pointer shrink-0"
+            >
+              🔗 Embed Free Visa Widget on Your Site →
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr className="bg-slate-900 text-white font-bold">
+                  <th className="p-3 rounded-tl-xl">Destination Country</th>
+                  <th className="p-3">Official Visas</th>
+                  <th className="p-3">Processing Time</th>
+                  <th className="p-3">Approval Rate</th>
+                  <th className="p-3">Capital & Hotel/Night</th>
+                  <th className="p-3 rounded-tr-xl text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {['us', 'gb', 'ca', 'de', 'au', 'ae', 'sg', 'th', 'jp', 'fr', 'ch', 'vn'].map((code) => {
+                  const meta = getCountryMeta(code);
+                  const count = getLiveVisaCount(code);
+                  const name = getCountryDisplayName(code);
+                  const flag = getCountryFlag(code);
+                  return (
+                    <tr
+                      key={code}
+                      onClick={() => navigate(`/in-to-${code}`)}
+                      className="hover:bg-blue-50/60 cursor-pointer transition-colors"
+                    >
+                      <td className="p-3 font-bold text-slate-900 flex items-center gap-2">
+                        <span className="text-lg">{flag}</span>
+                        <span>{name}</span>
+                      </td>
+                      <td className="p-3 font-extrabold text-[#0B3D91]">{count} Subclasses</td>
+                      <td className="p-3 text-amber-800 font-semibold">{meta.processing}</td>
+                      <td className="p-3">
+                        <span className="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-xs">
+                          {meta.successRate}
+                        </span>
+                      </td>
+                      <td className="p-3 text-slate-600">{meta.capital} ({meta.hotelPrice})</td>
+                      <td className="p-3 text-right">
+                        <span className="text-[#0B3D91] font-extrabold hover:underline">
+                          Checklist & Apply →
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -4981,7 +5106,182 @@ function ContactView({ navigate }: any) {
 }
 
 // ----------------------------------------------------
-// Privacy Policy View Component
+// About Us, Editorial Policy & Free Backlink Widget Generator (/about)
+// ----------------------------------------------------
+function AboutView({ navigate }: any) {
+  const [selectedCode, setSelectedCode] = useState('us');
+  const [copiedWidget, setCopiedWidget] = useState(false);
+
+  const cName = getCountryDisplayName(selectedCode);
+  const cFlag = getCountryFlag(selectedCode);
+  const cMeta = getCountryMeta(selectedCode);
+  const cCount = getLiveVisaCount(selectedCode);
+
+  const embedCode = `<!-- VisaApply.org Official Live Visa Badge (Dofollow Backlink) -->
+<div style="font-family:system-ui,-apple-system,sans-serif;max-width:380px;border:1px solid #cbd5e1;border-radius:16px;padding:16px;background:#ffffff;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+    <span style="font-size:18px;font-weight:800;color:#0f172a;">${cFlag} ${cName} Visa Guide 2026</span>
+    <span style="background:#dbeafe;color:#1e40af;font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px;">${cCount} Visas</span>
+  </div>
+  <div style="font-size:12px;color:#475569;line-height:1.6;margin-bottom:12px;">
+    • <strong>Processing Time:</strong> ${cMeta.processing}<br/>
+    • <strong>Approval Rate:</strong> ${cMeta.successRate}<br/>
+    • <strong>Capital & Currency:</strong> ${cMeta.capital} (${cMeta.currency})
+  </div>
+  <a href="https://www.visaapply.org/in-to-${selectedCode}" target="_blank" rel="dofollow" style="display:block;text-align:center;background:#0B3D91;color:#ffffff;text-decoration:none;font-size:12px;font-weight:700;padding:10px 14px;border-radius:10px;">
+    Check ${cName} Visa Fees &amp; Free PDF Checklist on VisaApply.org →
+  </a>
+</div>`;
+
+  const handleCopyWidget = () => {
+    navigator.clipboard.writeText(embedCode);
+    setCopiedWidget(true);
+    setTimeout(() => setCopiedWidget(false), 2500);
+  };
+
+  return (
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+      <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <button onClick={() => navigate('/')} className="hover:underline cursor-pointer">Home</button>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+        <span>About Us, Editorial Policy & Backlink Tools</span>
+      </div>
+
+      {/* E-E-A-T Editorial & Mission Card */}
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12 space-y-6">
+        <div className="inline-flex items-center gap-2 bg-blue-50 text-[#0B3D91] border border-blue-200 px-3 py-1 rounded-full text-xs font-extrabold">
+          <span>🏛️ E-E-A-T Verified Global Immigration Intelligence</span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          About VisaApply.org & Our Editorial Standards
+        </h1>
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+          <strong>VisaApply.org</strong> is a comprehensive, independent global visa intelligence platform engineered to simplify cross-border travel, work permits, study visas, and permanent residency pathways across all <strong>249 ISO-recognized countries and territories</strong> (covering <strong>14,084+ live visa and statutory classifications</strong>).
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="text-2xl font-extrabold text-[#0B3D91]">249 Countries</div>
+            <div className="text-xs font-bold text-slate-700 mt-1">100% Complete ISO Coverage</div>
+            <p className="text-xs text-slate-500 mt-1">Every sovereign state and dependent territory mapped across 7 continents.</p>
+          </div>
+          <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="text-2xl font-extrabold text-emerald-700">14,084+ Visas</div>
+            <div className="text-xs font-bold text-slate-700 mt-1">Primary Statutory Subclasses</div>
+            <p className="text-xs text-slate-500 mt-1">Includes US INA 278 routes, UK 222 Immigration Rules, Canada IRPR 151, Germany AufenthG 138 & Australia 135 subclasses.</p>
+          </div>
+          <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="text-2xl font-extrabold text-amber-700">Daily Audit</div>
+            <div className="text-xs font-bold text-slate-700 mt-1">Consular & VFS Cross-Checked</div>
+            <p className="text-xs text-slate-500 mt-1">Fees, processing times, embassy addresses in India, and document checklists updated for 2026.</p>
+          </div>
+        </div>
+
+        <div className="space-y-4 text-sm text-slate-700 leading-relaxed pt-4 border-t border-slate-100">
+          <h2 className="text-lg font-bold text-slate-900">Our Editorial & Fact-Checking Policy</h2>
+          <p>
+            Every visa guide, fee table, and document checklist published on VisaApply.org is compiled from primary legislative sources—including the US Foreign Affairs Manual (9 FAM), UK Home Office Immigration Rules, Canada IRCC operational bulletins, European Commission Schengen Visa Code, and official High Commission/Embassy notices in New Delhi, Mumbai, Bengaluru, Chennai, Hyderabad, and Kolkata.
+          </p>
+          <p>
+            <strong>Non-Affiliation Notice:</strong> VisaApply.org is an independent informational publication and is not affiliated with any government agency, embassy, or VFS Global. We never charge government visa fees; applicants are always directed to official consular portals.
+          </p>
+        </div>
+      </div>
+
+      {/* Free Embeddable Visa Widget / Backlink Generator */}
+      <div id="backlink-widget" className="bg-gradient-to-br from-slate-900 to-[#0B3D91] text-white rounded-2xl shadow-xl p-8 sm:p-12 space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3 py-1 rounded-full text-xs font-extrabold uppercase">
+              🔗 Free SEO Backlink & Partner Widget Tool
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold mt-2">
+              Embed Our Live 2026 Visa Requirement Badge on Your Blog or Agency Website
+            </h2>
+            <p className="text-xs sm:text-sm text-blue-100 mt-1 max-w-2xl">
+              Are you a travel blogger, university international office, or study-abroad consultant? Select any country below and copy the HTML snippet to display live 2026 visa requirements on your site.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start pt-2">
+          {/* Left: Selector & Code */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-blue-200 mb-2">
+                1. Choose Destination Country (249 Countries)
+              </label>
+              <select
+                value={selectedCode}
+                onChange={(e) => setSelectedCode(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm font-bold focus:outline-none focus:border-blue-400 cursor-pointer"
+              >
+                {Object.keys(NAME_MAP_249).map((code) => (
+                  <option key={code} value={code}>
+                    {getCountryFlag(code)} {getCountryDisplayName(code)} ({getLiveVisaCount(code)} Visas)
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-blue-200">
+                  2. Copy HTML Embed Code
+                </label>
+                <button
+                  type="button"
+                  onClick={handleCopyWidget}
+                  className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold rounded-lg text-xs cursor-pointer transition-colors"
+                >
+                  {copiedWidget ? '✓ Copied HTML Code!' : '📋 Copy Embed Code'}
+                </button>
+              </div>
+              <textarea
+                readOnly
+                rows={7}
+                value={embedCode}
+                className="w-full p-3 rounded-xl bg-slate-950/90 border border-slate-700 text-emerald-300 font-mono text-xs focus:outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Right: Live Preview */}
+          <div className="bg-white/10 border border-white/15 rounded-2xl p-6 space-y-4">
+            <div className="text-xs font-bold uppercase tracking-wider text-blue-200">
+              Live Widget Preview
+            </div>
+            <div className="bg-white text-slate-900 rounded-2xl p-5 shadow-lg border border-slate-200 max-w-sm">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-base font-extrabold text-slate-900">
+                  {cFlag} {cName} Visa Guide 2026
+                </span>
+                <span className="bg-blue-100 text-[#0B3D91] text-xs font-extrabold px-2.5 py-0.5 rounded-full">
+                  {cCount} Visas
+                </span>
+              </div>
+              <div className="text-xs text-slate-600 space-y-1 mb-4">
+                <div>• <strong>Processing Time:</strong> {cMeta.processing}</div>
+                <div>• <strong>Approval Rate:</strong> {cMeta.successRate}</div>
+                <div>• <strong>Capital & Currency:</strong> {cMeta.capital} ({cMeta.currency})</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate(`/in-to-${selectedCode}`)}
+                className="w-full py-2.5 px-4 bg-[#0B3D91] hover:bg-[#09327a] text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
+              >
+                Check {cName} Visa Fees & Free PDF Checklist →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------
+// Privacy Policy View Component (AdSense & GDPR Compliant)
 // ----------------------------------------------------
 function PrivacyView({ navigate }: any) {
   return (
@@ -4993,30 +5293,44 @@ function PrivacyView({ navigate }: any) {
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12 space-y-6">
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Privacy Policy</h1>
-        <p className="text-xs text-slate-500 font-medium">Last updated: 2026</p>
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Privacy Policy & Google AdSense Disclosure</h1>
+        <p className="text-xs text-slate-500 font-medium">Last updated: October 2026 • Effective Immediately</p>
 
         <p className="text-sm text-slate-700 leading-relaxed">
-          At <strong>VisaApply.org</strong>, we prioritize the privacy and confidentiality of our visitors. This Privacy Policy outlines the minimal information collected and how it is used across our global visa guidance services.
+          At <strong>VisaApply.org</strong> (accessible from <code>https://www.visaapply.org</code>), protecting the privacy of our visitors is one of our highest priorities. This Privacy Policy document details the types of information collected and recorded by VisaApply.org and how we use it in compliance with Google AdSense Publisher Policies, GDPR, CCPA, and India's Digital Personal Data Protection (DPDP) Act.
         </p>
 
         <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
           <h2 className="text-lg font-bold text-slate-900">1. Information We Collect</h2>
-          <p>We collect minimal personal data necessary to deliver global visa requirements, documentation guidance, and updates:</p>
+          <p>We collect minimal data required to deliver accurate visa eligibility checks, document checklists, and consular guides:</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Email Subscriptions:</strong> When you subscribe to 'Get Visa Updates', we save your email address in local browser storage to notify you of policy changes.</li>
-            <li><strong>Log Files & Analytics:</strong> Standard non-personally identifiable log information such as browser type, IP address, and pages visited for performance optimization.</li>
+            <li><strong>Voluntary User Inputs:</strong> Nationality, destination preferences, and contact form messages submitted voluntarily by users.</li>
+            <li><strong>Log Files & Analytics:</strong> Standard non-personally identifiable information including IP address, browser type, ISP, date/time stamp, referring/exit pages, and click counts to analyze trends and administer the site.</li>
           </ul>
 
-          <h2 className="text-lg font-bold text-slate-900">2. Cookies and Advertising</h2>
-          <p>VisaApply.org uses cookies to store visitor preferences and optimize user experience. Google AdSense and third-party vendors use cookies to serve relevant advertisements based on past visits.</p>
+          <h2 className="text-lg font-bold text-slate-900">2. Google AdSense & DoubleClick DART Cookie Disclosure</h2>
+          <p>
+            VisaApply.org is an official participant in the <strong>Google AdSense Content Program</strong> (Publisher ID: <code>pub-9048615701580913</code> / Customer ID: <code>9127677806</code>).
+          </p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Third-party vendors, including Google, use cookies (such as the Google DoubleClick DART cookie) to serve ads based on a user's prior visits to VisaApply.org or other websites on the internet.</li>
+            <li>Google's use of advertising cookies enables it and its partners to serve personalized or non-personalized advertisements to our users based on their visit to our site.</li>
+            <li>Users may opt out of personalized advertising at any time by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-[#0B3D91] font-semibold underline">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-[#0B3D91] font-semibold underline">www.aboutads.info</a>.</li>
+          </ul>
 
-          <h2 className="text-lg font-bold text-slate-900">3. Third-Party Links & Disclaimers</h2>
-          <p>VisaApply.org is an independent information portal. We provide external links to official embassy and immigration portals for user convenience. We are not responsible for the privacy practices or content of third-party websites.</p>
+          <h2 className="text-lg font-bold text-slate-900">3. Affiliate & Travel Partner Disclosure</h2>
+          <p>
+            To keep our 14,084+ visa guides and downloadable PDF checklists 100% free for travelers, VisaApply.org participates in verified travel affiliate programs including <strong>Booking.com (AID 8119919)</strong>, <strong>Travelpayouts / Aviasales (Marker 801550)</strong>, and <strong>Skyscanner (ID 8131850)</strong>. When you book refundable visa-compliant hotels or flights through our partner links, we may earn a small commission at zero extra cost to you.
+          </p>
+
+          <h2 className="text-lg font-bold text-slate-900">4. Third-Party Links & Non-Governmental Disclaimer</h2>
+          <p>
+            VisaApply.org is an independent informational portal and is not affiliated with VFS Global, USCIS, IRCC, UKVI, or any government embassy. We provide external links to official government portals for user convenience and are not responsible for the privacy practices of external sites.
+          </p>
         </div>
 
         <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-xl text-sm text-slate-800 font-medium flex items-center justify-between gap-4">
-          <span>For any privacy queries, data requests, or concerns, contact us:</span>
+          <span>For any privacy queries, GDPR/DPDP data requests, or concerns, contact our Data Protection Officer:</span>
           <a href="mailto:contact@visaapply.org" className="text-[#0B3D91] font-bold hover:underline shrink-0">contact@visaapply.org</a>
         </div>
       </div>
@@ -5038,7 +5352,7 @@ function TermsView({ navigate }: any) {
 
       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12 space-y-6">
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Terms of Service</h1>
-        <p className="text-xs text-slate-500 font-medium">Last updated: 2026</p>
+        <p className="text-xs text-slate-500 font-medium">Last updated: October 2026</p>
 
         <p className="text-sm text-slate-700 leading-relaxed">
           Welcome to <strong>VisaApply.org</strong>. By accessing or using our website, you agree to comply with and be bound by the following terms and conditions.
@@ -5052,7 +5366,7 @@ function TermsView({ navigate }: any) {
           <p>While we make every effort to maintain updated requirements, visa fees, document checklists, and processing timelines, immigration policies change frequently without prior notice. Users are advised to double-check information on official embassy channels before making non-refundable travel bookings.</p>
 
           <h2 className="text-lg font-bold text-slate-900">3. Intellectual Property</h2>
-          <p>All guides, tools, and content published on VisaApply.org are protected by copyright laws. Reproduction without written consent is prohibited.</p>
+          <p>All guides, tools, and content published on VisaApply.org are protected by copyright laws. Reproduction without written consent is prohibited, except when using our official Embeddable Visa Badge Widget with attribution link intact.</p>
         </div>
 
         <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-xl text-sm text-slate-800 font-medium flex items-center justify-between gap-4">

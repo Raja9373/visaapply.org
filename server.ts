@@ -512,7 +512,11 @@ const handleSitemapXml = (req: any, res: any) => {
     xml += `  <url><loc>${baseUrl}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/flights</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/blogs</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/about</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/sitemap</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/privacy</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/terms</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/audit</loc><changefreq>daily</changefreq><priority>0.8</priority></url>\n`;
 
     // All 249 Countries + 6 Categories per Country + 249 Interview Prep Pages
@@ -570,6 +574,24 @@ app.get('/sitemap_index.xml', handleSitemapIndexXml);
 app.get('/sitemap-index.xml', handleSitemapIndexXml);
 app.get('/api/sitemap.xml', handleSitemapXml);
 app.get('/api/sitemap', handleSitemapXml);
+
+app.get('/ads.txt', (req, res) => {
+  const adsPath = path.join(__dirname, 'public', 'ads.txt');
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  if (fs.existsSync(adsPath)) {
+    return res.status(200).send(fs.readFileSync(adsPath, 'utf-8'));
+  }
+  res.status(200).send('google.com, pub-9048615701580913, DIRECT, f08c47fec0942fa0\n');
+});
+
+app.get('/llms.txt', (req, res) => {
+  const llmsPath = path.join(__dirname, 'public', 'llms.txt');
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  if (fs.existsSync(llmsPath)) {
+    return res.status(200).send(fs.readFileSync(llmsPath, 'utf-8'));
+  }
+  res.status(200).send('# VisaApply.org — Global Visa Intelligence & Official Consular Guide Portal (2026)\nhttps://www.visaapply.org\n');
+});
 
 app.get('/robots.txt', (req, res) => {
   const robotsPath = path.join(__dirname, 'public', 'robots.txt');
