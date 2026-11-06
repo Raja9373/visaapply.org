@@ -2,6 +2,7 @@ import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from './fullVisaDatabase
 import { getCountryMeta, getCapitalSlug } from './countryMetaData';
 import { getContinentForCountry, CONTINENT_MAP_249 } from './continentMap';
 import { getEmbassyInfo } from './embassyAddresses';
+import { getFlightWidgetWithTP } from './travelpayoutsConfig';
 
 export interface GeneratedBlog {
   id: string;
@@ -413,15 +414,18 @@ ${faqSchema.map((f, idx) => `### Q${idx + 1}: ${f.question}\n${f.answer}`).join(
         <li><strong>Return Flight Itinerary & Travel Insurance:</strong> Confirmed round-trip ticket and $50,000 medical coverage.</li>
       </ul>
 
-      <div class="bg-gradient-to-r from-[#eff6ff] to-[#dbeafe] border-2 border-[#003580] rounded-2xl p-5 my-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div class="text-xs font-extrabold text-[#003580]">🏨 OFFICIAL HOTEL BOOKING FOR ${countryName.toUpperCase()} VISA</div>
-          <div class="text-lg font-black text-slate-900 mt-1">Hotels in ${meta.capital} from ${meta.hotelPrice} (Free Cancellation)</div>
-          <div class="text-xs text-slate-600 mt-0.5">Instant Booking.com confirmation accepted for ${countryName} VFS & Embassy submissions • AID 8119919</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+        <div class="bg-gradient-to-r from-[#eff6ff] to-[#dbeafe] border-2 border-[#003580] rounded-2xl p-4 flex flex-col justify-between gap-3">
+          <div>
+            <div class="text-xs font-extrabold text-[#003580]">🏨 OFFICIAL HOTEL BOOKING FOR ${countryName.toUpperCase()} VISA</div>
+            <div class="text-base font-black text-slate-900 mt-1">Hotels in ${meta.capital} from ${meta.hotelPrice}</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Free Cancellation • Accepted for VFS & Embassy • AID 8119919</div>
+          </div>
+          <a href="https://www.booking.com/city/${code}/${capitalSlug}.html?aid=8119919&label=blog-${code}" target="_blank" rel="noopener noreferrer" class="bg-[#003580] hover:bg-[#002860] text-white px-4 py-2.5 rounded-xl font-bold text-xs no-underline text-center">
+            Book ${meta.capital} Hotel on Booking.com →
+          </a>
         </div>
-        <a href="https://www.booking.com/city/${code}/${capitalSlug}.html?aid=8119919&label=blog-${code}" target="_blank" rel="noopener noreferrer" class="bg-[#003580] hover:bg-[#002860] text-white px-5 py-3 rounded-xl font-bold text-xs no-underline shrink-0">
-          Book ${meta.capital} Hotel on Booking.com →
-        </a>
+        ${getFlightWidgetWithTP(code, meta)}
       </div>
 
       <h2 class="text-2xl font-extrabold text-slate-900 mt-8">4. Career, Universities & Indian Community in ${countryName}</h2>

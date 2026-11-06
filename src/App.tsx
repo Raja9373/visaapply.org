@@ -19,6 +19,8 @@ import { BlogsPage, FeaturedBlogsCarousel } from './components/AutoBlogger';
 import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogGenerator';
 import { VisaChatbot } from './components/VisaChatbot';
 import { InterviewPrepFull, get20InterviewQuestions } from './components/InterviewPrepFull';
+import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
+import { FlightsPage } from './pages/FlightsPage';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   mergeArticleCollections,
@@ -219,6 +221,7 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   const isPrivacy = path === '/privacy';
   const isTerms = path === '/terms';
   const isBlogs = path === '/blogs' || path === '/blogs/';
+  const isFlights = path === '/flights' || path === '/flights/' || path.startsWith('/flights?');
   const interviewMatch = path.match(/^\/interview-prep\/([a-z]{2,3})$/i);
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
@@ -230,6 +233,9 @@ function generateMetadata(path: string, countries: Country[], article?: Article 
   if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
+  } else if (isFlights) {
+    title = 'Cheap Flights from India to 249 Countries – VisaApply Flights (ID 801550)';
+    description = 'Search 100+ airlines and compare the cheapest flights from India across 249 countries. Powered by Travelpayouts ID 801550, Aviasales & Skyscanner 8131850.';
   } else if (isBlogs) {
     title = '2026 Global Visa Blogs & Travel Guides (2,490+ Articles) – VisaApply.org';
     description = 'Explore 2,490+ SEO visa blogs across 249 countries for Indian travelers: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
@@ -555,9 +561,9 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
         </div>
       </div>
 
-      {/* Row 2: Booking.com Hotel + Indian Community & More + Cost Calculator */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
-        {/* Card 1: Booking.com Hotel Price */}
+      {/* Row 2: 4 Columns — Booking.com Hotel (8119919) + Travelpayouts Flight (801550) + Indian Community + Cost Calculator */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+        {/* Column 1: Booking.com Hotel Price */}
         <div className="bg-white rounded-2xl p-4 border-2 border-[#003580] flex flex-col justify-between">
           <div>
             <div className="text-xs font-extrabold text-[#003580]">🏨 HOTEL PRICE - BOOKING.COM</div>
@@ -565,7 +571,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
               From {meta.hotelPrice} in {meta.capital}
             </div>
             <a
-              href={`https://www.booking.com/city/${codeLower}/${capitalSlug}.html?aid=8119919&label=${fromLower}-to-${codeLower}-hotel`}
+              href={`https://www.booking.com/city/${codeLower}/${capitalSlug}.html?aid=${TRAVELPAYOUTS_CONFIG.bookingComAid}&label=${fromLower}-to-${codeLower}-hotel`}
               target="_blank"
               rel="noopener noreferrer"
               className="block mt-3 bg-[#003580] hover:bg-[#002860] text-white text-center py-2.5 px-3 rounded-[10px] font-bold text-xs no-underline transition-colors"
@@ -574,11 +580,101 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
             </a>
           </div>
           <div className="text-[10px] text-[#64748b] mt-2 text-center font-medium">
-            AID 8119919 • Free cancellation
+            AID {TRAVELPAYOUTS_CONFIG.bookingComAid} • Free cancellation
           </div>
         </div>
 
-        {/* Card 2: Indian Community & More */}
+        {/* Column 2: Flight Price - Travelpayouts ID 801550 + Skyscanner 8131850 */}
+        {(() => {
+          const flight = getFlightLinkForCountry(codeLower);
+          return (
+            <div
+              style={{
+                background: 'linear-gradient(135deg,#f0f9ff,#e0f7ff)',
+                border: '1px solid #7dd3fc',
+                borderRadius: '16px',
+                padding: '14px',
+              }}
+              className="flex flex-col justify-between"
+            >
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#0369a1' }}>
+                  ✈ FLIGHT PRICE - LIVE
+                </div>
+                <div style={{ fontSize: '15px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>
+                  {flight.route} From {flight.priceINR}
+                </div>
+                <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>
+                  Via Travelpayouts ID {TRAVELPAYOUTS_CONFIG.id} + Skyscanner {TRAVELPAYOUTS_CONFIG.skyscannerId}
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const target = `/flights?from=DEL&to=${flight.iata}`;
+                    if (navigate) navigate(target);
+                    else window.location.href = target;
+                  }}
+                  style={{
+                    background: '#10b981',
+                    color: 'white',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    border: 'none',
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                  }}
+                >
+                  ✈ Search {flight.route} Flights - From {flight.priceINR}
+                </button>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <a
+                    href={flight.aviasalesLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      flex: 1,
+                      background: '#003580',
+                      color: 'white',
+                      padding: '6px 8px',
+                      borderRadius: '8px',
+                      fontSize: '10px',
+                      fontWeight: 700,
+                      textDecoration: 'none',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Aviasales ↗
+                  </a>
+                  <a
+                    href={flight.skyscannerLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      flex: 1,
+                      background: 'white',
+                      color: '#0284c7',
+                      border: '1px solid #7dd3fc',
+                      padding: '6px 8px',
+                      borderRadius: '8px',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Skyscanner →
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Column 3: Indian Community & More */}
         <div className="bg-white rounded-2xl p-4 border border-[#e2e8f0] flex flex-col justify-between">
           <div>
             <div className="text-xs font-extrabold text-[#475569]">📊 INDIAN COMMUNITY & MORE</div>
@@ -603,7 +699,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
           </div>
         </div>
 
-        {/* Card 3: Cost Calculator */}
+        {/* Column 4: Cost Calculator */}
         <div className="bg-gradient-to-br from-[#f0fdf4] to-[#dcfce7] rounded-2xl p-4 border border-[#bbf7d0] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between">
@@ -634,8 +730,8 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
                 <b>$50-$500</b>
               </div>
               <div className="flex justify-between">
-                <span>Flight (DEL→):</span>
-                <b>{meta.flightPrice}</b>
+                <span>Flight ({getFlightLinkForCountry(codeLower).route}):</span>
+                <b>{getFlightLinkForCountry(codeLower).priceINR}</b>
               </div>
               <div className="flex justify-between">
                 <span>Hotel ({tripNights} nights):</span>
@@ -1816,6 +1912,7 @@ export default function App() {
   // Router parsing
   const isHome = currentPath === '/';
   const isAdmin = currentPath === '/admin';
+  const isFlights = currentPath === '/flights' || currentPath === '/flights/' || currentPath.startsWith('/flights?');
   const isBlogs = currentPath === '/blogs' || currentPath === '/blogs/';
   const interviewMatch = currentPath.match(/^\/interview-prep\/([a-z]{2,3})$/i);
   const isContact = currentPath === '/contact';
@@ -1858,7 +1955,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAdmin && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAdmin && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -1895,9 +1992,10 @@ export default function App() {
           </div>
 
           {/* Nav Links */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-blue-100">
+          <nav className="hidden md:flex items-center gap-5 text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${currentPath === '/' ? 'text-white font-bold' : 'hover:text-white'}`}>Home</button>
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer hover:text-white`}>Countries</button>
+            <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>✈ Flights</button>
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>📝 Blogs (2,490+)</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>🎤 Interview Prep</button>
             <button onClick={() => navigate('/contact')} className={`transition-colors cursor-pointer ${currentPath === '/contact' ? 'text-white font-bold' : 'hover:text-white'}`}>Contact</button>
@@ -1927,6 +2025,7 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Home</button>
+            <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">✈ Cheap Flights (249 Countries)</button>
             <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">📝 Visa Blogs (2,490+)</button>
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">🎤 Consular Interview Prep</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
@@ -1950,6 +2049,8 @@ export default function App() {
             onDelete={handleDeleteDraft}
             navigate={navigate}
           />
+        ) : isFlights ? (
+          <FlightsPage onNavigate={navigate} />
         ) : isBlogs ? (
           <BlogsPage navigate={navigate} />
         ) : interviewMatch ? (
@@ -5103,6 +5204,31 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
           <button onClick={() => window.location.reload()} className="text-xs underline font-semibold">Refresh Page</button>
         </div>
       )}
+
+      {/* Phase 5.5: Monetization Dashboard */}
+      <div style={{ background: 'white', borderRadius: '16px', padding: '20px', border: '1px solid #e2e8f0', marginBottom: '32px' }}>
+        <h3 style={{ fontWeight: 800, fontSize: '18px', color: '#0f172a', margin: 0 }}>💰 Monetization Dashboard — Monetization Status</h3>
+        <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+          <div style={{ background: '#eff6ff', padding: '12px', borderRadius: '10px', border: '1px solid #bfdbfe' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#1e40af' }}>BOOKING.COM</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>ID {TRAVELPAYOUTS_CONFIG.bookingComAid} ✅ Approved</div>
+            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>6 placements • &amp;label tracking • $15-$40/booking</div>
+          </div>
+          <div style={{ background: '#f0fdf4', padding: '12px', borderRadius: '10px', border: '1px solid #bbf7d0' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#15803d' }}>TRAVELPAYOUTS</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>ID {TRAVELPAYOUTS_CONFIG.id} ✅ Approved</div>
+            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Aviasales + 100 airlines • $2-$10/booking • Live NOW</div>
+          </div>
+          <div style={{ background: '#fef3c7', padding: '12px', borderRadius: '10px', border: '1px solid #fde68a' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#92400e' }}>SKYSCANNER DIRECT</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>ID {TRAVELPAYOUTS_CONFIG.skyscannerId} ⏳ In Review</div>
+            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Impact.com • Will auto-enable when approved</div>
+          </div>
+        </div>
+        <div style={{ marginTop: '16px', padding: '12px', background: '#f8fafc', borderRadius: '10px', fontSize: '12px', color: '#334155' }}>
+          <b>Next:</b> When Skyscanner shows Approved, change SKYSCANNER_ENABLED to true in travelpayoutsConfig.ts - Flight widget will use direct Skyscanner affiliate links with commission.
+        </div>
+      </div>
 
       {/* Verification Tools Section */}
       <div className="bg-gradient-to-r from-slate-900 to-[#0B3D91] text-white p-6 sm:p-8 rounded-2xl mb-10 shadow-lg">

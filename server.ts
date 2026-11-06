@@ -510,6 +510,7 @@ const handleSitemapXml = (req: any, res: any) => {
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     xml += `  <url><loc>${baseUrl}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>\n`;
+    xml += `  <url><loc>${baseUrl}/flights</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/blogs</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/sitemap</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
     xml += `  <url><loc>${baseUrl}/audit</loc><changefreq>daily</changefreq><priority>0.8</priority></url>\n`;

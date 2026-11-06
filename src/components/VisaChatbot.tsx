@@ -4,6 +4,7 @@ import { getCountryMeta } from '../data/countryMetaData';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { getContinentForCountry, CONTINENT_MAP_249 } from '../data/continentMap';
 import { parseHotelPriceUSD, parseProcessingDays, parseSuccessRateNum } from '../utils/countryLiveUtils';
+import { getFlightLinkForCountry } from '../data/travelpayoutsConfig';
 
 interface ChatMessage {
   id: string;
@@ -195,6 +196,7 @@ export function generateChatbotResponse(rawQuery: string): string {
       `;
     }
 
+    const flightInfo = getFlightLinkForCountry(code);
     return `
       <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">${flag} ${name} Visa Guide for Indians (2026)</div>
       <div style="font-size:12px; color:#334155; line-height:1.55;">
@@ -204,13 +206,13 @@ export function generateChatbotResponse(rawQuery: string): string {
         • <strong>Est. Visa Fee:</strong> ${feeINR}<br/>
         • <strong>Indian Approval Rate:</strong> <span style="color:#059669; font-weight:700;">${meta.successRate}</span><br/>
         • <strong>Currency & Best Season:</strong> ${meta.currency} (${meta.currencySymbol}) • ${meta.bestTime}<br/>
-        • <strong>Top Jobs & Unis:</strong> ${meta.topJobs} | ${meta.topUnis}<br/>
+        • <strong>Flight (${flightInfo.route}):</strong> <strong>From ${flightInfo.priceINR}</strong><br/>
         • <strong>Avg Hotel in ${meta.capital}:</strong> $${hotelNum}/night
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
         <a href="/in-to-${code}" style="background:#2563eb; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">📋 Full ${name} Checklist</a>
-        <a href="/interview-prep/${code}" style="background:#f1f5f9; color:#0f172a; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🎤 Interview Q&A</a>
-        <a href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name)}&aid=8119919&label=chatbot-${code}" target="_blank" rel="noopener noreferrer" style="background:#003580; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🏨 ${name} Hotels ($${hotelNum})</a>
+        <a href="${flightInfo.aviasalesLink}" target="_blank" rel="noopener noreferrer" style="background:#10b981; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">✈ Flights (${flightInfo.priceINR})</a>
+        <a href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name)}&aid=8119919&label=chatbot-${code}" target="_blank" rel="noopener noreferrer" style="background:#003580; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🏨 Hotels ($${hotelNum})</a>
       </div>
     `;
   }
