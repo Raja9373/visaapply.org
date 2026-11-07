@@ -38,19 +38,42 @@ const INDIA_EVISA_VOA_SET = new Set([
   'ae', 'sg', 'vn', 'id', 'lk', 'om', 'qa', 'bh', 'kh', 'la', 'mm', 'uz', 'az', 'ge', 'am', 'eg', 'jo', 'tz', 'ug', 'et', 'zm', 'zw', 'bw', 'jp', 'kr', 'ru', 'tr', 'au', 'nz'
 ]);
 
-// Explicit bilateral overrides from prompt + top corridors
-const EXPLICIT_BILATERAL_COUNTS: Record<string, number> = {
-  'us-to-in': 65,
+// Explicit bilateral route counts table (ROUTE_COUNTS) for origin-specific visa counts
+export const ROUTE_COUNTS: Record<string, number> = {
+  // AE (UAE) to Destinations
   'ae-to-us': 45,
+  'ae-to-gb': 52,
+  'ae-to-uk': 52,
+  'ae-to-ca': 42,
+  'ae-to-de': 40,
+  'ae-to-au': 46,
+  'ae-to-in': 58,
+  'ae-to-sg': 32,
+  'ae-to-fr': 38,
+  'ae-to-jp': 36,
+  'ae-to-th': 34,
+  'ae-to-sc': 40,
+  // US (United States) to Destinations
+  'us-to-in': 65,
+  'us-to-gb': 48,
+  'us-to-uk': 48,
   'us-to-ae': 30,
+  'us-to-ca': 38,
+  'us-to-de': 38,
+  'us-to-au': 42,
+  'us-to-sg': 35,
+  'us-to-fr': 38,
+  'us-to-jp': 36,
+  'us-to-th': 34,
+  'us-to-sc': 38,
+  // Other major bilateral corridors
   'gb-to-au': 55,
   'uk-to-au': 55,
-  'ae-to-gb': 38,
-  'ae-to-ca': 42,
-  'us-to-gb': 40,
   'gb-to-us': 44,
+  'uk-to-us': 44,
+  'gb-to-in': 62,
+  'uk-to-in': 62,
   'ca-to-us': 36,
-  'us-to-ca': 38,
   'au-to-us': 42,
   'sg-to-us': 35,
   'sa-to-us': 44,
@@ -109,20 +132,23 @@ export function isVOAEligible(fromRaw: string, toRaw: string): boolean {
   return voaDestinations.has(to);
 }
 
-export function calculateVisaCount(fromRaw: string, toRaw: string): number {
-  const from = (fromRaw || 'in').toLowerCase();
-  const to = (toRaw || 'us').toLowerCase();
+export function getVisaCount(selectedOrigin: string, destinationCode: string): number {
+  const rawFrom = (selectedOrigin || 'in').trim().toLowerCase();
+  const rawTo = (destinationCode || 'us').trim().toLowerCase();
+  const from = rawFrom === 'uk' ? 'gb' : (rawFrom === 'eu' || rawFrom === 'sch' || rawFrom === 'schengen' ? 'sc' : rawFrom);
+  const to = rawTo === 'uk' ? 'gb' : (rawTo === 'eu' || rawTo === 'sch' || rawTo === 'schengen' ? 'sc' : rawTo);
+
   if (from === to) return 0;
 
-  // 1. India to Any: Always return exact CORRECT_COUNTS (278 US, 222 GB, 151 CA, 138 DE, 135 AU, 135 AE, etc.)
+  // 1. India to Any: Always return exact CORRECT_COUNTS (278 US, 222 GB, 147 CA, 138 DE, 135 AU, 135 AE, etc.)
   if (from === 'in') {
     return getLiveVisaCount(to);
   }
 
-  // 2. Explicit bilateral overrides from prompt (US-TO-IN 65, AE-TO-US 45, US-TO-AE 30, GB-TO-AU 55, etc.)
+  // 2. Explicit bilateral ROUTE_COUNTS table (AE-TO-US 45, AE-TO-GB 52, US-TO-IN 65, US-TO-GB 48, etc.)
   const key = `${from}-to-${to}`;
-  if (EXPLICIT_BILATERAL_COUNTS[key] !== undefined) {
-    return EXPLICIT_BILATERAL_COUNTS[key];
+  if (ROUTE_COUNTS[key] !== undefined) {
+    return ROUTE_COUNTS[key];
   }
 
   // 3. Deterministic bilateral calculation based on destination complexity & passport relationship
@@ -130,10 +156,10 @@ export function calculateVisaCount(fromRaw: string, toRaw: string): number {
   const vf = isVisaFree(from, to);
 
   if (to === 'us') return vf ? 38 : 45;
-  if (to === 'gb' || to === 'uk') return vf ? 36 : 48;
-  if (to === 'ca') return vf ? 34 : 44;
-  if (to === 'au') return vf ? 55 : 46;
-  if (to === 'de' || to === 'fr') return vf ? 32 : 42;
+  if (to === 'gb') return vf ? 48 : 52;
+  if (to === 'ca') return vf ? 38 : 44;
+  if (to === 'au') return vf ? 42 : 46;
+  if (to === 'de' || to === 'fr') return vf ? 38 : 42;
   if (to === 'ae') return vf ? 30 : 38;
   if (to === 'in') return 65;
 
@@ -142,6 +168,10 @@ export function calculateVisaCount(fromRaw: string, toRaw: string): number {
     return Math.max(18, Math.min(48, Math.round(baseDestCount * 0.35) + hash));
   }
   return Math.max(24, Math.min(72, Math.round(baseDestCount * 0.5) + hash));
+}
+
+export function calculateVisaCount(fromRaw: string, toRaw: string): number {
+  return getVisaCount(fromRaw, toRaw);
 }
 
 export function getBilateralProcessingTime(fromRaw: string, toRaw: string): string {

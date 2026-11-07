@@ -23,7 +23,7 @@ import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLink
 import { FlightsPage } from './pages/FlightsPage';
 import { RoutesPage } from './pages/RoutesPage';
 import { ImmigrationUpdatesPage } from './pages/ImmigrationUpdatesPage';
-import { calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
+import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
 import {
@@ -1779,31 +1779,92 @@ export default function App() {
   const [forceUpdate, setForceUpdate] = useState(0);
 
   const [visaTypes] = useState<VisaType[]>([]);
-  const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
-  const [selectedOrigin, setSelectedOrigin] = useState<Country | null>(null);
+  const getInitialOriginCountry = (): Country => {
+    let initCode = 'IN';
+    try {
+      const savedOrigin = localStorage.getItem('visaapply_selected_origin');
+      if (savedOrigin && savedOrigin.trim().length >= 2) {
+        initCode = savedOrigin.trim().toUpperCase();
+      }
+    } catch {
+      // ignore storage errors
+    }
+    return {
+      code: initCode,
+      name: getCountryFullName(initCode),
+      flag: getCountryFlag(initCode)
+    };
+  };
+
+  const [detectedCountry, setDetectedCountry] = useState<Country | null>(getInitialOriginCountry);
+  const [selectedOrigin, setSelectedOriginState] = useState<Country | null>(getInitialOriginCountry);
+
+  const setSelectedOrigin = (countryOrCode: Country | string | null) => {
+    if (!countryOrCode) return;
+    const rawCode = typeof countryOrCode === 'string' ? countryOrCode : countryOrCode.code || 'IN';
+    const normCode = rawCode.trim().toUpperCase();
+    const cObj: Country = {
+      code: normCode,
+      name: getCountryFullName(normCode),
+      flag: getCountryFlag(normCode)
+    };
+    setSelectedOriginState(cObj);
+    setDetectedCountry(cObj);
+    try {
+      localStorage.setItem('visaapply_selected_origin', normCode);
+    } catch {
+      // ignore storage errors
+    }
+  };
+
   const [uiLang, setUiLang] = useState<SupportedLangCode>(() => {
     const fromUrl = getLangFromUrlPath(window.location.pathname).lang;
     return fromUrl || getSavedLanguage() || 'en';
   });
 
-  // Part B: Auto-detect user IP country & language on mount AND on tab focus (so switching VPN immediately updates language & origin)
+  // Part B: Auto-detect user IP country & language on mount AND on tab focus
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).getVisaCount = getVisaCount;
+      (window as any).setOrigin = (code: string) => setSelectedOrigin(code);
+    }
     let active = true;
     const runGeoDetection = () => {
       detectUserCountryAndLanguage().then(({ countryCode, lang }) => {
         if (!active) return;
-        const normCode = (countryCode || 'IN').toUpperCase();
-        const cObj: Country = {
-          code: normCode,
-          name: getCountryFullName(normCode),
-          flag: getCountryFlag(normCode)
+        let savedOrigin: string | null = null;
+        let simulatedVpn: string | null = null;
+        try {
+          savedOrigin = localStorage.getItem('visaapply_selected_origin');
+          simulatedVpn = localStorage.getItem('visaapply_last_detected_country');
+        } catch {
+          // ignore
+        }
+
+        const effectiveOriginCode = (
+          savedOrigin ||
+          simulatedVpn ||
+          'IN'
+        ).trim().toUpperCase();
+
+        const originObj: Country = {
+          code: effectiveOriginCode,
+          name: getCountryFullName(effectiveOriginCode),
+          flag: getCountryFlag(effectiveOriginCode)
         };
-        setDetectedCountry(cObj);
-        setSelectedOrigin(cObj);
+        setSelectedOriginState(originObj);
+
+        const detectedNorm = (simulatedVpn || savedOrigin || countryCode || 'IN').trim().toUpperCase();
+        setDetectedCountry({
+          code: detectedNorm,
+          name: getCountryFullName(detectedNorm),
+          flag: getCountryFlag(detectedNorm)
+        });
+
         const urlLang = getLangFromUrlPath(window.location.pathname).lang;
         if (urlLang) {
           setUiLang(urlLang);
-        } else {
+        } else if (simulatedVpn) {
           setUiLang(lang);
         }
       });
@@ -1835,11 +1896,12 @@ export default function App() {
       flag: getCountryFlag(normCode)
     };
     setDetectedCountry(cObj);
-    setSelectedOrigin(cObj);
+    setSelectedOriginState(cObj);
     setUiLang(mappedLang);
     setSavedLanguage(mappedLang);
     try {
       localStorage.setItem('visaapply_last_detected_country', normCode);
+      localStorage.setItem('visaapply_selected_origin', normCode);
     } catch {
       // ignore storage errors
     }
@@ -2198,10 +2260,11 @@ export default function App() {
               </select>
             </div>
 
-            {detectedCountry && (
+            {(selectedOrigin || detectedCountry) && (
               <div className="hidden sm:flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full text-xs text-blue-100 border border-white/15">
-                <span>{detectedCountry.flag}</span>
-                <span className="truncate max-w-[110px]">{getLocalizedCountryName(detectedCountry.code, uiLang, detectedCountry.name)}</span>
+                <span>{(selectedOrigin || detectedCountry)!.flag}</span>
+                <span className="font-bold">{(selectedOrigin || detectedCountry)!.code}</span>
+                <span className="truncate max-w-[110px]">{getLocalizedCountryName((selectedOrigin || detectedCountry)!.code, uiLang, (selectedOrigin || detectedCountry)!.name)}</span>
               </div>
             )}
             <button 
@@ -2524,6 +2587,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
 
   const uniqueCountries = deduplicateCountries(dynamicCountries);
 
+  const activeOriginCode = (selectedOrigin?.code || 'IN').toLowerCase();
+
   // Advanced match helper across 9 metadata fields + reason badge
   const getCountrySearchMatch = (c: Country, rawQuery: string): { matched: boolean; reason: string } => {
     const q = (rawQuery || '').trim().toLowerCase();
@@ -2536,7 +2601,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
     const isSchengen = CONTINENT_MAP_249.europe?.subregions?.schengen?.includes(c.code.toLowerCase());
 
     if (fullName.toLowerCase().includes(q) || c.code.toLowerCase() === q) {
-      return { matched: true, reason: `${meta.capital} • ${getLiveVisaCount(c.code)} Visas` };
+      return { matched: true, reason: `${meta.capital} • ${getVisaCount(activeOriginCode, c.code)} Visas` };
     }
     if (meta.capital.toLowerCase().includes(q)) {
       return { matched: true, reason: `Capital: ${meta.capital}` };
@@ -2580,7 +2645,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
       }
     }
     return matches;
-  }, [uniqueCountries, targetSearch]);
+  }, [uniqueCountries, targetSearch, activeOriginCode]);
 
   const filteredCountries = useMemo(() => {
     const list = uniqueCountries.filter((c: Country) => {
@@ -2627,7 +2692,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
 
     const sorted = [...list];
     if (sortBy === 'Sort by Visa Count (High to Low)') {
-      sorted.sort((a, b) => getLiveVisaCount(b.code) - getLiveVisaCount(a.code));
+      sorted.sort((a, b) => getVisaCount(activeOriginCode, b.code) - getVisaCount(activeOriginCode, a.code));
     } else if (sortBy === 'Sort by Hotel Price (Low to High)') {
       sorted.sort((a, b) => parseHotelPriceUSD(getCountryMeta(a.code).hotelPrice) - parseHotelPriceUSD(getCountryMeta(b.code).hotelPrice));
     } else if (sortBy === 'Sort by Processing Time (Fast to Slow)') {
@@ -2638,7 +2703,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
       sorted.sort((a, b) => getCountryFullName(a.code).localeCompare(getCountryFullName(b.code)));
     }
     return sorted;
-  }, [uniqueCountries, targetSearch, activeContinent, visaTypeFilter, processingFilter, hotelFilter, sortBy]);
+  }, [uniqueCountries, targetSearch, activeContinent, visaTypeFilter, processingFilter, hotelFilter, sortBy, activeOriginCode]);
 
   const ui = getUIString(uiLang);
 
@@ -2734,7 +2799,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               >
                 {uniqueCountries.map((c: Country) => (
                   <option key={c.code} value={c.code}>
-                    {getCountryFlag(c.code)} {getLocalizedCountryName(c.code, uiLang, getCountryFullName(c.code))} ({calculateVisaCount(selectedOrigin?.code || 'IN', c.code)} {ui.visas})
+                    {getCountryFlag(c.code)} {getLocalizedCountryName(c.code, uiLang, getCountryFullName(c.code))} ({getVisaCount(selectedOrigin?.code || 'IN', c.code)} {ui.visas})
                   </option>
                 ))}
               </select>
@@ -2750,7 +2815,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               }}
               className="w-full md:w-auto px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white font-black text-sm rounded-xl shadow-md cursor-pointer transition-colors shrink-0"
             >
-              {ui.viewRequirements} ({calculateVisaCount(selectedOrigin?.code || 'IN', heroDestCode)})
+              {ui.viewRequirements} ({getVisaCount(selectedOrigin?.code || 'IN', heroDestCode)})
             </button>
           </div>
 
@@ -2875,7 +2940,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     </div>
                   </div>
                   <span className="text-xs font-bold text-[#1d4ed8] bg-blue-50 px-2.5 py-1 rounded-lg shrink-0">
-                    {getLiveVisaCount(country.code)} Visas →
+                    {getVisaCount(originCode, destCode)} Visas ({originCode.toUpperCase()} → {destCode.toUpperCase()})
                   </span>
                 </button>
               );
@@ -2979,13 +3044,11 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             const originName = getLocalizedCountryName(originCode, uiLang, getCountryFullName(originCode));
             const destCode = country.code.toLowerCase();
             const isSelf = originCode === destCode;
-            const liveCount = calculateVisaCount(originCode, destCode);
+            const liveCount = getVisaCount(originCode, destCode);
             const procTime = getBilateralProcessingTime(originCode, destCode);
             const flagEmoji = getCountryFlag(country.code);
             const flagUrl = getCountryFlagUrl(country.code);
             const fullName = getLocalizedCountryName(country.code, uiLang, getCountryFullName(country.code));
-            const contKey = getContinentForCountry(country.code);
-            const contLabel = CONTINENT_MAP_249[contKey]?.label || contKey;
             const meta = getCountryMeta(country.code);
             const liveLocal = getLiveLocalTime(meta.timeZone);
 
@@ -3034,11 +3097,14 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                           </span>
                         ) : (
                           <>
-                            <span className="bg-[#f1f5f9] px-2 py-0.5 rounded-[10px] font-semibold text-[#334155]">
-                              {liveCount} {ui.visas} {originCode !== 'in' ? `(${originCode.toUpperCase()})` : ''}
+                            <span className="bg-[#f1f5f9] px-2 py-0.5 rounded-[10px] font-bold text-[#334155]">
+                              {liveCount} {ui.visas}
+                            </span>
+                            <span className="text-[11px] font-bold text-[#1d4ed8] bg-blue-50 px-1.5 py-0.5 rounded-md">
+                              {originCode.toUpperCase()} → {destCode.toUpperCase()}
                             </span>
                             <span className="text-[#64748b]">•</span>
-                            <span className="truncate">{originCode !== 'in' ? `${ui.fromCountryPrefix} ${originName}` : contLabel}</span>
+                            <span className="truncate">{ui.fromCountryPrefix} {originName}</span>
                           </>
                         )}
                       </div>

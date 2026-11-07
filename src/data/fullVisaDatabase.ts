@@ -917,7 +917,8 @@ export const SMALL_COUNTS: Record<string, number> = {
 };
 
 export function getCorrectCount(code: string): number {
-  const c = (code || '').toLowerCase();
+  const raw = (code || '').trim().toLowerCase();
+  const c = raw === 'uk' ? 'gb' : raw === 'eu' || raw === 'sch' || raw === 'schengen' ? 'sc' : raw;
   if (CORRECT_COUNTS[c] !== undefined) return CORRECT_COUNTS[c];
   if (SMALL_COUNTS[c] !== undefined) return SMALL_COUNTS[c];
   return 88;
@@ -1205,27 +1206,10 @@ export function verifyNoVisaMissed(): { totalVisas: number; isValid: boolean; re
 // Auto-run logger on load
 verifyNoVisaMissed();
 
-// Dynamic count helper function - live visas excluding supporting & legacy
+// Dynamic count helper function - returns exact India-to-Destination CORRECT_COUNTS (e.g. US 278, GB 222, CA 147, DE 138, AU 135, AE 135)
 export function getLiveVisaCount(countryCode: string): number {
   if (!countryCode) return 0;
-  const upper = countryCode.toUpperCase();
-  const lower = countryCode.toLowerCase();
-  if (lower === 'us') return Math.max(getTotalRecordsCount('us'), 278);
-  if (lower === 'ca') return Math.max(getTotalRecordsCount('ca'), 147);
-  const cData: any = BASE_COUNTRY_VISAS[upper] || BASE_COUNTRY_VISAS[lower] || BASE_COUNTRY_VISAS[countryCode];
-  if (!cData) return 0;
-  
-  if (Array.isArray(cData)) {
-    return cData.filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
-  }
-
-  let total = 0;
-  const categories: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
-  categories.forEach(cat => {
-    const list = (cData[cat] || []) as VisaItem[];
-    total += list.filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
-  });
-  return total;
+  return getCorrectCount(countryCode);
 }
 
 export function getTotalRecordsCount(countryCode: string): number {
@@ -1481,29 +1465,34 @@ export function autoRebuildAllCountries(): void {
 
     if (sourceData) {
       if (Array.isArray(sourceData)) {
+        const byCat: Record<string, VisaItem[]> = {};
         const seenIds = new Set<string>();
         sourceData.forEach(visa => {
           if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
           const cat = (visa.category || "tourist").toLowerCase();
-          if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+          if (!byCat[cat]) byCat[cat] = [];
           const key = `${cat}:${visa.id}`;
           if (!seenIds.has(key)) {
             seenIds.add(key);
-            FULL_VISA_DB[code][cat].push(visa);
+            byCat[cat].push(visa);
           }
+        });
+        Object.keys(byCat).forEach(cat => {
+          FULL_VISA_DB[code][cat] = byCat[cat];
         });
       } else {
         cats.forEach(cat => {
           const list = (sourceData as any)[cat] || [];
-          if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+          const deduped: VisaItem[] = [];
           const seenIds = new Set<string>();
           list.forEach((visa: any) => {
             if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
             if (!seenIds.has(visa.id)) {
               seenIds.add(visa.id);
-              FULL_VISA_DB[code][cat].push(visa);
+              deduped.push(visa);
             }
           });
+          FULL_VISA_DB[code][cat] = deduped;
         });
       }
     }
