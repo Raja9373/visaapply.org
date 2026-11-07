@@ -111,3 +111,17 @@ body {
   animation-play-state: paused;
 }
 
+/* Golden Visa Gradient Heading Text */
+.golden-visa-gradient-text {
+  background: linear-gradient(135deg, #FFD700, #D4AF37, #B8860B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.35));
+  display: inline;
+}
+
+

@@ -391,7 +391,23 @@ export const GoldenVisaPage: React.FC<GoldenVisaPageProps> = ({ onNavigate }) =>
             <span>2026 Sovereign Residency by Investment Guide</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white max-w-4xl mx-auto leading-tight">
-            Global Golden Visa &amp; Residency by Investment Directory
+            Global{' '}
+            <span
+              className="golden-visa-gradient-text"
+              style={{
+                background: 'linear-gradient(135deg, #FFD700, #D4AF37, #B8860B)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 800,
+                textShadow: '0 0 12px rgba(255, 215, 0, 0.35)',
+                filter: 'drop-shadow(0 0 12px rgba(255, 215, 0, 0.35))',
+                display: 'inline'
+              }}
+            >
+              Golden Visa
+            </span>{' '}
+            &amp; Residency by Investment Directory
           </h1>
           <p className="mt-4 text-slate-300 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
             Compare official requirements, minimum investment thresholds, physical stay rules, and citizenship pathways across 18+ sovereign programs worldwide. 100% free informational resource.
