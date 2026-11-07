@@ -16,7 +16,7 @@ import {
   RefreshCw,
   Sliders
 } from 'lucide-react';
-import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
+import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
 interface PhotoResizerPageProps {
@@ -520,8 +520,8 @@ export const PhotoResizerPage: React.FC<PhotoResizerPageProps> = ({ onNavigate =
           </div>
         </div>
 
-        {/* Lead Magnet Bar: Join Free WhatsApp Channel + Email Newsletter + AdSense Banner */}
-        <FreeLeadMagnetBar pageContext="Visa Photo Resizer Free Tool" adSlot="photo_resizer_banner" />
+        {/* Shared Email Only Subscribe Box */}
+        <EmailSubscribeBox pageContext="Visa Photo Resizer Free Tool" className="mb-8" />
 
         {/* FAQs */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle2, Sparkles } from 'lucide-react';
-import { AdSenseBanner } from './AdSenseBanner';
 
-interface FreeLeadMagnetBarProps {
+interface EmailSubscribeBoxProps {
   pageContext?: string;
-  adSlot?: string;
+  className?: string;
 }
 
-export const FreeLeadMagnetBar: React.FC<FreeLeadMagnetBarProps> = ({ pageContext = 'Visa Services', adSlot }) => {
+export const EmailSubscribeBox: React.FC<EmailSubscribeBoxProps> = ({ pageContext = 'Free Visa Tool', className = '' }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -34,11 +33,7 @@ export const FreeLeadMagnetBar: React.FC<FreeLeadMagnetBarProps> = ({ pageContex
   };
 
   return (
-    <div className="w-full my-8 space-y-6">
-      {/* Google AdSense Placement Box */}
-      <AdSenseBanner slot={adSlot || "1234567890"} />
-
-      {/* Email Only Subscribe Box */}
+    <div className={`w-full ${className}`}>
       <div className="bg-gradient-to-r from-[#0B2A5B] via-[#09327a] to-[#047857] rounded-2xl p-6 sm:p-8 text-white shadow-lg border border-emerald-500/30">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center lg:text-left max-w-xl">
@@ -58,7 +53,7 @@ export const FreeLeadMagnetBar: React.FC<FreeLeadMagnetBarProps> = ({ pageContex
             {subscribed ? (
               <div className="bg-emerald-500/20 border border-emerald-400/40 p-3 rounded-xl flex items-center gap-2 text-xs text-emerald-200 font-bold justify-center">
                 <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />
-                <span>Subscribed! Check inbox for free visa kit.</span>
+                <span>Subscribed Successfully! Check your inbox for free visa kit.</span>
               </div>
             ) : (
               <form onSubmit={handleEmailSubscribe} className="flex flex-col sm:flex-row gap-2">

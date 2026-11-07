@@ -12,7 +12,7 @@ import {
   Gift,
   Globe
 } from 'lucide-react';
-import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
+import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from '../components/BottomFreeToolsSection';
@@ -330,7 +330,7 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
         </div>
 
         {/* Lead Magnet Bar */}
-        <FreeLeadMagnetBar pageContext="Global Embassy Slot Alert Auto System" adSlot="slot_alert_banner" />
+        <EmailSubscribeBox pageContext="Global Embassy Slot Alert Auto System" className="mb-8" />
 
         {/* Frequently Asked Questions */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">

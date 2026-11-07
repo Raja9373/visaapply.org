@@ -18,8 +18,8 @@ export function AdSenseBanner({ slot }: { slot?: string }) {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full no-print">
-      <div className="w-full bg-slate-100 border border-slate-200 rounded-xl p-4 text-center overflow-hidden min-h-[90px] flex items-center justify-center">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 w-full no-print">
+      <div className="w-full text-center overflow-hidden flex items-center justify-center">
         <ins
           className="adsbygoogle"
           style={{ display: 'block', width: '100%' }}

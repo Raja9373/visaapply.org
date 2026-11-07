@@ -3276,7 +3276,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-[#0B3D91] to-[#072a68] text-white py-14 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-b from-[#0B3D91] to-[#072a68] text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-3 py-1.5 rounded-full text-xs text-blue-200">
             <Globe className="w-3.5 h-3.5" />
@@ -3289,10 +3289,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             {getUIString(uiLang).heroSubtitle}
           </p>
 
-          {/* Phase 1 TOP - Above the fold: 4 compact free tools cards */}
-          <TopFreeToolsStrip onNavigate={navigate} theme="dark" className="my-2" />
-
-          {/* Part C: Any-to-Any FROM + Swap (⇄) + TO Selector Bar (61,752 Routes) */}
+          {/* 1. FROM / TO Search Bar */}
           <div className="max-w-4xl mx-auto bg-white p-3.5 rounded-2xl shadow-xl flex flex-col md:flex-row gap-3 items-center text-slate-900">
             {/* FROM Dropdown (249 Countries) */}
             <div className="w-full md:flex-1 flex items-center gap-2 px-3.5 py-2.5 bg-slate-100 rounded-xl text-slate-800 text-sm font-medium border border-slate-200">
@@ -3369,34 +3366,25 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             </button>
           </div>
 
-          {/* Golden Visa Hero Highlight Card */}
-          <div className="max-w-4xl mx-auto bg-gradient-to-r from-amber-500/20 via-yellow-400/15 to-blue-900/40 border border-yellow-400/40 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-left shadow-lg">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl sm:text-3xl p-2 bg-yellow-400/20 rounded-xl border border-yellow-300/30 shrink-0">👑</span>
-              <div>
-                <div className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span>2026 Sovereign Residency by Investment</span>
-                  <span className="bg-amber-400/30 text-amber-200 text-[10px] px-1.5 py-0.5 rounded-full font-bold">NEW</span>
-                </div>
-                <div className="text-sm sm:text-base font-extrabold text-white mt-0.5">
-                  UAE, Portugal, Greece, Italy, EB-5 &amp; 18+ Global Golden Visas
-                </div>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => navigate('/golden-visa')}
-              className="golden-visa-premium-btn px-4 sm:px-5 py-2 text-xs sm:text-sm shrink-0"
-              title="Explore 18+ Sovereign Golden Visa Programs"
-            >
-              <span>✨</span>
-              <span>Golden Visa</span>
-            </button>
-          </div>
+          {/* 2. FREE Tools Section (Just below search bar, above Eligibility) */}
+          <TopFreeToolsStrip onNavigate={navigate} theme="dark" className="pt-2" />
+        </div>
+      </section>
 
-          {/* Quick Popular Bilateral Routes Bar */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-blue-100">
-            <span className="font-bold text-blue-200">{ui.popularRoutes}</span>
+      {/* Main Homepage Sections */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* 3. Check Your Visa Eligibility - 30 Sec (Move BELOW FREE Tools) */}
+        <EligibilityChecker
+          showDestinationPicker={true}
+          defaultFromCode={selectedOrigin?.code || 'IN'}
+          onNavigate={navigate}
+          uiLang={uiLang}
+        />
+
+        {/* 4. Popular Any-to-Any Routes */}
+        <div className="my-6 bg-slate-900 text-white rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-md">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-blue-100">
+            <span className="font-extrabold text-blue-200 uppercase tracking-wide mr-1">{ui.popularRoutes}</span>
             {[
               { from: 'IN', to: 'US', label: '🇮🇳 India → 🇺🇸 USA (278)' },
               { from: 'PL', to: 'US', label: '🇵🇱 Polska → 🇺🇸 USA (164)' },
@@ -3422,17 +3410,31 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             </button>
           </div>
         </div>
-      </section>
 
-      {/* All Global Destinations Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        {/* Phase 3 Tool 1: 30-Sec Visa Eligibility Checker on Homepage */}
-        <EligibilityChecker
-          showDestinationPicker={true}
-          defaultFromCode={selectedOrigin?.code || 'IN'}
-          onNavigate={navigate}
-          uiLang={uiLang}
-        />
+        {/* 5. Golden Visa Banner (MOVE HERE - Below Popular Routes, NOT at top) */}
+        <div className="my-6 bg-gradient-to-r from-slate-900 via-[#0B2A5B] to-slate-900 border border-amber-400/40 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-left shadow-xl">
+          <div className="flex items-center gap-3.5">
+            <span className="text-3xl sm:text-4xl p-2.5 bg-yellow-400/20 rounded-2xl border border-yellow-300/30 shrink-0">👑</span>
+            <div>
+              <div className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                <span>2026 Sovereign Residency by Investment</span>
+                <span className="bg-amber-400 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black">NEW</span>
+              </div>
+              <div className="text-base sm:text-lg font-black text-white mt-1">
+                UAE, Portugal, Greece, Italy, EB-5 &amp; 18+ Global Golden Visas
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/golden-visa')}
+            className="golden-visa-premium-btn px-5 py-2.5 text-xs sm:text-sm shrink-0 cursor-pointer"
+            title="Explore 18+ Sovereign Golden Visa Programs"
+          >
+            <span>✨</span>
+            <span>Golden Visa</span>
+          </button>
+        </div>
 
         {/* Phase 3 Tool 2: Side-by-Side Visa Comparison View */}
         {showComparison && compareCodes.length > 0 && (

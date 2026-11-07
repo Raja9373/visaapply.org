@@ -15,7 +15,7 @@ import {
   Globe2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
-import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
+import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
 interface CoverLetterGeneratorPageProps {
@@ -571,8 +571,8 @@ Contact: ${formData.homeAddress ? `${formData.homeAddress} • ` : ''}India
           </div>
         </div>
 
-        {/* Lead Magnet Bar: Join Free WhatsApp Channel + Email Newsletter + AdSense Banner */}
-        <FreeLeadMagnetBar pageContext="Cover Letter Generator Free Tool" adSlot="cover_letter_banner" />
+        {/* Shared Email Only Subscribe Box */}
+        <EmailSubscribeBox pageContext="Cover Letter Generator Free Tool" className="mb-8" />
 
         {/* FAQs */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
