@@ -65,32 +65,32 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8 font-sans">
       <div>
-        <div className="flex items-center gap-2 text-xs text-slate-500 mb-2 font-medium">
-          <button onClick={() => navigate?.('/')} className="hover:underline text-blue-600 cursor-pointer">Home</button>
+        <div className="flex items-center gap-2 text-xs text-slate-600 mb-2 font-medium">
+          <button onClick={() => navigate?.('/')} className="hover:underline text-blue-700 cursor-pointer">Home</button>
           <span>&gt;</span>
-          <span className="text-slate-900 font-bold">Global Visa Sitemap (1209+ Pages)</span>
+          <span className="text-slate-900 font-bold">Global Visa Sitemap (14,084+ Visa Guides &amp; 61,752 Routes)</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
-          VisaApply.org - Global Visa Sitemap (1209+ Pages / {totalUniqueRecords}+ Records)
+          VisaApply.org - Global Visa Sitemap (14,084+ Visa Pages / 249 Countries)
         </h1>
-        <p className="text-gray-600 text-sm">
-          Complete index of all {totalUniqueRecords}+ unique visa & immigration programme guides (including UK 222 Complete 2-Directory Architecture: 111 Official Visas + 111 Additional Routes, USA 201, Canada 130+, Australia 135, Germany 138, UAE 135, Singapore 109, Japan 128, Thailand 113).
+        <p className="text-slate-700 text-sm">
+          Complete index of all 14,084+ unique visa &amp; immigration programme guides across 249 ISO countries and 61,752 bilateral routes (including USA 278, UK 222 Complete 2-Directory Architecture: 111 Official Visas + 111 Additional Routes, Canada 151, Germany 138, Australia 135, UAE 135, Singapore 109, Japan 109, Thailand 98).
         </p>
       </div>
 
-      {/* Google Search Console XML Sitemap Verification Banner */}
+      {/* XML Sitemap Verification Banner */}
       <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="bg-emerald-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
+            <span className="bg-emerald-700 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
               ✅ XML Sitemap Live (HTTP 200 OK)
             </span>
             <h2 className="text-sm sm:text-base font-extrabold text-emerald-950">
-              Google Search Console Ready — 3,716+ Indexed URLs
+              Standard XML Sitemap Indexing — 7,600+ XML URLs
             </h2>
           </div>
           <p className="text-xs text-emerald-900">
-            Submit <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">https://www.visaapply.org/sitemap.xml</code> or <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">sitemap.xml</code> in Google Search Console.
+            Indexed solely via <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">https://www.visaapply.org/sitemap.xml</code> and <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">robots.txt</code>.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
