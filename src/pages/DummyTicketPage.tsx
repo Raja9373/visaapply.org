@@ -2,41 +2,29 @@ import React, { useState } from 'react';
 import { 
   Plane, 
   Hotel, 
-  CheckCircle2, 
   AlertTriangle, 
-  Clock, 
-  ShieldCheck, 
   FileText, 
   HelpCircle, 
   ChevronDown, 
   ChevronUp,
-  Send,
   Download,
-  Sparkles,
-  Gift,
-  Check
+  Sparkles
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
-import { AdSenseBanner } from '../components/AdSenseBanner';
+import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
+import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
+import { BottomFreeToolsSection } from '../components/BottomFreeToolsSection';
+import { HotelBookingWidget } from '../components/HotelBookingWidget';
+import { FlightSearchWidget } from '../components/FlightSearchWidget';
 
 interface DummyTicketPageProps {
   onNavigate?: (path: string) => void;
 }
 
-export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    passportNumber: '',
-    email: '',
-    whatsapp: '',
-    fromCity: '',
-    toCity: '',
-    travelDate: '',
-    returnDate: '',
-    packageType: 'combo'
-  });
-  const [submitted, setSubmitted] = useState(false);
+export const DummyTicketPage: React.FC<DummyTicketPageProps> = ({ 
+  onNavigate = (p) => { window.history.pushState({}, '', p); window.scrollTo(0,0); } 
+}) => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const handleDownloadSamplePdf = () => {
@@ -48,13 +36,13 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
       });
 
       // Header Banner
-      doc.setFillColor(11, 42, 91); // #0B2A5B
+      doc.setFillColor(11, 42, 91);
       doc.rect(0, 0, 210, 32, 'F');
 
       doc.setTextColor(255, 255, 255);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(16);
-      doc.text('OFFICIAL FLIGHT & HOTEL RESERVATION (SAMPLE)', 105, 14, { align: 'center' });
+      doc.text('OFFICIAL FLIGHT & HOTEL RESERVATION (FREE SAMPLE)', 105, 14, { align: 'center' });
 
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
@@ -79,7 +67,7 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
       doc.text('ISSUE DATE:', 110, 64);
 
       doc.setFont('helvetica', 'normal');
-      doc.text('SHARMA / RAHUL MR (SAMPLE)', 60, 54);
+      doc.text('SHARMA / RAHUL MR (FREE SAMPLE)', 60, 54);
       doc.text('VA-7X89Q2 (VERIFIED)', 145, 54);
       doc.text('CONFIRMED RESERVATION (UN-TICKETED)', 60, 64);
       doc.text(new Date().toLocaleDateString('en-GB'), 145, 64);
@@ -155,28 +143,6 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.fullName || !formData.whatsapp) {
-      alert('Please fill in your Name and WhatsApp number.');
-      return;
-    }
-
-    try {
-      const existingLeads = JSON.parse(localStorage.getItem('visaapply_dummy_ticket_leads') || '[]');
-      existingLeads.push({
-        ...formData,
-        isFreePromo: true,
-        submittedAt: new Date().toISOString()
-      });
-      localStorage.setItem('visaapply_dummy_ticket_leads', JSON.stringify(existingLeads));
-    } catch {
-      // Local storage fallback
-    }
-
-    setSubmitted(true);
-  };
-
   const faqs = [
     {
       q: "What is a dummy ticket for a visa application?",
@@ -184,19 +150,19 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
     },
     {
       q: "Is a dummy ticket acceptable for Schengen, US, UK, and Canada embassies?",
-      a: "Yes. Embassies and consulates worldwide (including VFS Global, BLS International, and TLScontact) explicitly advise applicants in their official checklists NOT to purchase non-refundable flight tickets prior to visa grant. They specifically ask for a 'Flight Itinerary' or 'Roundtrip Reservation', which is exactly what this service provides."
+      a: "Yes. Embassies and consulates worldwide (including VFS Global, BLS International, and TLScontact) explicitly advise applicants in their official checklists NOT to purchase non-refundable flight tickets prior to visa grant. They specifically ask for a 'Flight Itinerary' or 'Roundtrip Reservation', which is exactly what this guide provides."
     },
     {
       q: "How long does the PNR and reservation remain valid?",
-      a: "Our reservations remain active and verifiable on airline/hotel verification portals for 7 to 14 days, providing ample time for the embassy or visa processing center to review your application documents."
+      a: "Our free guides and sample reservations remain active and verifiable on airline/hotel verification portals for 7 to 14 days, providing ample time for the embassy or visa processing center to review your application documents."
     },
     {
       q: "Can I travel on a dummy ticket?",
       a: "NO. A dummy ticket is strictly an itinerary reservation document for visa and consular inspection. It is NOT a confirmed passenger boarding ticket and cannot be used to board an aircraft or check into a hotel. Once your visa is granted, you must book real, ticketed travel."
     },
     {
-      q: "Is this service really 100% free?",
-      a: "Yes! You can instantly download the Free Sample PDF and Visa Checklist above. If you want our reservation desk to generate a customized PNR itinerary for your specific dates, submit the form below—the first 100 users daily are 100% FREE without any payment or credit card required!"
+      q: "Is this service 100% free?",
+      a: "Yes! 100% free. You can search flights and book free cancellation hotels directly through our embedded widgets without paying anything."
     }
   ];
 
@@ -221,329 +187,74 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      {/* Top Back Bar & Breadcrumb */}
+      <PageBackBar onNavigate={onNavigate} pageName="Dummy Ticket" />
+
+      {/* TOP Free Tools Strip */}
+      <div className="bg-[#0B3D91] py-2 border-b border-blue-800">
+        <TopFreeToolsStrip onNavigate={onNavigate} theme="dark" />
+      </div>
+
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#0B2A5B] via-[#0B3D91] to-[#082247] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
-        <div className="max-w-5xl mx-auto text-center space-y-4">
+      <div className="bg-gradient-to-r from-[#0B2A5B] via-[#0B3D91] to-[#082247] text-white py-10 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
+        <div className="max-w-5xl mx-auto text-center space-y-3">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3.5 py-1.5 rounded-full text-xs font-black">
-            <Gift className="w-3.5 h-3.5 text-amber-300" />
-            <span>100% FREE Tool • Zero Payment • No Checkout</span>
+            <span>✨ 100% Free Embedded Booking Widgets • Zero Commission Markup</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
-            FREE Dummy Ticket Guide + Sample PDF
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
+            Dummy Ticket &amp; Flight Search Hub
           </h1>
-          <p className="text-base sm:text-lg text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Download free verifiable flight itinerary samples, hotel reservation templates, and embassy document checklists. 
-            First 100 applicants get personalized GDS itineraries made 100% free!
+          <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto">
+            Search live flights and book free-cancellation hotels directly below for your visa application.
           </p>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-        {/* Simple Explanation Card */}
-        <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 mb-8">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#0B3D91] flex items-center justify-center shrink-0 border border-blue-100">
-              <FileText className="w-6 h-6" />
-            </div>
-            <div className="space-y-2 text-sm sm:text-base leading-relaxed text-slate-700">
-              <h2 className="text-lg sm:text-xl font-bold text-slate-900">
-                What is a Dummy Ticket &amp; How Does It Work?
-              </h2>
-              <p>
-                A <strong>Dummy Ticket</strong> is a <strong>temporary flight + hotel reservation</strong> generated specifically for your visa application. It is <strong>NOT a real ticket for travel</strong>.
-              </p>
-              <p className="text-slate-600 text-sm">
-                Each reservation includes an authentic 6-character airline <strong>PNR (Passenger Name Record)</strong> or hotel booking voucher verifiable online. Valid for <strong>7–14 days</strong>, giving the consulate enough time to process your visa without requiring you to lock in thousands of rupees in non-refundable airline tickets.
-              </p>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 space-y-6">
+        
+        {/* Validity Box on TOP */}
+        <div className="bg-amber-50 border-2 border-amber-400 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-6 h-6 text-amber-700 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h3 className="font-black text-amber-900 text-sm sm:text-base">
+                ⚠️ Official Validity &amp; Usage Rules (Must Read Before Visa Submission)
+              </h3>
+              <ul className="text-xs sm:text-sm text-amber-950 space-y-1 list-disc list-inside font-medium">
+                <li><strong>Hotel Booking:</strong> Valid till free cancellation period (fully flexible, pay at property).</li>
+                <li><strong>Flight Reservation:</strong> Valid for 7 to 14 days (GDS PNR verifiable online).</li>
+                <li><strong>Travel Notice:</strong> STRICTLY for visa application consular proof only.</li>
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Free Sample Template + Checklist Download Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-          {/* Card 1: Free Sample PDF */}
-          <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border-2 border-blue-200 shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                  FREE DOWNLOAD
-                </span>
-                <span className="text-2xl">📄</span>
-              </div>
-              <h3 className="text-lg font-black text-slate-900">Sample Flight + Hotel Reservation PDF</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Download an authentic GDS flight reservation and confirmed hotel booking voucher template formatted for Schengen (France/Germany) &amp; US visas.
-              </p>
-              <ul className="mt-4 space-y-1.5 text-xs text-slate-700 font-medium">
-                <li className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Sample PNR &amp; Airline Segments</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Hotel Voucher &amp; Booking ID</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Embassy Accepted Layout</span>
-                </li>
-              </ul>
-            </div>
+        {/* EMBEDDED WIDGET 1: Hotel Booking Widget (Booking.com) */}
+        <HotelBookingWidget defaultCity="Dubai" />
+
+        {/* EMBEDDED WIDGET 2: Flight Search Widget (Aviasales / Travelpayouts) */}
+        <FlightSearchWidget defaultFrom="DEL" defaultTo="DXB" />
+
+        {/* Sample PDF Downloads */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 className="font-extrabold text-slate-900 text-base">Need a Sample PDF Template?</h3>
+            <p className="text-xs text-slate-500">Download official formatting reference for embassy submission.</p>
+          </div>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             <button
               type="button"
               onClick={handleDownloadSamplePdf}
-              className="mt-6 w-full py-3 bg-[#0B3D91] hover:bg-[#082e6d] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-none px-5 py-3 bg-[#0B3D91] hover:bg-[#082e6d] text-white font-black text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Download className="w-4 h-4 text-amber-300" />
-              <span>Download Free Sample PDF</span>
-            </button>
-          </div>
-
-          {/* Card 2: Free Visa Itinerary Checklist */}
-          <div className="bg-gradient-to-br from-amber-50 to-white rounded-2xl p-6 border-2 border-amber-200 shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-black text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-full">
-                  OFFICIAL CHECKLIST
-                </span>
-                <span className="text-2xl">📋</span>
-              </div>
-              <h3 className="text-lg font-black text-slate-900">Embassies Itinerary Document Checklist</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                VFS Global &amp; BLS certified list of itinerary documents required by consular officers to prevent refusal under lack of travel itinerary rules.
-              </p>
-              <ul className="mt-4 space-y-1.5 text-xs text-slate-700 font-medium">
-                <li className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Roundtrip Dates Match Rule</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Hotel Stay Across Multiple Cities</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Internal European Rail/Bus Bookings</span>
-                </li>
-              </ul>
-            </div>
-            <button
-              type="button"
-              onClick={handleDownloadSamplePdf}
-              className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
-            >
-              <Download className="w-4 h-4 text-slate-950" />
-              <span>Download Free Checklist</span>
+              <span>Download Sample PDF</span>
             </button>
           </div>
         </div>
 
-        {/* Disclaimer Box with RED Border */}
-        <div className="border-2 border-red-500 bg-red-50/70 rounded-2xl p-5 sm:p-6 mb-10 text-red-950">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="w-6 h-6 text-red-600 shrink-0 mt-0.5" />
-            <div className="space-y-1 text-sm sm:text-base leading-relaxed">
-              <h3 className="font-extrabold text-red-900 uppercase tracking-wide text-xs sm:text-sm">
-                Mandatory Visa Applicant Disclaimer
-              </h3>
-              <p className="font-bold">
-                This is a temporary reservation for visa purpose only. You cannot travel with this. After visa approval, book a real ticket.
-              </p>
-              <p className="text-xs text-red-800">
-                A dummy ticket is solely intended to satisfy consular documentary requirements at embassies, VFS Global, BLS, and consular visa counters. Attempting to board a flight with an un-ticketed reservation will result in denied boarding at airport immigration.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Lead Capture Form: 100% Free First 100 Users */}
-        <div id="reservation-form" className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 mb-10 scroll-mt-24">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
-            <div>
-              <div className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-xs font-black px-2.5 py-0.5 rounded-full mb-1">
-                <span>🎁</span> FIRST 100 USERS FREE TODAY
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                Want Us to Make It for You?
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Fill form, we will contact on WhatsApp — <strong>First 100 users FREE</strong> (Zero payment, no checkout).
-              </p>
-            </div>
-            <div className="bg-emerald-50 text-emerald-800 px-3 py-1.5 rounded-xl border border-emerald-200 text-xs font-bold text-center">
-              <span>Spots Left Today: </span>
-              <span className="font-black text-emerald-700">23 / 100</span>
-            </div>
-          </div>
-
-          {submitted ? (
-            <div className="p-8 bg-emerald-50 border-2 border-emerald-500 rounded-2xl text-center space-y-3">
-              <div className="w-14 h-14 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-black text-emerald-900">Request Received!</h3>
-              <p className="text-base font-semibold text-emerald-800 max-w-lg mx-auto">
-                We will send PDF on your Email + WhatsApp within 4 hours.
-              </p>
-              <p className="text-xs text-emerald-700">
-                Our reservation desk is preparing your verifiable itinerary for <strong>{formData.toCity || 'your destination'}</strong> ({formData.packageType.toUpperCase()}). 100% Free promo applied!
-              </p>
-              <div className="pt-3">
-                <button
-                  type="button"
-                  onClick={() => setSubmitted(false)}
-                  className="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
-                >
-                  Submit Another Free Request
-                </button>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Full Name (As on Passport) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Rahul Sharma"
-                    value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Passport Number (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Z1234567"
-                    value={formData.passportNumber}
-                    onChange={(e) => setFormData({ ...formData, passportNumber: e.target.value.toUpperCase() })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    WhatsApp Number (Fastest Delivery) *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+91 98765 43210"
-                    value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="rahul@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    From City / Airport *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. New Delhi (DEL)"
-                    value={formData.fromCity}
-                    onChange={(e) => setFormData({ ...formData, fromCity: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Destination City / Country *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Paris (CDG), France"
-                    value={formData.toCity}
-                    onChange={(e) => setFormData({ ...formData, toCity: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Travel Date *
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.travelDate}
-                    onChange={(e) => setFormData({ ...formData, travelDate: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Return Date *
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.returnDate}
-                    onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Reservation Type *
-                  </label>
-                  <select
-                    value={formData.packageType}
-                    onChange={(e) => setFormData({ ...formData, packageType: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  >
-                    <option value="combo">Combo (Flight + Hotel) — 100% FREE</option>
-                    <option value="flight">Flight Only — 100% FREE</option>
-                    <option value="hotel">Hotel Only — 100% FREE</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-[#0B3D91] hover:bg-[#082e6d] text-white font-black text-base rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <Send className="w-5 h-5 text-amber-300" />
-                  <span>Request Free Reservation on WhatsApp (Zero Payment)</span>
-                </button>
-                <p className="text-center text-xs text-slate-500 mt-2">
-                  🔒 100% Free Service. No payment, no checkout, no credit card required.
-                </p>
-              </div>
-            </form>
-          )}
-        </div>
-
-        {/* Lead Magnet Bar: Join Free WhatsApp Channel + Email Newsletter + AdSense Banner */}
-        <FreeLeadMagnetBar pageContext="Dummy Ticket Free Guide" adSlot="dummy_ticket_banner" />
+        {/* Lead Magnet Bar */}
+        <FreeLeadMagnetBar pageContext="Dummy Ticket Hub" adSlot="dummy_ticket_banner" />
 
         {/* Frequently Asked Questions */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
@@ -576,6 +287,14 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = () => {
           </div>
         </div>
       </div>
+
+      {/* BOTTOM Free Tools Section */}
+      <div className="mt-16 bg-slate-100 border-t border-slate-200 py-12">
+        <BottomFreeToolsSection onNavigate={onNavigate || (() => {})} />
+      </div>
+
+      {/* Bottom Back Button */}
+      <PageBottomBack onNavigate={onNavigate || (() => {})} />
     </div>
   );
 };

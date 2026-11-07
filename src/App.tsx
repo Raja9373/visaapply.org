@@ -31,6 +31,7 @@ import { EmbassySlotAlertPage } from './pages/EmbassySlotAlertPage';
 import { PhotoResizerPage } from './pages/PhotoResizerPage';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
+import { HotelBookingWidget } from './components/HotelBookingWidget';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
@@ -2515,6 +2516,7 @@ export default function App() {
   const isAdminLogin = routePath === '/admin/login' || routePath === '/admin/login/';
   const isAdmin = routePath === '/admin' || routePath === '/admin/';
   const isAdminUpdates = routePath === '/admin/updates' || routePath === '/admin/updates/';
+  const isAdminSlotAlert = routePath === '/admin/slot-alert' || routePath === '/admin/slot-alert/';
   const isAnyAdminRoute = routePath === '/admin' || routePath.startsWith('/admin/');
   const isAtlysVsVisaApply = routePath === '/atlys-vs-visaapply' || routePath === '/atlys-vs-visaapply/';
   const isGoldenVisa = routePath === '/golden-visa' || routePath === '/golden-visa/';
@@ -2807,6 +2809,12 @@ export default function App() {
             <ImmigrationUpdatesPage
               onNavigate={navigate}
               isAdminAuthenticated={isAdminAuthenticated}
+              adminToken={adminToken}
+              onLogout={handleAdminLogout}
+            />
+          ) : isAdminSlotAlert ? (
+            <AdminSlotAlertPage
+              navigate={navigate}
               adminToken={adminToken}
               onLogout={handleAdminLogout}
             />
@@ -3416,6 +3424,11 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           </div>
         </div>
       </section>
+
+      {/* Embedded Booking.com Hotel Search Widget */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-6">
+        <HotelBookingWidget defaultCity="Dubai" />
+      </div>
 
       {/* All Global Destinations Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -6863,6 +6876,206 @@ function AdminPortal({
       <div className="mt-8 text-center text-xs text-slate-500 font-medium">
         VisaApply.org Editorial Management Portal · Support: <a href="mailto:contact@visaapply.org" className="text-[#0B3D91] font-bold hover:underline">contact@visaapply.org</a>
       </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminSlotAlertPage({ navigate, adminToken, onLogout }: any) {
+  const [statusData, setStatusData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [cronRunning, setCronRunning] = useState<boolean>(false);
+  const [cronResult, setCronResult] = useState<string>('');
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch('/api/slot-alert/status');
+      const data = await res.json();
+      if (data.success) {
+        setStatusData(data);
+      }
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  const runCronNow = async () => {
+    setCronRunning(true);
+    setCronResult('');
+    try {
+      const res = await fetch('/api/cron/slot-check', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCronResult(`Cron check completed successfully! Emails sent: ${data.emailsSent}`);
+        fetchStatus();
+      } else {
+        setCronResult(data.error || 'Cron check failed');
+      }
+    } catch (err: any) {
+      setCronResult(err.message || 'Error running cron');
+    } finally {
+      setCronRunning(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
+      {/* Admin Nav Header */}
+      <div className="bg-slate-950 border-b border-slate-800 px-4 py-3 text-white">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 px-3 py-1 rounded-lg text-xs font-bold">
+              🔒 Admin Session Active
+            </span>
+            <button onClick={() => navigate('/admin')} className="text-xs font-semibold text-white bg-slate-800 px-3 py-1.5 rounded-lg cursor-pointer">
+              Dashboard
+            </button>
+            <button onClick={() => navigate('/admin/updates')} className="text-xs font-semibold text-cyan-300 hover:text-white transition-colors cursor-pointer">
+              249-Country Auto-Sync
+            </button>
+            <button onClick={() => navigate('/admin/slot-alert')} className="text-xs font-semibold text-amber-300 hover:text-white transition-colors cursor-pointer">
+              Slot Monitor (/admin/slot-alert)
+            </button>
+          </div>
+          <button onClick={onLogout} className="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-sm">
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Embassy Slot Auto Monitor</h1>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Fully automated cron checks every 30 minutes. Auto-emails subscribers when slots open.
+            </p>
+          </div>
+          <button
+            onClick={runCronNow}
+            disabled={cronRunning}
+            className="px-5 py-3 bg-[#0B3D91] hover:bg-[#082e6d] text-white text-sm font-bold rounded-xl shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+          >
+            <span>{cronRunning ? 'Checking Slots...' : '⚡ Run Slot Check Cron Now (Backup)'}</span>
+          </button>
+        </div>
+
+        {cronResult && (
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-900 font-bold">
+            {cronResult}
+          </div>
+        )}
+
+        {loading ? (
+          <div className="p-12 text-center text-slate-500 font-bold">Loading slot monitoring data...</div>
+        ) : (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span className="text-xs font-bold text-slate-500 uppercase block">Last Automated Check</span>
+                <span className="text-lg sm:text-xl font-black text-slate-900 mt-1 block">
+                  {statusData?.lastCheckTime ? new Date(statusData.lastCheckTime).toLocaleString() : 'Never'}
+                </span>
+              </div>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span className="text-xs font-bold text-slate-500 uppercase block">Total Email Subscribers</span>
+                <span className="text-xl sm:text-2xl font-black text-blue-600 mt-1 block">
+                  {statusData?.totalSubscribers || 0} Subscribed
+                </span>
+              </div>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span className="text-xs font-bold text-slate-500 uppercase block">Automated Cron Interval</span>
+                <span className="text-xl sm:text-2xl font-black text-emerald-600 mt-1 block">
+                  Every 30 Minutes
+                </span>
+              </div>
+            </div>
+
+            {/* Embassies Status Table */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+              <div className="p-5 border-b border-slate-100 font-black text-slate-900">
+                Monitored Embassies &amp; Consular Status
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                  <thead>
+                    <tr className="bg-slate-900 text-white font-bold">
+                      <th className="p-3">Embassy / Consulate</th>
+                      <th className="p-3">Current Status</th>
+                      <th className="p-3">Available Slot Date</th>
+                      <th className="p-3">Last Alert Dispatched</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {Object.entries(statusData?.embassies || {}).map(([emb, info]: [string, any]) => {
+                      const isOpen = info.status === 'Open';
+                      return (
+                        <tr key={emb} className="hover:bg-slate-50">
+                          <td className="p-3 font-bold text-slate-900">{emb}</td>
+                          <td className="p-3">
+                            <span className={`px-2.5 py-1 rounded-full font-extrabold text-xs ${isOpen ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'}`}>
+                              {isOpen ? '🟢 OPEN' : '🔴 Closed'}
+                            </span>
+                          </td>
+                          <td className="p-3 font-semibold text-slate-700">{info.lastSlotDate || 'N/A'}</td>
+                          <td className="p-3 text-slate-500 text-xs">
+                            {info.lastAlertTime ? new Date(info.lastAlertTime).toLocaleString() : 'No alert sent yet'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Subscribers Grouped by Route */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+              <h3 className="font-black text-slate-900 text-lg mb-4">Subscribers Grouped by Route ({statusData?.subscribers?.length || 0} Total)</h3>
+              {(!statusData?.subscribers || statusData.subscribers.length === 0) ? (
+                <p className="text-sm text-slate-500">No email subscribers yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex flex-wrap gap-2.5">
+                    {Object.entries(
+                      (statusData.subscribers || []).reduce((acc: any, s: any) => {
+                        const key = `${s.fromCountry || 'IN'} -> ${s.toCountry || 'US'}`;
+                        acc[key] = (acc[key] || 0) + 1;
+                        return acc;
+                      }, {})
+                    ).map(([route, count]: [string, any]) => (
+                      <div key={route} className="bg-blue-50 border border-blue-200 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-[#0B3D91]">
+                        {route}: <span className="text-emerald-700">{count} {count === 1 ? 'user' : 'users'}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-4">
+                    <span className="text-xs font-bold text-slate-500 block mb-2">Individual Subscriptions:</span>
+                    <ul className="space-y-2 max-h-56 overflow-y-auto pr-2">
+                      {statusData.subscribers.map((sub: any) => (
+                        <li key={sub.id} className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs sm:text-sm">
+                          <span className="font-bold text-slate-800">{sub.email}</span>
+                          <span className="bg-blue-100 text-[#0B3D91] font-bold px-2.5 py-0.5 rounded-md">
+                            {sub.fromCountry || 'IN'} → {sub.toCountry || 'US'} ({sub.embassyCity || 'Hub'})
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

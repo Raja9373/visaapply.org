@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
+import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
 interface CoverLetterGeneratorPageProps {
   onNavigate?: (path: string) => void;
@@ -32,7 +33,7 @@ const POPULAR_DESTINATIONS = [
   'Uzbekistan', 'Philippines', 'Cambodia', 'Morocco', 'Kenya'
 ];
 
-export const CoverLetterGeneratorPage: React.FC<CoverLetterGeneratorPageProps> = () => {
+export const CoverLetterGeneratorPage: React.FC<CoverLetterGeneratorPageProps> = ({ onNavigate = (p) => { window.history.pushState({}, '', p); window.scrollTo(0,0); } }) => {
   const [formData, setFormData] = useState({
     fullName: '',
     passportNumber: '',
@@ -217,6 +218,9 @@ Contact: ${formData.homeAddress ? `${formData.homeAddress} • ` : ''}India
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      {/* Top Back Bar & Breadcrumb */}
+      <PageBackBar onNavigate={onNavigate} pageName="Cover Letter Generator" />
 
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-[#0B2A5B] via-[#0B3D91] to-[#082247] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
@@ -601,6 +605,9 @@ Contact: ${formData.homeAddress ? `${formData.homeAddress} • ` : ''}India
           </div>
         </div>
       </div>
+
+      {/* Bottom Back Button */}
+      <PageBottomBack onNavigate={onNavigate} />
     </div>
   );
 };

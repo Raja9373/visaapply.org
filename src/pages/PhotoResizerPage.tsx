@@ -17,6 +17,7 @@ import {
   Sliders
 } from 'lucide-react';
 import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
+import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
 interface PhotoResizerPageProps {
   onNavigate?: (path: string) => void;
@@ -71,7 +72,7 @@ const PHOTO_PRESETS: PhotoPreset[] = [
   }
 ];
 
-export const PhotoResizerPage: React.FC<PhotoResizerPageProps> = () => {
+export const PhotoResizerPage: React.FC<PhotoResizerPageProps> = ({ onNavigate = (p) => { window.history.pushState({}, '', p); window.scrollTo(0,0); } }) => {
   const [selectedPresetId, setSelectedPresetId] = useState<string>('35x45');
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>('visa-photo.jpg');
@@ -232,6 +233,9 @@ export const PhotoResizerPage: React.FC<PhotoResizerPageProps> = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      {/* Top Back Bar & Breadcrumb */}
+      <PageBackBar onNavigate={onNavigate} pageName="Visa Photo Resizer" />
 
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-[#0B2A5B] via-[#0B3D91] to-[#082247] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
@@ -550,6 +554,9 @@ export const PhotoResizerPage: React.FC<PhotoResizerPageProps> = () => {
           </div>
         </div>
       </div>
+
+      {/* Bottom Back Button */}
+      <PageBottomBack onNavigate={onNavigate} />
     </div>
   );
 };

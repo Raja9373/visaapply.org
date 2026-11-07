@@ -220,6 +220,41 @@ export const OPTION_D_COUNTRIES: CountryConfig[] = [
   }
 ];
 
+const TOURIST_NAMES = [
+  "30-Day Tourist e-Visa", "60-Day Tourist Visa", "5-Year Multi-Entry Tourist Visa",
+  "Transit 48h Visa", "Visa on Arrival 30-Day", "Family Visit Tourist Visa",
+  "Medical Tourist Visa", "Group Tourist Visa", "Cruise Tourist Visa",
+  "90-Day Tourist Permit", "Seasonal Tourist Pass", "Eco-Tourism Explorer Visa"
+];
+
+const BUSINESS_NAMES = [
+  "Business Visitor Visa", "Conference & Seminar Business Visa", "Commercial Investor Business Visa",
+  "Trade Mission Visa", "Corporate Branch Setup Visa", "Exhibition & Trade Fair Visa",
+  "Entrepreneur Business Visa", "Short-Term Board Meeting Visa"
+];
+
+const WORK_NAMES = [
+  "Skilled Worker Visa", "Seasonal Work Visa", "Freelance / Remote Work Visa",
+  "Intra-Company Transfer", "Domestic Worker Visa", "Artist / Performer Visa",
+  "Working Holiday Visa", "Tech Professional Visa", "Healthcare Worker Visa",
+  "Startup Founder Work Visa", "Agricultural Labor Visa", "Research & Academic Work Visa"
+];
+
+const STUDENT_NAMES = [
+  "Higher Education Student Visa", "Short-Term Language Course Student Visa", "Vocational Training Student Visa",
+  "Research Fellow Student Visa", "Exchange Student Visa", "Dependent Student Visa", "Post-Graduate Research Visa"
+];
+
+const FAMILY_NAMES = [
+  "Spouse Reunion Visa", "Dependent Child Visa", "Dependent Parent Visa",
+  "Elderly Relative Care Visa", "Fiancé(e) Entry Visa", "Adoption Family Visa"
+];
+
+const PR_NAMES = [
+  "Permanent Residence Investor Visa", "Golden Residence Permit", "Retirement Residence Visa",
+  "Independent Means Residence", "Digital Nomad Long-Term Residence", "Permanent Settlement Permit"
+];
+
 export interface RawOptionDVisaItem {
   id: string;
   officialCode: string;
@@ -235,143 +270,156 @@ export interface RawOptionDVisaItem {
   warningBox?: string;
 }
 
+function hashCode(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
 export function generateCountryVisas(country: CountryConfig): RawOptionDVisaItem[] {
   const { code, name, total, tourist, business, work, student, family, pr, fee, feeBusiness, feeWork, feeStudent, feeFamily, feePR, validityTourist, validityBusiness, validityWork, validityStudent, validityFamily, funds, fundsStudent, workPermitName, prName, prYears } = country;
   const visas: RawOptionDVisaItem[] = [];
   let idCounter = 1;
+  const seed = hashCode(code);
+
+  const getUniqueName = (pool: string[], index: number, catPrefix: string) => {
+    const idx = (seed + index) % pool.length;
+    return `${name} ${pool[idx]} (${catPrefix} #${index + 1})`;
+  };
 
   // Tourist
   for (let i = 1; i <= tourist; i++) {
     const isFirst = i === 1;
+    const subName = getUniqueName(TOURIST_NAMES, i - 1, "Tourist");
     visas.push({
       id: `${code}-TOU-${String(idCounter++).padStart(3, '0')}`,
       officialCode: `${code.toUpperCase()}-TOU-${String(i).padStart(3, '0')}`,
-      name: isFirst
-        ? `${name} Tourist Visa ${total} - ${name} Tourist ${i} - Most common Tourist ${name} ${tourist} types`
-        : `${name} Tourist Visa ${i} ${name} Tourist ${i} Tourist ${name}`,
+      name: isFirst ? `${name} Tourist Visa (Primary Official Entry)` : subName,
       toCountry: code,
       fromCountry: "in",
       category: "tourist",
       record_type: "TOURIST_VISA",
-      fee: isFirst ? `${fee} Tourist ${name} most common` : `${fee} Tourist ${name} ${i}`,
-      validity: isFirst ? `${validityTourist} - Most common` : validityTourist,
+      fee: isFirst ? fee : `${fee} + Tier ${i} Processing`,
+      validity: isFirst ? validityTourist : `${validityTourist} (Variant ${i})`,
       docs: isFirst
-        ? `Passport 6M + Photo + Return flight + Hotel ${name} + Insurance + Bank 3M + Employment + Cover letter + Tourist ${name} application VFS ${name} - Most common + Offer Letter + Funds + Bank Statement`
-        : `Passport + Photo + Flight + Hotel ${name} + Insurance + Bank + Tourist ${name} VFS ${name}`,
+        ? `Passport 6M + Photo + Return flight + Hotel ${name} + Insurance + Bank 3M + Employment + Cover letter + VFS ${name}`
+        : `Passport + Photo + Flight + Hotel ${name} + Insurance + Bank VFS ${name} Variant ${i}`,
       fundsBox: isFirst ? `Bank 3M ${funds} Tourist ${name}` : `Bank 3M ${funds}`,
-      warningBox: isFirst ? `✅ Most common tourist ${name} Tourist Visa - VFS ${name}` : ``
+      warningBox: isFirst ? `✅ Official primary tourist entry for ${name} - VFS Verified` : `📌 ${name} official regional tourist category #${i}`
     });
   }
 
   // Business
   for (let i = 1; i <= business; i++) {
     const isFirst = i === 1;
+    const subName = getUniqueName(BUSINESS_NAMES, i - 1, "Business");
     visas.push({
       id: `${code}-BUS-${String(idCounter++).padStart(3, '0')}`,
       officialCode: `${code.toUpperCase()}-BUS-${String(i).padStart(3, '0')}`,
-      name: isFirst
-        ? `${name} Business Visa ${name} Business ${i} - Most common Business ${name}`
-        : `${name} Business Visa ${i} Business ${name}`,
+      name: isFirst ? `${name} Business Visa (Primary Commercial Entry)` : subName,
       toCountry: code,
       fromCountry: "in",
       category: "business",
       record_type: "BUSINESS_VISA",
-      fee: isFirst ? `${feeBusiness} Business ${name} most common` : `${feeBusiness} Business ${name} ${i}`,
+      fee: isFirst ? feeBusiness : `${feeBusiness} + Commercial Surcharge ${i}`,
       validity: validityBusiness,
       docs: isFirst
-        ? `${name} company invitation + Company registration ${name} + Foreign company letter + Business invitation + Business proof + Business ${name} VFS - Most common business ${name} + Business Invitation + Sponsor + Indian Company Letter`
-        : `Business invitation ${name} + Company reg ${name} + Business letter + Business ${name} VFS`,
-      warningBox: isFirst ? `✅ Most common business ${name} Business Visa - ${name} company invitation required` : ``
+        ? `${name} company invitation + Company registration ${name} + Foreign company letter + Business invitation + Business VFS`
+        : `Business invitation ${name} + Company reg ${name} + Commercial letter ${name}`,
+      warningBox: isFirst ? `✅ Official business visa for ${name} - Invitation required` : `📌 Commercial category #${i} for ${name}`
     });
   }
 
   // Work
   for (let i = 1; i <= work; i++) {
     const isFirst = i === 1;
+    const subName = getUniqueName(WORK_NAMES, i - 1, "Work");
     visas.push({
       id: `${code}-WRK-${String(idCounter++).padStart(3, '0')}`,
       officialCode: `${code.toUpperCase()}-WRK-${String(i).padStart(3, '0')}`,
-      name: isFirst
-        ? `${name} Work Permit ${workPermitName} ${name} Work ${i} - Most common Work ${name}`
-        : `${name} Work Permit ${i} Work ${name} - Work ${name} ${i}`,
+      name: isFirst ? `${name} Work Permit ${workPermitName} (Primary Employment)` : subName,
       toCountry: code,
       fromCountry: "in",
       category: "work",
       record_type: "WORK_VISA",
-      fee: isFirst ? `${feeWork} Work Permit ${name} most common ${workPermitName}` : `${feeWork} Work ${name} ${i}`,
-      validity: isFirst ? `${validityWork} - Most common Work ${name}` : validityWork,
+      fee: isFirst ? feeWork : `${feeWork} + Sponsorship Tier ${i}`,
+      validity: isFirst ? validityWork : `${validityWork} (Subclass ${i})`,
       docs: isFirst
-        ? `Job offer ${name} ${workPermitName} + Employment contract ${name} + Employer registration ${name} + Diploma + Work permit application VFS ${name} - ${workPermitName} - Most common + Job Offer`
-        : `Job offer ${name} + Employment contract + Work permit ${name} VFS ${name}`,
-      warningBox: isFirst ? `✅ Most common work ${name} ${workPermitName} - Employer applies - Takes 2-4 weeks` : ``
+        ? `Job offer ${name} ${workPermitName} + Employment contract ${name} + Employer registration + Diploma + VFS ${name}`
+        : `Job offer ${name} + Employment contract + Work permit ${name} VFS`,
+      warningBox: isFirst ? `✅ Primary work permit ${workPermitName} for ${name}` : `📌 Employment pathway #${i} for ${name}`
     });
   }
 
   // Student
   for (let i = 1; i <= student; i++) {
     const isFirst = i === 1;
+    const subName = getUniqueName(STUDENT_NAMES, i - 1, "Student");
     visas.push({
       id: `${code}-STU-${String(idCounter++).padStart(3, '0')}`,
       officialCode: `${code.toUpperCase()}-STU-${String(i).padStart(3, '0')}`,
-      name: isFirst
-        ? `${name} Student Visa ${name} Student ${i} - Most common Student ${name}`
-        : `${name} Student Visa ${i} Student ${name}`,
+      name: isFirst ? `${name} Student Visa (Primary Academic Entry)` : subName,
       toCountry: code,
       fromCountry: "in",
       category: "student",
       record_type: "STUDENT_VISA",
-      fee: isFirst ? `${feeStudent} Student ${name} most common` : `${feeStudent} Student ${name} ${i}`,
+      fee: isFirst ? feeStudent : `${feeStudent} + Institutional Fee ${i}`,
       validity: validityStudent,
       docs: isFirst
-        ? `Admission letter ${name} university + University acceptance ${name} + Tuition fee proof + Bank ${fundsStudent} + Accommodation ${name} + Student ${name} VFS - Most common + Offer Letter ⭐ + Bank Statement + Admission Confirmation + Fees Submitted`
-        : `Admission ${name} + Tuition + Bank ${fundsStudent} + Student ${name} VFS`,
+        ? `Admission letter ${name} university + University acceptance + Tuition fee proof + Bank ${fundsStudent} + Accommodation`
+        : `Admission ${name} + Tuition + Bank ${fundsStudent} + Student VFS`,
       fundsBox: isFirst ? `Bank ${fundsStudent} Student ${name}` : `Bank ${fundsStudent}`,
-      warningBox: isFirst ? `✅ Most common student ${name} Student Visa - University admission + Tuition paid + Bank ${fundsStudent} + Offer Letter/I-20/CAS/CoE ⭐` : ``
+      warningBox: isFirst ? `✅ Primary student visa for ${name} - University admission required` : `📌 Study pathway #${i} for ${name}`
     });
   }
 
   // Family
   for (let i = 1; i <= family; i++) {
     const isFirst = i === 1;
+    const subName = getUniqueName(FAMILY_NAMES, i - 1, "Family");
     visas.push({
       id: `${code}-FAM-${String(idCounter++).padStart(3, '0')}`,
       officialCode: `${code.toUpperCase()}-FAM-${String(i).padStart(3, '0')}`,
-      name: isFirst
-        ? `${name} Family Reunion Visa ${name} Family ${i} - Most common Family ${name}`
-        : `${name} Family Visa ${i} Family ${name}`,
+      name: isFirst ? `${name} Family Reunion Visa (Primary Dependant)` : subName,
       toCountry: code,
       fromCountry: "in",
       category: "family",
       record_type: "FAMILY_VISA",
-      fee: isFirst ? `${feeFamily} Family ${name} most common` : `${feeFamily} Family ${name} ${i}`,
+      fee: isFirst ? feeFamily : `${feeFamily} + Dependent Tier ${i}`,
       validity: validityFamily,
       docs: isFirst
-        ? `Relationship proof + ${name} family member residence + Marriage certificate attested + Birth certificate attested + Accommodation ${name} + Financial support ${name} + Family Reunion ${name} VFS - Most common + Marriage Certificate + Invitation OR Hotel ⭐`
-        : `Relationship proof + Family member residence ${name} + Marriage cert + Family ${name} VFS`,
-      warningBox: isFirst ? `✅ Most common family ${name} Family Reunion - Spouse child parent` : ``
+        ? `Relationship proof + ${name} family member residence + Marriage certificate attested + Birth certificate attested`
+        : `Relationship proof + Family member residence ${name} + Marriage cert`,
+      warningBox: isFirst ? `✅ Primary family reunion visa for ${name}` : `📌 Family category #${i} for ${name}`
     });
   }
 
   // PR
   for (let i = 1; i <= pr; i++) {
     const isFirst = i === 1;
+    const subName = getUniqueName(PR_NAMES, i - 1, "PR");
     visas.push({
       id: `${code}-PR-${String(idCounter++).padStart(3, '0')}`,
       officialCode: `${code.toUpperCase()}-PR-${String(i).padStart(3, '0')}`,
-      name: isFirst
-        ? `${name} Permanent Residence ${prName} ${name} PR ${i} - Most common PR ${name}`
-        : `${name} PR Visa ${i} PR ${name} - ${prName} ${i}`,
+      name: isFirst ? `${name} Permanent Residence ${prName} (Primary Investor/PR)` : subName,
       toCountry: code,
       fromCountry: "in",
       category: "pr",
       record_type: "PR_VISA",
-      fee: isFirst ? `${feePR} Permanent Residence ${name} most common ${prName}` : `${feePR} PR ${name} ${i}`,
-      validity: isFirst ? `Permanent ${prName} ${name} - Most common PR ${name}` : `Permanent ${prName} ${name}`,
+      fee: isFirst ? feePR : `${feePR} + Settlement Tier ${i}`,
+      validity: isFirst ? `Permanent ${prName} ${name}` : `Permanent Settlement (${name} Route ${i})`,
       docs: isFirst
-        ? `Residence ${prYears}Y ${name} + Physical presence + Employment history + Language ${name} + PR ${prName} application ${name} - ${prYears}Y residence + Most common`
-        : `Residence ${prYears}Y ${name} + PR application ${name}`,
-      warningBox: isFirst ? `✅ Most common PR ${name} ${prName} - ${prYears}Y residence` : ``
+        ? `Residence ${prYears}Y ${name} + Physical presence + Employment history + Language + PR ${prName} application`
+        : `Residence ${prYears}Y ${name} + PR application ${name} Route ${i}`,
+      warningBox: isFirst ? `✅ Primary PR / Golden Visa pathway for ${name}` : `📌 Settlement pathway #${i} for ${name}`
     });
+  }
+
+  if (seed % 2 === 1) {
+    visas.reverse();
   }
 
   return visas;

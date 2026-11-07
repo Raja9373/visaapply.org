@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Bell, 
   CheckCircle2, 
@@ -7,89 +7,143 @@ import {
   HelpCircle, 
   ChevronDown, 
   ChevronUp, 
-  AlertCircle,
-  Zap,
   Sparkles,
-  Send,
-  MessageSquare,
-  Gift
+  Mail,
+  Gift,
+  Globe
 } from 'lucide-react';
 import { FreeLeadMagnetBar } from '../components/FreeLeadMagnetBar';
-import { AdSenseBanner } from '../components/AdSenseBanner';
+import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
+import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
+import { BottomFreeToolsSection } from '../components/BottomFreeToolsSection';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
 
 interface EmbassySlotAlertPageProps {
   onNavigate?: (path: string) => void;
 }
 
-export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    whatsapp: '',
-    embassy: 'USA Delhi'
-  });
-
+export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({ 
+  onNavigate = (p) => { window.history.pushState({}, '', p); window.scrollTo(0,0); } 
+}) => {
+  const [email, setEmail] = useState('');
+  const [fromCountry, setFromCountry] = useState('IN');
+  const [toCountry, setToCountry] = useState('US');
+  const [embassyCity, setEmbassyCity] = useState('New Delhi (Embassy)');
+  
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [slotStatuses, setSlotStatuses] = useState<any>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Silent IP geo-detection on mount
+  useEffect(() => {
+    fetch('/api/geo')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.country) {
+          const code = String(data.country).toUpperCase();
+          if (NAME_MAP_249[code]) {
+            setFromCountry(code);
+          }
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/slot-alert/status')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setSlotStatuses(data.embassies || {});
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Auto-fill embassy cities based on From + To
+  useEffect(() => {
+    const key = `${fromCountry}-${toCountry}`;
+    const mapping: Record<string, string[]> = {
+      'IN-US': ['New Delhi (Embassy)', 'Mumbai (Consulate)', 'Chennai (Consulate)', 'Hyderabad (Consulate)', 'Kolkata (Consulate)'],
+      'IN-GB': ['New Delhi (VFS)', 'Mumbai (VFS)', 'Bengaluru (VFS)', 'Chandigarh (VFS)'],
+      'IN-CA': ['New Delhi (IRCC/VFS)', 'Bengaluru (VFS)', 'Chandigarh (VFS)'],
+      'PK-US': ['Islamabad (Embassy)', 'Karachi (Consulate)'],
+      'PK-GB': ['Islamabad (VFS)', 'Lahore (VFS)', 'Mirpur (VFS)'],
+      'NG-GB': ['Lagos (VFS)', 'Abuja (VFS)'],
+      'NG-US': ['Abuja (Embassy)', 'Lagos (Consulate)'],
+      'AE-US': ['Abu Dhabi (Embassy)', 'Dubai (Consulate)'],
+      'BD-US': ['Dhaka (Embassy)'],
+      'NP-US': ['Kathmandu (Embassy)']
+    };
+
+    const cities = mapping[key] || [
+      `${NAME_MAP_249[toCountry] || toCountry} Main Embassy / VFS Hub`
+    ];
+    setEmbassyCity(cities[0]);
+  }, [fromCountry, toCountry]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.whatsapp) {
-      alert('Please enter your Name and WhatsApp number.');
+    if (!email || !email.includes('@')) {
+      setErrorMsg('Please enter a valid email address.');
       return;
     }
+    setErrorMsg('');
+    setLoading(true);
 
     try {
-      const existingLeads = JSON.parse(localStorage.getItem('visaapply_slot_alert_leads') || '[]');
-      existingLeads.push({
-        ...formData,
-        isFirstAlertFree: true,
-        subscribedAt: new Date().toISOString()
+      const res = await fetch('/api/slot-alert/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: email.trim(), 
+          fromCountry, 
+          toCountry, 
+          embassyCity 
+        })
       });
-      localStorage.setItem('visaapply_slot_alert_leads', JSON.stringify(existingLeads));
+      const data = await res.json();
+      if (data.success) {
+        setSubscribed(true);
+      } else {
+        setErrorMsg(data.error || 'Subscription failed. Please try again.');
+      }
     } catch {
-      // Local storage fallback
+      setSubscribed(true);
+    } finally {
+      setLoading(false);
     }
-
-    setSubscribed(true);
   };
 
-  const embassies = [
-    'USA Delhi',
-    'USA Mumbai',
-    'USA Chennai',
-    'USA Hyderabad',
-    'USA Kolkata',
-    'Schengen - France',
-    'Schengen - Germany',
-    'Schengen - Italy',
-    'Schengen - Spain',
-    'Schengen - Netherlands',
-    'Schengen - Switzerland',
-    'Schengen - Greece',
-    'UK Priority Visa',
-    'Canada Biometrics VFS'
+  const destinationOptions = [
+    { code: 'US', label: '🇺🇸 United States (USA)' },
+    { code: 'GB', label: '🇬🇧 United Kingdom (UK)' },
+    { code: 'CA', label: '🇨🇦 Canada' },
+    { code: 'FR', label: '🇫🇷 France (Schengen)' },
+    { code: 'DE', label: '🇩🇪 Germany (Schengen)' },
+    { code: 'IT', label: '🇮🇹 Italy (Schengen)' },
+    { code: 'ES', label: '🇪🇸 Spain (Schengen)' },
+    { code: 'NL', label: '🇳🇱 Netherlands (Schengen)' },
+    { code: 'AU', label: '🇦🇺 Australia' },
+    { code: 'AE', label: '🇦🇪 United Arab Emirates' }
   ];
 
   const faqs = [
     {
-      q: "Slot kitne din me milta hai? (How long does it take for slots to open?)",
-      a: "Consulates and VFS centers frequently release bulk cancellation batches and newly opened biometric slots at random intervals—often at early morning (6 AM - 8 AM) or late evening (10 PM - 12 AM). In typical weeks, bulk slots for USA (B1/B2, F1) and Schengen open every 3 to 7 days."
+      q: "Slot kitne din me milta hai?",
+      a: "Consulates and VFS centers release bulk cancellation batches randomly (often early morning or late evening). Our automated system checks every 30 minutes 24/7."
     },
     {
-      q: "Kya ye slot booking guarantee hai? (Is appointment booking guaranteed?)",
-      a: "No. VisaApply does NOT guarantee appointment slots or sell booking appointments. We are an automated monitoring and alert broadcast service. The moment the official consular system releases appointment dates, we ping your WhatsApp instantly so YOU can log into your official US CGI Federal / usvisascheduling / VFS portal and claim the slot directly."
+      q: "Kya ye guarantee hai?",
+      a: "No guarantee. Humne inform kar diya, baaki tumhari kismat. We send instant automated emails the moment slots open so you can book directly on official government portals."
     },
     {
-      q: "Kya mujhe apna portal login password share karna padega? (Do I need to share login credentials?)",
-      a: "KABHI NAHI (NEVER). VisaApply never asks for your personal portal password or login credentials. Our automated servers monitor public consular wait-time feeds and appointment availability queues independently without requiring your account details."
+      q: "Kya mujhe apna password dena padega?",
+      a: "KABHI NAHI. VisaApply never asks for your portal credentials. We monitor public status feeds automatically."
     },
     {
-      q: "Alert aane par mujhe kya karna hoga? (What should I do when an alert arrives?)",
-      a: "As soon as you receive our WhatsApp ping, immediately log into your official portal (usvisascheduling.com for USA, or vfsglobal.com for Schengen), navigate to 'Reschedule Appointment', and pick the earliest opened slot."
-    },
-    {
-      q: "Is the first alert really 100% free?",
-      a: "YES! First Alert is 100% FREE. No payment, no checkout, and no credit card details required. Fill the 3-field form below and you'll receive your instant alert on WhatsApp the moment your embassy opens slots."
+      q: "Is this service 100% free?",
+      a: "YES! 100% free global email alerts. No credit card or payment required."
     }
   ];
 
@@ -114,78 +168,62 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      {/* Top Back Bar & Breadcrumb */}
+      <PageBackBar onNavigate={onNavigate} pageName="Global Embassy Slot Alert" />
+
+      {/* TOP Free Tools Strip */}
+      <div className="bg-[#0B3D91] py-2 border-b border-blue-800">
+        <TopFreeToolsStrip onNavigate={onNavigate} theme="dark" />
+      </div>
+
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-[#0B2A5B] via-[#0B3D91] to-[#082247] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
         <div className="max-w-5xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3.5 py-1.5 rounded-full text-xs font-black">
-            <Gift className="w-3.5 h-3.5 text-amber-300" />
-            <span>First Alert FREE • Zero Advance Payment • No Checkout</span>
+          <div className="inline-flex items-center gap-2 bg-emerald-500/25 text-emerald-300 border border-emerald-400/30 px-3.5 py-1.5 rounded-full text-xs font-black">
+            <Globe className="w-3.5 h-3.5 text-amber-300" />
+            <span>Global Coverage • All 249 Countries • Automated 30-Min Email Alerts</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
-            Embassy Slot Alert — USA / Schengen
+            Global Embassy Slot Alert — 249 Countries
           </h1>
-          <p className="text-lg sm:text-2xl text-amber-300 font-extrabold max-w-2xl mx-auto tracking-wide">
-            "USA ka slot khulte hi sabse pehle pata chalega"
-          </p>
-          <p className="text-sm sm:text-base text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Instant automated alerts on WhatsApp the split-second US Consulates (Delhi, Mumbai, Chennai, Hyderabad, Kolkata) or Schengen VFS centers release new appointment slots.
+          <p className="text-sm sm:text-base text-blue-100 max-w-3xl mx-auto leading-relaxed font-medium">
+            Kahi ke bhi ho — India, Pakistan, Nigeria, Dubai — System tumhare wale embassy ka slot check karega aur Email kar dega. System har 30 minute me slot check karta hai. Slot khulte hi system khud Email kar dega. Tumhe kuch nahi karna.
           </p>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-        {/* Live Slot Tracking Highlight Bar */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 mb-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
-            <span className="text-[11px] font-extrabold text-blue-800 uppercase block">Active Tracking</span>
-            <span className="text-xl sm:text-2xl font-black text-[#0B3D91]">5 US Consulates</span>
-          </div>
-          <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-            <span className="text-[11px] font-extrabold text-emerald-800 uppercase block">Schengen Hubs</span>
-            <span className="text-xl sm:text-2xl font-black text-emerald-700">7 VFS Nations</span>
-          </div>
-          <div className="p-3 bg-amber-50 rounded-xl border border-amber-100">
-            <span className="text-[11px] font-extrabold text-amber-800 uppercase block">Alert Dispatch</span>
-            <span className="text-xl sm:text-2xl font-black text-amber-700">&lt; 30 Seconds</span>
-          </div>
-          <div className="p-3 bg-purple-50 rounded-xl border border-purple-100">
-            <span className="text-[11px] font-extrabold text-purple-800 uppercase block">First Alert</span>
-            <span className="text-xl sm:text-2xl font-black text-purple-700">100% FREE</span>
-          </div>
-        </div>
-
-        {/* 100% Free First Alert Banner */}
-        <div className="bg-gradient-to-r from-emerald-500/10 via-amber-500/10 to-blue-500/10 border-2 border-emerald-400 rounded-2xl p-6 mb-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-xl shrink-0 shadow-md">
-              🎉
-            </div>
-            <div>
-              <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                Special Public Initiative
-              </span>
-              <h3 className="text-lg sm:text-xl font-black text-slate-900 mt-1">
-                First Alert is 100% FREE for Everyone
-              </h3>
-              <p className="text-xs text-slate-600">
-                No credit card, no registration fee, no payment required. Enter your WhatsApp number below to activate tracking.
-              </p>
-            </div>
-          </div>
-          <div className="bg-emerald-600 text-white font-black px-4 py-2 rounded-xl text-xs uppercase tracking-wider shadow-sm shrink-0">
-            First Alert FREE
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 space-y-8">
+        
+        {/* Live Slot Status Dashboard */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+          <h3 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+            <Clock className="w-4 h-4 text-[#0B3D91]" />
+            <span>Live Consular Status (Checked Every 30 Mins Worldwide)</span>
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            {Object.entries(slotStatuses).map(([emb, info]: [string, any]) => {
+              const isOpen = info.status === 'Open';
+              return (
+                <div key={emb} className={`p-3 rounded-xl border text-center ${isOpen ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'}`}>
+                  <span className="text-[11px] font-extrabold text-slate-700 block truncate">{emb}</span>
+                  <span className={`text-xs font-black px-2 py-0.5 rounded-full inline-block mt-1 ${isOpen ? 'bg-emerald-600 text-white animate-pulse' : 'bg-slate-200 text-slate-600'}`}>
+                    {isOpen ? `🟢 OPEN` : '🔴 Closed'}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Fast 3-Field Lead Capture Form: Name + WhatsApp + Embassy */}
-        <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 mb-10">
+        {/* Subscription Form */}
+        <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0B3D91] flex items-center justify-center font-bold">
-              <Bell className="w-5 h-5" />
+              <Mail className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-900">Activate Your Free Slot Alert</h2>
-              <p className="text-xs text-slate-500">Fast 3-field setup • Alert pinged directly to your WhatsApp • First Alert FREE</p>
+              <h2 className="text-xl font-black text-slate-900">Activate Global Slot Alert (Free)</h2>
+              <p className="text-xs text-slate-500">Select your origin passport country and destination embassy</p>
             </div>
           </div>
 
@@ -194,93 +232,107 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = () => {
               <div className="w-14 h-14 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-black text-emerald-900">Subscribed!</h3>
-              <p className="text-base sm:text-lg font-extrabold text-emerald-900 max-w-lg mx-auto">
-                "Subscribed! Jab slot khulega, hum WhatsApp + Email pe bhej denge."
+              <h3 className="text-2xl font-black text-emerald-900">Subscribed Successfully!</h3>
+              <p className="text-base font-extrabold text-emerald-900 max-w-lg mx-auto">
+                "System har 30 minute me slot check karta hai. Slot khulte hi system khud Email kar dega. Tumhe kuch nahi karna."
               </p>
               <p className="text-xs text-emerald-700">
-                24/7 automated server tracking activated for <strong>{formData.embassy}</strong>. Keep your WhatsApp notifications active.
+                Tracking activated for <strong>{NAME_MAP_249[fromCountry] || fromCountry}</strong> to <strong>{toCountry}</strong> ({embassyCity}).
               </p>
               <div className="pt-3">
                 <button
                   type="button"
                   onClick={() => setSubscribed(false)}
-                  className="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
                 >
-                  Activate Another Free Alert
+                  Subscribe Another Email
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {errorMsg && (
+                <div className="p-3 bg-red-50 text-red-700 text-xs font-bold rounded-xl border border-red-200">
+                  {errorMsg}
+                </div>
+              )}
+              
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {/* 1. Name */}
+                {/* 1. From Country */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Your Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Amit Verma"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-
-                {/* 2. WhatsApp Number */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    WhatsApp Number (for Alert) *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+91 98765 12345"
-                    value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                  />
-                </div>
-
-                {/* 3. Embassy */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Embassy / Consulate *
+                    From Country (Your Passport) *
                   </label>
                   <select
-                    value={formData.embassy}
-                    onChange={(e) => setFormData({ ...formData, embassy: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                    value={fromCountry}
+                    onChange={(e) => setFromCountry(e.target.value)}
+                    className="w-full px-3.5 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0B3D91] cursor-pointer"
                   >
-                    {embassies.map((emb) => (
-                      <option key={emb} value={emb}>{emb}</option>
+                    {Object.keys(NAME_MAP_249)
+                      .sort((a, b) => NAME_MAP_249[a].localeCompare(NAME_MAP_249[b]))
+                      .map((code) => (
+                        <option key={code} value={code}>
+                          {FLAG_MAP_249[code]} {NAME_MAP_249[code]} ({code})
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                {/* 2. To Destination Embassy */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                    To Embassy / Country *
+                  </label>
+                  <select
+                    value={toCountry}
+                    onChange={(e) => setToCountry(e.target.value)}
+                    className="w-full px-3.5 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0B3D91] cursor-pointer"
+                  >
+                    {destinationOptions.map((dest) => (
+                      <option key={dest.code} value={dest.code}>
+                        {dest.label}
+                      </option>
                     ))}
                   </select>
                 </div>
+
+                {/* 3. Email */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                    Your Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="e.g. user@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3.5 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                  />
+                </div>
               </div>
 
-              <div className="pt-3">
+              <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#0B3D91] hover:bg-[#082e6d] text-white font-black text-base rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                  disabled={loading}
+                  className="w-full py-4 bg-[#0B3D91] hover:bg-[#082e6d] text-white font-black text-base rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <Bell className="w-5 h-5 text-amber-300" />
-                  <span>Activate Free Alert (First Alert FREE)</span>
+                  <span>{loading ? 'Subscribing...' : 'Start Automated Global Email Alerts (100% Free)'}</span>
                 </button>
                 <p className="text-center text-xs text-slate-500 mt-2">
-                  ⚡ First Alert FREE. No login password required. No credit card required.
+                  ⚡ Humne inform kar diya, baaki tumhari kismat. Unsubscribe anytime.
                 </p>
               </div>
             </form>
           )}
         </div>
 
-        {/* Lead Magnet Bar: Join Free WhatsApp Channel + Email Newsletter + AdSense Banner */}
-        <FreeLeadMagnetBar pageContext="Embassy Slot Alert Free Service" adSlot="slot_alert_banner" />
+        {/* Lead Magnet Bar */}
+        <FreeLeadMagnetBar pageContext="Global Embassy Slot Alert Auto System" adSlot="slot_alert_banner" />
 
-        {/* FAQs */}
+        {/* Frequently Asked Questions */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
           <div className="flex items-center gap-3 mb-6">
             <HelpCircle className="w-6 h-6 text-[#0B3D91]" />
@@ -311,6 +363,14 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = () => {
           </div>
         </div>
       </div>
+
+      {/* BOTTOM Free Tools Section */}
+      <div className="mt-16 bg-slate-100 border-t border-slate-200 py-12">
+        <BottomFreeToolsSection onNavigate={onNavigate || (() => {})} />
+      </div>
+
+      {/* Bottom Back Button */}
+      <PageBottomBack onNavigate={onNavigate || (() => {})} />
     </div>
   );
 };

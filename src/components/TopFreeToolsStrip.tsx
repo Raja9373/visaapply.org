@@ -52,18 +52,23 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
   return (
     <div className={`w-full max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-3 ${className}`}>
       {/* Header Label */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-1.5">
           <span className="text-amber-400 text-sm">✨</span>
           <h3 className={`text-xs sm:text-sm font-extrabold tracking-wide uppercase ${isDark ? 'text-amber-300' : 'text-slate-800'}`}>
             FREE Tools - Visa Ke Liye Sab Kuch FREE
           </h3>
         </div>
-        <span className={`text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full ${
-          isDark ? 'bg-white/10 text-blue-200 border border-white/15' : 'bg-slate-100 text-slate-600 border border-slate-200'
-        }`}>
-          100% Free • No Login
-        </span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+            ✨ Real Visa Names - No Duplicates
+          </span>
+          <span className={`text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full ${
+            isDark ? 'bg-white/10 text-blue-200 border border-white/15' : 'bg-slate-100 text-slate-600 border border-slate-200'
+          }`}>
+            100% Free • No Login
+          </span>
+        </div>
       </div>
 
       {/* 4 Compact Cards: 2x2 grid on mobile, 1 row (4 cols) on desktop */}

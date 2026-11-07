@@ -1,0 +1,55 @@
+{
+  "lastCheckTime": "2026-11-07T18:18:59.010Z",
+  "embassies": {
+    "USA Delhi": {
+      "status": "Open",
+      "lastSlotDate": "2026-11-14",
+      "lastAlertTime": 1794075539011
+    },
+    "USA Mumbai": {
+      "status": "Closed",
+      "lastSlotDate": "N/A",
+      "lastAlertTime": null
+    },
+    "USA Chennai": {
+      "status": "Open",
+      "lastSlotDate": "2026-11-15",
+      "lastAlertTime": 1794075358018
+    },
+    "USA Hyderabad": {
+      "status": "Closed",
+      "lastSlotDate": "N/A",
+      "lastAlertTime": null
+    },
+    "USA Kolkata": {
+      "status": "Closed",
+      "lastSlotDate": "N/A",
+      "lastAlertTime": null
+    },
+    "Schengen - France": {
+      "status": "Closed",
+      "lastSlotDate": "2026-11-12",
+      "lastAlertTime": 1794075358019
+    },
+    "Schengen - Germany": {
+      "status": "Open",
+      "lastSlotDate": "2026-11-13",
+      "lastAlertTime": 1794075539011
+    },
+    "Schengen - Italy": {
+      "status": "Closed",
+      "lastSlotDate": "N/A",
+      "lastAlertTime": null
+    },
+    "Schengen - Spain": {
+      "status": "Open",
+      "lastSlotDate": "2026-11-13",
+      "lastAlertTime": 1794075539011
+    },
+    "Schengen - Netherlands": {
+      "status": "Closed",
+      "lastSlotDate": "N/A",
+      "lastAlertTime": null
+    }
+  }
+}

@@ -19,6 +19,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
+import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
 interface GoldenVisaPageProps {
   onNavigate: (path: string) => void;
@@ -369,6 +370,9 @@ export const GoldenVisaPage: React.FC<GoldenVisaPageProps> = ({ onNavigate }) =>
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
+      {/* Top Back Bar & Breadcrumb */}
+      <PageBackBar onNavigate={onNavigate} pageName="Golden Visa Directory" category="Investment" />
+
       {/* Critical Mandatory Disclaimer Banner */}
       <div className="bg-amber-500/10 border-b border-amber-500/30 text-amber-950 px-4 py-3.5">
         <div className="max-w-7xl mx-auto flex items-start gap-3">
@@ -802,6 +806,9 @@ export const GoldenVisaPage: React.FC<GoldenVisaPageProps> = ({ onNavigate }) =>
           </p>
         </div>
       </div>
+
+      {/* Bottom Back Button */}
+      <PageBottomBack onNavigate={onNavigate} />
     </div>
   );
 };
