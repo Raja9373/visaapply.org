@@ -3,6 +3,8 @@ import { getCountryMeta, getCapitalSlug } from '../data/countryMetaData';
 import { getLiveVisaCount, NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { generateChecklistPDF } from '../utils/countryLiveUtils';
+import { SupportedLangCode } from '../i18n/config';
+import { getUIString, getLocalizedCountryName } from '../utils/autoLanguage';
 
 interface EligibilityCheckerProps {
   countryCode?: string;
@@ -10,6 +12,7 @@ interface EligibilityCheckerProps {
   defaultFromCode?: string;
   showDestinationPicker?: boolean;
   onNavigate?: (path: string) => void;
+  uiLang?: SupportedLangCode;
 }
 
 export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
@@ -17,7 +20,8 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
   countryName,
   defaultFromCode = 'in',
   showDestinationPicker = false,
-  onNavigate
+  onNavigate,
+  uiLang = 'en'
 }) => {
   const [fromCode, setFromCode] = useState<string>((defaultFromCode || 'in').toLowerCase());
   const [destCode, setDestCode] = useState<string>((countryCode || 'us').toLowerCase());
@@ -32,10 +36,18 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
     }
   }, [countryCode]);
 
-  const resolvedName =
+  useEffect(() => {
+    if (defaultFromCode) {
+      setFromCode(defaultFromCode.toLowerCase());
+    }
+  }, [defaultFromCode]);
+
+  const ui = getUIString(uiLang);
+  const rawEnglishName =
     countryName && !showDestinationPicker
       ? countryName
       : NAME_MAP_249[destCode] || destCode.toUpperCase();
+  const resolvedName = getLocalizedCountryName(destCode, uiLang, rawEnglishName);
   const resolvedFlag = FLAG_MAP_249[destCode] || '🌍';
   const meta = getCountryMeta(destCode);
   const count = getLiveVisaCount(destCode);
@@ -172,20 +184,20 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <h2 className="text-xl sm:text-[22px] font-extrabold tracking-tight flex items-center gap-2">
-            <span>✅ Check Your Visa Eligibility - 30 Sec</span>
+            <span>{ui.eligibility}</span>
           </h2>
           <p className="text-[#94a3b8] text-[13px] mt-1">
-            Select your details — Instant eligibility check for{' '}
-            <span className="text-white font-bold">
-              {resolvedFlag} {resolvedName}
-            </span>{' '}
-            visa ({count} visa types)
+            {ui.eligibilitySub.replace('{country}', `${resolvedFlag} ${resolvedName}`)} ({count} {ui.visas})
           </p>
         </div>
         {showDestinationPicker && (
           <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-600 rounded-xl px-3 py-1.5 text-xs">
-            <span className="text-slate-300 font-semibold">Destination:</span>
+            <label htmlFor="elig-destination" className="text-slate-200 font-semibold">
+              {ui.toDestination}:
+            </label>
             <select
+              id="elig-destination"
+              aria-label="Select destination country for visa eligibility check"
               value={destCode}
               onChange={(e) => {
                 setDestCode(e.target.value);
@@ -195,7 +207,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
             >
               {allCountryCodes.map((c) => (
                 <option key={c} value={c} className="bg-slate-900 text-white">
-                  {FLAG_MAP_249[c] || '🌍'} {NAME_MAP_249[c]}
+                  {FLAG_MAP_249[c] || '🌍'} {getLocalizedCountryName(c, uiLang, NAME_MAP_249[c])}
                 </option>
               ))}
             </select>
@@ -206,6 +218,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
         <select
           id="elig-from"
+          aria-label="Select your passport or origin country"
           value={fromCode}
           onChange={(e) => setFromCode(e.target.value)}
           className="p-3 rounded-[10px] bg-[#1e293b] text-white border border-[#334155] text-xs sm:text-sm font-semibold focus:outline-none focus:border-blue-400 cursor-pointer"
@@ -222,6 +235,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
 
         <select
           id="elig-purpose"
+          aria-label="Select your travel purpose"
           value={purpose}
           onChange={(e) => setPurpose(e.target.value)}
           className="p-3 rounded-[10px] bg-[#1e293b] text-white border border-[#334155] text-xs sm:text-sm font-semibold focus:outline-none focus:border-blue-400 cursor-pointer"
@@ -236,6 +250,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
 
         <select
           id="elig-duration"
+          aria-label="Select intended duration of stay"
           value={duration}
           onChange={(e) => setDuration(e.target.value)}
           className="p-3 rounded-[10px] bg-[#1e293b] text-white border border-[#334155] text-xs sm:text-sm font-semibold focus:outline-none focus:border-blue-400 cursor-pointer"
@@ -249,6 +264,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
 
         <select
           id="elig-passport"
+          aria-label="Select passport validity status"
           value={passportValidity}
           onChange={(e) => setPassportValidity(e.target.value)}
           className="p-3 rounded-[10px] bg-[#1e293b] text-white border border-[#334155] text-xs sm:text-sm font-semibold focus:outline-none focus:border-blue-400 cursor-pointer"
@@ -261,7 +277,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
       <button
         type="button"
         onClick={() => setChecked(true)}
-        className="mt-4 bg-[#3b82f6] hover:bg-[#2563eb] text-white py-3 px-6 rounded-[10px] font-extrabold text-sm cursor-pointer w-full transition-colors shadow-md"
+        className="mt-4 bg-[#1d4ed8] hover:bg-[#1e40af] text-white py-3 px-6 rounded-[10px] font-extrabold text-sm cursor-pointer w-full transition-colors shadow-md"
       >
         Check Eligibility Now →
       </button>

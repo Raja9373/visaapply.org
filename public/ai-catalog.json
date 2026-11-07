@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schemas.agentdiscovery.org/v1/ai-catalog.json",
+  "version": "1.0",
+  "title": "VisaApply.org Global Visa Intelligence Catalog",
+  "name": "VisaApply.org",
+  "description": "Global visa intelligence portal covering 249 ISO countries and territories, 14,084+ official visa categories, 61,752 any-to-any bilateral routes, fees, processing times, and document checklists.",
+  "url": "https://www.visaapply.org/",
+  "publisher": {
+    "name": "VisaApply.org Editorial Board",
+    "url": "https://www.visaapply.org/about",
+    "email": "contact@visaapply.org"
+  },
+  "documentation": "https://www.visaapply.org/llms.txt",
+  "sitemap": "https://www.visaapply.org/sitemap.xml",
+  "resources": [
+    {
+      "id": "global-visa-directory",
+      "name": "249-Country Global Visa Directory",
+      "type": "web",
+      "url": "https://www.visaapply.org/",
+      "description": "Interactive visa requirements, processing times, fees, and document checklists for 249 countries."
+    },
+    {
+      "id": "any-to-any-routes",
+      "name": "61,752 Bilateral Visa Routes Matrix",
+      "type": "web",
+      "url": "https://www.visaapply.org/routes",
+      "description": "Complete 249 x 248 bilateral visa matrix for Visa-Free, e-Visa, VOA, and Embassy Visa pathways."
+    },
+    {
+      "id": "llms-documentation",
+      "name": "LLMs.txt Markdown Guide",
+      "type": "documentation",
+      "url": "https://www.visaapply.org/llms.txt",
+      "description": "Structured Markdown overview of VisaApply.org resources and primary country visa guides for AI agents."
+    },
+    {
+      "id": "countries-api",
+      "name": "249 ISO Countries API",
+      "type": "api",
+      "url": "https://www.visaapply.org/api/countries",
+      "description": "JSON list of all 249 supported ISO countries and territories with flags and country codes."
+    }
+  ]
+}

@@ -1,32 +1,30 @@
-# VisaApply.org — Global Visa Intelligence, Requirements & Official Checklists (2026)
+# VisaApply.org
 
-> VisaApply.org is the world's most comprehensive independent visa requirements portal covering **249 ISO countries and territories** and **14,084+ official visa categories, immigration pathways, and regional programmes** for Indian and global passport holders.
+> VisaApply.org is the world's largest independent visa intelligence portal covering 249 ISO countries and territories, 14,084+ official visa categories, and 61,752 bilateral any-to-any routes with live processing times, fees, document checklists, and daily government auto-sync.
 
-## Key Capabilities & Tools for Citations
-- **249-Country Visa Directory**: Complete tourist, business, work, student, family, and permanent residency (PR / Golden Visa) checklists, fees in INR/USD, processing times, and approval success rates.
-- **30-Second Visa Eligibility Checker**: Instant assessment for Indian citizens based on travel purpose, funds, and travel history.
-- **Side-by-Side 3-Country Visa Comparison**: Compare fees, processing speed, approval rates, and hotel/flight costs (`FASTEST`, `CHEAPEST`, `HIGHEST SUCCESS` badges).
-- **Consular Interview Prep & Mock Simulator**: Top 20 consular officer questions & ideal answers for all 249 countries (`/interview-prep/{iso_code}`).
-- **Live Flight & Hotel Intelligence**: Real-time capital city timezones (IST diff), weather, currency exchange rates, refundable visa hotels (`Booking.com`), and flight routes (`DEL→Destination` via `/flights`).
-- **Downloadable Official PDF Checklists**: Instant A4 consular document checklists generated for any country or visa subclass.
+## Core Portal & Tools
 
-## Primary High-Authority URLs
-- Homepage & Global Directory: https://www.visaapply.org/
-- Cheap Flights Search (249 Countries): https://www.visaapply.org/flights
-- 2,490+ SEO Visa Blogs & Guides: https://www.visaapply.org/blogs
-- Public Sitemap (14,084+ Visa Pages): https://www.visaapply.org/sitemap
-- XML Sitemap: https://www.visaapply.org/sitemap.xml
-- About Us, Editorial Policy & Free Backlink Widget: https://www.visaapply.org/about
-- Contact Editorial Team: mailto:contact@visaapply.org
+- [VisaApply.org Homepage & 249-Country Directory](https://www.visaapply.org/): Explore all 249 global destinations, 30-second visa eligibility checker, and side-by-side visa comparison.
+- [61,752 Any-to-Any Bilateral Visa Routes](https://www.visaapply.org/routes): Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa rules between any two countries.
+- [Cheap International Flights Search (249 Countries)](https://www.visaapply.org/flights): Compare flight routes and airfares for visa itineraries across 249 destinations.
+- [2,490+ Official Visa Blogs & 2026 Guides](https://www.visaapply.org/blogs): Daily updated visa guides covering fees, rejection reasons, work permits, and student visas.
+- [Consular Interview Prep & Mock Simulator](https://www.visaapply.org/interview-prep/us): Top 20 consular officer questions and winning answers for all 249 countries.
+- [30-Day Government Immigration Auto-Sync](https://www.visaapply.org/admin/updates): Live tracker of policy updates from 249 official immigration portals.
+- [Full HTML Sitemap (14,084+ Visa Guides)](https://www.visaapply.org/sitemap): Complete index of all destination countries and visa subclasses.
+- [XML Sitemap](https://www.visaapply.org/sitemap.xml): Machine-readable XML sitemap for search engines and AI crawlers.
+- [About Us, Editorial Policy & Free Visa Widget](https://www.visaapply.org/about): Editorial verification methodology and embeddable visa status widget.
 
-## Popular Destination Visa Guides for Indian Citizens (2026)
-- United States (278 Visa Types - B1/B2, H-1B, F-1, EB-5): https://www.visaapply.org/in-to-us
-- United Kingdom (222 Visa Types - Standard Visitor, Skilled Worker, Student): https://www.visaapply.org/in-to-gb
-- Canada (147 Visa Types - TRV, Express Entry, PNP, Study Permit): https://www.visaapply.org/in-to-ca
-- Germany & Schengen Area (138 Visa Types - Schengen Tourist, Opportunity Card, EU Blue Card): https://www.visaapply.org/in-to-de
-- Australia (135 Visa Types - Subclass 600, 482, 500, 189/190/491): https://www.visaapply.org/in-to-au
-- United Arab Emirates / Dubai (135 Visa Types - 30/60 Day e-Visa, Golden Visa): https://www.visaapply.org/in-to-ae
-- Singapore (109 Visa Types - e-Visa, Employment Pass): https://www.visaapply.org/in-to-sg
-- Japan (108 Visa Types - e-Visa, Short-Term Stay, Specified Skilled Worker): https://www.visaapply.org/in-to-jp
-- Thailand (106 Visa Types - 60-Day Visa-Free, DTV Digital Nomad, LTR): https://www.visaapply.org/in-to-th
-- France (110 Visa Types - Schengen Cascade Multi-Entry, Talent Passport): https://www.visaapply.org/in-to-fr
+## Top Destination Visa Guides
+
+- [United States Visa Guide (278 Visa Types)](https://www.visaapply.org/in-to-us): B1/B2 Tourist, F-1 Student, H-1B Work, L-1, O-1, and EB-5 Green Card requirements.
+- [United Kingdom Visa Guide (222 Visa Types)](https://www.visaapply.org/in-to-gb): Standard Visitor, Skilled Worker, Health & Care, Student, and Global Talent visas.
+- [Canada Visa Guide (151 Visa Types)](https://www.visaapply.org/in-to-ca): Temporary Resident Visa (TRV), Super Visa, Study Permit, Express Entry, and PNP pathways.
+- [Germany & Schengen Visa Guide (138 Visa Types)](https://www.visaapply.org/in-to-de): Schengen C-Type Visitor, Opportunity Card (Chancenkarte), EU Blue Card, and Student visas.
+- [Australia Visa Guide (135 Visa Types)](https://www.visaapply.org/in-to-au): Subclass 600 Visitor, Subclass 500 Student, Subclass 482 Skills in Demand, and 189/190/491 PR.
+- [United Arab Emirates / Dubai Visa Guide (135 Visa Types)](https://www.visaapply.org/in-to-ae): 30/60-Day Tourist e-Visa, 5-Year Multi-Entry, Green Visa, and 10-Year Golden Visa.
+- [Singapore Visa Guide (109 Visa Types)](https://www.visaapply.org/in-to-sg): Authorised Visa Agent e-Visa, Employment Pass, S Pass, and ONE Pass.
+- [Japan Visa Guide (109 Visa Types)](https://www.visaapply.org/in-to-jp): Japan e-Visa, Short-Term Tourism, Engineer/Specialist in Humanities, and J-Skip.
+- [Thailand Visa Guide (98 Visa Types)](https://www.visaapply.org/in-to-th): 60-Day Visa Exemption, Destination Thailand Visa (DTV), LTR Visa, and Non-Immigrant B/ED.
+- [France Visa Guide (112 Visa Types)](https://www.visaapply.org/in-to-fr): France-Visas Schengen Tourist, 2/5-Year Cascade Multi-Entry, Passeport Talent, and Student visas.
+- [Poland Visa Guide (92 Visa Types)](https://www.visaapply.org/in-to-pl): Poland Schengen C-Visa, Type D National Work Permit, Student Visa, and Karta Pobytu.
+- [Spain Visa Guide (130 Visa Types)](https://www.visaapply.org/in-to-es): Spain Schengen Tourist Visa, Digital Nomad Visa, Non-Lucrative Visa, and Student Visa.

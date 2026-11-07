@@ -1440,8 +1440,14 @@ export function getVisasByCategoryFixed(countryCode: string, category: string): 
   return [];
 }
 
+let isAutoRebuilt = false;
+
 // 3. AUTO-REBUILD ALL COUNTRIES ON APPLICATION LOAD
 export function autoRebuildAllCountries(): void {
+  if (isAutoRebuilt && Object.keys(FULL_VISA_DB).length >= 200) {
+    return;
+  }
+  isAutoRebuilt = true;
   const cats: (keyof CountryVisas)[] = ['tourist', 'business', 'work', 'student', 'family', 'pr'];
   
   // A. Ensure BASE_COUNTRY_VISAS has both lowercase and uppercase for all countries
@@ -1475,11 +1481,14 @@ export function autoRebuildAllCountries(): void {
 
     if (sourceData) {
       if (Array.isArray(sourceData)) {
+        const seenIds = new Set<string>();
         sourceData.forEach(visa => {
           if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
           const cat = (visa.category || "tourist").toLowerCase();
           if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
-          if (!FULL_VISA_DB[code][cat].some((v: any) => v.id === visa.id)) {
+          const key = `${cat}:${visa.id}`;
+          if (!seenIds.has(key)) {
+            seenIds.add(key);
             FULL_VISA_DB[code][cat].push(visa);
           }
         });
@@ -1487,9 +1496,11 @@ export function autoRebuildAllCountries(): void {
         cats.forEach(cat => {
           const list = (sourceData as any)[cat] || [];
           if (!FULL_VISA_DB[code][cat]) FULL_VISA_DB[code][cat] = [];
+          const seenIds = new Set<string>();
           list.forEach((visa: any) => {
             if (visa.record_type === "SUPPORTING_CLASSIFICATION" || visa.record_type === "LEGACY_VISA") return;
-            if (!FULL_VISA_DB[code][cat].some((v: any) => v.id === visa.id)) {
+            if (!seenIds.has(visa.id)) {
+              seenIds.add(visa.id);
               FULL_VISA_DB[code][cat].push(visa);
             }
           });
@@ -1503,8 +1514,9 @@ export function autoRebuildAllCountries(): void {
     });
   });
 
-  // C. Populate 2D dual access FULL_VISA_DB[from][to]
-  allCodes.forEach(fromCode => {
+  // C. Populate lightweight 2D dual access for primary origin codes without 250,000 allocations
+  const primaryOrigins = ['in', 'IN', 'us', 'US', 'gb', 'GB', 'ae', 'AE', 'ca', 'CA', 'au', 'AU', 'de', 'DE', 'pl', 'PL', 'es', 'ES', 'fr', 'FR'];
+  primaryOrigins.forEach(fromCode => {
     if (!FULL_VISA_DB[fromCode]) FULL_VISA_DB[fromCode] = {};
     allCodes.forEach(toCode => {
       if (fromCode !== toCode) {
@@ -1512,110 +1524,13 @@ export function autoRebuildAllCountries(): void {
       }
     });
   });
-
-  // Verification logs for key countries
-  const checkList = [
-    { name: "Canada", code: "ca", expected: 130 },
-    { name: "Germany", code: "de", expected: 138 },
-    { name: "Australia", code: "au", expected: 135 },
-    { name: "Singapore", code: "sg", expected: 109 },
-    { name: "USA", code: "us", expected: 201 },
-    { name: "Qatar", code: "qa", expected: 66 },
-    { name: "Poland", code: "pl", expected: 92 },
-    { name: "Denmark", code: "dk", expected: 92 },
-    { name: "Finland", code: "fi", expected: 92 },
-    { name: "Belgium", code: "be", expected: 92 },
-    { name: "Austria", code: "at", expected: 92 },
-    { name: "Hong Kong", code: "hk", expected: 45 },
-    { name: "Taiwan", code: "tw", expected: 52 },
-    { name: "Cambodia", code: "kh", expected: 48 },
-    { name: "Laos", code: "la", expected: 42 },
-    { name: "Myanmar", code: "mm", expected: 46 },
-    { name: "Brunei", code: "bn", expected: 38 },
-    { name: "Pakistan", code: "pk", expected: 62 },
-    { name: "Bangladesh", code: "bd", expected: 58 },
-    { name: "Sri Lanka", code: "lk", expected: 62 },
-    { name: "Nepal", code: "np", expected: 35 },
-    { name: "Mongolia", code: "mn", expected: 44 },
-    { name: "Kazakhstan", code: "kz", expected: 56 },
-    { name: "Oman", code: "om", expected: 64 },
-    { name: "Kuwait", code: "kw", expected: 62 },
-    { name: "Bahrain", code: "bh", expected: 60 },
-    { name: "Jordan", code: "jo", expected: 58 },
-    { name: "Lebanon", code: "lb", expected: 52 },
-    { name: "Egypt", code: "eg", expected: 72 },
-    { name: "Morocco", code: "ma", expected: 62 },
-    { name: "Kenya", code: "ke", expected: 68 },
-    { name: "Nigeria", code: "ng", expected: 65 },
-    { name: "Ghana", code: "gh", expected: 58 },
-    { name: "Ethiopia", code: "et", expected: 62 },
-    { name: "Tanzania", code: "tz", expected: 60 },
-    { name: "Uganda", code: "ug", expected: 56 },
-    { name: "Mauritius", code: "mu", expected: 48 },
-    { name: "Argentina", code: "ar", expected: 58 },
-    { name: "Chile", code: "cl", expected: 55 },
-    { name: "Colombia", code: "co", expected: 52 },
-    { name: "Peru", code: "pe", expected: 50 },
-    { name: "Uruguay", code: "uy", expected: 45 },
-    { name: "Panama", code: "pa", expected: 48 },
-    { name: "Costa Rica", code: "cr", expected: 46 },
-    { name: "Dominican Republic", code: "do", expected: 44 },
-    { name: "Jamaica", code: "jm", expected: 42 },
-    { name: "Iceland", code: "is", expected: 52 },
-    { name: "Luxembourg", code: "lu", expected: 48 },
-    { name: "Czech Republic", code: "cz", expected: 62 },
-    { name: "Hungary", code: "hu", expected: 60 },
-    { name: "Greece", code: "gr", expected: 68 },
-    { name: "Croatia", code: "hr", expected: 58 },
-    { name: "Romania", code: "ro", expected: 62 },
-    { name: "Ukraine", code: "ua", expected: 58 },
-    { name: "Cyprus", code: "cy", expected: 52 },
-    { name: "Malta", code: "mt", expected: 50 },
-    { name: "Uzbekistan", code: "uz", expected: 48 },
-    { name: "Azerbaijan", code: "az", expected: 52 },
-    { name: "Bhutan", code: "bt", expected: 28 },
-    { name: "Maldives", code: "mv", expected: 32 },
-    { name: "Seychelles", code: "sc", expected: 28 },
-    { name: "Fiji", code: "fj", expected: 38 },
-    { name: "Botswana", code: "bw", expected: 42 },
-    { name: "Zambia", code: "zm", expected: 44 },
-    { name: "Zimbabwe", code: "zw", expected: 40 },
-    { name: "Namibia", code: "na", expected: 38 },
-    { name: "Mozambique", code: "mz", expected: 42 },
-    { name: "Andorra", code: "ad", expected: 30 },
-    { name: "Monaco", code: "mc", expected: 28 },
-    { name: "Liechtenstein", code: "li", expected: 26 },
-    { name: "San Marino", code: "sm", expected: 24 },
-    { name: "Tunisia", code: "tn", expected: 36 }
-  ];
-
-  checkList.forEach(({ name, code, expected }) => {
-    const liveCount = getLiveVisaCount(code);
-    const catCount = cats.filter(c => FULL_VISA_DB[code]?.[c]?.length > 0).length;
-    console.log(`${name}: ${liveCount} Categories: ${catCount}`);
-  });
 }
 
 export async function initializeFullVisaDatabase(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    try {
-      autoRebuildAllCountries();
-      const count = Object.keys(BASE_COUNTRY_VISAS || {}).length;
-      if (count >= 200) {
-        resolve();
-      } else {
-        setTimeout(() => {
-          autoRebuildAllCountries();
-          resolve();
-        }, 50);
-      }
-    } catch (err) {
-      reject(err);
-    }
-  });
+  autoRebuildAllCountries();
 }
 
-// Run auto-rebuild immediately on load
+// Run auto-rebuild once on load
 autoRebuildAllCountries();
 
 

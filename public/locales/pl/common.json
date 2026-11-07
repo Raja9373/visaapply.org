@@ -1,0 +1,16 @@
+{
+  "siteName": "VisaApply.org",
+  "heroTitle": "Dokąd chcesz podróżować?",
+  "heroSubtitle": "Wybierz kraj pochodzenia i cel podróży spośród 249 państw (61 752 tras wizowych).",
+  "visaTypes": "Rodzaje Wiz",
+  "visas": "Wiz",
+  "liveTime": "CZAS LOKALNY",
+  "processing": "CZAS OCZEKIWANIA",
+  "hotelFrom": "HOTELE OD",
+  "searchFlights": "Szukaj Lotów",
+  "eligibility": "Sprawdź Kwalifikację Wizową w 30 Sekund",
+  "fromPassport": "Z (Paszport / Kraj zamieszkania)",
+  "toDestination": "Do (Kraj docelowy)",
+  "swapRoute": "⇄ Zamień",
+  "allDestinations": "Wszystkie Kierunki Świata (249 Krajów)"
+}

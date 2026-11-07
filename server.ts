@@ -151,9 +151,19 @@ seedInitialArticles();
 
 // Detect User Geo
 app.get('/api/geo', (req, res) => {
-  const ipCountry = req.headers['x-vercel-ip-country'] as string || req.query.country as string || 'IN';
-  const found = COUNTRIES.find(c => c.code.toLowerCase() === ipCountry.toLowerCase()) || COUNTRIES[10]; // Default India
-  res.json({ country: found });
+  const ipCountry = (
+    (req.headers['cf-ipcountry'] as string) ||
+    (req.headers['x-vercel-ip-country'] as string) ||
+    (req.headers['x-country-code'] as string) ||
+    (req.headers['x-appengine-country'] as string) ||
+    (req.query.country as string) ||
+    ''
+  ).trim().toUpperCase();
+  const found = ipCountry
+    ? COUNTRIES.find(c => c.code.toUpperCase() === ipCountry)
+    : undefined;
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({ country: found || null, countryCode: ipCountry || null });
 });
 
 // Get Countries list
@@ -776,8 +786,38 @@ app.get('/llms.txt', (req, res) => {
   if (fs.existsSync(llmsPath)) {
     return res.status(200).send(fs.readFileSync(llmsPath, 'utf-8'));
   }
-  res.status(200).send('# VisaApply.org — Global Visa Intelligence & Official Consular Guide Portal (2026)\nhttps://www.visaapply.org\n');
+  res.status(200).send(`# VisaApply.org\n\n> Global Visa Intelligence & Official Consular Guide Portal (2026)\n\n## Core Links\n- [Homepage](https://www.visaapply.org/): 249 countries and 61,752 routes.\n- [Routes Matrix](https://www.visaapply.org/routes): Any-to-any visa requirements.\n- [Sitemap](https://www.visaapply.org/sitemap.xml): XML sitemap.\n`);
 });
+
+const handleAiCatalogJson = (req: any, res: any) => {
+  const catalogPath = path.join(__dirname, 'public', 'ai-catalog.json');
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  if (fs.existsSync(catalogPath)) {
+    return res.status(200).send(fs.readFileSync(catalogPath, 'utf-8'));
+  }
+  return res.status(200).json({
+    $schema: 'https://schemas.agentdiscovery.org/v1/ai-catalog.json',
+    version: '1.0',
+    title: 'VisaApply.org Global Visa Intelligence Catalog',
+    name: 'VisaApply.org',
+    description: 'Global visa intelligence portal covering 249 ISO countries and 61,752 routes.',
+    url: 'https://www.visaapply.org/',
+    documentation: 'https://www.visaapply.org/llms.txt',
+    sitemap: 'https://www.visaapply.org/sitemap.xml',
+    resources: [
+      {
+        id: 'global-visa-directory',
+        name: '249-Country Global Visa Directory',
+        type: 'web',
+        url: 'https://www.visaapply.org/',
+        description: 'Interactive visa requirements, processing times, fees, and document checklists for 249 countries.'
+      }
+    ]
+  });
+};
+
+app.get(['/ai-catalog.json', '/.well-known/ai-catalog.json'], handleAiCatalogJson);
 
 app.get('/robots.txt', (req, res) => {
   const robotsPath = path.join(__dirname, 'public', 'robots.txt');
@@ -813,12 +853,12 @@ const TOP_VISA_COUNTS_SSR: Record<string, number> = {
 
 function getServerSideOgMeta(pathname: string) {
   const clean = (pathname || '/').split('?')[0].replace(/\/+$/, '') || '/';
-  const langStripped = clean.replace(/^\/(en|hi|ar|fr|de|es|ru|zh|ja|pt)(\/|$)/i, '/') || '/';
+  const langStripped = clean.replace(/^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/|$)/i, '/') || '/';
 
   let ogTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
   let ogDesc = "249 countries, 14,084+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
-  let ogImage = "https://visaapply.org/og-image.jpg";
-  let ogUrl = `https://visaapply.org${clean === '/' ? '' : clean}`;
+  let ogImage = "https://www.visaapply.org/og-image.jpg";
+  let ogUrl = `https://www.visaapply.org${clean === '/' ? '/' : clean}`;
   let twitterTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries";
   let twitterDesc = "249 countries, 14,084+ visas, 61,752 routes, 10 languages, auto-update daily";
 

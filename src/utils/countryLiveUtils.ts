@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf';
 import { getCountryMeta } from '../data/countryMetaData';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 
@@ -6,8 +5,15 @@ const weatherCache = new Map<string, { temp: string; emoji: string; desc: string
 const currencyCache = new Map<string, string>();
 let allRatesCache: Record<string, number> | null = null;
 let allRatesFetchPromise: Promise<Record<string, number> | null> | null = null;
+const liveTimeCache = new Map<string, { minuteBucket: number; result: { time: string; diffFromIST: string } }>();
 
 export function getLiveLocalTime(timeZone: string): { time: string; diffFromIST: string } {
+  const tzKey = timeZone || 'UTC';
+  const minuteBucket = Math.floor(Date.now() / 60000);
+  const cached = liveTimeCache.get(tzKey);
+  if (cached && cached.minuteBucket === minuteBucket) {
+    return cached.result;
+  }
   try {
     const now = new Date();
     const localTime = now.toLocaleTimeString('en-IN', {
@@ -29,7 +35,9 @@ export function getLiveLocalTime(timeZone: string): { time: string; diffFromIST:
     if (diffHours === 0) diffText = "Same as IST";
     else if (diffHours > 0) diffText = `${Math.abs(diffHours)}h ahead of IST`;
     else diffText = `${Math.abs(diffHours)}h behind IST`;
-    return { time: `${localTime} ${localDay}`, diffFromIST: diffText };
+    const result = { time: `${localTime} ${localDay}`, diffFromIST: diffText };
+    liveTimeCache.set(tzKey, { minuteBucket, result });
+    return result;
   } catch (e) {
     return { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), diffFromIST: "IST" };
   }
@@ -133,48 +141,50 @@ export function generateChecklistPDF(
   visaNameOrOpts: string | ChecklistPDFOptions,
   countryNameArg?: string
 ): void {
-  const opts: ChecklistPDFOptions =
-    typeof visaNameOrOpts === 'string'
-      ? {
-          visaName: visaNameOrOpts,
-          countryName: countryNameArg || 'Destination Country'
-        }
-      : visaNameOrOpts;
+  void (async () => {
+    const { jsPDF } = await import('jspdf');
+    const opts: ChecklistPDFOptions =
+      typeof visaNameOrOpts === 'string'
+        ? {
+            visaName: visaNameOrOpts,
+            countryName: countryNameArg || 'Destination Country'
+          }
+        : visaNameOrOpts;
 
-  const code = (opts.countryCode || 'us').toLowerCase();
-  const meta = getCountryMeta(code);
-  const embassy = getEmbassyInfo(code.toUpperCase());
+    const code = (opts.countryCode || 'us').toLowerCase();
+    const meta = getCountryMeta(code);
+    const embassy = getEmbassyInfo(code.toUpperCase());
 
-  const fee = opts.fee || '$150 - $250 (Official Consular Fee)';
-  const validity = opts.validity || 'Up to 1 - 10 Years (Category Dependent)';
-  const processing = opts.processing || meta.processing || '10-15 Working Days';
-  const docs =
-    opts.docs && opts.docs.length > 0
-      ? opts.docs
-      : [
-          'Valid Passport (minimum 6 months validity beyond travel dates, at least 2 blank pages)',
-          'Completed & Signed Official Visa Application Form',
-          '2 Recent Biometric Passport Photographs (35x45mm or 2x2 inch, white background)',
-          'Last 6 Months Certified Bank Statements with sufficient closing balance',
-          'Income Tax Returns (ITR) / Form 16 for the last 2-3 financial years',
-          'Confirmed Return Flight Itinerary & Hotel Accommodation Booking',
-          'Comprehensive International Travel & Medical Insurance ($50,000 / EUR 30,000 coverage)',
-          'Employment NOC / Leave Approval Letter or Business Registration Certificate'
-        ];
+    const fee = opts.fee || '$150 - $250 (Official Consular Fee)';
+    const validity = opts.validity || 'Up to 1 - 10 Years (Category Dependent)';
+    const processing = opts.processing || meta.processing || '10-15 Working Days';
+    const docs =
+      opts.docs && opts.docs.length > 0
+        ? opts.docs
+        : [
+            'Valid Passport (minimum 6 months validity beyond travel dates, at least 2 blank pages)',
+            'Completed & Signed Official Visa Application Form',
+            '2 Recent Biometric Passport Photographs (35x45mm or 2x2 inch, white background)',
+            'Last 6 Months Certified Bank Statements with sufficient closing balance',
+            'Income Tax Returns (ITR) / Form 16 for the last 2-3 financial years',
+            'Confirmed Return Flight Itinerary & Hotel Accommodation Booking',
+            'Comprehensive International Travel & Medical Insurance ($50,000 / EUR 30,000 coverage)',
+            'Employment NOC / Leave Approval Letter or Business Registration Certificate'
+          ];
 
-  const steps =
-    opts.steps && opts.steps.length > 0
-      ? opts.steps
-      : [
-          'Verify visa category eligibility and prepare all required original documents',
-          'Complete the online visa application form on the official portal',
-          'Pay the official government visa fee and biometric fee online',
-          'Schedule an appointment at the nearest VFS Global / Consulate center',
-          'Attend biometrics collection and submit supporting documentation',
-          'Track application status online and collect passport upon approval'
-        ];
+    const steps =
+      opts.steps && opts.steps.length > 0
+        ? opts.steps
+        : [
+            'Verify visa category eligibility and prepare all required original documents',
+            'Complete the online visa application form on the official portal',
+            'Pay the official government visa fee and biometric fee online',
+            'Schedule an appointment at the nearest VFS Global / Consulate center',
+            'Attend biometrics collection and submit supporting documentation',
+            'Track application status online and collect passport upon approval'
+          ];
 
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
   let y = 40;
 
@@ -287,9 +297,10 @@ export function generateChecklistPDF(
   doc.text(`Phone: ${missionPhone}   |   Email: ${missionEmail}`, 52, y + 54);
   doc.text(`Official Portal: ${embassy.officialWebsite || 'https://visaapply.org'}`, 52, y + 67);
 
-  const safeCountry = (opts.countryName || 'Country').replace(/[^a-zA-Z0-9]+/g, '_');
-  const safeVisa = (opts.visaName || 'Visa').replace(/[^a-zA-Z0-9]+/g, '_').slice(0, 40);
-  doc.save(`${safeCountry}_${safeVisa}_Checklist.pdf`);
+    const safeCountry = (opts.countryName || 'Country').replace(/[^a-zA-Z0-9]+/g, '_');
+    const safeVisa = (opts.visaName || 'Visa').replace(/[^a-zA-Z0-9]+/g, '_').slice(0, 40);
+    doc.save(`${safeCountry}_${safeVisa}_Checklist.pdf`);
+  })();
 }
 
 if (typeof window !== 'undefined') {

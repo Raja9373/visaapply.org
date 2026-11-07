@@ -20,6 +20,10 @@ export default defineConfig(() => {
         },
       },
     ],
+    build: {
+      sourcemap: true,
+      target: 'es2022',
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
