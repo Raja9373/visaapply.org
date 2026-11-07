@@ -2408,18 +2408,18 @@ export default function App() {
     <div className="min-h-screen flex flex-col text-slate-900 font-sans">
       {/* Official VFS-Style Top Header */}
       <header className="sticky top-0 z-50 bg-[#0B3D91] text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Zone */}
           <div 
             onClick={() => navigate('/')} 
-            className="flex items-center gap-3 cursor-pointer shrink-0"
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer min-w-0 shrink-0"
           >
-            <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center border border-white/20">
-              <Globe className="w-6 h-6 text-blue-200" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/10 flex items-center justify-center border border-white/20 shrink-0">
+              <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-blue-200" />
             </div>
-            <div>
-              <span className="text-xl font-bold tracking-tight text-white block">VisaApply.org</span>
-              <span className="text-xs text-blue-200 tracking-wide font-medium">61,752 Routes • 249 Countries</span>
+            <div className="min-w-0">
+              <span className="text-lg sm:text-xl font-bold tracking-tight text-white block truncate">VisaApply.org</span>
+              <span className="text-[11px] sm:text-xs text-blue-200 tracking-wide font-medium block truncate">61,752 Routes • 249 Countries</span>
             </div>
           </div>
 
@@ -2445,15 +2445,15 @@ export default function App() {
           </nav>
 
           {/* Primary Action / 15-Language Switcher + Geo Indicator */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {/* Part B: Auto Language Switcher Dropdown */}
-            <div className="flex items-center gap-1 bg-white/10 hover:bg-white/15 px-2.5 py-1.5 rounded-xl border border-white/20 text-xs">
+            <div className="flex items-center gap-1 bg-white/10 hover:bg-white/15 px-2 sm:px-2.5 py-1.5 rounded-xl border border-white/20 text-xs">
               <span>🌐</span>
               <select
                 aria-label="Select Language"
                 value={uiLang}
                 onChange={(e) => handleLanguageChange(e.target.value as SupportedLangCode)}
-                className="bg-transparent text-white font-bold text-xs focus:outline-none cursor-pointer"
+                className="bg-transparent text-white font-bold text-xs focus:outline-none cursor-pointer max-w-[92px] sm:max-w-none truncate"
               >
                 {SUPPORTED_LANGUAGES_10.map((l) => (
                   <option key={l.code} value={l.code} className="text-slate-900 font-semibold">
@@ -3114,32 +3114,47 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         </div>
 
         {/* Phase 2 Step 1: Advanced Search Bar + Live Suggestions Dropdown */}
-        <div className="max-w-[800px] mx-auto mb-6 relative">
-          <div className="flex items-center bg-white border-2 border-[#e2e8f0] focus-within:border-[#3b82f6] rounded-2xl px-5 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-colors">
-            <span className="text-xl mr-3">🔍</span>
-            <input
-              id="country-search"
-              type="text"
-              value={targetSearch}
-              onFocus={() => setShowSuggestions(true)}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 180)}
-              onChange={(e) => {
-                setTargetSearch(e.target.value);
-                setShowSuggestions(true);
-              }}
-              placeholder={ui.searchPlaceholder}
-              className="flex-1 border-none outline-none text-[15px] font-medium text-slate-900 bg-transparent"
-            />
-            {targetSearch && (
-              <button
-                type="button"
-                onClick={() => setTargetSearch('')}
-                className="mr-2 text-xs font-bold text-slate-400 hover:text-slate-600 px-2 py-1 cursor-pointer"
-              >
-                ✕
-              </button>
-            )}
-            <span className="bg-[#f1f5f9] px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#334155] shrink-0">
+        <div
+          className={`w-full md:max-w-[800px] md:mx-auto mb-6 relative z-30 md:z-20 scroll-mt-24 max-md:sticky max-md:top-20 max-md:bg-slate-50/95 max-md:backdrop-blur-sm max-md:py-2.5 max-md:px-1 md:p-0 md:bg-transparent transition-all`}
+        >
+          <div className="w-full flex items-center bg-white border-2 border-[#e2e8f0] focus-within:border-[#3b82f6] rounded-2xl px-3.5 py-2.5 md:px-5 md:py-3 shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-colors">
+            <span className="text-lg md:text-xl mr-2.5 md:mr-3 shrink-0 pointer-events-none">🔍</span>
+            <div className="relative flex-1 min-w-0 flex items-center">
+              <input
+                id="country-search"
+                type="text"
+                value={targetSearch}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 180)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setTargetSearch(val);
+                  if (setSearchQuery) setSearchQuery(val);
+                  setShowSuggestions(true);
+                }}
+                placeholder={ui.searchPlaceholder}
+                className="w-full min-w-0 pr-9 border-none outline-none text-sm md:text-[15px] font-medium text-slate-900 bg-transparent truncate touch-manipulation"
+              />
+              {targetSearch.length > 0 && (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  title="Clear search"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    setTargetSearch('');
+                    if (setSearchQuery) setSearchQuery('');
+                    setShowSuggestions(false);
+                    const inputEl = document.getElementById('country-search') as HTMLInputElement | null;
+                    inputEl?.focus();
+                  }}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:bg-slate-200 transition-colors cursor-pointer touch-manipulation"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <span className="hidden md:inline-block ml-2 bg-[#f1f5f9] px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#334155] shrink-0">
               249 COUNTRIES
             </span>
           </div>
@@ -3147,7 +3162,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           {/* Search Suggestions Dropdown */}
           <div
             id="search-suggestions"
-            className={`absolute top-full left-0 right-0 bg-white rounded-xl border border-[#e2e8f0] shadow-[0_12px_24px_rgba(0,0,0,0.1)] mt-2 max-h-[300px] overflow-y-auto z-20 ${
+            className={`absolute top-full left-1 right-1 md:left-0 md:right-0 bg-white rounded-xl border border-[#e2e8f0] shadow-[0_12px_24px_rgba(0,0,0,0.1)] mt-2 max-h-[55vh] md:max-h-[300px] overflow-y-auto z-30 md:z-20 ${
               showSuggestions && targetSearch.trim().length > 0 && searchSuggestions.length > 0 ? 'block' : 'hidden'
             }`}
           >
@@ -3159,10 +3174,10 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   key={country.code}
                   type="button"
                   onMouseDown={() => navigate(`/${originCode}-to-${destCode}`)}
-                  className="w-full px-4 py-2.5 text-left hover:bg-blue-50/70 flex items-center justify-between border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
+                  className="w-full px-3.5 md:px-4 py-2.5 text-left hover:bg-blue-50/70 flex items-center justify-between gap-2 border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-2xl">{getCountryFlag(country.code)}</span>
+                  <div className="flex items-center gap-2.5 md:gap-3 min-w-0">
+                    <span className="text-xl md:text-2xl shrink-0">{getCountryFlag(country.code)}</span>
                     <div className="min-w-0">
                       <div className="font-bold text-sm text-slate-900 truncate">
                         {getCountryFullName(country.code)}
@@ -3170,7 +3185,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                       <div className="text-xs text-slate-600 truncate">{reason}</div>
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-[#1d4ed8] bg-blue-50 px-2.5 py-1 rounded-lg shrink-0">
+                  <span className="text-[11px] md:text-xs font-bold text-[#1d4ed8] bg-blue-50 px-2 md:px-2.5 py-1 rounded-lg shrink-0">
                     {getVisaCount(originCode, destCode)} Visas ({originCode.toUpperCase()} → {destCode.toUpperCase()})
                   </span>
                 </button>
@@ -3659,15 +3674,32 @@ function SitemapView({ countries, navigate }: any) {
       </div>
 
       {/* Search Bar */}
-      <div className="max-w-md mb-8 relative">
-        <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+      <div className="w-full max-w-md mb-8 relative z-20 scroll-mt-24 sm:scroll-mt-28">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
         <input 
           type="text"
           value={search}
+          onFocus={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            if (rect.top < 88 && typeof window !== 'undefined') {
+              window.scrollBy({ top: rect.top - 96, behavior: 'smooth' });
+            }
+          }}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search country or code (e.g. US, Dubai, Germany)..."
-          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91] shadow-sm"
+          className="w-full min-h-[44px] pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91] shadow-sm touch-manipulation"
         />
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch('')}
+            aria-label="Clear search"
+            title="Clear search"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:bg-slate-200 transition-colors cursor-pointer touch-manipulation"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -5305,11 +5337,17 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
             {/* FAQ Search Input */}
             {faqs && faqs.length > 0 && (
-              <div className="relative w-full sm:w-72">
+              <div className="relative w-full sm:w-72 z-20 scroll-mt-24 sm:scroll-mt-28">
                 <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={faqSearchQuery}
+                  onFocus={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    if (rect.top < 88 && typeof window !== 'undefined') {
+                      window.scrollBy({ top: rect.top - 96, behavior: 'smooth' });
+                    }
+                  }}
                   onChange={(e) => setFaqSearchQuery(e.target.value)}
                   placeholder={isJa ? "FAQを検索..." : "Search FAQs..."}
                   className="w-full min-h-[44px] pl-10 pr-10 py-2.5 sm:py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B3D91] focus:bg-white text-slate-800 touch-manipulation"
