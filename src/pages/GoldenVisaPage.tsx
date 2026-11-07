@@ -18,6 +18,7 @@ import {
   Compass,
   ArrowRight
 } from 'lucide-react';
+import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
 
 interface GoldenVisaPageProps {
   onNavigate: (path: string) => void;
@@ -448,6 +449,9 @@ export const GoldenVisaPage: React.FC<GoldenVisaPageProps> = ({ onNavigate }) =>
               <span>Golden Visa Directory &amp; Comparison</span>
             </button>
           </div>
+
+          {/* Phase 1 TOP Free Tools Strip */}
+          <TopFreeToolsStrip onNavigate={onNavigate} theme="dark" className="mt-6" />
         </div>
       </div>
 

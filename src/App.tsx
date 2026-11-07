@@ -25,6 +25,12 @@ import { RoutesPage } from './pages/RoutesPage';
 import { ImmigrationUpdatesPage } from './pages/ImmigrationUpdatesPage';
 import { AtlysVsVisaApplyPage } from './pages/AtlysVsVisaApplyPage';
 import { GoldenVisaPage } from './pages/GoldenVisaPage';
+import { DummyTicketPage } from './pages/DummyTicketPage';
+import { CoverLetterGeneratorPage } from './pages/CoverLetterGeneratorPage';
+import { EmbassySlotAlertPage } from './pages/EmbassySlotAlertPage';
+import { PhotoResizerPage } from './pages/PhotoResizerPage';
+import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
+import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
@@ -58,7 +64,8 @@ import {
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
   ArrowRight, ExternalLink, Clock, DollarSign, Menu, X, ChevronRight, Check,
-  Mail, Copy, Send, MapPin, Phone, ChevronDown, ArrowUp, Navigation
+  Mail, Copy, Send, MapPin, Phone, ChevronDown, ArrowUp, Navigation,
+  Camera, Zap, Bell
 } from 'lucide-react';
 
 import { ALL_249_ISO_FORCED } from './data/all249Countries';
@@ -306,6 +313,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isAdminRoute = path === '/admin' || path.startsWith('/admin/');
   const isAtlysVsVisaApply = path === '/atlys-vs-visaapply' || path === '/atlys-vs-visaapply/';
   const isGoldenVisa = path === '/golden-visa' || path === '/golden-visa/';
+  const isDummyTicket = path === '/dummy-ticket' || path === '/dummy-ticket/';
+  const isCoverLetter = path === '/cover-letter-generator' || path === '/cover-letter-generator/';
+  const isSlotAlert = path === '/embassy-slot-alert' || path === '/embassy-slot-alert/';
+  const isPhotoResizer = path === '/photo-resizer' || path === '/photo-resizer/';
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -347,6 +358,18 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     description = 'Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.';
     ogImageUrl = 'https://visaapply.org/og/golden-visa.jpg';
     ogImageAlt = 'Golden Visa & Residency by Investment 2026 - VisaApply.org';
+  } else if (isDummyTicket) {
+    title = 'Dummy Ticket - Flight + Hotel Reservation for Visa – VisaApply.org';
+    description = 'Official verifiable flight and hotel reservations for visa applications. Real GDS airline PNR and hotel booking voucher valid for 7–14 days. Delivered on WhatsApp in 4 hours.';
+  } else if (isCoverLetter) {
+    title = 'Free Cover Letter Generator for Visa – VisaApply.org';
+    description = 'Auto-generate a proper formal visa cover letter in English for Schengen, USA, UK, Canada, and 249 nations. Free instant PDF download with ties to home country.';
+  } else if (isSlotAlert) {
+    title = 'Embassy Slot Alert - USA / Schengen – VisaApply.org';
+    description = 'USA ka slot khulte hi sabse pehle pata chalega. Automated 24/7 consular slot tracking on WhatsApp & Email for US Consulates in India and Schengen VFS centers.';
+  } else if (isPhotoResizer) {
+    title = 'Visa Photo Resizer - Free Online – VisaApply.org';
+    description = 'Free online visa photo resizer and cropper. 35x45mm (Schengen/UK), 2x2 inch (USA DS-160), or 51x51mm at 300 DPI. 100% private client-side browser processing.';
   } else if (isRoutes) {
     title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
     description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
@@ -538,6 +561,14 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Atlys vs VisaApply", "item": `${baseUrl}/atlys-vs-visaapply` });
   } else if (isGoldenVisa) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Golden Visa", "item": `${baseUrl}/golden-visa` });
+  } else if (isDummyTicket) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Dummy Ticket", "item": `${baseUrl}/dummy-ticket` });
+  } else if (isCoverLetter) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Cover Letter Generator", "item": `${baseUrl}/cover-letter-generator` });
+  } else if (isSlotAlert) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Embassy Slot Alert", "item": `${baseUrl}/embassy-slot-alert` });
+  } else if (isPhotoResizer) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Photo Resizer", "item": `${baseUrl}/photo-resizer` });
   } else if (isRoutes) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "61,752 Visa Routes", "item": `${baseUrl}/routes` });
   } else if (isAbout) {
@@ -2170,6 +2201,7 @@ export default function App() {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(true);
 
   useEffect(() => {
@@ -2486,6 +2518,10 @@ export default function App() {
   const isAnyAdminRoute = routePath === '/admin' || routePath.startsWith('/admin/');
   const isAtlysVsVisaApply = routePath === '/atlys-vs-visaapply' || routePath === '/atlys-vs-visaapply/';
   const isGoldenVisa = routePath === '/golden-visa' || routePath === '/golden-visa/';
+  const isDummyTicket = routePath === '/dummy-ticket' || routePath === '/dummy-ticket/';
+  const isCoverLetter = routePath === '/cover-letter-generator' || routePath === '/cover-letter-generator/';
+  const isSlotAlert = routePath === '/embassy-slot-alert' || routePath === '/embassy-slot-alert/';
+  const isPhotoResizer = routePath === '/photo-resizer' || routePath === '/photo-resizer/';
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2531,7 +2567,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2571,6 +2607,76 @@ export default function App() {
               <span>✨</span>
               <span>Golden Visa</span>
             </button>
+
+            {/* Services Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setServicesDropdownOpen(true)}
+              onMouseLeave={() => setServicesDropdownOpen(false)}
+            >
+              <button 
+                type="button"
+                onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
+                className={`flex items-center gap-1 transition-colors cursor-pointer py-1.5 ${
+                  isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer 
+                    ? 'text-amber-300 font-bold' 
+                    : 'text-blue-100 hover:text-white'
+                }`}
+              >
+                <span>Services</span>
+                <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+
+              {servicesDropdownOpen && (
+                <div className="absolute top-full left-0 w-64 bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/dummy-ticket'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Plane className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Dummy Ticket</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">Free Guide &amp; Sample PDF</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/cover-letter-generator'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-emerald-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Cover Letter Generator</div>
+                      <div className="text-[10px] text-blue-200 font-normal">100% Free PDF Download</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/embassy-slot-alert'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Zap className="w-4 h-4 text-yellow-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Embassy Slot Alert</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">First Alert FREE (WhatsApp)</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/photo-resizer'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Camera className="w-4 h-4 text-purple-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Visa Photo Resizer</div>
+                      <div className="text-[10px] text-blue-200 font-normal">35x45mm / 2x2" (300 DPI)</div>
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
+
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navInterview}</button>
             <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navAbout}</button>
@@ -2602,95 +2708,84 @@ export default function App() {
                 <span className="truncate max-w-[110px]">{getLocalizedCountryName((selectedOrigin || detectedCountry)!.code, uiLang, (selectedOrigin || detectedCountry)!.name)}</span>
               </div>
             )}
+            {/* Animated Hamburger Button */}
             <button 
               type="button"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               title={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-white hover:bg-white/10 rounded-lg"
+              className="lg:hidden p-2 text-white hover:bg-white/10 active:bg-white/20 rounded-xl transition-all relative flex items-center justify-center w-10 h-10 focus:outline-none cursor-pointer"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <div className="w-5 h-4 flex flex-col justify-between items-center relative">
+                <span 
+                  className={`h-0.5 w-5 bg-white rounded-full transition-all duration-300 ease-in-out transform origin-center ${
+                    mobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''
+                  }`} 
+                />
+                <span 
+                  className={`h-0.5 w-5 bg-white rounded-full transition-all duration-200 ease-in-out ${
+                    mobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
+                  }`} 
+                />
+                <span 
+                  className={`h-0.5 w-5 bg-white rounded-full transition-all duration-300 ease-in-out transform origin-center ${
+                    mobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''
+                  }`} 
+                />
+              </div>
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#09327a] px-6 py-4 border-t border-blue-900/50 space-y-3">
-            <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navHome}</button>
-            <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold">{getUIString(uiLang).navRoutes}</button>
-            <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">{getUIString(uiLang).navFlights}</button>
-            <div className="py-1">
-              <button
-                type="button"
-                onClick={() => { navigate('/golden-visa'); setMobileMenuOpen(false); }}
-                className="golden-visa-premium-btn px-4 py-2 text-xs font-black inline-flex"
-              >
-                <span>✨</span>
-                <span>Golden Visa</span>
-              </button>
-            </div>
-            <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navBlogs}</button>
-            <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navInterview}</button>
-            <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navAbout}</button>
-            <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
-          </div>
-        )}
-      </header>
-
-      {/* Auto-Detected VPN / IP Location & Native Language Bar */}
-      <div className="bg-slate-900 text-slate-200 border-b border-slate-800 px-4 py-2 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-            <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold text-[11px]">
-              ● AUTO-GEO
-            </span>
-            <span className="font-semibold text-white">
-              {detectedCountry ? (
-                <>
-                  {detectedCountry.flag}{' '}
-                  {getUIString(uiLang)
-                    .detectedBanner.replace(
-                      '{country}',
-                      `${getLocalizedCountryName(detectedCountry.code, uiLang, detectedCountry.name)} (${detectedCountry.code})`
-                    )
-                    .replace('{lang}', `${getLanguageOption(uiLang).flag} ${getLanguageOption(uiLang).nativeName}`)}
-                </>
-              ) : (
-                `${getLanguageOption(uiLang).flag} ${getLanguageOption(uiLang).nativeName}`
-              )}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 flex-wrap justify-center">
-            <span className="text-[11px] text-slate-400 font-medium">Instant Country/VPN Test:</span>
-            {[
-              { code: 'PL', label: '🇵🇱 Poland (PL)' },
-              { code: 'DE', label: '🇩🇪 Germany (DE)' },
-              { code: 'ES', label: '🇪🇸 Spain (ES)' },
-              { code: 'FR', label: '🇫🇷 France (FR)' },
-              { code: 'AE', label: '🇦🇪 UAE (AR)' },
-              { code: 'IN', label: '🇮🇳 India (HI)' },
-              { code: 'US', label: '🇺🇸 USA (EN)' }
-            ].map((item) => {
-              const isCurrent = detectedCountry?.code === item.code;
-              return (
+        {/* Animated Mobile Menu Drawer */}
+        <div 
+          className={`lg:hidden mobile-nav-drawer bg-[#09327a] border-t border-blue-900/50 shadow-2xl ${
+            mobileMenuOpen ? 'open' : ''
+          }`}
+        >
+          <div>
+            <div className="px-6 py-4 space-y-3">
+              <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">{getUIString(uiLang).navHome}</button>
+              <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold transition-colors">{getUIString(uiLang).navRoutes}</button>
+              <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold transition-colors">{getUIString(uiLang).navFlights}</button>
+              <div className="py-1">
                 <button
-                  key={item.code}
                   type="button"
-                  onClick={() => handleSimulateVpnCountry(item.code)}
-                  className={`px-2 py-0.5 rounded-md text-[11px] font-bold transition-colors cursor-pointer ${
-                    isCurrent
-                      ? 'bg-blue-600 text-white border border-blue-400'
-                      : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
-                  }`}
+                  onClick={() => { navigate('/golden-visa'); setMobileMenuOpen(false); }}
+                  className="golden-visa-premium-btn px-4 py-2 text-xs font-black inline-flex"
                 >
-                  {item.label}
+                  <span>✨</span>
+                  <span>Golden Visa</span>
                 </button>
-              );
-            })}
+              </div>
+
+              {/* Mobile Services Links */}
+              <div className="pt-2 pb-2 border-y border-blue-800/50 my-2 space-y-1">
+                <span className="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider block px-1">
+                  Free Services &amp; Tools
+                </span>
+                <button onClick={() => { navigate('/dummy-ticket'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  ✈️ Dummy Ticket (Flight &amp; Hotel)
+                </button>
+                <button onClick={() => { navigate('/cover-letter-generator'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  📄 Cover Letter Generator (PDF)
+                </button>
+                <button onClick={() => { navigate('/embassy-slot-alert'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  🔔 Embassy Slot Alert (USA / Schengen)
+                </button>
+                <button onClick={() => { navigate('/photo-resizer'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  📷 Visa Photo Resizer (300 DPI)
+                </button>
+              </div>
+
+              <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">{getUIString(uiLang).navBlogs}</button>
+              <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">{getUIString(uiLang).navInterview}</button>
+              <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">{getUIString(uiLang).navAbout}</button>
+              <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">Contact Us</button>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content Router */}
       <main className="flex-1">
@@ -2730,8 +2825,19 @@ export default function App() {
               isAdminAuthenticated={isAdminAuthenticated}
               adminToken={adminToken}
               onLogout={handleAdminLogout}
+              detectedCountry={detectedCountry}
+              uiLang={uiLang}
+              onSimulateVpnCountry={handleSimulateVpnCountry}
             />
           )
+        ) : isDummyTicket ? (
+          <DummyTicketPage onNavigate={navigate} />
+        ) : isCoverLetter ? (
+          <CoverLetterGeneratorPage onNavigate={navigate} />
+        ) : isSlotAlert ? (
+          <EmbassySlotAlertPage onNavigate={navigate} />
+        ) : isPhotoResizer ? (
+          <PhotoResizerPage onNavigate={navigate} />
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isGoldenVisa ? (
@@ -2842,19 +2948,40 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Compare</h4>
+            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Free Services &amp; Tools</h4>
             <ul className="space-y-2 text-sm">
               <li>
+                <button onClick={() => navigate('/dummy-ticket')} className="text-amber-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>✈️</span>
+                  <span>Dummy Ticket (Reservation)</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/cover-letter-generator')} className="text-emerald-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>📄</span>
+                  <span>Cover Letter Generator</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/embassy-slot-alert')} className="text-yellow-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🔔</span>
+                  <span>Embassy Slot Alert</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/photo-resizer')} className="text-blue-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>📷</span>
+                  <span>Visa Photo Resizer (300 DPI)</span>
+                </button>
+              </li>
+              <li className="pt-2 border-t border-slate-800">
                 <button 
                   onClick={() => navigate('/atlys-vs-visaapply')} 
-                  className="text-amber-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="text-amber-200 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>⚖️</span>
                   <span>Atlys vs VisaApply</span>
                 </button>
-              </li>
-              <li className="text-xs text-slate-300 leading-relaxed pt-1">
-                Zero service fees vs agency markups, 249 countries coverage, and direct sovereign government portal access.
               </li>
             </ul>
           </div>
@@ -3154,6 +3281,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal">
             {getUIString(uiLang).heroSubtitle}
           </p>
+
+          {/* Phase 1 TOP - Above the fold: 4 compact free tools cards */}
+          <TopFreeToolsStrip onNavigate={navigate} theme="dark" className="my-2" />
 
           {/* Part C: Any-to-Any FROM + Swap (⇄) + TO Selector Bar (61,752 Routes) */}
           <div className="max-w-4xl mx-auto bg-white p-3.5 rounded-2xl shadow-xl flex flex-col md:flex-row gap-3 items-center text-slate-900">
@@ -3776,6 +3906,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           </div>
         </div>
       </section>
+
+      {/* Phase 1 BOTTOM - Full Detail Services Section */}
+      <BottomFreeToolsSection onNavigate={navigate} />
 
       {/* Phase 4 Tool 1: Featured 249-Country SEO Blogs Carousel */}
       <FeaturedBlogsCarousel navigate={navigate} />
@@ -6391,7 +6524,10 @@ function AdminPortal({
   onDelete,
   navigate,
   isAdminAuthenticated,
-  onLogout
+  onLogout,
+  detectedCountry,
+  uiLang,
+  onSimulateVpnCountry
 }: any) {
   const [cooldown, setCooldown] = useState(0);
 
@@ -6457,6 +6593,56 @@ function AdminPortal({
           </button>
         </div>
       </div>
+
+      {/* Admin-Only Geo/VPN Simulator Toolbar (Hidden from Public View) */}
+      {onSimulateVpnCountry && (
+        <div className="bg-slate-900 text-slate-200 border-b border-slate-800 px-4 py-2 text-xs">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+              <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold text-[11px]">
+                🔧 ADMIN DEBUG: AUTO-GEO
+              </span>
+              <span className="font-semibold text-white">
+                {detectedCountry ? (
+                  <>
+                    Simulated: {detectedCountry.flag} {detectedCountry.name} ({detectedCountry.code}) • UI: {uiLang?.toUpperCase()}
+                  </>
+                ) : (
+                  'Auto-detect mode active'
+                )}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap justify-center">
+              <span className="text-[11px] text-slate-400 font-medium">Instant Country/VPN Test:</span>
+              {[
+                { code: 'PL', label: '🇵🇱 Poland' },
+                { code: 'DE', label: '🇩🇪 Germany' },
+                { code: 'ES', label: '🇪🇸 Spain' },
+                { code: 'FR', label: '🇫🇷 France' },
+                { code: 'AE', label: '🇦🇪 UAE' },
+                { code: 'IN', label: '🇮🇳 India' },
+                { code: 'US', label: '🇺🇸 USA' }
+              ].map((item) => {
+                const isCurrent = detectedCountry?.code === item.code;
+                return (
+                  <button
+                    key={item.code}
+                    type="button"
+                    onClick={() => onSimulateVpnCountry(item.code)}
+                    className={`px-2 py-0.5 rounded-md text-[11px] font-bold transition-colors cursor-pointer ${
+                      isCurrent
+                        ? 'bg-blue-600 text-white border border-blue-400'
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-200">

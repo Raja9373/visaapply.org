@@ -6,6 +6,7 @@ import {
 } from '../data/travelpayoutsConfig';
 import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
 import { getCountryMeta, getCapitalSlug } from '../data/countryMetaData';
+import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
 
 interface FlightsPageProps {
   onNavigate: (path: string) => void;
@@ -209,6 +210,9 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
           </span>
         </div>
       </div>
+
+      {/* Phase 1 TOP Free Tools Strip */}
+      <TopFreeToolsStrip onNavigate={onNavigate} theme="light" className="my-2" />
 
       {/* Top Route Selector (Origin + All 249 Destination Countries) */}
       <div

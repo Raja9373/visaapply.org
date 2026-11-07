@@ -925,6 +925,36 @@ function getServerSideOgMeta(pathname: string) {
     ogImage = "https://www.visaapply.org/og-image.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
+  } else if (langStripped === '/golden-visa') {
+    ogTitle = "Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org";
+    ogDesc = "Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.";
+    ogImage = "https://visaapply.org/og/golden-visa.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/dummy-ticket') {
+    ogTitle = "Dummy Ticket - Flight + Hotel Reservation for Visa – VisaApply.org";
+    ogDesc = "Official verifiable flight and hotel reservations for visa applications. Real GDS airline PNR and hotel booking voucher valid for 7–14 days. Delivered on WhatsApp in 4 hours.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/cover-letter-generator') {
+    ogTitle = "Free Cover Letter Generator for Visa – VisaApply.org";
+    ogDesc = "Auto-generate a proper formal visa cover letter in English for Schengen, USA, UK, Canada, and 249 nations. Free instant PDF download with ties to home country.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/embassy-slot-alert') {
+    ogTitle = "Embassy Slot Alert - USA / Schengen – VisaApply.org";
+    ogDesc = "USA ka slot khulte hi sabse pehle pata chalega. Automated 24/7 consular slot tracking on WhatsApp & Email for US Consulates in India and Schengen VFS centers.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/photo-resizer') {
+    ogTitle = "Visa Photo Resizer - Free Online – VisaApply.org";
+    ogDesc = "Free online visa photo resizer and cropper. 35x45mm (Schengen/UK), 2x2 inch (USA DS-160), or 51x51mm at 300 DPI. 100% private client-side browser processing.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
   } else {
     const level3Match = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
     const routeMatch = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})(?:-([a-z]+))?$/i);
