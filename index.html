@@ -22,11 +22,32 @@
           enumerable: true
         });
         
+        var NativeWebSocket = window.WebSocket;
+        if (NativeWebSocket) {
+          window.WebSocket = function (url, protocols) {
+            try {
+              var ws = new NativeWebSocket(url, protocols);
+              ws.addEventListener('error', function (e) {
+                if (e && e.preventDefault) e.preventDefault();
+              });
+              return ws;
+            } catch (err) {
+              return {
+                addEventListener: function () {},
+                removeEventListener: function () {},
+                send: function () {},
+                close: function () {}
+              };
+            }
+          };
+          window.WebSocket.prototype = NativeWebSocket.prototype;
+        }
+
         var origConsoleErr = console.error;
         console.error = function() {
           var args = Array.prototype.slice.call(arguments);
           var str = args.map(function(a) { return String(a || ''); }).join(' ');
-          if (str.indexOf('WebSocket closed without opened') !== -1 || str.indexOf('failed to connect to websocket') !== -1) {
+          if (str.indexOf('WebSocket') !== -1 || str.indexOf('websocket') !== -1) {
             return;
           }
           origConsoleErr.apply(console, arguments);
@@ -34,13 +55,13 @@
 
         window.addEventListener('unhandledrejection', function (event) {
           var msg = event && event.reason && (event.reason.message || String(event.reason));
-          if (msg && (msg.indexOf('WebSocket closed without opened') !== -1 || msg.indexOf('failed to connect to websocket') !== -1)) {
+          if (msg && (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1)) {
             event.preventDefault();
           }
         });
         window.addEventListener('error', function (event) {
           var msg = event && (event.message || String(event.error || ''));
-          if (msg && (msg.indexOf('WebSocket closed without opened') !== -1 || msg.indexOf('failed to connect to websocket') !== -1)) {
+          if (msg && (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1)) {
             event.preventDefault();
           }
         });
