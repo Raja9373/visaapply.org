@@ -44,9 +44,16 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 px-3.5 py-1.5 rounded-full text-xs font-extrabold text-emerald-300">
             <span>🌍 249 × 248 = 61,752 LIVE ANY-TO-ANY BILATERAL VISA ROUTES</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight">
-            Global Any-to-Any Visa Route Explorer (61,752 Routes)
-          </h1>
+          <div className="space-y-2">
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+              Global Any-to-Any Visa Route Explorer
+            </h1>
+            <div>
+              <span className="inline-block bg-blue-500/25 border border-blue-400/40 text-blue-200 px-3.5 py-1 rounded-full text-xs sm:text-sm font-extrabold whitespace-nowrap">
+                (61,752 Routes)
+              </span>
+            </div>
+          </div>
           <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto">
             Not just India to 249 countries — check bilateral visa counts, Visa-Free eligibility, local embassy locations, and flights from ANY passport/residence country to ANY destination worldwide.
           </p>
