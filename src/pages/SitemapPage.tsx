@@ -136,14 +136,14 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
             <div className="text-[11px] text-slate-600">249 Countries × 6 Categories</div>
           </a>
           <a
-            href="/sitemap-visas.xml"
+            href="/sitemap-visas-1.xml"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas.xml</div>
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas-1..15.xml</div>
             <div className="text-lg font-black text-slate-900 mt-0.5">14,084 Pages</div>
-            <div className="text-[11px] text-slate-600">Official Visa Subclass Detail Pages</div>
+            <div className="text-[11px] text-slate-600">Split into 15 XML Files (1,000 each)</div>
           </a>
           <a
             href="/sitemap-routes.xml"

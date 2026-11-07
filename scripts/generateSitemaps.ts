@@ -58,7 +58,7 @@ function generateCategoriesSitemap(): { filename: string; count: number } {
   return { filename, count };
 }
 
-function generateVisasSitemap(): { filename: string; count: number } {
+function generateVisasSitemaps(): { filenames: string[]; count: number } {
   const TARGET_VISA_COUNT = 14084;
   const urls: string[] = [];
   const seen = new Set<string>();
@@ -97,14 +97,29 @@ function generateVisasSitemap(): { filename: string; count: number } {
     }
   }
 
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-  for (const u of urls) {
-    xml += `  <url><loc>${u}</loc><lastmod>${LASTMOD}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+  const legacyPath = path.join(PUBLIC_DIR, 'sitemap-visas.xml');
+  if (fs.existsSync(legacyPath)) {
+    fs.unlinkSync(legacyPath);
   }
-  xml += `</urlset>\n`;
-  const filename = 'sitemap-visas.xml';
-  fs.writeFileSync(path.join(PUBLIC_DIR, filename), xml, 'utf-8');
-  return { filename, count: urls.length };
+
+  const CHUNK_SIZE = 1000;
+  const TOTAL_VISA_FILES = 15;
+  const filenames: string[] = [];
+
+  for (let i = 1; i <= TOTAL_VISA_FILES; i++) {
+    const startIdx = (i - 1) * CHUNK_SIZE;
+    const slice = urls.slice(startIdx, startIdx + CHUNK_SIZE);
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    for (const u of slice) {
+      xml += `  <url><loc>${u}</loc><lastmod>${LASTMOD}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+    }
+    xml += `</urlset>\n`;
+    const filename = `sitemap-visas-${i}.xml`;
+    fs.writeFileSync(path.join(PUBLIC_DIR, filename), xml, 'utf-8');
+    filenames.push(filename);
+  }
+
+  return { filenames, count: urls.length };
 }
 
 function generateRoutesSitemaps(): { filenames: string[]; totalRoutes: number } {
@@ -202,14 +217,14 @@ function generateBlogsSitemap(): { filename: string; count: number } {
 function buildMasterSitemapIndex(
   countriesFile: string,
   categoriesFile: string,
-  visasFile: string,
+  visaFiles: string[],
   blogsFile: string,
   routeFiles: string[]
 ) {
   const allSitemaps = [
     countriesFile,
     categoriesFile,
-    visasFile,
+    ...visaFiles,
     blogsFile,
     ...routeFiles
   ];
@@ -233,14 +248,14 @@ function main() {
 
   const cRes = generateCountriesSitemap();
   const catRes = generateCategoriesSitemap();
-  const vRes = generateVisasSitemap();
+  const vRes = generateVisasSitemaps();
   const rRes = generateRoutesSitemaps();
   const bRes = generateBlogsSitemap();
 
   buildMasterSitemapIndex(
     cRes.filename,
     catRes.filename,
-    vRes.filename,
+    vRes.filenames,
     bRes.filename,
     rRes.filenames
   );
@@ -250,7 +265,7 @@ function main() {
   console.log('✅ SITEMAP REBUILD COMPLETE (NO GSC API)');
   console.log(`- ${cRes.filename}: ${cRes.count} URLs`);
   console.log(`- ${catRes.filename}: ${catRes.count} URLs`);
-  console.log(`- ${vRes.filename}: ${vRes.count} URLs`);
+  console.log(`- sitemap-visas-1..15.xml (15 files): ${vRes.count} URLs`);
   console.log(`- sitemap-routes-1..70.xml (70 files): ${rRes.totalRoutes} URLs`);
   console.log(`- ${bRes.filename}: ${bRes.count} URLs`);
   console.log(`- Total Indexed Pages in sitemap-index.xml: ${grandTotal.toLocaleString()} URLs`);

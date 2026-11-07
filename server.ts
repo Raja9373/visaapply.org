@@ -709,7 +709,7 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     const subFiles = [
       'sitemap-countries.xml',
       'sitemap-categories.xml',
-      'sitemap-visas.xml',
+      ...Array.from({ length: 15 }, (_, i) => `sitemap-visas-${i + 1}.xml`),
       'sitemap-blogs.xml',
       ...Array.from({ length: 70 }, (_, i) => `sitemap-routes-${i + 1}.xml`)
     ];
