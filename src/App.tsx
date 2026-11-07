@@ -23,6 +23,7 @@ import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLink
 import { FlightsPage } from './pages/FlightsPage';
 import { RoutesPage } from './pages/RoutesPage';
 import { ImmigrationUpdatesPage } from './pages/ImmigrationUpdatesPage';
+import { AtlysVsVisaApplyPage } from './pages/AtlysVsVisaApplyPage';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
@@ -302,6 +303,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isAdminLogin = path === '/admin/login' || path === '/admin/login/';
   const isAdminUpdates = path === '/admin/updates' || path === '/admin/updates/';
   const isAdminRoute = path === '/admin' || path.startsWith('/admin/');
+  const isAtlysVsVisaApply = path === '/atlys-vs-visaapply' || path === '/atlys-vs-visaapply/';
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -333,6 +335,9 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isAdminRoute) {
     title = 'Admin Portal – VisaApply.org';
     description = 'Restricted administrator portal for VisaApply.org.';
+  } else if (isAtlysVsVisaApply) {
+    title = 'Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup';
+    description = 'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and 14,084+ official visa types.';
   } else if (isRoutes) {
     title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
     description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
@@ -500,6 +505,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
 
   if (isAdmin) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Admin Portal", "item": `${baseUrl}/admin` });
+  } else if (isAtlysVsVisaApply) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Atlys vs VisaApply", "item": `${baseUrl}/atlys-vs-visaapply` });
   } else if (isAbout) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "About Us & Editorial Policy", "item": `${baseUrl}/about` });
   } else if (isFlights) {
@@ -2352,6 +2359,7 @@ export default function App() {
   const isAdmin = routePath === '/admin' || routePath === '/admin/';
   const isAdminUpdates = routePath === '/admin/updates' || routePath === '/admin/updates/';
   const isAnyAdminRoute = routePath === '/admin' || routePath.startsWith('/admin/');
+  const isAtlysVsVisaApply = routePath === '/atlys-vs-visaapply' || routePath === '/atlys-vs-visaapply/';
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2397,7 +2405,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2431,17 +2439,6 @@ export default function App() {
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navInterview}</button>
             <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navAbout}</button>
-            {isAdminAuthenticated && (
-              <>
-                <button onClick={() => navigate('/admin/updates')} className={`transition-colors cursor-pointer ${isAdminUpdates ? 'text-cyan-300 font-bold' : 'text-cyan-200 hover:text-white'}`}>{getUIString(uiLang).navGovSync}</button>
-                <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${isAdmin ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1`}>
-                  <Shield className="w-3.5 h-3.5 text-amber-300" /> Admin
-                </button>
-                <button onClick={handleAdminLogout} className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg text-xs transition-colors cursor-pointer">
-                  Logout
-                </button>
-              </>
-            )}
           </nav>
 
           {/* Primary Action / 15-Language Switcher + Geo Indicator */}
@@ -2492,13 +2489,6 @@ export default function App() {
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navInterview}</button>
             <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navAbout}</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
-            {isAdminAuthenticated && (
-              <>
-                <button onClick={() => { navigate('/admin/updates'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-cyan-300 hover:text-white font-bold">{getUIString(uiLang).navGovSync}</button>
-                <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
-                <button onClick={() => { void handleAdminLogout(); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-red-300 hover:text-red-200 font-bold">Logout</button>
-              </>
-            )}
           </div>
         )}
       </header>
@@ -2597,6 +2587,8 @@ export default function App() {
               onLogout={handleAdminLogout}
             />
           )
+        ) : isAtlysVsVisaApply ? (
+          <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isRoutes ? (
           <RoutesPage onNavigate={navigate} />
         ) : isAbout ? (
@@ -2669,8 +2661,8 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="space-y-3 md:col-span-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="space-y-3">
             <div className="flex items-center gap-2 text-white">
               <Globe className="w-5 h-5 text-blue-400" />
               <span className="font-bold text-lg">VisaApply.org</span>
@@ -2702,18 +2694,60 @@ export default function App() {
             </ul>
           </div>
           <div>
+            <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Compare</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <button 
+                  onClick={() => navigate('/atlys-vs-visaapply')} 
+                  className="text-amber-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>⚖️</span>
+                  <span>Atlys vs VisaApply</span>
+                </button>
+              </li>
+              <li className="text-xs text-slate-300 leading-relaxed pt-1">
+                Zero service fees vs agency markups, 249 countries coverage, and direct sovereign government portal access.
+              </li>
+            </ul>
+          </div>
+          <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-300 font-semibold underline underline-offset-2 hover:text-white">contact@visaapply.org</a></li>
               <li className="text-xs text-slate-300">14,084+ Visa & Programme Guides across 249 Destination Countries</li>
               <li className="text-xs text-slate-300">AdSense Publisher: pub-9048615701580913</li>
-              <li><button onClick={() => navigate('/admin')} className="hover:text-white text-xs text-slate-300 transition-colors cursor-pointer">Admin Portal Access</button></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-300 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} VisaApply.org. All rights reserved. 14,084+ Visa & Programme Guides across 249 Destination Countries. Contact: <a href="mailto:contact@visaapply.org" className="text-blue-300 font-semibold underline underline-offset-2 hover:text-white">contact@visaapply.org</a></p>
-          <p className="text-blue-300 font-medium">Official Email: <a href="mailto:contact@visaapply.org" className="underline underline-offset-2 font-bold hover:text-white">contact@visaapply.org</a></p>
+          <p className="text-slate-400">© {new Date().getFullYear()} VisaApply.org. All rights reserved. 14,084+ Visa & Programme Guides across 249 Destination Countries.</p>
+          <div className="flex items-center gap-2 flex-wrap" style={{ fontSize: '11px', color: '#9ca3af' }}>
+            <span>© {new Date().getFullYear()} VisaApply.org</span>
+            <span>•</span>
+            <button
+              onClick={() => navigate('/privacy')}
+              style={{ fontSize: '11px', color: '#9ca3af' }}
+              className="hover:text-slate-200 transition-colors cursor-pointer bg-transparent border-0 p-0 font-normal"
+            >
+              Privacy
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => navigate('/terms')}
+              style={{ fontSize: '11px', color: '#9ca3af' }}
+              className="hover:text-slate-200 transition-colors cursor-pointer bg-transparent border-0 p-0 font-normal"
+            >
+              Terms
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => navigate('/admin/login')}
+              style={{ fontSize: '11px', color: '#9ca3af' }}
+              className="hover:text-slate-200 transition-colors cursor-pointer bg-transparent border-0 p-0 font-normal"
+            >
+              Admin
+            </button>
+          </div>
         </div>
       </footer>
     </div>

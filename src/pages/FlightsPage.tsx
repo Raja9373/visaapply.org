@@ -38,17 +38,35 @@ const INDIAN_ORIGIN_AIRPORTS = [
 
 const QUICK_POPULAR_FLIGHTS = [
   { code: 'ae', iata: 'DXB', name: 'Dubai', price: '₹14,800' },
-  { code: 'us', iata: 'NYC', name: 'USA (DEL/DXB→NYC)', price: '₹45,200' },
-  { code: 'gb', iata: 'LON', name: 'UK', price: '₹38,500' },
+  { code: 'us', iata: 'NYC', name: 'USA (NYC)', price: '₹45,200' },
+  { code: 'gb', iata: 'LHR', name: 'London (LHR)', price: '₹38,500' },
   { code: 'sg', iata: 'SIN', name: 'Singapore', price: '₹18,500' },
   { code: 'th', iata: 'BKK', name: 'Thailand', price: '₹12,500' },
   { code: 'au', iata: 'SYD', name: 'Australia', price: '₹52,000' },
 ];
 
+const IATA_AIRPORT_ALIASES: Record<string, { countryCode: string; iata: string }> = {
+  LHR: { countryCode: 'gb', iata: 'LHR' },
+  LGW: { countryCode: 'gb', iata: 'LGW' },
+  LON: { countryCode: 'gb', iata: 'LON' },
+  NYC: { countryCode: 'us', iata: 'NYC' },
+  JFK: { countryCode: 'us', iata: 'JFK' },
+  EWR: { countryCode: 'us', iata: 'EWR' },
+  DXB: { countryCode: 'ae', iata: 'DXB' },
+  AUH: { countryCode: 'ae', iata: 'AUH' },
+  FRA: { countryCode: 'de', iata: 'FRA' },
+  PAR: { countryCode: 'fr', iata: 'PAR' },
+  CDG: { countryCode: 'fr', iata: 'CDG' },
+};
+
 function resolveCountryAndIata(rawParam: string): { countryCode: string; iata: string } {
   const clean = (rawParam || 'ae').trim();
   const lower = clean.toLowerCase();
   const upper = clean.toUpperCase();
+
+  if (IATA_AIRPORT_ALIASES[upper]) {
+    return IATA_AIRPORT_ALIASES[upper];
+  }
 
   // Direct 2-letter country code match
   if (NAME_MAP_249[lower]) {
@@ -76,6 +94,17 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
   const [selectedCountry, setSelectedCountry] = useState<string>('ae');
   const [toIata, setToIata] = useState<string>('DXB');
   const [countrySearch, setCountrySearch] = useState<string>('');
+  const [iframeLoaded, setIframeLoaded] = useState<boolean>(false);
+  const [showFallback, setShowFallback] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIframeLoaded(false);
+    setShowFallback(false);
+    const timer = setTimeout(() => {
+      setShowFallback(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [fromIata, toIata, selectedCountry]);
 
   useEffect(() => {
     try {
@@ -108,7 +137,18 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
   const flightInfo = getFlightLinkForCountry(selectedCountry);
   const capitalSlug = getCapitalSlug(meta.capital);
 
-  const aviasalesSearchUrl = `https://www.aviasales.com/search/${fromIata}${toIata}?marker=${TRAVELPAYOUTS_CONFIG.marker}&with_request=true&locale=en&currency=inr`;
+  const aviasalesDirectUrl = `https://www.aviasales.com/?marker=801550&with_request=true&locale=en&currency=inr&origin_iata=${fromIata}&destination_iata=${toIata}`;
+  const bookingComDirectUrl = 'https://www.booking.com/?aid=8119919';
+  const hotelCityName = selectedCountry === 'ae'
+    ? 'Abu Dhabi'
+    : toIata === 'NYC'
+      ? 'New York'
+      : (toIata === 'LON' || toIata === 'LHR')
+        ? 'London'
+        : (meta.capital || countryName);
+  const hotelButtonLabel = `Check ${hotelCityName} Hotels →`;
+
+  const aviasalesSearchUrl = aviasalesDirectUrl;
   const skyscannerRouteUrl = flightInfo.skyscannerLink;
 
   const filteredCountries249 = useMemo(() => {
@@ -139,8 +179,7 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
           ✈ Cheap Flights from India - 249 Countries
         </h1>
         <p style={{ color: '#94a3b8', marginTop: '8px', fontSize: '14px' }}>
-          Powered by Travelpayouts ID {TRAVELPAYOUTS_CONFIG.id} + Skyscanner{' '}
-          {TRAVELPAYOUTS_CONFIG.skyscannerId} + Aviasales • Search 100+ Airlines • Best Price
+          Compare 100+ Airlines with Aviasales &amp; Skyscanner • Real-Time Live Fares • Best Price
           Guarantee
         </p>
         <div
@@ -191,7 +230,7 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
               fontWeight: 700,
             }}
           >
-            ✅ ID {TRAVELPAYOUTS_CONFIG.id} Active
+            ✅ Live Search Active
           </span>
         </div>
       </div>
@@ -434,7 +473,7 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* White Label Iframe - Main Search */}
+      {/* Flight Search Main Section */}
       <div
         style={{
           maxWidth: '1200px',
@@ -455,40 +494,149 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
             style={{
               background: '#003580',
               color: 'white',
-              padding: '12px 20px',
+              padding: '14px 20px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               flexWrap: 'wrap',
-              gap: '8px',
+              gap: '10px',
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 800 }}>
-              🌍 VisaApply White Label Flight Search — Marker #{TRAVELPAYOUTS_CONFIG.marker} ({fromIata}{' '}
-              → {toIata})
+            <div style={{ fontSize: '15px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>🌍 Flight Search</span>
+              <span style={{ opacity: 0.85, fontSize: '13px', fontWeight: 600 }}>
+                ({fromIata} → {toIata})
+              </span>
             </div>
             <a
-              href={aviasalesSearchUrl}
+              href={aviasalesDirectUrl}
               target="_blank"
               rel="noopener noreferrer"
               style={{
                 background: '#10b981',
                 color: 'white',
-                padding: '6px 12px',
+                padding: '8px 16px',
                 borderRadius: '8px',
-                fontSize: '11px',
+                fontSize: '12px',
                 fontWeight: 800,
                 textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 2px 8px rgba(16,185,129,0.3)',
               }}
             >
-              Open Fullscreen Flight Search ↗
+              Open Flight Search on Aviasales ↗
             </a>
           </div>
-          <iframe
-            src={aviasalesSearchUrl}
-            style={{ width: '100%', height: '700px', border: 'none' }}
-            title="VisaApply Flight Search - Travelpayouts 801550"
-          />
+
+          {/* Fallback & Direct Launch Buttons: Active immediately if iframe blocked or after 3s */}
+          {showFallback && (
+            <div
+              style={{
+                padding: '24px 20px',
+                background: '#f8fafc',
+                borderBottom: '1px solid #e2e8f0',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a', marginBottom: '6px' }}>
+                Instant Flight &amp; Hotel Deals ({fromIata} → {toIata})
+              </div>
+              <p style={{ fontSize: '12px', color: '#64748b', maxWidth: '600px', margin: '0 auto 16px', lineHeight: 1.5 }}>
+                Click below to compare real-time airline fares across 100+ carriers and discounted hotel bookings:
+              </p>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '14px',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                }}
+              >
+                <a
+                  href={aviasalesDirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: '#10b981',
+                    color: 'white',
+                    padding: '14px 28px',
+                    borderRadius: '12px',
+                    fontSize: '15px',
+                    fontWeight: 800,
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Search Flights on Aviasales →
+                </a>
+                <a
+                  href={bookingComDirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: '#003580',
+                    color: 'white',
+                    padding: '14px 28px',
+                    borderRadius: '12px',
+                    fontSize: '15px',
+                    fontWeight: 800,
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 4px 14px rgba(0, 53, 128, 0.35)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {hotelButtonLabel}
+                </a>
+              </div>
+            </div>
+          )}
+
+          <div style={{ position: 'relative', width: '100%', minHeight: showFallback ? '350px' : '650px', background: '#f1f5f9' }}>
+            {!iframeLoaded && !showFallback && (
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  color: '#64748b',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  padding: '20px',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontSize: '28px' }}>✈️</div>
+                <div>Loading Live Flight Fares ({fromIata} → {toIata})...</div>
+              </div>
+            )}
+            <iframe
+              key={`${fromIata}-${toIata}`}
+              src={aviasalesDirectUrl}
+              onLoad={() => setIframeLoaded(true)}
+              onError={() => setShowFallback(true)}
+              style={{
+                width: '100%',
+                height: showFallback ? '450px' : '700px',
+                border: 'none',
+                display: 'block',
+              }}
+              title={`VisaApply Flight Search ${fromIata} to ${toIata}`}
+            />
+          </div>
         </div>
       </div>
 
@@ -517,8 +665,7 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
                 🛫 Live Flight Fares from {fromIata} Across 249 Countries
               </h2>
               <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0' }}>
-                Click any country below to load live {fromIata}→Destination fares with Travelpayouts ID{' '}
-                {TRAVELPAYOUTS_CONFIG.id}
+                Click any country below to load live {fromIata}→Destination fares across top airlines.
               </p>
             </div>
             <input
@@ -594,52 +741,9 @@ export const FlightsPage: React.FC<FlightsPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Alternative - Aviasales Widget (If White Label pending) */}
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '20px auto',
-          padding: '0 20px',
-        }}
-      >
-        <div
-          style={{
-            padding: '20px',
-            background: 'white',
-            borderRadius: '16px',
-            border: '1px solid #e2e8f0',
-          }}
-        >
-          <h3 style={{ fontWeight: 800, margin: 0, fontSize: '16px', color: '#0f172a' }}>
-            🔧 Alternative - Aviasales Widget & White Label Setup (Travelpayouts ID{' '}
-            {TRAVELPAYOUTS_CONFIG.id})
-          </h3>
-          <p style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
-            White Label Brand Color: <b>#003580</b> (Booking.com Blue) + <b>#10b981</b> (Green CTA) •
-            Direct Widget Embed Code:
-          </p>
-          <pre
-            style={{
-              background: '#f8fafc',
-              padding: '12px',
-              borderRadius: '8px',
-              fontSize: '11px',
-              overflowX: 'auto',
-              marginTop: '8px',
-              border: '1px solid #e2e8f0',
-            }}
-          >
-            {`<script src="//www.travelpayouts.com/widgets/801550/flights.js" data-marker="801550" data-origin="${fromIata}" data-destination="${toIata}" data-origin-iata="${fromIata}" data-destination-iata="${toIata}"></script>`}
-          </pre>
-        </div>
-      </div>
-
-      {/* Footer with monetization info */}
+      {/* Footer with clean airline info */}
       <div style={{ textAlign: 'center', padding: '24px', fontSize: '11px', color: '#64748b' }}>
-        Flight search powered by Travelpayouts ID {TRAVELPAYOUTS_CONFIG.id} (Approved) • Skyscanner
-        ID {TRAVELPAYOUTS_CONFIG.skyscannerId} (In Review) • Booking.com AID{' '}
-        {TRAVELPAYOUTS_CONFIG.bookingComAid} (Approved) • Aviasales • 100+ Airlines • Commission
-        $2-$10 per booking
+        Flight search powered by 100+ airlines, Aviasales, Skyscanner, and Booking.com. All fares subject to real-time seat availability.
       </div>
     </div>
   );

@@ -919,6 +919,12 @@ function getServerSideOgMeta(pathname: string) {
     ogImage = "https://visaapply.org/og/flights.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
+  } else if (langStripped === '/atlys-vs-visaapply') {
+    ogTitle = "Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup";
+    ogDesc = "Compare Atlys vs VisaApply.org: $0 service fees vs agency markups, 249 countries vs ~80, zero-document storage privacy vs cloud uploads, and 14,084+ visas.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
   } else {
     const level3Match = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
     const routeMatch = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})(?:-([a-z]+))?$/i);
