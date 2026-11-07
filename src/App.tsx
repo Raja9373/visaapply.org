@@ -24,6 +24,7 @@ import { FlightsPage } from './pages/FlightsPage';
 import { RoutesPage } from './pages/RoutesPage';
 import { ImmigrationUpdatesPage } from './pages/ImmigrationUpdatesPage';
 import { AtlysVsVisaApplyPage } from './pages/AtlysVsVisaApplyPage';
+import { GoldenVisaPage } from './pages/GoldenVisaPage';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
@@ -304,6 +305,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isAdminUpdates = path === '/admin/updates' || path === '/admin/updates/';
   const isAdminRoute = path === '/admin' || path.startsWith('/admin/');
   const isAtlysVsVisaApply = path === '/atlys-vs-visaapply' || path === '/atlys-vs-visaapply/';
+  const isGoldenVisa = path === '/golden-visa' || path === '/golden-visa/';
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -314,7 +316,9 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isFlights = path === '/flights' || path === '/flights/' || path.startsWith('/flights?');
   const interviewMatch = path.match(/^\/interview-prep\/([a-z]{2,3})$/i);
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)$/i);
-  const level3DetailMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
+  const level3DetailMatch =
+    path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i) ||
+    (!articleMatch && path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i));
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
@@ -338,6 +342,11 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isAtlysVsVisaApply) {
     title = 'Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup';
     description = 'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and 14,084+ official visa types.';
+  } else if (isGoldenVisa) {
+    title = 'Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org';
+    description = 'Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.';
+    ogImageUrl = 'https://visaapply.org/og/golden-visa.jpg';
+    ogImageAlt = 'Golden Visa & Residency by Investment 2026 - VisaApply.org';
   } else if (isRoutes) {
     title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
     description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
@@ -374,8 +383,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (level3DetailMatch) {
     const fromCode = level3DetailMatch[1].toUpperCase();
     const toCode = level3DetailMatch[2].toUpperCase();
-    const catCode = level3DetailMatch[3].toLowerCase();
-    const subCode = level3DetailMatch[4].toLowerCase();
+    const catCode = level3DetailMatch[4] ? level3DetailMatch[3].toLowerCase() : (article?.type || 'tourist').toLowerCase();
+    const subCode = (level3DetailMatch[4] || level3DetailMatch[3] || '').toLowerCase();
     const fromDisplay = getCountryDisplayName(fromCode);
     const toDisplay = getCountryDisplayName(toCode);
     const catVisas = getVisasForAnyRoute(fromCode, toCode, catCode);
@@ -496,17 +505,41 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     document.head.appendChild(ldScript);
   }
 
-  const baseUrl = window.location.origin;
+  const baseUrl = getCanonicalBaseOrigin();
+  const getCategoryDisplayName = (catCode: string): string => {
+    const c = String(catCode || '').toLowerCase();
+    switch (c) {
+      case 'tourist':
+        return 'Tourist Visa';
+      case 'work':
+        return 'Work Visa';
+      case 'student':
+        return 'Student Visa';
+      case 'business':
+        return 'Business Visa';
+      case 'family':
+        return 'Family Visa';
+      case 'pr':
+        return 'Permanent Residency';
+      default:
+        return `${c.charAt(0).toUpperCase() + c.slice(1)} Visa`;
+    }
+  };
+
   let breadcrumbItems: any[] = [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": `${baseUrl}/` }
   ];
 
   let targetCodeForSchema = 'us';
 
-  if (isAdmin) {
+  if (isAdminRoute) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Admin Portal", "item": `${baseUrl}/admin` });
   } else if (isAtlysVsVisaApply) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Atlys vs VisaApply", "item": `${baseUrl}/atlys-vs-visaapply` });
+  } else if (isGoldenVisa) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Golden Visa", "item": `${baseUrl}/golden-visa` });
+  } else if (isRoutes) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "61,752 Visa Routes", "item": `${baseUrl}/routes` });
   } else if (isAbout) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "About Us & Editorial Policy", "item": `${baseUrl}/about` });
   } else if (isFlights) {
@@ -516,8 +549,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (interviewMatch) {
     targetCodeForSchema = interviewMatch[1].toLowerCase();
     const cName = getCountryDisplayName(targetCodeForSchema);
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${cName} Visa`, "item": `${baseUrl}/in-to-${targetCodeForSchema}` });
-    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": `${cName} Interview Prep`, "item": window.location.href });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `India to ${cName}`, "item": `${baseUrl}/in-to-${targetCodeForSchema}` });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": `${cName} Interview Prep`, "item": canonicalHref });
   } else if (isContact) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Contact Us", "item": `${baseUrl}/contact` });
   } else if (isPrivacy) {
@@ -525,23 +558,115 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isTerms) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Terms of Service", "item": `${baseUrl}/terms` });
   } else if (isSitemap) {
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All Visa Guides", "item": `${baseUrl}/sitemap` });
-  } else if (quizMatch) {
-    const from = (quizMatch[1] || 'IN').toUpperCase();
-    const to = quizMatch[2].toUpperCase();
-    targetCodeForSchema = to.toLowerCase();
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Visa Guide`, "item": window.location.href });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All 14,084+ Visa Guides Directory", "item": `${baseUrl}/sitemap` });
+  } else if (level3DetailMatch) {
+    // -------------------------------------------------------------------------------------------------
+    // Visa Detail Page (14,084+ pages): Dynamic 4-Level Hierarchy -> Home > From-To > Category > Visa Detail
+    // -------------------------------------------------------------------------------------------------
+    const fromCode = level3DetailMatch[1].toUpperCase();
+    const toCode = level3DetailMatch[2].toUpperCase();
+    const catCode = level3DetailMatch[4] ? level3DetailMatch[3].toLowerCase() : (article?.type || 'tourist').toLowerCase();
+    const subCode = (level3DetailMatch[4] || level3DetailMatch[3] || '').toLowerCase();
+    const fromDisplay = getCountryDisplayName(fromCode);
+    const toDisplay = getCountryDisplayName(toCode);
+    targetCodeForSchema = toCode.toLowerCase();
+
+    const catVisas = getVisasForAnyRoute(fromCode, toCode, catCode);
+    const matchedVisa =
+      catVisas.find((v: any) => {
+        const vid = String(v.id || '').toLowerCase();
+        const vcode = String(v.officialCode || '').toLowerCase();
+        return vid === subCode || vcode === subCode || vid.endsWith(`-${subCode}`);
+      }) || catVisas[0];
+    const rawName = article?.title || matchedVisa?.name || subCode.toUpperCase();
+    const cleanSubName = getVisaSubtypeWithoutCountry(rawName, toDisplay, toCode);
+
+    // Position 2: From-To Route
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 2,
+      "name": `${fromDisplay} to ${toDisplay}`,
+      "item": `${baseUrl}/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`
+    });
+    // Position 3: Category
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 3,
+      "name": getCategoryDisplayName(catCode),
+      "item": `${baseUrl}/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${catCode}`
+    });
+    // Position 4: Visa Detail (specific subclass)
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 4,
+      "name": cleanSubName || rawName,
+      "item": canonicalHref
+    });
   } else if (articleMatch) {
+    // -------------------------------------------------------------------------------------------------
+    // Category Page (1,494 pages): Dynamic 3-Level Hierarchy -> Home > From-To > Category
+    // -------------------------------------------------------------------------------------------------
     const from = articleMatch[1].toUpperCase();
     const to = articleMatch[2].toUpperCase();
+    const catCode = articleMatch[3].toLowerCase();
+    const fromDisplay = getCountryDisplayName(from);
+    const toDisplay = getCountryDisplayName(to);
     targetCodeForSchema = to.toLowerCase();
-    const type = articleMatch[3].toUpperCase();
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": `${from} to ${to} Guides`, "item": `${baseUrl}/${from.toLowerCase()}-to-${to.toLowerCase()}` });
-    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": `${type} Visa Guide`, "item": window.location.href });
-  } else if (article) {
+
+    // Position 2: From-To Route
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 2,
+      "name": `${fromDisplay} to ${toDisplay}`,
+      "item": `${baseUrl}/${from.toLowerCase()}-to-${to.toLowerCase()}`
+    });
+    // Position 3: Category
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 3,
+      "name": getCategoryDisplayName(catCode),
+      "item": canonicalHref
+    });
+  } else if (quizMatch) {
+    // -------------------------------------------------------------------------------------------------
+    // Route Page (61,752 pages): Dynamic 2-Level Hierarchy -> Home > From-To
+    // -------------------------------------------------------------------------------------------------
+    const from = (quizMatch[1] || 'IN').toUpperCase();
+    const to = quizMatch[2].toUpperCase();
+    const fromDisplay = getCountryDisplayName(from);
+    const toDisplay = getCountryDisplayName(to);
+    targetCodeForSchema = to.toLowerCase();
+
+    // Position 2: From-To Route
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 2,
+      "name": `${fromDisplay} to ${toDisplay}`,
+      "item": canonicalHref
+    });
+  } else if (article && article.title) {
     targetCodeForSchema = (article.to || 'us').toLowerCase();
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Blogs", "item": `${baseUrl}/blogs` });
-    breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": article.title, "item": window.location.href });
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Visa Blogs",
+      "item": `${baseUrl}/blogs`
+    });
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 3,
+      "name": article.title,
+      "item": canonicalHref
+    });
+  } else if (path !== '/' && path.includes('-to-')) {
+    const clean = path.replace(/^\//, '').replace(/-/g, ' ');
+    const formatted = clean.charAt(0).toUpperCase() + clean.slice(1);
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": 2,
+      "name": formatted,
+      "item": canonicalHref
+    });
   }
 
   const schemaCountryName = getCountryDisplayName(targetCodeForSchema);
@@ -2360,6 +2485,7 @@ export default function App() {
   const isAdminUpdates = routePath === '/admin/updates' || routePath === '/admin/updates/';
   const isAnyAdminRoute = routePath === '/admin' || routePath.startsWith('/admin/');
   const isAtlysVsVisaApply = routePath === '/atlys-vs-visaapply' || routePath === '/atlys-vs-visaapply/';
+  const isGoldenVisa = routePath === '/golden-visa' || routePath === '/golden-visa/';
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2405,7 +2531,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2436,6 +2562,7 @@ export default function App() {
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
             <button onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
+            <button onClick={() => navigate('/golden-visa')} className={`transition-colors cursor-pointer ${isGoldenVisa ? 'text-yellow-300 font-bold' : 'text-yellow-200 hover:text-white'}`}>Golden Visa</button>
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navInterview}</button>
             <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navAbout}</button>
@@ -2485,6 +2612,7 @@ export default function App() {
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navHome}</button>
             <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold">{getUIString(uiLang).navRoutes}</button>
             <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">{getUIString(uiLang).navFlights}</button>
+            <button onClick={() => { navigate('/golden-visa'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-yellow-300 hover:text-white font-bold">Golden Visa</button>
             <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navInterview}</button>
             <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navAbout}</button>
@@ -2589,6 +2717,8 @@ export default function App() {
           )
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
+        ) : isGoldenVisa ? (
+          <GoldenVisaPage onNavigate={navigate} />
         ) : isRoutes ? (
           <RoutesPage onNavigate={navigate} />
         ) : isAbout ? (
@@ -2684,6 +2814,7 @@ export default function App() {
             <ul className="space-y-2 text-sm">
               <li><button onClick={() => navigate('/about')} className="hover:text-white transition-colors cursor-pointer">About Us & Editorial Policy</button></li>
               <li><button onClick={() => navigate('/about')} className="text-emerald-300 hover:text-emerald-200 font-semibold transition-colors cursor-pointer">🔗 Free Visa Widget (Backlink)</button></li>
+              <li><button onClick={() => navigate('/golden-visa')} className="text-yellow-300 hover:text-yellow-200 font-semibold transition-colors cursor-pointer">👑 Golden Visa (2026 Guide)</button></li>
               <li><button onClick={() => navigate('/flights')} className="hover:text-white transition-colors cursor-pointer">✈ Cheap Flights (249 Countries)</button></li>
               <li><button onClick={() => navigate('/blogs')} className="hover:text-white transition-colors cursor-pointer">Visa Blogs (2,490+ Guides)</button></li>
               <li><button onClick={() => navigate('/interview-prep/us')} className="hover:text-white transition-colors cursor-pointer">Consular Interview Prep</button></li>
