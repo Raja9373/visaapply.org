@@ -898,7 +898,7 @@ function getServerSideOgMeta(pathname: string) {
 // Vite middleware for development
 import { createServer as createViteServer } from 'vite';
 const vite = await createViteServer({
-  server: { middlewareMode: true }
+  server: { middlewareMode: true, hmr: false }
 });
 
 // Inject Impact verification tag + dynamic Open Graph & Twitter Card tags on HTML page requests
