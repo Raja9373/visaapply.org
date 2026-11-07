@@ -31,7 +31,6 @@ import { EmbassySlotAlertPage } from './pages/EmbassySlotAlertPage';
 import { PhotoResizerPage } from './pages/PhotoResizerPage';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
-import { HotelBookingWidget } from './components/HotelBookingWidget';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
@@ -361,13 +360,13 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     ogImageAlt = 'Golden Visa & Residency by Investment 2026 - VisaApply.org';
   } else if (isDummyTicket) {
     title = 'Dummy Ticket - Flight + Hotel Reservation for Visa – VisaApply.org';
-    description = 'Official verifiable flight and hotel reservations for visa applications. Real GDS airline PNR and hotel booking voucher valid for 7–14 days. Delivered on WhatsApp in 4 hours.';
+    description = 'Official verifiable flight and hotel reservations for visa applications. Real GDS airline PNR and hotel booking voucher valid for 7–14 days. Instant free sample guides and booking tools.';
   } else if (isCoverLetter) {
     title = 'Free Cover Letter Generator for Visa – VisaApply.org';
     description = 'Auto-generate a proper formal visa cover letter in English for Schengen, USA, UK, Canada, and 249 nations. Free instant PDF download with ties to home country.';
   } else if (isSlotAlert) {
     title = 'Embassy Slot Alert - USA / Schengen – VisaApply.org';
-    description = 'USA ka slot khulte hi sabse pehle pata chalega. Automated 24/7 consular slot tracking on WhatsApp & Email for US Consulates in India and Schengen VFS centers.';
+    description = 'Automated 24/7 consular slot tracking on Email for US, Schengen, UK, Canada, and global embassies across 249 countries.';
   } else if (isPhotoResizer) {
     title = 'Visa Photo Resizer - Free Online – VisaApply.org';
     description = 'Free online visa photo resizer and cropper. 35x45mm (Schengen/UK), 2x2 inch (USA DS-160), or 51x51mm at 300 DPI. 100% private client-side browser processing.';
@@ -2661,7 +2660,7 @@ export default function App() {
                     <Zap className="w-4 h-4 text-yellow-300 shrink-0" />
                     <div>
                       <div className="text-white">Embassy Slot Alert</div>
-                      <div className="text-[10px] text-emerald-300 font-medium">First Alert FREE (WhatsApp)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% Free Email Alert</div>
                     </div>
                   </button>
                   <button
@@ -3424,11 +3423,6 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           </div>
         </div>
       </section>
-
-      {/* Embedded Booking.com Hotel Search Widget */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-6">
-        <HotelBookingWidget defaultCity="Dubai" />
-      </div>
 
       {/* All Global Destinations Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -5508,7 +5502,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
                 </div>
                 <div className="space-y-2.5 mt-2.5 text-slate-700">
                   <div>
-                    <span className="font-bold text-slate-900 block">Minimum Funds (Kitna Dikhana Hai):</span>
+                    <span className="font-bold text-slate-900 block">Minimum Funds (Amount Required):</span>
                     <p className="mt-0.5 leading-relaxed">{dbVisaItem?.fundsBox?.minimum || "₹3-5 Lakhs liquid balance in savings account (AUD $5,000+ equivalent for tourist; ₹30-35 Lakhs for student)."}</p>
                   </div>
                   <div>
@@ -5517,12 +5511,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
                   </div>
                   <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-red-900 text-[11px] leading-relaxed">
                     <span className="font-bold block text-red-950">Sudden Deposit Warning:</span>
-                    {dbVisaItem?.fundsBox?.suddenDeposit || "❌ 1 din pehle 10 lakh daal ke mat dikhao - 3 mahine purana hona chahiye. Large deposit >50k ka source proof chahiye (Salary slip/Bonus/Property sale/Gift deed). Credit card se borrowed money reject."}
+                    {dbVisaItem?.fundsBox?.suddenDeposit || "❌ Do not deposit large funds right before application - funds should be seasoned for at least 3 months. Large deposits (>50k) require source proof (Salary slip / Bonus / Property sale / Gift deed). Borrowed money from credit cards will be rejected."}
                   </div>
                 </div>
               </div>
               <div className="p-2.5 bg-emerald-100/70 border border-emerald-300 rounded-lg text-[11px] text-emerald-950 font-medium">
-                {dbVisaItem?.fundsBox?.example || "✅ Sahi: Regular monthly salary credits. ❌ Galat: One-day loan deposit without source."}
+                {dbVisaItem?.fundsBox?.example || "✅ Correct: Regular monthly salary credits. ❌ Incorrect: One-day loan deposit without verifiable source."}
               </div>
             </div>
 
@@ -5535,12 +5529,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
                 </div>
                 <div className="space-y-2.5 mt-2.5 text-slate-700">
                   <div>
-                    <span className="font-bold text-slate-900 block">Required ITR (Kitne Saal):</span>
+                    <span className="font-bold text-slate-900 block">Required ITR (Years Required):</span>
                     <p className="mt-0.5 leading-relaxed">{dbVisaItem?.itrBox?.years || "2-3 years ITR-V + Computation of Income + Form 16 + Balance sheet if business."}</p>
                   </div>
                   <div>
                     <span className="font-bold text-slate-900 block">ITR & Bank Reconciliation Match:</span>
-                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.itrBox?.match || "ITR aur bank credit match hona chahiye. ITR 10 lakh, bank credit 50 lakh = Mismatch = Direct Reject under PIC 4020."}</p>
+                    <p className="mt-0.5 leading-relaxed">{dbVisaItem?.itrBox?.match || "Reported ITR income and bank credit must match. Mismatch between ITR and bank statements will result in visa refusal."}</p>
                   </div>
                   <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-[11px] leading-relaxed">
                     <span className="font-bold block text-amber-950">No ITR Case:</span>

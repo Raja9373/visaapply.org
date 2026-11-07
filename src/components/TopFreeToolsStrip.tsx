@@ -14,12 +14,13 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
 }) => {
   const tools = [
     {
-      title: 'Dummy Ticket (Reservation)',
+      title: 'Dummy Ticket - Flight / Hotel',
       shortTitle: 'Dummy Ticket',
       icon: '✈️',
       path: '/dummy-ticket',
-      badge: 'FREE Guide',
-      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40'
+      badge: 'FREE GUIDE',
+      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+      subText: 'Flight + Hotel Reservation - FREE Guide'
     },
     {
       title: 'Cover Letter Generator',
@@ -27,15 +28,17 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
       icon: '📄',
       path: '/cover-letter-generator',
       badge: 'FREE',
-      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40'
+      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+      subText: 'Use Free'
     },
     {
       title: 'Embassy Slot Alert',
       shortTitle: 'Slot Alert',
       icon: '🔔',
       path: '/embassy-slot-alert',
-      badge: '1st Alert FREE',
-      badgeColor: 'bg-amber-500/25 text-amber-300 border-amber-400/40'
+      badge: 'FREE',
+      badgeColor: 'bg-amber-500/25 text-amber-300 border-amber-400/40',
+      subText: 'Use Free'
     },
     {
       title: 'Visa Photo Resizer (300 DPI)',
@@ -43,7 +46,8 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
       icon: '📷',
       path: '/photo-resizer',
       badge: 'FREE',
-      badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-400/40'
+      badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-400/40',
+      subText: 'Use Free'
     }
   ];
 
@@ -56,7 +60,7 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
         <div className="flex items-center gap-1.5">
           <span className="text-amber-400 text-sm">✨</span>
           <h3 className={`text-xs sm:text-sm font-extrabold tracking-wide uppercase ${isDark ? 'text-amber-300' : 'text-slate-800'}`}>
-            FREE Tools - Visa Ke Liye Sab Kuch FREE
+            FREE Tools - Everything You Need For Your Visa
           </h3>
         </div>
         <div className="flex items-center gap-1.5">
@@ -98,7 +102,7 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
                 <span className="sm:hidden">{t.shortTitle}</span>
               </div>
               <span className={`text-[10px] flex items-center gap-1 font-semibold mt-0.5 ${isDark ? 'text-blue-200 group-hover:text-white' : 'text-slate-500 group-hover:text-slate-800'}`}>
-                <span>Use Free</span>
+                <span>{t.subText}</span>
                 <span className="group-hover:translate-x-0.5 transition-transform">→</span>
               </span>
             </div>

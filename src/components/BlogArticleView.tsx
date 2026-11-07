@@ -729,16 +729,16 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
                 </div>
                 <div className="space-y-2.5 mt-2.5 text-slate-700">
                   <div>
-                    <span className="font-bold text-slate-900 block">Required ITR (Kitne Saal):</span>
+                    <span className="font-bold text-slate-900 block">Required ITR (Years Required):</span>
                     <p className="mt-0.5 leading-relaxed">Past 2 to 3 financial years ITR-V + Computation of Income + Form 16 / Form 26AS.</p>
                   </div>
                   <div>
                     <span className="font-bold text-slate-900 block">ITR & Bank Reconciliation:</span>
-                    <p className="mt-0.5 leading-relaxed">ITR me reported income aur bank me aane wale salary credits 100% reconcile hone chahiye. Mismatch hone par direct refusal.</p>
+                    <p className="mt-0.5 leading-relaxed">Reported income in ITR and bank statement salary credits must match 100%. Mismatch may result in visa refusal.</p>
                   </div>
                   <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-[11px] leading-relaxed">
                     <span className="font-bold block text-amber-950">No ITR Case:</span>
-                    Agar ITR nahi hai to Form 26AS + 6 months salary slips + Employer NOC lagao, lekin visa refusal risk 60% badh jata hai.
+                    If ITR is unavailable, attach Form 26AS + 6 months salary slips + Employer NOC, though lack of ITR significantly increases refusal risk.
                   </div>
                 </div>
               </div>

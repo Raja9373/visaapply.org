@@ -130,16 +130,16 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
 
   const faqs = [
     {
-      q: "Slot kitne din me milta hai?",
+      q: "How soon do visa appointment slots open?",
       a: "Consulates and VFS centers release bulk cancellation batches randomly (often early morning or late evening). Our automated system checks every 30 minutes 24/7."
     },
     {
-      q: "Kya ye guarantee hai?",
-      a: "No guarantee. Humne inform kar diya, baaki tumhari kismat. We send instant automated emails the moment slots open so you can book directly on official government portals."
+      q: "Is this appointment slot booking guaranteed?",
+      a: "No guarantee. We provide instant email alerts as soon as official portals release slots, enabling you to book directly. Your appointment depends on official availability."
     },
     {
-      q: "Kya mujhe apna password dena padega?",
-      a: "KABHI NAHI. VisaApply never asks for your portal credentials. We monitor public status feeds automatically."
+      q: "Do I need to share my portal password?",
+      a: "NEVER. VisaApply never asks for your portal credentials or account passwords. We monitor public status feeds automatically."
     },
     {
       q: "Is this service 100% free?",
@@ -187,7 +187,7 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
             Global Embassy Slot Alert — 249 Countries
           </h1>
           <p className="text-sm sm:text-base text-blue-100 max-w-3xl mx-auto leading-relaxed font-medium">
-            Kahi ke bhi ho — India, Pakistan, Nigeria, Dubai — System tumhare wale embassy ka slot check karega aur Email kar dega. System har 30 minute me slot check karta hai. Slot khulte hi system khud Email kar dega. Tumhe kuch nahi karna.
+            No matter where you are applying from — India, Pakistan, Nigeria, Dubai — our automated system checks your embassy's slot availability and emails you instantly. The system checks appointment slots every 30 minutes 24/7. The moment slots open, an email is sent automatically. You don't have to do anything manually.
           </p>
         </div>
       </div>
@@ -234,7 +234,7 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
               </div>
               <h3 className="text-2xl font-black text-emerald-900">Subscribed Successfully!</h3>
               <p className="text-base font-extrabold text-emerald-900 max-w-lg mx-auto">
-                "System har 30 minute me slot check karta hai. Slot khulte hi system khud Email kar dega. Tumhe kuch nahi karna."
+                "Our system checks appointment slots every 30 minutes. The moment slots open, you will receive an instant email notification."
               </p>
               <p className="text-xs text-emerald-700">
                 Tracking activated for <strong>{NAME_MAP_249[fromCountry] || fromCountry}</strong> to <strong>{toCountry}</strong> ({embassyCity}).

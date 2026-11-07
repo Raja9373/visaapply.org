@@ -18,7 +18,7 @@ export const BottomFreeToolsSection: React.FC<BottomFreeToolsSectionProps> = ({ 
       features: [
         'Sample PDF & Checklist Download',
         'Valid 7–14 days for consular scrutiny',
-        'First 100 daily custom reservations FREE',
+        '100 Daily custom reservations FREE',
         'Zero payment or checkout required'
       ],
       ctaText: 'Open Dummy Ticket Tool'
@@ -41,17 +41,17 @@ export const BottomFreeToolsSection: React.FC<BottomFreeToolsSectionProps> = ({ 
     },
     {
       title: 'Embassy Slot Alert (USA / Schengen)',
-      subtitle: 'Instant WhatsApp & Email Notifications',
+      subtitle: 'Instant Email Notifications',
       icon: '🔔',
       path: '/embassy-slot-alert',
-      badge: '1st Alert FREE',
+      badge: 'FREE',
       badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
-      description: '"USA ka slot khulte hi sabse pehle pata chalega." Automated 24/7 server monitoring for appointment slots and cancellations across US Consulates in India and Schengen VFS hubs.',
+      description: 'Automated 24/7 server monitoring for appointment slots and cancellations across global Consulates and VFS hubs.',
       features: [
-        'Instant WhatsApp ping under 30 seconds',
-        'Delhi, Mumbai, Chennai, Hyderabad, Kolkata',
+        'Instant email alert within 30 minutes',
+        'Global coverage across all 249 countries',
         'Zero login password or portal credentials required',
-        'First alert 100% free for all applicants'
+        '100% Free alert for all applicants'
       ],
       ctaText: 'Activate Free Slot Alert'
     },
