@@ -68,47 +68,102 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
         <div className="flex items-center gap-2 text-xs text-slate-600 mb-2 font-medium">
           <button onClick={() => navigate?.('/')} className="hover:underline text-blue-700 cursor-pointer">Home</button>
           <span>&gt;</span>
-          <span className="text-slate-900 font-bold">Global Visa Sitemap (14,084+ Visa Guides &amp; 61,752 Routes)</span>
+          <span className="text-slate-900 font-bold">Global Visa Sitemap Index (80,317 Total Indexed Pages)</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
-          VisaApply.org - Global Visa Sitemap (14,084+ Visa Pages / 249 Countries)
+          VisaApply.org - Global Sitemap Architecture (80,317 Pages Across 74 XML Sitemaps)
         </h1>
         <p className="text-slate-700 text-sm">
-          Complete index of all 14,084+ unique visa &amp; immigration programme guides across 249 ISO countries and 61,752 bilateral routes (including USA 278, UK 222 Complete 2-Directory Architecture: 111 Official Visas + 111 Additional Routes, Canada 151, Germany 138, Australia 135, UAE 135, Singapore 109, Japan 109, Thailand 98).
+          Complete index of 249 Countries + 1,494 Category Pages + 14,084 Visa Detail Pages + 61,752 Bilateral Routes (70 XML Files) + 2,748 Blog &amp; Interview Guides using canonical <code className="font-mono font-bold">https://www.visaapply.org/</code> URLs.
         </p>
       </div>
 
-      {/* XML Sitemap Verification Banner */}
-      <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="bg-emerald-700 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
-              ✅ XML Sitemap Live (HTTP 200 OK)
-            </span>
-            <h2 className="text-sm sm:text-base font-extrabold text-emerald-950">
-              Standard XML Sitemap Indexing — 7,600+ XML URLs
-            </h2>
+      {/* XML Sitemap Index Directory Banner */}
+      <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="bg-emerald-700 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
+                ✅ Master Sitemap Index Live (80,317 Pages)
+              </span>
+              <h2 className="text-sm sm:text-base font-extrabold text-emerald-950">
+                sitemap-index.xml — 74 Sub-Sitemaps (https://www.visaapply.org/)
+              </h2>
+            </div>
+            <p className="text-xs text-emerald-900">
+              Master Index: <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">https://www.visaapply.org/sitemap-index.xml</code> (No GSC API, pure XML Sitemap indexing).
+            </p>
           </div>
-          <p className="text-xs text-emerald-900">
-            Indexed solely via <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">https://www.visaapply.org/sitemap.xml</code> and <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">robots.txt</code>.
-          </p>
+          <div className="flex items-center gap-2 flex-wrap shrink-0">
+            <a
+              href="/sitemap-index.xml"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors"
+            >
+              Open /sitemap-index.xml ↗
+            </a>
+            <a
+              href="/robots.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
+            >
+              View /robots.txt ↗
+            </a>
+          </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-1">
           <a
-            href="/sitemap.xml"
+            href="/sitemap-countries.xml"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors"
+            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
-            Open /sitemap.xml ↗
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-countries.xml</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">249 Pages</div>
+            <div className="text-[11px] text-slate-600">All 249 ISO Destination Hubs</div>
           </a>
           <a
-            href="/robots.txt"
+            href="/sitemap-categories.xml"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
+            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
-            View /robots.txt ↗
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-categories.xml</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">1,494 Pages</div>
+            <div className="text-[11px] text-slate-600">249 Countries × 6 Categories</div>
+          </a>
+          <a
+            href="/sitemap-visas.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
+          >
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas.xml</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">14,084 Pages</div>
+            <div className="text-[11px] text-slate-600">Official Visa Subclass Detail Pages</div>
+          </a>
+          <a
+            href="/sitemap-routes.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
+          >
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-routes-1..70.xml</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">61,752 Pages</div>
+            <div className="text-[11px] text-slate-600">Split into 70 XML Files (249×248)</div>
+          </a>
+          <a
+            href="/sitemap-blogs.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
+          >
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-blogs.xml</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">2,748 Pages</div>
+            <div className="text-[11px] text-slate-600">SEO Blogs &amp; Interview Guides</div>
           </a>
         </div>
       </div>

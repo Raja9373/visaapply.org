@@ -694,82 +694,59 @@ Return a concise JSON object with keys:
 app.post('/api/cron/immigration-sync', handleImmigrationSyncCron);
 app.get('/api/cron/immigration-sync', handleImmigrationSyncCron);
 
-// Dynamic & Static Sitemap XML (/sitemap.xml, /sitemap_index.xml, /api/sitemap.xml, /api/sitemap)
-const handleSitemapXml = (req: any, res: any) => {
-  try {
-    const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
-    const baseUrl = process.env.APP_URL || 'https://www.visaapply.org';
-    const categories = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
-
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-    xml += `  <url><loc>${baseUrl}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/routes</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/flights</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/blogs</loc><changefreq>daily</changefreq><priority>0.95</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/about</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/sitemap</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/privacy</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/terms</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    xml += `  <url><loc>${baseUrl}/audit</loc><changefreq>daily</changefreq><priority>0.8</priority></url>\n`;
-
-    // All 249 Countries + 6 Categories per Country + 249 Interview Prep Pages
-    for (const c of COUNTRIES) {
-      const code = (c.code || '').toLowerCase();
-      if (!code) continue;
-      xml += `  <url><loc>${baseUrl}/in-to-${code}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
-      xml += `  <url><loc>${baseUrl}/ae-to-${code}</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
-      xml += `  <url><loc>${baseUrl}/us-to-${code}</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
-      xml += `  <url><loc>${baseUrl}/interview-prep/${code}</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
-      for (const cat of categories) {
-        xml += `  <url><loc>${baseUrl}/in-to-${code}-${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
-      }
-    }
-
-    // Markdown & Published Blog Guides
-    files.forEach(file => {
-      const slug = file.replace('.md', '');
-      xml += `  <url><loc>${baseUrl}/${slug}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
-    });
-
-    xml += `</urlset>`;
-    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.status(200).send(xml);
-  } catch (err: any) {
-    res.status(500).send(err.message);
-  }
-};
-
+// Static & Dynamic 80,000+ Page Sitemap Index Architecture (No GSC API, https://www.visaapply.org/ URLs only)
 const handleSitemapIndexXml = (req: any, res: any) => {
   try {
-    const indexPath = path.join(__dirname, 'public', 'sitemap_index.xml');
+    const indexPath = path.join(__dirname, 'public', 'sitemap-index.xml');
     if (fs.existsSync(indexPath)) {
       const xml = fs.readFileSync(indexPath, 'utf-8');
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }
-    const baseUrl = process.env.APP_URL || 'https://www.visaapply.org';
-    const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>${baseUrl}/sitemap.xml</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-  </sitemap>
-</sitemapindex>`;
+    const baseUrl = 'https://www.visaapply.org';
+    const lastmod = '2026-11-07';
+    const subFiles = [
+      'sitemap-countries.xml',
+      'sitemap-categories.xml',
+      'sitemap-visas.xml',
+      'sitemap-blogs.xml',
+      ...Array.from({ length: 70 }, (_, i) => `sitemap-routes-${i + 1}.xml`)
+    ];
+    let indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    for (const f of subFiles) {
+      indexXml += `  <sitemap>\n    <loc>${baseUrl}/${f}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </sitemap>\n`;
+    }
+    indexXml += `</sitemapindex>\n`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.status(200).send(indexXml);
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.status(200).send(indexXml);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
 };
 
-app.get('/sitemap.xml', handleSitemapXml);
-app.get('/sitemap_index.xml', handleSitemapIndexXml);
-app.get('/sitemap-index.xml', handleSitemapIndexXml);
-app.get('/api/sitemap.xml', handleSitemapXml);
-app.get('/api/sitemap', handleSitemapXml);
+const handleSubSitemapXml = (req: any, res: any) => {
+  try {
+    const rawSub = String(req.params?.sub || '').replace(/[^a-zA-Z0-9-_]/g, '');
+    if (rawSub === 'index') {
+      return handleSitemapIndexXml(req, res);
+    }
+    const filePath = path.join(__dirname, 'public', `sitemap-${rawSub}.xml`);
+    if (fs.existsSync(filePath)) {
+      const xml = fs.readFileSync(filePath, 'utf-8');
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+      return res.status(200).send(xml);
+    }
+    return res.status(404).send('Sitemap not found');
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+};
+
+app.get(['/sitemap.xml', '/sitemap_index.xml', '/sitemap-index.xml', '/api/sitemap.xml', '/api/sitemap'], handleSitemapIndexXml);
+app.get('/sitemap-:sub.xml', handleSubSitemapXml);
 
 app.get('/ads.txt', (req, res) => {
   const adsPath = path.join(__dirname, 'public', 'ads.txt');
