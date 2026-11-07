@@ -322,7 +322,7 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
                   <span>{loading ? 'Subscribing...' : 'Start Automated Global Email Alerts (100% Free)'}</span>
                 </button>
                 <p className="text-center text-xs text-slate-500 mt-2">
-                  ⚡ Humne inform kar diya, baaki tumhari kismat. Unsubscribe anytime.
+                  ⚡ We notify you instantly the moment slots open. Unsubscribe anytime.
                 </p>
               </div>
             </form>

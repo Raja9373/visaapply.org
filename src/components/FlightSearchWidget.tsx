@@ -44,7 +44,7 @@ export const FlightSearchWidget: React.FC<FlightSearchWidgetProps> = ({
       <div className="mb-3">
         <h3 className="flex items-center gap-2 text-[#0B2A5B] font-black text-base sm:text-lg">
           <span>✈️</span>
-          <span>Flight Book Karo - Yahi Se</span>
+          <span>Book Flights Here</span>
         </h3>
       </div>
 

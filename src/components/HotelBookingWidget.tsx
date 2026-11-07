@@ -43,7 +43,7 @@ export const HotelBookingWidget: React.FC<HotelBookingWidgetProps> = ({
       <div className="mb-3">
         <h3 className="flex items-center gap-2 text-[#0B2A5B] font-black text-base sm:text-lg">
           <span>🏨</span>
-          <span>Hotel Book Karo - Yahi Se</span>
+          <span>Book Hotels Here</span>
         </h3>
       </div>
 
@@ -118,7 +118,7 @@ export const HotelBookingWidget: React.FC<HotelBookingWidgetProps> = ({
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-xs text-slate-600 font-bold flex items-center gap-1.5">
             <span className="text-emerald-600">●</span>
-            <span>FREE Cancellation • Pay at Property • Abhi Paisa Mat Do</span>
+            <span>FREE Cancellation • Pay at Property • No Payment Now</span>
           </div>
           <button
             type="submit"
