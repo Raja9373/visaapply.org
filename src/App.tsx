@@ -2562,7 +2562,15 @@ export default function App() {
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
             <button onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
-            <button onClick={() => navigate('/golden-visa')} className={`transition-colors cursor-pointer ${isGoldenVisa ? 'text-yellow-300 font-bold' : 'text-yellow-200 hover:text-white'}`}>Golden Visa</button>
+            <button
+              type="button"
+              onClick={() => navigate('/golden-visa')}
+              className="golden-visa-premium-btn px-3 py-1.5 text-xs xl:text-xs"
+              title="Sovereign Residency by Investment Directory"
+            >
+              <span>✨</span>
+              <span>Golden Visa</span>
+            </button>
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navInterview}</button>
             <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navAbout}</button>
@@ -2612,7 +2620,16 @@ export default function App() {
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navHome}</button>
             <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold">{getUIString(uiLang).navRoutes}</button>
             <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">{getUIString(uiLang).navFlights}</button>
-            <button onClick={() => { navigate('/golden-visa'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-yellow-300 hover:text-white font-bold">Golden Visa</button>
+            <div className="py-1">
+              <button
+                type="button"
+                onClick={() => { navigate('/golden-visa'); setMobileMenuOpen(false); }}
+                className="golden-visa-premium-btn px-4 py-2 text-xs font-black inline-flex"
+              >
+                <span>✨</span>
+                <span>Golden Visa</span>
+              </button>
+            </div>
             <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navInterview}</button>
             <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navAbout}</button>
@@ -3212,6 +3229,31 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               className="w-full md:w-auto px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white font-black text-sm rounded-xl shadow-md cursor-pointer transition-colors shrink-0"
             >
               {ui.viewRequirements} ({getVisaCount(selectedOrigin?.code || 'IN', heroDestCode)})
+            </button>
+          </div>
+
+          {/* Golden Visa Hero Highlight Card */}
+          <div className="max-w-4xl mx-auto bg-gradient-to-r from-amber-500/20 via-yellow-400/15 to-blue-900/40 border border-yellow-400/40 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-left shadow-lg">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl sm:text-3xl p-2 bg-yellow-400/20 rounded-xl border border-yellow-300/30 shrink-0">👑</span>
+              <div>
+                <div className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <span>2026 Sovereign Residency by Investment</span>
+                  <span className="bg-amber-400/30 text-amber-200 text-[10px] px-1.5 py-0.5 rounded-full font-bold">NEW</span>
+                </div>
+                <div className="text-sm sm:text-base font-extrabold text-white mt-0.5">
+                  UAE, Portugal, Greece, Italy, EB-5 &amp; 18+ Global Golden Visas
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/golden-visa')}
+              className="golden-visa-premium-btn px-4 sm:px-5 py-2 text-xs sm:text-sm shrink-0"
+              title="Explore 18+ Sovereign Golden Visa Programs"
+            >
+              <span>✨</span>
+              <span>Golden Visa</span>
             </button>
           </div>
 

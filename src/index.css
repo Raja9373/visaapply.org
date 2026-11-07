@@ -35,3 +35,79 @@ body {
     padding: 0 !important;
   }
 }
+
+/* ========================================================
+   PREMIUM ANIMATED GOLDEN VISA BUTTON
+   - Gold gradient: linear-gradient(135deg, #FFD700, #D4AF37, #FFC107)
+   - Dark text: #0B2A5B, bold
+   - Animation 1 (Soft Pulse Zoom): scale 1.0 to 1.06 over 2s smooth ease-in-out
+   - Animation 2 (Shine Sweep): white shine sweep every 3s across the gold surface
+   - Glow: box-shadow 0 0 15px rgba(255, 215, 0, 0.5) always on
+   - Hover: scale 1.10 + larger glow
+   - Mobile: overflow-hidden & size bounded, no overlap
+   ======================================================== */
+
+@keyframes goldenPulseZoom {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes goldenShineSweep {
+  0%, 15% {
+    transform: translateX(-160%) skewX(-25deg);
+  }
+  60%, 100% {
+    transform: translateX(260%) skewX(-25deg);
+  }
+}
+
+.golden-visa-premium-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #FFD700, #D4AF37, #FFC107);
+  color: #0B2A5B !important;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 9999px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  overflow: hidden;
+  cursor: pointer;
+  animation: goldenPulseZoom 2s ease-in-out infinite;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  white-space: nowrap;
+  user-select: none;
+  z-index: 1;
+}
+
+.golden-visa-premium-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    rgba(255, 255, 255, 0) 25%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0) 75%
+  );
+  transform: translateX(-160%) skewX(-25deg);
+  animation: goldenShineSweep 3s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.golden-visa-premium-btn:hover {
+  transform: scale(1.10) !important;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.85), 0 4px 14px rgba(11, 42, 91, 0.25) !important;
+  animation-play-state: paused;
+}
+

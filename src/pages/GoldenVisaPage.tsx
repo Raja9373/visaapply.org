@@ -416,11 +416,27 @@ export const GoldenVisaPage: React.FC<GoldenVisaPageProps> = ({ onNavigate }) =>
               <span className="text-xl sm:text-2xl font-black text-white">Zero / No Agent</span>
             </div>
           </div>
+
+          {/* Hero CTA Button with Premium Animation */}
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById('sovereign-programs-grid');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="golden-visa-premium-btn px-6 sm:px-8 py-3 text-sm sm:text-base shadow-xl"
+              title="Explore 18+ Sovereign Golden Visa Programs"
+            >
+              <span>✨</span>
+              <span>Golden Visa Directory &amp; Comparison</span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Interactive Program Filter & Search Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+      <div id="sovereign-programs-grid" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 scroll-mt-20">
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search */}
