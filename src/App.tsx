@@ -3381,35 +3381,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           uiLang={uiLang}
         />
 
-        {/* 4. Popular Any-to-Any Routes */}
-        <div className="my-6 bg-slate-900 text-white rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-md">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-blue-100">
-            <span className="font-extrabold text-blue-200 uppercase tracking-wide mr-1">{ui.popularRoutes}</span>
-            {[
-              { from: 'IN', to: 'US', label: '🇮🇳 India → 🇺🇸 USA (278)' },
-              { from: 'PL', to: 'US', label: '🇵🇱 Polska → 🇺🇸 USA (164)' },
-              { from: 'DE', to: 'US', label: '🇩🇪 Deutschland → 🇺🇸 USA (164)' },
-              { from: 'ES', to: 'US', label: '🇪🇸 España → 🇺🇸 USA (164)' },
-              { from: 'AE', to: 'US', label: '🇦🇪 UAE → 🇺🇸 USA (45)' },
-            ].map((r) => (
-              <button
-                key={`${r.from}-${r.to}`}
-                type="button"
-                onClick={() => navigate(`/${r.from.toLowerCase()}-to-${r.to.toLowerCase()}`)}
-                className="bg-white/10 hover:bg-white/20 border border-white/20 px-2.5 py-1 rounded-full font-semibold text-white cursor-pointer transition-colors"
-              >
-                {r.label}
-              </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => navigate('/routes')}
-              className="bg-amber-400/20 hover:bg-amber-400/30 border border-amber-300/40 px-3 py-1 rounded-full font-extrabold text-amber-200 cursor-pointer transition-colors"
-            >
-              {ui.navRoutes} →
-            </button>
-          </div>
-        </div>
+
 
         {/* 5. Golden Visa Banner (MOVE HERE - Below Popular Routes, NOT at top) */}
         <div className="my-6 bg-gradient-to-r from-slate-900 via-[#0B2A5B] to-slate-900 border border-amber-400/40 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-left shadow-xl">
