@@ -219,12 +219,89 @@ if (typeof window !== 'undefined') {
 
 console.log("✅ COUNTRY NAME + FLAG BUG FIX DONE - KH -> Cambodia, 86 countries now show full names + flags - IN -> US, IN -> Cambodia, etc - No more KH, BH, OM code display");
 
+function escapeRegexChars(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getCountryAliasesForDedupe(toCountryName: string, toCode?: string): string[] {
+  const code = (toCode || '').toUpperCase();
+  const baseName = (toCountryName || '').trim();
+  const display = code ? getCountryDisplayName(code) : '';
+  const mapName = code ? (NAME_MAP_249[code.toLowerCase()] || '') : '';
+  const aliases = new Set<string>();
+  [baseName, display, mapName].forEach((n) => {
+    if (n && n.length >= 2) aliases.add(n.trim());
+  });
+  if (code === 'US') {
+    aliases.add('United States of America');
+    aliases.add('United States');
+    aliases.add('USA');
+    aliases.add('U.S.');
+  } else if (code === 'GB' || code === 'UK') {
+    aliases.add('United Kingdom');
+    aliases.add('UK');
+    aliases.add('Great Britain');
+  } else if (code === 'AE') {
+    aliases.add('United Arab Emirates');
+    aliases.add('UAE');
+  } else if (code === 'KR') {
+    aliases.add('South Korea');
+  } else if (code === 'CZ') {
+    aliases.add('Czech Republic');
+    aliases.add('Czechia');
+  }
+  return Array.from(aliases).sort((a, b) => b.length - a.length);
+}
+
+/**
+ * Strips all occurrences of destination country name and trailing '- {Country}' from a visa name
+ * so that when combined as `{From} to {To} {subtype} (2026 Guide)`, the destination country name
+ * appears ONLY ONCE across all 14,084 visa detail pages.
+ */
+function getVisaSubtypeWithoutCountry(rawVisaName: string, toCountryName: string, toCode?: string): string {
+  if (!rawVisaName) return 'Visa';
+  let result = String(rawVisaName).trim();
+  const aliases = getCountryAliasesForDedupe(toCountryName, toCode);
+
+  for (const alias of aliases) {
+    const esc = escapeRegexChars(alias);
+    // Remove trailing "- {Country}" or "- Most common ... {Country} ..."
+    result = result.replace(new RegExp(`\\s*[-–—]\\s*${esc}\\s*$`, 'gi'), '');
+    result = result.replace(new RegExp(`\\s*[-–—]\\s*Most common[^-]*${esc}.*$`, 'gi'), '');
+  }
+
+  for (const alias of aliases) {
+    const esc = escapeRegexChars(alias);
+    result = result.replace(new RegExp(`\\b${esc}\\b`, 'gi'), ' ');
+    result = result.replace(new RegExp(esc, 'gi'), ' ');
+  }
+
+  result = result
+    .replace(/\s*[-–—]+\s*[-–—]+\s*/g, ' - ')
+    .replace(/^[\s\-–—:]+|[\s\-–—:]+$/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+  return result || 'Visa';
+}
+
+/**
+ * Ensures standalone visa name uses destination country name at most ONCE and never appends `- {Country}` again.
+ */
+function dedupeVisaNameSingleCountry(rawVisaName: string, toCountryName: string, toCode?: string): string {
+  if (!rawVisaName) return toCountryName ? `${toCountryName} Visa` : 'Visa';
+  const subtype = getVisaSubtypeWithoutCountry(rawVisaName, toCountryName, toCode);
+  return toCountryName ? `${toCountryName} ${subtype}`.replace(/\s{2,}/g, ' ').trim() : subtype;
+}
+
 function generateMetadata(rawPath: string, countries: Country[], article?: Article | null) {
   const { strippedPath: path } = getLangFromUrlPath(rawPath);
   injectTenLanguageHreflangTags(rawPath);
 
   const isAdmin = path === '/admin';
+  const isAdminLogin = path === '/admin/login' || path === '/admin/login/';
   const isAdminUpdates = path === '/admin/updates' || path === '/admin/updates/';
+  const isAdminRoute = path === '/admin' || path.startsWith('/admin/');
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -234,7 +311,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isBlogs = path === '/blogs' || path === '/blogs/';
   const isFlights = path === '/flights' || path === '/flights/' || path.startsWith('/flights?');
   const interviewMatch = path.match(/^\/interview-prep\/([a-z]{2,3})$/i);
-  const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z]+)$/);
+  const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)$/i);
+  const level3DetailMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
@@ -243,12 +321,18 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   let ogImageUrl = 'https://visaapply.org/og-image.jpg';
   let ogImageAlt = 'VisaApply.org - 249 Countries, 61,752 Routes';
 
-  if (isAdmin) {
+  if (isAdminLogin) {
+    title = 'Admin Login – VisaApply.org';
+    description = 'Restricted administrator login for VisaApply.org.';
+  } else if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
   } else if (isAdminUpdates) {
     title = 'Last 30 Days Immigration Changes (Auto-Synced Daily) – VisaApply.org';
     description = 'Real-time immigration policy changes, visa fee updates, processing time shifts, and new visa announcements across 249 official government portals.';
+  } else if (isAdminRoute) {
+    title = 'Admin Portal – VisaApply.org';
+    description = 'Restricted administrator portal for VisaApply.org.';
   } else if (isRoutes) {
     title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
     description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
@@ -282,8 +366,34 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isSitemap) {
     title = 'All 14,084+ Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org';
     description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and 6 visa categories.`;
+  } else if (level3DetailMatch) {
+    const fromCode = level3DetailMatch[1].toUpperCase();
+    const toCode = level3DetailMatch[2].toUpperCase();
+    const catCode = level3DetailMatch[3].toLowerCase();
+    const subCode = level3DetailMatch[4].toLowerCase();
+    const fromDisplay = getCountryDisplayName(fromCode);
+    const toDisplay = getCountryDisplayName(toCode);
+    const catVisas = getVisasForAnyRoute(fromCode, toCode, catCode);
+    const matchedVisa =
+      catVisas.find((v: any) => {
+        const vid = String(v.id || '').toLowerCase();
+        const vcode = String(v.officialCode || '').toLowerCase();
+        return vid === subCode || vcode === subCode || vid.endsWith(`-${subCode}`);
+      }) || catVisas[0];
+    const rawName = article?.title || matchedVisa?.name || subCode.toUpperCase();
+    if (article?.title && article.title.endsWith('(2026 Guide)')) {
+      title = article.title;
+    } else {
+      const subClean = getVisaSubtypeWithoutCountry(rawName, toDisplay, toCode);
+      title = `${fromDisplay} to ${toDisplay} ${subClean} (2026 Guide)`;
+    }
+    description = `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${title}.`;
+    ogImageUrl = `https://visaapply.org/og/${toCode.toLowerCase()}.jpg`;
+    ogImageAlt = title;
   } else if (article && article.title) {
-    title = `${article.title} [2026 Fees & Checklist] | VisaApply.org`;
+    title = article.title.endsWith('(2026 Guide)')
+      ? article.title
+      : `${article.title} [2026 Fees & Checklist] | VisaApply.org`;
     description = article.excerpt || `Complete 2026 visa guide for ${article.title}. Find official fees, mandatory documents, processing time, and FAQs.`;
   } else if (articleMatch) {
     const from = articleMatch[1].toUpperCase();
@@ -345,6 +455,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const cleanCanonicalPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
   const canonicalHref = `${canonicalBase}${cleanCanonicalPath}`;
 
+  setOrCreateMeta('name', 'robots', isAdminRoute ? 'noindex, nofollow' : 'index, follow');
+  setOrCreateMeta('name', 'googlebot', isAdminRoute ? 'noindex, nofollow' : 'index, follow');
   setOrCreateMeta('name', 'description', description);
   setOrCreateMeta('property', 'og:type', 'website');
   setOrCreateMeta('property', 'og:site_name', 'VisaApply.org');
@@ -608,9 +720,9 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
         <div className="flex-1 w-full min-w-0">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl sm:text-[32px] font-black text-slate-900 tracking-[-0.5px] leading-tight">
+              <h2 className="text-2xl sm:text-[32px] font-black text-slate-900 tracking-[-0.5px] leading-tight">
                 {toName} - {count} Visa Types
-              </h1>
+              </h2>
               <div className="text-xs font-bold text-[#0B3D91] mt-1 flex items-center gap-2 flex-wrap">
                 <span>
                   {getCountryFlag(fromCode)} From {getCountryDisplayName(fromCode)} → {toFlag} To {toName} ({count} Visas)
@@ -1640,7 +1752,7 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
                 </div>
               </div>
               <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">
-                {(isJa && v.name_ja) ? v.name_ja : v.name}
+                {(isJa && v.name_ja) ? v.name_ja : dedupeVisaNameSingleCountry(v.name, toCountry.name, toCode)}
               </h3>
               <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
                 {(isJa && v.purpose_ja) ? v.purpose_ja : v.purpose}
@@ -1948,10 +2060,19 @@ export default function App() {
   const [selectedVisaType, setSelectedVisaType] = useState<string>('tourist');
   const [followUpAnswer, setFollowUpAnswer] = useState<string>('yes');
 
-  // Admin state
+  // Admin state & session verification
   const [drafts, setDrafts] = useState<Article[]>([]);
   const [cronLoading, setCronLoading] = useState(false);
   const [cronResult, setCronResult] = useState<string | null>(null);
+  const [adminToken, setAdminToken] = useState<string>(() => {
+    try {
+      return sessionStorage.getItem('visaapply_admin_token') || '';
+    } catch {
+      return '';
+    }
+  });
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(false);
+  const [adminSessionChecked, setAdminSessionChecked] = useState<boolean>(false);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -1974,6 +2095,79 @@ export default function App() {
     const urlLang = getLangFromUrlPath(path).lang;
     if (urlLang) setUiLang(urlLang);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Verify admin login on every page load & navigation
+  useEffect(() => {
+    let cancelled = false;
+    const { strippedPath } = getLangFromUrlPath(currentPath);
+    const isAdminRouteNow = strippedPath === '/admin' || strippedPath.startsWith('/admin/');
+    const isAdminLoginNow = strippedPath === '/admin/login' || strippedPath === '/admin/login/';
+
+    const verifyAdminSession = async () => {
+      let storedToken = '';
+      try {
+        storedToken = sessionStorage.getItem('visaapply_admin_token') || '';
+      } catch {
+        storedToken = '';
+      }
+
+      try {
+        const res = await fetch('/api/admin/session', {
+          method: 'GET',
+          headers: storedToken ? { Authorization: `Bearer ${storedToken}`, 'X-Admin-Token': storedToken } : {},
+          credentials: 'include'
+        });
+        if (cancelled) return;
+        if (res.ok) {
+          const data = await res.json().catch(() => ({ authenticated: false }));
+          if (data && data.authenticated) {
+            setIsAdminAuthenticated(true);
+            setAdminSessionChecked(true);
+            return;
+          }
+        }
+      } catch {
+        // Session check failed -> treat as unauthenticated
+      }
+
+      if (cancelled) return;
+      try {
+        sessionStorage.removeItem('visaapply_admin_token');
+      } catch {
+        // ignore
+      }
+      setAdminToken('');
+      setIsAdminAuthenticated(false);
+      setAdminSessionChecked(true);
+
+      if (isAdminRouteNow && !isAdminLoginNow) {
+        window.history.replaceState({}, '', '/admin/login');
+        setCurrentPath('/admin/login');
+      }
+    };
+
+    void verifyAdminSession();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentPath]);
+
+  const handleAdminLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+    } catch {
+      // ignore network error on logout
+    }
+    try {
+      sessionStorage.removeItem('visaapply_admin_token');
+    } catch {
+      // ignore
+    }
+    setAdminToken('');
+    setIsAdminAuthenticated(false);
+    window.history.replaceState({}, '', '/admin/login');
+    setCurrentPath('/admin/login');
   };
 
   const handleLanguageChange = (nextLang: SupportedLangCode) => {
@@ -2154,8 +2348,10 @@ export default function App() {
   // Router parsing (supports 10-language prefixes like /hi/in-to-us, /ar/ae-to-us, /de/de-to-us, etc.)
   const { strippedPath: routePath } = getLangFromUrlPath(currentPath);
   const isHome = routePath === '/';
-  const isAdmin = routePath === '/admin';
+  const isAdminLogin = routePath === '/admin/login' || routePath === '/admin/login/';
+  const isAdmin = routePath === '/admin' || routePath === '/admin/';
   const isAdminUpdates = routePath === '/admin/updates' || routePath === '/admin/updates/';
+  const isAnyAdminRoute = routePath === '/admin' || routePath.startsWith('/admin/');
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2201,7 +2397,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAdmin && !isAdminUpdates && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2234,11 +2430,18 @@ export default function App() {
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
             <button onClick={() => navigate('/blogs')} className={`transition-colors cursor-pointer ${isBlogs ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => navigate('/interview-prep/us')} className={`transition-colors cursor-pointer ${interviewMatch ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navInterview}</button>
-            <button onClick={() => navigate('/admin/updates')} className={`transition-colors cursor-pointer ${isAdminUpdates ? 'text-cyan-300 font-bold' : 'text-cyan-200 hover:text-white'}`}>{getUIString(uiLang).navGovSync}</button>
             <button onClick={() => navigate('/about')} className={`transition-colors cursor-pointer ${isAbout ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navAbout}</button>
-            <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${isAdmin ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1`}>
-              <Shield className="w-3.5 h-3.5 text-amber-300" /> Admin
-            </button>
+            {isAdminAuthenticated && (
+              <>
+                <button onClick={() => navigate('/admin/updates')} className={`transition-colors cursor-pointer ${isAdminUpdates ? 'text-cyan-300 font-bold' : 'text-cyan-200 hover:text-white'}`}>{getUIString(uiLang).navGovSync}</button>
+                <button onClick={() => navigate('/admin')} className={`transition-colors cursor-pointer ${isAdmin ? 'text-amber-300 font-bold' : 'text-amber-300 hover:text-amber-200'} flex items-center gap-1`}>
+                  <Shield className="w-3.5 h-3.5 text-amber-300" /> Admin
+                </button>
+                <button onClick={handleAdminLogout} className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg text-xs transition-colors cursor-pointer">
+                  Logout
+                </button>
+              </>
+            )}
           </nav>
 
           {/* Primary Action / 15-Language Switcher + Geo Indicator */}
@@ -2287,10 +2490,15 @@ export default function App() {
             <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold">{getUIString(uiLang).navFlights}</button>
             <button onClick={() => { navigate('/blogs'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navBlogs}</button>
             <button onClick={() => { navigate('/interview-prep/us'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navInterview}</button>
-            <button onClick={() => { navigate('/admin/updates'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-cyan-300 hover:text-white font-bold">{getUIString(uiLang).navGovSync}</button>
             <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">{getUIString(uiLang).navAbout}</button>
             <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium">Contact Us</button>
-            <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
+            {isAdminAuthenticated && (
+              <>
+                <button onClick={() => { navigate('/admin/updates'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-cyan-300 hover:text-white font-bold">{getUIString(uiLang).navGovSync}</button>
+                <button onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-amber-200 font-medium">Admin Portal</button>
+                <button onClick={() => { void handleAdminLogout(); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-red-300 hover:text-red-200 font-bold">Logout</button>
+              </>
+            )}
           </div>
         )}
       </header>
@@ -2351,23 +2559,46 @@ export default function App() {
 
       {/* Main Content Router */}
       <main className="flex-1">
-        {isAdminUpdates ? (
-          <ImmigrationUpdatesPage onNavigate={navigate} />
+        {isAnyAdminRoute ? (
+          isAdminLogin || !isAdminAuthenticated ? (
+            <AdminLoginView
+              isAuthenticated={isAdminAuthenticated}
+              adminSessionChecked={adminSessionChecked}
+              intendedPath={isAdminLogin ? '/admin/updates' : routePath}
+              onLoginSuccess={(token, targetPath) => {
+                setAdminToken(token);
+                setIsAdminAuthenticated(true);
+                setAdminSessionChecked(true);
+                navigate(targetPath || '/admin/updates');
+              }}
+              navigate={navigate}
+            />
+          ) : isAdminUpdates ? (
+            <ImmigrationUpdatesPage
+              onNavigate={navigate}
+              isAdminAuthenticated={isAdminAuthenticated}
+              adminToken={adminToken}
+              onLogout={handleAdminLogout}
+            />
+          ) : (
+            <AdminPortal 
+              drafts={drafts} 
+              articles={articles}
+              setArticles={setArticles}
+              setDrafts={setDrafts}
+              cronLoading={cronLoading}
+              cronResult={cronResult}
+              onTriggerCron={handleTriggerCron}
+              onApprove={handleApproveDraft}
+              onDelete={handleDeleteDraft}
+              navigate={navigate}
+              isAdminAuthenticated={isAdminAuthenticated}
+              adminToken={adminToken}
+              onLogout={handleAdminLogout}
+            />
+          )
         ) : isRoutes ? (
           <RoutesPage onNavigate={navigate} />
-        ) : isAdmin ? (
-          <AdminPortal 
-            drafts={drafts} 
-            articles={articles}
-            setArticles={setArticles}
-            setDrafts={setDrafts}
-            cronLoading={cronLoading}
-            cronResult={cronResult}
-            onTriggerCron={handleTriggerCron}
-            onApprove={handleApproveDraft}
-            onDelete={handleDeleteDraft}
-            navigate={navigate}
-          />
         ) : isAbout ? (
           <AboutView navigate={navigate} />
         ) : isFlights ? (
@@ -4058,15 +4289,6 @@ function ArticleView({ match, articles = [], navigate }: any) {
     };
   }, [fromCode, toCode, subtypeCode, dbVisaItem]);
 
-  useEffect(() => {
-    setLoading(false);
-    generateMetadata(window.location.pathname, [], null);
-  }, [fromCode, toCode, categoryCode, subtypeCode]);
-
-  if (loading) {
-    return <ArticleSkeleton />;
-  }
-
   const fromName = getCountryDisplayName(fromCode);
   const toName = getCountryDisplayName(toCode);
   const fromFlag = getCountryFlag(fromCode);
@@ -4074,11 +4296,32 @@ function ArticleView({ match, articles = [], navigate }: any) {
   const fromCountry = { name: fromName, flag: fromFlag, code: fromCode };
   const toCountry = { name: toName, flag: toFlag, code: toCode };
 
-  const visaName = (isJa && dbVisaItem?.name_ja) ? dbVisaItem.name_ja : (dbVisaItem?.name || subtypeCode.toUpperCase());
+  const rawVisaName = (isJa && dbVisaItem?.name_ja) ? dbVisaItem.name_ja : (dbVisaItem?.name || subtypeCode.toUpperCase());
+  const visaSubtypeWithoutCountry = getVisaSubtypeWithoutCountry(rawVisaName, toCountry.name, toCode);
+  const visaName = isJa ? rawVisaName : dedupeVisaNameSingleCountry(rawVisaName, toCountry.name, toCode);
 
   const guideTitle = isJa 
-    ? `${fromCountry.name}から${toCountry.name}への${visaName} (2026年最新ガイド)`
-    : `${fromCountry.name} to ${toCountry.name} ${visaName} (2026 Guide)`;
+    ? `${fromCountry.name}から${toCountry.name}への${visaSubtypeWithoutCountry} (2026年最新ガイド)`
+    : `${fromCountry.name} to ${toCountry.name} ${visaSubtypeWithoutCountry} (2026 Guide)`;
+
+  useEffect(() => {
+    setLoading(false);
+    generateMetadata(window.location.pathname, [], {
+      slug: window.location.pathname.replace(/^\//, ''),
+      title: guideTitle,
+      from: fromCode,
+      to: toCode,
+      type: resolvedCategoryCode,
+      date: '2026-11-07',
+      fees: dbVisaItem?.fee || '$185',
+      docs: ''
+    });
+    document.title = guideTitle;
+  }, [fromCode, toCode, categoryCode, subtypeCode, guideTitle, resolvedCategoryCode, dbVisaItem?.fee]);
+
+  if (loading) {
+    return <ArticleSkeleton />;
+  }
 
   const rawDocs = (isJa && dbVisaItem?.docs_ja) ? dbVisaItem.docs_ja : dbVisaItem?.docs;
   const docsList = Array.isArray(rawDocs) 
@@ -4156,14 +4399,12 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
             {/* Breadcrumb Indicator */}
             <div className="flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-slate-600 bg-slate-100/90 px-2.5 py-1 rounded-lg border border-slate-200 truncate min-w-0">
-              <span className="shrink-0">{fromCountry.flag} {fromCode}</span>
-              <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
-              <span className="shrink-0">{toCountry.flag} {toCode}</span>
+              <span className="shrink-0">{fromCode} → {toCode}</span>
               <span className="text-slate-300 shrink-0">/</span>
               <span className="capitalize text-[#0B3D91] shrink-0 font-bold">{resolvedCategoryCode}</span>
               <span className="text-slate-300 shrink-0">/</span>
-              <span className="truncate font-bold text-slate-900" title={visaName}>
-                {dbVisaItem?.officialCode ? `Subclass ${dbVisaItem.officialCode}` : visaName}
+              <span className="truncate font-bold text-slate-900" title={visaSubtypeWithoutCountry}>
+                {visaSubtypeWithoutCountry}
               </span>
             </div>
           </div>
@@ -4246,7 +4487,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         <span>&gt;</span>
         <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${resolvedCategoryCode}`)} className="cursor-pointer hover:text-blue-600 capitalize">{resolvedCategoryCode}</span>
         <span>&gt;</span>
-        <span className="text-slate-900 font-bold">{dbVisaItem?.name || subtypeCode.toUpperCase()}</span>
+        <span className="text-slate-900 font-bold">{visaSubtypeWithoutCountry}</span>
       </nav>
 
       {/* Phase 1.5: 8 Live Features + Booking.com Hotel Hero */}
@@ -4263,9 +4504,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
         {/* Header Title & Badges */}
         <div id="section-overview" className="text-center space-y-3 pb-6 border-b border-slate-200 scroll-mt-28">
           <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#0B3D91] bg-blue-50 px-3 py-1 rounded-full w-max mx-auto">
-            <span>{fromCountry.flag} {fromCode}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-            <span>{toCountry.flag} {toCode}</span>
+            <span>{fromCode} → {toCode}</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -5780,14 +6019,142 @@ function TermsView({ navigate }: any) {
 }
 
 // ----------------------------------------------------
-// Admin Portal Component (Password Protected)
+// Admin Login View (/admin/login) & Protected Admin Portal
 // ----------------------------------------------------
-function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cronResult, onTriggerCron, onApprove, onDelete, navigate }: any) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+function AdminLoginView({
+  isAuthenticated,
+  intendedPath,
+  onLoginSuccess,
+  navigate
+}: {
+  isAuthenticated: boolean;
+  adminSessionChecked: boolean;
+  intendedPath: string;
+  onLoginSuccess: (token: string, targetPath: string) => void;
+  navigate: (path: string) => void;
+}) {
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(false);
+
+  useEffect(() => {
+    if (window.location.pathname !== '/admin/login') {
+      window.history.replaceState({}, '', '/admin/login');
+    }
+    if (isAuthenticated) {
+      navigate(intendedPath && intendedPath !== '/admin/login' ? intendedPath : '/admin/updates');
+    }
+  }, [isAuthenticated, intendedPath, navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoadingAuth(true);
+    setAuthError(null);
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ password: passwordInput })
+      });
+      const text = await res.text();
+      if (!text || text.trim().startsWith('<')) {
+        setAuthError('Server error: authentication endpoint returned an invalid response.');
+        setLoadingAuth(false);
+        return;
+      }
+      const data = JSON.parse(text);
+      if (res.ok && data.success && data.token) {
+        try {
+          sessionStorage.setItem('visaapply_admin_token', data.token);
+        } catch {
+          // ignore sessionStorage error
+        }
+        const params = new URLSearchParams(window.location.search);
+        const redirectParam = params.get('redirect');
+        const safeTarget =
+          redirectParam && redirectParam.startsWith('/admin') && redirectParam !== '/admin/login'
+            ? redirectParam
+            : intendedPath && intendedPath.startsWith('/admin') && intendedPath !== '/admin/login'
+              ? intendedPath
+              : '/admin/updates';
+        onLoginSuccess(data.token, safeTarget);
+      } else {
+        setAuthError(data.message || 'Invalid administrator password.');
+      }
+    } catch {
+      setAuthError('Authentication failed. Please try again.');
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
+
+  return (
+    <div className="min-h-[75vh] flex items-center justify-center px-4 bg-slate-50">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3">
+            <Shield className="w-6 h-6" />
+          </div>
+          <h1 className="text-xl font-extrabold text-slate-900">Admin Login</h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Restricted access • Authenticate with ADMIN_PASSWORD to unlock /admin pages
+          </p>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Admin Password</label>
+            <input
+              type="password"
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+              placeholder="Enter administrator password"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+              required
+              autoFocus
+            />
+          </div>
+
+          {authError && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium text-center">
+              {authError}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loadingAuth}
+            className="w-full py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-colors shadow-md disabled:opacity-50 cursor-pointer"
+          >
+            {loadingAuth ? 'Verifying Session...' : 'Sign In to Admin Portal'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function AdminPortal({
+  drafts,
+  articles,
+  setArticles,
+  cronLoading,
+  cronResult,
+  onTriggerCron,
+  onApprove,
+  onDelete,
+  navigate,
+  isAdminAuthenticated,
+  onLogout
+}: any) {
   const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (!isAdminAuthenticated) {
+      navigate('/admin/login');
+    }
+  }, [isAdminAuthenticated, navigate]);
 
   const handleTriggerWithCooldown = async () => {
     if (cooldown > 0 || cronLoading) return;
@@ -5811,114 +6178,75 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
     localStorage.setItem('publishedGuides', JSON.stringify(unique));
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoadingAuth(true);
-    setAuthError(null);
-    try {
-      const res = await fetch('/api/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passwordInput })
-      });
-      const text = await res.text();
-      if (!text || text.trim().startsWith('<')) {
-        setAuthError('Server error: API endpoint returned HTML');
-        setLoadingAuth(false);
-        return;
-      }
-      const data = JSON.parse(text);
-      if (res.ok && data.success) {
-        setIsAuthenticated(true);
-      } else {
-        setAuthError(data.message || 'Wrong password');
-      }
-    } catch (err) {
-      setAuthError('Authentication failed');
-    } finally {
-      setLoadingAuth(false);
-    }
-  };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
-          <div className="text-center mb-6">
-            <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3">
-              <Shield className="w-6 h-6" />
-            </div>
-            <h1 className="text-xl font-bold text-slate-900">Admin Portal Access</h1>
-            <p className="text-xs text-slate-500 mt-1">Enter password to manage VisaApply.org editorial drafts</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Password</label>
-              <input 
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                placeholder="Enter admin password"
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
-                required
-              />
-            </div>
-
-            {authError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium text-center">
-                {authError}
-              </div>
-            )}
-
-            <button 
-              type="submit"
-              disabled={loadingAuth}
-              className="w-full py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-colors shadow-md disabled:opacity-50"
-            >
-              {loadingAuth ? 'Authenticating...' : 'Access Dashboard'}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
+  if (!isAdminAuthenticated) {
+    return null;
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 mb-1">
-            <Shield className="w-4 h-4" />
-            <span>Admin Editorial Portal</span>
+    <div className="min-h-screen bg-slate-50">
+      {/* Admin Navigation Header with Logout Button */}
+      <div className="bg-slate-950 border-b border-slate-800 px-4 py-3 text-white">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 px-3 py-1 rounded-lg text-xs font-bold">
+              🔒 Admin Session Active
+            </span>
+            <button
+              onClick={() => navigate('/admin')}
+              className="text-xs font-semibold text-white bg-slate-800 px-3 py-1.5 rounded-lg cursor-pointer"
+            >
+              Dashboard (/admin)
+            </button>
+            <button
+              onClick={() => navigate('/admin/updates')}
+              className="text-xs font-semibold text-cyan-300 hover:text-white transition-colors cursor-pointer"
+            >
+              249-Country Auto-Sync (/admin/updates)
+            </button>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">VisaApply.org Management</h1>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button 
-            disabled={cronLoading || cooldown > 0}
-            onClick={handleTriggerWithCooldown}
-            className="px-5 py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-all flex items-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+          <button
+            onClick={onLogout}
+            className="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-sm"
           >
-            <RefreshCw className={`w-4 h-4 ${cronLoading ? 'animate-spin' : ''}`} />
-            <span>{cronLoading ? 'Generating AI Guides...' : cooldown > 0 ? `Generating... Please wait (${cooldown}s)` : 'Trigger Gemini AI Auto-Blogger Now'}</span>
-          </button>
-          <button 
-            onClick={() => setIsAuthenticated(false)}
-            className="px-4 py-3 bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm hover:bg-slate-300 transition-colors"
-          >
-            Lock
+            Logout
           </button>
         </div>
       </div>
 
-      {cronResult && (
-        <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-900 font-medium flex items-center justify-between">
-          <span>{cronResult}</span>
-          <button onClick={() => window.location.reload()} className="text-xs underline font-semibold">Refresh Page</button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-200">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 mb-1">
+              <Shield className="w-4 h-4" />
+              <span>Admin Editorial Portal</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">VisaApply.org Management</h1>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button 
+              disabled={cronLoading || cooldown > 0}
+              onClick={handleTriggerWithCooldown}
+              className="px-5 py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-all flex items-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+            >
+              <RefreshCw className={`w-4 h-4 ${cronLoading ? 'animate-spin' : ''}`} />
+              <span>{cronLoading ? 'Generating AI Guides...' : cooldown > 0 ? `Generating... Please wait (${cooldown}s)` : 'Trigger Gemini AI Auto-Blogger Now'}</span>
+            </button>
+            <button 
+              onClick={onLogout}
+              className="px-4 py-3 bg-red-600 text-white font-semibold rounded-xl text-sm hover:bg-red-700 transition-colors cursor-pointer shadow-sm"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-      )}
+
+        {cronResult && (
+          <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-900 font-medium flex items-center justify-between">
+            <span>{cronResult}</span>
+            <button onClick={() => window.location.reload()} className="text-xs underline font-semibold">Refresh Page</button>
+          </div>
+        )}
 
       {/* Phase 5.5: Monetization Dashboard */}
       <div style={{ background: 'white', borderRadius: '16px', padding: '20px', border: '1px solid #e2e8f0', marginBottom: '32px' }}>
@@ -6103,6 +6431,7 @@ function AdminPortal({ drafts, articles, setArticles, setDrafts, cronLoading, cr
 
       <div className="mt-8 text-center text-xs text-slate-500 font-medium">
         VisaApply.org Editorial Management Portal · Support: <a href="mailto:contact@visaapply.org" className="text-[#0B3D91] font-bold hover:underline">contact@visaapply.org</a>
+      </div>
       </div>
     </div>
   );

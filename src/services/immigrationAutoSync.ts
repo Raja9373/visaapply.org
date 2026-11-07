@@ -190,7 +190,10 @@ export function applyLiveUpdateToDatabase(entry: ImmigrationChangelogItem) {
   }
 }
 
-export async function checkImmigrationUpdates(targetCountries?: string[]): Promise<{
+export async function checkImmigrationUpdates(
+  targetCountries?: string[],
+  adminToken?: string
+): Promise<{
   success: boolean;
   checkedCount: number;
   updatesFound: number;
@@ -198,27 +201,34 @@ export async function checkImmigrationUpdates(targetCountries?: string[]): Promi
   changelog: ImmigrationChangelogItem[];
   adminEmailNotified: string;
 }> {
-  try {
-    const response = await fetch('/api/cron/immigration-sync', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        countries: targetCountries || ['us', 'gb', 'ae', 'sg', 'ca', 'au', 'de', 'th'],
-        adminEmail: 'maddydelhi57@gmail.com',
-      }),
-    });
+  const token =
+    adminToken ||
+    (typeof window !== 'undefined' ? sessionStorage.getItem('visaapply_admin_token') || '' : '');
+  const response = await fetch('/api/cron/immigration-sync', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}`, 'X-Admin-Token': token } : {}),
+    },
+    body: JSON.stringify({
+      countries: targetCountries || ['us', 'gb', 'ae', 'sg', 'ca', 'au', 'de', 'th'],
+      adminEmail: 'maddydelhi57@gmail.com',
+    }),
+  });
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data && Array.isArray(data.changelog)) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(LOCAL_STORAGE_CHANGELOG_KEY, JSON.stringify(data.changelog));
-        }
-        return data;
+  if (response.status === 401 || response.status === 403) {
+    throw new Error('Unauthorized: Admin login required.');
+  }
+
+  if (response.ok) {
+    const data = await response.json();
+    if (data && Array.isArray(data.changelog)) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LOCAL_STORAGE_CHANGELOG_KEY, JSON.stringify(data.changelog));
       }
+      return data;
     }
-  } catch (e) {
-    // Fallback to client-side sync record if server route is busy
   }
 
   const fallbackEntry: ImmigrationChangelogItem = {

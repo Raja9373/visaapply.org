@@ -11,9 +11,17 @@ import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
 
 interface ImmigrationUpdatesPageProps {
   onNavigate: (path: string) => void;
+  isAdminAuthenticated?: boolean;
+  adminToken?: string;
+  onLogout?: () => void;
 }
 
-export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ onNavigate }) => {
+export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({
+  onNavigate,
+  isAdminAuthenticated = false,
+  adminToken = '',
+  onLogout,
+}) => {
   const [changelog, setChangelog] = useState<ImmigrationChangelogItem[]>(() =>
     getStoredImmigrationChangelog()
   );
@@ -31,7 +39,11 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
   const [manualSource, setManualSource] = useState('');
 
   useEffect(() => {
-    fetch('/api/immigration-changelog')
+    if (!isAdminAuthenticated) {
+      onNavigate('/admin/login');
+      return;
+    }
+    fetch('/api/immigration-changelog', { credentials: 'include' })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
@@ -39,18 +51,30 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
         }
       })
       .catch(() => {});
-  }, []);
+  }, [isAdminAuthenticated, onNavigate]);
+
+  if (!isAdminAuthenticated) {
+    return null;
+  }
 
   const handleRunAutoSync = async () => {
+    if (!isAdminAuthenticated) {
+      onNavigate('/admin/login');
+      return;
+    }
     setSyncing(true);
     setSyncMessage(null);
     try {
-      const res = await checkImmigrationUpdates();
+      const res = await checkImmigrationUpdates(undefined, adminToken);
       setChangelog(res.changelog);
       setSyncMessage(
         `✅ Auto-Sync Complete! Checked ${res.checkedCount} official government immigration portals via Gemini AI. Email notification queued for ${res.adminEmailNotified} and breaking blog published to /blogs.`
       );
     } catch (e: any) {
+      if (String(e?.message || '').includes('Unauthorized')) {
+        onLogout?.();
+        return;
+      }
       setSyncMessage(`Sync completed via backup Timatic/Wikipedia feed.`);
     } finally {
       setSyncing(false);
@@ -59,6 +83,10 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
 
   const handleAddManualUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAdminAuthenticated) {
+      onNavigate('/admin/login');
+      return;
+    }
     const cName = NAME_MAP_249[manualCountry] || manualCountry.toUpperCase();
     const slug = `breaking-${cName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-visa-update-${Date.now()}`;
     const newEntry: ImmigrationChangelogItem = {
@@ -83,11 +111,19 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
     setChangelog(updated);
 
     try {
-      await fetch('/api/admin/manual-update', {
+      const res = await fetch('/api/admin/manual-update', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(adminToken ? { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken } : {}),
+        },
         body: JSON.stringify(newEntry),
       });
+      if (res.status === 401) {
+        onLogout?.();
+        return;
+      }
     } catch (err) {}
 
     setManualTitle('');
@@ -106,6 +142,35 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Protected Admin Navigation Header with Logout Button */}
+      <div className="bg-slate-900 text-white rounded-2xl px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 border border-slate-700 shadow-md">
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2.5 py-1 rounded-lg text-xs font-extrabold">
+            🔒 ADMIN SECURE SESSION
+          </span>
+          <button
+            type="button"
+            onClick={() => onNavigate('/admin')}
+            className="text-xs font-bold text-slate-300 hover:text-white cursor-pointer"
+          >
+            Dashboard (/admin)
+          </button>
+          <span className="text-slate-600">•</span>
+          <span className="text-xs font-extrabold text-cyan-300">
+            249-Country Auto-Sync (/admin/updates)
+          </span>
+        </div>
+        {onLogout && (
+          <button
+            type="button"
+            onClick={onLogout}
+            className="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs cursor-pointer transition-colors shadow-xs"
+          >
+            Logout
+          </button>
+        )}
+      </div>
+
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-900 via-[#0B3D91] to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -120,23 +185,25 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
               Monitors 249 official government visa portals + Wikipedia Visa Policy + IATA Timatic + Henley Passport Index. Auto-updates FULL_VISA_DB, emails <b>maddydelhi57@gmail.com</b>, and publishes breaking blogs.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2.5 shrink-0">
-            <button
-              type="button"
-              disabled={syncing}
-              onClick={handleRunAutoSync}
-              className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs cursor-pointer transition-colors shadow-md disabled:opacity-50"
-            >
-              {syncing ? '⏳ Syncing 249 Portals with Gemini AI...' : '⚡ Run 249-Country Auto-Sync Now'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowManualForm((prev) => !prev)}
-              className="px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl text-xs border border-white/25 cursor-pointer transition-colors"
-            >
-              ➕ Add Manual Update
-            </button>
-          </div>
+          {isAdminAuthenticated && (
+            <div className="flex flex-wrap gap-2.5 shrink-0">
+              <button
+                type="button"
+                disabled={syncing}
+                onClick={handleRunAutoSync}
+                className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs cursor-pointer transition-colors shadow-md disabled:opacity-50"
+              >
+                {syncing ? '⏳ Syncing 249 Portals with Gemini AI...' : '⚡ Run 249-Country Auto-Sync Now'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowManualForm((prev) => !prev)}
+                className="px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl text-xs border border-white/25 cursor-pointer transition-colors"
+              >
+                ➕ Add Manual Update
+              </button>
+            </div>
+          )}
         </div>
 
         {syncMessage && (
@@ -147,7 +214,7 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({ 
       </div>
 
       {/* Manual Override Form */}
-      {showManualForm && (
+      {isAdminAuthenticated && showManualForm && (
         <form
           onSubmit={handleAddManualUpdate}
           className="bg-white rounded-2xl border-2 border-blue-200 p-6 shadow-md space-y-4"

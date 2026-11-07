@@ -2,6 +2,7 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
@@ -242,14 +243,92 @@ app.get('/api/articles/:slug', (req, res) => {
   }
 });
 
-app.post('/api/admin', (req, res) => {
-  const { password } = req.body || {};
-  const adminPass = process.env.ADMIN_PASSWORD || 'Alokms98';
-  if (password === adminPass) {
-    res.json({ success: true });
-  } else {
-    res.status(401).json({ success: false, message: 'Wrong password' });
+function getAdminPassword(): string {
+  return (process.env.ADMIN_PASSWORD || '').trim();
+}
+
+function getExpectedAdminToken(): string {
+  const pass = getAdminPassword();
+  if (!pass) return '';
+  return crypto.createHmac('sha256', pass).update('visaapply-admin-v1').digest('hex');
+}
+
+function parseAdminCookie(req: any): string {
+  const cookieHeader = String(req.headers?.cookie || '');
+  const match = cookieHeader.match(/(?:^|;\s*)visaapply_admin_session=([^;]+)/);
+  return match ? decodeURIComponent(match[1].trim()) : '';
+}
+
+function extractAdminToken(req: any): string {
+  const authHeader = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '').trim();
+  const customHeader = String(req.headers?.['x-admin-token'] || '').trim();
+  const cookieToken = parseAdminCookie(req);
+  return authHeader || customHeader || cookieToken;
+}
+
+function isAdminAuthenticatedReq(req: any): boolean {
+  const expected = getExpectedAdminToken();
+  if (!expected) return false;
+  const provided = extractAdminToken(req);
+  if (!provided || provided.length !== expected.length) return false;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
+  } catch {
+    return false;
   }
+}
+
+function requireAdminAuth(req: any, res: any, next: any) {
+  if (!isAdminAuthenticatedReq(req)) {
+    return res.status(401).json({
+      success: false,
+      authenticated: false,
+      error: 'Unauthorized: Admin login required at /admin/login'
+    });
+  }
+  next();
+}
+
+const handleAdminLogin = (req: any, res: any) => {
+  const { password } = req.body || {};
+  const adminPass = getAdminPassword();
+  if (!adminPass) {
+    return res.status(503).json({
+      success: false,
+      authenticated: false,
+      message: 'ADMIN_PASSWORD environment variable is not configured on the server.'
+    });
+  }
+  if (typeof password === 'string' && password.length > 0 && password === adminPass) {
+    const token = getExpectedAdminToken();
+    const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    const cookieFlags = isSecure
+      ? 'Path=/; HttpOnly; SameSite=None; Secure; Max-Age=86400'
+      : 'Path=/; HttpOnly; SameSite=Lax; Max-Age=86400';
+    res.setHeader('Set-Cookie', `visaapply_admin_session=${encodeURIComponent(token)}; ${cookieFlags}`);
+    return res.json({ success: true, authenticated: true, token });
+  }
+  return res.status(401).json({ success: false, authenticated: false, message: 'Invalid admin password' });
+};
+
+app.post('/api/admin', handleAdminLogin);
+app.post('/api/admin/login', handleAdminLogin);
+app.post('/api/admin/auth', handleAdminLogin);
+
+app.get(['/api/admin', '/api/admin/session'], (req, res) => {
+  if (isAdminAuthenticatedReq(req)) {
+    return res.json({ success: true, authenticated: true });
+  }
+  return res.status(401).json({ success: false, authenticated: false });
+});
+
+app.post('/api/admin/logout', (req, res) => {
+  const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+  const cookieFlags = isSecure
+    ? 'Path=/; HttpOnly; SameSite=None; Secure; Max-Age=0'
+    : 'Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
+  res.setHeader('Set-Cookie', `visaapply_admin_session=; ${cookieFlags}`);
+  return res.json({ success: true, authenticated: false });
 });
 
 // AI FAQ Answer Generation for un-matched queries
@@ -291,17 +370,6 @@ Provide a concise, highly accurate, and helpful official consular answer address
       success: true, 
       answer: `Regarding your query "${query}" for ${fromCountry} to ${destination} ${visaType} visa: Please review official embassy guidelines, maintain 3-6 months bank statements, and ensure valid passport documentation.` 
     });
-  }
-});
-
-// Admin: Auth check
-app.post('/api/admin/auth', (req, res) => {
-  const { password } = req.body;
-  const adminPass = process.env.ADMIN_PASSWORD || 'Alokms98';
-  if (password === adminPass) {
-    res.json({ success: true });
-  } else {
-    res.status(401).json({ success: false, error: 'Wrong password' });
   }
 });
 
@@ -358,7 +426,7 @@ app.get('/api/drafts', (req, res) => {
 });
 
 // Admin: Get Drafts
-app.get('/api/admin/drafts', (req, res) => {
+app.get('/api/admin/drafts', requireAdminAuth, (req, res) => {
   try {
     const files = fs.readdirSync(DRAFTS_DIR).filter(f => f.endsWith('.md'));
     const drafts = files.map(file => {
@@ -379,7 +447,7 @@ app.get('/api/admin/drafts', (req, res) => {
 });
 
 // Admin: Approve Draft
-app.post('/api/admin/approve', (req, res) => {
+app.post('/api/admin/approve', requireAdminAuth, (req, res) => {
   try {
     const { slug } = req.body;
     const draftPath = path.join(DRAFTS_DIR, `${slug}.md`);
@@ -400,7 +468,7 @@ app.post('/api/admin/approve', (req, res) => {
 });
 
 // Admin: Delete Draft
-app.delete('/api/admin/drafts/:slug', (req, res) => {
+app.delete('/api/admin/drafts/:slug', requireAdminAuth, (req, res) => {
   try {
     const { slug } = req.params;
     const draftPath = path.join(DRAFTS_DIR, `${slug}.md`);
@@ -567,7 +635,7 @@ app.get('/api/immigration-changelog', (req, res) => {
   res.json(readChangelogFromDisk());
 });
 
-app.post('/api/admin/manual-update', (req, res) => {
+app.post('/api/admin/manual-update', requireAdminAuth, (req, res) => {
   try {
     const entry = req.body;
     const current = readChangelogFromDisk();
@@ -691,15 +759,21 @@ Return a concise JSON object with keys:
   }
 };
 
-app.post('/api/cron/immigration-sync', handleImmigrationSyncCron);
-app.get('/api/cron/immigration-sync', handleImmigrationSyncCron);
+app.post('/api/cron/immigration-sync', requireAdminAuth, handleImmigrationSyncCron);
+app.get('/api/cron/immigration-sync', requireAdminAuth, handleImmigrationSyncCron);
 
-// Static & Dynamic 80,000+ Page Sitemap Index Architecture (No GSC API, https://www.visaapply.org/ URLs only)
+function stripAdminUrlsFromXml(xml: string): string {
+  return xml
+    .replace(/<url>[\s\S]*?<loc>[^<]*\/admin(?:\/[^<]*)?<\/loc>[\s\S]*?<\/url>\s*/gi, '')
+    .replace(/<sitemap>[\s\S]*?<loc>[^<]*\/admin(?:\/[^<]*)?<\/loc>[\s\S]*?<\/sitemap>\s*/gi, '');
+}
+
+// Static & Dynamic 80,000+ Page Sitemap Index Architecture (No GSC API, https://www.visaapply.org/ URLs only, zero /admin/* URLs)
 const handleSitemapIndexXml = (req: any, res: any) => {
   try {
     const indexPath = path.join(__dirname, 'public', 'sitemap-index.xml');
     if (fs.existsSync(indexPath)) {
-      const xml = fs.readFileSync(indexPath, 'utf-8');
+      const xml = stripAdminUrlsFromXml(fs.readFileSync(indexPath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
@@ -734,7 +808,7 @@ const handleSubSitemapXml = (req: any, res: any) => {
     }
     const filePath = path.join(__dirname, 'public', `sitemap-${rawSub}.xml`);
     if (fs.existsSync(filePath)) {
-      const xml = fs.readFileSync(filePath, 'utf-8');
+      const xml = stripAdminUrlsFromXml(fs.readFileSync(filePath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
@@ -846,8 +920,26 @@ function getServerSideOgMeta(pathname: string) {
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
   } else {
+    const level3Match = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
     const routeMatch = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})(?:-([a-z]+))?$/i);
-    if (routeMatch) {
+    if (level3Match) {
+      const fromCode = level3Match[1].toLowerCase();
+      const toCode = level3Match[2].toLowerCase();
+      const cat = level3Match[3].toLowerCase();
+      const sub = level3Match[4];
+      const fromCountryObj = COUNTRIES.find((c) => c.code.toLowerCase() === fromCode);
+      const toCountryObj = COUNTRIES.find((c) => c.code.toLowerCase() === toCode);
+      const fromName = fromCountryObj?.name || fromCode.toUpperCase();
+      const toName = toCountryObj?.name || toCode.toUpperCase();
+      const catLabel = cat.charAt(0).toUpperCase() + cat.slice(1);
+      const numMatch = sub.match(/(\d+)$/);
+      const numSuffix = numMatch ? ` ${parseInt(numMatch[1], 10)}` : '';
+      ogTitle = `${fromName} to ${toName} ${catLabel} Visa${numSuffix} (2026 Guide)`;
+      ogDesc = `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${ogTitle}.`;
+      ogImage = `https://visaapply.org/og/${toCode}.jpg`;
+      twitterTitle = ogTitle;
+      twitterDesc = ogDesc;
+    } else if (routeMatch) {
       const fromCode = routeMatch[1].toLowerCase();
       const toCode = routeMatch[2].toLowerCase();
       const fromCountryObj = COUNTRIES.find((c) => c.code.toLowerCase() === fromCode);
@@ -881,7 +973,7 @@ const vite = await createViteServer({
 // Inject Impact verification tag + dynamic Open Graph & Twitter Card tags on HTML page requests
 app.use(async (req, res, next) => {
   if (
-    req.method !== 'GET' ||
+    (req.method !== 'GET' && req.method !== 'HEAD') ||
     req.path.startsWith('/api') ||
     req.path.startsWith('/src') ||
     req.path.startsWith('/@') ||
@@ -895,12 +987,30 @@ app.use(async (req, res, next) => {
   }
 
   try {
+    const cleanReqPath = (req.path || '/').replace(/^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/|$)/i, '/') || '/';
+    const isAdminPageReq = cleanReqPath === '/admin' || cleanReqPath.startsWith('/admin/');
+    const isAdminLoginReq = cleanReqPath === '/admin/login' || cleanReqPath === '/admin/login/';
+
+    // Server-side protection: if requesting any /admin/* page (except /admin/login) without valid session cookie, redirect to /admin/login
+    if (isAdminPageReq && !isAdminLoginReq && !isAdminAuthenticatedReq(req)) {
+      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      return res.redirect(302, `/admin/login?redirect=${encodeURIComponent(cleanReqPath)}`);
+    }
+
     const indexPath = path.join(__dirname, 'index.html');
     const rawHtml = fs.readFileSync(indexPath, 'utf-8');
     let transformed = await vite.transformIndexHtml(req.originalUrl, rawHtml);
     const impactTag = "<meta name='impact-site-verification' value='b1ae4431-d331-41dd-a031-905fa7d5844a'>";
     transformed = transformed.replace(/<meta\s+name=['"]impact-site-verification['"][^>]*>\s*/gi, '');
     transformed = transformed.replace(/<head>/i, `<head>\n    ${impactTag}`);
+
+    if (isAdminPageReq) {
+      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      transformed = transformed.replace(/<meta\s+name=['"]robots['"][^>]*>\s*/gi, '');
+      transformed = transformed.replace(/<head>/i, `<head>\n    <meta name="robots" content="noindex, nofollow" />\n    <meta name="googlebot" content="noindex, nofollow" />`);
+    }
 
     const og = getServerSideOgMeta(req.path);
     const esc = (s: string) => s.replace(/"/g, '&quot;');

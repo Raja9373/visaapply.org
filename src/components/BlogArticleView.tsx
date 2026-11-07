@@ -561,9 +561,7 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
 
             {/* Breadcrumb Indicator */}
             <div className="flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-slate-600 bg-slate-100/90 px-2.5 py-1 rounded-lg border border-slate-200 truncate min-w-0">
-              <span className="shrink-0">{fromCountry.flag} {fromCode}</span>
-              <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
-              <span className="shrink-0">{toCountry.flag} {toCode}</span>
+              <span className="shrink-0">{fromCode} → {toCode}</span>
               <span className="text-slate-300 shrink-0">/</span>
               <span className="capitalize text-[#0B3D91] shrink-0 font-bold">{categoryCode}</span>
               <span className="text-slate-300 shrink-0">/</span>

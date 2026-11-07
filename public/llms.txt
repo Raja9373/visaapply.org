@@ -9,7 +9,6 @@
 - [Cheap International Flights Search (249 Countries)](https://www.visaapply.org/flights): Compare flight routes and airfares for visa itineraries across 249 destinations.
 - [2,490+ Official Visa Blogs & 2026 Guides](https://www.visaapply.org/blogs): Daily updated visa guides covering fees, rejection reasons, work permits, and student visas.
 - [Consular Interview Prep & Mock Simulator](https://www.visaapply.org/interview-prep/us): Top 20 consular officer questions and winning answers for all 249 countries.
-- [30-Day Government Immigration Auto-Sync](https://www.visaapply.org/admin/updates): Live tracker of policy updates from 249 official immigration portals.
 - [Full HTML Sitemap (14,084+ Visa Guides)](https://www.visaapply.org/sitemap): Complete index of all destination countries and visa subclasses.
 - [XML Sitemap](https://www.visaapply.org/sitemap.xml): Machine-readable XML sitemap for search engines and AI crawlers.
 - [About Us, Editorial Policy & Free Visa Widget](https://www.visaapply.org/about): Editorial verification methodology and embeddable visa status widget.

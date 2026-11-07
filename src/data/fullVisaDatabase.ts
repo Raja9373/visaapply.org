@@ -1027,7 +1027,7 @@ const CURATED_DEDICATED_CODES = new Set([
       cats.tourist.push({
         id:`${c}-TOU-${String(i).padStart(3,'0')}`,
         officialCode:`${c.toUpperCase()}-TOU-${tmpl.sub.substring(0,4).toUpperCase()}-${i}`,
-        name:`${name} ${tmpl.sub} Visa ${i} - ${name}`,
+        name:`${name} ${tmpl.sub} Visa ${i}`,
         toCountry:c,
         fromCountry:"in",
         category:"tourist",
@@ -1043,7 +1043,7 @@ const CURATED_DEDICATED_CODES = new Set([
       cats.business.push({
         id:`${c}-BUS-${String(i).padStart(3,'0')}`,
         officialCode:`${c.toUpperCase()}-BUS-${tmpl.sub.substring(0,4).toUpperCase()}-${i}`,
-        name:`${name} ${tmpl.sub} Visa ${i} - ${name}`,
+        name:`${name} ${tmpl.sub} Visa ${i}`,
         toCountry:c,
         fromCountry:"in",
         category:"business",
@@ -1059,7 +1059,7 @@ const CURATED_DEDICATED_CODES = new Set([
       cats.work.push({
         id:`${c}-WRK-${String(i).padStart(3,'0')}`,
         officialCode:`${c.toUpperCase()}-WRK-${tmpl.sub.substring(0,4).toUpperCase()}-${i}`,
-        name:`${name} ${tmpl.sub} Visa ${i} - ${name}`,
+        name:`${name} ${tmpl.sub} Visa ${i}`,
         toCountry:c,
         fromCountry:"in",
         category:"work",
@@ -1075,7 +1075,7 @@ const CURATED_DEDICATED_CODES = new Set([
       cats.student.push({
         id:`${c}-STU-${String(i).padStart(3,'0')}`,
         officialCode:`${c.toUpperCase()}-STU-${tmpl.sub.substring(0,4).toUpperCase()}-${i}`,
-        name:`${name} ${tmpl.sub} Visa ${i} - ${name}`,
+        name:`${name} ${tmpl.sub} Visa ${i}`,
         toCountry:c,
         fromCountry:"in",
         category:"student",
@@ -1091,7 +1091,7 @@ const CURATED_DEDICATED_CODES = new Set([
       cats.family.push({
         id:`${c}-FAM-${String(i).padStart(3,'0')}`,
         officialCode:`${c.toUpperCase()}-FAM-${tmpl.sub.substring(0,4).toUpperCase()}-${i}`,
-        name:`${name} ${tmpl.sub} Visa ${i} - ${name}`,
+        name:`${name} ${tmpl.sub} Visa ${i}`,
         toCountry:c,
         fromCountry:"in",
         category:"family",
@@ -1107,7 +1107,7 @@ const CURATED_DEDICATED_CODES = new Set([
       cats.pr.push({
         id:`${c}-PR-${String(i).padStart(3,'0')}`,
         officialCode:`${c.toUpperCase()}-PR-${tmpl.sub.substring(0,4).toUpperCase()}-${i}`,
-        name:`${name} ${tmpl.sub} Visa ${i} - ${name}`,
+        name:`${name} ${tmpl.sub} Visa ${i}`,
         toCountry:c,
         fromCountry:"in",
         category:"pr",
@@ -1120,6 +1120,39 @@ const CURATED_DEDICATED_CODES = new Set([
 
     BASE_COUNTRY_VISAS[c] = cats;
     BASE_COUNTRY_VISAS[c.toUpperCase()] = cats;
+  });
+
+  // Deduplicate destination country name inside all 14,084 visa names so '- {Country}' is never appended
+  const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  allCodes.forEach(code => {
+    const c = code.toLowerCase();
+    const countryName = NAME_MAP_249[c] || c.toUpperCase();
+    const entry = BASE_COUNTRY_VISAS[c] || BASE_COUNTRY_VISAS[c.toUpperCase()];
+    if (!entry || !countryName) return;
+    const escaped = escapeRegExp(countryName);
+    const trailingDashCountryRe = new RegExp(`\\s*[-–—]\\s*${escaped}\\s*$`, 'i');
+    (['tourist', 'business', 'work', 'student', 'family', 'pr'] as const).forEach(cat => {
+      const list = (entry as any)[cat];
+      if (!Array.isArray(list)) return;
+      list.forEach((v: any) => {
+        if (!v || typeof v.name !== 'string') return;
+        let cleaned = v.name.replace(trailingDashCountryRe, '').trim();
+        // If country name still appears more than once in v.name, keep only the first occurrence
+        const allMatches = cleaned.match(new RegExp(escaped, 'gi'));
+        if (allMatches && allMatches.length > 1) {
+          let seen = 0;
+          cleaned = cleaned
+            .replace(new RegExp(escaped, 'gi'), (m) => {
+              seen++;
+              return seen === 1 ? m : '';
+            })
+            .replace(/\s*[-–—]\s*$/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+        }
+        v.name = cleaned;
+      });
+    });
   });
 
   console.log("✅ ALL 249 COUNTRIES UNIQUE VISA TEMPLATES APPLIED WITH EXACT COUNTS - Zero duplicates.");
