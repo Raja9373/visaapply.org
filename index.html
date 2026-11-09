@@ -24,7 +24,41 @@
         
         var NativeWebSocket = window.WebSocket;
         if (NativeWebSocket) {
+          var createMockSocket = function (url, protocols) {
+            return {
+              url: String(url || ''),
+              protocol: typeof protocols === 'string' ? protocols : '',
+              readyState: 1,
+              CONNECTING: 0,
+              OPEN: 1,
+              CLOSING: 2,
+              CLOSED: 3,
+               binaryType: 'blob',
+              bufferedAmount: 0,
+              extensions: '',
+              onopen: null,
+              onerror: null,
+              onclose: null,
+              onmessage: null,
+              addEventListener: function () {},
+              removeEventListener: function () {},
+              dispatchEvent: function () { return true; },
+              send: function () {},
+              close: function () {}
+            };
+          };
           window.WebSocket = function (url, protocols) {
+            var urlStr = String(url || '');
+            var protoStr = String(protocols || '');
+            if (
+              protoStr.indexOf('vite') !== -1 ||
+              urlStr.indexOf('token=') !== -1 ||
+              urlStr.indexOf('vite') !== -1 ||
+              urlStr.indexOf('localhost:') !== -1 ||
+              urlStr.indexOf('run.app') !== -1
+            ) {
+              return createMockSocket(url, protocols);
+            }
             try {
               var ws = new NativeWebSocket(url, protocols);
               ws.addEventListener('error', function (e) {
@@ -32,22 +66,21 @@
               });
               return ws;
             } catch (err) {
-              return {
-                addEventListener: function () {},
-                removeEventListener: function () {},
-                send: function () {},
-                close: function () {}
-              };
+              return createMockSocket(url, protocols);
             }
           };
           window.WebSocket.prototype = NativeWebSocket.prototype;
+          window.WebSocket.CONNECTING = 0;
+          window.WebSocket.OPEN = 1;
+          window.WebSocket.CLOSING = 2;
+          window.WebSocket.CLOSED = 3;
         }
 
         var origConsoleErr = console.error;
         console.error = function() {
           var args = Array.prototype.slice.call(arguments);
-          var str = args.map(function(a) { return String(a || ''); }).join(' ');
-          if (str.indexOf('WebSocket') !== -1 || str.indexOf('websocket') !== -1) {
+          var str = args.map(function(a) { return String((a && (a.message || a.stack)) || a || ''); }).join(' ');
+          if (str.indexOf('WebSocket') !== -1 || str.indexOf('websocket') !== -1 || str.indexOf('[vite]') !== -1) {
             return;
           }
           origConsoleErr.apply(console, arguments);
@@ -57,14 +90,16 @@
           var msg = event && event.reason && (event.reason.message || String(event.reason));
           if (msg && (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1)) {
             event.preventDefault();
+            event.stopImmediatePropagation();
           }
-        });
+        }, true);
         window.addEventListener('error', function (event) {
           var msg = event && (event.message || String(event.error || ''));
           if (msg && (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1)) {
             event.preventDefault();
+            event.stopImmediatePropagation();
           }
-        });
+        }, true);
       } catch (e) {}
     </script>
     <title>VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages</title>

@@ -19,7 +19,18 @@ dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+app.set('trust proxy', true);
 app.use(express.json());
+
+// Enforce canonical https://www.visaapply.org (301 redirect from http:// and non-www visaapply.org)
+app.use((req, res, next) => {
+  const rawHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').toLowerCase().split(':')[0];
+  const rawProto = String(req.headers['x-forwarded-proto'] || req.protocol || 'https').toLowerCase().split(',')[0].trim();
+  if (rawHost === 'visaapply.org' || (rawHost === 'www.visaapply.org' && rawProto === 'http')) {
+    return res.redirect(301, `https://www.visaapply.org${req.originalUrl || '/'}`);
+  }
+  next();
+});
 
 const CONTENT_DIR = path.join(__dirname, 'content');
 const DRAFTS_DIR = path.join(__dirname, 'content/drafts');
@@ -897,8 +908,8 @@ function getLocalizedEmailContent(fromCountry: string, embassyName: string, slot
           </a>
         </p>
         <p style="color: #64748b; font-size: 12px; margin-top: 16px;">
-          Slot 10-15 minute me bhar jata hai, turant book karo.<br/>
-          <a href="https://visaapply.org/embassy-slot-alert" style="color: #94a3b8;">Alert band karne ke liye yahan click karo (Unsubscribe)</a>
+          Embassy appointment slots fill within 10-15 minutes. Please book immediately.<br/>
+          <a href="https://www.visaapply.org/embassy-slot-alert" style="color: #94a3b8;">Click here to manage or unsubscribe from slot alerts</a>
         </p>
       </div>
     `
@@ -1061,15 +1072,16 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     if (fs.existsSync(indexPath)) {
       const xml = stripAdminUrlsFromXml(fs.readFileSync(indexPath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.setHeader('X-Robots-Tag', 'noindex');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }
     const baseUrl = 'https://www.visaapply.org';
-    const lastmod = '2026-11-07';
+    const lastmod = '2026-11-09';
     const subFiles = [
       'sitemap-countries.xml',
       'sitemap-categories.xml',
-      ...Array.from({ length: 15 }, (_, i) => `sitemap-visas-${i + 1}.xml`),
+      ...Array.from({ length: 12 }, (_, i) => `sitemap-visas-${i + 1}.xml`),
       'sitemap-blogs.xml',
       ...Array.from({ length: 70 }, (_, i) => `sitemap-routes-${i + 1}.xml`)
     ];
@@ -1079,6 +1091,7 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     }
     indexXml += `</sitemapindex>\n`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('X-Robots-Tag', 'noindex');
     res.setHeader('Cache-Control', 'public, max-age=3600');
     return res.status(200).send(indexXml);
   } catch (err: any) {
@@ -1096,6 +1109,7 @@ const handleSubSitemapXml = (req: any, res: any) => {
     if (fs.existsSync(filePath)) {
       const xml = stripAdminUrlsFromXml(fs.readFileSync(filePath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.setHeader('X-Robots-Tag', 'noindex');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }
@@ -1162,7 +1176,7 @@ app.get('/robots.txt', (req, res) => {
   if (fs.existsSync(robotsPath)) {
     return res.status(200).send(fs.readFileSync(robotsPath, 'utf-8'));
   }
-  res.status(200).send(`User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: https://www.visaapply.org/sitemap.xml\nSitemap: https://visaapply.org/sitemap.xml\n`);
+  res.status(200).send(`User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: https://www.visaapply.org/sitemap-index.xml\n`);
 });
 
 // Serve Open Graph 1200x630 images for homepage (/og-image.jpg), /og/flights.jpg, and all 249 countries (/og/:slug.jpg)
@@ -1202,7 +1216,7 @@ function getServerSideOgMeta(pathname: string) {
   if (langStripped === '/flights') {
     ogTitle = "Cheap Flights from India - 249 Countries - From ₹12,500 - VisaApply.org";
     ogDesc = "Search 100+ airlines - Delhi to Dubai ₹14,800, Delhi to USA ₹45,200 - Travelpayouts 801550";
-    ogImage = "https://visaapply.org/og/flights.jpg";
+    ogImage = "https://www.visaapply.org/og/flights.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
   } else if (langStripped === '/atlys-vs-visaapply') {
@@ -1214,7 +1228,7 @@ function getServerSideOgMeta(pathname: string) {
   } else if (langStripped === '/golden-visa') {
     ogTitle = "Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org";
     ogDesc = "Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.";
-    ogImage = "https://visaapply.org/og/golden-visa.jpg";
+    ogImage = "https://www.visaapply.org/og/golden-visa.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
   } else if (langStripped === '/dummy-ticket') {
@@ -1265,6 +1279,72 @@ function getServerSideOgMeta(pathname: string) {
     ogImage = "https://www.visaapply.org/og-image.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
+  } else if (langStripped === '/multi-country-planner') {
+    ogTitle = "Multi-Country Trip Visa Planner (Check All Visas in 1 Min) – VisaApply.org";
+    ogDesc = "Free Multi-Country Trip Planner: Select your passport and add 2-5 destination countries. Check all visas, Schengen rules, Dubai transit visa warnings, total cost, and download Full Trip Plan PDF.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/bank-statement-guide') {
+    ogTitle = "Bank Statement Guide for Visa - How Much Balance Do You Need? – VisaApply.org";
+    ogDesc = "Calculate required bank balance for USA, Schengen, UK & Canada Tourist or Student visas. View 6-month statement sample, 5 tips, and download free Bank Statement Checklist PDF.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/travel-insurance-compare') {
+    ogTitle = "Travel Insurance Compare - Best Insurance for Your Visa – VisaApply.org";
+    ogDesc = "100% Free Compare: Tata AIG, HDFC Ergo, and Niva Bupa VFS-approved travel medical insurance starting at Rs 499. Meets mandatory €30,000 Schengen requirement.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/esim-249') {
+    ogTitle = "eSIM for 249 Countries - Buy eSIM for Your Trip – VisaApply.org";
+    ogDesc = "Free Compare of Airalo, Holafly, and Nomad travel eSIM plans across 249 countries in USD and INR. Instant QR activation and 5G data roaming.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/forex-card-compare') {
+    ogTitle = "Forex Card Compare - Best Card to Carry Abroad – VisaApply.org";
+    ogDesc = "Compare Niyo Global, Wise, HDFC ForexPlus, and BookMyForex zero-markup forex cards for USA, Europe, Dubai, and Thailand. Save up to 4.13% forex markup.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/sponsorship-finder') {
+    ogTitle = "Visa Sponsorship Finder (USA, UK, Canada, Australia, Germany) – VisaApply.org";
+    ogDesc = "100% Free Directory of verified companies sponsoring H1B, UK Skilled Worker, Canada LMIA/GTS, Australia TSS 482, and Germany EU Blue Card across IT, Healthcare, Engineering, and Nursing.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/work-permit-guide') {
+    ogTitle = "Work Permit Guide - Jobs Abroad with Visa Sponsorship – VisaApply.org";
+    ogDesc = "100% Free Work Permit Guide: Compare visa types, salary ranges, processing times, and sponsorship rules across Gulf (UAE, Qatar, Saudi), Europe (Germany, Poland, Portugal), Canada, and Australia.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/student-visa-university') {
+    ogTitle = "Student Visa + University Finder (With & Without IELTS) – VisaApply.org";
+    ogDesc = "Free Student Visa + University Finder for USA, UK, Canada, Australia, and Germany. Compare 5 universities by course, budget (Rs 10L / 20L / 40L), IELTS requirement, and post-study work rights.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/passport-seva-guide') {
+    ogTitle = "Passport Seva Guide - New Passport, Renewal, Tatkal – VisaApply.org";
+    ogDesc = "Complete 5-step Indian Passport Seva guide for New Passport, Re-issue/Renewal, Tatkal (1–3 days), and Lost Passport. Check official fees (Rs 1,500 / Rs 3,500), documents, and download PDF checklist.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/oci-pio-guide' || langStripped === '/oci-%20pio-guide' || langStripped === '/oci- pio-guide') {
+    ogTitle = "OCI / PIO Card Guide for NRI - Eligibility, Fee ($275) & Checklist – VisaApply.org";
+    ogDesc = "Official OCI / PIO Card Guide for NRIs in USA, UK, Canada, and Australia. Check OCI eligibility, $275 VFS fee, 30-60 days processing time, required documents, and OCI vs PIO vs Visa comparison.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/scholarship-finder') {
+    ogTitle = "Scholarship Finder (USA, UK, Canada, Australia, Germany) – VisaApply.org";
+    ogDesc = "100% Free Scholarship Finder: Compare 15 Fully Funded, Partial, and Merit scholarships (Fulbright, Chevening, DAAD, Vanier, Gates Cambridge) with live deadline calendar and official apply links.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
   } else {
     const level3Match = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
     const routeMatch = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})(?:-([a-z]+))?$/i);
@@ -1282,7 +1362,7 @@ function getServerSideOgMeta(pathname: string) {
       const numSuffix = numMatch ? ` ${parseInt(numMatch[1], 10)}` : '';
       ogTitle = `${fromName} to ${toName} ${catLabel} Visa${numSuffix} (2026 Guide)`;
       ogDesc = `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${ogTitle}.`;
-      ogImage = `https://visaapply.org/og/${toCode}.jpg`;
+      ogImage = `https://www.visaapply.org/og/${toCode}.jpg`;
       twitterTitle = ogTitle;
       twitterDesc = ogDesc;
     } else if (routeMatch) {
@@ -1299,9 +1379,9 @@ function getServerSideOgMeta(pathname: string) {
         ogDesc = "USA visa for Indians - 278 types, fees $185, processing 15-20 days, success 92%, hotel from $120/night Booking.com, flights from ₹45,200";
       } else {
         ogTitle = `${toName} Visa for ${fromLabel} 2026 - ${count} Visa Types - VisaApply.org`;
-        ogDesc = `${toName} visa for ${fromLabel} - ${count} types, official 2026 fees, fast processing, high approval rate, hotel deals on Booking.com & cheap flights via Travelpayouts 801550`;
+        ogDesc = `${toName} visa for ${fromLabel} - ${count} types, official 2026 fees, fast processing, high approval rate, hotel deals on Booking.com & cheap flights via Travelpayouts`;
       }
-      ogImage = `https://visaapply.org/og/${toCode}.jpg`;
+      ogImage = `https://www.visaapply.org/og/${toCode}.jpg`;
       twitterTitle = ogTitle;
       twitterDesc = ogDesc;
     }
@@ -1347,6 +1427,7 @@ app.use(async (req, res, next) => {
     const indexPath = path.join(__dirname, 'index.html');
     const rawHtml = fs.readFileSync(indexPath, 'utf-8');
     let transformed = await vite.transformIndexHtml(req.originalUrl, rawHtml);
+    transformed = transformed.replace(/<script\s+type="module"\s+src="\/@vite\/client"><\/script>\s*/gi, '');
     const impactTag = "<meta name='impact-site-verification' value='b1ae4431-d331-41dd-a031-905fa7d5844a'>";
     transformed = transformed.replace(/<meta\s+name=['"]impact-site-verification['"][^>]*>\s*/gi, '');
     transformed = transformed.replace(/<head>/i, `<head>\n    ${impactTag}`);
@@ -1362,6 +1443,9 @@ app.use(async (req, res, next) => {
     const esc = (s: string) => s.replace(/"/g, '&quot;');
     transformed = transformed
       .replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(og.ogTitle)}</title>`)
+      .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${esc(og.ogUrl)}" />`)
+      .replace(/<link\s+rel="alternate"\s+hreflang="en"[^>]*\/?>/i, `<link rel="alternate" hreflang="en" data-dynamic-hreflang="true" href="${esc(og.ogUrl)}" />`)
+      .replace(/<link\s+rel="alternate"\s+hreflang="x-default"[^>]*\/?>/i, `<link rel="alternate" hreflang="x-default" data-dynamic-hreflang="true" href="${esc(og.ogUrl)}" />`)
       .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${esc(og.ogDesc)}" />`)
       .replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${esc(og.ogTitle)}" />`)
       .replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${esc(og.ogDesc)}" />`)

@@ -33,6 +33,17 @@ import { VisaRejectionAppealPage } from './pages/VisaRejectionAppealPage';
 import { SopGeneratorPage } from './pages/SopGeneratorPage';
 import { VisaTrackingPage } from './pages/VisaTrackingPage';
 import { VisaMapPage } from './pages/VisaMapPage';
+import { MultiCountryPlannerPage } from './pages/MultiCountryPlannerPage';
+import { BankStatementGuidePage } from './pages/BankStatementGuidePage';
+import { TravelInsuranceComparePage } from './pages/TravelInsuranceComparePage';
+import { Esim249Page } from './pages/Esim249Page';
+import { ForexCardComparePage } from './pages/ForexCardComparePage';
+import { SponsorshipFinderPage } from './pages/SponsorshipFinderPage';
+import { WorkPermitGuidePage } from './pages/WorkPermitGuidePage';
+import { StudentVisaUniversityPage } from './pages/StudentVisaUniversityPage';
+import { PassportSevaGuidePage } from './pages/PassportSevaGuidePage';
+import { OciPioGuidePage } from './pages/OciPioGuidePage';
+import { ScholarshipFinderPage } from './pages/ScholarshipFinderPage';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
@@ -69,7 +80,7 @@ import {
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
   ArrowRight, ExternalLink, Clock, DollarSign, Menu, X, ChevronRight, Check,
   Mail, Copy, Send, MapPin, Phone, ChevronDown, ArrowUp, Navigation,
-  Camera, Zap, Bell
+  Camera, Zap, Bell, Compass, Landmark, HeartPulse, Wifi, CreditCard
 } from 'lucide-react';
 
 import { ALL_249_ISO_FORCED } from './data/all249Countries';
@@ -325,6 +336,23 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isSopGenerator = path === '/sop-generator' || path === '/sop-generator/';
   const isVisaTracking = path === '/visa-tracking' || path === '/visa-tracking/';
   const isVisaMap = path === '/visa-map' || path === '/visa-map/' || path.startsWith('/visa-map?');
+  const isMultiCountryPlanner = path === '/multi-country-planner' || path === '/multi-country-planner/' || path.startsWith('/multi-country-planner?');
+  const isBankStatementGuide = path === '/bank-statement-guide' || path === '/bank-statement-guide/';
+  const isTravelInsuranceCompare = path === '/travel-insurance-compare' || path === '/travel-insurance-compare/';
+  const isEsim249 = path === '/esim-249' || path === '/esim-249/';
+  const isForexCardCompare = path === '/forex-card-compare' || path === '/forex-card-compare/';
+  const isSponsorshipFinder = path === '/sponsorship-finder' || path === '/sponsorship-finder/' || path.startsWith('/sponsorship-finder?');
+  const isWorkPermitGuide = path === '/work-permit-guide' || path === '/work-permit-guide/' || path.startsWith('/work-permit-guide?');
+  const isStudentVisaUniversity = path === '/student-visa-university' || path === '/student-visa-university/' || path.startsWith('/student-visa-university?');
+  const isPassportSevaGuide = path === '/passport-seva-guide' || path === '/passport-seva-guide/' || path.startsWith('/passport-seva-guide?');
+  const isOciPioGuide =
+    path === '/oci-pio-guide' ||
+    path === '/oci-pio-guide/' ||
+    path === '/oci-%20pio-guide' ||
+    path === '/oci-%20pio-guide/' ||
+    path === '/oci- pio-guide' ||
+    path === '/oci- pio-guide/';
+  const isScholarshipFinder = path === '/scholarship-finder' || path === '/scholarship-finder/' || path.startsWith('/scholarship-finder?');
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -343,7 +371,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
   let title = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
   let description = "249 countries, 11,563+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
-  let ogImageUrl = 'https://visaapply.org/og-image.jpg';
+  let ogImageUrl = 'https://www.visaapply.org/og-image.jpg';
   let ogImageAlt = 'VisaApply.org - 249 Countries, 61,752 Routes';
 
   if (isAdminLogin) {
@@ -364,7 +392,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isGoldenVisa) {
     title = 'Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org';
     description = 'Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.';
-    ogImageUrl = 'https://visaapply.org/og/golden-visa.jpg';
+    ogImageUrl = 'https://www.visaapply.org/og/golden-visa.jpg';
     ogImageAlt = 'Golden Visa & Residency by Investment 2026 - VisaApply.org';
   } else if (isDummyTicket) {
     title = 'Dummy Ticket - Flight + Hotel Reservation for Visa – VisaApply.org';
@@ -390,6 +418,39 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isVisaMap) {
     title = 'Global Visa Map - Interactive World Map (249 Passports) – VisaApply.org';
     description = 'Interactive World Map showing Visa-Free, Visa on Arrival, e-Visa, and Embassy Visa requirements across 249 passports. 100% Free to explore, filter, and share.';
+  } else if (isMultiCountryPlanner) {
+    title = 'Multi-Country Trip Visa Planner (Check All Visas in 1 Min) – VisaApply.org';
+    description = 'Free Multi-Country Trip Planner: Select your passport and add 2-5 destination countries. Check all visas, Schengen rules, Dubai transit visa warnings, total cost, and download Full Trip Plan PDF.';
+  } else if (isBankStatementGuide) {
+    title = 'Bank Statement Guide for Visa - How Much Balance Do You Need? – VisaApply.org';
+    description = 'Calculate required bank balance for USA, Schengen, UK & Canada Tourist or Student visas. View 6-month statement sample, 5 tips, and download free Bank Statement Checklist PDF.';
+  } else if (isTravelInsuranceCompare) {
+    title = 'Travel Insurance Compare - Best Insurance for Your Visa – VisaApply.org';
+    description = '100% Free Compare: Tata AIG, HDFC Ergo, and Niva Bupa VFS-approved travel medical insurance starting at Rs 499. Meets mandatory €30,000 Schengen requirement.';
+  } else if (isEsim249) {
+    title = 'eSIM for 249 Countries - Buy eSIM for Your Trip – VisaApply.org';
+    description = 'Free Compare of Airalo, Holafly, and Nomad travel eSIM plans across 249 countries in USD and INR. Instant QR activation and 5G data roaming.';
+  } else if (isForexCardCompare) {
+    title = 'Forex Card Compare - Best Card to Carry Abroad – VisaApply.org';
+    description = 'Compare Niyo Global, Wise, HDFC ForexPlus, and BookMyForex zero-markup forex cards for USA, Europe, Dubai, and Thailand. Save up to 4.13% forex markup.';
+  } else if (isSponsorshipFinder) {
+    title = 'Visa Sponsorship Finder (USA, UK, Canada, Australia, Germany) – VisaApply.org';
+    description = '100% Free Directory of verified companies sponsoring H1B, UK Skilled Worker, Canada LMIA/GTS, Australia TSS 482, and Germany EU Blue Card across IT, Healthcare, Engineering, and Nursing.';
+  } else if (isWorkPermitGuide) {
+    title = 'Work Permit Guide - Jobs Abroad with Visa Sponsorship – VisaApply.org';
+    description = '100% Free Work Permit Guide: Compare visa types, salary ranges, processing times, and sponsorship rules across Gulf (UAE, Qatar, Saudi), Europe (Germany, Poland, Portugal), Canada, and Australia.';
+  } else if (isStudentVisaUniversity) {
+    title = 'Student Visa + University Finder (With & Without IELTS) – VisaApply.org';
+    description = 'Free Student Visa + University Finder for USA, UK, Canada, Australia, and Germany. Compare 5 universities by course, budget (Rs 10L / 20L / 40L), IELTS requirement, and post-study work rights.';
+  } else if (isPassportSevaGuide) {
+    title = 'Passport Seva Guide - New Passport, Renewal, Tatkal – VisaApply.org';
+    description = 'Complete 5-step Indian Passport Seva guide for New Passport, Re-issue/Renewal, Tatkal (1–3 days), and Lost Passport. Check official fees (Rs 1,500 / Rs 3,500), documents, and download PDF checklist.';
+  } else if (isOciPioGuide) {
+    title = 'OCI / PIO Card Guide for NRI - Eligibility, Fee ($275) & Checklist – VisaApply.org';
+    description = 'Official OCI / PIO Card Guide for NRIs in USA, UK, Canada, and Australia. Check OCI eligibility, $275 VFS fee, 30-60 days processing time, required documents, and OCI vs PIO vs Visa comparison.';
+  } else if (isScholarshipFinder) {
+    title = 'Scholarship Finder (USA, UK, Canada, Australia, Germany) – VisaApply.org';
+    description = '100% Free Scholarship Finder: Compare 15 Fully Funded, Partial, and Merit scholarships (Fulbright, Chevening, DAAD, Vanier, Gates Cambridge) with live deadline calendar and official apply links.';
   } else if (isRoutes) {
     title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
     description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
@@ -399,7 +460,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isFlights) {
     title = 'Cheap Flights from India - 249 Countries - From ₹12,500 - VisaApply.org';
     description = 'Search 100+ airlines - Delhi to Dubai ₹14,800, Delhi to USA ₹45,200 - Travelpayouts 801550';
-    ogImageUrl = 'https://visaapply.org/og/flights.jpg';
+    ogImageUrl = 'https://www.visaapply.org/og/flights.jpg';
     ogImageAlt = 'Cheap Flights from India - 249 Countries - VisaApply.org';
   } else if (isBlogs) {
     title = '2026 Global Visa Blogs & Travel Guides (2,490+ Official Articles) – VisaApply.org';
@@ -409,7 +470,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const cName = getCountryDisplayName(code);
     title = `${cName} Visa Interview Questions & Winning Answers [2026 Updated] – VisaApply.org`;
     description = `Master the top 20 ${cName} consular interview questions and ideal answers, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
-    ogImageUrl = `https://visaapply.org/og/${code}.jpg`;
+    ogImageUrl = `https://www.visaapply.org/og/${code}.jpg`;
     ogImageAlt = `${cName} Visa Interview Prep - VisaApply.org`;
   } else if (isContact) {
     title = 'Contact Us & Consular Support Desk – VisaApply.org';
@@ -445,7 +506,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
       title = `${fromDisplay} to ${toDisplay} ${subClean} (2026 Guide)`;
     }
     description = `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${title}.`;
-    ogImageUrl = `https://visaapply.org/og/${toCode.toLowerCase()}.jpg`;
+    ogImageUrl = `https://www.visaapply.org/og/${toCode.toLowerCase()}.jpg`;
     ogImageAlt = title;
   } else if (article && article.title) {
     title = article.title.endsWith('(2026 Guide)')
@@ -462,7 +523,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const meta = getCountryMeta(to);
     const vCount = calculateVisaCount(from, to);
     const proc = getBilateralProcessingTime(from, to);
-    ogImageUrl = `https://visaapply.org/og/${toLower}.jpg`;
+    ogImageUrl = `https://www.visaapply.org/og/${toLower}.jpg`;
     ogImageAlt = `${toName} Visa for ${fromName} - ${vCount} Visa Types - VisaApply.org`;
     if (article && article.title) {
       title = `${article.title} [2026 Updated] | VisaApply.org`;
@@ -480,7 +541,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const meta = getCountryMeta(to);
     const vCount = calculateVisaCount(from, to);
     const proc = getBilateralProcessingTime(from, to);
-    ogImageUrl = `https://visaapply.org/og/${toLower}.jpg`;
+    ogImageUrl = `https://www.visaapply.org/og/${toLower}.jpg`;
     ogImageAlt = `${toName} Visa for ${fromLabel} 2026 - ${vCount} Visa Types`;
 
     if (from === 'IN' && to === 'US') {
@@ -597,6 +658,28 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Application Status Tracker", "item": `${baseUrl}/visa-tracking` });
   } else if (isVisaMap) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Global Visa Map", "item": `${baseUrl}/visa-map` });
+  } else if (isMultiCountryPlanner) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Multi-Country Trip Planner", "item": `${baseUrl}/multi-country-planner` });
+  } else if (isBankStatementGuide) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Bank Statement Guide for Visa", "item": `${baseUrl}/bank-statement-guide` });
+  } else if (isTravelInsuranceCompare) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Travel Insurance Compare", "item": `${baseUrl}/travel-insurance-compare` });
+  } else if (isEsim249) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "eSIM for 249 Countries", "item": `${baseUrl}/esim-249` });
+  } else if (isForexCardCompare) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Forex Card Compare", "item": `${baseUrl}/forex-card-compare` });
+  } else if (isSponsorshipFinder) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Sponsorship Finder", "item": `${baseUrl}/sponsorship-finder` });
+  } else if (isWorkPermitGuide) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Work Permit Guide", "item": `${baseUrl}/work-permit-guide` });
+  } else if (isStudentVisaUniversity) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Student Visa + University Finder", "item": `${baseUrl}/student-visa-university` });
+  } else if (isPassportSevaGuide) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Passport Seva Guide", "item": `${baseUrl}/passport-seva-guide` });
+  } else if (isOciPioGuide) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "OCI / PIO Card Guide for NRI", "item": `${baseUrl}/oci-pio-guide` });
+  } else if (isScholarshipFinder) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Scholarship Finder", "item": `${baseUrl}/scholarship-finder` });
   } else if (isRoutes) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "61,752 Visa Routes", "item": `${baseUrl}/routes` });
   } else if (isAbout) {
@@ -2505,6 +2588,23 @@ export default function App() {
   const isSopGenerator = routePath === '/sop-generator' || routePath === '/sop-generator/';
   const isVisaTracking = routePath === '/visa-tracking' || routePath === '/visa-tracking/';
   const isVisaMap = routePath === '/visa-map' || routePath === '/visa-map/' || routePath.startsWith('/visa-map?');
+  const isMultiCountryPlanner = routePath === '/multi-country-planner' || routePath === '/multi-country-planner/' || routePath.startsWith('/multi-country-planner?');
+  const isBankStatementGuide = routePath === '/bank-statement-guide' || routePath === '/bank-statement-guide/';
+  const isTravelInsuranceCompare = routePath === '/travel-insurance-compare' || routePath === '/travel-insurance-compare/';
+  const isEsim249 = routePath === '/esim-249' || routePath === '/esim-249/';
+  const isForexCardCompare = routePath === '/forex-card-compare' || routePath === '/forex-card-compare/';
+  const isSponsorshipFinder = routePath === '/sponsorship-finder' || routePath === '/sponsorship-finder/' || routePath.startsWith('/sponsorship-finder?');
+  const isWorkPermitGuide = routePath === '/work-permit-guide' || routePath === '/work-permit-guide/' || routePath.startsWith('/work-permit-guide?');
+  const isStudentVisaUniversity = routePath === '/student-visa-university' || routePath === '/student-visa-university/' || routePath.startsWith('/student-visa-university?');
+  const isPassportSevaGuide = routePath === '/passport-seva-guide' || routePath === '/passport-seva-guide/' || routePath.startsWith('/passport-seva-guide?');
+  const isOciPioGuide =
+    routePath === '/oci-pio-guide' ||
+    routePath === '/oci-pio-guide/' ||
+    routePath === '/oci-%20pio-guide' ||
+    routePath === '/oci-%20pio-guide/' ||
+    routePath === '/oci- pio-guide' ||
+    routePath === '/oci- pio-guide/';
+  const isScholarshipFinder = routePath === '/scholarship-finder' || routePath === '/scholarship-finder/' || routePath.startsWith('/scholarship-finder?');
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2550,7 +2650,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2601,7 +2701,7 @@ export default function App() {
                 type="button"
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
                 className={`flex items-center gap-1 transition-colors cursor-pointer py-1.5 ${
-                  isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer || isRejectionAppeal || isSopGenerator || isVisaTracking || isVisaMap
+                  isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer || isRejectionAppeal || isSopGenerator || isVisaTracking || isVisaMap || isMultiCountryPlanner || isBankStatementGuide || isTravelInsuranceCompare || isEsim249 || isForexCardCompare || isSponsorshipFinder || isWorkPermitGuide || isStudentVisaUniversity || isPassportSevaGuide || isOciPioGuide || isScholarshipFinder
                     ? 'text-amber-300 font-bold' 
                     : 'text-blue-100 hover:text-white'
                 }`}
@@ -2611,11 +2711,89 @@ export default function App() {
               </button>
 
               {servicesDropdownOpen && (
-                <div className="absolute top-full left-0 w-72 bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                <div className="absolute top-full left-0 w-72 max-h-[80vh] overflow-y-auto bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/scholarship-finder'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Award className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Scholarship Finder (100% Free)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">Fulbright, Chevening, DAAD &amp; Deadlines</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/work-permit-guide'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Briefcase className="w-4 h-4 text-emerald-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Work Permit Guide</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% FREE • Gulf, Europe, CA, AU</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/student-visa-university'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <GraduationCap className="w-4 h-4 text-cyan-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Student Visa + University Finder</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">FREE • IELTS &amp; Without IELTS</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/passport-seva-guide'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Passport Seva Guide (India)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">FREE Guide • New, Renewal, Tatkal</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/oci-pio-guide'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Globe className="w-4 h-4 text-emerald-300 shrink-0" />
+                    <div>
+                      <div className="text-white">OCI / PIO Card Guide for NRI</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">FREE Guide • Lifetime Visa ($275)</div>
+                    </div>
+                  </button>
+                  <div className="my-1 border-t border-blue-800/70" />
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/sponsorship-finder'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Briefcase className="w-4 h-4 text-emerald-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Visa Sponsorship Finder</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% FREE • H1B, UK, Canada, AU, DE</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/multi-country-planner'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Compass className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Multi-Country Trip Planner</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">Check 2–5 Countries in 1 Min (PDF)</div>
+                    </div>
+                  </button>
                   <button
                     type="button"
                     onClick={() => { navigate('/visa-map'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <Globe className="w-4 h-4 text-emerald-300 shrink-0" />
                     <div>
@@ -2623,10 +2801,56 @@ export default function App() {
                       <div className="text-[10px] text-emerald-300 font-medium">100% Free Interactive World Map</div>
                     </div>
                   </button>
+                  <div className="my-1 border-t border-blue-800/70" />
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/bank-statement-guide'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Landmark className="w-4 h-4 text-emerald-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Bank Statement Guide for Visa</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">Required Balance &amp; Checklist PDF</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/travel-insurance-compare'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <HeartPulse className="w-4 h-4 text-rose-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Travel Insurance Compare</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% FREE Compare (From ₹499)</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/esim-249'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Wifi className="w-4 h-4 text-cyan-300 shrink-0" />
+                    <div>
+                      <div className="text-white">eSIM for 249 Countries</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">FREE Compare Airalo, Holafly, Nomad</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/forex-card-compare'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <CreditCard className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Forex Card Compare (0% Markup)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">FREE Compare Niyo, Wise, HDFC</div>
+                    </div>
+                  </button>
+                  <div className="my-1 border-t border-blue-800/70" />
                   <button
                     type="button"
                     onClick={() => { navigate('/dummy-ticket'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <Plane className="w-4 h-4 text-amber-300 shrink-0" />
                     <div>
@@ -2637,7 +2861,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => { navigate('/cover-letter-generator'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <FileText className="w-4 h-4 text-emerald-300 shrink-0" />
                     <div>
@@ -2648,7 +2872,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => { navigate('/embassy-slot-alert'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <Zap className="w-4 h-4 text-yellow-300 shrink-0" />
                     <div>
@@ -2659,7 +2883,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => { navigate('/photo-resizer'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <Camera className="w-4 h-4 text-purple-300 shrink-0" />
                     <div>
@@ -2671,7 +2895,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => { navigate('/visa-rejection-appeal'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <Shield className="w-4 h-4 text-rose-300 shrink-0" />
                     <div>
@@ -2682,7 +2906,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => { navigate('/sop-generator'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <GraduationCap className="w-4 h-4 text-cyan-300 shrink-0" />
                     <div>
@@ -2693,7 +2917,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => { navigate('/visa-tracking'); setServicesDropdownOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
                   >
                     <Search className="w-4 h-4 text-amber-300 shrink-0" />
                     <div>
@@ -2792,8 +3016,41 @@ export default function App() {
                 <span className="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider block px-1">
                   Free Services &amp; Tools
                 </span>
+                <button onClick={() => { navigate('/scholarship-finder'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-amber-300 hover:text-white font-bold transition-colors">
+                  🏆 Scholarship Finder (100% Free)
+                </button>
+                <button onClick={() => { navigate('/work-permit-guide'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-emerald-300 hover:text-white font-bold transition-colors">
+                  🛠️ Work Permit Guide (Jobs Abroad)
+                </button>
+                <button onClick={() => { navigate('/student-visa-university'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-cyan-300 hover:text-white font-bold transition-colors">
+                  🎓 Student Visa + University Finder
+                </button>
+                <button onClick={() => { navigate('/passport-seva-guide'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-amber-300 hover:text-white font-bold transition-colors">
+                  📘 Passport Seva Guide (New / Tatkal)
+                </button>
+                <button onClick={() => { navigate('/oci-pio-guide'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-emerald-300 hover:text-white font-bold transition-colors">
+                  🇮🇳 OCI / PIO Card Guide for NRI
+                </button>
+                <button onClick={() => { navigate('/sponsorship-finder'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-emerald-300 hover:text-white font-bold transition-colors">
+                  💼 Visa Sponsorship Finder (100% Free)
+                </button>
+                <button onClick={() => { navigate('/multi-country-planner'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-amber-300 hover:text-white font-bold transition-colors">
+                  🧭 Multi-Country Trip Planner (2–5 Stops)
+                </button>
                 <button onClick={() => { navigate('/visa-map'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-emerald-300 hover:text-white font-bold transition-colors">
                   🗺️ Global Visa Map (249 Passports)
+                </button>
+                <button onClick={() => { navigate('/bank-statement-guide'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-emerald-300 hover:text-white font-semibold transition-colors">
+                  🏦 Bank Statement Guide for Visa (PDF)
+                </button>
+                <button onClick={() => { navigate('/travel-insurance-compare'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  🛡️ Travel Insurance Compare (From ₹499)
+                </button>
+                <button onClick={() => { navigate('/esim-249'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  📶 eSIM for 249 Countries (FREE Compare)
+                </button>
+                <button onClick={() => { navigate('/forex-card-compare'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  💳 Forex Card Compare (0% Markup)
                 </button>
                 <button onClick={() => { navigate('/dummy-ticket'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
                   ✈️ Dummy Ticket (Flight &amp; Hotel)
@@ -2892,6 +3149,28 @@ export default function App() {
           <VisaTrackingPage onNavigate={navigate} />
         ) : isVisaMap ? (
           <VisaMapPage onNavigate={navigate} />
+        ) : isMultiCountryPlanner ? (
+          <MultiCountryPlannerPage onNavigate={navigate} />
+        ) : isBankStatementGuide ? (
+          <BankStatementGuidePage onNavigate={navigate} />
+        ) : isTravelInsuranceCompare ? (
+          <TravelInsuranceComparePage onNavigate={navigate} />
+        ) : isEsim249 ? (
+          <Esim249Page onNavigate={navigate} />
+        ) : isForexCardCompare ? (
+          <ForexCardComparePage onNavigate={navigate} />
+        ) : isSponsorshipFinder ? (
+          <SponsorshipFinderPage onNavigate={navigate} />
+        ) : isWorkPermitGuide ? (
+          <WorkPermitGuidePage onNavigate={navigate} />
+        ) : isStudentVisaUniversity ? (
+          <StudentVisaUniversityPage onNavigate={navigate} />
+        ) : isPassportSevaGuide ? (
+          <PassportSevaGuidePage onNavigate={navigate} />
+        ) : isOciPioGuide ? (
+          <OciPioGuidePage onNavigate={navigate} />
+        ) : isScholarshipFinder ? (
+          <ScholarshipFinderPage onNavigate={navigate} />
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isGoldenVisa ? (
@@ -3005,9 +3284,75 @@ export default function App() {
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Free Services &amp; Tools</h4>
             <ul className="space-y-2 text-sm">
               <li>
+                <button onClick={() => navigate('/scholarship-finder')} className="text-amber-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🏆</span>
+                  <span>Scholarship Finder (100% Free)</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/work-permit-guide')} className="text-emerald-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🛠️</span>
+                  <span>Work Permit Guide</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/student-visa-university')} className="text-cyan-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🎓</span>
+                  <span>Student Visa + University Finder</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/passport-seva-guide')} className="text-amber-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>📘</span>
+                  <span>Passport Seva Guide (India)</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/oci-pio-guide')} className="text-emerald-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🇮🇳</span>
+                  <span>OCI / PIO Card Guide for NRI</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/sponsorship-finder')} className="text-emerald-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>💼</span>
+                  <span>Visa Sponsorship Finder</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/multi-country-planner')} className="text-amber-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🧭</span>
+                  <span>Multi-Country Trip Planner</span>
+                </button>
+              </li>
+              <li>
                 <button onClick={() => navigate('/visa-map')} className="text-emerald-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
                   <span>🗺️</span>
                   <span>Global Visa Map (249 Passports)</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/bank-statement-guide')} className="text-emerald-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🏦</span>
+                  <span>Bank Statement Guide for Visa</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/travel-insurance-compare')} className="text-rose-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🛡️</span>
+                  <span>Travel Insurance Compare</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/esim-249')} className="text-cyan-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>📶</span>
+                  <span>eSIM for 249 Countries</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/forex-card-compare')} className="text-amber-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>💳</span>
+                  <span>Forex Card Compare</span>
                 </button>
               </li>
               <li>

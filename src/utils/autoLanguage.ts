@@ -295,10 +295,14 @@ export function getLocalizedCountryName(
 }
 
 export function getCanonicalBaseOrigin(): string {
-  if (typeof window !== 'undefined' && window.location?.origin) {
-    const host = window.location.hostname.toLowerCase();
-    if (host === 'www.visaapply.org' || host === 'visaapply.org') {
-      return window.location.origin;
+  if (typeof window !== 'undefined' && window.location) {
+    const host = (window.location.hostname || '').toLowerCase();
+    const proto = window.location.protocol;
+    if (host === 'visaapply.org' || ((host === 'www.visaapply.org' || host === 'visaapply.org') && proto === 'http:')) {
+      const targetUrl = `https://www.visaapply.org${window.location.pathname || '/'}${window.location.search || ''}${window.location.hash || ''}`;
+      try {
+        window.location.replace(targetUrl);
+      } catch {}
     }
   }
   return 'https://www.visaapply.org';

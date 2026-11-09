@@ -2,13 +2,6 @@ User-agent: *
 Allow: /
 Allow: /ads.txt
 Allow: /llms.txt
-Allow: /sitemap-index.xml
-Allow: /sitemap.xml
-Allow: /sitemap-countries.xml
-Allow: /sitemap-categories.xml
-Allow: /sitemap-visas.xml
-Allow: /sitemap-blogs.xml
-Allow: /sitemap-routes.xml
 Disallow: /admin
 
 User-agent: Mediapartners-Google
@@ -36,8 +29,4 @@ User-agent: ClaudeBot
 Allow: /
 
 Sitemap: https://www.visaapply.org/sitemap-index.xml
-Sitemap: https://www.visaapply.org/sitemap.xml
-Sitemap: https://www.visaapply.org/sitemap-countries.xml
-Sitemap: https://www.visaapply.org/sitemap-categories.xml
-Sitemap: https://www.visaapply.org/sitemap-visas.xml
-Sitemap: https://www.visaapply.org/sitemap-blogs.xml
+

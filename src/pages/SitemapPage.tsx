@@ -101,7 +101,7 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
             <a
               href="/sitemap-index.xml"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors"
             >
               Open /sitemap-index.xml ↗
@@ -109,7 +109,7 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
             <a
               href="/robots.txt"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
             >
               View /robots.txt ↗
@@ -121,7 +121,7 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
           <a
             href="/sitemap-countries.xml"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
             <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-countries.xml</div>
@@ -131,17 +131,17 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
           <a
             href="/sitemap-categories.xml"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
             <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-categories.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">1,494 Pages</div>
-            <div className="text-[11px] text-slate-600">249 Countries × 6 Categories</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">1,514 Pages</div>
+            <div className="text-[11px] text-slate-600">249 Countries × 6 Categories + Tools</div>
           </a>
           <a
             href="/sitemap-visas-1.xml"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
             <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas-1..12.xml</div>
@@ -149,9 +149,9 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
             <div className="text-[11px] text-slate-600">Split into 12 XML Files (Real Visas Only)</div>
           </a>
           <a
-            href="/sitemap-routes.xml"
+            href="/sitemap-routes-1.xml"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
             <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-routes-1..70.xml</div>
@@ -161,7 +161,7 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
           <a
             href="/sitemap-blogs.xml"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
             <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-blogs.xml</div>
@@ -183,7 +183,18 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           {[
+            { url: '/scholarship-finder', label: '🏆 Scholarship Finder (100% Free)', sub: '15 Fully Funded, Partial & Merit Scholarships + Deadline Calendar' },
+            { url: '/work-permit-guide', label: '🛠️ Work Permit Guide', sub: '100% Free • Jobs Abroad with Visa Sponsorship (Gulf, Europe, CA, AU)' },
+            { url: '/student-visa-university', label: '🎓 Student Visa + University Finder', sub: 'FREE • Compare 5 Universities, Tuition, IELTS & Post-Study Work' },
+            { url: '/passport-seva-guide', label: '📘 Passport Seva Guide (India)', sub: 'FREE Guide • New Passport, Renewal, Tatkal & Checklist PDF' },
+            { url: '/oci-pio-guide', label: '🇮🇳 OCI / PIO Card Guide for NRI', sub: 'FREE Guide • Lifetime India Visa ($275), Eligibility & Documents' },
+            { url: '/sponsorship-finder', label: '💼 Visa Sponsorship Finder', sub: '100% Free • H1B, UK, Canada, Australia & Germany Sponsors' },
+            { url: '/multi-country-planner', label: '🧭 Multi-Country Trip Visa Planner', sub: 'Check 2–5 Countries in 1 Min • Full Trip PDF' },
             { url: '/visa-map', label: '🗺️ Interactive Global Visa Map', sub: '249 Passports • Visa-Free, VOA & e-Visa Map' },
+            { url: '/bank-statement-guide', label: '🏦 Bank Statement Guide for Visa', sub: 'Required Balance Calculator & Checklist PDF' },
+            { url: '/travel-insurance-compare', label: '🛡️ Travel Insurance Compare', sub: '100% FREE Compare • Tata AIG, HDFC Ergo, Niva Bupa' },
+            { url: '/esim-249', label: '📶 eSIM for 249 Countries', sub: 'FREE Compare • Airalo, Holafly, Nomad in USD & INR' },
+            { url: '/forex-card-compare', label: '💳 Forex Card Compare (0% Markup)', sub: 'FREE Compare • Niyo Global, Wise, HDFC, BookMyForex' },
             { url: '/visa-rejection-appeal', label: '⚖️ Visa Rejection Appeal Guide', sub: '100% Free Check & Appeal Letter PDF' },
             { url: '/sop-generator', label: '🎓 Free SOP Generator for Student Visa', sub: '800-Word Official SOP PDF' },
             { url: '/visa-tracking', label: '🔍 Track Your Visa Application Status', sub: 'Official VFS, CEAC, TLS & IRCC Links' },

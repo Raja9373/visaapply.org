@@ -295,7 +295,7 @@ export function generateChecklistPDF(
   const embAddress = doc.splitTextToSize(`Mission: ${missionCity} - ${missionAddress}`, pageWidth - 104);
   doc.text(embAddress, 52, y + 34);
   doc.text(`Phone: ${missionPhone}   |   Email: ${missionEmail}`, 52, y + 54);
-  doc.text(`Official Portal: ${embassy.officialWebsite || 'https://visaapply.org'}`, 52, y + 67);
+  doc.text(`Official Portal: ${embassy.officialWebsite || 'https://www.visaapply.org'}`, 52, y + 67);
 
     const safeCountry = (opts.countryName || 'Country').replace(/[^a-zA-Z0-9]+/g, '_');
     const safeVisa = (opts.visaName || 'Visa').replace(/[^a-zA-Z0-9]+/g, '_').slice(0, 40);
