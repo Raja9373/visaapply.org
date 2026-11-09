@@ -9,6 +9,7 @@ import {
 import { FULL_VISA_DB, CountryVisas } from '../data/fullVisaDatabase';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { fetchWithRetry } from '../utils/fetchWithRetry';
+import { applySeoMetadataToDom } from '../utils/seoMetadataManager';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   findDefaultGuideMatch,
@@ -366,12 +367,22 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
     // Scroll to top on load
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Set dynamic page metadata
-    document.title = `${title} | VisaApply.org`;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', activeArticle?.excerpt || `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${fromCountry.name} citizens applying for a ${categoryCode} visa to ${toCountry.name}.`);
-    }
+    // Synchronize all required SEO metadata (Title, Description, Canonical, OpenGraph, Twitter) via centralized manager
+    const fullTitle = title.includes('VisaApply.org') ? title : `${title} | VisaApply.org`;
+    const fullDesc =
+      activeArticle?.excerpt ||
+      `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${fromCountry.name} citizens applying for a ${categoryCode} visa to ${toCountry.name}.`;
+    const toCodeLower = String(toCountry.code || 'us').toLowerCase();
+    applySeoMetadataToDom(
+      {
+        title: fullTitle,
+        description: fullDesc,
+        ogType: 'article',
+        ogImage: `https://www.visaapply.org/og/${toCodeLower}.jpg`,
+        ogImageAlt: fullTitle,
+      },
+      typeof window !== 'undefined' ? window.location.pathname : `/${slug}`
+    );
 
     // Set initial FAQs from dbVisaItem immediately, then synchronize via /api/faq with 30s timeout & exponential backoff
     const initialFaqs = (dbVisaItem?.faq && Array.isArray(dbVisaItem.faq) && dbVisaItem.faq.length > 0)

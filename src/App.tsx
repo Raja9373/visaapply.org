@@ -58,6 +58,13 @@ import {
   hasRicherRemoteArticles
 } from './data/defaultArticles';
 import { fetchWithRetry } from './utils/fetchWithRetry';
+import {
+  applySeoMetadataToDom,
+  resolveStaticRouteSeoMetadata,
+  normalizeCanonicalUrl,
+  auditAllStaticRoutesSeo,
+  validateCurrentDomMetadata
+} from './utils/seoMetadataManager';
 import { CA_REGIONAL_WARNING_TEXT, CA_IRCC_REFERENCE_LINKS } from './data/canadaVisas';
 import {
   UK_REGIONAL_WARNING_TEXT,
@@ -184,8 +191,17 @@ export function renderCountryPageFixed(countryCode: string) {
     ? (window as any).getLiveVisaCount(code)
     : (BASE_COUNTRY_VISAS[code] ? (BASE_COUNTRY_VISAS[code] as any).length : 0);
   
-  // FIX TITLE - India to KH -> India to Cambodia
-  document.title = `VisaApply.org - ${fromName} to ${toName} - ${liveCount} Visas`;
+  // Synchronize title & OG/Twitter tags via centralized SEO metadata manager
+  const pageTitle = `VisaApply.org - ${fromName} to ${toName} - ${liveCount} Visas`;
+  applySeoMetadataToDom(
+    {
+      title: pageTitle,
+      description: `${toName} visa requirements for ${fromName} citizens: ${liveCount} official visa subclasses, 2026 fees, processing times, and document checklists.`,
+      ogImage: `https://www.visaapply.org/og/${code}.jpg`,
+      ogImageAlt: pageTitle
+    },
+    `/in-to-${code}`
+  );
   
   let html = `<div style="padding:24px;"><div style="display:flex; align-items:center; gap:12px; margin-bottom:8px; justify-content:center;"><div style="width:48px; height:32px; background:#1e40af; color:white; display:flex; align-items:center; justify-content:center; border-radius:4px; font-weight:800;">IN</div><div style="font-size:20px; color:#94a3b8;">→</div><div style="width:48px; height:32px; background:#f1f5f9; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; border-radius:4px; font-size:24px;">${toFlag}</div></div><h1 style="font-size:28px; font-weight:800; text-align:center;">Travel from ${fromName} to ${toName}</h1><p style="color:#64748b; text-align:center; margin-top:8px;">Step 1 of 2: Select your primary purpose of travel below to see all official visa options.</p>`;
   
@@ -360,7 +376,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isPrivacy = path === '/privacy';
   const isTerms = path === '/terms';
   const isBlogs = path === '/blogs' || path === '/blogs/';
-  const isFlights = path === '/flights' || path === '/flights/' || path.startsWith('/flights?');
+  const isAudit = path === '/audit' || path === '/audit/';
+  const isVerification = path === '/verification' || path === '/verification/';
+  const isAdminSlotAlert = path === '/admin/slot-alert' || path === '/admin/slot-alert/';
+  const staticRouteEntry = resolveStaticRouteSeoMetadata(rawPath);
   const interviewMatch = path.match(/^\/interview-prep\/([a-z]{2,3})$/i);
   const articleMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)$/i);
   const level3DetailMatch =
@@ -374,9 +393,19 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   let ogImageUrl = 'https://www.visaapply.org/og-image.jpg';
   let ogImageAlt = 'VisaApply.org - 249 Countries, 61,752 Routes';
 
-  if (isAdminLogin) {
+  const isFlights = path === '/flights' || path === '/flights/' || path.startsWith('/flights?');
+
+  if (staticRouteEntry) {
+    title = staticRouteEntry.title;
+    description = staticRouteEntry.description;
+    if (staticRouteEntry.ogImage) ogImageUrl = staticRouteEntry.ogImage;
+    if (staticRouteEntry.ogImageAlt) ogImageAlt = staticRouteEntry.ogImageAlt;
+  } else if (isAdminLogin) {
     title = 'Admin Login – VisaApply.org';
     description = 'Restricted administrator login for VisaApply.org.';
+  } else if (isAdminSlotAlert) {
+    title = 'Embassy Slot Auto Monitor – Admin Portal – VisaApply.org';
+    description = 'Restricted administrator console for monitoring embassy appointment slot checks and subscriber alerts.';
   } else if (isAdmin) {
     title = 'Admin Editorial Portal – VisaApply.org';
     description = 'Manage AI-generated visa guide drafts and publish official immigration content.';
@@ -558,47 +587,21 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     description = `Official 2026 comprehensive visa requirements, fee schedule, embassy appointment process, and downloadable PDF checklist for ${formatted}.`;
   }
 
-  document.title = title;
-  const setOrCreateMeta = (attrName: 'name' | 'property', attrVal: string, contentVal: string) => {
-    let el = document.querySelector(`meta[${attrName}="${attrVal}"]`) as HTMLMetaElement | null;
-    if (!el) {
-      el = document.createElement('meta');
-      el.setAttribute(attrName, attrVal);
-      document.head.appendChild(el);
-    }
-    el.setAttribute('content', contentVal);
-  };
+  const canonicalHref = normalizeCanonicalUrl(rawPath);
+  const isArticleView = Boolean(level3DetailMatch || articleMatch || (article && article.title));
 
-  const canonicalBase = getCanonicalBaseOrigin();
-  const cleanCanonicalPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
-  const canonicalHref = `${canonicalBase}${cleanCanonicalPath}`;
-
-  setOrCreateMeta('name', 'robots', isAdminRoute ? 'noindex, nofollow' : 'index, follow');
-  setOrCreateMeta('name', 'googlebot', isAdminRoute ? 'noindex, nofollow' : 'index, follow');
-  setOrCreateMeta('name', 'description', description);
-  setOrCreateMeta('property', 'og:type', 'website');
-  setOrCreateMeta('property', 'og:site_name', 'VisaApply.org');
-  setOrCreateMeta('property', 'og:title', title);
-  setOrCreateMeta('property', 'og:description', description);
-  setOrCreateMeta('property', 'og:url', canonicalHref);
-  setOrCreateMeta('property', 'og:image', ogImageUrl);
-  setOrCreateMeta('property', 'og:image:secure_url', ogImageUrl);
-  setOrCreateMeta('property', 'og:image:width', '1200');
-  setOrCreateMeta('property', 'og:image:height', '630');
-  setOrCreateMeta('property', 'og:image:alt', ogImageAlt);
-
-  setOrCreateMeta('name', 'twitter:card', 'summary_large_image');
-  setOrCreateMeta('name', 'twitter:title', title);
-  setOrCreateMeta('name', 'twitter:description', description);
-  setOrCreateMeta('name', 'twitter:image', ogImageUrl);
-
-  let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-  if (!canonicalLink) {
-    canonicalLink = document.createElement('link');
-    canonicalLink.setAttribute('rel', 'canonical');
-    document.head.appendChild(canonicalLink);
-  }
-  canonicalLink.setAttribute('href', canonicalHref);
+  applySeoMetadataToDom(
+    {
+      title,
+      description,
+      canonical: canonicalHref,
+      ogType: isArticleView ? 'article' : 'website',
+      ogImage: ogImageUrl,
+      ogImageAlt,
+      noindex: isAdminRoute || isAudit
+    },
+    rawPath
+  );
 
   // Inject Schema.org JSON-LD for AEO, GEO & SEO Knowledge Graph (Organization, WebSite, WebApplication, BreadcrumbList, FAQPage, HowTo)
   let ldScript = document.getElementById('seo-ld-json');
@@ -701,6 +704,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Terms of Service", "item": `${baseUrl}/terms` });
   } else if (isSitemap) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All 11,563+ Visa Guides Directory", "item": `${baseUrl}/sitemap` });
+  } else if (isAudit) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Live Database Audit", "item": `${baseUrl}/audit` });
+  } else if (isVerification) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Consular Data Verification", "item": `${baseUrl}/verification` });
   } else if (level3DetailMatch) {
     // -------------------------------------------------------------------------------------------------
     // Visa Detail Page (11,563+ pages): Dynamic 4-Level Hierarchy -> Home > From-To > Category > Visa Detail
@@ -1260,9 +1267,9 @@ function VisaCategorySelectionView({ match, countries, navigate, uiLang, onChang
   const liveCount = calculateVisaCount(fromCode, toCode);
 
   useEffect(() => {
-    document.title = `VisaApply.org - ${localizedFromName} to ${localizedToName} - ${liveCount} Visas`;
+    generateMetadata(window.location.pathname, countries);
     console.log(`✅ FIXED HEADER: Travel from ${headerInfo.fromName} to ${headerInfo.toName} - Flag ${headerInfo.toFlag} - ${liveCount} types - Was showing KH now showing ${headerInfo.toName}`);
-  }, [fromCode, toCode, localizedFromName, localizedToName, headerInfo.fromName, headerInfo.toName, headerInfo.toFlag, liveCount]);
+  }, [fromCode, toCode, localizedFromName, localizedToName, headerInfo.fromName, headerInfo.toName, headerInfo.toFlag, liveCount, countries]);
 
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const getCatVisasCount = (catId: string) => {
@@ -2200,7 +2207,8 @@ export default function App() {
         const urlLang = getLangFromUrlPath(window.location.pathname).lang;
         if (urlLang) {
           setUiLang(urlLang);
-        } else if (simulatedVpn) {
+        } else {
+          // User opened the site without a language prefix: automatically switch to their country's local language
           setUiLang(lang);
         }
       });
@@ -2311,8 +2319,20 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    generateMetadata(currentPath, countries);
-  }, [currentPath, countries]);
+    auditAllStaticRoutesSeo();
+  }, []);
+
+  useEffect(() => {
+    const { strippedPath } = getLangFromUrlPath(currentPath);
+    const slug = normalizeBlogSlug(strippedPath);
+    const blogMatch = slug
+      ? (findGeneratedBlogBySlug(slug) as unknown as Article | undefined) ||
+        articles.find((a: Article) => normalizeBlogSlug(a.slug) === slug || normalizeBlogSlug((a as any).route) === slug) ||
+        findDefaultGuideMatch(slug)
+      : undefined;
+    generateMetadata(currentPath, countries, blogMatch || null);
+    validateCurrentDomMetadata(true);
+  }, [currentPath, countries, articles]);
 
   const navigate = (path: string) => {
     window.history.pushState({}, '', path);
@@ -5090,7 +5110,6 @@ function ArticleView({ match, articles = [], navigate }: any) {
       fees: dbVisaItem?.fee || '$185',
       docs: ''
     });
-    document.title = guideTitle;
   }, [fromCode, toCode, categoryCode, subtypeCode, guideTitle, resolvedCategoryCode, dbVisaItem?.fee]);
 
   if (loading) {
