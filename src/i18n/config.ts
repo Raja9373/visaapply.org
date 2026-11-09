@@ -147,7 +147,7 @@ export const UI_TRANSLATIONS_10: Record<SupportedLangCode, I18nStrings> = {
     searchPlaceholder: 'Search 249 countries, capitals, visas - e.g. USA, London, Schengen, e-Visa, 15 Days...',
     popularRoutes: 'Popular Any-to-Any Routes:',
     heroTitle: 'Where do you want to travel?',
-    heroSubtitle: 'Select your origin passport/country and destination across all 249 countries (61,752 Any-to-Any bilateral visa routes).',
+    heroSubtitle: 'Select your origin passport/country and destination across all 249 countries.',
     viewRequirements: 'View →',
     compare: '➕ Compare',
     added: '✓ Added',

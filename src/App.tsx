@@ -3701,9 +3701,14 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white balance">
             {getUIString(uiLang).heroTitle}
           </h1>
-          <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal">
-            {getUIString(uiLang).heroSubtitle}
-          </p>
+          <div className="max-w-2xl mx-auto flex flex-col items-center gap-1.5">
+            <p className="text-blue-100 text-base sm:text-lg font-normal leading-relaxed">
+              Select your origin passport/country and destination across all 249 countries.
+            </p>
+            <span className="inline-block text-xs sm:text-sm font-medium text-emerald-200 bg-blue-500/20 border border-blue-400/30 px-3 py-0.5 rounded-full whitespace-nowrap">
+              (61,752 Any-to-Any bilateral visa routes)
+            </span>
+          </div>
 
           {/* 1. FROM / TO Search Bar */}
           <div className="max-w-4xl mx-auto bg-white p-3.5 rounded-2xl shadow-xl flex flex-col md:flex-row gap-3 items-center text-slate-900">

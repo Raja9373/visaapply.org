@@ -7,6 +7,7 @@ import matter from 'gray-matter';
 import { marked } from 'marked';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import handleFaqRequest from './src/api/faq.js';
+import handleAiEligibilityRequest from './src/api/aiEligibility.js';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   findDefaultGuideMatch,
@@ -413,6 +414,11 @@ app.get('/api/guides', (req, res) => {
 // FAQ endpoint for local dev
 app.all('/api/faq', async (req, res) => {
   return handleFaqRequest(req, res);
+});
+
+// AI-Based Eligibility Checker endpoint
+app.post('/api/ai-eligibility', async (req, res) => {
+  return handleAiEligibilityRequest(req, res);
 });
 
 // Drafts endpoint for local dev
@@ -1072,7 +1078,8 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     if (fs.existsSync(indexPath)) {
       const xml = stripAdminUrlsFromXml(fs.readFileSync(indexPath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('X-Robots-Tag', 'noindex');
+      res.setHeader('X-Robots-Tag', 'index, follow');
+      res.setHeader('Link', '<https://www.visaapply.org/sitemap-index.xml>; rel="canonical"');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }
@@ -1091,7 +1098,8 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     }
     indexXml += `</sitemapindex>\n`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.setHeader('X-Robots-Tag', 'noindex');
+    res.setHeader('X-Robots-Tag', 'index, follow');
+    res.setHeader('Link', '<https://www.visaapply.org/sitemap-index.xml>; rel="canonical"');
     res.setHeader('Cache-Control', 'public, max-age=3600');
     return res.status(200).send(indexXml);
   } catch (err: any) {
@@ -1109,7 +1117,8 @@ const handleSubSitemapXml = (req: any, res: any) => {
     if (fs.existsSync(filePath)) {
       const xml = stripAdminUrlsFromXml(fs.readFileSync(filePath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('X-Robots-Tag', 'noindex');
+      res.setHeader('X-Robots-Tag', 'index, follow');
+      res.setHeader('Link', `<https://www.visaapply.org/sitemap-${rawSub}.xml>; rel="canonical"`);
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }
