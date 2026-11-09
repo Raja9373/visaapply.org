@@ -5,12 +5,10 @@ export const TRAVELPAYOUTS_CONFIG = {
   id: '801550',
   marker: '801550', // Your Travelpayouts marker
   bookingComAid: '8119919', // Booking.com Impact ID
-  skyscannerId: '8131850', // Skyscanner Impact ID - In Review
-  skyscannerEnabled: false, // Will be true when Impact shows Approved
   travelpayoutsEnabled: true, // Now approved - true
 };
 
-// Primary international airport / city IATA codes for accurate Aviasales & Skyscanner route searches
+// Primary international airport / city IATA codes for accurate Aviasales route searches
 export const AIRPORT_IATA_MAP: Record<string, string> = {
   us: 'NYC',
   ca: 'YYZ',
@@ -127,7 +125,6 @@ export interface FlightLinkInfo {
   iata: string;
   tpLink: string;
   aviasalesLink: string;
-  skyscannerLink: string;
 }
 
 const CUSTOM_INR_PRICES: Record<string, string> = {
@@ -176,17 +173,11 @@ export const FLIGHT_LINKS_249: Record<string, FlightLinkInfo> = (() => {
   for (const rawCode of allCodes) {
     const code = rawCode.toLowerCase();
     const meta = getCountryMeta(code);
-    const countryName = NAME_MAP_249[code] || code.toUpperCase();
-    const countrySlug = countryName
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
     const iata = AIRPORT_IATA_MAP[code] || code.toUpperCase();
     const route = `DEL→${iata}`;
     const priceINR = convertFlightPriceToINR(meta.flightPrice, code);
     const aviasalesLink = `https://www.aviasales.com/search/DEL${iata}?marker=${TRAVELPAYOUTS_CONFIG.marker}&with_request=true&locale=en&currency=inr`;
     const tpLink = `https://www.aviasales.com/search/DEL${iata}?marker=${TRAVELPAYOUTS_CONFIG.marker}&with_request=true&locale=en&currency=inr`;
-    const skyscannerLink = `https://www.skyscanner.co.in/routes/del/${code}/new-delhi-to-${countrySlug}.html`;
 
     map[code] = {
       price: `${priceINR} (${meta.flightPrice})`,
@@ -195,7 +186,6 @@ export const FLIGHT_LINKS_249: Record<string, FlightLinkInfo> = (() => {
       iata,
       tpLink,
       aviasalesLink,
-      skyscannerLink,
     };
   }
   return map;
@@ -207,19 +197,10 @@ export function getFlightLinkForCountry(code: string, fromCode: string = 'in'): 
   if (f === 'in' && FLIGHT_LINKS_249[c]) return FLIGHT_LINKS_249[c];
 
   const meta = getCountryMeta(c);
-  const fromMeta = getCountryMeta(f);
   const fromIata = AIRPORT_IATA_MAP[f] || f.toUpperCase();
   const toIata = AIRPORT_IATA_MAP[c] || c.toUpperCase();
   const priceINR = convertFlightPriceToINR(meta.flightPrice, c);
   const displayPrice = f === 'in' ? priceINR : `${meta.flightPrice} (${priceINR})`;
-  const fromCitySlug = (fromMeta.capital || 'new-delhi')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-  const toCountrySlug = (NAME_MAP_249[c] || c)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
 
   return {
     price: `${priceINR} (${meta.flightPrice})`,
@@ -228,7 +209,6 @@ export function getFlightLinkForCountry(code: string, fromCode: string = 'in'): 
     iata: toIata,
     tpLink: `https://www.aviasales.com/search/${fromIata}${toIata}?marker=${TRAVELPAYOUTS_CONFIG.marker}&with_request=true&locale=en&currency=inr`,
     aviasalesLink: `https://www.aviasales.com/search/${fromIata}${toIata}?marker=${TRAVELPAYOUTS_CONFIG.marker}&with_request=true&locale=en&currency=inr`,
-    skyscannerLink: `https://www.skyscanner.co.in/routes/${fromIata.toLowerCase()}/${c}/${fromCitySlug}-to-${toCountrySlug}.html`,
   };
 }
 
@@ -242,11 +222,10 @@ export function getFlightWidgetWithTP(code: string, metaArg?: { flightPrice?: st
       <div>
         <div style="font-size:11px; font-weight:800; color:#0369a1;">✈ FLIGHT PRICE - LIVE</div>
         <div style="font-size:14px; font-weight:800; margin-top:4px; color:#0f172a;">${flight.route} From ${flight.priceINR}</div>
-        <div style="font-size:10px; color:#64748b; margin-top:2px;">Via Travelpayouts ID ${TRAVELPAYOUTS_CONFIG.id} + Skyscanner ${TRAVELPAYOUTS_CONFIG.skyscannerId}</div>
+        <div style="font-size:10px; color:#64748b; margin-top:2px;">Via Travelpayouts</div>
       </div>
       <div style="display:flex; flex-direction:column; gap:6px;">
         <a href="${flight.tpLink}" target="_blank" rel="noopener noreferrer" style="background:#10b981; color:white; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; text-decoration:none; text-align:center;">Search Flights →</a>
-        <a href="${flight.skyscannerLink}" target="_blank" rel="noopener noreferrer" style="background:white; color:#0284c7; border:1px solid #7dd3fc; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; text-decoration:none; text-align:center;">Skyscanner →</a>
       </div>
     </div>
   </div>`;

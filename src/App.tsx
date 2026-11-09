@@ -29,6 +29,10 @@ import { DummyTicketPage } from './pages/DummyTicketPage';
 import { CoverLetterGeneratorPage } from './pages/CoverLetterGeneratorPage';
 import { EmbassySlotAlertPage } from './pages/EmbassySlotAlertPage';
 import { PhotoResizerPage } from './pages/PhotoResizerPage';
+import { VisaRejectionAppealPage } from './pages/VisaRejectionAppealPage';
+import { SopGeneratorPage } from './pages/SopGeneratorPage';
+import { VisaTrackingPage } from './pages/VisaTrackingPage';
+import { VisaMapPage } from './pages/VisaMapPage';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
@@ -265,7 +269,7 @@ function getCountryAliasesForDedupe(toCountryName: string, toCode?: string): str
 /**
  * Strips all occurrences of destination country name and trailing '- {Country}' from a visa name
  * so that when combined as `{From} to {To} {subtype} (2026 Guide)`, the destination country name
- * appears ONLY ONCE across all 14,084 visa detail pages.
+ * appears ONLY ONCE across all 11,563 visa detail pages.
  */
 function getVisaSubtypeWithoutCountry(rawVisaName: string, toCountryName: string, toCode?: string): string {
   if (!rawVisaName) return 'Visa';
@@ -317,6 +321,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isCoverLetter = path === '/cover-letter-generator' || path === '/cover-letter-generator/';
   const isSlotAlert = path === '/embassy-slot-alert' || path === '/embassy-slot-alert/';
   const isPhotoResizer = path === '/photo-resizer' || path === '/photo-resizer/';
+  const isRejectionAppeal = path === '/visa-rejection-appeal' || path === '/visa-rejection-appeal/';
+  const isSopGenerator = path === '/sop-generator' || path === '/sop-generator/';
+  const isVisaTracking = path === '/visa-tracking' || path === '/visa-tracking/';
+  const isVisaMap = path === '/visa-map' || path === '/visa-map/' || path.startsWith('/visa-map?');
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -334,7 +342,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
   let title = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
-  let description = "249 countries, 14,084+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
+  let description = "249 countries, 11,563+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
   let ogImageUrl = 'https://visaapply.org/og-image.jpg';
   let ogImageAlt = 'VisaApply.org - 249 Countries, 61,752 Routes';
 
@@ -352,7 +360,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     description = 'Restricted administrator portal for VisaApply.org.';
   } else if (isAtlysVsVisaApply) {
     title = 'Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup';
-    description = 'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and 14,084+ official visa types.';
+    description = 'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and 11,563+ official visa types.';
   } else if (isGoldenVisa) {
     title = 'Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org';
     description = 'Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.';
@@ -370,6 +378,18 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isPhotoResizer) {
     title = 'Visa Photo Resizer - Free Online – VisaApply.org';
     description = 'Free online visa photo resizer and cropper. 35x45mm (Schengen/UK), 2x2 inch (USA DS-160), or 51x51mm at 300 DPI. 100% private client-side browser processing.';
+  } else if (isRejectionAppeal) {
+    title = 'Visa Rejection Appeal Guide - Why Was Your Visa Rejected? – VisaApply.org';
+    description = 'Check why your USA, Schengen, UK, or Canada visa was rejected. Get a clear step-by-step fix checklist, when to re-apply, and generate a 100% Free Visa Appeal Letter PDF.';
+  } else if (isSopGenerator) {
+    title = 'Free SOP Generator for Student Visa – VisaApply.org';
+    description = 'Auto-generate a complete 800-word Statement of Purpose (SOP) for Student Visa (Canada, UK, USA, Australia, Germany). 100% free instant Copy and PDF download with no login.';
+  } else if (isVisaTracking) {
+    title = 'Track Your Visa Application Status – VisaApply.org';
+    description = 'Track your visa application status on official portals: VFS Global, CGI Federal / CEAC (USA), TLScontact (UK), IRCC (Canada), and ImmiAccount. Free status guide & email reminder.';
+  } else if (isVisaMap) {
+    title = 'Global Visa Map - Interactive World Map (249 Passports) – VisaApply.org';
+    description = 'Interactive World Map showing Visa-Free, Visa on Arrival, e-Visa, and Embassy Visa requirements across 249 passports. 100% Free to explore, filter, and share.';
   } else if (isRoutes) {
     title = '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org';
     description = 'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.';
@@ -401,7 +421,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     title = 'Terms of Service & Editorial Disclaimer – VisaApply.org';
     description = 'Terms of Service and non-governmental consular disclaimer for VisaApply.org.';
   } else if (isSitemap) {
-    title = 'All 14,084+ Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org';
+    title = 'All 11,563+ Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org';
     description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and 6 visa categories.`;
   } else if (level3DetailMatch) {
     const fromCode = level3DetailMatch[1].toUpperCase();
@@ -569,6 +589,14 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Embassy Slot Alert", "item": `${baseUrl}/embassy-slot-alert` });
   } else if (isPhotoResizer) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Photo Resizer", "item": `${baseUrl}/photo-resizer` });
+  } else if (isRejectionAppeal) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Rejection Appeal Guide", "item": `${baseUrl}/visa-rejection-appeal` });
+  } else if (isSopGenerator) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Free SOP Generator", "item": `${baseUrl}/sop-generator` });
+  } else if (isVisaTracking) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Visa Application Status Tracker", "item": `${baseUrl}/visa-tracking` });
+  } else if (isVisaMap) {
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Global Visa Map", "item": `${baseUrl}/visa-map` });
   } else if (isRoutes) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "61,752 Visa Routes", "item": `${baseUrl}/routes` });
   } else if (isAbout) {
@@ -589,10 +617,10 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isTerms) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Terms of Service", "item": `${baseUrl}/terms` });
   } else if (isSitemap) {
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All 14,084+ Visa Guides Directory", "item": `${baseUrl}/sitemap` });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All 11,563+ Visa Guides Directory", "item": `${baseUrl}/sitemap` });
   } else if (level3DetailMatch) {
     // -------------------------------------------------------------------------------------------------
-    // Visa Detail Page (14,084+ pages): Dynamic 4-Level Hierarchy -> Home > From-To > Category > Visa Detail
+    // Visa Detail Page (11,563+ pages): Dynamic 4-Level Hierarchy -> Home > From-To > Category > Visa Detail
     // -------------------------------------------------------------------------------------------------
     const fromCode = level3DetailMatch[1].toUpperCase();
     const toCode = level3DetailMatch[2].toUpperCase();
@@ -783,7 +811,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
       "name": "VisaApply.org",
       "url": "https://www.visaapply.org",
       "email": "contact@visaapply.org",
-      "description": "Global Visa Intelligence & Consular Guide Portal covering 14,084+ live visa pathways across 249 countries and territories.",
+      "description": "Global Visa Intelligence & Consular Guide Portal covering 11,563+ live visa pathways across 249 countries and territories.",
       "sameAs": [
         "https://www.visaapply.org/about",
         "https://www.visaapply.org/sitemap"
@@ -989,10 +1017,9 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
           </div>
         </div>
 
-        {/* Column 2: Flight Price - Travelpayouts ID 801550 + Skyscanner 8131850 */}
+        {/* Column 2: Flight Price - Travelpayouts */}
         {(() => {
           const flight = getFlightLinkForCountry(codeLower, fromLower);
-          const fromIata = AIRPORT_IATA_MAP[fromLower] || 'DEL';
           return (
             <div
               style={{
@@ -1011,17 +1038,14 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
                   {flight.route} From {flight.priceINR}
                 </div>
                 <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>
-                  Via Travelpayouts ID {TRAVELPAYOUTS_CONFIG.id} + Skyscanner {TRAVELPAYOUTS_CONFIG.skyscannerId}
+                  Via Travelpayouts
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const target = `/flights?from=${fromIata}&to=${flight.iata}`;
-                    if (navigate) navigate(target);
-                    else window.location.href = target;
-                  }}
+                <a
+                  href={flight.aviasalesLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     background: '#10b981',
                     color: 'white',
@@ -1029,52 +1053,14 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
                     borderRadius: '10px',
                     fontSize: '11px',
                     fontWeight: 800,
-                    border: 'none',
-                    cursor: 'pointer',
+                    textDecoration: 'none',
                     textAlign: 'center',
+                    display: 'block',
+                    width: '100%',
                   }}
                 >
-                  ✈ Search {flight.route} Flights - From {flight.priceINR}
-                </button>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <a
-                    href={flight.aviasalesLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      flex: 1,
-                      background: '#003580',
-                      color: 'white',
-                      padding: '6px 8px',
-                      borderRadius: '8px',
-                      fontSize: '10px',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Aviasales ↗
-                  </a>
-                  <a
-                    href={flight.skyscannerLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      flex: 1,
-                      background: 'white',
-                      color: '#0284c7',
-                      border: '1px solid #7dd3fc',
-                      padding: '6px 8px',
-                      borderRadius: '8px',
-                      fontSize: '10px',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Skyscanner →
-                  </a>
-                </div>
+                  Search Flights on Aviasales →
+                </a>
               </div>
             </div>
           );
@@ -1159,14 +1145,6 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
         </div>
       </div>
     </div>
-
-    {/* Phase 3 Tool 1: 30-Sec Visa Eligibility Checker */}
-    <EligibilityChecker
-      countryCode={toCode}
-      countryName={toName}
-      defaultFromCode={fromCode}
-      onNavigate={navigate}
-    />
 
     {/* Phase 3 Tool 3: Embassy Finder + Consular Interview Prep (Any-to-Any Origin Aware) */}
     <EmbassyFinder countryCode={toCode} countryName={toName} fromCode={fromCode} onNavigate={navigate} />
@@ -2523,6 +2501,10 @@ export default function App() {
   const isCoverLetter = routePath === '/cover-letter-generator' || routePath === '/cover-letter-generator/';
   const isSlotAlert = routePath === '/embassy-slot-alert' || routePath === '/embassy-slot-alert/';
   const isPhotoResizer = routePath === '/photo-resizer' || routePath === '/photo-resizer/';
+  const isRejectionAppeal = routePath === '/visa-rejection-appeal' || routePath === '/visa-rejection-appeal/';
+  const isSopGenerator = routePath === '/sop-generator' || routePath === '/sop-generator/';
+  const isVisaTracking = routePath === '/visa-tracking' || routePath === '/visa-tracking/';
+  const isVisaMap = routePath === '/visa-map' || routePath === '/visa-map/' || routePath.startsWith('/visa-map?');
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2568,7 +2550,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2619,7 +2601,7 @@ export default function App() {
                 type="button"
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
                 className={`flex items-center gap-1 transition-colors cursor-pointer py-1.5 ${
-                  isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer 
+                  isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer || isRejectionAppeal || isSopGenerator || isVisaTracking || isVisaMap
                     ? 'text-amber-300 font-bold' 
                     : 'text-blue-100 hover:text-white'
                 }`}
@@ -2629,7 +2611,18 @@ export default function App() {
               </button>
 
               {servicesDropdownOpen && (
-                <div className="absolute top-full left-0 w-64 bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                <div className="absolute top-full left-0 w-72 bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/visa-map'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Globe className="w-4 h-4 text-emerald-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Global Visa Map (249 Passports)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% Free Interactive World Map</div>
+                    </div>
+                  </button>
                   <button
                     type="button"
                     onClick={() => { navigate('/dummy-ticket'); setServicesDropdownOpen(false); }}
@@ -2672,6 +2665,40 @@ export default function App() {
                     <div>
                       <div className="text-white">Visa Photo Resizer</div>
                       <div className="text-[10px] text-blue-200 font-normal">35x45mm / 2x2" (300 DPI)</div>
+                    </div>
+                  </button>
+                  <div className="my-1 border-t border-blue-800/70" />
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/visa-rejection-appeal'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Shield className="w-4 h-4 text-rose-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Visa Rejection Appeal Guide</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% Free Check &amp; Appeal PDF</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/sop-generator'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <GraduationCap className="w-4 h-4 text-cyan-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Free SOP Generator (Student)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">100% Free 800-Word SOP PDF</div>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/visa-tracking'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Search className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-white">Track Visa Status</div>
+                      <div className="text-[10px] text-blue-200 font-normal">FREE VFS / CEAC / UKVI Links</div>
                     </div>
                   </button>
                 </div>
@@ -2765,6 +2792,9 @@ export default function App() {
                 <span className="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider block px-1">
                   Free Services &amp; Tools
                 </span>
+                <button onClick={() => { navigate('/visa-map'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-emerald-300 hover:text-white font-bold transition-colors">
+                  🗺️ Global Visa Map (249 Passports)
+                </button>
                 <button onClick={() => { navigate('/dummy-ticket'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
                   ✈️ Dummy Ticket (Flight &amp; Hotel)
                 </button>
@@ -2776,6 +2806,15 @@ export default function App() {
                 </button>
                 <button onClick={() => { navigate('/photo-resizer'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
                   📷 Visa Photo Resizer (300 DPI)
+                </button>
+                <button onClick={() => { navigate('/visa-rejection-appeal'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  ⚖️ Visa Rejection Appeal Guide (100% Free)
+                </button>
+                <button onClick={() => { navigate('/sop-generator'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  🎓 Free SOP Generator for Student Visa
+                </button>
+                <button onClick={() => { navigate('/visa-tracking'); setMobileMenuOpen(false); }} className="block w-full text-left py-1.5 px-2 text-xs text-blue-100 hover:text-white font-semibold transition-colors">
+                  🔍 Track Your Visa Application Status
                 </button>
               </div>
 
@@ -2845,6 +2884,14 @@ export default function App() {
           <EmbassySlotAlertPage onNavigate={navigate} />
         ) : isPhotoResizer ? (
           <PhotoResizerPage onNavigate={navigate} />
+        ) : isRejectionAppeal ? (
+          <VisaRejectionAppealPage onNavigate={navigate} />
+        ) : isSopGenerator ? (
+          <SopGeneratorPage onNavigate={navigate} />
+        ) : isVisaTracking ? (
+          <VisaTrackingPage onNavigate={navigate} />
+        ) : isVisaMap ? (
+          <VisaMapPage onNavigate={navigate} />
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isGoldenVisa ? (
@@ -2928,7 +2975,7 @@ export default function App() {
               <span className="font-bold text-lg">VisaApply.org</span>
             </div>
             <p className="text-sm text-slate-300 max-w-md leading-relaxed">
-              VisaApply.org is an independent global visa information portal providing accurate requirements, documentation checklists, and step-by-step application guidance across 249 countries and 14,084+ visa subclasses worldwide.
+              VisaApply.org is an independent global visa information portal providing accurate requirements, documentation checklists, and step-by-step application guidance across 249 countries and 11,563+ visa subclasses worldwide.
             </p>
             <p className="text-xs text-slate-300">
               Disclaimer: We are not affiliated with VFS Global, IRCC, USCIS, UKVI, or any government embassy. Official applications must be submitted through official government portals.
@@ -2951,12 +2998,18 @@ export default function App() {
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy & AdSense</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-200 font-semibold text-blue-300 transition-colors cursor-pointer">Sitemap (14,084+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-200 font-semibold text-blue-300 transition-colors cursor-pointer">Sitemap (11,563+ Pages)</button></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Free Services &amp; Tools</h4>
             <ul className="space-y-2 text-sm">
+              <li>
+                <button onClick={() => navigate('/visa-map')} className="text-emerald-300 hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🗺️</span>
+                  <span>Global Visa Map (249 Passports)</span>
+                </button>
+              </li>
               <li>
                 <button onClick={() => navigate('/dummy-ticket')} className="text-amber-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
                   <span>✈️</span>
@@ -2981,6 +3034,24 @@ export default function App() {
                   <span>Visa Photo Resizer (300 DPI)</span>
                 </button>
               </li>
+              <li>
+                <button onClick={() => navigate('/visa-rejection-appeal')} className="text-rose-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>⚖️</span>
+                  <span>Visa Rejection Appeal Guide</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/sop-generator')} className="text-cyan-300 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🎓</span>
+                  <span>Free SOP Generator (Student)</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/visa-tracking')} className="text-emerald-200 hover:text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>🔍</span>
+                  <span>Track Visa Status</span>
+                </button>
+              </li>
               <li className="pt-2 border-t border-slate-800">
                 <button 
                   onClick={() => navigate('/atlys-vs-visaapply')} 
@@ -2996,13 +3067,13 @@ export default function App() {
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="mailto:contact@visaapply.org" className="text-blue-300 font-semibold underline underline-offset-2 hover:text-white">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-300">14,084+ Visa & Programme Guides across 249 Destination Countries</li>
+              <li className="text-xs text-slate-300">11,563+ Visa & Programme Guides across 249 Destination Countries</li>
               <li className="text-xs text-slate-300">AdSense Publisher: pub-9048615701580913</li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-300 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400">© {new Date().getFullYear()} VisaApply.org. All rights reserved. 14,084+ Visa & Programme Guides across 249 Destination Countries.</p>
+          <p className="text-slate-400">© {new Date().getFullYear()} VisaApply.org. All rights reserved. 11,563+ Visa & Programme Guides across 249 Destination Countries.</p>
           <div className="flex items-center gap-2 flex-wrap" style={{ fontSize: '11px', color: '#9ca3af' }}>
             <span>© {new Date().getFullYear()} VisaApply.org</span>
             <span>•</span>
@@ -6155,7 +6226,7 @@ function AboutView({ navigate }: any) {
           About VisaApply.org & Our Editorial Standards
         </h1>
         <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-          <strong>VisaApply.org</strong> is a comprehensive, independent global visa intelligence platform engineered to simplify cross-border travel, work permits, study visas, and permanent residency pathways across all <strong>249 ISO-recognized countries and territories</strong> (covering <strong>14,084+ live visa and statutory classifications</strong>).
+          <strong>VisaApply.org</strong> is a comprehensive, independent global visa intelligence platform engineered to simplify cross-border travel, work permits, study visas, and permanent residency pathways across all <strong>249 ISO-recognized countries and territories</strong> (covering <strong>11,563+ live visa and statutory classifications</strong>).
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
@@ -6165,7 +6236,7 @@ function AboutView({ navigate }: any) {
             <p className="text-xs text-slate-500 mt-1">Every sovereign state and dependent territory mapped across 7 continents.</p>
           </div>
           <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
-            <div className="text-2xl font-extrabold text-emerald-700">14,084+ Visas</div>
+            <div className="text-2xl font-extrabold text-emerald-700">11,563+ Visas</div>
             <div className="text-xs font-bold text-slate-700 mt-1">Primary Statutory Subclasses</div>
             <p className="text-xs text-slate-500 mt-1">Includes US INA 278 routes, UK 222 Immigration Rules, Canada IRPR 151, Germany AufenthG 138 & Australia 135 subclasses.</p>
           </div>
@@ -6319,7 +6390,7 @@ function PrivacyView({ navigate }: any) {
 
           <h2 className="text-lg font-bold text-slate-900">3. Affiliate & Travel Partner Disclosure</h2>
           <p>
-            To keep our 14,084+ visa guides and downloadable PDF checklists 100% free for travelers, VisaApply.org participates in verified travel affiliate programs including <strong>Booking.com (AID 8119919)</strong>, <strong>Travelpayouts / Aviasales (Marker 801550)</strong>, and <strong>Skyscanner (ID 8131850)</strong>. When you book refundable visa-compliant hotels or flights through our partner links, we may earn a small commission at zero extra cost to you.
+            To keep our 11,563+ visa guides and downloadable PDF checklists 100% free for travelers, VisaApply.org participates in verified travel affiliate programs including <strong>Booking.com (AID 8119919)</strong> and <strong>Travelpayouts / Aviasales (Marker 801550)</strong>. When you book refundable visa-compliant hotels or flights through our partner links, we may earn a small commission at zero extra cost to you.
           </p>
 
           <h2 className="text-lg font-bold text-slate-900">4. Third-Party Links & Non-Governmental Disclaimer</h2>
@@ -6674,14 +6745,6 @@ function AdminPortal({
             <div style={{ fontSize: '14px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>ID {TRAVELPAYOUTS_CONFIG.id} ✅ Approved</div>
             <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Aviasales + 100 airlines • $2-$10/booking • Live NOW</div>
           </div>
-          <div style={{ background: '#fef3c7', padding: '12px', borderRadius: '10px', border: '1px solid #fde68a' }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#92400e' }}>SKYSCANNER DIRECT</div>
-            <div style={{ fontSize: '14px', fontWeight: 800, marginTop: '4px', color: '#0f172a' }}>ID {TRAVELPAYOUTS_CONFIG.skyscannerId} ⏳ In Review</div>
-            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Impact.com • Will auto-enable when approved</div>
-          </div>
-        </div>
-        <div style={{ marginTop: '16px', padding: '12px', background: '#f8fafc', borderRadius: '10px', fontSize: '12px', color: '#334155' }}>
-          <b>Next:</b> When Skyscanner shows Approved, change SKYSCANNER_ENABLED to true in travelpayoutsConfig.ts - Flight widget will use direct Skyscanner affiliate links with commission.
         </div>
       </div>
 
@@ -6725,7 +6788,7 @@ function AdminPortal({
             <div>
               <div className="text-2xl mb-2">🗺️</div>
               <h3 className="font-extrabold text-base text-blue-200">Sitemap (61,752+ Routes) – Public + Admin</h3>
-              <p className="text-xs text-slate-200 mt-1">Indexed links for all 14,084+ visa guides & 61,752 bilateral routes across 249 countries.</p>
+              <p className="text-xs text-slate-200 mt-1">Indexed links for all 11,563+ visa guides & 61,752 bilateral routes across 249 countries.</p>
             </div>
             <span className="text-xs font-bold text-blue-200 mt-4 inline-flex items-center gap-1">Open Public Sitemap →</span>
           </div>

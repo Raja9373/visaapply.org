@@ -57,7 +57,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
     {
       feature: 'Visa Categories Covered',
       atlys: 'Mostly Tourist & Business e-Visas (single/double entry)',
-      visaapply: '14,084+ Visas across 6 categories: Tourist, Business, Work, Student, Family, PR',
+      visaapply: '11,563+ Visas across 6 categories: Tourist, Business, Work, Student, Family, PR',
       winner: 'visaapply',
       category: 'Database'
     },
@@ -122,7 +122,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
   const faqs = [
     {
       q: 'How does VisaApply.org compare to Atlys?',
-      a: 'Atlys is a commercial visa agency app that charges a service fee ($20–$60+ per applicant) to fill and submit e-visa forms on your behalf. VisaApply.org is an open, 100% free global visa intelligence portal covering all 249 countries and 14,084+ visas. We provide official government application links, step-by-step guidance, free document checklists, and consular interview simulators with $0 service fees.'
+      a: 'Atlys is a commercial visa agency app that charges a service fee ($20–$60+ per applicant) to fill and submit e-visa forms on your behalf. VisaApply.org is an open, 100% free global visa intelligence portal covering all 249 countries and 11,563+ visas. We provide official government application links, step-by-step guidance, free document checklists, and consular interview simulators with $0 service fees.'
     },
     {
       q: 'Why should I apply directly through official government portals instead of an agency app?',
@@ -130,7 +130,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
     },
     {
       q: 'Does Atlys cover all visas and countries?',
-      a: 'No. Atlys focuses primarily on e-visas for approximately 80 to 100 popular tourist destinations. It does not cover in-person embassy visa interviews, long-term work permits, international student visas, family reunification, or permanent residency for all 249 countries and territories. VisaApply.org indexes 14,084+ visa subclasses worldwide.'
+      a: 'No. Atlys focuses primarily on e-visas for approximately 80 to 100 popular tourist destinations. It does not cover in-person embassy visa interviews, long-term work permits, international student visas, family reunification, or permanent residency for all 249 countries and territories. VisaApply.org indexes 11,563+ visa subclasses worldwide.'
     },
     {
       q: 'Is my personal data safer on VisaApply.org?',
@@ -176,7 +176,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
           </h1>
 
           <p className="text-blue-100 text-base sm:text-lg max-w-3xl mx-auto font-normal leading-relaxed">
-            Comparing commercial third-party visa agencies charging service markups against VisaApply.org’s 100% free, direct-to-government global visa intelligence across 249 countries, privacy standards, and 14,084+ official visa categories.
+            Comparing commercial third-party visa agencies charging service markups against VisaApply.org’s 100% free, direct-to-government global visa intelligence across 249 countries, privacy standards, and 11,563+ official visa categories.
           </p>
 
           {/* Quick Metrics Bar */}
@@ -200,7 +200,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
             <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
               <span className="text-xs text-blue-200 block font-medium">Official Visas</span>
               <span className="text-xl sm:text-2xl font-black text-white mt-1 block">
-                14,084+ Visas
+                11,563+ Visas
               </span>
               <span className="text-[11px] text-amber-300 font-bold mt-1 block">Tourist, Work, Study, PR</span>
             </div>
@@ -277,7 +277,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Complete Scale:</strong> 249 Countries & Territories, 14,084+ Visas, and 61,752 bilateral Any-to-Any routes.</span>
+                  <span><strong>Complete Scale:</strong> 249 Countries & Territories, 11,563+ Visas, and 61,752 bilateral Any-to-Any routes.</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -379,7 +379,7 @@ export const AtlysVsVisaApplyPage: React.FC<AtlysVsVisaApplyPageProps> = ({ onNa
               <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
                 <Compass className="w-5 h-5" />
               </div>
-              <h3 className="font-extrabold text-lg text-slate-900">14,084+ Visas vs e-Visas Only</h3>
+              <h3 className="font-extrabold text-lg text-slate-900">11,563+ Visas vs e-Visas Only</h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Most agency platforms only process straightforward tourist e-visas. When you need a German EU Blue Card, Canadian Express Entry PR, US F-1 Student or H-1B Work Visa, or UK Skilled Worker Permit, agency apps cannot help. VisaApply.org covers all 6 visa categories across 249 nations.
               </p>

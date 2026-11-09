@@ -476,7 +476,7 @@ export function getVisasForAnyRoute(fromRaw: string, toRaw: string, category?: s
 
       const baseName = baseItem?.name
         ? baseItem.name.replace(/for Indians|India to/gi, `for ${fromName} Nationals`)
-        : `${toName} ${cat.charAt(0).toUpperCase() + cat.slice(1)} Subclass #${seq}`;
+        : `${toName} Official ${cat.charAt(0).toUpperCase() + cat.slice(1)} Entry Pathway`;
 
       generated.push({
         id: `${from}-to-${to}-${cat}-${seq}`,

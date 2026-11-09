@@ -15,7 +15,7 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
   const [toFilter, setToFilter] = useState<string>('');
   const [badgeFilter, setBadgeFilter] = useState<'ALL' | 'VISA_FREE' | 'EVISA' | 'VOA'>('ALL');
 
-  const allIsoCodes = useMemo(() => Object.keys(NAME_MAP_249), []);
+  const allIsoCodes = useMemo(() => Object.keys(NAME_MAP_249).filter((k) => k !== 'eu'), []);
 
   const routesForOrigin = useMemo(() => {
     const q = toFilter.trim().toLowerCase();
@@ -42,7 +42,7 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
       <div className="bg-gradient-to-r from-slate-900 via-[#0B3D91] to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 px-3.5 py-1.5 rounded-full text-xs font-extrabold text-emerald-300">
-            <span>🌍 249 × 248 = 61,752 LIVE ANY-TO-ANY BILATERAL VISA ROUTES</span>
+            <span>🌍 249 × 248 = 61,752 LIVE ANY-TO-ANY BILATERAL VISA ROUTES • 11,563 OFFICIAL VISAS</span>
           </div>
           <div className="space-y-2">
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
@@ -55,7 +55,7 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
             </div>
           </div>
           <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto">
-            Not just India to 249 countries — check bilateral visa counts, Visa-Free eligibility, local embassy locations, and flights from ANY passport/residence country to ANY destination worldwide.
+            Explore all 11,563 official government visa subclasses across 249 countries — check bilateral visa counts, Visa-Free eligibility, local embassy locations, and flights from ANY passport/residence country to ANY destination worldwide.
           </p>
 
           {/* Quick Popular Corridors */}

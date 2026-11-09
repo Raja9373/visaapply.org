@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FULL_VISA_DB, BASE_COUNTRY_VISAS, COUNTRY_INFO, VisaItem, CountryVisas } from '../data/fullVisaDatabase';
+import { FULL_VISA_DB, BASE_COUNTRY_VISAS, COUNTRY_INFO, NAME_MAP_249, FLAG_MAP_249, VisaItem, CountryVisas } from '../data/fullVisaDatabase';
 import { UK_111_VISAS } from '../data/ukVisas';
 import {
   UK_GROUP_1_REGIONAL_WORK,
@@ -18,20 +18,23 @@ import {
 export function SitemapPage({ navigate }: { navigate?: (path: string) => void }) {
   const [search, setSearch] = useState('');
 
-  const countryCodes = Object.keys(COUNTRY_INFO).filter(code => code === code.toUpperCase());
+  const countryCodes = Object.keys(NAME_MAP_249)
+    .filter(code => code !== 'eu')
+    .map(code => code.toUpperCase());
 
   const filteredCodes = countryCodes.filter(code => {
     if (!search.trim()) return true;
     const q = search.toLowerCase();
-    const name = COUNTRY_INFO[code]?.name.toLowerCase() || '';
-    return code.toLowerCase().includes(q) || name.includes(q);
+    const lower = code.toLowerCase();
+    const name = (NAME_MAP_249[lower] || COUNTRY_INFO[code]?.name || '').toLowerCase();
+    return lower.includes(q) || name.includes(q);
   });
 
   const categoriesList: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
   
   let totalUniqueRecords = 0;
   countryCodes.forEach(toCode => {
-    const cData = BASE_COUNTRY_VISAS[toCode] || FULL_VISA_DB[toCode];
+    const cData = BASE_COUNTRY_VISAS[toCode.toLowerCase()] || BASE_COUNTRY_VISAS[toCode] || FULL_VISA_DB[toCode];
     if (cData) {
       categoriesList.forEach(cat => {
         totalUniqueRecords += cData[cat]?.length || 0;
@@ -68,13 +71,13 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
         <div className="flex items-center gap-2 text-xs text-slate-600 mb-2 font-medium">
           <button onClick={() => navigate?.('/')} className="hover:underline text-blue-700 cursor-pointer">Home</button>
           <span>&gt;</span>
-          <span className="text-slate-900 font-bold">Global Visa Sitemap Index (80,317 Total Indexed Pages)</span>
+          <span className="text-slate-900 font-bold">Global Visa Sitemap Index (77,806 Total Indexed Pages)</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
-          VisaApply.org - Global Sitemap Architecture (80,317 Pages Across 74 XML Sitemaps)
+          VisaApply.org - Global Sitemap Architecture (77,806 Pages Across 85 XML Sitemaps)
         </h1>
         <p className="text-slate-700 text-sm">
-          Complete index of 249 Countries + 1,494 Category Pages + 14,084 Visa Detail Pages + 61,752 Bilateral Routes (70 XML Files) + 2,748 Blog &amp; Interview Guides using canonical <code className="font-mono font-bold">https://www.visaapply.org/</code> URLs.
+          Complete index of 249 Countries + 1,494 Category Pages + {totalUniqueRecords.toLocaleString()} Visa Detail Pages + 61,752 Bilateral Routes (70 XML Files) + 2,748 Blog &amp; Interview Guides using canonical <code className="font-mono font-bold">https://www.visaapply.org/</code> URLs.
         </p>
       </div>
 
@@ -84,10 +87,10 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="bg-emerald-700 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
-                ✅ Master Sitemap Index Live (80,317 Pages)
+                ✅ Master Sitemap Index Live (77,806 Pages)
               </span>
               <h2 className="text-sm sm:text-base font-extrabold text-emerald-950">
-                sitemap-index.xml — 74 Sub-Sitemaps (https://www.visaapply.org/)
+                sitemap-index.xml — 85 Sub-Sitemaps (https://www.visaapply.org/)
               </h2>
             </div>
             <p className="text-xs text-emerald-900">
@@ -141,9 +144,9 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
             rel="noopener noreferrer"
             className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
           >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas-1..15.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">14,084 Pages</div>
-            <div className="text-[11px] text-slate-600">Split into 15 XML Files (1,000 each)</div>
+            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas-1..12.xml</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">{totalUniqueRecords.toLocaleString()} Pages</div>
+            <div className="text-[11px] text-slate-600">Split into 12 XML Files (Real Visas Only)</div>
           </a>
           <a
             href="/sitemap-routes.xml"
@@ -168,6 +171,46 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
         </div>
       </div>
 
+      {/* Free Consular Services & Tools Index */}
+      <div className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3">
+          <h2 className="text-lg font-extrabold text-slate-900">
+            🛠️ Free Consular Services &amp; Visa Tools Directory (100% Free)
+          </h2>
+          <span className="bg-blue-50 text-[#0B3D91] text-xs font-black px-3 py-1 rounded-full">
+            Public &amp; Indexable Tools
+          </span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          {[
+            { url: '/visa-map', label: '🗺️ Interactive Global Visa Map', sub: '249 Passports • Visa-Free, VOA & e-Visa Map' },
+            { url: '/visa-rejection-appeal', label: '⚖️ Visa Rejection Appeal Guide', sub: '100% Free Check & Appeal Letter PDF' },
+            { url: '/sop-generator', label: '🎓 Free SOP Generator for Student Visa', sub: '800-Word Official SOP PDF' },
+            { url: '/visa-tracking', label: '🔍 Track Your Visa Application Status', sub: 'Official VFS, CEAC, TLS & IRCC Links' },
+            { url: '/dummy-ticket', label: '✈️ Dummy Ticket (Flight & Hotel)', sub: 'Verifiable Reservation Guide & PDF' },
+            { url: '/cover-letter-generator', label: '📄 Cover Letter Generator', sub: '100% Free Consular Cover Letter PDF' },
+            { url: '/embassy-slot-alert', label: '🔔 Embassy Slot Alert', sub: 'Free Email Alert for USA & Schengen' },
+            { url: '/photo-resizer', label: '📷 Visa Photo Resizer (300 DPI)', sub: '35x45mm & 2x2 Inch Biometric Tool' },
+            { url: '/golden-visa', label: '👑 Golden Visa Directory (2026)', sub: 'Sovereign Residency by Investment' }
+          ].map((tool) => (
+            <a
+              key={tool.url}
+              href={tool.url}
+              onClick={(e) => {
+                if (navigate) {
+                  e.preventDefault();
+                  navigate(tool.url);
+                }
+              }}
+              className="p-3.5 bg-slate-50 hover:bg-blue-50/60 border border-slate-200 rounded-xl transition-colors block"
+            >
+              <div className="font-extrabold text-[#0B3D91]">{tool.label}</div>
+              <div className="text-[11px] text-slate-600 mt-0.5">{tool.sub}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
       <div className="bg-white border border-slate-200 p-4 sm:p-6 rounded-2xl shadow-xs">
         <input
           type="text"
@@ -180,8 +223,9 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
 
       <div className="space-y-8">
         {filteredCodes.map(toCode => {
-          const cName = COUNTRY_INFO[toCode]?.name;
-          const cFlag = COUNTRY_INFO[toCode]?.flag || '🌍';
+          const lowerCode = toCode.toLowerCase();
+          const cName = NAME_MAP_249[lowerCode] || COUNTRY_INFO[toCode]?.name || toCode;
+          const cFlag = FLAG_MAP_249[lowerCode] || COUNTRY_INFO[toCode]?.flag || '🌍';
           
           return (
             <div key={toCode} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">

@@ -1183,7 +1183,7 @@ app.get(['/og-image.jpg', '/og/:slug.jpg'], (req, res) => {
   res.status(404).end();
 });
 
-// Helper to compute dynamic OG tags for server-rendered HTML (so Facebook & WhatsApp crawlers see exact OG tags without needing JS)
+// Helper to compute dynamic OG tags for server-rendered HTML (so social crawlers see exact OG tags without needing JS)
 const TOP_VISA_COUNTS_SSR: Record<string, number> = {
   us: 278, gb: 222, uk: 222, ca: 151, de: 138, au: 135, ae: 135, sg: 109, fr: 112, jp: 109, th: 98, ch: 94, vn: 82
 };
@@ -1193,11 +1193,11 @@ function getServerSideOgMeta(pathname: string) {
   const langStripped = clean.replace(/^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/|$)/i, '/') || '/';
 
   let ogTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
-  let ogDesc = "249 countries, 14,084+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
+  let ogDesc = "249 countries, 11,563+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
   let ogImage = "https://www.visaapply.org/og-image.jpg";
   let ogUrl = `https://www.visaapply.org${clean === '/' ? '/' : clean}`;
   let twitterTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries";
-  let twitterDesc = "249 countries, 14,084+ visas, 61,752 routes, 10 languages, auto-update daily";
+  let twitterDesc = "249 countries, 11,563+ visas, 61,752 routes, 10 languages, auto-update daily";
 
   if (langStripped === '/flights') {
     ogTitle = "Cheap Flights from India - 249 Countries - From ₹12,500 - VisaApply.org";
@@ -1207,7 +1207,7 @@ function getServerSideOgMeta(pathname: string) {
     twitterDesc = ogDesc;
   } else if (langStripped === '/atlys-vs-visaapply') {
     ogTitle = "Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup";
-    ogDesc = "Compare Atlys vs VisaApply.org: $0 service fees vs agency markups, 249 countries vs ~80, zero-document storage privacy vs cloud uploads, and 14,084+ visas.";
+    ogDesc = "Compare Atlys vs VisaApply.org: $0 service fees vs agency markups, 249 countries vs ~80, zero-document storage privacy vs cloud uploads, and 11,563+ visas.";
     ogImage = "https://www.visaapply.org/og-image.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
@@ -1219,7 +1219,7 @@ function getServerSideOgMeta(pathname: string) {
     twitterDesc = ogDesc;
   } else if (langStripped === '/dummy-ticket') {
     ogTitle = "Dummy Ticket - Flight + Hotel Reservation for Visa – VisaApply.org";
-    ogDesc = "Official verifiable flight and hotel reservations for visa applications. Real GDS airline PNR and hotel booking voucher valid for 7–14 days. Delivered on WhatsApp in 4 hours.";
+    ogDesc = "Official verifiable flight and hotel reservations for visa applications. Real GDS airline PNR and hotel booking voucher valid for 7–14 days. Free guide and sample PDF.";
     ogImage = "https://www.visaapply.org/og-image.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
@@ -1231,13 +1231,37 @@ function getServerSideOgMeta(pathname: string) {
     twitterDesc = ogDesc;
   } else if (langStripped === '/embassy-slot-alert') {
     ogTitle = "Embassy Slot Alert - USA / Schengen – VisaApply.org";
-    ogDesc = "USA ka slot khulte hi sabse pehle pata chalega. Automated 24/7 consular slot tracking on WhatsApp & Email for US Consulates in India and Schengen VFS centers.";
+    ogDesc = "Automated 24/7 consular slot tracking directly on Email for US Consulates, Schengen VFS centers, UK, and Canada.";
     ogImage = "https://www.visaapply.org/og-image.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
   } else if (langStripped === '/photo-resizer') {
     ogTitle = "Visa Photo Resizer - Free Online – VisaApply.org";
     ogDesc = "Free online visa photo resizer and cropper. 35x45mm (Schengen/UK), 2x2 inch (USA DS-160), or 51x51mm at 300 DPI. 100% private client-side browser processing.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/visa-rejection-appeal') {
+    ogTitle = "Visa Rejection Appeal Guide - Why Was Your Visa Rejected? – VisaApply.org";
+    ogDesc = "Understand why your USA, Schengen, UK, or Canada visa was rejected. Check what to fix, when to re-apply, and generate a 100% Free Appeal Letter PDF.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/sop-generator') {
+    ogTitle = "Free SOP Generator for Student Visa – VisaApply.org";
+    ogDesc = "Auto-generate an 800-word Statement of Purpose (SOP) for Student Visa with Academic Background, Why This University, Why This Country, and Future Plans. Free PDF.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/visa-tracking') {
+    ogTitle = "Track Your Visa Application Status – VisaApply.org";
+    ogDesc = "Track your visa application status on official portals: VFS Global, CGI Federal / CEAC (USA), TLScontact (UK), IRCC (Canada), and ImmiAccount.";
+    ogImage = "https://www.visaapply.org/og-image.jpg";
+    twitterTitle = ogTitle;
+    twitterDesc = ogDesc;
+  } else if (langStripped === '/visa-map') {
+    ogTitle = "Global Visa Map - Interactive World Map (249 Passports) – VisaApply.org";
+    ogDesc = "Interactive World Map showing Visa-Free, Visa on Arrival, e-Visa, and Embassy Visa requirements for all 249 passports. 100% Free.";
     ogImage = "https://www.visaapply.org/og-image.jpg";
     twitterTitle = ogTitle;
     twitterDesc = ogDesc;
