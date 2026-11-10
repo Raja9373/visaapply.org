@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Globe, ArrowRight, Shield, CheckCircle2, AlertCircle, ExternalLink, Calendar, FileText, DollarSign, Clock, Check, Building2, XCircle, AlertTriangle, HelpCircle } from 'lucide-react';
 import { getImmigrationProfileForCountry, ImmigrationCategoryKey, ImmigrationProgram, PathwayVerificationStatus } from '../data/globalImmigrationHubData';
 import { CountryPAAFaqSection } from '../components/CountryPAAFaqSection';
+import { CATEGORY_URL_PARAM_MAP, CATEGORY_INTERNAL_TO_PARAM_MAP } from './GlobalImmigrationHubPage';
+
+function parseCategoryFromUrl(): ImmigrationCategoryKey {
+  if (typeof window === 'undefined') return 'pr';
+  const params = new URLSearchParams(window.location.search);
+  const catParam = params.get('category');
+  if (!catParam) return 'pr';
+  return CATEGORY_URL_PARAM_MAP[catParam.toLowerCase()] || 'pr';
+}
 
 interface CountryImmigrationDetailPageProps {
   countryCode: string;
@@ -12,7 +21,11 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
   const normCode = (countryCode || 'US').trim().toUpperCase();
   const profile = getImmigrationProfileForCountry(normCode);
 
-  const [activeCategory, setActiveCategory] = useState<ImmigrationCategoryKey>('pr');
+  const [activeCategory, setActiveCategory] = useState<ImmigrationCategoryKey>(parseCategoryFromUrl());
+
+  useEffect(() => {
+    setActiveCategory(parseCategoryFromUrl());
+  }, [countryCode]);
 
   const categories: Array<{ id: ImmigrationCategoryKey; label: string; icon: string; desc: string }> = [
     { id: 'pr', label: 'Permanent Residency', icon: '🏠', desc: 'Sovereign PR permits, points systems, and settlement pathways.' },
@@ -152,7 +165,11 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
             return (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
+                onClick={() => {
+                  setActiveCategory(cat.id);
+                  const paramSlug = CATEGORY_INTERNAL_TO_PARAM_MAP[cat.id];
+                  window.history.pushState({}, '', `/immigration/${normCode.toLowerCase()}?category=${paramSlug}`);
+                }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                   isActive
                     ? 'bg-[#0B3D91] text-white border-[#0B3D91] shadow-lg'

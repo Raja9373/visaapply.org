@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, ArrowRight, ShieldCheck, Sparkles, Building2, UserCheck, Briefcase, Users, TrendingUp, Palmtree } from 'lucide-react';
+import { Globe, ArrowRight, Sparkles } from 'lucide-react';
 
 interface GlobalImmigrationPromoSectionProps {
   onNavigate: (path: string) => void;
@@ -13,45 +13,57 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
   const categories = [
     {
       id: 'pr',
+      urlParam: 'permanent-residency',
       name: 'Permanent Residency',
       icon: '🏠',
       desc: 'Sovereign PR permits, points systems, and settlement pathways across 249 countries.',
-      badge: 'PR Pathways'
+      badge: 'PR Pathways',
+      cta: 'Explore PR Countries'
     },
     {
       id: 'citizenship',
+      urlParam: 'citizenship',
       name: 'Citizenship & Naturalization',
       icon: '🛂',
       desc: 'Naturalization timelines, dual citizenship laws, and statutory passport acquisition.',
-      badge: 'Citizenship'
+      badge: 'Citizenship',
+      cta: 'Explore Citizenship Options'
     },
     {
       id: 'work',
+      urlParam: 'work',
       name: 'Work Immigration',
       icon: '💼',
       desc: 'Skilled worker visas, employer sponsorships, and job seeker opportunity permits.',
-      badge: 'Work Permits'
+      badge: 'Work Permits',
+      cta: 'Explore Work Immigration'
     },
     {
       id: 'family',
+      urlParam: 'family',
       name: 'Family Immigration',
       icon: '👨‍👩‍👧‍👦',
       desc: 'Spouse visas, dependent children, and parent sponsorships worldwide.',
-      badge: 'Family Reunion'
+      badge: 'Family Reunion',
+      cta: 'Explore Family Immigration'
     },
     {
       id: 'business',
+      urlParam: 'business-investor',
       name: 'Business & Investor Immigration',
       icon: '📈',
       desc: 'Investor visas, startup entrepreneur permits, and sovereign Golden Visas.',
-      badge: 'Investment PR'
+      badge: 'Investment PR',
+      cta: 'Explore Investor Routes'
     },
     {
       id: 'digital_nomad',
+      urlParam: 'digital-nomad-retirement',
       name: 'Digital Nomad & Retirement Residency',
       icon: '🌴',
       desc: 'Remote work permits, freelancer visas, and self-funded retirement residency.',
-      badge: 'Remote & Retire'
+      badge: 'Remote & Retire',
+      cta: 'Explore Digital Nomad Options'
     }
   ];
 
@@ -78,12 +90,12 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
           </p>
         </div>
 
-        {/* 6 Clickable Category Cards */}
+        {/* 6 Clickable Category Cards with Unique Destinations */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {categories.map((cat) => (
             <div
               key={cat.id}
-              onClick={() => onNavigate('/immigration')}
+              onClick={() => onNavigate(`/immigration?category=${cat.urlParam}`)}
               className="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-emerald-400/50 rounded-2xl p-5 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
@@ -104,7 +116,7 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
               </div>
 
               <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-emerald-300 group-hover:text-emerald-200">
-                <span>View 249 Pathways</span>
+                <span>{cat.cta}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
@@ -119,7 +131,7 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
             className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm sm:text-base rounded-2xl shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sparkles className="w-5 h-5 text-amber-950 shrink-0" />
-            <span>Explore Immigration Opportunities</span>
+            <span>Explore All 249 Country Immigration Hubs</span>
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>
