@@ -36,7 +36,10 @@ import {
   getVisaEvidence,
   saveVisaEvidence,
   getVisaVersions,
-  saveVisaVersion
+  saveVisaVersion,
+  getDashboardStats,
+  updateVisaStatus,
+  restoreVersion
 } from './src/db/immigrationDatabase';
 import { executeImmigrationBatch } from './src/services/immigrationBatchProcessor';
 
@@ -1040,6 +1043,17 @@ app.get('/api/admin/visa-details', requireAdminAuth, (req, res) => {
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
+});// Admin: Get specific Visa Details
+app.get('/api/admin/visa-details/:programId', requireAdminAuth, (req, res) => {
+  try {
+    const details = getVisaDetails(req.params.programId);
+    if (!details) {
+      return res.status(404).json({ error: 'Visa details not found' });
+    }
+    res.json({ success: true, details });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Admin: Save Visa Details
@@ -1084,6 +1098,35 @@ app.get('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, r
 app.post('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, res) => {
   saveVisaVersion({ ...req.body, programId: req.params.programId });
   res.json({ success: true });
+});
+
+// Admin: Dashboard Stats
+app.get('/api/admin/dashboard-stats', requireAdminAuth, (req, res) => {
+  try {
+    const stats = getDashboardStats();
+    res.json({ success: true, stats });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Update Status
+app.post('/api/admin/visa-details/:programId/status', requireAdminAuth, (req, res) => {
+  const allowedStatuses = ['DRAFT', 'NEEDS_EVIDENCE', 'UNDER_REVIEW', 'VERIFIED', 'APPROVED', 'PUBLISHED', 'UPDATE_REQUIRED', 'EXPIRED', 'REJECTED', 'QUARANTINED'];
+  const { status } = req.body;
+  if (!allowedStatuses.includes(status)) return res.status(400).json({ error: 'Invalid status' });
+  updateVisaStatus(req.params.programId, status);
+  res.json({ success: true });
+});
+
+// Admin: Restore Version
+app.post('/api/admin/visa-details/:programId/versions/:versionId/restore', requireAdminAuth, (req, res) => {
+  try {
+    restoreVersion(req.params.versionId);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // --- Embassy Slot Checker & Auto Email System ---

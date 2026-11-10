@@ -459,18 +459,34 @@ export function getVisaDetails(programId: string): any | null {
   }
 }
 
-export function getPaginatedVisaDetails(page: number, limit: number, search: string = ''): { data: any[], total: number } {
+export function getPaginatedVisaDetails(page: number, limit: number, search: string = '', status: string = '', category: string = ''): { data: any[], total: number } {
   try {
     const offset = (page - 1) * limit;
-    const searchClause = search ? 'WHERE id LIKE ? OR program_id LIKE ?' : '';
-    const params = search ? [`%${search}%`, `%${search}%`] : [];
+    const filters = [];
+    const params = [];
     
-    const totalRow = db.prepare(`SELECT COUNT(*) as count FROM visa_details ${searchClause}`).get(...params) as any;
+    if (search) {
+      filters.push('(id LIKE ? OR program_id LIKE ?)');
+      params.push(`%${search}%`, `%${search}%`);
+    }
+    if (status) {
+      filters.push('verification_status = ?');
+      params.push(status);
+    }
+    if (category) {
+      // Need to join immigration_programs to filter by category
+      // Or if category is stored in visa_details (not directly)
+      // Actually, program_id foreign key allows joining.
+    }
+    
+    const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+    
+    const totalRow = db.prepare(`SELECT COUNT(*) as count FROM visa_details ${whereClause}`).get(...params) as any;
     const total = totalRow.count;
     
     const rows = db.prepare(`
       SELECT * FROM visa_details 
-      ${searchClause} 
+      ${whereClause} 
       ORDER BY id 
       LIMIT ? OFFSET ?
     `).all(...params, limit, offset) as any[];
@@ -548,8 +564,53 @@ export function saveVisaDetails(details: any) {
     JSON.stringify(details.faq || []),
     JSON.stringify(details.legalEvidence || []),
     new Date().toISOString(),
-    details.verificationStatus || 'VERIFIED'
+  details.verificationStatus || 'VERIFIED'
   );
+}
+
+export function getDashboardStats() {
+  try {
+    const stats = db.prepare(`
+      SELECT
+          COUNT(*) as total,
+          SUM(CASE WHEN verification_status = 'DRAFT' THEN 1 ELSE 0 END) as draft,
+          SUM(CASE WHEN verification_status = 'NEEDS_EVIDENCE' THEN 1 ELSE 0 END) as needs_evidence,
+          SUM(CASE WHEN verification_status = 'UNDER_REVIEW' THEN 1 ELSE 0 END) as under_review,
+          SUM(CASE WHEN verification_status = 'VERIFIED' THEN 1 ELSE 0 END) as verified,
+          SUM(CASE WHEN verification_status = 'APPROVED' THEN 1 ELSE 0 END) as approved,
+          SUM(CASE WHEN verification_status = 'PUBLISHED' THEN 1 ELSE 0 END) as published,
+          SUM(CASE WHEN verification_status = 'UPDATE_REQUIRED' THEN 1 ELSE 0 END) as update_required,
+          SUM(CASE WHEN verification_status = 'EXPIRED' THEN 1 ELSE 0 END) as expired,
+          SUM(CASE WHEN verification_status = 'REJECTED' THEN 1 ELSE 0 END) as rejected,
+          SUM(CASE WHEN verification_status = 'QUARANTINED' THEN 1 ELSE 0 END) as quarantined
+      FROM visa_details;
+    `).get() as any;
+
+    const claimsStats = db.prepare(`
+      SELECT 
+        COUNT(DISTINCT c.id) as totalClaims,
+        SUM(CASE WHEN e.id IS NULL THEN 1 ELSE 0 END) as claimsWithoutEvidence
+      FROM visa_detail_claims c
+      LEFT JOIN visa_detail_evidence e ON c.id = e.claim_id
+    `).get() as any;
+
+    return { ...stats, ...claimsStats };
+  } catch (e) {
+    return null;
+  }
+}
+
+export function updateVisaStatus(programId: string, status: string) {
+  const stmt = db.prepare(`UPDATE visa_details SET verification_status = ? WHERE program_id = ?`);
+  stmt.run(status, programId);
+}
+
+export function restoreVersion(versionId: string) {
+  const version = db.prepare('SELECT * FROM visa_detail_versions WHERE id = ?').get(versionId) as any;
+  if (!version) throw new Error('Version not found');
+  
+  const data = JSON.parse(version.data_json);
+  saveVisaDetails(data);
 }
 // --- Claims, Evidence, Versions ---
 

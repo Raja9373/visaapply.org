@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Save, ArrowLeft } from 'lucide-react';
 
 export function VisaDetailEditorPage() {
   const { programId } = useParams();
@@ -13,11 +13,15 @@ export function VisaDetailEditorPage() {
     fetch(`/api/admin/visa-details/${programId}`) 
       .then(res => res.json())
       .then(data => {
-        setDetails(data);
+        setDetails(data.details);
         setLoading(false);
       })
       .catch(console.error);
   }, [programId]);
+
+  const updateSection = (section: string, data: any) => {
+    setDetails({ ...details, [section]: data });
+  };
 
   const handleSaveAll = async () => {
     setSaving(true);
@@ -30,7 +34,17 @@ export function VisaDetailEditorPage() {
     alert('Saved successfully!');
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="p-10 text-center">Loading...</div>;
+
+  const sections = [
+    { key: 'countryOverview', label: 'Country Overview' },
+    { key: 'visaOverview', label: 'Visa Overview' },
+    { key: 'eligibility', label: 'Eligibility' },
+    { key: 'financial', label: 'Financial Requirements' },
+    { key: 'documentChecklist', label: 'Document Checklist' },
+    { key: 'applicationSteps', label: 'Application Process' },
+    { key: 'faq', label: 'FAQs' },
+  ];
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
@@ -39,13 +53,25 @@ export function VisaDetailEditorPage() {
       </button>
       <h1 className="text-3xl font-extrabold text-slate-900">Edit Visa Details: {programId}</h1>
       
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <pre className="text-xs bg-slate-100 p-4 rounded">{JSON.stringify(details, null, 2)}</pre>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {sections.map(section => (
+          <div key={section.key} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-800 mb-4">{section.label}</h2>
+            <textarea 
+              className="w-full h-32 p-3 border rounded-lg text-sm"
+              value={JSON.stringify(details[section.key] || {}, null, 2)}
+              onChange={(e) => updateSection(section.key, JSON.parse(e.target.value))}
+            />
+          </div>
+        ))}
+      </div>
+      
+      <div className="flex justify-end gap-4">
         <button 
           onClick={handleSaveAll}
-          className="mt-4 flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-bold"
         >
-          {saving ? 'Saving...' : 'Save All Changes'}
+          <Save size={18} /> {saving ? 'Saving...' : 'Save All Changes'}
         </button>
       </div>
     </div>
