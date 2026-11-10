@@ -54,6 +54,8 @@ export { OPTION_D_COUNTRIES, ALL_OPTION_D_DATA };
 import { OPTION_E_COUNTRIES, ALL_OPTION_E_DATA } from './optionEVisas';
 export { OPTION_E_COUNTRIES, ALL_OPTION_E_DATA };
 
+import { auditAndEnhanceAllVisas } from './specialVisasAudit';
+
 export interface VisaItem {
   id: string;
   name: string;
@@ -71,6 +73,9 @@ export interface VisaItem {
   processing?: string;
   purpose?: string;
   eligibility?: string;
+  applyFrom?: 'Offshore' | 'Onshore' | 'Both';
+  specialCategory?: string;
+  isAuditNotice?: boolean;
   popular?: boolean;
   highlight?: boolean;
   isActive?: boolean;
@@ -1451,6 +1456,9 @@ const CURATED_DEDICATED_CODES = new Set([
     COUNTRY_VISA_COUNTS[c] = syncedCounts;
     COUNTRY_VISA_COUNTS[c.toUpperCase()] = syncedCounts;
   });
+
+  // Audit and enhance special visas (Working Holiday, Seasonal, Digital Nomad, Retirement, Job Seeker) and applyFrom for ALL 249 countries
+  auditAndEnhanceAllVisas(BASE_COUNTRY_VISAS);
 
   console.log(`✅ ALL 249 COUNTRIES VERIFIED WITH REAL OFFICIAL VISA COUNTS (${TOTAL_REAL_VISAS_249} Total Visas) - Zero 88/68 templates, zero numbered duplicates.`);
 })();

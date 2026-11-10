@@ -44,6 +44,9 @@ import { StudentVisaUniversityPage } from './pages/StudentVisaUniversityPage';
 import { PassportSevaGuidePage } from './pages/PassportSevaGuidePage';
 import { OciPioGuidePage } from './pages/OciPioGuidePage';
 import { ScholarshipFinderPage } from './pages/ScholarshipFinderPage';
+import { GlobalImmigrationHubPage } from './pages/GlobalImmigrationHubPage';
+import { CountryImmigrationDetailPage } from './pages/CountryImmigrationDetailPage';
+import { CountryPAAFaqSection } from './components/CountryPAAFaqSection';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
@@ -369,6 +372,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     path === '/oci- pio-guide' ||
     path === '/oci- pio-guide/';
   const isScholarshipFinder = path === '/scholarship-finder' || path === '/scholarship-finder/' || path.startsWith('/scholarship-finder?');
+  const isImmigrationHub = path === '/immigration' || path === '/immigration/';
+  const immigrationDetailMatch = path.match(/^\/immigration\/([a-z]{2,3})$/i);
   const isRoutes = path === '/routes' || path === '/routes/';
   const isSitemap = path === '/sitemap';
   const isAbout = path === '/about' || path === '/backlink-widget';
@@ -1397,6 +1402,17 @@ function VisaCategorySelectionView({ match, countries, navigate, uiLang, onChang
             </button>
           ))}
         </div>
+
+        {/* Top 20 People Also Ask (PAA) FAQ Section for Google Ranking */}
+        <div className="mt-12 pt-8 border-t border-slate-200">
+          <CountryPAAFaqSection
+            countryName={headerInfo.toName}
+            countryCode={toCode}
+            fromCountryName={headerInfo.fromName}
+            fromCode={fromCode}
+            onNavigate={navigate}
+          />
+        </div>
       </div>
     </div>
   );
@@ -1436,12 +1452,14 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
   const [regionalFilter, setRegionalFilter] = useState<'all' | 'regional' | 'dama' | '491-sn-fs' | '494-es-la' | '191-pathways' | '417-462-ext'>('all');
   const [usTypeFilter, setUsTypeFilter] = useState<'all' | 'official-visas' | 'programmes' | 'eb5-tea' | 'humanitarian' | 'travel-auth'>('all');
   const [caTypeFilter, setCaTypeFilter] = useState<'all' | 'official-visas' | 'programmes' | 'communities' | 'forms'>('all');
+  const [specialFilter, setSpecialFilter] = useState<'all' | 'working_holiday' | 'seasonal_work' | 'offshore' | 'onshore' | 'digital_nomad' | 'retirement'>('all');
   const [showRegionalOverview, setShowRegionalOverview] = useState<boolean>(false);
 
   useEffect(() => {
     setRegionalFilter('all');
     setUsTypeFilter('all');
     setCaTypeFilter('all');
+    setSpecialFilter('all');
   }, [toCode, category]);
 
   const sortedVisas = [...categoryVisas].sort((a: any, b: any) => {
@@ -1455,6 +1473,31 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
   const displayedVisas = sortedVisas.filter((v: any) => {
     if (statusFilter === 'active' && v.isActive === false) return false;
     if (statusFilter === 'legacy' && v.isLegacy !== true) return false;
+
+    if (specialFilter !== 'all') {
+      const nameCode = ((v.name || '') + ' ' + (v.code || '') + ' ' + (v.officialCode || '') + ' ' + (v.purpose || '')).toLowerCase();
+      const applyFrom = (v.applyFrom || 'Offshore').toLowerCase();
+      const specCat = (v.specialCategory || '').toLowerCase();
+
+      if (specialFilter === 'working_holiday') {
+        if (specCat !== 'working_holiday' && !nameCode.includes('working holiday') && !nameCode.includes('work & holiday') && !nameCode.includes('417') && !nameCode.includes('462') && !nameCode.includes('whv') && !nameCode.includes('pvt') && !nameCode.includes('h-1') && !nameCode.includes('iec')) return false;
+      }
+      if (specialFilter === 'seasonal_work') {
+        if (specCat !== 'seasonal_work' && !nameCode.includes('seasonal') && !nameCode.includes('farm') && !nameCode.includes('agriculture') && !nameCode.includes('sawp') && !nameCode.includes('rse') && !nameCode.includes('h-2a') && !nameCode.includes('h-2b') && !nameCode.includes('e-8') && !nameCode.includes('palm') && !nameCode.includes('tokutei')) return false;
+      }
+      if (specialFilter === 'digital_nomad') {
+        if (specCat !== 'digital_nomad' && !nameCode.includes('digital nomad') && !nameCode.includes('remote work') && !nameCode.includes('workcation') && !nameCode.includes('dtv') && !nameCode.includes('d8') && !nameCode.includes('freelance') && !nameCode.includes('freiberufler')) return false;
+      }
+      if (specialFilter === 'retirement') {
+        if (specCat !== 'retirement' && !nameCode.includes('retirement') && !nameCode.includes('pensionado') && !nameCode.includes('non-lucrative') && !nameCode.includes('d7') && !nameCode.includes('o-a') && !nameCode.includes('residenza elettiva')) return false;
+      }
+      if (specialFilter === 'offshore') {
+        if (applyFrom !== 'offshore' && applyFrom !== 'both') return false;
+      }
+      if (specialFilter === 'onshore') {
+        if (applyFrom !== 'onshore' && applyFrom !== 'both') return false;
+      }
+    }
 
     if (toCode === 'US' && usTypeFilter !== 'all') {
       if (usTypeFilter === 'official-visas') {
@@ -1589,6 +1632,33 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
             : `Official list of all ${categoryVisas.length} ${categoryTitle.toLowerCase()} visa categories for ${toCountry.name}. Select a specific visa type below to view full requirements, document checklists, and application guidelines.`
           }
         </p>
+
+        {/* Global Special Visas & Apply Location Filter Pills (249/249 Countries) */}
+        <div className="flex flex-wrap items-center gap-1.5 mt-4 pt-4 border-t border-slate-200">
+          <span className="text-xs font-bold text-slate-500 mr-1">Special Filters:</span>
+          {[
+            { id: 'all', label: 'All Visas', icon: '🌐' },
+            { id: 'working_holiday', label: 'Working Holiday', icon: '🎒' },
+            { id: 'seasonal_work', label: 'Seasonal Work', icon: '🌾' },
+            { id: 'digital_nomad', label: 'Digital Nomad', icon: '💻' },
+            { id: 'retirement', label: 'Retirement', icon: '🏖️' },
+            { id: 'offshore', label: 'Apply From: Offshore', icon: '🌐' },
+            { id: 'onshore', label: 'Apply From: Onshore', icon: '🏠' }
+          ].map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setSpecialFilter(f.id as any)}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
+                specialFilter === f.id
+                  ? 'bg-[#0B3D91] text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+              }`}
+            >
+              <span>{f.icon}</span>
+              <span>{f.label}</span>
+            </button>
+          ))}
+        </div>
 
         {/* Filter Toolbar for Active vs Legacy subclasses */}
         {(toCode === 'AU' || toCode === 'US' || toCode === 'CA' || toCode === 'GB' || toCode === 'AE') && (
@@ -1985,6 +2055,26 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
               <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">
                 {(isJa && v.name_ja) ? v.name_ja : dedupeVisaNameSingleCountry(v.name, toCountry.name, toCode)}
               </h3>
+
+              {/* Apply From Badge (Offshore / Onshore / Both) & Special Category Tag */}
+              <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                <span className={`text-[11px] font-extrabold px-2 py-0.5 rounded-md border ${
+                  (v.applyFrom || 'Offshore') === 'Onshore'
+                    ? 'bg-purple-50 text-purple-900 border-purple-200'
+                    : (v.applyFrom || 'Offshore') === 'Both'
+                    ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                    : 'bg-blue-50 text-blue-900 border-blue-200'
+                }`}>
+                  {(v.applyFrom || 'Offshore') === 'Onshore' ? '🏠 Apply From: Onshore' : (v.applyFrom || 'Offshore') === 'Both' ? '🌐🏠 Apply From: Offshore & Onshore' : '🌐 Apply From: Offshore'}
+                </span>
+
+                {v.specialCategory && (
+                  <span className="text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded-md capitalize">
+                    {v.specialCategory.replace('_', ' ')}
+                  </span>
+                )}
+              </div>
+
               <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
                 {(isJa && v.purpose_ja) ? v.purpose_ja : v.purpose}
               </p>
@@ -2075,6 +2165,17 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
         >
           {isJa ? 'リクエストを送信' : 'Suggest Missing Visa'}
         </a>
+      </div>
+
+      {/* Top 20 People Also Ask (PAA) FAQ Section for Google Ranking */}
+      <div className="mt-12 pt-8 border-t border-slate-200">
+        <CountryPAAFaqSection
+          countryName={toCountry.name}
+          countryCode={toCode}
+          fromCountryName={fromCountry.name}
+          fromCode={fromCode}
+          onNavigate={navigate}
+        />
       </div>
     </div>
   );
@@ -2625,6 +2726,8 @@ export default function App() {
     routePath === '/oci- pio-guide' ||
     routePath === '/oci- pio-guide/';
   const isScholarshipFinder = routePath === '/scholarship-finder' || routePath === '/scholarship-finder/' || routePath.startsWith('/scholarship-finder?');
+  const isImmigrationHub = routePath === '/immigration' || routePath === '/immigration/';
+  const immigrationDetailMatch = routePath.match(/^\/immigration\/([a-z]{2,3})$/i);
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -2670,7 +2773,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -2699,6 +2802,7 @@ export default function App() {
           {/* Nav Links */}
           <nav className="hidden lg:flex items-center gap-4 text-xs xl:text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
+            <button onClick={() => navigate('/immigration')} className={`transition-colors cursor-pointer ${isImmigrationHub || immigrationDetailMatch ? 'text-amber-300 font-bold' : 'text-[#93c5fd] hover:text-white font-bold'}`}>🌐 Global Immigration</button>
             <button onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
             <button
@@ -2732,6 +2836,18 @@ export default function App() {
 
               {servicesDropdownOpen && (
                 <div className="absolute top-full left-0 w-72 max-h-[80vh] overflow-y-auto bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/immigration'); setServicesDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center gap-2.5 text-xs text-white font-bold cursor-pointer"
+                  >
+                    <Globe className="w-4 h-4 text-amber-300 shrink-0" />
+                    <div>
+                      <div className="text-amber-300 font-black">Global Immigration Hub (249 Countries)</div>
+                      <div className="text-[10px] text-emerald-300 font-medium">PR, Citizenship, Work, Investor, Nomad</div>
+                    </div>
+                  </button>
+                  <div className="my-1 border-t border-blue-800/70" />
                   <button
                     type="button"
                     onClick={() => { navigate('/scholarship-finder'); setServicesDropdownOpen(false); }}
@@ -3018,6 +3134,7 @@ export default function App() {
           <div>
             <div className="px-6 py-4 space-y-3">
               <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">{getUIString(uiLang).navHome}</button>
+              <button onClick={() => { navigate('/immigration'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold transition-colors">🌐 Global Immigration Hub (249 Countries)</button>
               <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold transition-colors">{getUIString(uiLang).navRoutes}</button>
               <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold transition-colors">{getUIString(uiLang).navFlights}</button>
               <div className="py-1">
@@ -3191,6 +3308,10 @@ export default function App() {
           <OciPioGuidePage onNavigate={navigate} />
         ) : isScholarshipFinder ? (
           <ScholarshipFinderPage onNavigate={navigate} />
+        ) : isImmigrationHub ? (
+          <GlobalImmigrationHubPage navigate={navigate} />
+        ) : immigrationDetailMatch ? (
+          <CountryImmigrationDetailPage countryCode={immigrationDetailMatch[1]} navigate={navigate} />
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isGoldenVisa ? (
@@ -3288,6 +3409,7 @@ export default function App() {
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Quick Links & Tools</h4>
             <ul className="space-y-2 text-sm">
+              <li><button onClick={() => navigate('/immigration')} className="text-amber-300 hover:text-amber-200 font-bold transition-colors cursor-pointer">🌐 Global Immigration Hub (249 Countries)</button></li>
               <li><button onClick={() => navigate('/about')} className="hover:text-white transition-colors cursor-pointer">About Us & Editorial Policy</button></li>
               <li><button onClick={() => navigate('/about')} className="text-emerald-300 hover:text-emerald-200 font-semibold transition-colors cursor-pointer">🔗 Free Visa Widget (Backlink)</button></li>
               <li><button onClick={() => navigate('/golden-visa')} className="text-yellow-300 hover:text-yellow-200 font-semibold transition-colors cursor-pointer">👑 Golden Visa (2026 Guide)</button></li>
@@ -5298,6 +5420,16 @@ function ArticleView({ match, articles = [], navigate }: any) {
         <div id="section-overview" className="text-center space-y-3 pb-6 border-b border-slate-200 scroll-mt-28">
           <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#0B3D91] bg-blue-50 px-3 py-1 rounded-full w-max mx-auto">
             <span>{fromCode} → {toCode}</span>
+            <span className="text-slate-300">•</span>
+            <span className={`px-2 py-0.5 rounded text-[11px] font-extrabold ${
+              (dbVisaItem?.applyFrom || 'Offshore') === 'Onshore'
+                ? 'bg-purple-100 text-purple-900 border border-purple-300'
+                : (dbVisaItem?.applyFrom || 'Offshore') === 'Both'
+                ? 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+                : 'bg-blue-100 text-blue-900 border border-blue-300'
+            }`}>
+              {(dbVisaItem?.applyFrom || 'Offshore') === 'Onshore' ? '🏠 Apply From: Onshore' : (dbVisaItem?.applyFrom || 'Offshore') === 'Both' ? '🌐🏠 Apply From: Offshore & Onshore' : '🌐 Apply From: Offshore'}
+            </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">

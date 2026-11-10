@@ -422,6 +422,12 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
       '100% Free Scholarship Finder: Compare 15 Fully Funded, Partial, and Merit scholarships (Fulbright, Chevening, DAAD, Vanier, Gates Cambridge) with live deadline calendar and official apply links.',
     breadcrumbName: 'Scholarship Finder',
   },
+  '/immigration': {
+    title: 'Global Immigration & Residency Hub (249 Countries) – VisaApply.org',
+    description:
+      'Explore official Permanent Residency, Citizenship, Work Permits, Family Sponsorship, Business Investor visas, and Digital Nomad residency for all 249 countries.',
+    breadcrumbName: 'Global Immigration Hub',
+  },
   '/about': {
     title: 'About Us, Editorial Policy & Free Visa Backlink Widget – VisaApply.org',
     description:
@@ -514,6 +520,10 @@ const KNOWN_DYNAMIC_ROUTE_PATTERNS: ReadonlyArray<{ name: string; regex: RegExp 
   {
     name: 'Direct Visa Subtype (/:from-to-:to-:sub)',
     regex: /^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i,
+  },
+  {
+    name: 'Global Immigration Country Hub (/immigration/:code)',
+    regex: /^\/immigration\/([a-z]{2,3})$/i,
   },
   {
     name: 'Blog / Guide Article Slug',
