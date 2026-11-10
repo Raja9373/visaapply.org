@@ -825,23 +825,23 @@ export const VERIFIED_IMMIGRATION_PROGRAMS: ImmigrationProgram[] = [
     category: 'digital_nomad',
     officialName: 'Portugal D7 Passive Income & Retirement Residence Visa',
     localLanguageName: 'Visto D7 - Residência por Rendimentos Próprios (Art. 58.º Lei 23/2007)',
-    legalBasis: 'Portuguese Foreigners Act (Lei n.º 23/2007, de 4 de julho), Article 58(1) & Portaria n.º 111/2019',
+    legalBasis: 'Portuguese Foreigners Act (Lei n.º 23/2007, de 4 de julho), Article 58(1), Portaria n.º 111/2019 & Decreto-Lei n.º 107/2023',
     classificationType: 'Actual Immigration Program',
-    eligibility: 'Non-EU nationals with stable, verifiable PASSIVE income (pensions, real estate rental, dividends, royalties) exceeding Portuguese minimum wage. Correctly classified as Passive Income/Retirement (D8 is the separate Digital Nomad visa).',
+    eligibility: 'Non-EU nationals with stable, verifiable PASSIVE income (pensions, real estate rental, dividends, royalties) exceeding the 2026 Portuguese minimum wage (€920/month). Correctly classified as Passive Income/Retirement (D8 is the separate Digital Nomad visa).',
     nationalityRestrictions: 'Open to all Non-EU/EEA nationals',
     ageRequirements: '18+',
     educationRequirements: 'None',
     workExperienceRequirements: 'None',
-    minSalaryOrIncome: 'Minimum monthly PASSIVE income equal to 100% Portuguese minimum wage (€820/month = €9,840/year for principal applicant).',
+    minSalaryOrIncome: 'Minimum monthly NET PASSIVE income equal to 100% Portuguese minimum wage (€920/month = €11,040/year for principal applicant; +50% / €460/mo for spouse/parent; +30% / €276/mo per minor child).',
     investmentRequirement: 'None',
-    requiredFundsAndProof: 'Portuguese bank account statement showing deposit of at least €9,840 plus proof of ongoing passive income source.',
+    requiredFundsAndProof: 'Portuguese bank account deposit showing liquid savings equal to at least 1-2 years of minimum wage (€11,040 - €22,080+) plus proof of ongoing net passive income sources.',
     residencyDuration: '2 Years initial residence card, renewable for 3 years.',
     renewalRules: 'Renewable every 3 years subject to staying in Portugal 16 months per 2-year block.',
     prOrCitizenshipTransition: 'Eligible for Permanent Residency and Portuguese Citizenship after 5 years (Lei da Nacionalidade).',
-    familyInclusionRules: 'Family reunification permitted under Article 98 for spouse, dependent children, and dependent parents.',
+    familyInclusionRules: 'Family reunification permitted under Article 98 for spouse (+50% RMN), dependent children (+30% RMN), and dependent parents.',
     workAndStudyRights: 'Full right to work as employee or self-employed worker in Portugal.',
     restrictionsAndExceptions: 'Active remote employment salary qualifies under the separate D8 Remote Work Visa, NOT D7 passive income.',
-    requiredDocuments: ['Proof of Passive Income', 'NIF (Portuguese Tax Number)', 'Portuguese Bank Statements', '12-Month Lease Agreement', 'Criminal Record Certificate'],
+    requiredDocuments: ['Proof of Net Passive Income', 'NIF (Portuguese Tax Number)', 'Portuguese Bank Statements (€11,040+ Deposit)', '12-Month Lease Agreement', 'Criminal Record Certificate'],
     documentsAndFormats: 'Consular visa application + AIMA in-person biometrics.',
     translationAttestationRequirements: 'Certified Portuguese translation with Hague Apostille.',
     applicationProcedure: 'Apply for 4-month D7 visa at VFS/consulate, enter Portugal, attend biometrics appointment at AIMA, and receive residence card.',
@@ -851,9 +851,9 @@ export const VERIFIED_IMMIGRATION_PROGRAMS: ImmigrationProgram[] = [
     officialApplicationUrl: 'https://vistos.mne.gov.pt/en/',
     officialInformationUrl: 'https://vistos.mne.gov.pt/en/national-visas/residence-permits/retirement-or-religious-purposes',
     sourceAuthority: 'Ministry of Foreign Affairs (MNE) & AIMA Portugal',
-    sourceLastUpdated: '2026-01-20',
+    sourceLastUpdated: '2026-02-01',
     lastCheckedDate: CURRENT_DATE,
-    verificationEvidence: 'Governed by Art. 58(1) Lei 23/2007. Correctly classified as Passive Income & Retirement (separate from D8 remote work).',
+    verificationEvidence: 'Governed by Art. 58(1) Lei 23/2007 & Portaria 111/2019. Updated 2026 minimum wage €920/month (€11,040/year net).',
     verificationStatus: 'AVAILABLE_VERIFIED'
   },
   {
@@ -869,16 +869,16 @@ export const VERIFIED_IMMIGRATION_PROGRAMS: ImmigrationProgram[] = [
     ageRequirements: '18+',
     educationRequirements: 'None mandatory',
     workExperienceRequirements: 'Demonstrated remote employment contract or freelancer client contracts.',
-    minSalaryOrIncome: 'Minimum monthly remote income equal to 4x Portuguese minimum wage (€3,280/month = €39,360/year).',
+    minSalaryOrIncome: 'Minimum monthly remote income equal to 4x Portuguese minimum wage (€3,680/month = €44,160/year based on 2026 €920/mo baseline).',
     investmentRequirement: 'None',
-    requiredFundsAndProof: 'Bank statements showing last 3 months income (min €3,280/mo) and Portuguese bank balance.',
+    requiredFundsAndProof: 'Bank statements showing last 3 months income (min €3,680/mo) and Portuguese bank balance.',
     residencyDuration: '1 Year (Temporary Stay Visa) or 2 Years (Residence Visa, renewable for 3 years).',
     renewalRules: 'Renewable every 3 years for residence visa path.',
     prOrCitizenshipTransition: 'Residence visa pathway leads to Portuguese Permanent Residency & Citizenship after 5 years.',
     familyInclusionRules: 'Family reunification (Art. 98) allowed for spouse and dependent children under residence visa path.',
     workAndStudyRights: 'Remote employment for foreign entities; local employment permitted under residence permit.',
     restrictionsAndExceptions: 'Income must be derived strictly from foreign entities outside Portugal.',
-    requiredDocuments: ['Proof of Remote Income (4x Minimum Wage)', 'Employment Contract / Freelancer Service Contracts', 'NIF & Bank Account', 'Criminal Record', 'Health Insurance'],
+    requiredDocuments: ['Proof of Remote Income (4x Minimum Wage = €3,680/mo)', 'Employment Contract / Freelancer Service Contracts', 'NIF & Bank Account', 'Criminal Record', 'Health Insurance'],
     documentsAndFormats: 'Consular application + AIMA biometrics.',
     translationAttestationRequirements: 'Certified Portuguese translation with Hague Apostille.',
     applicationProcedure: 'Submit D8 visa application at Portuguese consulate/VFS, travel to Portugal, complete biometrics at AIMA, and obtain residence card.',
@@ -888,9 +888,9 @@ export const VERIFIED_IMMIGRATION_PROGRAMS: ImmigrationProgram[] = [
     officialApplicationUrl: 'https://vistos.mne.gov.pt/en/national-visas/residence-permits/remote-work',
     officialInformationUrl: 'https://vistos.mne.gov.pt/en/national-visas/residence-permits/remote-work',
     sourceAuthority: 'Ministry of Foreign Affairs (MNE) & AIMA Portugal',
-    sourceLastUpdated: '2026-01-25',
+    sourceLastUpdated: '2026-02-01',
     lastCheckedDate: CURRENT_DATE,
-    verificationEvidence: 'Established under Lei n.º 18/2022 (Article 61.º-B). D8 is Portugal\'s dedicated Digital Nomad Remote Work Visa.',
+    verificationEvidence: 'Established under Lei n.º 18/2022 (Article 61.º-B). D8 remote work baseline 4x 2026 minimum wage (€3,680/month).',
     verificationStatus: 'AVAILABLE_VERIFIED'
   },
   {
@@ -1122,34 +1122,21 @@ export const VERIFIED_IMMIGRATION_PROGRAMS: ImmigrationProgram[] = [
 ];
 
 /**
- * Countries with confirmed absence of specific categories based on sovereign legislation.
+ * Countries with confirmed absence of specific categories based on sovereign legislation (7 total slots).
  */
 const CONFIRMED_NOT_AVAILABLE_MAP: Record<string, Partial<Record<ImmigrationCategoryKey, string>>> = {
   VA: {
-    digital_nomad: 'Vatican City does not issue digital nomad or remote work visas. Residence is restricted exclusively to ecclesiastical duties or Holy See appointments.',
-    business: 'Vatican City has no commercial investor or business residency framework.',
-    pr: 'Vatican City does not offer permanent residency to non-ecclesiastical foreign nationals.'
+    digital_nomad: 'Vatican City State Law No. LXXI on Citizenship, Residence and Access (1929/2011). Residence is restricted exclusively to ecclesiastical duties or Holy See appointments. No digital nomad visa exists.',
+    business: 'Vatican City Fundamental Law (2023). Vatican City has no commercial investor or private business residency framework.',
+    pr: 'Vatican City Law No. LXXI Art. 1. Vatican City does not offer permanent residency to non-ecclesiastical foreign nationals.'
   },
   KP: {
-    digital_nomad: 'North Korea does not offer digital nomad or remote work visas.',
-    business: 'North Korea has no public commercial investor residency program.'
-  },
-  SA: {
-    digital_nomad: 'Saudi Arabia does not offer a dedicated Digital Nomad visa. Premium Residency (Iqama) is available for investors, talent, and real estate owners.'
-  },
-  SG: {
-    digital_nomad: 'Singapore does not offer a dedicated Digital Nomad visa. Remote workers must hold an Employment Pass, ONE Pass, or Tech.Pass.'
-  },
-  CN: {
-    digital_nomad: 'China does not issue a dedicated Digital Nomad visa. Remote workers must utilize commercial Z work visas or R high-talent visas.'
+    digital_nomad: 'DPRK Supreme People Assembly Immigration Regulations. North Korea does not offer digital nomad or remote work visas.',
+    business: 'DPRK Foreign Investment Law. Private individual commercial investor residency is not permitted.'
   },
   TV: {
-    digital_nomad: 'Tuvalu has no legislation providing for digital nomad or remote worker residency permits.',
-    business: 'Tuvalu has no commercial residency-by-investment scheme.'
-  },
-  NR: {
-    digital_nomad: 'Nauru does not offer digital nomad or remote work visas.',
-    business: 'Nauru has no commercial investor residency program.'
+    digital_nomad: 'Tuvalu Immigration Act 2008 & Regulations 2014. Tuvalu has no legislation providing for digital nomad or remote worker residency permits.',
+    business: 'Tuvalu Foreign Investment Act 1996. Tuvalu has no statutory passive residency-by-investment scheme.'
   }
 };
 

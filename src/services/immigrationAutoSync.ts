@@ -171,10 +171,16 @@ export function getStoredBatchState(): ResumableBatchState {
 }
 
 export function saveBatchState(state: ResumableBatchState): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(LOCAL_STORAGE_BATCH_STATE_KEY, JSON.stringify(state));
-  } catch (e) {}
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_BATCH_STATE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+  fetch('/api/immigration/batch-state', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state)
+  }).catch(() => {});
 }
 
 export async function executeResumableCountryBatch(
