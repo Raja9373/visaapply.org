@@ -6,8 +6,8 @@ import crypto from 'crypto';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
-import handleFaqRequest from './src/api/faq.js';
-import handleAiEligibilityRequest from './src/api/aiEligibility.js';
+import handleFaqRequest from './src/api/faq';
+import handleAiEligibilityRequest from './src/api/aiEligibility';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   findDefaultGuideMatch,
@@ -18,7 +18,7 @@ import {
   resolveStaticRouteSeoMetadata,
   normalizeCanonicalUrl,
   validateAndSanitizeSeoMetadata
-} from './src/utils/seoMetadataManager.js';
+} from './src/utils/seoMetadataManager';
 import dotenv from 'dotenv';
 import {
   saveBatchStateToDb,
@@ -26,8 +26,12 @@ import {
   saveChangelogEntryToDb,
   getChangelogFromDb,
   logCronExecutionToDb,
-  getCronExecutionLogsFromDb
-} from './src/db/immigrationDatabase.js';
+  getCronExecutionLogsFromDb,
+  getVisaDetails,
+  getAllVisaDetails,
+  saveVisaDetails
+} from './src/db/immigrationDatabase';
+import { executeImmigrationBatch } from './src/services/immigrationBatchProcessor';
 
 dotenv.config();
 
@@ -63,7 +67,7 @@ const ai = new GoogleGenAI({
   }
 });
 
-import { ALL_249_ISO_FORCED } from './src/data/all249Countries.js';
+import { ALL_249_ISO_FORCED } from './src/data/all249Countries';
 
 // 249 ISO Full World Record Countries list
 export const COUNTRIES = ALL_249_ISO_FORCED;
@@ -709,6 +713,17 @@ app.post('/api/immigration/batch-state', (req, res) => {
   }
 });
 
+app.post('/api/immigration/batch-execute', async (req, res) => {
+  try {
+    const batchIndex = req.body?.batchIndex || 1;
+    const batchSize = req.body?.batchSize || 25;
+    const result = await executeImmigrationBatch(batchIndex, batchSize);
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 function publishBreakingBlogToContent(entry: any) {
   try {
     const slug = entry.autoBlogSlug || `breaking-${entry.countryCode}-visa-update-${Date.now()}`;
@@ -983,10 +998,45 @@ Return a concise JSON object with keys:
 
 app.all('/api/cron/immigration-sync', requireCronOrAdminAuth, handleImmigrationSyncCron);
 
+app.get('/api/visa-details/:programId', (req, res) => {
+  try {
+    const { programId } = req.params;
+    const details = getVisaDetails(programId);
+    if (!details) {
+      return res.status(404).json({ error: 'Visa details not found' });
+    }
+    res.json(details);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Get Cron Logs
 app.get('/api/admin/cron-logs', requireAdminAuth, (req, res) => {
   try {
     const logs = getCronExecutionLogsFromDb(50);
     res.json({ success: true, count: logs.length, logs });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Get all Visa Details
+app.get('/api/admin/visa-details', requireAdminAuth, (req, res) => {
+  try {
+    const details = getAllVisaDetails();
+    res.json({ success: true, details });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Save Visa Details
+app.post('/api/admin/visa-details', requireAdminAuth, (req, res) => {
+  try {
+    const details = req.body;
+    saveVisaDetails(details);
+    res.json({ success: true, message: 'Visa details saved successfully.' });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

@@ -131,6 +131,28 @@ export function initDatabaseSchema() {
     CREATE INDEX IF NOT EXISTS idx_prog_status ON immigration_programs(verification_status);
     CREATE INDEX IF NOT EXISTS idx_changelog_date ON changelog_entries(date);
     CREATE INDEX IF NOT EXISTS idx_cron_time ON cron_execution_logs(timestamp);
+
+    CREATE TABLE IF NOT EXISTS visa_details (
+      id TEXT PRIMARY KEY,
+      program_id TEXT NOT NULL REFERENCES immigration_programs(id),
+      country_overview_json TEXT,
+      visa_overview_json TEXT,
+      eligibility_json TEXT,
+      financial_json TEXT,
+      document_checklist_json TEXT,
+      application_fields_json TEXT,
+      application_steps_json TEXT,
+      interview_prep_json TEXT,
+      embassy_directory_json TEXT,
+      refusal_appeal_json TEXT,
+      after_approval_json TEXT,
+      cost_calculator_json TEXT,
+      faq_json TEXT,
+      legal_evidence_json TEXT,
+      last_updated TEXT,
+      verification_status TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_visa_details_program_id ON visa_details(program_id);
   `);
 }
 
@@ -372,3 +394,110 @@ export function getCronExecutionLogsFromDb(limit: number = 20): any[] {
     return [];
   }
 }
+
+export function getVisaDetails(programId: string): any | null {
+  try {
+    const row = db.prepare('SELECT * FROM visa_details WHERE program_id = ?').get(programId) as any;
+    if (!row) return null;
+    return {
+      id: row.id,
+      programId: row.program_id,
+      countryOverview: JSON.parse(row.country_overview_json || '{}'),
+      visaOverview: JSON.parse(row.visa_overview_json || '{}'),
+      eligibility: JSON.parse(row.eligibility_json || '{}'),
+      financial: JSON.parse(row.financial_json || '{}'),
+      documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
+      applicationFields: JSON.parse(row.application_fields_json || '[]'),
+      applicationSteps: JSON.parse(row.application_steps_json || '[]'),
+      interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
+      embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
+      refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
+      afterApproval: JSON.parse(row.after_approval_json || '{}'),
+      costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
+      faq: JSON.parse(row.faq_json || '[]'),
+      legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
+      lastUpdated: row.last_updated,
+      verificationStatus: row.verification_status
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+export function getAllVisaDetails(): any[] {
+  try {
+    const rows = db.prepare('SELECT * FROM visa_details').all() as any[];
+    return rows.map((row) => ({
+      id: row.id,
+      programId: row.program_id,
+      countryOverview: JSON.parse(row.country_overview_json || '{}'),
+      visaOverview: JSON.parse(row.visa_overview_json || '{}'),
+      eligibility: JSON.parse(row.eligibility_json || '{}'),
+      financial: JSON.parse(row.financial_json || '{}'),
+      documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
+      applicationFields: JSON.parse(row.application_fields_json || '[]'),
+      applicationSteps: JSON.parse(row.application_steps_json || '[]'),
+      interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
+      embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
+      refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
+      afterApproval: JSON.parse(row.after_approval_json || '{}'),
+      costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
+      faq: JSON.parse(row.faq_json || '[]'),
+      legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
+      lastUpdated: row.last_updated,
+      verificationStatus: row.verification_status
+    }));
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveVisaDetails(details: any) {
+  const stmt = db.prepare(`
+    INSERT INTO visa_details (
+      id, program_id, country_overview_json, visa_overview_json, eligibility_json,
+      financial_json, document_checklist_json, application_fields_json,
+      application_steps_json, interview_prep_json, embassy_directory_json,
+      refusal_appeal_json, after_approval_json, cost_calculator_json,
+      faq_json, legal_evidence_json, last_updated, verification_status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET
+      country_overview_json = excluded.country_overview_json,
+      visa_overview_json = excluded.visa_overview_json,
+      eligibility_json = excluded.eligibility_json,
+      financial_json = excluded.financial_json,
+      document_checklist_json = excluded.document_checklist_json,
+      application_fields_json = excluded.application_fields_json,
+      application_steps_json = excluded.application_steps_json,
+      interview_prep_json = excluded.interview_prep_json,
+      embassy_directory_json = excluded.embassy_directory_json,
+      refusal_appeal_json = excluded.refusal_appeal_json,
+      after_approval_json = excluded.after_approval_json,
+      cost_calculator_json = excluded.cost_calculator_json,
+      faq_json = excluded.faq_json,
+      legal_evidence_json = excluded.legal_evidence_json,
+      last_updated = excluded.last_updated,
+      verification_status = excluded.verification_status
+  `);
+  stmt.run(
+    details.id || `vd-${details.programId}`,
+    details.programId,
+    JSON.stringify(details.countryOverview || {}),
+    JSON.stringify(details.visaOverview || {}),
+    JSON.stringify(details.eligibility || {}),
+    JSON.stringify(details.financial || {}),
+    JSON.stringify(details.documentChecklist || []),
+    JSON.stringify(details.applicationFields || []),
+    JSON.stringify(details.applicationSteps || []),
+    JSON.stringify(details.interviewPrep || {}),
+    JSON.stringify(details.embassyDirectory || []),
+    JSON.stringify(details.refusalAppeal || {}),
+    JSON.stringify(details.afterApproval || {}),
+    JSON.stringify(details.costCalculator || {}),
+    JSON.stringify(details.faq || []),
+    JSON.stringify(details.legalEvidence || []),
+    new Date().toISOString(),
+    details.verificationStatus || 'VERIFIED'
+  );
+}
+

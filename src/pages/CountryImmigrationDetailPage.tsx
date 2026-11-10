@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Globe, ArrowRight, Shield, CheckCircle2, AlertCircle, ExternalLink, Calendar, FileText, DollarSign, Clock, Check, Building2, XCircle, AlertTriangle, HelpCircle } from 'lucide-react';
+import { Shield, Check, ExternalLink, Clock, XCircle, Building2 } from 'lucide-react';
 import { getImmigrationProfileForCountry, ImmigrationCategoryKey, ImmigrationProgram, PathwayVerificationStatus } from '../data/globalImmigrationHubData';
 import { CountryPAAFaqSection } from '../components/CountryPAAFaqSection';
 import { CATEGORY_URL_PARAM_MAP, CATEGORY_INTERNAL_TO_PARAM_MAP } from './GlobalImmigrationHubPage';
+import { VisaDetailRenderer } from '../components/VisaDetailRenderer';
 
 function parseCategoryFromUrl(): ImmigrationCategoryKey {
   if (typeof window === 'undefined') return 'pr';
@@ -34,6 +35,7 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
     { id: 'family', label: 'Family & Spouse', icon: '👨‍👩‍👧‍👦', desc: 'Spouse visas, dependent children, and parent sponsorships.' },
     { id: 'business', label: 'Business & Investor', icon: '📈', desc: 'Investor visas, entrepreneur startups, and Golden Visas.' },
     { id: 'digital_nomad', label: 'Digital Nomad & Retirement', icon: '🌴', desc: 'Remote work permits, freelancer visas, and retirement residency.' },
+    { id: 'tourist', label: 'Tourist & Visitor', icon: '✈️', desc: 'Tourism, sightseeing, and visitor visas.' },
   ];
 
   const currentCategoryPrograms = profile.programs.filter((p) => p.category === activeCategory);
@@ -43,7 +45,6 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
     (p) => p.verificationStatus !== 'AVAILABLE_VERIFIED'
   );
 
-  // Prevent thin unverified/unavailable program pages from being indexed by search engines
   useEffect(() => {
     let existingMeta = document.querySelector('meta[name="robots"]');
     if (hasUnverifiedOnly) {
@@ -66,50 +67,8 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
     };
   }, [hasUnverifiedOnly, normCode, activeCategory]);
 
-  const renderStatusBadge = (status: PathwayVerificationStatus) => {
-    switch (status) {
-      case 'AVAILABLE_VERIFIED':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
-            ✅ AVAILABLE - VERIFIED
-          </span>
-        );
-      case 'NOT_AVAILABLE_CONFIRMED':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-200 text-slate-800 border border-slate-400">
-            🚫 CONFIRMED NOT AVAILABLE
-          </span>
-        );
-      case 'AWAITING_OFFICIAL_VERIFICATION':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-800 border border-blue-300">
-            ⏳ AWAITING OFFICIAL VERIFICATION
-          </span>
-        );
-      case 'NEEDS_REVIEW':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
-            ⚠️ NEEDS REVIEW
-          </span>
-        );
-      case 'TEMPORARILY_CLOSED':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-100 text-purple-800 border border-purple-300">
-            ⏸️ TEMPORARILY CLOSED
-          </span>
-        );
-      case 'EXPIRED':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300">
-            ❌ EXPIRED / TERMINATED
-          </span>
-        );
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
-      {/* Sticky Back Button Bar */}
       <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 py-3 border-b border-slate-200 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <button
@@ -127,7 +86,6 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
         </div>
       </div>
 
-      {/* Hero Section */}
       <section className="bg-gradient-to-b from-[#0B3D91] to-[#072a68] text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center space-y-4">
           <div className="text-6xl mb-2">{profile.flag}</div>
@@ -153,9 +111,7 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
         </div>
       </section>
 
-      {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Category Navigation Tabs */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
           {categories.map((cat) => {
             const prog = profile.programs.find((p) => p.category === cat.id);
@@ -196,7 +152,6 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
           })}
         </div>
 
-        {/* Selected Category Header */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm mb-8">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-3xl">{activeCategoryMeta.icon}</span>
@@ -207,177 +162,12 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
           </div>
         </div>
 
-        {/* Programs List */}
         <div className="space-y-6">
-          {currentCategoryPrograms.map((prog) => {
-            if (prog.verificationStatus === 'NOT_AVAILABLE_CONFIRMED') {
-              return (
-                <div key={prog.id} className="bg-slate-100 rounded-2xl border border-slate-300 p-6 sm:p-8 space-y-3">
-                  <div className="flex items-center justify-between">
-                    {renderStatusBadge(prog.verificationStatus)}
-                    <span className="text-xs text-slate-500">Audited: {prog.lastCheckedDate}</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900">{prog.officialName}</h3>
-                  <div className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700">
-                    <XCircle className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-slate-900 mb-1">Official Legal Finding:</p>
-                      <p className="leading-relaxed">{prog.eligibility}</p>
-                    </div>
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    Source Authority: <strong>{prog.sourceAuthority}</strong> • Governed by national immigration legislation.
-                  </div>
-                </div>
-              );
-            }
-
-            if (prog.verificationStatus === 'AWAITING_OFFICIAL_VERIFICATION') {
-              return (
-                <div key={prog.id} className="bg-blue-50/60 rounded-2xl border border-blue-200 p-6 sm:p-8 space-y-3">
-                  <div className="flex items-center justify-between">
-                    {renderStatusBadge(prog.verificationStatus)}
-                    <span className="text-xs text-slate-500">Audited: {prog.lastCheckedDate}</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900">{prog.officialName}</h3>
-                  <div className="flex items-start gap-3 bg-white p-4 rounded-xl border border-blue-200 text-xs sm:text-sm text-slate-700">
-                    <Clock className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-slate-900 mb-1">Consular Source Audit Status:</p>
-                      <p className="leading-relaxed">{prog.eligibility}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="text-slate-500">Authority: <strong>{prog.sourceAuthority}</strong></span>
-                    <a
-                      href={prog.officialInformationUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-700 font-bold hover:underline inline-flex items-center gap-1"
-                    >
-                      <span>Check Consular Portal</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-              );
-            }
-
-            return (
-              <div key={prog.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 sm:p-8">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      {renderStatusBadge(prog.verificationStatus)}
-                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-blue-900 border border-blue-200">
-                        Apply: {prog.applyFrom || 'Offshore'}
-                      </span>
-                      <span className="text-xs text-slate-400">• Last Checked: {prog.lastCheckedDate}</span>
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-black text-slate-900">{prog.officialName}</h3>
-                    {prog.localLanguageName && (
-                      <div className="text-xs font-semibold text-slate-500 italic mt-0.5">
-                        Local Name: {prog.localLanguageName}
-                      </div>
-                    )}
-                  </div>
-                  <a
-                    href={prog.officialInformationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-[#0B3D91] border border-blue-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0"
-                  >
-                    <span>Official Govt Source</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                {/* Verification Evidence Notice */}
-                <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700 my-4 space-y-1">
-                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <Shield className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Official Source Verification Evidence &amp; Audit Trail:</span>
-                  </div>
-                  <p className="font-mono text-[11px] text-slate-600">
-                    "{prog.verificationEvidence}"
-                  </p>
-                  <div className="text-[10px] text-slate-400 pt-0.5">
-                    Authority: <strong>{prog.sourceAuthority}</strong> • Checked on: {prog.lastCheckedDate}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-6 text-sm">
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span className="text-xs font-bold text-slate-500 uppercase block mb-1">Government Fees</span>
-                    <span className="font-bold text-slate-900">{prog.governmentFees}</span>
-                  </div>
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span className="text-xs font-bold text-slate-500 uppercase block mb-1">Processing Time</span>
-                    <span className="font-bold text-slate-900">{prog.processingTime || 'Variable'}</span>
-                  </div>
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span className="text-xs font-bold text-slate-500 uppercase block mb-1">Min Investment / Income</span>
-                    <span className="font-bold text-slate-900">{prog.minSalaryOrIncome || prog.investmentRequirement || 'N/A'}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Eligibility Criteria</h4>
-                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed bg-blue-50/50 p-4 rounded-xl border border-blue-100">
-                      {prog.eligibility}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-2">Required Document Checklist</h4>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {(prog.requiredDocuments || []).map((doc, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                          <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>{doc}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Application Procedure</h4>
-                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                      {prog.applicationProcedure}
-                    </p>
-                  </div>
-
-                  {prog.renewalRules && (
-                    <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700">
-                      <b>Residence Duration &amp; Renewal Rules:</b> {prog.renewalRules}
-                    </div>
-                  )}
-
-                  {prog.prOrCitizenshipTransition && (
-                    <div className="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl text-xs text-emerald-900">
-                      <b>PR &amp; Citizenship Transition:</b> {prog.prOrCitizenshipTransition}
-                    </div>
-                  )}
-
-                  {prog.familyInclusionRules && (
-                    <div className="bg-blue-50 border border-blue-200 p-3.5 rounded-xl text-xs text-blue-900">
-                      <b>Family Inclusion Rules:</b> {prog.familyInclusionRules}
-                    </div>
-                  )}
-
-                  {prog.restrictionsAndExceptions && (
-                    <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs text-amber-900">
-                      <b>Important Conditions &amp; Exceptions:</b> {prog.restrictionsAndExceptions}
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {currentCategoryPrograms.map((prog) => (
+            <ProgramCard key={prog.id} prog={prog} />
+          ))}
         </div>
 
-        {/* Top 20 People Also Ask (PAA) FAQ Section for Google Ranking */}
         <div className="mt-12 pt-8 border-t border-slate-200">
           <CountryPAAFaqSection
             countryName={profile.countryName}
@@ -386,6 +176,127 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
             fromCode="IN"
             onNavigate={navigate}
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function renderStatusBadge(status: PathwayVerificationStatus) {
+  switch (status) {
+    case 'AVAILABLE_VERIFIED':
+      return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">✅ AVAILABLE - VERIFIED</span>;
+    case 'NOT_AVAILABLE_CONFIRMED':
+      return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-200 text-slate-800 border border-slate-400">🚫 CONFIRMED NOT AVAILABLE</span>;
+    case 'AWAITING_OFFICIAL_VERIFICATION':
+      return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-800 border border-blue-300">⏳ AWAITING OFFICIAL VERIFICATION</span>;
+    case 'NEEDS_REVIEW':
+      return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">⚠️ NEEDS REVIEW</span>;
+    case 'TEMPORARILY_CLOSED':
+      return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-100 text-purple-800 border border-purple-300">⏸️ TEMPORARILY CLOSED</span>;
+    case 'EXPIRED':
+      return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300">❌ EXPIRED / TERMINATED</span>;
+  }
+}
+
+function ProgramCard({ prog }: { prog: ImmigrationProgram }) {
+  const [details, setDetails] = useState<any>(null);
+
+  useEffect(() => {
+    if (prog.verificationStatus === 'AVAILABLE_VERIFIED') {
+      fetch(`/api/visa-details/${prog.id}`)
+        .then(res => res.json())
+        .then(data => setDetails(data))
+        .catch(() => {});
+    }
+  }, [prog.id, prog.verificationStatus]);
+
+  if (details) {
+    return <VisaDetailRenderer details={details} />;
+  }
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 sm:p-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
+        <div>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            {renderStatusBadge(prog.verificationStatus)}
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-blue-900 border border-blue-200">
+              Apply: {prog.applyFrom || 'Offshore'}
+            </span>
+            <span className="text-xs text-slate-400">• Last Checked: {prog.lastCheckedDate}</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-slate-900">{prog.officialName}</h3>
+          {prog.localLanguageName && (
+            <div className="text-xs font-semibold text-slate-500 italic mt-0.5">
+              Local Name: {prog.localLanguageName}
+            </div>
+          )}
+        </div>
+        <a
+          href={prog.officialInformationUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-[#0B3D91] border border-blue-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0"
+        >
+          <span>Official Govt Source</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </a>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700 my-4 space-y-1">
+        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+          <Shield className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Official Source Verification Evidence &amp; Audit Trail:</span>
+        </div>
+        <p className="font-mono text-[11px] text-slate-600">
+          "{prog.verificationEvidence}"
+        </p>
+        <div className="text-[10px] text-slate-400 pt-0.5">
+          Authority: <strong>{prog.sourceAuthority}</strong> • Checked on: {prog.lastCheckedDate}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-6 text-sm">
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <span className="text-xs font-bold text-slate-500 uppercase block mb-1">Government Fees</span>
+          <span className="font-bold text-slate-900">{prog.governmentFees}</span>
+        </div>
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <span className="text-xs font-bold text-slate-500 uppercase block mb-1">Processing Time</span>
+          <span className="font-bold text-slate-900">{prog.processingTime || 'Variable'}</span>
+        </div>
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <span className="text-xs font-bold text-slate-500 uppercase block mb-1">Min Investment / Income</span>
+          <span className="font-bold text-slate-900">{prog.minSalaryOrIncome || prog.investmentRequirement || 'N/A'}</span>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <h4 className="font-bold text-slate-900 text-sm mb-1">Eligibility Criteria</h4>
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+            {prog.eligibility}
+          </p>
+        </div>
+
+        <div>
+          <h4 className="font-bold text-slate-900 text-sm mb-2">Required Document Checklist</h4>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {(prog.requiredDocuments || []).map((doc, idx) => (
+              <li key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{doc}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="font-bold text-slate-900 text-sm mb-1">Application Procedure</h4>
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            {prog.applicationProcedure}
+          </p>
         </div>
       </div>
     </div>

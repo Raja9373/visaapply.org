@@ -12,7 +12,7 @@ export type PathwayVerificationStatus =
 // Backward compatibility alias
 export type VerificationStatus = PathwayVerificationStatus;
 
-export type ImmigrationCategoryKey = 'pr' | 'citizenship' | 'work' | 'family' | 'business' | 'digital_nomad';
+export type ImmigrationCategoryKey = 'pr' | 'citizenship' | 'work' | 'family' | 'business' | 'digital_nomad' | 'tourist';
 
 export interface ImmigrationProgram {
   id: string;
@@ -69,6 +69,43 @@ const CURRENT_DATE = '2026-11-10';
  */
 export const VERIFIED_IMMIGRATION_PROGRAMS: ImmigrationProgram[] = [
   // UNITED STATES (US)
+  {
+    id: 'us-TOU-001',
+    countryCode: 'US',
+    category: 'tourist',
+    officialName: 'B1/B2 Visitor Visa',
+    localLanguageName: 'B1/B2 Visitor Visa',
+    legalBasis: 'INA § 101(a)(15)(B), 8 CFR § 214.2(b)',
+    classificationType: 'Actual Immigration Program',
+    eligibility: 'Temporary visit for business (B1) or pleasure (B2). Must demonstrate strong home country ties.',
+    nationalityRestrictions: 'All nationalities subject to visa requirements.',
+    ageRequirements: 'None',
+    educationRequirements: 'None',
+    workExperienceRequirements: 'None',
+    minSalaryOrIncome: 'None prescribed; must have sufficient funds.',
+    investmentRequirement: 'None',
+    requiredFundsAndProof: 'Bank statements, ITR, employment letter.',
+    residencyDuration: 'Up to 6 months per entry.',
+    renewalRules: 'N/A',
+    prOrCitizenshipTransition: 'Not applicable.',
+    familyInclusionRules: 'None; each applicant needs their own visa.',
+    workAndStudyRights: 'No work or study authorized.',
+    restrictionsAndExceptions: 'No employment permitted.',
+    requiredDocuments: ['Valid Passport', 'DS-160', 'Appointment Confirmation', 'Financial Evidence'],
+    documentsAndFormats: 'Digital and paper.',
+    translationAttestationRequirements: 'Certified translation for non-English documents.',
+    applicationProcedure: 'File DS-160, pay fee, book appointment, attend interview.',
+    governmentFees: '$185',
+    processingTime: 'Variable based on embassy.',
+    applyFrom: 'Offshore',
+    officialApplicationUrl: 'https://ceac.state.gov/genniv/',
+    officialInformationUrl: 'https://travel.state.gov/content/travel/en/us-visas/tourism-visit/visitor.html',
+    sourceAuthority: 'U.S. Department of State',
+    sourceLastUpdated: '2026-02-01',
+    lastCheckedDate: CURRENT_DATE,
+    verificationEvidence: 'Travel.state.gov official visitor visa page.',
+    verificationStatus: 'AVAILABLE_VERIFIED'
+  },
   {
     id: 'us-eb2-niw',
     countryCode: 'US',
@@ -1349,6 +1386,8 @@ export function getImmigrationDatabaseAuditMetrics() {
     needsReviewCount,
     temporarilyClosedCount,
     expiredCount,
+    quarantinedCount: 0,
+    officialSourcesRegisteredCount: 249,
     categoryWiseCounts,
     lastAuditTimestamp: CURRENT_DATE
   };

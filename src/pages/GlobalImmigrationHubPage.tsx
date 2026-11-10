@@ -14,9 +14,11 @@ export const CATEGORY_URL_PARAM_MAP: Record<string, ImmigrationCategoryKey> = {
   'family': 'family',
   'business-investor': 'business',
   'digital-nomad-retirement': 'digital_nomad',
+  'tourist-visitor': 'tourist',
   'pr': 'pr',
   'business': 'business',
-  'digital_nomad': 'digital_nomad'
+  'digital_nomad': 'digital_nomad',
+  'tourist': 'tourist'
 };
 
 export const CATEGORY_INTERNAL_TO_PARAM_MAP: Record<ImmigrationCategoryKey, string> = {
@@ -25,7 +27,8 @@ export const CATEGORY_INTERNAL_TO_PARAM_MAP: Record<ImmigrationCategoryKey, stri
   'work': 'work',
   'family': 'family',
   'business': 'business-investor',
-  'digital_nomad': 'digital-nomad-retirement'
+  'digital_nomad': 'digital-nomad-retirement',
+  'tourist': 'tourist-visitor'
 };
 
 export function parseCategoryFromLocation(): ImmigrationCategoryKey | 'all' {
@@ -78,6 +81,7 @@ export function GlobalImmigrationHubPage({ navigate }: GlobalImmigrationHubPageP
     { id: 'family', paramSlug: 'family', label: 'Family & Spouse', icon: '👨‍👩‍👧‍👦' },
     { id: 'business', paramSlug: 'business-investor', label: 'Business & Investor', icon: '📈' },
     { id: 'digital_nomad', paramSlug: 'digital-nomad-retirement', label: 'Digital Nomad & Retirement', icon: '🌴' },
+    { id: 'tourist', paramSlug: 'tourist-visitor', label: 'Tourist & Visitor', icon: '✈️' },
   ];
 
   // Dynamic Header Copy based on Active Category
