@@ -91,7 +91,7 @@ export function GlobalImmigrationHubPage({ navigate }: GlobalImmigrationHubPageP
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredCountries.map((c) => {
             const profile = getImmigrationProfileForCountry(c.code);
-            const verifiedCount = profile.programs.filter((p) => p.verificationStatus === 'VERIFIED').length;
+            const verifiedCount = profile.programs.filter((p) => p.verificationStatus === 'AVAILABLE_VERIFIED').length;
             const categoryMatchCount =
               selectedCategory === 'all'
                 ? profile.programs.length

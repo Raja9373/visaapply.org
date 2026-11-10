@@ -46,6 +46,7 @@ import { OciPioGuidePage } from './pages/OciPioGuidePage';
 import { ScholarshipFinderPage } from './pages/ScholarshipFinderPage';
 import { GlobalImmigrationHubPage } from './pages/GlobalImmigrationHubPage';
 import { CountryImmigrationDetailPage } from './pages/CountryImmigrationDetailPage';
+import { GlobalImmigrationPromoSection } from './components/GlobalImmigrationPromoSection';
 import { CountryPAAFaqSection } from './components/CountryPAAFaqSection';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
@@ -2802,9 +2803,22 @@ export default function App() {
           {/* Nav Links */}
           <nav className="hidden lg:flex items-center gap-4 text-xs xl:text-sm font-medium text-blue-100">
             <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
-            <button onClick={() => navigate('/immigration')} className={`transition-colors cursor-pointer ${isImmigrationHub || immigrationDetailMatch ? 'text-amber-300 font-bold' : 'text-[#93c5fd] hover:text-white font-bold'}`}>🌐 Global Immigration</button>
             <button onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
             <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
+            <button
+              onClick={() => navigate('/immigration')}
+              className={`flex items-center gap-1.5 transition-colors cursor-pointer px-2.5 py-1 rounded-full ${
+                isImmigrationHub || immigrationDetailMatch
+                  ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
+                  : 'bg-emerald-600/15 text-emerald-200 hover:text-white font-semibold hover:bg-emerald-600/30 border border-emerald-500/20'
+              }`}
+            >
+              <Globe className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>Global Immigration</span>
+              <span className="bg-emerald-500 text-white text-[10px] font-black uppercase px-1.5 py-0.5 rounded tracking-wide shadow-sm">
+                NEW
+              </span>
+            </button>
             <button
               type="button"
               onClick={() => navigate('/golden-visa')}
@@ -3134,9 +3148,20 @@ export default function App() {
           <div>
             <div className="px-6 py-4 space-y-3">
               <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-blue-100 hover:text-white font-medium transition-colors">{getUIString(uiLang).navHome}</button>
-              <button onClick={() => { navigate('/immigration'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold transition-colors">🌐 Global Immigration Hub (249 Countries)</button>
               <button onClick={() => { navigate('/routes'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-amber-300 hover:text-white font-bold transition-colors">{getUIString(uiLang).navRoutes}</button>
               <button onClick={() => { navigate('/flights'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-emerald-300 hover:text-white font-bold transition-colors">{getUIString(uiLang).navFlights}</button>
+              <button
+                onClick={() => { navigate('/immigration'); setMobileMenuOpen(false); }}
+                className="flex items-center justify-between w-full text-left py-2 text-emerald-300 hover:text-white font-bold transition-colors bg-emerald-500/10 px-3 py-2 rounded-xl border border-emerald-500/30"
+              >
+                <span className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Global Immigration Hub (249 Countries)</span>
+                </span>
+                <span className="bg-emerald-500 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wide shrink-0">
+                  NEW
+                </span>
+              </button>
               <div className="py-1">
                 <button
                   type="button"
@@ -3936,6 +3961,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
 
       {/* Main Homepage Sections */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Prominent Global Immigration & Residency Hub Section */}
+        <GlobalImmigrationPromoSection onNavigate={navigate} className="mb-10" />
+
         {/* 3. Check Your Visa Eligibility - 30 Sec (Move BELOW FREE Tools) */}
         <EligibilityChecker
           showDestinationPicker={true}

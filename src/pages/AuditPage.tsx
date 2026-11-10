@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BASE_COUNTRY_VISAS, FULL_VISA_DB, COUNTRY_INFO, COUNTRY_VISA_COUNTS, VisaItem, CountryVisas } from '../data/fullVisaDatabase';
 
+import { ImmigrationVerificationDashboard } from '../components/ImmigrationVerificationDashboard';
+
 export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
   const [filterQuery, setFilterQuery] = useState('');
   let totalCount = 0;
@@ -113,6 +115,9 @@ export function AuditPage({ navigate }: { navigate?: (path: string) => void }) {
         </h1>
         <p className="text-gray-600 text-sm">Real-time count of {totalCount}+ visa & immigration programme records live on site (including USA 201, Canada 130 Visas (150 Total Records), UK 222, Australia 135, UAE 135, Germany 138, Singapore 109, Thailand 113 & Japan 128)</p>
       </div>
+
+      {/* Phase 2 Global Immigration Data Verification Dashboard */}
+      <ImmigrationVerificationDashboard />
 
       {/* Hero Banner */}
       <div className="bg-emerald-50 border-2 border-emerald-500 rounded-2xl p-6 sm:p-8 shadow-sm">
