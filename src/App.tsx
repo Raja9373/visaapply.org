@@ -8,6 +8,8 @@ import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
 import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
 import { VerificationView } from './components/VerificationView';
+import { VisaManagementAdminPage } from './pages/VisaManagementAdminPage';
+import { VisaDetailEditorPage } from './pages/VisaDetailEditorPage';
 import { AuditPage } from './pages/AuditPage';
 import { SitemapPage } from './pages/SitemapPage';
 import { AdSenseBanner } from './components/AdSenseBanner';
@@ -346,6 +348,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const isAdminLogin = path === '/admin/login' || path === '/admin/login/';
   const isAdminUpdates = path === '/admin/updates' || path === '/admin/updates/';
   const isAdminRoute = path === '/admin' || path.startsWith('/admin/');
+  const isVisaManagementAdmin = path === '/admin/visa-management' || path === '/admin/visa-management/';
+  const visaDetailEditorMatch = path.match(/^\/admin\/visa-management\/([a-zA-Z0-9-]+)$/);
   const isAtlysVsVisaApply = path === '/atlys-vs-visaapply' || path === '/atlys-vs-visaapply/';
   const isGoldenVisa = path === '/golden-visa' || path === '/golden-visa/';
   const isDummyTicket = path === '/dummy-ticket' || path === '/dummy-ticket/';
@@ -2444,12 +2448,15 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const { strippedPath } = getLangFromUrlPath(currentPath);
+  const isAdminRouteNow = strippedPath === '/admin' || strippedPath.startsWith('/admin/');
+  const isAdminLoginNow = strippedPath === '/admin/login' || strippedPath === '/admin/login/';
+  const isVisaManagementAdmin = strippedPath === '/admin/visa-management' || strippedPath === '/admin/visa-management/';
+  const visaDetailEditorMatch = strippedPath.match(/^\/admin\/visa-management\/([a-zA-Z0-9-]+)$/);
+
   // Verify admin login on every page load & navigation
   useEffect(() => {
     let cancelled = false;
-    const { strippedPath } = getLangFromUrlPath(currentPath);
-    const isAdminRouteNow = strippedPath === '/admin' || strippedPath.startsWith('/admin/');
-    const isAdminLoginNow = strippedPath === '/admin/login' || strippedPath === '/admin/login/';
 
     const verifyAdminSession = async () => {
       let storedToken = '';
@@ -3262,6 +3269,10 @@ export default function App() {
               }}
               navigate={navigate}
             />
+          ) : isVisaManagementAdmin ? (
+            <VisaManagementAdminPage navigate={navigate} />
+          ) : visaDetailEditorMatch ? (
+            <VisaDetailEditorPage />
           ) : isAdminUpdates ? (
             <ImmigrationUpdatesPage
               onNavigate={navigate}

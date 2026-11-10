@@ -29,7 +29,14 @@ import {
   getCronExecutionLogsFromDb,
   getVisaDetails,
   getAllVisaDetails,
-  saveVisaDetails
+  getPaginatedVisaDetails,
+  saveVisaDetails,
+  getVisaClaims,
+  saveVisaClaim,
+  getVisaEvidence,
+  saveVisaEvidence,
+  getVisaVersions,
+  saveVisaVersion
 } from './src/db/immigrationDatabase';
 import { executeImmigrationBatch } from './src/services/immigrationBatchProcessor';
 
@@ -1021,11 +1028,15 @@ app.get('/api/admin/cron-logs', requireAdminAuth, (req, res) => {
   }
 });
 
-// Admin: Get all Visa Details
+// Admin: Get all Visa Details (Paginated)
 app.get('/api/admin/visa-details', requireAdminAuth, (req, res) => {
   try {
-    const details = getAllVisaDetails();
-    res.json({ success: true, details });
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
+    const search = (req.query.search as string) || '';
+    
+    const details = getPaginatedVisaDetails(page, limit, search);
+    res.json({ success: true, ...details });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -1040,6 +1051,39 @@ app.post('/api/admin/visa-details', requireAdminAuth, (req, res) => {
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Admin: Get Claims
+app.get('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res) => {
+  res.json({ success: true, claims: getVisaClaims(req.params.programId) });
+});
+
+// Admin: Save Claim
+app.post('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res) => {
+  saveVisaClaim({ ...req.body, programId: req.params.programId });
+  res.json({ success: true });
+});
+
+// Admin: Get Evidence
+app.get('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (req, res) => {
+  res.json({ success: true, evidence: getVisaEvidence(req.params.claimId) });
+});
+
+// Admin: Save Evidence
+app.post('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (req, res) => {
+  saveVisaEvidence({ ...req.body, claimId: req.params.claimId });
+  res.json({ success: true });
+});
+
+// Admin: Get Versions
+app.get('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, res) => {
+  res.json({ success: true, versions: getVisaVersions(req.params.programId) });
+});
+
+// Admin: Save Version (Rollback)
+app.post('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, res) => {
+  saveVisaVersion({ ...req.body, programId: req.params.programId });
+  res.json({ success: true });
 });
 
 // --- Embassy Slot Checker & Auto Email System ---

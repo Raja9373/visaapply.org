@@ -6,26 +6,26 @@ export function VisaManagementAdminPage({ navigate }: { navigate: (path: string)
   const [stats, setStats] = useState<any>({ total: 0, enriched: 0, awaiting: 0 });
   const [records, setRecords] = useState<any[]>([]);
 
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(50);
+  const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
-    fetch('/api/admin/visa-details')
+    fetch(`/api/admin/visa-details?page=${page}&limit=${limit}&search=${searchQuery}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          setRecords(data.details);
+          setRecords(data.data);
+          setTotalPages(Math.ceil(data.total / limit));
           setStats({
-            total: data.details.length,
-            enriched: data.details.filter((r: any) => r.verificationStatus === 'VERIFIED').length,
-            awaiting: data.details.filter((r: any) => r.verificationStatus !== 'VERIFIED').length
+            total: data.total,
+            enriched: 0, // Need to implement a separate stats endpoint or fetch from db
+            awaiting: 0
           });
         }
       })
       .catch(console.error);
-  }, []);
-
-  const filteredRecords = records.filter(r => 
-    r.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.programId.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  }, [page, limit, searchQuery]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
@@ -35,14 +35,6 @@ export function VisaManagementAdminPage({ navigate }: { navigate: (path: string)
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <h3 className="text-sm font-semibold text-slate-500">Total Visa Records</h3>
           <p className="text-3xl font-black text-slate-900 mt-2">{stats.total}</p>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-500">Enriched Records</h3>
-          <p className="text-3xl font-black text-emerald-600 mt-2">{stats.enriched}</p>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-500">Awaiting Enrichment</h3>
-          <p className="text-3xl font-black text-amber-600 mt-2">{stats.awaiting}</p>
         </div>
       </div>
 
@@ -68,7 +60,7 @@ export function VisaManagementAdminPage({ navigate }: { navigate: (path: string)
             </tr>
           </thead>
           <tbody>
-            {filteredRecords.map(record => (
+            {records.map(record => (
               <tr key={record.id} className="border-b hover:bg-slate-50">
                 <td className="p-3 font-mono text-slate-600">{record.id}</td>
                 <td className="p-3 font-medium text-slate-900">{record.programId}</td>
@@ -78,12 +70,26 @@ export function VisaManagementAdminPage({ navigate }: { navigate: (path: string)
                   </span>
                 </td>
                 <td className="p-3">
-                  <button className="text-indigo-600 hover:text-indigo-800 font-semibold">Edit</button>
+                  <a href={`/admin/visa-management/${record.programId}`} className="text-indigo-600 hover:text-indigo-800 font-semibold">Edit</a>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        
+        <div className="mt-4 flex items-center justify-between">
+            <div className="text-sm text-slate-500">Page {page} of {totalPages}</div>
+            <div className="flex gap-2">
+                <button 
+                  disabled={page === 1}
+                  onClick={() => setPage(p => p - 1)}
+                  className="px-3 py-1 bg-slate-100 rounded disabled:opacity-50">Prev</button>
+                <button 
+                  disabled={page === totalPages}
+                  onClick={() => setPage(p => p + 1)}
+                  className="px-3 py-1 bg-slate-100 rounded disabled:opacity-50">Next</button>
+            </div>
+        </div>
       </div>
     </div>
   );

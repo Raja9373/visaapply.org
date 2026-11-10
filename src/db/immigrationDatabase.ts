@@ -23,7 +23,9 @@ db.pragma('synchronous = NORMAL');
  * Initialize database schema
  */
 export function initDatabaseSchema() {
-  db.exec(`
+    db.exec(`PRAGMA foreign_keys = ON;`);
+
+    db.exec(`
     CREATE TABLE IF NOT EXISTS batch_state (
       id INTEGER PRIMARY KEY CHECK (id = 1),
       current_batch_index INTEGER NOT NULL DEFAULT 1,
@@ -153,6 +155,39 @@ export function initDatabaseSchema() {
       verification_status TEXT
     );
     CREATE INDEX IF NOT EXISTS idx_visa_details_program_id ON visa_details(program_id);
+
+    CREATE TABLE IF NOT EXISTS visa_detail_claims (
+      id TEXT PRIMARY KEY,
+      program_id TEXT NOT NULL REFERENCES immigration_programs(id),
+      section TEXT NOT NULL,
+      description TEXT NOT NULL,
+      value TEXT,
+      unit TEXT,
+      status TEXT NOT NULL DEFAULT 'NEEDS_EVIDENCE',
+      reviewer TEXT,
+      review_timestamp TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_claims_program ON visa_detail_claims(program_id);
+
+    CREATE TABLE IF NOT EXISTS visa_detail_evidence (
+      id TEXT PRIMARY KEY,
+      claim_id TEXT NOT NULL REFERENCES visa_detail_claims(id),
+      source_url TEXT NOT NULL,
+      legal_instrument TEXT,
+      effective_date TEXT,
+      last_checked_date TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_evidence_claim ON visa_detail_evidence(claim_id);
+
+    CREATE TABLE IF NOT EXISTS visa_detail_versions (
+      id TEXT PRIMARY KEY,
+      program_id TEXT NOT NULL REFERENCES immigration_programs(id),
+      data_json TEXT NOT NULL,
+      editor_id TEXT NOT NULL,
+      timestamp TEXT NOT NULL,
+      change_reason TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_versions_program ON visa_detail_versions(program_id);
   `);
 }
 
@@ -424,31 +459,47 @@ export function getVisaDetails(programId: string): any | null {
   }
 }
 
-export function getAllVisaDetails(): any[] {
+export function getPaginatedVisaDetails(page: number, limit: number, search: string = ''): { data: any[], total: number } {
   try {
-    const rows = db.prepare('SELECT * FROM visa_details').all() as any[];
-    return rows.map((row) => ({
-      id: row.id,
-      programId: row.program_id,
-      countryOverview: JSON.parse(row.country_overview_json || '{}'),
-      visaOverview: JSON.parse(row.visa_overview_json || '{}'),
-      eligibility: JSON.parse(row.eligibility_json || '{}'),
-      financial: JSON.parse(row.financial_json || '{}'),
-      documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
-      applicationFields: JSON.parse(row.application_fields_json || '[]'),
-      applicationSteps: JSON.parse(row.application_steps_json || '[]'),
-      interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
-      embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
-      refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
-      afterApproval: JSON.parse(row.after_approval_json || '{}'),
-      costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
-      faq: JSON.parse(row.faq_json || '[]'),
-      legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
-      lastUpdated: row.last_updated,
-      verificationStatus: row.verification_status
-    }));
+    const offset = (page - 1) * limit;
+    const searchClause = search ? 'WHERE id LIKE ? OR program_id LIKE ?' : '';
+    const params = search ? [`%${search}%`, `%${search}%`] : [];
+    
+    const totalRow = db.prepare(`SELECT COUNT(*) as count FROM visa_details ${searchClause}`).get(...params) as any;
+    const total = totalRow.count;
+    
+    const rows = db.prepare(`
+      SELECT * FROM visa_details 
+      ${searchClause} 
+      ORDER BY id 
+      LIMIT ? OFFSET ?
+    `).all(...params, limit, offset) as any[];
+
+    return {
+      total,
+      data: rows.map((row) => ({
+        id: row.id,
+        programId: row.program_id,
+        countryOverview: JSON.parse(row.country_overview_json || '{}'),
+        visaOverview: JSON.parse(row.visa_overview_json || '{}'),
+        eligibility: JSON.parse(row.eligibility_json || '{}'),
+        financial: JSON.parse(row.financial_json || '{}'),
+        documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
+        applicationFields: JSON.parse(row.application_fields_json || '[]'),
+        applicationSteps: JSON.parse(row.application_steps_json || '[]'),
+        interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
+        embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
+        refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
+        afterApproval: JSON.parse(row.after_approval_json || '{}'),
+        costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
+        faq: JSON.parse(row.faq_json || '[]'),
+        legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
+        lastUpdated: row.last_updated,
+        verificationStatus: row.verification_status
+      }))
+    };
   } catch (e) {
-    return [];
+    return { data: [], total: 0 };
   }
 }
 
@@ -500,4 +551,53 @@ export function saveVisaDetails(details: any) {
     details.verificationStatus || 'VERIFIED'
   );
 }
+// --- Claims, Evidence, Versions ---
 
+export function getVisaClaims(programId: string): any[] {
+  return db.prepare('SELECT * FROM visa_detail_claims WHERE program_id = ?').all(programId) as any[];
+}
+
+export function saveVisaClaim(claim: any) {
+  const stmt = db.prepare(`
+    INSERT INTO visa_detail_claims (id, program_id, section, description, value, unit, status, reviewer, review_timestamp)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET
+      section = excluded.section,
+      description = excluded.description,
+      value = excluded.value,
+      unit = excluded.unit,
+      status = excluded.status,
+      reviewer = excluded.reviewer,
+      review_timestamp = excluded.review_timestamp
+  `);
+  stmt.run(claim.id, claim.programId, claim.section, claim.description, claim.value, claim.unit, claim.status, claim.reviewer, claim.reviewTimestamp);
+}
+
+export function getVisaEvidence(claimId: string): any[] {
+  return db.prepare('SELECT * FROM visa_detail_evidence WHERE claim_id = ?').all(claimId) as any[];
+}
+
+export function saveVisaEvidence(evidence: any) {
+  const stmt = db.prepare(`
+    INSERT INTO visa_detail_evidence (id, claim_id, source_url, legal_instrument, effective_date, last_checked_date)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET
+      source_url = excluded.source_url,
+      legal_instrument = excluded.legal_instrument,
+      effective_date = excluded.effective_date,
+      last_checked_date = excluded.last_checked_date
+  `);
+  stmt.run(evidence.id, evidence.claimId, evidence.sourceUrl, evidence.legalInstrument, evidence.effectiveDate, evidence.lastCheckedDate);
+}
+
+export function getVisaVersions(programId: string): any[] {
+  return db.prepare('SELECT * FROM visa_detail_versions WHERE program_id = ? ORDER BY timestamp DESC').all(programId) as any[];
+}
+
+export function saveVisaVersion(version: any) {
+  const stmt = db.prepare(`
+    INSERT INTO visa_detail_versions (id, program_id, data_json, editor_id, timestamp, change_reason)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
+  stmt.run(version.id, version.programId, JSON.stringify(version.data), version.editorId, version.timestamp, version.changeReason);
+}
