@@ -762,29 +762,81 @@ app.post('/api/admin/manual-update', requireAdminAuth, (req, res) => {
   }
 });
 
-function isVercelCronOrAdminAuthorized(req: any): boolean {
-  const isVercelHeader = req.headers['x-vercel-cron'] === '1' || req.headers['x-vercel-cron'] === 'true' || Boolean(req.headers['x-vercel-cron']);
-  const authHeader = String(req.headers['authorization'] || '').replace(/^Bearer\s+/i, '').trim();
-  const cronSecret = process.env.CRON_SECRET;
-  const isCronSecretValid = Boolean(cronSecret && authHeader === cronSecret);
-  const isAdmin = isAdminAuthenticatedReq(req);
-  const isLocal = req.hostname === 'localhost' || req.ip === '127.0.0.1' || req.ip === '::1';
+let isSyncCronRunning = false;
 
-  return isVercelHeader || isCronSecretValid || isAdmin || isLocal;
+function validateCronAuthTimingSafe(req: any): { status: 'AUTHORIZED' | 'UNAUTHORIZED' | 'CONFIG_ERROR' } {
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+  const cronSecret = (process.env.CRON_SECRET || '').trim();
+
+  // Fail-closed in production if CRON_SECRET is not configured
+  if (isProduction && !cronSecret) {
+    return { status: 'CONFIG_ERROR' };
+  }
+
+  const authHeader = String(req.headers['authorization'] || '').replace(/^Bearer\s+/i, '').trim();
+
+  if (cronSecret && authHeader) {
+    if (authHeader.length === cronSecret.length) {
+      try {
+        const isMatch = crypto.timingSafeEqual(Buffer.from(authHeader), Buffer.from(cronSecret));
+        if (isMatch) return { status: 'AUTHORIZED' };
+      } catch {}
+    }
+  }
+
+  // Admin session authentication for manual admin dispatch
+  if (isAdminAuthenticatedReq(req)) {
+    return { status: 'AUTHORIZED' };
+  }
+
+  // Localhost development access
+  const isLocal = req.hostname === 'localhost' || req.ip === '127.0.0.1' || req.ip === '::1';
+  if (!isProduction && isLocal) {
+    return { status: 'AUTHORIZED' };
+  }
+
+  return { status: 'UNAUTHORIZED' };
 }
 
 function requireCronOrAdminAuth(req: any, res: any, next: any) {
-  if (!isVercelCronOrAdminAuthorized(req)) {
+  const authResult = validateCronAuthTimingSafe(req);
+
+  if (authResult.status === 'CONFIG_ERROR') {
+    logCronExecutionToDb({
+      cronName: 'immigration-sync',
+      httpMethod: req.method || 'GET',
+      targetCountries: [],
+      status: 'CONFIG_ERROR',
+      checkedCount: 0,
+      updatesFound: 0,
+      logMessage: 'Production Cron configuration error: CRON_SECRET environment variable is missing (Fail-Closed).',
+      executionDurationMs: 0
+    });
+    return res.status(503).json({
+      success: false,
+      error: 'CRON_SECRET environment variable is not configured in production (Fail-Closed).'
+    });
+  }
+
+  if (authResult.status !== 'AUTHORIZED') {
     return res.status(401).json({
       success: false,
       authenticated: false,
-      error: 'Unauthorized cron invocation'
+      error: 'Unauthorized cron invocation.'
     });
   }
+
   next();
 }
 
 const handleImmigrationSyncCron = async (req: any, res: any) => {
+  if (isSyncCronRunning) {
+    return res.status(429).json({
+      success: false,
+      message: 'Immigration sync execution already in progress. Skipped duplicate overlapping execution.'
+    });
+  }
+  isSyncCronRunning = true;
   const startTime = Date.now();
   try {
     const adminEmail = req.body?.adminEmail || req.query?.adminEmail || 'maddydelhi57@gmail.com';
@@ -924,6 +976,8 @@ Return a concise JSON object with keys:
       executionDurationMs: durationMs
     });
     res.status(500).json({ error: err.message });
+  } finally {
+    isSyncCronRunning = false;
   }
 };
 
