@@ -8,10 +8,6 @@ import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
 import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
 import { VerificationView } from './components/VerificationView';
-import { VisaManagementAdminPage } from './pages/VisaManagementAdminPage';
-import { VisaDetailEditorPage } from './pages/VisaDetailEditorPage';
-import { AuditPage } from './pages/AuditPage';
-import { SitemapPage } from './pages/SitemapPage';
 import { AdSenseBanner } from './components/AdSenseBanner';
 import { BlogArticleView } from './components/BlogArticleView';
 import { EligibilityChecker } from './components/EligibilityChecker';
@@ -22,32 +18,45 @@ import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogG
 import { VisaChatbot } from './components/VisaChatbot';
 import { InterviewPrepFull, get20InterviewQuestions } from './components/InterviewPrepFull';
 import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
-import { FlightsPage } from './pages/FlightsPage';
-import { RoutesPage } from './pages/RoutesPage';
-import { ImmigrationUpdatesPage } from './pages/ImmigrationUpdatesPage';
-import { AtlysVsVisaApplyPage } from './pages/AtlysVsVisaApplyPage';
-import { GoldenVisaPage } from './pages/GoldenVisaPage';
-import { DummyTicketPage } from './pages/DummyTicketPage';
-import { CoverLetterGeneratorPage } from './pages/CoverLetterGeneratorPage';
-import { EmbassySlotAlertPage } from './pages/EmbassySlotAlertPage';
-import { PhotoResizerPage } from './pages/PhotoResizerPage';
-import { VisaRejectionAppealPage } from './pages/VisaRejectionAppealPage';
-import { SopGeneratorPage } from './pages/SopGeneratorPage';
-import { VisaTrackingPage } from './pages/VisaTrackingPage';
-import { VisaMapPage } from './pages/VisaMapPage';
-import { MultiCountryPlannerPage } from './pages/MultiCountryPlannerPage';
-import { BankStatementGuidePage } from './pages/BankStatementGuidePage';
-import { TravelInsuranceComparePage } from './pages/TravelInsuranceComparePage';
-import { Esim249Page } from './pages/Esim249Page';
-import { ForexCardComparePage } from './pages/ForexCardComparePage';
-import { SponsorshipFinderPage } from './pages/SponsorshipFinderPage';
-import { WorkPermitGuidePage } from './pages/WorkPermitGuidePage';
-import { StudentVisaUniversityPage } from './pages/StudentVisaUniversityPage';
-import { PassportSevaGuidePage } from './pages/PassportSevaGuidePage';
-import { OciPioGuidePage } from './pages/OciPioGuidePage';
-import { ScholarshipFinderPage } from './pages/ScholarshipFinderPage';
-import { GlobalImmigrationHubPage } from './pages/GlobalImmigrationHubPage';
-import { CountryImmigrationDetailPage } from './pages/CountryImmigrationDetailPage';
+const VisaManagementAdminPage = React.lazy(() => import('./pages/VisaManagementAdminPage').then(m => ({ default: m.VisaManagementAdminPage })));
+const VisaDetailEditorPage = React.lazy(() => import('./pages/VisaDetailEditorPage').then(m => ({ default: m.VisaDetailEditorPage })));
+const AuditPage = React.lazy(() => import('./pages/AuditPage').then(m => ({ default: m.AuditPage })));
+const SitemapPage = React.lazy(() => import('./pages/SitemapPage').then(m => ({ default: m.SitemapPage })));
+const FlightsPage = React.lazy(() => import('./pages/FlightsPage').then(m => ({ default: m.FlightsPage })));
+const RoutesPage = React.lazy(() => import('./pages/RoutesPage').then(m => ({ default: m.RoutesPage })));
+const ImmigrationUpdatesPage = React.lazy(() => import('./pages/ImmigrationUpdatesPage').then(m => ({ default: m.ImmigrationUpdatesPage })));
+const AtlysVsVisaApplyPage = React.lazy(() => import('./pages/AtlysVsVisaApplyPage').then(m => ({ default: m.AtlysVsVisaApplyPage })));
+const GoldenVisaPage = React.lazy(() => import('./pages/GoldenVisaPage').then(m => ({ default: m.GoldenVisaPage })));
+const DummyTicketPage = React.lazy(() => import('./pages/DummyTicketPage').then(m => ({ default: m.DummyTicketPage })));
+const CoverLetterGeneratorPage = React.lazy(() => import('./pages/CoverLetterGeneratorPage').then(m => ({ default: m.CoverLetterGeneratorPage })));
+const EmbassySlotAlertPage = React.lazy(() => import('./pages/EmbassySlotAlertPage').then(m => ({ default: m.EmbassySlotAlertPage })));
+const PhotoResizerPage = React.lazy(() => import('./pages/PhotoResizerPage').then(m => ({ default: m.PhotoResizerPage })));
+const VisaRejectionAppealPage = React.lazy(() => import('./pages/VisaRejectionAppealPage').then(m => ({ default: m.VisaRejectionAppealPage })));
+const SopGeneratorPage = React.lazy(() => import('./pages/SopGeneratorPage').then(m => ({ default: m.SopGeneratorPage })));
+const VisaTrackingPage = React.lazy(() => import('./pages/VisaTrackingPage').then(m => ({ default: m.VisaTrackingPage })));
+const VisaMapPage = React.lazy(() => import('./pages/VisaMapPage').then(m => ({ default: m.VisaMapPage })));
+const MultiCountryPlannerPage = React.lazy(() => import('./pages/MultiCountryPlannerPage').then(m => ({ default: m.MultiCountryPlannerPage })));
+const BankStatementGuidePage = React.lazy(() => import('./pages/BankStatementGuidePage').then(m => ({ default: m.BankStatementGuidePage })));
+const TravelInsuranceComparePage = React.lazy(() => import('./pages/TravelInsuranceComparePage').then(m => ({ default: m.TravelInsuranceComparePage })));
+const Esim249Page = React.lazy(() => import('./pages/Esim249Page').then(m => ({ default: m.Esim249Page })));
+const ForexCardComparePage = React.lazy(() => import('./pages/ForexCardComparePage').then(m => ({ default: m.ForexCardComparePage })));
+const SponsorshipFinderPage = React.lazy(() => import('./pages/SponsorshipFinderPage').then(m => ({ default: m.SponsorshipFinderPage })));
+const WorkPermitGuidePage = React.lazy(() => import('./pages/WorkPermitGuidePage').then(m => ({ default: m.WorkPermitGuidePage })));
+const StudentVisaUniversityPage = React.lazy(() => import('./pages/StudentVisaUniversityPage').then(m => ({ default: m.StudentVisaUniversityPage })));
+const PassportSevaGuidePage = React.lazy(() => import('./pages/PassportSevaGuidePage').then(m => ({ default: m.PassportSevaGuidePage })));
+const OciPioGuidePage = React.lazy(() => import('./pages/OciPioGuidePage').then(m => ({ default: m.OciPioGuidePage })));
+const ScholarshipFinderPage = React.lazy(() => import('./pages/ScholarshipFinderPage').then(m => ({ default: m.ScholarshipFinderPage })));
+const GlobalImmigrationHubPage = React.lazy(() => import('./pages/GlobalImmigrationHubPage').then(m => ({ default: m.GlobalImmigrationHubPage })));
+const CountryImmigrationDetailPage = React.lazy(() => import('./pages/CountryImmigrationDetailPage').then(m => ({ default: m.CountryImmigrationDetailPage })));
+
+function PageLoadingFallback() {
+  return (
+    <div className="min-h-[50vh] flex flex-col items-center justify-center py-20 px-4 text-center">
+      <div className="w-10 h-10 border-4 border-blue-200 border-t-[#0B3D91] rounded-full animate-spin mb-4" />
+      <p className="text-sm font-semibold text-slate-600">Loading VisaApply.org Knowledge Engine...</p>
+    </div>
+  );
+}
 import { GlobalImmigrationPromoSection } from './components/GlobalImmigrationPromoSection';
 import { CountryPAAFaqSection } from './components/CountryPAAFaqSection';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
@@ -3255,7 +3264,8 @@ export default function App() {
 
       {/* Main Content Router */}
       <main className="flex-1">
-        {isAnyAdminRoute ? (
+        <React.Suspense fallback={<PageLoadingFallback />}>
+          {isAnyAdminRoute ? (
           isAdminLogin || !isAdminAuthenticated ? (
             <AdminLoginView
               isAuthenticated={isAdminAuthenticated}
@@ -3414,6 +3424,7 @@ export default function App() {
             uiLang={uiLang}
           />
         )}
+        </React.Suspense>
       </main>
 
       {/* Phase 4 Tool 2: Floating 249-Country Visa Assistant Chatbot */}

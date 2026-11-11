@@ -1,0 +1,2677 @@
+/**
+ * VISAAPPLY.ORG — PHASE 3.1 COMPREHENSIVE VISA INFORMATION STANDARD
+ *
+ * Defines:
+ * 1. The 5-Tier Requirement Classification Standard
+ * 2. Complete 30-Section VisaComprehensiveProfile TypeScript Interfaces
+ * 3. All 22 Additional Applicant Information Special Topics
+ * 4. Pure, deterministic, lossless normalization & round-trip functions
+ *    between legacy 13-section (A–M) records and the 30-section model.
+ */
+
+export type RequirementClassification =
+  | 'LEGAL_REQUIREMENT'
+  | 'ADMIN_INSTRUCTION'
+  | 'CONSULAR_CHECKLIST'
+  | 'PRACTICAL_RECOMMENDATION'
+  | 'NON_OFFICIAL_ESTIMATE';
+
+export const REQUIREMENT_CLASSIFICATIONS: readonly RequirementClassification[] = [
+  'LEGAL_REQUIREMENT',
+  'ADMIN_INSTRUCTION',
+  'CONSULAR_CHECKLIST',
+  'PRACTICAL_RECOMMENDATION',
+  'NON_OFFICIAL_ESTIMATE'
+] as const;
+
+export function isValidRequirementClassification(val: unknown): val is RequirementClassification {
+  return typeof val === 'string' && (REQUIREMENT_CLASSIFICATIONS as readonly string[]).includes(val);
+}
+
+// --- UNIFIED EVIDENCE STATUS CONSTANTS & BACKWARD-COMPATIBLE NORMALIZATION (PHASE 3.2.2) ---
+
+export const EVIDENCE_STATUSES = [
+  'VERIFIED_OFFICIAL',
+  'OFFICIAL_BUT_NOT_FULLY_CONFIRMED',
+  'SECONDARY_SOURCE',
+  'OUTDATED',
+  'BROKEN_LINK',
+  'NEEDS_REVIEW',
+  'REJECTED'
+] as const;
+
+export type EvidenceStatus = (typeof EVIDENCE_STATUSES)[number];
+
+export type LegacyEvidenceStatusAlias = 'SECONDARY_OR_INFERRED' | 'DEPRECATED_SOURCE';
+
+export type EvidenceVerificationStatus = EvidenceStatus | LegacyEvidenceStatusAlias;
+
+export const QUALIFYING_OFFICIAL_EVIDENCE_STATUSES: readonly EvidenceStatus[] = [
+  'VERIFIED_OFFICIAL',
+  'OFFICIAL_BUT_NOT_FULLY_CONFIRMED'
+] as const;
+
+export const INVALIDATING_EVIDENCE_STATUSES: readonly EvidenceStatus[] = [
+  'OUTDATED',
+  'BROKEN_LINK',
+  'REJECTED'
+] as const;
+
+/**
+ * Normalizes any raw or legacy evidence status into a canonical EvidenceStatus without
+ * discarding or falsely verifying uncertain records.
+ */
+export function normalizeEvidenceStatus(raw: unknown): EvidenceStatus {
+  if (typeof raw !== 'string') return 'NEEDS_REVIEW';
+  const trimmed = raw.trim().toUpperCase();
+  if (trimmed === 'SECONDARY_OR_INFERRED') return 'SECONDARY_SOURCE';
+  if (trimmed === 'DEPRECATED_SOURCE') return 'OUTDATED';
+  if ((EVIDENCE_STATUSES as readonly string[]).includes(trimmed)) {
+    return trimmed as EvidenceStatus;
+  }
+  return 'NEEDS_REVIEW';
+}
+
+export function isQualifyingOfficialEvidence(status: unknown): boolean {
+  const norm = normalizeEvidenceStatus(status);
+  return (QUALIFYING_OFFICIAL_EVIDENCE_STATUSES as readonly string[]).includes(norm);
+}
+
+export function isInvalidatingEvidenceStatus(status: unknown): boolean {
+  const norm = normalizeEvidenceStatus(status);
+  return (INVALIDATING_EVIDENCE_STATUSES as readonly string[]).includes(norm);
+}
+
+export type SectionVerificationState =
+  | 'VERIFIED'
+  | 'PARTIAL'
+  | 'AWAITING_VERIFICATION'
+  | 'NOT_APPLICABLE'
+  | 'UNKNOWN';
+
+export interface SectionMetadata {
+  sectionNumber: number;
+  sectionKey: string;
+  legacySectionCode: string | null;
+  title: string;
+  verificationState: SectionVerificationState;
+  requirementClassification: RequirementClassification | 'MIXED' | 'UNKNOWN';
+  applicabilityReason: string | null;
+  officialSourceUrl: string | null;
+  legalBasis: string | null;
+  lastVerifiedAt: string | null;
+  applicableNationality?: string | null;
+  countryIso?: string | null;
+  visaCategory?: string | null;
+  issuingAuthority?: string | null;
+  publicationDate?: string | null;
+  effectiveDate?: string | null;
+  reviewerNotes?: string | null;
+  supportingExcerpts?: string | null;
+}
+
+export interface ClassifiedRuleItem {
+  id?: string;
+  label: string;
+  value: string | number | boolean | null;
+  unit?: string | null;
+  requirementClassification: RequirementClassification;
+  applicableNationality: string; // ISO-2 code or 'ALL'
+  verificationStatus: string; // e.g., 'NEEDS_EVIDENCE' | 'VERIFIED_OFFICIAL'
+  legalReference?: string | null;
+  officialSourceUrl?: string | null;
+}
+
+// --- 30 SECTIONS INTERFACES ---
+
+export interface Section01CountryOverview {
+  meta: SectionMetadata;
+  name: string | null;
+  summary: string | null;
+  capital: string | null;
+  currency: string | null;
+  officialLanguage: string | null;
+  officialPortalUrl: string | null;
+  bestTravelSeason: string | null;
+  primaryImmigrationAgency: string | null;
+  borderControlAgency: string | null;
+  legalFrameworkSummary: string | null;
+  legacyFields: Record<string, any>;
+}
+
+export interface Section02VisaProgramOverview {
+  meta: SectionMetadata;
+  visaName: string | null;
+  officialProgramName: string | null;
+  statutoryCode: string | null;
+  category: string | null;
+  purpose: string | null;
+  stayDuration: string | null;
+  validity: string | null;
+  entryType: string | null;
+  feeSummary: string | null;
+  whoShouldApply: string | null;
+  whoShouldNotApply: string | null;
+  legacyFields: Record<string, any>;
+}
+
+export interface VisaSubcategoryStream {
+  streamCode: string;
+  streamName: string;
+  targetApplicant: string | null;
+  keyRulesSummary: string | null;
+  maxStay: string | null;
+  switchingPermitted: boolean | null;
+  requirementClassification: RequirementClassification;
+}
+
+export interface Section03CategoriesAndSubcategories {
+  meta: SectionMetadata;
+  streams: VisaSubcategoryStream[];
+  categoryHierarchyNotes: string | null;
+}
+
+export interface NationalitySpecificOverride {
+  nationalityIso: string; // e.g. 'IN', 'US', 'ALL'
+  visaRequired: boolean | null;
+  exemptionOrSpecialProgramName: string | null; // e.g., 'VWP / ESTA', 'eTA'
+  reciprocityFee: string | null;
+  maxValidityOverride: string | null;
+  biometricsExempt: boolean | null;
+  notes: string | null;
+  requirementClassification: RequirementClassification;
+}
+
+export interface Section04NationalitySpecificRules {
+  meta: SectionMetadata;
+  defaultRuleSummary: string | null;
+  exemptNationalities: string[];
+  restrictedNationalities: string[];
+  nationalityOverrides: NationalitySpecificOverride[];
+}
+
+export interface Section05CoreEligibilityRequirements {
+  meta: SectionMetadata;
+  summary: string | null;
+  minAge: number | string | null;
+  maxAge: number | string | null;
+  healthInsuranceRequired: boolean | null;
+  policeClearanceRequired: boolean | null;
+  characterAndGoodConductRules: string | null;
+  genuineIntentAndTiesCriteria: string | null;
+  classifiedRules: ClassifiedRuleItem[];
+  legacyFields: Record<string, any>;
+}
+
+export interface Section06EducationalQualifications {
+  meta: SectionMetadata;
+  educationLevel: string | null;
+  credentialEvaluationRequired: boolean | null;
+  designatedEvaluationBodies: string[];
+  professionalLicensingRules: string | null;
+  attestationOrApostilleRules: string | null;
+}
+
+export interface Section07EmploymentAndOccupation {
+  meta: SectionMetadata;
+  workExperienceYears: number | string | null;
+  occupationClassificationSystem: string | null; // e.g. 'NOC TEER', 'UK SOC 2020', 'ANZSCO'
+  eligibleOccupationCodes: string[];
+  shortageOccupationListUrl: string | null;
+  laborMarketTestRequired: boolean | null;
+  minSalaryThreshold: string | null;
+}
+
+export interface Section08LanguageRequirements {
+  meta: SectionMetadata;
+  languageRequirementSummary: string | null;
+  cefrOrClbLevel: string | null;
+  acceptedTestProviders: string[];
+  minScoresBySkill: {
+    reading: string | null;
+    writing: string | null;
+    listening: string | null;
+    speaking: string | null;
+    overall: string | null;
+  };
+  testValidityYears: number | null;
+  exemptions: string[];
+}
+
+export interface Section09FinancialAndProofOfFunds {
+  meta: SectionMetadata;
+  minBankBalance: string | number | null;
+  recommendedFunds: string | null;
+  currency: string | null;
+  fundRequirementClassification: RequirementClassification | 'UNKNOWN';
+  incomeRequirement: string | null;
+  bankStatementMonths: number | string | null;
+  itrRequirement: string | null;
+  dependentAdditionalFundsFormula: string | null;
+  acceptedProofTypes: string[];
+  unacceptedAssetTypes: string[];
+  notes: string | null;
+  legacyFields: Record<string, any>;
+}
+
+export interface Section10SponsorAndSponsorshipRules {
+  meta: SectionMetadata;
+  sponsorshipAllowed: boolean | null;
+  eligibleSponsorTypes: string[];
+  undertakingFormCode: string | null;
+  sponsorMinimumIncomeRequirement: string | null;
+  employerSponsorLicenseRequired: boolean | null;
+  sponsorshipNotes: string | null;
+}
+
+export interface ComprehensiveChecklistDocument {
+  name: string;
+  description: string | null;
+  mandatory: boolean;
+  applicantCategory: string | null;
+  format: string | null;
+  validityRequirements: string | null;
+  requirementClassification: RequirementClassification;
+  translationRequired: boolean | null;
+  apostilleOrNotarizationRequired: boolean | null;
+  issuingAuthority: string | null;
+  rawItem: Record<string, any>;
+}
+
+export interface Section11CompleteDocumentChecklist {
+  meta: SectionMetadata;
+  documents: ComprehensiveChecklistDocument[];
+}
+
+export interface Section12DocumentFormattingAndTechSpecs {
+  meta: SectionMetadata;
+  photoDimensionsMm: string | null;
+  photoBackgroundColor: string | null;
+  biometricPhotoRules: string | null;
+  acceptedFileFormats: string[];
+  maxFileSizeMb: number | null;
+  scannerDpiRequirement: number | null;
+  certifiedTranslationStandard: string | null;
+  apostilleAndLegalizationRules: string | null;
+}
+
+export interface ComprehensiveFormFieldGuide {
+  fieldName: string;
+  section: string | null;
+  type: string | null;
+  instructions: string | null;
+  commonMistake: string | null;
+  rawField: Record<string, any>;
+}
+
+export interface Section13OfficialFormsAndFieldGuide {
+  meta: SectionMetadata;
+  officialFormCode: string | null;
+  officialFormUrl: string | null;
+  sessionTimeoutWarning: string | null;
+  digitalSignatureRules: string | null;
+  fields: ComprehensiveFormFieldGuide[];
+  legacyFieldObject: Record<string, any> | null;
+}
+
+export interface ComprehensiveApplicationStep {
+  stepNumber: number;
+  title: string;
+  description: string | null;
+  channel: 'ONLINE_PORTAL' | 'VAC_IN_PERSON' | 'EMBASSY_CONSULATE' | 'BORDER_PORT' | 'MIXED' | 'UNKNOWN';
+  fees: string | null;
+  estimatedDuration: string | null;
+  appointmentRequired: string | boolean | null;
+  officialActionUrl: string | null;
+  rawStep: Record<string, any>;
+}
+
+export interface Section14StepByStepApplicationProcedure {
+  meta: SectionMetadata;
+  steps: ComprehensiveApplicationStep[];
+}
+
+export interface Section15AppointmentBiometricsAndMedical {
+  meta: SectionMetadata;
+  biometricsRequired: boolean | null;
+  biometricAgeRange: string | null;
+  biometricValidityPeriod: string | null;
+  vacOperatorName: string | null;
+  appointmentBookingUrl: string | null;
+  medicalExamRequired: boolean | null;
+  panelPhysicianDirectoryUrl: string | null;
+  requiredMedicalScreenings: string[];
+}
+
+export interface ComprehensiveInterviewQuestion {
+  question: string;
+  idealAnswerOrGuidance: string | null;
+  redFlag: string | null;
+  supportingDocs: string | null;
+  rawQuestion: Record<string, any>;
+}
+
+export interface Section16InterviewPreparationAndVerification {
+  meta: SectionMetadata;
+  interviewRequired: boolean | null;
+  interviewWaiverEligibility: string | null;
+  requiredDocumentsAtWindow: string[];
+  backgroundVerificationProcess: string | null;
+  administrativeProcessingInfo: string | null;
+  tips: string | null;
+  questions: ComprehensiveInterviewQuestion[];
+  legacyFields: Record<string, any>;
+}
+
+export interface ConsularFacilityItem {
+  name: string | null;
+  city: string | null;
+  facilityType: 'EMBASSY' | 'CONSULATE' | 'VAC' | 'UNKNOWN';
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  bookingUrl: string | null;
+  jurisdictionCoverage: string | null;
+  operatingHours: string | null;
+  rawFacility: Record<string, any>;
+}
+
+export interface Section17EmbassyConsulateAndVacDirectory {
+  meta: SectionMetadata;
+  facilities: ConsularFacilityItem[];
+}
+
+export interface OptionalOrThirdPartyCostItem {
+  label: string;
+  amount: string | number;
+  currency: string | null;
+  requirementClassification: RequirementClassification;
+}
+
+export interface Section18OfficialFeesAndCostBreakdown {
+  meta: SectionMetadata;
+  governmentFee: string | number | null;
+  serviceOrVacFee: string | number | null;
+  biometricFee: string | number | null;
+  healthcareSurcharge: string | number | null;
+  priorityProcessingFee: string | number | null;
+  issuanceReciprocityFeeNote: string | null;
+  currency: string | null;
+  isRefundableOnRefusal: boolean | null;
+  acceptedPaymentMethods: string[];
+  optionalCosts: OptionalOrThirdPartyCostItem[];
+  legacyFields: Record<string, any>;
+}
+
+export interface Section19ProcessingTimesAndTimelines {
+  meta: SectionMetadata;
+  standardProcessingWindow: string | null;
+  peakSeasonProcessingWindow: string | null;
+  earliestApplyDaysBeforeTravel: number | null;
+  recommendedLeadTimeDays: number | null;
+  expeditedProcessingAvailable: boolean | null;
+  officialLiveWaitTimeUrl: string | null;
+}
+
+export interface Section20VisaConditionsAndPermittedActivities {
+  meta: SectionMetadata;
+  visaValidityVsStayDurationRule: string | null;
+  authorizedStayDuration: string | null;
+  rollingStayWindowRule: string | null; // e.g. '90 days in any 180-day period'
+  permittedActivities: string[];
+  prohibitedActivities: string[];
+  noRecourseToPublicFundsRule: string | null;
+}
+
+export interface Section21WorkAuthorizationAndEmployment {
+  meta: SectionMetadata;
+  workRightsSummary: string | null;
+  workPermitted: boolean | null;
+  authorizationType: 'NONE' | 'EMPLOYER_TIED' | 'OPEN_WORK' | 'RESTRICTED_HOURS' | 'BUSINESS_VISITOR_ONLY' | 'UNKNOWN';
+  maxHoursPerWeekTermTime: number | null;
+  maxHoursPerWeekHolidays: number | null;
+  selfEmploymentOrFreelanceAllowed: boolean | null;
+  remoteWorkForForeignEmployerAllowed: boolean | null;
+}
+
+export interface Section22StudyAuthorizationAndAcademicRules {
+  meta: SectionMetadata;
+  studyPermitted: boolean | null;
+  maxShortCourseDuration: string | null;
+  designatedInstitutionRequired: boolean | null;
+  institutionChangeRules: string | null;
+  attendanceComplianceRules: string | null;
+}
+
+export interface Section23FamilyAndDependentRules {
+  meta: SectionMetadata;
+  dependentsAllowed: boolean | null;
+  eligibleRelationships: string[];
+  maxDependentChildAge: number | null;
+  dependentWorkRights: string | null;
+  dependentStudyRights: string | null;
+  separateApplicationRequired: boolean | null;
+  dependentFinancialRequirementNote: string | null;
+}
+
+export interface Section24TravelPreparationAndPreDeparture {
+  meta: SectionMetadata;
+  travelInsuranceMandatory: boolean | null;
+  minInsuranceCoverageAmount: string | null;
+  onwardOrReturnTicketRequired: boolean | null;
+  accommodationProofRequired: boolean | null;
+  customsAndMedicationRules: string | null;
+}
+
+export interface Section25ArrivalBorderControlAndEntry {
+  meta: SectionMetadata;
+  entryRequirementsSummary: string | null;
+  visaDoesNotGuaranteeEntryWarning: string;
+  digitalArrivalCardName: string | null;
+  digitalArrivalCardUrl: string | null;
+  handLuggageDocuments: string[];
+  borderInspectionTopics: string[];
+  admissionStampAndI94VerificationRule: string | null;
+}
+
+export interface Section26PostArrivalRegistrationAndCompliance {
+  meta: SectionMetadata;
+  registrationRequirementsSummary: string | null;
+  localRegistrationRequired: boolean | null;
+  registrationAuthorityName: string | null;
+  registrationDeadlineDays: number | null;
+  residencePermitCollectionRule: string | null;
+  taxIdApplicationProcess: string | null;
+  addressChangeReportingRule: string | null;
+  legacyFields: Record<string, any>;
+}
+
+export interface Section27RenewalExtensionAndStatusChange {
+  meta: SectionMetadata;
+  extensionPossible: boolean | string | null;
+  extensionFormCode: string | null;
+  recommendedApplyDaysBeforeExpiry: number | null;
+  maintainedStatusWhilePendingRule: string | null;
+  inCountrySwitchingAllowed: boolean | null;
+  eligibleSwitchTargets: string[];
+  employerOrSponsorChangeRule: string | null;
+}
+
+export interface Section28RefusalAppealAndReapplication {
+  meta: SectionMetadata;
+  commonRefusalReasons: string[];
+  statutoryRefusalCodes: string[];
+  appealPossible: boolean | null;
+  reviewType: 'ADMINISTRATIVE_REVIEW' | 'STATUTORY_APPEAL' | 'REMONSTRATION' | 'JUDICIAL_REVIEW' | 'REAPPLICATION_ONLY' | 'UNKNOWN';
+  appellateBodyName: string | null;
+  appealDeadlineDays: number | string | null;
+  reapplicationWaitDays: number | string | null;
+  appealAndReapplicationProcedure: string | null;
+  legacyFields: Record<string, any>;
+}
+
+export interface Section29PermanentResidenceAndCitizenship {
+  meta: SectionMetadata;
+  settlementPathSummary: string | null;
+  countsTowardPermanentResidence: boolean | null;
+  minYearsToPermanentResidence: number | null;
+  maxAbsenceDaysPerYearForPr: number | null;
+  prLanguageAndCivicRequirements: string | null;
+  minYearsToCitizenship: number | null;
+  dualCitizenshipPermitted: boolean | null;
+}
+
+export interface ComprehensiveFaqItem {
+  question: string;
+  answer: string;
+  verificationStatus: string | null;
+  requirementClassification: RequirementClassification;
+  rawFaq: Record<string, any>;
+}
+
+export interface Section30FaqsEdgeCasesAndOfficialSources {
+  meta: SectionMetadata;
+  faqs: ComprehensiveFaqItem[];
+  legalEvidenceItems: Record<string, any>[];
+}
+
+// --- 22 ADDITIONAL APPLICANT INFORMATION SPECIAL TOPICS ---
+
+export interface ApplicantSpecialTopicEntry {
+  topicNumber: number;
+  topicKey: string;
+  title: string;
+  verificationState: SectionVerificationState;
+  requirementClassification: RequirementClassification | 'UNKNOWN';
+  summary: string | null;
+  details: Record<string, any>;
+  officialSourceUrl: string | null;
+  legalReference: string | null;
+  applicabilityReason?: string | null;
+  applicableNationality?: string | null;
+  countryIso?: string | null;
+  visaCategory?: string | null;
+  issuingAuthority?: string | null;
+  publicationDate?: string | null;
+  effectiveDate?: string | null;
+  lastVerifiedAt?: string | null;
+  reviewerNotes?: string | null;
+  supportingExcerpts?: string | null;
+}
+
+export interface VisaApplicantSpecialTopics {
+  t01_passportValidityAndBlankPages: ApplicantSpecialTopicEntry & {
+    minPassportValidityMonthsBeyondStay: number | null;
+    minBlankPages: number | null;
+  };
+  t02_priorRefusalsAndViolations: ApplicantSpecialTopicEntry & {
+    mandatoryDisclosureRequired: boolean | null;
+    waiverFormCode: string | null;
+  };
+  t03_criminalRecordAndPoliceClearance: ApplicantSpecialTopicEntry & {
+    pccTriggerRule: string | null;
+    certificateMaxAgeMonths: number | null;
+  };
+  t04_medicalVaccinationsAndHealthInsurance: ApplicantSpecialTopicEntry & {
+    mandatoryVaccinations: string[];
+    medicalInadmissibilityGrounds: string | null;
+  };
+  t05_minorsParentalConsentAndCustody: ApplicantSpecialTopicEntry & {
+    notarizedParentalConsentRequired: boolean | null;
+    custodyOrderRules: string | null;
+  };
+  t06_elderlyAndAccessibilityAccommodations: ApplicantSpecialTopicEntry & {
+    biometricAgeExemptionRule: string | null;
+    interviewAgeWaiverRule: string | null;
+    accessibilityRequestProcedure: string | null;
+  };
+  t07_dualNationalityAndStatelessDocuments: ApplicantSpecialTopicEntry & {
+    dualCitizenEntryPassportRule: string | null;
+    refugeeTravelDocumentAccepted: boolean | null;
+  };
+  t08_thirdCountryApplicationRules: ApplicantSpecialTopicEntry & {
+    nonResidentApplicationAllowed: boolean | null;
+    proofOfLegalResidenceRequired: boolean | null;
+  };
+  t09_transitAndAirportTransitRules: ApplicantSpecialTopicEntry & {
+    airsideTransitVisaRequired: boolean | null;
+    thirdCountryVisaExemptions: string[];
+  };
+  t10_borderEntryRefusalVsVisaApproval: ApplicantSpecialTopicEntry & {
+    portOfEntryAuthorityName: string | null;
+    secondaryInspectionProcedure: string | null;
+  };
+  t11_customsCashAndProhibitedItems: ApplicantSpecialTopicEntry & {
+    cashDeclarationThreshold: string | null;
+    prohibitedItemsSummary: string | null;
+  };
+  t12_taxResidencyImplications: ApplicantSpecialTopicEntry & {
+    statutoryDayCountTrigger: number | null;
+    taxAuthorityUrl: string | null;
+  };
+  t13_socialSecurityHealthcareAndPublicFunds: ApplicantSpecialTopicEntry & {
+    publicFundsProhibited: boolean | null;
+    publicHealthcareEligible: boolean | null;
+  };
+  t14_addressEmployerAndStatusChangeReporting: ApplicantSpecialTopicEntry & {
+    addressChangeReportingDeadlineDays: number | null;
+    reportingFormOrPortal: string | null;
+  };
+  t15_rightsWhileApplicationOrRenewalPending: ApplicantSpecialTopicEntry & {
+    maintainedOrBridgingStatusApplies: boolean | null;
+    workRightsContinueWhilePending: boolean | null;
+  };
+  t16_travelOutsideCountryWhilePending: ApplicantSpecialTopicEntry & {
+    leavingCancelsPendingApplication: boolean | null;
+    advanceParoleOrReEntryPermitRequired: boolean | null;
+  };
+  t17_lostOrStolenPassportOrResidenceCard: ApplicantSpecialTopicEntry & {
+    policeReportRequired: boolean | null;
+    replacementVisaOrTransferProcedure: string | null;
+  };
+  t18_visaCancellationCurtailmentAndRevocation: ApplicantSpecialTopicEntry & {
+    curtailmentGracePeriodDays: number | null;
+    revocationGroundsSummary: string | null;
+  };
+  t19_overstayConsequencesFinesAndBans: ApplicantSpecialTopicEntry & {
+    reEntryBanThresholds: string | null;
+    dailyFineOrPenaltyRule: string | null;
+  };
+  t20_immigrationLawChangesDuringProcessing: ApplicantSpecialTopicEntry & {
+    filingDateVsDecisionDateRule: string | null;
+  };
+  t21_humanitarianAsylumAndProtectionDisclaimers: ApplicantSpecialTopicEntry & {
+    officialProtectionAgencyUrl: string | null;
+  };
+  t22_licensedImmigrationAdvisorGuidance: ApplicantSpecialTopicEntry & {
+    officialRegulatorName: string | null;
+    officialRegulatorVerifyUrl: string | null;
+  };
+}
+
+export interface VisaComprehensiveProfile {
+  schemaVersion: '3.1.0';
+  id: string;
+  programId: string;
+  verificationStatus: string;
+  lastUpdated: string | null;
+  sections: {
+    s01_countryOverview: Section01CountryOverview;
+    s02_visaProgramOverview: Section02VisaProgramOverview;
+    s03_categoriesAndSubcategories: Section03CategoriesAndSubcategories;
+    s04_nationalitySpecificRules: Section04NationalitySpecificRules;
+    s05_coreEligibilityRequirements: Section05CoreEligibilityRequirements;
+    s06_educationalQualifications: Section06EducationalQualifications;
+    s07_employmentAndOccupation: Section07EmploymentAndOccupation;
+    s08_languageRequirements: Section08LanguageRequirements;
+    s09_financialAndProofOfFunds: Section09FinancialAndProofOfFunds;
+    s10_sponsorAndSponsorshipRules: Section10SponsorAndSponsorshipRules;
+    s11_completeDocumentChecklist: Section11CompleteDocumentChecklist;
+    s12_documentFormattingAndTechSpecs: Section12DocumentFormattingAndTechSpecs;
+    s13_officialFormsAndFieldGuide: Section13OfficialFormsAndFieldGuide;
+    s14_stepByStepApplicationProcedure: Section14StepByStepApplicationProcedure;
+    s15_appointmentBiometricsAndMedical: Section15AppointmentBiometricsAndMedical;
+    s16_interviewPreparationAndVerification: Section16InterviewPreparationAndVerification;
+    s17_embassyConsulateAndVacDirectory: Section17EmbassyConsulateAndVacDirectory;
+    s18_officialFeesAndCostBreakdown: Section18OfficialFeesAndCostBreakdown;
+    s19_processingTimesAndTimelines: Section19ProcessingTimesAndTimelines;
+    s20_visaConditionsAndPermittedActivities: Section20VisaConditionsAndPermittedActivities;
+    s21_workAuthorizationAndEmployment: Section21WorkAuthorizationAndEmployment;
+    s22_studyAuthorizationAndAcademicRules: Section22StudyAuthorizationAndAcademicRules;
+    s23_familyAndDependentRules: Section23FamilyAndDependentRules;
+    s24_travelPreparationAndPreDeparture: Section24TravelPreparationAndPreDeparture;
+    s25_arrivalBorderControlAndEntry: Section25ArrivalBorderControlAndEntry;
+    s26_postArrivalRegistrationAndCompliance: Section26PostArrivalRegistrationAndCompliance;
+    s27_renewalExtensionAndStatusChange: Section27RenewalExtensionAndStatusChange;
+    s28_refusalAppealAndReapplication: Section28RefusalAppealAndReapplication;
+    s29_permanentResidenceAndCitizenship: Section29PermanentResidenceAndCitizenship;
+    s30_faqsEdgeCasesAndOfficialSources: Section30FaqsEdgeCasesAndOfficialSources;
+  };
+  applicantSpecialTopics: VisaApplicantSpecialTopics;
+  legacy13Snapshot: {
+    countryOverview: Record<string, any>;
+    visaOverview: Record<string, any>;
+    eligibility: Record<string, any>;
+    financial: Record<string, any>;
+    documentChecklist: any[];
+    applicationFields: any;
+    applicationSteps: any[];
+    interviewPrep: Record<string, any>;
+    embassyDirectory: any[];
+    refusalAppeal: Record<string, any>;
+    afterApproval: Record<string, any>;
+    costCalculator: Record<string, any>;
+    faq: any[];
+    legalEvidence: any[];
+  };
+}
+
+// --- HELPER CONSTRUCTORS ---
+
+function makeMeta(
+  sectionNumber: number,
+  sectionKey: string,
+  title: string,
+  legacySectionCode: string | null,
+  hasData: boolean,
+  lastVerifiedAt: string | null,
+  officialSourceUrl: string | null = null,
+  requirementClassification: RequirementClassification | 'MIXED' | 'UNKNOWN' = 'UNKNOWN'
+): SectionMetadata {
+  return {
+    sectionNumber,
+    sectionKey,
+    legacySectionCode,
+    title,
+    verificationState: hasData ? 'PARTIAL' : 'AWAITING_VERIFICATION',
+    requirementClassification,
+    applicabilityReason: null,
+    officialSourceUrl,
+    legalBasis: null,
+    lastVerifiedAt
+  };
+}
+
+function makeTopicBase(
+  topicNumber: number,
+  topicKey: string,
+  title: string
+): ApplicantSpecialTopicEntry {
+  return {
+    topicNumber,
+    topicKey,
+    title,
+    verificationState: 'AWAITING_VERIFICATION',
+    requirementClassification: 'UNKNOWN',
+    summary: null,
+    details: {},
+    officialSourceUrl: null,
+    legalReference: null
+  };
+}
+
+export function createDefaultApplicantSpecialTopics(): VisaApplicantSpecialTopics {
+  return {
+    t01_passportValidityAndBlankPages: {
+      ...makeTopicBase(1, 't01_passportValidityAndBlankPages', 'Passport validity and blank pages'),
+      minPassportValidityMonthsBeyondStay: null,
+      minBlankPages: null
+    },
+    t02_priorRefusalsAndViolations: {
+      ...makeTopicBase(2, 't02_priorRefusalsAndViolations', 'Prior visa refusals, deportations and immigration violations'),
+      mandatoryDisclosureRequired: null,
+      waiverFormCode: null
+    },
+    t03_criminalRecordAndPoliceClearance: {
+      ...makeTopicBase(3, 't03_criminalRecordAndPoliceClearance', 'Criminal record and police clearance certificates'),
+      pccTriggerRule: null,
+      certificateMaxAgeMonths: null
+    },
+    t04_medicalVaccinationsAndHealthInsurance: {
+      ...makeTopicBase(4, 't04_medicalVaccinationsAndHealthInsurance', 'Medical conditions, vaccinations and health insurance'),
+      mandatoryVaccinations: [],
+      medicalInadmissibilityGrounds: null
+    },
+    t05_minorsParentalConsentAndCustody: {
+      ...makeTopicBase(5, 't05_minorsParentalConsentAndCustody', 'Minors, parental consent and custody rules'),
+      notarizedParentalConsentRequired: null,
+      custodyOrderRules: null
+    },
+    t06_elderlyAndAccessibilityAccommodations: {
+      ...makeTopicBase(6, 't06_elderlyAndAccessibilityAccommodations', 'Elderly applicants and accessibility accommodations'),
+      biometricAgeExemptionRule: null,
+      interviewAgeWaiverRule: null,
+      accessibilityRequestProcedure: null
+    },
+    t07_dualNationalityAndStatelessDocuments: {
+      ...makeTopicBase(7, 't07_dualNationalityAndStatelessDocuments', 'Dual nationality and stateless/refugee travel documents'),
+      dualCitizenEntryPassportRule: null,
+      refugeeTravelDocumentAccepted: null
+    },
+    t08_thirdCountryApplicationRules: {
+      ...makeTopicBase(8, 't08_thirdCountryApplicationRules', 'Applying from a third country (residence vs citizenship)'),
+      nonResidentApplicationAllowed: null,
+      proofOfLegalResidenceRequired: null
+    },
+    t09_transitAndAirportTransitRules: {
+      ...makeTopicBase(9, 't09_transitAndAirportTransitRules', 'Transit visa and airport transit rules'),
+      airsideTransitVisaRequired: null,
+      thirdCountryVisaExemptions: []
+    },
+    t10_borderEntryRefusalVsVisaApproval: {
+      ...makeTopicBase(10, 't10_borderEntryRefusalVsVisaApproval', 'Border entry refusal vs visa approval'),
+      portOfEntryAuthorityName: null,
+      secondaryInspectionProcedure: null
+    },
+    t11_customsCashAndProhibitedItems: {
+      ...makeTopicBase(11, 't11_customsCashAndProhibitedItems', 'Customs, cash declaration and prohibited items'),
+      cashDeclarationThreshold: null,
+      prohibitedItemsSummary: null
+    },
+    t12_taxResidencyImplications: {
+      ...makeTopicBase(12, 't12_taxResidencyImplications', 'Tax residency implications of long stays'),
+      statutoryDayCountTrigger: null,
+      taxAuthorityUrl: null
+    },
+    t13_socialSecurityHealthcareAndPublicFunds: {
+      ...makeTopicBase(13, 't13_socialSecurityHealthcareAndPublicFunds', 'Social security, healthcare access and public funds restrictions'),
+      publicFundsProhibited: null,
+      publicHealthcareEligible: null
+    },
+    t14_addressEmployerAndStatusChangeReporting: {
+      ...makeTopicBase(14, 't14_addressEmployerAndStatusChangeReporting', 'Address change, employer change and status change reporting'),
+      addressChangeReportingDeadlineDays: null,
+      reportingFormOrPortal: null
+    },
+    t15_rightsWhileApplicationOrRenewalPending: {
+      ...makeTopicBase(15, 't15_rightsWhileApplicationOrRenewalPending', 'Rights while an application or renewal is pending'),
+      maintainedOrBridgingStatusApplies: null,
+      workRightsContinueWhilePending: null
+    },
+    t16_travelOutsideCountryWhilePending: {
+      ...makeTopicBase(16, 't16_travelOutsideCountryWhilePending', 'Travel outside the country while an application is pending'),
+      leavingCancelsPendingApplication: null,
+      advanceParoleOrReEntryPermitRequired: null
+    },
+    t17_lostOrStolenPassportOrResidenceCard: {
+      ...makeTopicBase(17, 't17_lostOrStolenPassportOrResidenceCard', 'Lost or stolen passport, visa foil or residence card'),
+      policeReportRequired: null,
+      replacementVisaOrTransferProcedure: null
+    },
+    t18_visaCancellationCurtailmentAndRevocation: {
+      ...makeTopicBase(18, 't18_visaCancellationCurtailmentAndRevocation', 'Visa cancellation, curtailment and revocation'),
+      curtailmentGracePeriodDays: null,
+      revocationGroundsSummary: null
+    },
+    t19_overstayConsequencesFinesAndBans: {
+      ...makeTopicBase(19, 't19_overstayConsequencesFinesAndBans', 'Overstay consequences, fines, detention and re-entry bans'),
+      reEntryBanThresholds: null,
+      dailyFineOrPenaltyRule: null
+    },
+    t20_immigrationLawChangesDuringProcessing: {
+      ...makeTopicBase(20, 't20_immigrationLawChangesDuringProcessing', 'Immigration law changes during processing'),
+      filingDateVsDecisionDateRule: null
+    },
+    t21_humanitarianAsylumAndProtectionDisclaimers: {
+      ...makeTopicBase(21, 't21_humanitarianAsylumAndProtectionDisclaimers', 'Humanitarian, asylum, refugee and special protection disclaimers'),
+      officialProtectionAgencyUrl: null
+    },
+    t22_licensedImmigrationAdvisorGuidance: {
+      ...makeTopicBase(22, 't22_licensedImmigrationAdvisorGuidance', 'When to consult a licensed immigration lawyer or regulated advisor'),
+      officialRegulatorName: null,
+      officialRegulatorVerifyUrl: null
+    }
+  };
+}
+
+function hasNonEmptyKeys(obj: unknown): boolean {
+  if (!obj || typeof obj !== 'object') return false;
+  if (Array.isArray(obj)) return obj.length > 0;
+  return Object.keys(obj).some(k => {
+    const v = (obj as any)[k];
+    return v !== undefined && v !== null && v !== '';
+  });
+}
+
+/**
+ * Pure, deterministic, lossless mapper from any existing 13-section (A–M) visa_details record
+ * into the complete 30-Section + 22-Applicant-Topic VisaComprehensiveProfile model.
+ *
+ * Guarantees:
+ * - Zero data loss: All existing A–M fields are mapped into the relevant 30 sections AND
+ *   retained in `legacy13Snapshot` and per-section `legacyFields`.
+ * - Zero fabrication: Unpopulated fields remain explicitly `null` or `[]` with
+ *   `verificationState: 'AWAITING_VERIFICATION'`.
+ * - No automatic verification: AI or unverified values are never promoted to VERIFIED.
+ */
+export function normalizeVisaDetailTo30Sections(record: any): VisaComprehensiveProfile {
+  const rec = record || {};
+  const lastUpdated: string | null = rec.lastUpdated ?? rec.last_updated ?? null;
+  const verificationStatus: string = rec.verificationStatus ?? rec.verification_status ?? 'DRAFT';
+
+  const co = rec.countryOverview && typeof rec.countryOverview === 'object' ? rec.countryOverview : {};
+  const vo = rec.visaOverview && typeof rec.visaOverview === 'object' ? rec.visaOverview : {};
+  const el = rec.eligibility && typeof rec.eligibility === 'object' ? rec.eligibility : {};
+  const fi = rec.financial && typeof rec.financial === 'object' ? rec.financial : {};
+  const dc = Array.isArray(rec.documentChecklist) ? rec.documentChecklist : [];
+  const af = rec.applicationFields !== undefined && rec.applicationFields !== null ? rec.applicationFields : [];
+  const as = Array.isArray(rec.applicationSteps) ? rec.applicationSteps : [];
+  const ip = rec.interviewPrep && typeof rec.interviewPrep === 'object' ? rec.interviewPrep : {};
+  const ed = Array.isArray(rec.embassyDirectory) ? rec.embassyDirectory : [];
+  const ra = rec.refusalAppeal && typeof rec.refusalAppeal === 'object' ? rec.refusalAppeal : {};
+  const aa = rec.afterApproval && typeof rec.afterApproval === 'object' ? rec.afterApproval : {};
+  const cc = rec.costCalculator && typeof rec.costCalculator === 'object' ? rec.costCalculator : {};
+  const fq = Array.isArray(rec.faq) ? rec.faq : [];
+  const le = Array.isArray(rec.legalEvidence) ? rec.legalEvidence : [];
+
+  const existingComp =
+    rec.comprehensiveSections &&
+    typeof rec.comprehensiveSections === 'object' &&
+    rec.comprehensiveSections.sections
+      ? (rec.comprehensiveSections as Partial<VisaComprehensiveProfile>)
+      : null;
+
+  const s01Has = hasNonEmptyKeys(co);
+  const s02Has = hasNonEmptyKeys(vo);
+  const s05Has = hasNonEmptyKeys(el);
+  const s06Has = Boolean(el.educationLevel);
+  const s07Has = el.workExperienceYears !== undefined && el.workExperienceYears !== null && el.workExperienceYears !== '';
+  const s08Has = Boolean(el.languageRequirement);
+  const s09Has = hasNonEmptyKeys(fi);
+  const s10Has = fi.sponsorshipAllowed !== undefined && fi.sponsorshipAllowed !== null;
+  const s11Has = dc.length > 0;
+  const s12Has = dc.some((d: any) => Boolean(d?.format));
+  const s13Has = Array.isArray(af) ? af.length > 0 : hasNonEmptyKeys(af);
+  const s14Has = as.length > 0;
+  const s16Has = hasNonEmptyKeys(ip);
+  const s17Has = ed.length > 0;
+  const s18Has = hasNonEmptyKeys(cc) || Boolean(vo.fee);
+  const s20Has = Boolean(vo.stayDuration || vo. stay || vo.validity || vo.entryType || aa.authorizedStay);
+  const s21Has = Boolean(aa.workRights);
+  const s25Has = Boolean(aa.entryRequirements);
+  const s26Has = Boolean(aa.registrationRequirements);
+  const s27Has = aa.extensionPossible !== undefined && aa.extensionPossible !== null;
+  const s28Has = hasNonEmptyKeys(ra);
+  const s29Has = Boolean(aa.settlementPath);
+  const s30Has = fq.length > 0 || le.length > 0;
+
+  const normalizedFields: ComprehensiveFormFieldGuide[] = Array.isArray(af)
+    ? af.map((f: any) => ({
+        fieldName: f?.fieldName ?? f?.name ?? '',
+        section: f?.section ?? null,
+        type: f?.type ?? null,
+        instructions: f?.instructions ?? f?.guidance ?? null,
+        commonMistake: f?.commonMistake ?? null,
+        rawField: { ...f }
+      }))
+    : hasNonEmptyKeys(af)
+    ? Object.entries(af).map(([k, v]) => ({
+        fieldName: k,
+        section: null,
+        type: 'TEXT',
+        instructions: typeof v === 'string' ? v : JSON.stringify(v),
+        commonMistake: null,
+        rawField: { [k]: v }
+      }))
+    : [];
+
+  const specialTopics = createDefaultApplicantSpecialTopics();
+  if (el.policeClearanceRequired !== undefined) {
+    specialTopics.t03_criminalRecordAndPoliceClearance.details = {
+      policeClearanceRequired: el.policeClearanceRequired
+    };
+    specialTopics.t03_criminalRecordAndPoliceClearance.verificationState = 'PARTIAL';
+  }
+  if (el.healthInsuranceRequired !== undefined) {
+    specialTopics.t04_medicalVaccinationsAndHealthInsurance.details = {
+      healthInsuranceRequired: el.healthInsuranceRequired
+    };
+    specialTopics.t04_medicalVaccinationsAndHealthInsurance.verificationState = 'PARTIAL';
+  }
+
+  const baseProfile: VisaComprehensiveProfile = {
+    schemaVersion: '3.1.0',
+    id: rec.id || `vd-${rec.programId || 'unknown'}`,
+    programId: rec.programId || rec.program_id || '',
+    verificationStatus,
+    lastUpdated,
+    sections: {
+      s01_countryOverview: {
+        meta: makeMeta(1, 's01_countryOverview', 'Country Overview', 'A', s01Has, lastUpdated, co.officialPortalUrl ?? null),
+        name: co.name ?? null,
+        summary: co.summary ?? null,
+        capital: co.capital ?? null,
+        currency: co.currency ?? null,
+        officialLanguage: co.language ?? co.officialLanguage ?? null,
+        officialPortalUrl: co.officialPortalUrl ?? null,
+        bestTravelSeason: co.bestTravelSeason ?? null,
+        primaryImmigrationAgency: co.primaryImmigrationAgency ?? null,
+        borderControlAgency: co.borderControlAgency ?? null,
+        legalFrameworkSummary: co.legalFrameworkSummary ?? null,
+        legacyFields: { ...co }
+      },
+      s02_visaProgramOverview: {
+        meta: makeMeta(2, 's02_visaProgramOverview', 'Visa Program Overview', 'B', s02Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        visaName: vo.visaName ?? vo.name ?? null,
+        officialProgramName: vo.officialProgramName ?? vo.visaName ?? vo.name ?? null,
+        statutoryCode: vo.code ?? vo.statutoryCode ?? null,
+        category: vo.category ?? null,
+        purpose: vo.purpose ?? null,
+        stayDuration: vo.stayDuration ?? vo.stay ?? null,
+        validity: vo.validity ?? null,
+        entryType: vo.entryType ?? null,
+        feeSummary: vo.fee ?? null,
+        whoShouldApply: vo.whoShouldApply ?? null,
+        whoShouldNotApply: vo.whoShouldNotApply ?? null,
+        legacyFields: { ...vo }
+      },
+      s03_categoriesAndSubcategories: {
+        meta: makeMeta(3, 's03_categoriesAndSubcategories', 'Available Visa Categories & Subcategories', null, false, lastUpdated),
+        streams: [],
+        categoryHierarchyNotes: null
+      },
+      s04_nationalitySpecificRules: {
+        meta: makeMeta(4, 's04_nationalitySpecificRules', 'Nationality-Specific Eligibility Rules', null, false, lastUpdated),
+        defaultRuleSummary: null,
+        exemptNationalities: [],
+        restrictedNationalities: [],
+        nationalityOverrides: []
+      },
+      s05_coreEligibilityRequirements: {
+        meta: makeMeta(5, 's05_coreEligibilityRequirements', 'Core Eligibility Requirements', 'C', s05Has, lastUpdated, null, 'MIXED'),
+        summary: el.summary ?? null,
+        minAge: el.minAge ?? null,
+        maxAge: el.maxAge ?? null,
+        healthInsuranceRequired: el.healthInsuranceRequired ?? null,
+        policeClearanceRequired: el.policeClearanceRequired ?? null,
+        characterAndGoodConductRules: el.characterRequirements ?? null,
+        genuineIntentAndTiesCriteria: el.intentAndTiesCriteria ?? null,
+        classifiedRules: Array.isArray(el.classifiedRules) ? el.classifiedRules : [],
+        legacyFields: { ...el }
+      },
+      s06_educationalQualifications: {
+        meta: makeMeta(6, 's06_educationalQualifications', 'Educational Qualification & Credential Rules', 'C', s06Has, lastUpdated),
+        educationLevel: el.educationLevel ?? null,
+        credentialEvaluationRequired: null,
+        designatedEvaluationBodies: [],
+        professionalLicensingRules: null,
+        attestationOrApostilleRules: null
+      },
+      s07_employmentAndOccupation: {
+        meta: makeMeta(7, 's07_employmentAndOccupation', 'Employment, Occupation & Experience Rules', 'C', s07Has, lastUpdated),
+        workExperienceYears: el.workExperienceYears ?? null,
+        occupationClassificationSystem: null,
+        eligibleOccupationCodes: [],
+        shortageOccupationListUrl: null,
+        laborMarketTestRequired: null,
+        minSalaryThreshold: null
+      },
+      s08_languageRequirements: {
+        meta: makeMeta(8, 's08_languageRequirements', 'Language Requirements', 'C', s08Has, lastUpdated),
+        languageRequirementSummary: el.languageRequirement ?? null,
+        cefrOrClbLevel: null,
+        acceptedTestProviders: [],
+        minScoresBySkill: {
+          reading: null,
+          writing: null,
+          listening: null,
+          speaking: null,
+          overall: null
+        },
+        testValidityYears: null,
+        exemptions: []
+      },
+      s09_financialAndProofOfFunds: {
+        meta: makeMeta(
+          9,
+          's09_financialAndProofOfFunds',
+          'Financial Requirements & Proof of Funds',
+          'D',
+          s09Has,
+          lastUpdated,
+          null,
+          fi.fundClassification && isValidRequirementClassification(fi.fundClassification)
+            ? fi.fundClassification
+            : 'UNKNOWN'
+        ),
+        minBankBalance: fi.minBankBalance ?? null,
+        recommendedFunds: fi.recommendedFunds ?? null,
+        currency: fi.currency ?? null,
+        fundRequirementClassification:
+          fi.fundClassification && isValidRequirementClassification(fi.fundClassification)
+            ? fi.fundClassification
+            : 'UNKNOWN',
+        incomeRequirement: fi.incomeRequirement ?? null,
+        bankStatementMonths: fi.bankStatementMonths ?? null,
+        itrRequirement: fi.itrRequirement ?? null,
+        dependentAdditionalFundsFormula: fi.dependentAdditionalAmount ?? null,
+        acceptedProofTypes: Array.isArray(fi.acceptedProofTypes) ? fi.acceptedProofTypes : [],
+        unacceptedAssetTypes: Array.isArray(fi.unacceptedAssets) ? fi.unacceptedAssets : [],
+        notes: fi.notes ?? null,
+        legacyFields: { ...fi }
+      },
+      s10_sponsorAndSponsorshipRules: {
+        meta: makeMeta(10, 's10_sponsorAndSponsorshipRules', 'Sponsor & Financial Sponsorship Rules', 'D', s10Has, lastUpdated),
+        sponsorshipAllowed: fi.sponsorshipAllowed ?? null,
+        eligibleSponsorTypes: [],
+        undertakingFormCode: null,
+        sponsorMinimumIncomeRequirement: null,
+        employerSponsorLicenseRequired: null,
+        sponsorshipNotes: null
+      },
+      s11_completeDocumentChecklist: {
+        meta: makeMeta(11, 's11_completeDocumentChecklist', 'Complete Document Checklist', 'E', s11Has, lastUpdated, null, 'CONSULAR_CHECKLIST'),
+        documents: dc.map((d: any) => ({
+          name: d?.name ?? d?.item ?? '',
+          description: d?.description ?? null,
+          mandatory: Boolean(d?.mandatory),
+          applicantCategory: d?.applicantCategory ?? null,
+          format: d?.format ?? null,
+          validityRequirements: d?.validityRequirements ?? null,
+          requirementClassification: isValidRequirementClassification(d?.requirementClassification)
+            ? d.requirementClassification
+            : d?.mandatory
+            ? 'CONSULAR_CHECKLIST'
+            : 'PRACTICAL_RECOMMENDATION',
+          translationRequired: d?.translationRequired ?? null,
+          apostilleOrNotarizationRequired: d?.apostilleOrNotarizationRequired ?? null,
+          issuingAuthority: d?.issuingAuthority ?? null,
+          rawItem: { ...d }
+        }))
+      },
+      s12_documentFormattingAndTechSpecs: {
+        meta: makeMeta(12, 's12_documentFormattingAndTechSpecs', 'Document Formatting & Technical Specifications', 'E', s12Has, lastUpdated),
+        photoDimensionsMm: null,
+        photoBackgroundColor: null,
+        biometricPhotoRules: null,
+        acceptedFileFormats: Array.from(new Set(dc.map((d: any) => d?.format).filter(Boolean))),
+        maxFileSizeMb: null,
+        scannerDpiRequirement: null,
+        certifiedTranslationStandard: null,
+        apostilleAndLegalizationRules: null
+      },
+      s13_officialFormsAndFieldGuide: {
+        meta: makeMeta(13, 's13_officialFormsAndFieldGuide', 'Official Application Forms & Field-by-Field Guidance', 'F', s13Has, lastUpdated, null, 'ADMIN_INSTRUCTION'),
+        officialFormCode: null,
+        officialFormUrl: null,
+        sessionTimeoutWarning: null,
+        digitalSignatureRules: null,
+        fields: normalizedFields,
+        legacyFieldObject: !Array.isArray(af) && typeof af === 'object' ? { ...af } : null
+      },
+      s14_stepByStepApplicationProcedure: {
+        meta: makeMeta(14, 's14_stepByStepApplicationProcedure', 'Step-by-Step Application Procedure', 'G', s14Has, lastUpdated, null, 'ADMIN_INSTRUCTION'),
+        steps: as.map((s: any, idx: number) => ({
+          stepNumber: Number(s?.stepNumber ?? idx + 1),
+          title: s?.title ?? '',
+          description: s?.description ?? null,
+          channel: s?.channel ?? 'UNKNOWN',
+          fees: s?.fees ?? null,
+          estimatedDuration: s?.estimatedDuration ?? null,
+          appointmentRequired: s?.appointmentRequired ?? null,
+          officialActionUrl: s?.officialActionUrl ?? null,
+          rawStep: { ...s }
+        }))
+      },
+      s15_appointmentBiometricsAndMedical: {
+        meta: makeMeta(15, 's15_appointmentBiometricsAndMedical', 'Appointment, Biometrics & Medical Rules', null, false, lastUpdated),
+        biometricsRequired: null,
+        biometricAgeRange: null,
+        biometricValidityPeriod: null,
+        vacOperatorName: null,
+        appointmentBookingUrl: null,
+        medicalExamRequired: null,
+        panelPhysicianDirectoryUrl: null,
+        requiredMedicalScreenings: []
+      },
+      s16_interviewPreparationAndVerification: {
+        meta: makeMeta(16, 's16_interviewPreparationAndVerification', 'Interview Preparation & Verification Rules', 'H', s16Has, lastUpdated, null, 'PRACTICAL_RECOMMENDATION'),
+        interviewRequired: ip.interviewRequired ?? null,
+        interviewWaiverEligibility: ip.waiverEligibility ?? null,
+        requiredDocumentsAtWindow: Array.isArray(ip.requiredAtWindow) ? ip.requiredAtWindow : [],
+        backgroundVerificationProcess: ip.backgroundCheckProcess ?? null,
+        administrativeProcessingInfo: ip.administrativeProcessingInfo ?? null,
+        tips: ip.tips ?? null,
+        questions: Array.isArray(ip.questions)
+          ? ip.questions.map((q: any) => ({
+              question: q?.question ?? '',
+              idealAnswerOrGuidance: q?.idealAnswer ?? q?.guidance ?? null,
+              redFlag: q?.redFlag ?? null,
+              supportingDocs: q?.supportingDocs ?? null,
+              rawQuestion: { ...q }
+            }))
+          : [],
+        legacyFields: { ...ip }
+      },
+      s17_embassyConsulateAndVacDirectory: {
+        meta: makeMeta(17, 's17_embassyConsulateAndVacDirectory', 'Official Embassy, Consulate & VAC Directory', 'I', s17Has, lastUpdated, null, 'ADMIN_INSTRUCTION'),
+        facilities: ed.map((e: any) => ({
+          name: e?.name ?? null,
+          city: e?.city ?? null,
+          facilityType: e?.facilityType ?? 'UNKNOWN',
+          address: e?.address ?? null,
+          phone: e?.phone ?? null,
+          email: e?.email ?? null,
+          bookingUrl: e?.bookingUrl ?? null,
+          jurisdictionCoverage: e?.jurisdiction ?? e?.jurisdictionCoverage ?? null,
+          operatingHours: e?.operatingHours ?? null,
+          rawFacility: { ...e }
+        }))
+      },
+      s18_officialFeesAndCostBreakdown: {
+        meta: makeMeta(18, 's18_officialFeesAndCostBreakdown', 'Official Fees & Full Cost Breakdown', 'L', s18Has, lastUpdated, null, 'MIXED'),
+        governmentFee: cc.governmentFee ?? cc.governmentVisaFee ?? vo.fee ?? null,
+        serviceOrVacFee: cc.serviceFee ?? null,
+        biometricFee: cc.biometricFee ?? cc.biometricsFee ?? null,
+        healthcareSurcharge: cc.healthcareSurcharge ?? null,
+        priorityProcessingFee: cc.priorityProcessingFee ?? null,
+        issuanceReciprocityFeeNote: cc.issuanceFeeNote ?? null,
+        currency: cc.currency ?? co.currency ?? null,
+        isRefundableOnRefusal: cc.isRefundable ?? null,
+        acceptedPaymentMethods: Array.isArray(cc.paymentMethods) ? cc.paymentMethods : [],
+        optionalCosts: Array.isArray(cc.optionalCosts)
+          ? cc.optionalCosts.map((oc: any) => ({
+              label: oc?.label ?? oc?.name ?? '',
+              amount: oc?.amount ?? oc?.cost ?? '',
+              currency: oc?.currency ?? cc.currency ?? null,
+              requirementClassification: isValidRequirementClassification(oc?.requirementClassification)
+                ? oc.requirementClassification
+                : 'NON_OFFICIAL_ESTIMATE'
+            }))
+          : [],
+        legacyFields: { ...cc }
+      },
+      s19_processingTimesAndTimelines: {
+        meta: makeMeta(19, 's19_processingTimesAndTimelines', 'Official Processing Times & Timelines', null, false, lastUpdated),
+        standardProcessingWindow: null,
+        peakSeasonProcessingWindow: null,
+        earliestApplyDaysBeforeTravel: null,
+        recommendedLeadTimeDays: null,
+        expeditedProcessingAvailable: null,
+        officialLiveWaitTimeUrl: null
+      },
+      s20_visaConditionsAndPermittedActivities: {
+        meta: makeMeta(20, 's20_visaConditionsAndPermittedActivities', 'Visa Conditions, Validity & Permitted Activities', 'B', s20Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        visaValidityVsStayDurationRule: null,
+        authorizedStayDuration: aa.authorizedStay ?? vo.stayDuration ?? vo.stay ?? null,
+        rollingStayWindowRule: null,
+        permittedActivities: [],
+        prohibitedActivities: [],
+        noRecourseToPublicFundsRule: null
+      },
+      s21_workAuthorizationAndEmployment: {
+        meta: makeMeta(21, 's21_workAuthorizationAndEmployment', 'Work Authorization & Employment Conditions', 'K', s21Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        workRightsSummary: aa.workRights ?? null,
+        workPermitted: null,
+        authorizationType: 'UNKNOWN',
+        maxHoursPerWeekTermTime: null,
+        maxHoursPerWeekHolidays: null,
+        selfEmploymentOrFreelanceAllowed: null,
+        remoteWorkForForeignEmployerAllowed: null
+      },
+      s22_studyAuthorizationAndAcademicRules: {
+        meta: makeMeta(22, 's22_studyAuthorizationAndAcademicRules', 'Study Authorization & Academic Conditions', null, false, lastUpdated),
+        studyPermitted: null,
+        maxShortCourseDuration: null,
+        designatedInstitutionRequired: null,
+        institutionChangeRules: null,
+        attendanceComplianceRules: null
+      },
+      s23_familyAndDependentRules: {
+        meta: makeMeta(23, 's23_familyAndDependentRules', 'Family & Dependent Rules', null, false, lastUpdated),
+        dependentsAllowed: null,
+        eligibleRelationships: [],
+        maxDependentChildAge: null,
+        dependentWorkRights: null,
+        dependentStudyRights: null,
+        separateApplicationRequired: null,
+        dependentFinancialRequirementNote: null
+      },
+      s24_travelPreparationAndPreDeparture: {
+        meta: makeMeta(24, 's24_travelPreparationAndPreDeparture', 'Travel Preparation & Pre-Departure Checklist', null, false, lastUpdated),
+        travelInsuranceMandatory: el.healthInsuranceRequired ?? null,
+        minInsuranceCoverageAmount: null,
+        onwardOrReturnTicketRequired: null,
+        accommodationProofRequired: null,
+        customsAndMedicationRules: null
+      },
+      s25_arrivalBorderControlAndEntry: {
+        meta: makeMeta(25, 's25_arrivalBorderControlAndEntry', 'Arrival, Border Control & Entry Procedure', 'K', s25Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        entryRequirementsSummary: aa.entryRequirements ?? null,
+        visaDoesNotGuaranteeEntryWarning:
+          'A valid visa permits travel to a port of entry to request permission to enter; final admission and period of authorized stay are determined by border control officers upon arrival.',
+        digitalArrivalCardName: null,
+        digitalArrivalCardUrl: null,
+        handLuggageDocuments: [],
+        borderInspectionTopics: [],
+        admissionStampAndI94VerificationRule: null
+      },
+      s26_postArrivalRegistrationAndCompliance: {
+        meta: makeMeta(26, 's26_postArrivalRegistrationAndCompliance', 'Post-Arrival Registration & Local Compliance', 'K', s26Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        registrationRequirementsSummary: aa.registrationRequirements ?? null,
+        localRegistrationRequired: null,
+        registrationAuthorityName: null,
+        registrationDeadlineDays: null,
+        residencePermitCollectionRule: null,
+        taxIdApplicationProcess: null,
+        addressChangeReportingRule: null,
+        legacyFields: { ...aa }
+      },
+      s27_renewalExtensionAndStatusChange: {
+        meta: makeMeta(27, 's27_renewalExtensionAndStatusChange', 'Renewal, Extension & Status Change Rules', 'K', s27Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        extensionPossible: aa.extensionPossible ?? null,
+        extensionFormCode: null,
+        recommendedApplyDaysBeforeExpiry: null,
+        maintainedStatusWhilePendingRule: null,
+        inCountrySwitchingAllowed: null,
+        eligibleSwitchTargets: [],
+        employerOrSponsorChangeRule: null
+      },
+      s28_refusalAppealAndReapplication: {
+        meta: makeMeta(28, 's28_refusalAppealAndReapplication', 'Refusal, Administrative Review, Appeal & Reapplication', 'J', s28Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        commonRefusalReasons: Array.isArray(ra.commonReasons)
+          ? ra.commonReasons
+          : ra.grounds
+          ? [String(ra.grounds)]
+          : [],
+        statutoryRefusalCodes: Array.isArray(ra.statutoryRefusalCodes) ? ra.statutoryRefusalCodes : [],
+        appealPossible: ra.appealPossible ?? null,
+        reviewType: 'UNKNOWN',
+        appellateBodyName: null,
+        appealDeadlineDays: ra.appealDeadlineDays ?? null,
+        reapplicationWaitDays: ra.reapplicationWaitDays ?? null,
+        appealAndReapplicationProcedure: ra.appealProcess ?? ra.appealProcedure ?? null,
+        legacyFields: { ...ra }
+      },
+      s29_permanentResidenceAndCitizenship: {
+        meta: makeMeta(29, 's29_permanentResidenceAndCitizenship', 'Permanent Residence, Settlement & Citizenship Pathways', 'K', s29Has, lastUpdated, null, 'LEGAL_REQUIREMENT'),
+        settlementPathSummary: aa.settlementPath ?? null,
+        countsTowardPermanentResidence: null,
+        minYearsToPermanentResidence: null,
+        maxAbsenceDaysPerYearForPr: null,
+        prLanguageAndCivicRequirements: null,
+        minYearsToCitizenship: null,
+        dualCitizenshipPermitted: null
+      },
+      s30_faqsEdgeCasesAndOfficialSources: {
+        meta: makeMeta(30, 's30_faqsEdgeCasesAndOfficialSources', 'FAQs, Edge Cases & Official Sources', 'M', s30Has, lastUpdated),
+        faqs: fq.map((f: any) => ({
+          question: f?.question ?? f?.q ?? '',
+          answer: f?.answer ?? f?.a ?? '',
+          verificationStatus: f?.verificationStatus ?? null,
+          requirementClassification: isValidRequirementClassification(f?.requirementClassification)
+            ? f.requirementClassification
+            : 'ADMIN_INSTRUCTION',
+          rawFaq: { ...f }
+        })),
+        legalEvidenceItems: le.map((item: any) => ({ ...item }))
+      }
+    },
+    applicantSpecialTopics: specialTopics,
+    legacy13Snapshot: {
+      countryOverview: { ...co },
+      visaOverview: { ...vo },
+      eligibility: { ...el },
+      financial: { ...fi },
+      documentChecklist: dc.map((d: any) => (typeof d === 'object' && d !== null ? { ...d } : d)),
+      applicationFields: Array.isArray(af)
+        ? af.map((f: any) => (typeof f === 'object' && f !== null ? { ...f } : f))
+        : typeof af === 'object' && af !== null
+        ? { ...af }
+        : af,
+      applicationSteps: as.map((s: any) => (typeof s === 'object' && s !== null ? { ...s } : s)),
+      interviewPrep: { ...ip },
+      embassyDirectory: ed.map((e: any) => (typeof e === 'object' && e !== null ? { ...e } : e)),
+      refusalAppeal: { ...ra },
+      afterApproval: { ...aa },
+      costCalculator: { ...cc },
+      faq: fq.map((f: any) => (typeof f === 'object' && f !== null ? { ...f } : f)),
+      legalEvidence: le.map((l: any) => (typeof l === 'object' && l !== null ? { ...l } : l))
+    }
+  };
+
+  if (existingComp && existingComp.sections) {
+    const prevSnap = existingComp.legacy13Snapshot;
+    const isSameJson = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+
+    // If top-level A-M fields were not changed relative to prevSnap, preserve any direct edits made to existingComp.sections;
+    // If top-level A-M fields WERE mutated (e.g. `{ ...reloaded, visaOverview: { ... } }`), let the updated baseProfile A-M values win while keeping 30-section extensions.
+    const coUnchanged = prevSnap && isSameJson(co, prevSnap.countryOverview);
+    const voUnchanged = prevSnap && isSameJson(vo, prevSnap.visaOverview);
+    const elUnchanged = prevSnap && isSameJson(el, prevSnap.eligibility);
+    const fiUnchanged = prevSnap && isSameJson(fi, prevSnap.financial);
+    const dcUnchanged = prevSnap && isSameJson(dc, prevSnap.documentChecklist);
+    const afUnchanged = prevSnap && isSameJson(af, prevSnap.applicationFields);
+    const asUnchanged = prevSnap && isSameJson(as, prevSnap.applicationSteps);
+    const ipUnchanged = prevSnap && isSameJson(ip, prevSnap.interviewPrep);
+    const edUnchanged = prevSnap && isSameJson(ed, prevSnap.embassyDirectory);
+    const raUnchanged = prevSnap && isSameJson(ra, prevSnap.refusalAppeal);
+    const aaUnchanged = prevSnap && isSameJson(aa, prevSnap.afterApproval);
+    const ccUnchanged = prevSnap && isSameJson(cc, prevSnap.costCalculator);
+    const fqUnchanged = prevSnap && isSameJson(fq, prevSnap.faq) && isSameJson(le, prevSnap.legalEvidence);
+
+    const es = existingComp.sections;
+
+    const mergeSec = <T extends { meta: SectionMetadata }>(existingSec: T | undefined, baseSec: T): T => {
+      if (!existingSec) return baseSec;
+      const mergedMeta: SectionMetadata = {
+        ...baseSec.meta,
+        ...existingSec.meta,
+        verificationState:
+          existingSec.meta?.verificationState === 'AWAITING_VERIFICATION' &&
+          baseSec.meta.verificationState === 'PARTIAL'
+            ? 'PARTIAL'
+            : existingSec.meta?.verificationState || baseSec.meta.verificationState,
+        officialSourceUrl: existingSec.meta?.officialSourceUrl ?? baseSec.meta.officialSourceUrl
+      };
+      const result: any = { ...existingSec };
+      for (const [k, v] of Object.entries(baseSec)) {
+        if (k === 'meta') continue;
+        if (k === 'legacyFields') {
+          result.legacyFields = {
+            ...((existingSec as any).legacyFields || {}),
+            ...((baseSec as any).legacyFields || {})
+          };
+          continue;
+        }
+        if (v !== null && v !== undefined) {
+          result[k] = v;
+        }
+      }
+      result.meta = mergedMeta;
+      return result as T;
+    };
+
+    return {
+      schemaVersion: '3.1.0',
+      id: baseProfile.id,
+      programId: baseProfile.programId,
+      verificationStatus: baseProfile.verificationStatus,
+      lastUpdated: baseProfile.lastUpdated,
+      sections: {
+        s01_countryOverview: coUnchanged && es.s01_countryOverview
+          ? es.s01_countryOverview
+          : mergeSec(es.s01_countryOverview, baseProfile.sections.s01_countryOverview),
+        s02_visaProgramOverview: voUnchanged && es.s02_visaProgramOverview
+          ? es.s02_visaProgramOverview
+          : mergeSec(es.s02_visaProgramOverview, baseProfile.sections.s02_visaProgramOverview),
+        s03_categoriesAndSubcategories: es.s03_categoriesAndSubcategories || baseProfile.sections.s03_categoriesAndSubcategories,
+        s04_nationalitySpecificRules: es.s04_nationalitySpecificRules || baseProfile.sections.s04_nationalitySpecificRules,
+        s05_coreEligibilityRequirements: elUnchanged && es.s05_coreEligibilityRequirements
+          ? es.s05_coreEligibilityRequirements
+          : mergeSec(es.s05_coreEligibilityRequirements, baseProfile.sections.s05_coreEligibilityRequirements),
+        s06_educationalQualifications: elUnchanged && es.s06_educationalQualifications
+          ? es.s06_educationalQualifications
+          : {
+              ...baseProfile.sections.s06_educationalQualifications,
+              ...(es.s06_educationalQualifications || {}),
+              educationLevel: el.educationLevel ?? es.s06_educationalQualifications?.educationLevel ?? null
+            },
+        s07_employmentAndOccupation: elUnchanged && es.s07_employmentAndOccupation
+          ? es.s07_employmentAndOccupation
+          : {
+              ...baseProfile.sections.s07_employmentAndOccupation,
+              ...(es.s07_employmentAndOccupation || {}),
+              workExperienceYears: el.workExperienceYears ?? es.s07_employmentAndOccupation?.workExperienceYears ?? null
+            },
+        s08_languageRequirements: elUnchanged && es.s08_languageRequirements
+          ? es.s08_languageRequirements
+          : {
+              ...baseProfile.sections.s08_languageRequirements,
+              ...(es.s08_languageRequirements || {}),
+              languageRequirementSummary: el.languageRequirement ?? es.s08_languageRequirements?.languageRequirementSummary ?? null
+            },
+        s09_financialAndProofOfFunds: fiUnchanged && es.s09_financialAndProofOfFunds
+          ? es.s09_financialAndProofOfFunds
+          : mergeSec(es.s09_financialAndProofOfFunds, baseProfile.sections.s09_financialAndProofOfFunds),
+        s10_sponsorAndSponsorshipRules: fiUnchanged && es.s10_sponsorAndSponsorshipRules
+          ? es.s10_sponsorAndSponsorshipRules
+          : {
+              ...baseProfile.sections.s10_sponsorAndSponsorshipRules,
+              ...(es.s10_sponsorAndSponsorshipRules || {}),
+              sponsorshipAllowed: fi.sponsorshipAllowed ?? es.s10_sponsorAndSponsorshipRules?.sponsorshipAllowed ?? null
+            },
+        s11_completeDocumentChecklist: dcUnchanged && es.s11_completeDocumentChecklist
+          ? es.s11_completeDocumentChecklist
+          : mergeSec(es.s11_completeDocumentChecklist, baseProfile.sections.s11_completeDocumentChecklist),
+        s12_documentFormattingAndTechSpecs: es.s12_documentFormattingAndTechSpecs || baseProfile.sections.s12_documentFormattingAndTechSpecs,
+        s13_officialFormsAndFieldGuide: afUnchanged && es.s13_officialFormsAndFieldGuide
+          ? es.s13_officialFormsAndFieldGuide
+          : {
+              ...baseProfile.sections.s13_officialFormsAndFieldGuide,
+              ...(es.s13_officialFormsAndFieldGuide || {}),
+              fields: baseProfile.sections.s13_officialFormsAndFieldGuide.fields,
+              legacyFieldObject: baseProfile.sections.s13_officialFormsAndFieldGuide.legacyFieldObject
+            },
+        s14_stepByStepApplicationProcedure: asUnchanged && es.s14_stepByStepApplicationProcedure
+          ? es.s14_stepByStepApplicationProcedure
+          : mergeSec(es.s14_stepByStepApplicationProcedure, baseProfile.sections.s14_stepByStepApplicationProcedure),
+        s15_appointmentBiometricsAndMedical: es.s15_appointmentBiometricsAndMedical || baseProfile.sections.s15_appointmentBiometricsAndMedical,
+        s16_interviewPreparationAndVerification: ipUnchanged && es.s16_interviewPreparationAndVerification
+          ? es.s16_interviewPreparationAndVerification
+          : mergeSec(es.s16_interviewPreparationAndVerification, baseProfile.sections.s16_interviewPreparationAndVerification),
+        s17_embassyConsulateAndVacDirectory: edUnchanged && es.s17_embassyConsulateAndVacDirectory
+          ? es.s17_embassyConsulateAndVacDirectory
+          : mergeSec(es.s17_embassyConsulateAndVacDirectory, baseProfile.sections.s17_embassyConsulateAndVacDirectory),
+        s18_officialFeesAndCostBreakdown: ccUnchanged && voUnchanged && es.s18_officialFeesAndCostBreakdown
+          ? es.s18_officialFeesAndCostBreakdown
+          : mergeSec(es.s18_officialFeesAndCostBreakdown, baseProfile.sections.s18_officialFeesAndCostBreakdown),
+        s19_processingTimesAndTimelines: es.s19_processingTimesAndTimelines || baseProfile.sections.s19_processingTimesAndTimelines,
+        s20_visaConditionsAndPermittedActivities: aaUnchanged && voUnchanged && es.s20_visaConditionsAndPermittedActivities
+          ? es.s20_visaConditionsAndPermittedActivities
+          : {
+              ...baseProfile.sections.s20_visaConditionsAndPermittedActivities,
+              ...(es.s20_visaConditionsAndPermittedActivities || {}),
+              authorizedStayDuration:
+                baseProfile.sections.s20_visaConditionsAndPermittedActivities.authorizedStayDuration ??
+                es.s20_visaConditionsAndPermittedActivities?.authorizedStayDuration ??
+                null
+            },
+        s21_workAuthorizationAndEmployment: aaUnchanged && es.s21_workAuthorizationAndEmployment
+          ? es.s21_workAuthorizationAndEmployment
+          : {
+              ...baseProfile.sections.s21_workAuthorizationAndEmployment,
+              ...(es.s21_workAuthorizationAndEmployment || {}),
+              workRightsSummary: aa.workRights ?? es.s21_workAuthorizationAndEmployment?.workRightsSummary ?? null
+            },
+        s22_studyAuthorizationAndAcademicRules: es.s22_studyAuthorizationAndAcademicRules || baseProfile.sections.s22_studyAuthorizationAndAcademicRules,
+        s23_familyAndDependentRules: es.s23_familyAndDependentRules || baseProfile.sections.s23_familyAndDependentRules,
+        s24_travelPreparationAndPreDeparture: es.s24_travelPreparationAndPreDeparture || baseProfile.sections.s24_travelPreparationAndPreDeparture,
+        s25_arrivalBorderControlAndEntry: aaUnchanged && es.s25_arrivalBorderControlAndEntry
+          ? es.s25_arrivalBorderControlAndEntry
+          : {
+              ...baseProfile.sections.s25_arrivalBorderControlAndEntry,
+              ...(es.s25_arrivalBorderControlAndEntry || {}),
+              entryRequirementsSummary: aa.entryRequirements ?? es.s25_arrivalBorderControlAndEntry?.entryRequirementsSummary ?? null
+            },
+        s26_postArrivalRegistrationAndCompliance: aaUnchanged && es.s26_postArrivalRegistrationAndCompliance
+          ? es.s26_postArrivalRegistrationAndCompliance
+          : mergeSec(es.s26_postArrivalRegistrationAndCompliance, baseProfile.sections.s26_postArrivalRegistrationAndCompliance),
+        s27_renewalExtensionAndStatusChange: aaUnchanged && es.s27_renewalExtensionAndStatusChange
+          ? es.s27_renewalExtensionAndStatusChange
+          : {
+              ...baseProfile.sections.s27_renewalExtensionAndStatusChange,
+              ...(es.s27_renewalExtensionAndStatusChange || {}),
+              extensionPossible: aa.extensionPossible ?? es.s27_renewalExtensionAndStatusChange?.extensionPossible ?? null
+            },
+        s28_refusalAppealAndReapplication: raUnchanged && es.s28_refusalAppealAndReapplication
+          ? es.s28_refusalAppealAndReapplication
+          : mergeSec(es.s28_refusalAppealAndReapplication, baseProfile.sections.s28_refusalAppealAndReapplication),
+        s29_permanentResidenceAndCitizenship: aaUnchanged && es.s29_permanentResidenceAndCitizenship
+          ? es.s29_permanentResidenceAndCitizenship
+          : {
+              ...baseProfile.sections.s29_permanentResidenceAndCitizenship,
+              ...(es.s29_permanentResidenceAndCitizenship || {}),
+              settlementPathSummary: aa.settlementPath ?? es.s29_permanentResidenceAndCitizenship?.settlementPathSummary ?? null
+            },
+        s30_faqsEdgeCasesAndOfficialSources: fqUnchanged && es.s30_faqsEdgeCasesAndOfficialSources
+          ? es.s30_faqsEdgeCasesAndOfficialSources
+          : mergeSec(es.s30_faqsEdgeCasesAndOfficialSources, baseProfile.sections.s30_faqsEdgeCasesAndOfficialSources)
+      },
+      applicantSpecialTopics: {
+        ...baseProfile.applicantSpecialTopics,
+        ...(existingComp.applicantSpecialTopics || {})
+      },
+      legacy13Snapshot: baseProfile.legacy13Snapshot
+    };
+  }
+
+  return baseProfile;
+}
+
+/**
+ * Reconstructs the exact 13-section (A–M) legacy object from a 30-Section VisaComprehensiveProfile
+ * without losing any field or custom property.
+ */
+export function denormalize30SectionsToLegacy13(profile: VisaComprehensiveProfile): Record<string, any> {
+  const snap = profile.legacy13Snapshot;
+  const s = profile.sections;
+
+  const countryOverview = {
+    ...(snap?.countryOverview || {}),
+    ...(s?.s01_countryOverview?.legacyFields || {})
+  };
+  if (s?.s01_countryOverview?.capital !== null && countryOverview.capital !== undefined) {
+    countryOverview.capital = s.s01_countryOverview.capital;
+  }
+
+  const visaOverview = {
+    ...(snap?.visaOverview || {}),
+    ...(s?.s02_visaProgramOverview?.legacyFields || {})
+  };
+
+  const eligibility = {
+    ...(snap?.eligibility || {}),
+    ...(s?.s05_coreEligibilityRequirements?.legacyFields || {})
+  };
+
+  const financial = {
+    ...(snap?.financial || {}),
+    ...(s?.s09_financialAndProofOfFunds?.legacyFields || {})
+  };
+
+  const documentChecklist = snap?.documentChecklist
+    ? snap.documentChecklist.map((d: any) => (typeof d === 'object' && d !== null ? { ...d } : d))
+    : (s?.s11_completeDocumentChecklist?.documents || []).map(d => ({ ...d.rawItem }));
+
+  const applicationFields =
+    snap?.applicationFields !== undefined
+      ? Array.isArray(snap.applicationFields)
+        ? snap.applicationFields.map((f: any) => (typeof f === 'object' && f !== null ? { ...f } : f))
+        : typeof snap.applicationFields === 'object' && snap.applicationFields !== null
+        ? { ...snap.applicationFields }
+        : snap.applicationFields
+      : s?.s13_officialFormsAndFieldGuide?.legacyFieldObject ||
+        (s?.s13_officialFormsAndFieldGuide?.fields || []).map(f => ({ ...f.rawField }));
+
+  const applicationSteps = snap?.applicationSteps
+    ? snap.applicationSteps.map((st: any) => (typeof st === 'object' && st !== null ? { ...st } : st))
+    : (s?.s14_stepByStepApplicationProcedure?.steps || []).map(st => ({ ...st.rawStep }));
+
+  const interviewPrep = {
+    ...(snap?.interviewPrep || {}),
+    ...(s?.s16_interviewPreparationAndVerification?.legacyFields || {})
+  };
+
+  const embassyDirectory = snap?.embassyDirectory
+    ? snap.embassyDirectory.map((e: any) => (typeof e === 'object' && e !== null ? { ...e } : e))
+    : (s?.s17_embassyConsulateAndVacDirectory?.facilities || []).map(f => ({ ...f.rawFacility }));
+
+  const refusalAppeal = {
+    ...(snap?.refusalAppeal || {}),
+    ...(s?.s28_refusalAppealAndReapplication?.legacyFields || {})
+  };
+
+  const afterApproval = {
+    ...(snap?.afterApproval || {}),
+    ...(s?.s26_postArrivalRegistrationAndCompliance?.legacyFields || {})
+  };
+
+  const costCalculator = {
+    ...(snap?.costCalculator || {}),
+    ...(s?.s18_officialFeesAndCostBreakdown?.legacyFields || {})
+  };
+
+  const faq = snap?.faq
+    ? snap.faq.map((f: any) => (typeof f === 'object' && f !== null ? { ...f } : f))
+    : (s?.s30_faqsEdgeCasesAndOfficialSources?.faqs || []).map(f => ({ ...f.rawFaq }));
+
+  const legalEvidence = snap?.legalEvidence
+    ? snap.legalEvidence.map((l: any) => (typeof l === 'object' && l !== null ? { ...l } : l))
+    : (s?.s30_faqsEdgeCasesAndOfficialSources?.legalEvidenceItems || []).map(l => ({ ...l }));
+
+  return {
+    id: profile.id,
+    programId: profile.programId,
+    countryOverview,
+    visaOverview,
+    eligibility,
+    financial,
+    documentChecklist,
+    applicationFields,
+    applicationSteps,
+    interviewPrep,
+    embassyDirectory,
+    refusalAppeal,
+    afterApproval,
+    costCalculator,
+    faq,
+    legalEvidence,
+    lastUpdated: profile.lastUpdated,
+    verificationStatus: profile.verificationStatus
+  };
+}
+
+// --- PHASE 3.2: 6 LIFECYCLE STAGES, 30 SECTIONS & 22 SPECIAL TOPICS REGISTRIES ---
+
+export interface RequirementClassificationMeta {
+  code: RequirementClassification;
+  label: string;
+  shortLabel: string;
+  isBindingLegalOrOfficial: boolean;
+  description: string;
+  badgeClass: string;
+}
+
+export const REQUIREMENT_CLASSIFICATION_META: readonly RequirementClassificationMeta[] = [
+  {
+    code: 'LEGAL_REQUIREMENT',
+    label: '1. Legal Requirement (Statute / Regulation)',
+    shortLabel: 'Legal Requirement',
+    isBindingLegalOrOfficial: true,
+    description: 'Mandatory requirement established by primary immigration legislation, statutory act, or binding regulation.',
+    badgeClass: 'bg-indigo-100 text-indigo-800 border-indigo-300'
+  },
+  {
+    code: 'ADMIN_INSTRUCTION',
+    label: '2. Administrative Instruction (Official Policy)',
+    shortLabel: 'Admin Instruction',
+    isBindingLegalOrOfficial: true,
+    description: 'Mandatory agency rule, ministerial instruction, or immigration manual directive.',
+    badgeClass: 'bg-blue-100 text-blue-800 border-blue-300'
+  },
+  {
+    code: 'CONSULAR_CHECKLIST',
+    label: '3. Consular Checklist (Post / VAC Requirement)',
+    shortLabel: 'Consular Checklist',
+    isBindingLegalOrOfficial: true,
+    description: 'Embassy, consulate, or VAC submission checklist requirement enforced at intake.',
+    badgeClass: 'bg-teal-100 text-teal-800 border-teal-300'
+  },
+  {
+    code: 'PRACTICAL_RECOMMENDATION',
+    label: '4. Practical Recommendation (Non-Binding Guidance)',
+    shortLabel: 'Practical Recommendation',
+    isBindingLegalOrOfficial: false,
+    description: 'Recommended best practice for applicants; not a statutory minimum.',
+    badgeClass: 'bg-amber-100 text-amber-800 border-amber-300'
+  },
+  {
+    code: 'NON_OFFICIAL_ESTIMATE',
+    label: '5. Non-Official Estimate (Indicative / Third-Party)',
+    shortLabel: 'Non-Official Estimate',
+    isBindingLegalOrOfficial: false,
+    description: 'Indicative third-party cost, travel budget, or non-official planning estimate.',
+    badgeClass: 'bg-slate-100 text-slate-700 border-slate-300'
+  }
+] as const;
+
+export type SectionKey30 = keyof VisaComprehensiveProfile['sections'];
+export type SpecialTopicKey22 = keyof VisaApplicantSpecialTopics;
+
+export interface SectionRegistryItem {
+  sectionNumber: number;
+  sectionKey: SectionKey30;
+  stageNumber: 1 | 2 | 3 | 4 | 5 | 6;
+  legacyCode: string | null;
+  title: string;
+  shortTitle: string;
+  claimSectionLabel: string;
+}
+
+export const THIRTY_SECTIONS_REGISTRY: readonly SectionRegistryItem[] = [
+  // Stage 1: Program & Nationality Overview (Sections 1-4)
+  { sectionNumber: 1, sectionKey: 's01_countryOverview', stageNumber: 1, legacyCode: 'A', title: '1. Country Overview & Legal Framework', shortTitle: 'Country Overview', claimSectionLabel: 'S01: Country Overview' },
+  { sectionNumber: 2, sectionKey: 's02_visaProgramOverview', stageNumber: 1, legacyCode: 'B', title: '2. Visa Program Overview & Statutory Basis', shortTitle: 'Visa Program Overview', claimSectionLabel: 'S02: Visa Program Overview' },
+  { sectionNumber: 3, sectionKey: 's03_categoriesAndSubcategories', stageNumber: 1, legacyCode: null, title: '3. Available Visa Categories & Subcategories', shortTitle: 'Categories & Streams', claimSectionLabel: 'S03: Categories & Subcategories' },
+  { sectionNumber: 4, sectionKey: 's04_nationalitySpecificRules', stageNumber: 1, legacyCode: null, title: '4. Nationality-Specific Eligibility Rules', shortTitle: 'Nationality Rules', claimSectionLabel: 'S04: Nationality-Specific Rules' },
+
+  // Stage 2: Eligibility, Qualifications & Sponsorship (Sections 5-10)
+  { sectionNumber: 5, sectionKey: 's05_coreEligibilityRequirements', stageNumber: 2, legacyCode: 'C', title: '5. Core Eligibility Requirements', shortTitle: 'Core Eligibility', claimSectionLabel: 'S05: Core Eligibility' },
+  { sectionNumber: 6, sectionKey: 's06_educationalQualifications', stageNumber: 2, legacyCode: 'C', title: '6. Educational Qualification & Credential Rules', shortTitle: 'Education & Credentials', claimSectionLabel: 'S06: Educational Qualifications' },
+  { sectionNumber: 7, sectionKey: 's07_employmentAndOccupation', stageNumber: 2, legacyCode: 'C', title: '7. Employment, Occupation & Experience Rules', shortTitle: 'Employment & Occupation', claimSectionLabel: 'S07: Employment & Occupation' },
+  { sectionNumber: 8, sectionKey: 's08_languageRequirements', stageNumber: 2, legacyCode: 'C', title: '8. Language Proficiency Requirements', shortTitle: 'Language Requirements', claimSectionLabel: 'S08: Language Requirements' },
+  { sectionNumber: 9, sectionKey: 's09_financialAndProofOfFunds', stageNumber: 2, legacyCode: 'D', title: '9. Financial Requirements & Proof of Funds', shortTitle: 'Financial & Funds', claimSectionLabel: 'S09: Financial & Proof of Funds' },
+  { sectionNumber: 10, sectionKey: 's10_sponsorAndSponsorshipRules', stageNumber: 2, legacyCode: 'D', title: '10. Sponsor & Financial Sponsorship Rules', shortTitle: 'Sponsorship Rules', claimSectionLabel: 'S10: Sponsor & Sponsorship Rules' },
+
+  // Stage 3: Documents, Forms & Application Procedure (Sections 11-17)
+  { sectionNumber: 11, sectionKey: 's11_completeDocumentChecklist', stageNumber: 3, legacyCode: 'E', title: '11. Complete Document Checklist', shortTitle: 'Document Checklist', claimSectionLabel: 'S11: Complete Document Checklist' },
+  { sectionNumber: 12, sectionKey: 's12_documentFormattingAndTechSpecs', stageNumber: 3, legacyCode: 'E', title: '12. Document Formatting & Technical Specifications', shortTitle: 'Formatting & Tech Specs', claimSectionLabel: 'S12: Document Formatting & Specs' },
+  { sectionNumber: 13, sectionKey: 's13_officialFormsAndFieldGuide', stageNumber: 3, legacyCode: 'F', title: '13. Official Application Forms & Field-by-Field Guidance', shortTitle: 'Official Forms & Fields', claimSectionLabel: 'S13: Official Forms & Field Guide' },
+  { sectionNumber: 14, sectionKey: 's14_stepByStepApplicationProcedure', stageNumber: 3, legacyCode: 'G', title: '14. Step-by-Step Application Procedure', shortTitle: 'Application Steps', claimSectionLabel: 'S14: Step-by-Step Procedure' },
+  { sectionNumber: 15, sectionKey: 's15_appointmentBiometricsAndMedical', stageNumber: 3, legacyCode: null, title: '15. Appointment, Biometrics & Medical Rules', shortTitle: 'Biometrics & Medical', claimSectionLabel: 'S15: Biometrics & Medical Rules' },
+  { sectionNumber: 16, sectionKey: 's16_interviewPreparationAndVerification', stageNumber: 3, legacyCode: 'H', title: '16. Interview Preparation & Verification Rules', shortTitle: 'Interview & Verification', claimSectionLabel: 'S16: Interview & Verification' },
+  { sectionNumber: 17, sectionKey: 's17_embassyConsulateAndVacDirectory', stageNumber: 3, legacyCode: 'I', title: '17. Official Embassy, Consulate & VAC Directory', shortTitle: 'Embassy & VAC Directory', claimSectionLabel: 'S17: Embassy & VAC Directory' },
+
+  // Stage 4: Fees, Timelines & Visa Conditions (Sections 18-23)
+  { sectionNumber: 18, sectionKey: 's18_officialFeesAndCostBreakdown', stageNumber: 4, legacyCode: 'L', title: '18. Official Fees & Full Cost Breakdown', shortTitle: 'Official Fees & Costs', claimSectionLabel: 'S18: Official Fees & Costs' },
+  { sectionNumber: 19, sectionKey: 's19_processingTimesAndTimelines', stageNumber: 4, legacyCode: null, title: '19. Official Processing Times & Timelines', shortTitle: 'Processing Timelines', claimSectionLabel: 'S19: Processing Times & Timelines' },
+  { sectionNumber: 20, sectionKey: 's20_visaConditionsAndPermittedActivities', stageNumber: 4, legacyCode: 'B', title: '20. Visa Conditions, Validity & Permitted Activities', shortTitle: 'Visa Conditions & Stay', claimSectionLabel: 'S20: Visa Conditions & Activities' },
+  { sectionNumber: 21, sectionKey: 's21_workAuthorizationAndEmployment', stageNumber: 4, legacyCode: 'K', title: '21. Work Authorization & Employment Conditions', shortTitle: 'Work Authorization', claimSectionLabel: 'S21: Work Authorization' },
+  { sectionNumber: 22, sectionKey: 's22_studyAuthorizationAndAcademicRules', stageNumber: 4, legacyCode: null, title: '22. Study Authorization & Academic Conditions', shortTitle: 'Study Authorization', claimSectionLabel: 'S22: Study Authorization' },
+  { sectionNumber: 23, sectionKey: 's23_familyAndDependentRules', stageNumber: 4, legacyCode: null, title: '23. Family & Dependent Rules', shortTitle: 'Family & Dependents', claimSectionLabel: 'S23: Family & Dependent Rules' },
+
+  // Stage 5: Travel, Border Entry & Post-Arrival Life (Sections 24-27)
+  { sectionNumber: 24, sectionKey: 's24_travelPreparationAndPreDeparture', stageNumber: 5, legacyCode: null, title: '24. Travel Preparation & Pre-Departure Checklist', shortTitle: 'Pre-Departure Prep', claimSectionLabel: 'S24: Travel Prep & Pre-Departure' },
+  { sectionNumber: 25, sectionKey: 's25_arrivalBorderControlAndEntry', stageNumber: 5, legacyCode: 'K', title: '25. Arrival, Border Control & Entry Procedure', shortTitle: 'Border Entry & Arrival', claimSectionLabel: 'S25: Arrival & Border Control' },
+  { sectionNumber: 26, sectionKey: 's26_postArrivalRegistrationAndCompliance', stageNumber: 5, legacyCode: 'K', title: '26. Post-Arrival Registration & Local Compliance', shortTitle: 'Post-Arrival Registration', claimSectionLabel: 'S26: Post-Arrival Registration' },
+  { sectionNumber: 27, sectionKey: 's27_renewalExtensionAndStatusChange', stageNumber: 5, legacyCode: 'K', title: '27. Renewal, Extension & Status Change Rules', shortTitle: 'Renewal & Status Change', claimSectionLabel: 'S27: Renewal & Status Change' },
+
+  // Stage 6: Refusals, PR/Citizenship & Special Edge Cases (Sections 28-30)
+  { sectionNumber: 28, sectionKey: 's28_refusalAppealAndReapplication', stageNumber: 6, legacyCode: 'J', title: '28. Refusal, Administrative Review, Appeal & Reapplication', shortTitle: 'Refusals & Appeals', claimSectionLabel: 'S28: Refusal, Appeal & Reapply' },
+  { sectionNumber: 29, sectionKey: 's29_permanentResidenceAndCitizenship', stageNumber: 6, legacyCode: 'K', title: '29. Permanent Residence, Settlement & Citizenship Pathways', shortTitle: 'PR & Citizenship', claimSectionLabel: 'S29: PR & Citizenship Pathways' },
+  { sectionNumber: 30, sectionKey: 's30_faqsEdgeCasesAndOfficialSources', stageNumber: 6, legacyCode: 'M', title: '30. FAQs, Edge Cases & Official Sources', shortTitle: 'FAQs & Official Sources', claimSectionLabel: 'S30: FAQs & Official Sources' }
+] as const;
+
+export interface LifecycleStageDefinition {
+  stageNumber: 1 | 2 | 3 | 4 | 5 | 6;
+  title: string;
+  subtitle: string;
+  sectionKeys: readonly SectionKey30[];
+  includesSpecialTopics?: boolean;
+}
+
+export const SIX_LIFECYCLE_STAGES: readonly LifecycleStageDefinition[] = [
+  {
+    stageNumber: 1,
+    title: 'Stage 1: Program & Nationality Overview',
+    subtitle: 'Destination legal framework, program identity, streams & nationality overrides (Sections 1–4)',
+    sectionKeys: ['s01_countryOverview', 's02_visaProgramOverview', 's03_categoriesAndSubcategories', 's04_nationalitySpecificRules']
+  },
+  {
+    stageNumber: 2,
+    title: 'Stage 2: Eligibility, Qualifications & Sponsorship',
+    subtitle: 'Age, character, education, occupation, language, proof of funds & sponsors (Sections 5–10)',
+    sectionKeys: [
+      's05_coreEligibilityRequirements',
+      's06_educationalQualifications',
+      's07_employmentAndOccupation',
+      's08_languageRequirements',
+      's09_financialAndProofOfFunds',
+      's10_sponsorAndSponsorshipRules'
+    ]
+  },
+  {
+    stageNumber: 3,
+    title: 'Stage 3: Documents, Forms & Application Procedure',
+    subtitle: 'Checklist, formatting, form field guide, workflow steps, biometrics, interview & posts (Sections 11–17)',
+    sectionKeys: [
+      's11_completeDocumentChecklist',
+      's12_documentFormattingAndTechSpecs',
+      's13_officialFormsAndFieldGuide',
+      's14_stepByStepApplicationProcedure',
+      's15_appointmentBiometricsAndMedical',
+      's16_interviewPreparationAndVerification',
+      's17_embassyConsulateAndVacDirectory'
+    ]
+  },
+  {
+    stageNumber: 4,
+    title: 'Stage 4: Fees, Timelines & Visa Conditions',
+    subtitle: 'Government/VAC fees, processing times, stay rules, work/study rights & dependents (Sections 18–23)',
+    sectionKeys: [
+      's18_officialFeesAndCostBreakdown',
+      's19_processingTimesAndTimelines',
+      's20_visaConditionsAndPermittedActivities',
+      's21_workAuthorizationAndEmployment',
+      's22_studyAuthorizationAndAcademicRules',
+      's23_familyAndDependentRules'
+    ]
+  },
+  {
+    stageNumber: 5,
+    title: 'Stage 5: Travel, Border Entry & Post-Arrival Life',
+    subtitle: 'Pre-departure checklist, port of entry inspection, local registration & extensions (Sections 24–27)',
+    sectionKeys: [
+      's24_travelPreparationAndPreDeparture',
+      's25_arrivalBorderControlAndEntry',
+      's26_postArrivalRegistrationAndCompliance',
+      's27_renewalExtensionAndStatusChange'
+    ]
+  },
+  {
+    stageNumber: 6,
+    title: 'Stage 6: Refusals, PR/Citizenship & Special Edge Cases',
+    subtitle: 'Statutory refusals, appeals, PR/citizenship pathways, FAQs & all 22 Applicant Special Topics (Sections 28–30 + T01–T22)',
+    sectionKeys: ['s28_refusalAppealAndReapplication', 's29_permanentResidenceAndCitizenship', 's30_faqsEdgeCasesAndOfficialSources'],
+    includesSpecialTopics: true
+  }
+] as const;
+
+export interface SpecialTopicRegistryItem {
+  topicNumber: number;
+  topicKey: SpecialTopicKey22;
+  title: string;
+  shortTitle: string;
+}
+
+export const TWENTY_TWO_SPECIAL_TOPICS_REGISTRY: readonly SpecialTopicRegistryItem[] = [
+  { topicNumber: 1, topicKey: 't01_passportValidityAndBlankPages', title: 'T01. Passport validity and blank pages', shortTitle: 'Passport Validity & Pages' },
+  { topicNumber: 2, topicKey: 't02_priorRefusalsAndViolations', title: 'T02. Prior visa refusals, deportations and immigration violations', shortTitle: 'Prior Refusals & Violations' },
+  { topicNumber: 3, topicKey: 't03_criminalRecordAndPoliceClearance', title: 'T03. Criminal record and police clearance certificates', shortTitle: 'Criminal Record & PCC' },
+  { topicNumber: 4, topicKey: 't04_medicalVaccinationsAndHealthInsurance', title: 'T04. Medical conditions, vaccinations and health insurance', shortTitle: 'Medical & Vaccinations' },
+  { topicNumber: 5, topicKey: 't05_minorsParentalConsentAndCustody', title: 'T05. Minors, parental consent and custody rules', shortTitle: 'Minors & Parental Consent' },
+  { topicNumber: 6, topicKey: 't06_elderlyAndAccessibilityAccommodations', title: 'T06. Elderly applicants and accessibility accommodations', shortTitle: 'Elderly & Accessibility' },
+  { topicNumber: 7, topicKey: 't07_dualNationalityAndStatelessDocuments', title: 'T07. Dual nationality and stateless/refugee travel documents', shortTitle: 'Dual Nationality & Stateless' },
+  { topicNumber: 8, topicKey: 't08_thirdCountryApplicationRules', title: 'T08. Applying from a third country (residence vs citizenship)', shortTitle: 'Third-Country Applications' },
+  { topicNumber: 9, topicKey: 't09_transitAndAirportTransitRules', title: 'T09. Transit visa and airport transit rules', shortTitle: 'Transit & Airport Rules' },
+  { topicNumber: 10, topicKey: 't10_borderEntryRefusalVsVisaApproval', title: 'T10. Border entry refusal vs visa approval', shortTitle: 'Border Refusal vs Visa' },
+  { topicNumber: 11, topicKey: 't11_customsCashAndProhibitedItems', title: 'T11. Customs, cash declaration and prohibited items', shortTitle: 'Customs & Cash Declaration' },
+  { topicNumber: 12, topicKey: 't12_taxResidencyImplications', title: 'T12. Tax residency implications of long stays', shortTitle: 'Tax Residency Rules' },
+  { topicNumber: 13, topicKey: 't13_socialSecurityHealthcareAndPublicFunds', title: 'T13. Social security, healthcare access and public funds restrictions', shortTitle: 'Healthcare & Public Funds' },
+  { topicNumber: 14, topicKey: 't14_addressEmployerAndStatusChangeReporting', title: 'T14. Address change, employer change and status change reporting', shortTitle: 'Change Reporting Rules' },
+  { topicNumber: 15, topicKey: 't15_rightsWhileApplicationOrRenewalPending', title: 'T15. Rights while an application or renewal is pending', shortTitle: 'Rights While Pending' },
+  { topicNumber: 16, topicKey: 't16_travelOutsideCountryWhilePending', title: 'T16. Travel outside the country while an application is pending', shortTitle: 'Travel While Pending' },
+  { topicNumber: 17, topicKey: 't17_lostOrStolenPassportOrResidenceCard', title: 'T17. Lost or stolen passport, visa foil or residence card', shortTitle: 'Lost/Stolen Passport/Card' },
+  { topicNumber: 18, topicKey: 't18_visaCancellationCurtailmentAndRevocation', title: 'T18. Visa cancellation, curtailment and revocation', shortTitle: 'Cancellation & Revocation' },
+  { topicNumber: 19, topicKey: 't19_overstayConsequencesFinesAndBans', title: 'T19. Overstay consequences, fines, detention and re-entry bans', shortTitle: 'Overstay Fines & Bans' },
+  { topicNumber: 20, topicKey: 't20_immigrationLawChangesDuringProcessing', title: 'T20. Immigration law changes during processing', shortTitle: 'Law Changes In-Flight' },
+  { topicNumber: 21, topicKey: 't21_humanitarianAsylumAndProtectionDisclaimers', title: 'T21. Humanitarian, asylum, refugee and special protection disclaimers', shortTitle: 'Humanitarian & Asylum' },
+  { topicNumber: 22, topicKey: 't22_licensedImmigrationAdvisorGuidance', title: 'T22. When to consult a licensed immigration lawyer or regulated advisor', shortTitle: 'Licensed Advisor Guidance' }
+] as const;
+
+/**
+ * Synchronizes edits made in the 30-Section VisaComprehensiveProfile back into the
+ * legacy 13-Section (A–M) top-level properties AND updates `comp.legacy13Snapshot`
+ * so saving `details` persists both models in lockstep without data loss.
+ */
+export function sync30SectionsToLegacyDetails(details: any, comp: VisaComprehensiveProfile): any {
+  const s = comp.sections;
+
+  const countryOverview = {
+    ...(details.countryOverview || {}),
+    ...(s.s01_countryOverview.legacyFields || {}),
+    ...(s.s01_countryOverview.name !== null ? { name: s.s01_countryOverview.name } : {}),
+    ...(s.s01_countryOverview.summary !== null ? { summary: s.s01_countryOverview.summary } : {}),
+    ...(s.s01_countryOverview.capital !== null ? { capital: s.s01_countryOverview.capital } : {}),
+    ...(s.s01_countryOverview.currency !== null ? { currency: s.s01_countryOverview.currency } : {}),
+    ...(s.s01_countryOverview.officialLanguage !== null
+      ? { language: s.s01_countryOverview.officialLanguage, officialLanguage: s.s01_countryOverview.officialLanguage }
+      : {}),
+    ...(s.s01_countryOverview.officialPortalUrl !== null ? { officialPortalUrl: s.s01_countryOverview.officialPortalUrl } : {}),
+    ...(s.s01_countryOverview.bestTravelSeason !== null ? { bestTravelSeason: s.s01_countryOverview.bestTravelSeason } : {})
+  };
+
+  const visaOverview = {
+    ...(details.visaOverview || {}),
+    ...(s.s02_visaProgramOverview.legacyFields || {}),
+    ...(s.s02_visaProgramOverview.visaName !== null
+      ? { visaName: s.s02_visaProgramOverview.visaName, name: s.s02_visaProgramOverview.visaName }
+      : {}),
+    ...(s.s02_visaProgramOverview.statutoryCode !== null ? { code: s.s02_visaProgramOverview.statutoryCode } : {}),
+    ...(s.s02_visaProgramOverview.category !== null ? { category: s.s02_visaProgramOverview.category } : {}),
+    ...(s.s02_visaProgramOverview.purpose !== null ? { purpose: s.s02_visaProgramOverview.purpose } : {}),
+    ...(s.s02_visaProgramOverview.stayDuration !== null
+      ? { stayDuration: s.s02_visaProgramOverview.stayDuration, stay: s.s02_visaProgramOverview.stayDuration }
+      : {}),
+    ...(s.s02_visaProgramOverview.validity !== null ? { validity: s.s02_visaProgramOverview.validity } : {}),
+    ...(s.s02_visaProgramOverview.entryType !== null ? { entryType: s.s02_visaProgramOverview.entryType } : {}),
+    ...(s.s02_visaProgramOverview.feeSummary !== null ? { fee: s.s02_visaProgramOverview.feeSummary } : {})
+  };
+
+  const eligibility = {
+    ...(details.eligibility || {}),
+    ...(s.s05_coreEligibilityRequirements.legacyFields || {}),
+    ...(s.s05_coreEligibilityRequirements.summary !== null ? { summary: s.s05_coreEligibilityRequirements.summary } : {}),
+    ...(s.s05_coreEligibilityRequirements.minAge !== null ? { minAge: s.s05_coreEligibilityRequirements.minAge } : {}),
+    ...(s.s05_coreEligibilityRequirements.maxAge !== null ? { maxAge: s.s05_coreEligibilityRequirements.maxAge } : {}),
+    ...(s.s05_coreEligibilityRequirements.healthInsuranceRequired !== null
+      ? { healthInsuranceRequired: s.s05_coreEligibilityRequirements.healthInsuranceRequired }
+      : {}),
+    ...(s.s05_coreEligibilityRequirements.policeClearanceRequired !== null
+      ? { policeClearanceRequired: s.s05_coreEligibilityRequirements.policeClearanceRequired }
+      : {}),
+    ...(s.s06_educationalQualifications.educationLevel !== null
+      ? { educationLevel: s.s06_educationalQualifications.educationLevel }
+      : {}),
+    ...(s.s07_employmentAndOccupation.workExperienceYears !== null
+      ? { workExperienceYears: s.s07_employmentAndOccupation.workExperienceYears }
+      : {}),
+    ...(s.s08_languageRequirements.languageRequirementSummary !== null
+      ? { languageRequirement: s.s08_languageRequirements.languageRequirementSummary }
+      : {})
+  };
+
+  const financial = {
+    ...(details.financial || {}),
+    ...(s.s09_financialAndProofOfFunds.legacyFields || {}),
+    ...(s.s09_financialAndProofOfFunds.minBankBalance !== null ? { minBankBalance: s.s09_financialAndProofOfFunds.minBankBalance } : {}),
+    ...(s.s09_financialAndProofOfFunds.recommendedFunds !== null ? { recommendedFunds: s.s09_financialAndProofOfFunds.recommendedFunds } : {}),
+    ...(s.s09_financialAndProofOfFunds.currency !== null ? { currency: s.s09_financialAndProofOfFunds.currency } : {}),
+    ...(s.s09_financialAndProofOfFunds.incomeRequirement !== null ? { incomeRequirement: s.s09_financialAndProofOfFunds.incomeRequirement } : {}),
+    ...(s.s09_financialAndProofOfFunds.bankStatementMonths !== null ? { bankStatementMonths: s.s09_financialAndProofOfFunds.bankStatementMonths } : {}),
+    ...(s.s09_financialAndProofOfFunds.itrRequirement !== null ? { itrRequirement: s.s09_financialAndProofOfFunds.itrRequirement } : {}),
+    ...(s.s09_financialAndProofOfFunds.notes !== null ? { notes: s.s09_financialAndProofOfFunds.notes } : {}),
+    ...(s.s10_sponsorAndSponsorshipRules.sponsorshipAllowed !== null
+      ? { sponsorshipAllowed: s.s10_sponsorAndSponsorshipRules.sponsorshipAllowed }
+      : {})
+  };
+
+  const documentChecklist = s.s11_completeDocumentChecklist.documents.map(d => ({
+    ...(d.rawItem || {}),
+    name: d.name,
+    item: d.name,
+    description: d.description ?? '',
+    mandatory: d.mandatory,
+    applicantCategory: d.applicantCategory ?? 'All Applicants',
+    format: d.format ?? 'Original / Copy',
+    validityRequirements: d.validityRequirements ?? '',
+    requirementClassification: d.requirementClassification,
+    translationRequired: d.translationRequired,
+    apostilleOrNotarizationRequired: d.apostilleOrNotarizationRequired,
+    issuingAuthority: d.issuingAuthority ?? ''
+  }));
+
+  const applicationFields = Array.isArray(details.applicationFields)
+    ? s.s13_officialFormsAndFieldGuide.fields.map(f => ({
+        ...(f.rawField || {}),
+        fieldName: f.fieldName,
+        name: f.fieldName,
+        section: f.section ?? '',
+        type: f.type ?? 'TEXT',
+        instructions: f.instructions ?? '',
+        guidance: f.instructions ?? '',
+        commonMistake: f.commonMistake ?? ''
+      }))
+    : details.applicationFields;
+
+  const applicationSteps = s.s14_stepByStepApplicationProcedure.steps.map((st, idx) => ({
+    ...(st.rawStep || {}),
+    stepNumber: st.stepNumber || idx + 1,
+    title: st.title,
+    description: st.description ?? '',
+    instructions: st.description ?? '',
+    channel: st.channel,
+    fees: st.fees ?? '',
+    estimatedDuration: st.estimatedDuration ?? '',
+    appointmentRequired: st.appointmentRequired ?? '',
+    officialActionUrl: st.officialActionUrl ?? '',
+    officialLink: st.officialActionUrl ?? ''
+  }));
+
+  const interviewPrep = {
+    ...(details.interviewPrep || {}),
+    ...(s.s16_interviewPreparationAndVerification.legacyFields || {}),
+    ...(s.s16_interviewPreparationAndVerification.tips !== null ? { tips: s.s16_interviewPreparationAndVerification.tips } : {}),
+    ...(s.s16_interviewPreparationAndVerification.interviewRequired !== null
+      ? { interviewRequired: s.s16_interviewPreparationAndVerification.interviewRequired }
+      : {}),
+    questions: s.s16_interviewPreparationAndVerification.questions.map(q => ({
+      ...(q.rawQuestion || {}),
+      question: q.question,
+      guidance: q.idealAnswerOrGuidance ?? '',
+      idealAnswer: q.idealAnswerOrGuidance ?? '',
+      redFlag: q.redFlag ?? '',
+      supportingDocs: q.supportingDocs ?? ''
+    }))
+  };
+
+  const embassyDirectory = s.s17_embassyConsulateAndVacDirectory.facilities.map(f => ({
+    ...(f.rawFacility || {}),
+    name: f.name ?? '',
+    city: f.city ?? '',
+    facilityType: f.facilityType,
+    address: f.address ?? '',
+    phone: f.phone ?? '',
+    email: f.email ?? '',
+    bookingUrl: f.bookingUrl ?? '',
+    appointmentLink: f.bookingUrl ?? '',
+    jurisdiction: f.jurisdictionCoverage ?? '',
+    jurisdictionCoverage: f.jurisdictionCoverage ?? '',
+    operatingHours: f.operatingHours ?? '',
+    workingHours: f.operatingHours ?? ''
+  }));
+
+  const refusalAppeal = {
+    ...(details.refusalAppeal || {}),
+    ...(s.s28_refusalAppealAndReapplication.legacyFields || {}),
+    ...(s.s28_refusalAppealAndReapplication.commonRefusalReasons.length > 0
+      ? {
+          commonReasons: s.s28_refusalAppealAndReapplication.commonRefusalReasons,
+          grounds: s.s28_refusalAppealAndReapplication.commonRefusalReasons.join('; ')
+        }
+      : {}),
+    ...(s.s28_refusalAppealAndReapplication.appealPossible !== null
+      ? { appealPossible: s.s28_refusalAppealAndReapplication.appealPossible }
+      : {}),
+    ...(s.s28_refusalAppealAndReapplication.appealAndReapplicationProcedure !== null
+      ? {
+          appealProcess: s.s28_refusalAppealAndReapplication.appealAndReapplicationProcedure,
+          appealProcedure: s.s28_refusalAppealAndReapplication.appealAndReapplicationProcedure
+        }
+      : {})
+  };
+
+  const afterApproval = {
+    ...(details.afterApproval || {}),
+    ...(s.s26_postArrivalRegistrationAndCompliance.legacyFields || {}),
+    ...(s.s25_arrivalBorderControlAndEntry.entryRequirementsSummary !== null
+      ? {
+          entryRequirements: s.s25_arrivalBorderControlAndEntry.entryRequirementsSummary,
+          entryConditions: s.s25_arrivalBorderControlAndEntry.entryRequirementsSummary
+        }
+      : {}),
+    ...(s.s20_visaConditionsAndPermittedActivities.authorizedStayDuration !== null
+      ? { authorizedStay: s.s20_visaConditionsAndPermittedActivities.authorizedStayDuration }
+      : {}),
+    ...(s.s21_workAuthorizationAndEmployment.workRightsSummary !== null
+      ? { workRights: s.s21_workAuthorizationAndEmployment.workRightsSummary }
+      : {}),
+    ...(s.s26_postArrivalRegistrationAndCompliance.registrationRequirementsSummary !== null
+      ? { registrationRequirements: s.s26_postArrivalRegistrationAndCompliance.registrationRequirementsSummary }
+      : {}),
+    ...(s.s27_renewalExtensionAndStatusChange.extensionPossible !== null
+      ? { extensionPossible: s.s27_renewalExtensionAndStatusChange.extensionPossible }
+      : {}),
+    ...(s.s29_permanentResidenceAndCitizenship.settlementPathSummary !== null
+      ? { settlementPath: s.s29_permanentResidenceAndCitizenship.settlementPathSummary }
+      : {})
+  };
+
+  const costCalculator = {
+    ...(details.costCalculator || {}),
+    ...(s.s18_officialFeesAndCostBreakdown.legacyFields || {}),
+    ...(s.s18_officialFeesAndCostBreakdown.governmentFee !== null
+      ? {
+          governmentFee: s.s18_officialFeesAndCostBreakdown.governmentFee,
+          governmentVisaFee: s.s18_officialFeesAndCostBreakdown.governmentFee
+        }
+      : {}),
+    ...(s.s18_officialFeesAndCostBreakdown.serviceOrVacFee !== null
+      ? {
+          serviceFee: s.s18_officialFeesAndCostBreakdown.serviceOrVacFee,
+          applicationCentreCharges: s.s18_officialFeesAndCostBreakdown.serviceOrVacFee
+        }
+      : {}),
+    ...(s.s18_officialFeesAndCostBreakdown.biometricFee !== null
+      ? {
+          biometricFee: s.s18_officialFeesAndCostBreakdown.biometricFee,
+          biometricsFee: s.s18_officialFeesAndCostBreakdown.biometricFee
+        }
+      : {}),
+    ...(s.s18_officialFeesAndCostBreakdown.currency !== null ? { currency: s.s18_officialFeesAndCostBreakdown.currency } : {})
+  };
+
+  const faq = s.s30_faqsEdgeCasesAndOfficialSources.faqs.map(f => ({
+    ...(f.rawFaq || {}),
+    question: f.question,
+    q: f.question,
+    answer: f.answer,
+    a: f.answer,
+    verificationStatus: f.verificationStatus ?? 'VERIFIED_OFFICIAL',
+    requirementClassification: f.requirementClassification
+  }));
+
+  const legalEvidence = s.s30_faqsEdgeCasesAndOfficialSources.legalEvidenceItems.map(l => ({ ...l }));
+
+  const updatedComp: VisaComprehensiveProfile = {
+    ...comp,
+    legacy13Snapshot: {
+      countryOverview,
+      visaOverview,
+      eligibility,
+      financial,
+      documentChecklist,
+      applicationFields,
+      applicationSteps,
+      interviewPrep,
+      embassyDirectory,
+      refusalAppeal,
+      afterApproval,
+      costCalculator,
+      faq,
+      legalEvidence
+    }
+  };
+
+  return {
+    ...details,
+    countryOverview,
+    visaOverview,
+    eligibility,
+    financial,
+    documentChecklist,
+    applicationFields,
+    applicationSteps,
+    interviewPrep,
+    embassyDirectory,
+    refusalAppeal,
+    afterApproval,
+    costCalculator,
+    faq,
+    legalEvidence,
+    comprehensiveSections: updatedComp
+  };
+}
+
+/**
+ * Synchronizes edits made in the Legacy 13-Section (A–M) editor immediately into
+ * `details.comprehensiveSections` in memory while preserving 30-section metadata and extensions.
+ */
+export function syncLegacyDetailsTo30Sections(details: any): any {
+  if (!details || typeof details !== 'object') return details;
+  const updatedComp = normalizeVisaDetailTo30Sections(details);
+  return {
+    ...details,
+    comprehensiveSections: updatedComp
+  };
+}
+
+// --- PHASE 3.2.2: SERVER & CLIENT CONTENT HONESTY & CLAIM INTEGRITY VALIDATORS ---
+
+export function isSectionSubstantivelyPopulated(sectionObj: any): boolean {
+  if (!sectionObj || typeof sectionObj !== 'object') return false;
+  return Object.entries(sectionObj).some(([k, v]) => {
+    if (k === 'meta' || k === 'legacyFields' || k === 'legacyFieldObject') return false;
+    // Ignore default static boilerplate warning in s25 if no other substantive field is set
+    if (
+      k === 'visaDoesNotGuaranteeEntryWarning' &&
+      sectionObj.entryRequirementsSummary === null &&
+      sectionObj.digitalArrivalCardName === null &&
+      sectionObj.digitalArrivalCardUrl === null &&
+      sectionObj.admissionStampAndI94VerificationRule === null &&
+      (!Array.isArray(sectionObj.handLuggageDocuments) || sectionObj.handLuggageDocuments.length === 0) &&
+      (!Array.isArray(sectionObj.borderInspectionTopics) || sectionObj.borderInspectionTopics.length === 0)
+    ) {
+      return false;
+    }
+    if (k === 'channel' || k === 'facilityType' || k === 'authorizationType' || k === 'reviewType' || k === 'fundRequirementClassification') {
+      if (v === 'UNKNOWN') return false;
+    }
+    if (Array.isArray(v)) return v.length > 0;
+    if (v && typeof v === 'object') {
+      return Object.values(v).some(inner => inner !== null && inner !== undefined && inner !== '');
+    }
+    return v !== null && v !== undefined && String(v).trim() !== '';
+  });
+}
+
+const TOPIC_METADATA_KEYS = new Set([
+  'topicNumber',
+  'topicKey',
+  'title',
+  'verificationState',
+  'requirementClassification',
+  'officialSourceUrl',
+  'legalReference',
+  'applicabilityReason',
+  'lastVerifiedAt',
+  'applicableNationality',
+  'countryIso',
+  'visaCategory',
+  'issuingAuthority',
+  'publicationDate',
+  'effectiveDate',
+  'reviewerNotes',
+  'supportingExcerpts'
+]);
+
+export function isTopicSubstantivelyPopulated(topicObj: any): boolean {
+  if (!topicObj || typeof topicObj !== 'object') return false;
+  if (topicObj.summary && String(topicObj.summary).trim() !== '') return true;
+  if (topicObj.details && typeof topicObj.details === 'object') {
+    const hasDetails = Object.values(topicObj.details).some(
+      val => val !== null && val !== undefined && String(val).trim() !== ''
+    );
+    if (hasDetails) return true;
+  }
+  return Object.entries(topicObj).some(([k, v]) => {
+    if (TOPIC_METADATA_KEYS.has(k) || k === 'summary' || k === 'details') return false;
+    if (Array.isArray(v)) return v.length > 0;
+    return v !== null && v !== undefined && String(v).trim() !== '';
+  });
+}
+
+export interface ProfileHonestyValidationResult {
+  valid: boolean;
+  errors: string[];
+}
+
+/**
+ * Validates every comprehensive section (s01..s30) and special topic (t01..t22) against
+ * Phase 3.2.2 honesty gates:
+ * 1. Rejects VERIFIED when substantive content is missing.
+ * 2. Rejects VERIFIED when required officialSourceUrl metadata is missing.
+ * 3. Rejects NOT_APPLICABLE when applicabilityReason is empty.
+ */
+export function validateComprehensiveProfileHonesty(detailsOrProfile: any): ProfileHonestyValidationResult {
+  const errors: string[] = [];
+  if (!detailsOrProfile || typeof detailsOrProfile !== 'object') {
+    return { valid: true, errors };
+  }
+
+  const profile: VisaComprehensiveProfile =
+    detailsOrProfile.sections && detailsOrProfile.applicantSpecialTopics
+      ? detailsOrProfile
+      : normalizeVisaDetailTo30Sections(detailsOrProfile);
+
+  const rawComp =
+    detailsOrProfile.comprehensiveSections && typeof detailsOrProfile.comprehensiveSections === 'object'
+      ? detailsOrProfile.comprehensiveSections
+      : detailsOrProfile.sections
+      ? detailsOrProfile
+      : null;
+
+  for (const reg of THIRTY_SECTIONS_REGISTRY) {
+    const secKey = reg.sectionKey;
+    const sec = profile.sections?.[secKey] as any;
+    const rawSec = rawComp?.sections?.[secKey] as any;
+    const targetSec = rawSec || sec;
+    if (!targetSec) continue;
+
+    const meta: SectionMetadata | undefined = targetSec.meta || sec?.meta;
+    if (!meta) continue;
+
+    if (meta.verificationState === 'VERIFIED') {
+      const hasContent = isSectionSubstantivelyPopulated(targetSec);
+      const hasSourceUrl = Boolean(meta.officialSourceUrl && String(meta.officialSourceUrl).trim());
+      if (!hasContent) {
+        errors.push(
+          `Section ${reg.sectionNumber} (${secKey}) cannot be marked VERIFIED because substantive content is missing.`
+        );
+      }
+      if (!hasSourceUrl) {
+        errors.push(
+          `Section ${reg.sectionNumber} (${secKey}) cannot be marked VERIFIED because required officialSourceUrl metadata is missing.`
+        );
+      }
+    } else if (meta.verificationState === 'NOT_APPLICABLE') {
+      const hasReason = Boolean(meta.applicabilityReason && String(meta.applicabilityReason).trim());
+      if (!hasReason) {
+        errors.push(
+          `Section ${reg.sectionNumber} (${secKey}) cannot be marked NOT_APPLICABLE when applicabilityReason is empty.`
+        );
+      }
+    }
+  }
+
+  for (const tReg of TWENTY_TWO_SPECIAL_TOPICS_REGISTRY) {
+    const tKey = tReg.topicKey;
+    const topic = profile.applicantSpecialTopics?.[tKey] as any;
+    const rawTopic = rawComp?.applicantSpecialTopics?.[tKey] as any;
+    const targetTopic = rawTopic ? { ...(topic || {}), ...rawTopic } : topic;
+    if (!targetTopic) continue;
+
+    if (targetTopic.verificationState === 'VERIFIED') {
+      const hasContent = isTopicSubstantivelyPopulated(targetTopic);
+      const hasSourceUrl = Boolean(
+        targetTopic.officialSourceUrl && String(targetTopic.officialSourceUrl).trim()
+      );
+      if (!hasContent) {
+        errors.push(
+          `Special Topic T${String(tReg.topicNumber).padStart(2, '0')} (${tKey}) cannot be marked VERIFIED because substantive content is missing.`
+        );
+      }
+      if (!hasSourceUrl) {
+        errors.push(
+          `Special Topic T${String(tReg.topicNumber).padStart(2, '0')} (${tKey}) cannot be marked VERIFIED because required officialSourceUrl metadata is missing.`
+        );
+      }
+    } else if (targetTopic.verificationState === 'NOT_APPLICABLE') {
+      const hasReason = Boolean(
+        targetTopic.applicabilityReason && String(targetTopic.applicabilityReason).trim()
+      );
+      if (!hasReason) {
+        errors.push(
+          `Special Topic T${String(tReg.topicNumber).padStart(2, '0')} (${tKey}) cannot be marked NOT_APPLICABLE when applicabilityReason is empty.`
+        );
+      }
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
+export interface ClaimMismatchOrStaleWarning {
+  code:
+    | 'STALE_OR_MISSING_EVIDENCE'
+    | 'SUPERSEDED_OR_EXPIRED_EVIDENCE'
+    | 'COUNTRY_MISMATCH'
+    | 'VISA_CATEGORY_MISMATCH'
+    | 'NATIONALITY_MISMATCH';
+  message: string;
+}
+
+export type ClaimIntegrityWarning = ClaimMismatchOrStaleWarning;
+
+export interface ClaimIntegrityEvaluation {
+  hasQualifyingOfficialEvidence: boolean;
+  staleOrMissingEvidence: boolean;
+  canPresentAsVerified: boolean;
+  warnings: ClaimMismatchOrStaleWarning[];
+}
+
+function normalizeCategoryString(cat: string): string {
+  const c = cat.trim().toLowerCase();
+  if (c.includes('tour') || c.includes('visit') || c === 'b1/b2' || c === 'tou') return 'tourist';
+  if (c.includes('work') || c.includes('employ') || c.includes('skill')) return 'work';
+  if (c.includes('stud') || c.includes('academ')) return 'student';
+  if (c.includes('busi') || c.includes('invest')) return 'business';
+  if (c.includes('fam') || c.includes('spous') || c.includes('depend')) return 'family';
+  if (c.includes('pr') || c.includes('perm') || c.includes('settle')) return 'pr';
+  return c;
+}
+
+/**
+ * Evaluates a claim and its attached evidence for:
+ * - Qualifying official evidence presence
+ * - Stale, outdated, broken, or superseded evidence (when dates or statuses establish it)
+ * - Country ISO mismatch against the program
+ * - Visa category mismatch against the program
+ * - Nationality mismatch against a target applicant nationality
+ *
+ * Never infers expiration without explicit dates or status data.
+ */
+export function evaluateClaimIntegrity(
+  claim: any,
+  context?: {
+    expectedCountryIso?: string;
+    expectedVisaCategory?: string;
+    targetNationality?: string;
+    referenceDateIso?: string;
+  }
+): ClaimIntegrityEvaluation {
+  const warnings: ClaimMismatchOrStaleWarning[] = [];
+  const evidenceList: any[] = Array.isArray(claim?.evidence) ? claim.evidence : [];
+
+  // Detect date-based superseded evidence when multiple dated official sources exist
+  // or when an explicit expiration date is in the past.
+  const refDate = context?.referenceDateIso || new Date().toISOString().split('T')[0];
+  let maxOfficialEffectiveDate = '';
+  for (const ev of evidenceList) {
+    const normSt = normalizeEvidenceStatus(ev?.status);
+    const eff = String(ev?.effectiveDate || ev?.effective_date || '').trim();
+    if (isQualifyingOfficialEvidence(normSt) && /^\d{4}-\d{2}-\d{2}$/.test(eff)) {
+      if (eff > maxOfficialEffectiveDate) {
+        maxOfficialEffectiveDate = eff;
+      }
+    }
+  }
+
+  let validOfficialCount = 0;
+  let hasInvalidatedEvidence = false;
+  let hasSupersededOrExpiredEvidence = false;
+
+  for (const ev of evidenceList) {
+    const normSt = normalizeEvidenceStatus(ev?.status);
+    const pubDate = String(ev?.publicationDate || ev?.publication_date || '').trim();
+    const effDate = String(ev?.effectiveDate || ev?.effective_date || '').trim();
+    const expDate = String(ev?.expirationDate || ev?.expiration_date || '').trim();
+    const notes = String(ev?.reviewerNotes || ev?.reviewer_notes || '').toLowerCase();
+
+    if (isInvalidatingEvidenceStatus(normSt)) {
+      hasInvalidatedEvidence = true;
+    }
+
+    const explicitlyExpiredByDate =
+      (/^\d{4}-\d{2}-\d{2}$/.test(expDate) && expDate < refDate) ||
+      notes.includes('superseded by') ||
+      notes.includes('expired on');
+
+    const chronologicallyInvalid =
+      /^\d{4}-\d{2}-\d{2}$/.test(pubDate) &&
+      /^\d{4}-\d{2}-\d{2}$/.test(effDate) &&
+      effDate < '1900-01-01';
+
+    if (explicitlyExpiredByDate || chronologicallyInvalid) {
+      hasSupersededOrExpiredEvidence = true;
+    } else if (isQualifyingOfficialEvidence(normSt)) {
+      validOfficialCount++;
+    }
+  }
+
+  if (
+    evidenceList.length > 1 &&
+    maxOfficialEffectiveDate &&
+    evidenceList.some(ev => {
+      const eff = String(ev?.effectiveDate || ev?.effective_date || '').trim();
+      return /^\d{4}-\d{2}-\d{2}$/.test(eff) && eff < maxOfficialEffectiveDate && normalizeEvidenceStatus(ev?.status) === 'OUTDATED';
+    })
+  ) {
+    hasSupersededOrExpiredEvidence = true;
+  }
+
+  const hasQualifyingOfficialEvidence = validOfficialCount > 0;
+  const staleOrMissingEvidence =
+    !hasQualifyingOfficialEvidence && (claim?.status === 'VERIFIED' || hasInvalidatedEvidence || hasSupersededOrExpiredEvidence);
+
+  if (!hasQualifyingOfficialEvidence && (claim?.status === 'VERIFIED' || hasInvalidatedEvidence)) {
+    warnings.push({
+      code: 'STALE_OR_MISSING_EVIDENCE',
+      message:
+        'No active qualifying official evidence (VERIFIED_OFFICIAL or OFFICIAL_BUT_NOT_FULLY_CONFIRMED) supports this claim.'
+    });
+  }
+
+  if (hasSupersededOrExpiredEvidence) {
+    warnings.push({
+      code: 'SUPERSEDED_OR_EXPIRED_EVIDENCE',
+      message: 'One or more attached evidence records have dates or notes establishing they are superseded or expired.'
+    });
+  }
+
+  // Country ISO check
+  const claimCountry = String(claim?.countryIso || claim?.country_iso || '').trim().toUpperCase();
+  const inferredProgCountry = String(
+    context?.expectedCountryIso || (claim?.programId || claim?.program_id || '').split('-')[0] || ''
+  )
+    .trim()
+    .toUpperCase();
+
+  if (claimCountry && inferredProgCountry && inferredProgCountry.length === 2 && claimCountry !== inferredProgCountry) {
+    warnings.push({
+      code: 'COUNTRY_MISMATCH',
+      message: `Claim countryIso (${claimCountry}) does not match program destination country (${inferredProgCountry}).`
+    });
+  }
+
+  // Visa category check
+  const claimCat = String(claim?.visaCategory || claim?.visa_category || '').trim();
+  const expectedCat = String(context?.expectedVisaCategory || '').trim();
+  if (claimCat && expectedCat) {
+    const normClaimCat = normalizeCategoryString(claimCat);
+    const normExpectedCat = normalizeCategoryString(expectedCat);
+    if (
+      normClaimCat &&
+      normExpectedCat &&
+      normClaimCat !== normExpectedCat &&
+      !normClaimCat.includes(normExpectedCat) &&
+      !normExpectedCat.includes(normClaimCat)
+    ) {
+      warnings.push({
+        code: 'VISA_CATEGORY_MISMATCH',
+        message: `Claim visaCategory ("${claimCat}") does not match program category ("${expectedCat}").`
+      });
+    }
+  }
+
+  // Nationality mismatch check
+  const claimNat = String(claim?.applicableNationality || claim?.applicable_nationality || 'ALL')
+    .trim()
+    .toUpperCase();
+  const targetNat = String(context?.targetNationality || '')
+    .trim()
+    .toUpperCase();
+  if (claimNat !== 'ALL' && !/^[A-Z]{2}$/.test(claimNat)) {
+    warnings.push({
+      code: 'NATIONALITY_MISMATCH',
+      message: `Claim applicableNationality ("${claimNat}") is not a valid ISO-2 nationality code or "ALL".`
+    });
+  } else if (targetNat && targetNat !== 'ALL' && claimNat !== 'ALL' && claimNat !== targetNat) {
+    warnings.push({
+      code: 'NATIONALITY_MISMATCH',
+      message: `Claim applies to nationality "${claimNat}", which does not match target applicant nationality "${targetNat}".`
+    });
+  }
+
+  const hasBlockingMismatch = warnings.some(
+    w =>
+      w.code === 'STALE_OR_MISSING_EVIDENCE' ||
+      w.code === 'COUNTRY_MISMATCH' ||
+      w.code === 'VISA_CATEGORY_MISMATCH' ||
+      w.code === 'NATIONALITY_MISMATCH' ||
+      (w.code === 'SUPERSEDED_OR_EXPIRED_EVIDENCE' && !hasQualifyingOfficialEvidence)
+  );
+
+  return {
+    hasQualifyingOfficialEvidence,
+    staleOrMissingEvidence,
+    canPresentAsVerified: claim?.status === 'VERIFIED' && hasQualifyingOfficialEvidence && !hasBlockingMismatch,
+    warnings
+  };
+}
+
+/**
+ * Sanitizes visa details and claims for public consumption:
+ * 1. Strips reviewer notes, reviewer IDs, editor IDs, internal change reasons, and operational metadata.
+ * 2. Filters claims and evidence by applicant nationality and verified eligibility.
+ * 3. Never presents unverified, rejected, or stale claims as VERIFIED public guidance.
+ */
+export function sanitizeVisaDetailsForPublic(
+  rawDetails: any,
+  options?: {
+    nationality?: string;
+    claims?: any[];
+  }
+): any {
+  if (!rawDetails || typeof rawDetails !== 'object') return null;
+
+  const targetNat = (options?.nationality || 'ALL').trim().toUpperCase();
+  const rawClaims: any[] = Array.isArray(options?.claims)
+    ? options!.claims
+    : Array.isArray(rawDetails.claims)
+    ? rawDetails.claims
+    : [];
+
+  const sanitizedClaims = rawClaims
+    .filter(c => {
+      // Do not expose REJECTED, QUARANTINED, or OUTDATED claims to public as verified guidance
+      if (['REJECTED', 'QUARANTINED'].includes(c.status)) return false;
+      // Filter by nationality: include universal ('ALL') and matching target nationality
+      if (targetNat && targetNat !== 'ALL') {
+        const claimNat = String(c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase();
+        if (claimNat !== 'ALL' && claimNat !== targetNat) return false;
+      }
+      return true;
+    })
+    .map(c => {
+      const evidenceList: any[] = Array.isArray(c.evidence) ? c.evidence : [];
+      const sanitizedEvidence = evidenceList
+        .filter(ev => {
+          const normSt = normalizeEvidenceStatus(ev?.status);
+          return normSt !== 'REJECTED';
+        })
+        .map(ev => ({
+          id: ev.id,
+          sourceTitle: ev.sourceTitle || ev.source_title || 'Official Source',
+          sourceUrl: ev.sourceUrl || ev.source_url || '',
+          issuingAuthority: ev.issuingAuthority || ev.issuing_authority || '',
+          legalInstrument: ev.legalInstrument || ev.legal_instrument || '',
+          publicationDate: ev.publicationDate || ev.publication_date || '',
+          effectiveDate: ev.effectiveDate || ev.effective_date || '',
+          accessDate: ev.accessDate || ev.access_date || '',
+          excerpt: ev.excerpt || '',
+          status: normalizeEvidenceStatus(ev?.status)
+        }));
+
+      const integrity = evaluateClaimIntegrity(
+        { ...c, evidence: sanitizedEvidence },
+        {
+          expectedCountryIso: (rawDetails.programId || '').split('-')[0] || '',
+          targetNationality: targetNat
+        }
+      );
+
+      // Public presentation status: never display as VERIFIED if integrity check fails
+      const publicStatus =
+        c.status === 'VERIFIED' && integrity.canPresentAsVerified
+          ? 'VERIFIED'
+          : c.status === 'VERIFIED'
+          ? 'AWAITING_VERIFICATION'
+          : c.status || 'NEEDS_EVIDENCE';
+
+      return {
+        id: c.id,
+        programId: c.programId || c.program_id,
+        section: c.section,
+        description: c.description,
+        value: c.value || '',
+        unit: c.unit || '',
+        status: publicStatus,
+        requirementClassification: isValidRequirementClassification(c.requirementClassification)
+          ? c.requirementClassification
+          : 'ADMIN_INSTRUCTION',
+        applicableNationality: (c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase(),
+        countryIso: c.countryIso || c.country_iso || '',
+        visaCategory: c.visaCategory || c.visa_category || '',
+        canPresentAsVerified: integrity.canPresentAsVerified,
+        staleOrMissingEvidence: integrity.staleOrMissingEvidence,
+        warnings: integrity.warnings,
+        evidence: sanitizedEvidence
+      };
+    });
+
+  // Deep clone and sanitize comprehensive sections (strip reviewer notes and internal operational fields)
+  const comp = rawDetails.comprehensiveSections
+    ? JSON.parse(JSON.stringify(rawDetails.comprehensiveSections))
+    : normalizeVisaDetailTo30Sections(rawDetails);
+
+  if (comp?.sections) {
+    for (const sKey of Object.keys(comp.sections)) {
+      const sec = comp.sections[sKey];
+      if (sec?.meta) {
+        delete sec.meta.reviewerNotes;
+        delete sec.meta.internalReviewNotes;
+      }
+    }
+  }
+
+  if (comp?.applicantSpecialTopics) {
+    for (const tKey of Object.keys(comp.applicantSpecialTopics)) {
+      const top = comp.applicantSpecialTopics[tKey];
+      if (top) {
+        delete top.reviewerNotes;
+        delete top.internalReviewNotes;
+      }
+    }
+  }
+
+  return {
+    id: rawDetails.id,
+    programId: rawDetails.programId,
+    verificationStatus: rawDetails.verificationStatus,
+    lastUpdated: rawDetails.lastUpdated,
+    countryOverview: rawDetails.countryOverview || {},
+    visaOverview: rawDetails.visaOverview || {},
+    eligibility: rawDetails.eligibility || {},
+    financial: rawDetails.financial || {},
+    documentChecklist: rawDetails.documentChecklist || [],
+    applicationFields: rawDetails.applicationFields || [],
+    applicationSteps: rawDetails.applicationSteps || [],
+    interviewPrep: rawDetails.interviewPrep || {},
+    embassyDirectory: rawDetails.embassyDirectory || [],
+    refusalAppeal: rawDetails.refusalAppeal || {},
+    afterApproval: rawDetails.afterApproval || {},
+    costCalculator: rawDetails.costCalculator || {},
+    faq: rawDetails.faq || [],
+    legalEvidence: rawDetails.legalEvidence || [],
+    comprehensiveSections: comp,
+    claims: sanitizedClaims,
+    selectedNationality: targetNat
+  };
+}
+
+

@@ -32,6 +32,7 @@ import {
   getPaginatedVisaDetails,
   saveVisaDetails,
   getVisaClaims,
+  getVisaClaimById,
   getVisaClaimsWithEvidence,
   saveVisaClaim,
   deleteVisaClaim,
@@ -42,7 +43,13 @@ import {
   saveVisaVersion,
   getDashboardStats,
   updateVisaStatus,
-  restoreVersion
+  restoreVersion,
+  EVIDENCE_STATUSES,
+  normalizeEvidenceStatus,
+  isQualifyingOfficialEvidence,
+  validateComprehensiveProfileHonesty,
+  evaluateClaimIntegrity,
+  sanitizeVisaDetailsForPublic
 } from './src/db/immigrationDatabase';
 import { executeImmigrationBatch } from './src/services/immigrationBatchProcessor';
 
@@ -528,8 +535,8 @@ app.delete('/api/admin/drafts/:slug', requireAdminAuth, (req, res) => {
   }
 });
 
-// Cron Route for Vercel Cron & Manual Trigger
-app.post('/api/cron', async (req, res) => {
+// Cron Route for Vercel Cron & Manual Trigger (Protected by requireCronOrAdminAuth)
+app.post('/api/cron', requireCronOrAdminAuth, async (req, res) => {
   try {
     // Pick 1 country in rotation based on day of year
     const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
@@ -716,7 +723,7 @@ app.get('/api/immigration/batch-state', (req, res) => {
   res.json(defaultState);
 });
 
-app.post('/api/immigration/batch-state', (req, res) => {
+app.post('/api/immigration/batch-state', requireCronOrAdminAuth, (req, res) => {
   try {
     const newState = req.body;
     writeBatchStateToDisk(newState);
@@ -726,7 +733,7 @@ app.post('/api/immigration/batch-state', (req, res) => {
   }
 });
 
-app.post('/api/immigration/batch-execute', async (req, res) => {
+app.post('/api/immigration/batch-execute', requireCronOrAdminAuth, async (req, res) => {
   try {
     const batchIndex = req.body?.batchIndex || 1;
     const batchSize = req.body?.batchSize || 25;
@@ -814,12 +821,6 @@ function validateCronAuthTimingSafe(req: any): { status: 'AUTHORIZED' | 'UNAUTHO
 
   // Admin session authentication for manual admin dispatch
   if (isAdminAuthenticatedReq(req)) {
-    return { status: 'AUTHORIZED' };
-  }
-
-  // Localhost development access
-  const isLocal = req.hostname === 'localhost' || req.ip === '127.0.0.1' || req.ip === '::1';
-  if (!isProduction && isLocal) {
     return { status: 'AUTHORIZED' };
   }
 
@@ -1014,11 +1015,17 @@ app.all('/api/cron/immigration-sync', requireCronOrAdminAuth, handleImmigrationS
 app.get('/api/visa-details/:programId', (req, res) => {
   try {
     const { programId } = req.params;
-    const details = getVisaDetails(programId);
-    if (!details) {
+    const nationality = typeof req.query.nationality === 'string' ? req.query.nationality : 'ALL';
+    const rawDetails = getVisaDetails(programId);
+    if (!rawDetails) {
       return res.status(404).json({ error: 'Visa details not found' });
     }
-    res.json(details);
+    const rawClaims = getVisaClaimsWithEvidence(programId, nationality);
+    const sanitized = sanitizeVisaDetailsForPublic(rawDetails, {
+      nationality,
+      claims: rawClaims
+    });
+    res.json(sanitized);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -1059,13 +1066,23 @@ app.get('/api/admin/visa-details/:programId', requireAdminAuth, (req, res) => {
   }
 });
 
-// Admin: Save Visa Details
+// Admin: Save Visa Details (with server-side 30-Section & 22-Topic honesty validation)
 app.post('/api/admin/visa-details', requireAdminAuth, (req, res) => {
   try {
     const details = req.body;
     if (!details || !details.programId) {
       return res.status(400).json({ success: false, error: 'Missing programId in visa details' });
     }
+
+    const honestyValidation = validateComprehensiveProfileHonesty(details);
+    if (!honestyValidation.valid) {
+      return res.status(400).json({
+        success: false,
+        error: honestyValidation.errors.join(' | '),
+        validationErrors: honestyValidation.errors
+      });
+    }
+
     saveVisaDetails(details);
 
     // Auto-create an audit snapshot version on save
@@ -1090,10 +1107,11 @@ app.post('/api/admin/visa-details', requireAdminAuth, (req, res) => {
   }
 });
 
-// Admin: Get Claims (with embedded evidence to prevent N+1 queries)
+// Admin: Get Claims (with embedded evidence & integrity warnings to prevent N+1 queries)
 app.get('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res) => {
   try {
-    const claims = getVisaClaimsWithEvidence(req.params.programId);
+    const targetNat = typeof req.query.nationality === 'string' ? req.query.nationality : undefined;
+    const claims = getVisaClaimsWithEvidence(req.params.programId, targetNat);
     res.json({ success: true, claims });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -1122,14 +1140,86 @@ function recordAuditVersionSnapshot(programId: string, editorId: string, changeR
   }
 }
 
-// Admin: Save / Update Claim
+// Admin: Save / Update Claim (with server-side VERIFIED evidence & program ownership enforcement)
 app.post('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res) => {
   try {
-    const { id, section, description, value, unit, status, reviewer } = req.body;
+    const {
+      id,
+      section,
+      description,
+      value,
+      unit,
+      status,
+      reviewer,
+      requirementClassification,
+      requirement_classification,
+      applicableNationality,
+      applicable_nationality,
+      countryIso,
+      country_iso,
+      visaCategory,
+      visa_category,
+      evidenceIds,
+      evidence
+    } = req.body;
     if (!section || !description) {
       return res.status(400).json({ success: false, error: 'Section and description are required for a claim' });
     }
+
     const claimId = id || `claim-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    const existingClaim = id ? getVisaClaimById(id) : null;
+    if (existingClaim && existingClaim.programId !== req.params.programId) {
+      return res.status(400).json({
+        success: false,
+        error: `Claim ${id} belongs to program ${existingClaim.programId}, not ${req.params.programId}`
+      });
+    }
+
+    const attachedEvidence = id ? getVisaEvidence(id) : [];
+
+    // Validate any explicitly referenced evidence IDs or evidence array in the request body
+    if (Array.isArray(evidenceIds)) {
+      const attachedIds = new Set(attachedEvidence.map((ev: any) => ev.id));
+      for (const refId of evidenceIds) {
+        if (!attachedIds.has(refId)) {
+          return res.status(400).json({
+            success: false,
+            error: `Invalid or mismatched evidence reference (${refId}): does not belong to claim ${claimId} in program ${req.params.programId}`
+          });
+        }
+      }
+    }
+    if (Array.isArray(evidence)) {
+      const attachedIds = new Set(attachedEvidence.map((ev: any) => ev.id));
+      for (const evObj of evidence) {
+        const refClaimId = evObj?.claimId || evObj?.claim_id;
+        const refEvId = evObj?.id;
+        if ((refClaimId && refClaimId !== claimId) || (refEvId && !attachedIds.has(refEvId))) {
+          return res.status(400).json({
+            success: false,
+            error: `Invalid or mismatched evidence reference (${refEvId || 'unknown'}): does not belong to claim ${claimId} in program ${req.params.programId}`
+          });
+        }
+      }
+    }
+
+    const requestedStatus = status || 'NEEDS_EVIDENCE';
+    if (requestedStatus === 'VERIFIED') {
+      const integrity = evaluateClaimIntegrity({
+        id: claimId,
+        programId: req.params.programId,
+        status: 'VERIFIED',
+        evidence: attachedEvidence
+      });
+      if (!integrity.hasQualifyingOfficialEvidence) {
+        return res.status(400).json({
+          success: false,
+          error:
+            'Claim cannot be saved as VERIFIED without at least one attached qualifying official evidence record (VERIFIED_OFFICIAL or OFFICIAL_BUT_NOT_FULLY_CONFIRMED) belonging to this claim and program.'
+        });
+      }
+    }
+
     const claimData = {
       id: claimId,
       programId: req.params.programId,
@@ -1137,17 +1227,23 @@ app.post('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, re
       description,
       value: value || '',
       unit: unit || '',
-      status: status || 'NEEDS_EVIDENCE',
+      status: requestedStatus,
       reviewer: reviewer || 'admin',
-      reviewTimestamp: new Date().toISOString()
+      reviewTimestamp: new Date().toISOString(),
+      requirementClassification: requirementClassification || requirement_classification || 'ADMIN_INSTRUCTION',
+      applicableNationality: (applicableNationality || applicable_nationality || 'ALL').trim() || 'ALL',
+      countryIso: (countryIso ?? country_iso ?? '').trim(),
+      visaCategory: (visaCategory ?? visa_category ?? '').trim()
     };
     saveVisaClaim(claimData);
+    const updatedClaims = getVisaClaimsWithEvidence(req.params.programId);
+    const enrichedClaim = updatedClaims.find(c => c.id === claimId) || claimData;
     const versionId = recordAuditVersionSnapshot(
       req.params.programId,
       claimData.reviewer,
-      `${id ? 'Updated' : 'Created'} claim [${section}]: ${description.slice(0, 50)}`
+      `${id ? 'Updated' : 'Created'} claim [${section} | ${claimData.requirementClassification} | Nat:${claimData.applicableNationality}]: ${description.slice(0, 50)}`
     );
-    res.json({ success: true, claim: claimData, versionId });
+    res.json({ success: true, claim: enrichedClaim, versionId });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -1178,25 +1274,49 @@ app.get('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (r
   }
 });
 
-// Admin: Save / Update Evidence
+// Admin: Save / Update Evidence (with unified status normalization & stale-evidence claim downgrade)
 app.post('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (req, res) => {
   try {
-    const { id, programId, sourceUrl, source_url, sourceTitle, source_title, issuingAuthority, issuing_authority, legalInstrument, legal_instrument, publicationDate, publication_date, effectiveDate, effective_date, accessDate, access_date, reviewerNotes, reviewer_notes, status } = req.body;
+    const {
+      id,
+      programId,
+      sourceUrl,
+      source_url,
+      sourceTitle,
+      source_title,
+      issuingAuthority,
+      issuing_authority,
+      legalInstrument,
+      legal_instrument,
+      publicationDate,
+      publication_date,
+      effectiveDate,
+      effective_date,
+      accessDate,
+      access_date,
+      reviewerNotes,
+      reviewer_notes,
+      excerpt,
+      status
+    } = req.body;
     const url = sourceUrl || source_url;
     if (!url || typeof url !== 'string' || !url.trim()) {
       return res.status(400).json({ success: false, error: 'Official source URL is mandatory for evidence' });
     }
-    const allowedStatuses = [
-      'VERIFIED_OFFICIAL',
-      'OFFICIAL_BUT_NOT_FULLY_CONFIRMED',
-      'SECONDARY_SOURCE',
-      'OUTDATED',
-      'BROKEN_LINK',
-      'NEEDS_REVIEW',
-      'REJECTED'
-    ];
-    // Never mark evidence VERIFIED automatically because a URL was entered
-    const safeStatus = allowedStatuses.includes(status) ? status : 'NEEDS_REVIEW';
+
+    const parentClaim = getVisaClaimById(req.params.claimId);
+    if (!parentClaim) {
+      return res.status(404).json({ success: false, error: `Parent claim ${req.params.claimId} not found` });
+    }
+    if (programId && parentClaim.programId !== programId) {
+      return res.status(400).json({
+        success: false,
+        error: `Claim ${req.params.claimId} belongs to program ${parentClaim.programId}, not ${programId}`
+      });
+    }
+
+    // Normalize status using unified Phase 3.2.2 normalizer; never auto-verify when omitted
+    const safeStatus = status ? normalizeEvidenceStatus(status) : 'NEEDS_REVIEW';
     const evidenceId = id || `ev-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const evidenceData = {
       id: evidenceId,
@@ -1209,37 +1329,63 @@ app.post('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (
       effectiveDate: (effectiveDate || effective_date || '').trim(),
       accessDate: (accessDate || access_date || new Date().toISOString().split('T')[0]).trim(),
       reviewerNotes: (reviewerNotes || reviewer_notes || '').trim(),
+      excerpt: (excerpt || '').trim(),
       status: safeStatus
     };
-    saveVisaEvidence(evidenceData);
-    let versionId = null;
-    if (programId) {
+    const saveRes = saveVisaEvidence(evidenceData);
+    const resolvedProgramId = programId || parentClaim.programId;
+    let versionId = saveRes.versionId || null;
+    if (resolvedProgramId && !saveRes.downgradedClaim) {
       versionId = recordAuditVersionSnapshot(
-        programId,
+        resolvedProgramId,
         'admin',
         `${id ? 'Updated' : 'Attached'} evidence (${safeStatus}) on claim ${req.params.claimId}`
       );
     }
-    res.json({ success: true, evidence: evidenceData, versionId });
+    res.json({
+      success: true,
+      evidence: evidenceData,
+      downgradedClaim: Boolean(saveRes.downgradedClaim),
+      newClaimStatus: saveRes.newClaimStatus || parentClaim.status,
+      versionId
+    });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Admin: Delete Evidence
+// Admin: Delete Evidence (with transactional stale-evidence claim downgrade)
 app.delete('/api/admin/visa-details/claims/:claimId/evidence/:evidenceId', requireAdminAuth, (req, res) => {
   try {
     const programId = (req.query.programId as string) || req.body?.programId;
-    deleteVisaEvidence(req.params.evidenceId);
-    let versionId = null;
-    if (programId) {
+    const parentClaim = getVisaClaimById(req.params.claimId);
+    const existingEv = getVisaEvidence(req.params.claimId).find(
+      (ev: any) => ev.id === req.params.evidenceId
+    );
+    if (!existingEv) {
+      return res.status(404).json({
+        success: false,
+        error: `Evidence ${req.params.evidenceId} not found on claim ${req.params.claimId}`
+      });
+    }
+
+    const delRes = deleteVisaEvidence(req.params.evidenceId);
+    const resolvedProgramId = programId || parentClaim?.programId;
+    let versionId = delRes.versionId || null;
+    if (resolvedProgramId && !delRes.downgradedClaim) {
       versionId = recordAuditVersionSnapshot(
-        programId,
+        resolvedProgramId,
         'admin',
         `Deleted evidence ${req.params.evidenceId} from claim ${req.params.claimId}`
       );
     }
-    res.json({ success: true, message: 'Evidence deleted successfully', versionId });
+    res.json({
+      success: true,
+      message: 'Evidence deleted successfully',
+      downgradedClaim: Boolean(delRes.downgradedClaim),
+      newClaimStatus: delRes.newClaimStatus || parentClaim?.status,
+      versionId
+    });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

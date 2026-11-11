@@ -1,864 +1,1598 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Plus,
   Trash2,
   Edit2,
-  AlertCircle,
   CheckCircle,
-  Clock,
+  AlertTriangle,
   ExternalLink,
-  ShieldAlert,
-  Link2Off,
-  FileText,
   Save,
   X,
+  FileText,
+  ShieldAlert,
+  Link2,
   RefreshCw,
-  ChevronLeft,
-  ChevronRight
+  Filter,
+  Scale,
+  Globe,
+  BookOpen,
+  CheckSquare,
+  XCircle,
+  Info
 } from 'lucide-react';
+import { getStoredAdminToken } from '../../utils/adminAuth';
+import {
+  REQUIREMENT_CLASSIFICATIONS,
+  REQUIREMENT_CLASSIFICATION_META,
+  THIRTY_SECTIONS_REGISTRY,
+  SIX_LIFECYCLE_STAGES,
+  TWENTY_TWO_SPECIAL_TOPICS_REGISTRY,
+  EVIDENCE_STATUSES,
+  normalizeEvidenceStatus,
+  isQualifyingOfficialEvidence,
+  evaluateClaimIntegrity
+} from '../../types/visaComprehensiveProfile';
+import type {
+  RequirementClassification,
+  EvidenceStatus,
+  ClaimIntegrityWarning
+} from '../../types/visaComprehensiveProfile';
 
-export const A_TO_M_SECTIONS = [
-  { code: 'A', key: 'countryOverview', label: 'A. Country Overview' },
-  { code: 'B', key: 'visaOverview', label: 'B. Visa Overview' },
-  { code: 'C', key: 'eligibility', label: 'C. Eligibility Requirements' },
-  { code: 'D', key: 'financial', label: 'D. Financial Requirements, ITR & Bank Statements' },
-  { code: 'E', key: 'documentChecklist', label: 'E. Document Checklist' },
-  { code: 'F', key: 'applicationFields', label: 'F. Application Form Information' },
-  { code: 'G', key: 'applicationSteps', label: 'G. Step-by-Step Application Process' },
-  { code: 'H', key: 'interviewPrep', label: 'H. Interview Preparation' },
-  { code: 'I', key: 'embassyDirectory', label: 'I. Embassy & Consulate Directory' },
-  { code: 'J', key: 'refusalAppeal', label: 'J. Refusal, Appeals & Reapplication' },
-  { code: 'K', key: 'afterApproval', label: 'K. After Approval & Entry' },
-  { code: 'L', key: 'costCalculator', label: 'L. Cost Calculator' },
-  { code: 'M', key: 'faq', label: 'M. FAQs & Official Sources' }
-];
+export { EVIDENCE_STATUSES, normalizeEvidenceStatus, isQualifyingOfficialEvidence, evaluateClaimIntegrity };
+export type { EvidenceStatus, ClaimIntegrityWarning };
 
-export const EVIDENCE_STATUSES = [
-  'VERIFIED_OFFICIAL',
-  'OFFICIAL_BUT_NOT_FULLY_CONFIRMED',
-  'SECONDARY_SOURCE',
-  'OUTDATED',
-  'BROKEN_LINK',
-  'NEEDS_REVIEW',
-  'REJECTED'
+export const SECTIONS_A_TO_M = [
+  { code: 'A', label: 'A. Country Overview' },
+  { code: 'B', label: 'B. Visa Overview' },
+  { code: 'C', label: 'C. Eligibility Criteria' },
+  { code: 'D', label: 'D. Financial Requirements' },
+  { code: 'E', label: 'E. Document Checklist' },
+  { code: 'F', label: 'F. Application Form Fields' },
+  { code: 'G', label: 'G. Step-by-Step Application Procedure' },
+  { code: 'H', label: 'H. Interview Preparation' },
+  { code: 'I', label: 'I. Embassy and Consulate Directory' },
+  { code: 'J', label: 'J. Refusal, Appeals and Reapplication' },
+  { code: 'K', label: 'K. After Approval and Entry' },
+  { code: 'L', label: 'L. Cost Calculator' },
+  { code: 'M', label: 'M. FAQs and Official Sources' }
 ] as const;
 
 export const CLAIM_STATUSES = [
+  'DRAFT',
   'NEEDS_EVIDENCE',
-  'AWAITING_REVIEW',
+  'UNDER_REVIEW',
+  'PARTIAL',
   'VERIFIED',
-  'OUTDATED',
-  'UNVERIFIED',
-  'REJECTED'
+  'REJECTED',
+  'OUTDATED'
 ] as const;
 
-export function ClaimsManager({ programId, onMutated }: { programId: string; onMutated?: () => void }) {
-  const [claims, setClaims] = useState<any[]>([]);
+export const COMMON_NATIONALITY_OPTIONS = [
+  { code: 'ALL', label: 'ALL — Universal (All Nationalities)' },
+  { code: 'IN', label: 'IN — India' },
+  { code: 'CN', label: 'CN — China' },
+  { code: 'PH', label: 'PH — Philippines' },
+  { code: 'NG', label: 'NG — Nigeria' },
+  { code: 'PK', label: 'PK — Pakistan' },
+  { code: 'BD', label: 'BD — Bangladesh' },
+  { code: 'BR', label: 'BR — Brazil' },
+  { code: 'MX', label: 'MX — Mexico' },
+  { code: 'VN', label: 'VN — Vietnam' },
+  { code: 'ID', label: 'ID — Indonesia' },
+  { code: 'TR', label: 'TR — Turkey' },
+  { code: 'EG', label: 'EG — Egypt' },
+  { code: 'ZA', label: 'ZA — South Africa' },
+  { code: 'CO', label: 'CO — Colombia' },
+  { code: 'KE', label: 'KE — Kenya' },
+  { code: 'GH', label: 'GH — Ghana' },
+  { code: 'NP', label: 'NP — Nepal' },
+  { code: 'LK', label: 'LK — Sri Lanka' },
+  { code: 'US', label: 'US — United States' },
+  { code: 'GB', label: 'GB — United Kingdom' },
+  { code: 'CA', label: 'CA — Canada' },
+  { code: 'AU', label: 'AU — Australia' },
+  { code: 'DE', label: 'DE — Germany' },
+  { code: 'FR', label: 'FR — France' },
+  { code: 'JP', label: 'JP — Japan' },
+  { code: 'KR', label: 'KR — South Korea' },
+  { code: 'SG', label: 'SG — Singapore' },
+  { code: 'AE', label: 'AE — United Arab Emirates' }
+] as const;
+
+export interface EvidenceRecord {
+  id: string;
+  claimId: string;
+  sourceTitle: string;
+  sourceUrl: string;
+  issuingAuthority: string;
+  legalInstrument: string;
+  publicationDate: string;
+  effectiveDate: string;
+  accessDate: string;
+  reviewerNotes: string;
+  excerpt?: string;
+  status: EvidenceStatus;
+}
+
+export interface ClaimRecord {
+  id: string;
+  programId: string;
+  section: string;
+  description: string;
+  value: string;
+  unit: string;
+  status: string;
+  reviewer: string;
+  reviewTimestamp: string;
+  requirementClassification: RequirementClassification;
+  applicableNationality: string;
+  countryIso: string;
+  visaCategory: string;
+  evidence: EvidenceRecord[];
+  staleOrMissingEvidence?: boolean;
+  canPresentAsVerified?: boolean;
+  warnings?: ClaimIntegrityWarning[];
+}
+
+interface Props {
+  programId: string;
+  defaultCountryIso?: string;
+  defaultVisaCategory?: string;
+  onClaimsUpdated?: () => void;
+}
+
+function getClassificationMeta(code: string) {
+  return (
+    REQUIREMENT_CLASSIFICATION_META.find(m => m.code === code) ||
+    REQUIREMENT_CLASSIFICATION_META[1] // ADMIN_INSTRUCTION fallback
+  );
+}
+
+export const ClaimsManager: React.FC<Props> = ({
+  programId,
+  defaultCountryIso = '',
+  defaultVisaCategory = '',
+  onClaimsUpdated
+}) => {
+  const [claims, setClaims] = useState<ClaimRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [banner, setBanner] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Filters
   const [sectionFilter, setSectionFilter] = useState<string>('ALL');
-  const [page, setPage] = useState(1);
-  const pageSize = 10;
+  const [classificationFilter, setClassificationFilter] = useState<string>('ALL');
+  const [nationalityFilter, setNationalityFilter] = useState<string>('ALL');
+  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Claim modal / form state
-  const [editingClaim, setEditingClaim] = useState<any | null>(null);
-  const [claimDeletingId, setClaimDeletingId] = useState<string | null>(null);
+  const inferredCountryIso = useMemo(() => {
+    if (defaultCountryIso) return defaultCountryIso.toUpperCase();
+    const prefix = (programId || '').split('-')[0];
+    return prefix && prefix.length === 2 ? prefix.toUpperCase() : 'US';
+  }, [programId, defaultCountryIso]);
 
-  // Evidence modal / form state
-  const [editingEvidence, setEditingEvidence] = useState<{ claimId: string; evidence: any } | null>(null);
-  const [evidenceDeleting, setEvidenceDeleting] = useState<{ claimId: string; evidenceId: string } | null>(null);
+  const inferredCategory = useMemo(() => {
+    if (defaultVisaCategory) return defaultVisaCategory;
+    const parts = (programId || '').split('-');
+    return parts[1] || 'Visitor / Tourist';
+  }, [programId, defaultVisaCategory]);
 
-  const loadClaims = useCallback(async () => {
+  // Add Claim Form State
+  const [showAddClaim, setShowAddClaim] = useState(false);
+  const [newClaim, setNewClaim] = useState<{
+    section: string;
+    description: string;
+    value: string;
+    unit: string;
+    status: string;
+    reviewer: string;
+    requirementClassification: RequirementClassification;
+    applicableNationality: string;
+    customNationality: string;
+    countryIso: string;
+    visaCategory: string;
+  }>({
+    section: THIRTY_SECTIONS_REGISTRY[1].claimSectionLabel, // S02: Visa Program Overview
+    description: '',
+    value: '',
+    unit: '',
+    status: 'NEEDS_EVIDENCE',
+    reviewer: 'admin',
+    requirementClassification: 'LEGAL_REQUIREMENT',
+    applicableNationality: 'ALL',
+    customNationality: '',
+    countryIso: inferredCountryIso,
+    visaCategory: inferredCategory
+  });
+
+  // Edit Claim State
+  const [editingClaimId, setEditingClaimId] = useState<string | null>(null);
+  const [editClaimForm, setEditClaimForm] = useState<{
+    section: string;
+    description: string;
+    value: string;
+    unit: string;
+    status: string;
+    reviewer: string;
+    requirementClassification: RequirementClassification;
+    applicableNationality: string;
+    countryIso: string;
+    visaCategory: string;
+  }>({
+    section: '',
+    description: '',
+    value: '',
+    unit: '',
+    status: 'NEEDS_EVIDENCE',
+    reviewer: 'admin',
+    requirementClassification: 'ADMIN_INSTRUCTION',
+    applicableNationality: 'ALL',
+    countryIso: '',
+    visaCategory: ''
+  });
+
+  // Delete Claim Confirmation State
+  const [confirmDeleteClaimId, setConfirmDeleteClaimId] = useState<string | null>(null);
+
+  // Add / Edit Evidence State
+  const [activeEvidenceClaimId, setActiveEvidenceClaimId] = useState<string | null>(null);
+  const [editingEvidenceId, setEditingEvidenceId] = useState<string | null>(null);
+  const [evidenceForm, setEvidenceForm] = useState<{
+    sourceTitle: string;
+    sourceUrl: string;
+    issuingAuthority: string;
+    legalInstrument: string;
+    publicationDate: string;
+    effectiveDate: string;
+    accessDate: string;
+    excerpt: string;
+    reviewerNotes: string;
+    status: EvidenceStatus;
+  }>({
+    sourceTitle: '',
+    sourceUrl: '',
+    issuingAuthority: '',
+    legalInstrument: '',
+    publicationDate: '',
+    effectiveDate: '',
+    accessDate: new Date().toISOString().split('T')[0],
+    excerpt: '',
+    reviewerNotes: '',
+    status: 'NEEDS_REVIEW'
+  });
+
+  // Delete Evidence Confirmation State
+  const [confirmDeleteEvidence, setConfirmDeleteEvidence] = useState<{
+    claimId: string;
+    evidenceId: string;
+  } | null>(null);
+
+  const authHeaders = useCallback(() => {
+    const token = getStoredAdminToken();
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  }, []);
+
+  const showMessage = (type: 'success' | 'error', text: string) => {
+    setBanner({ type, text });
+    setTimeout(() => {
+      setBanner(prev => (prev?.text === text ? null : prev));
+    }, 5000);
+  };
+
+  const fetchClaims = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
-      const res = await fetch(`/api/admin/visa-details/${programId}/claims`);
-      if (!res.ok) throw new Error(`Failed to fetch claims (${res.status})`);
+      const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
+        headers: authHeaders()
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to load claims`);
       const data = await res.json();
       setClaims(Array.isArray(data.claims) ? data.claims : []);
     } catch (err: any) {
-      setError(err.message || 'Error loading claims');
+      showMessage('error', err.message || 'Could not load claims');
     } finally {
       setLoading(false);
     }
-  }, [programId]);
+  }, [programId, authHeaders]);
 
   useEffect(() => {
-    loadClaims();
-  }, [loadClaims]);
+    fetchClaims();
+  }, [fetchClaims]);
 
-  const handleSaveClaim = async (e: React.FormEvent) => {
+  const handleCreateClaim = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingClaim?.section || !editingClaim?.description) return;
+    if (!newClaim.description.trim()) {
+      showMessage('error', 'Claim description is required.');
+      return;
+    }
+    const resolvedNat =
+      newClaim.applicableNationality === 'CUSTOM'
+        ? newClaim.customNationality.trim().toUpperCase() || 'ALL'
+        : newClaim.applicableNationality;
+
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editingClaim)
+        headers: authHeaders(),
+        body: JSON.stringify({
+          section: newClaim.section,
+          description: newClaim.description,
+          value: newClaim.value,
+          unit: newClaim.unit,
+          status: 'NEEDS_EVIDENCE', // Never auto-verified on creation
+          reviewer: newClaim.reviewer || 'admin',
+          requirementClassification: newClaim.requirementClassification,
+          applicableNationality: resolvedNat,
+          countryIso: newClaim.countryIso.trim().toUpperCase() || inferredCountryIso,
+          visaCategory: newClaim.visaCategory.trim() || inferredCategory
+        })
       });
       const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save claim');
-      setEditingClaim(null);
-      await loadClaims();
-      if (onMutated) onMutated();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to add claim');
+      showMessage(
+        'success',
+        `Claim created [${newClaim.requirementClassification} | Nat: ${resolvedNat}] and audit snapshot recorded.`
+      );
+      setNewClaim({
+        section: THIRTY_SECTIONS_REGISTRY[1].claimSectionLabel,
+        description: '',
+        value: '',
+        unit: '',
+        status: 'NEEDS_EVIDENCE',
+        reviewer: 'admin',
+        requirementClassification: 'LEGAL_REQUIREMENT',
+        applicableNationality: 'ALL',
+        customNationality: '',
+        countryIso: inferredCountryIso,
+        visaCategory: inferredCategory
+      });
+      setShowAddClaim(false);
+      await fetchClaims();
+      onClaimsUpdated?.();
     } catch (err: any) {
-      setError(err.message);
+      showMessage('error', err.message);
     }
   };
 
-  const handleConfirmDeleteClaim = async (claimId: string) => {
+  const startEditClaim = (claim: ClaimRecord) => {
+    setEditingClaimId(claim.id);
+    setEditClaimForm({
+      section: claim.section,
+      description: claim.description,
+      value: claim.value || '',
+      unit: claim.unit || '',
+      status: claim.status || 'NEEDS_EVIDENCE',
+      reviewer: claim.reviewer || 'admin',
+      requirementClassification: claim.requirementClassification || 'ADMIN_INSTRUCTION',
+      applicableNationality: claim.applicableNationality || 'ALL',
+      countryIso: claim.countryIso || inferredCountryIso,
+      visaCategory: claim.visaCategory || inferredCategory
+    });
+  };
+
+  const handleUpdateClaim = async (claimId: string) => {
+    const targetClaim = claims.find(c => c.id === claimId);
+    const hasVerifiedOfficialEvidence = (targetClaim?.evidence || []).some(
+      ev => ev.status === 'VERIFIED_OFFICIAL' || ev.status === 'OFFICIAL_BUT_NOT_FULLY_CONFIRMED'
+    );
+    if (editClaimForm.status === 'VERIFIED' && !hasVerifiedOfficialEvidence) {
+      showMessage(
+        'error',
+        'Cannot mark claim as VERIFIED without at least one attached official evidence record (VERIFIED_OFFICIAL or OFFICIAL_BUT_NOT_FULLY_CONFIRMED).'
+      );
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          id: claimId,
+          ...editClaimForm
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to update claim');
+      showMessage('success', 'Claim updated and version snapshot recorded.');
+      setEditingClaimId(null);
+      await fetchClaims();
+      onClaimsUpdated?.();
+    } catch (err: any) {
+      showMessage('error', err.message);
+    }
+  };
+
+  const handleQuickClaimDecision = async (claim: ClaimRecord, nextStatus: string) => {
+    const hasOfficialEvidence = (claim.evidence || []).some(
+      ev => ev.status === 'VERIFIED_OFFICIAL' || ev.status === 'OFFICIAL_BUT_NOT_FULLY_CONFIRMED'
+    );
+    if (nextStatus === 'VERIFIED' && !hasOfficialEvidence) {
+      showMessage(
+        'error',
+        'Verification blocked: Attach at least one official source (VERIFIED_OFFICIAL) before approving this claim.'
+      );
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          id: claim.id,
+          section: claim.section,
+          description: claim.description,
+          value: claim.value,
+          unit: claim.unit,
+          status: nextStatus,
+          reviewer: claim.reviewer || 'admin',
+          requirementClassification: claim.requirementClassification,
+          applicableNationality: claim.applicableNationality,
+          countryIso: claim.countryIso,
+          visaCategory: claim.visaCategory
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to update claim status');
+      showMessage('success', `Claim status updated to ${nextStatus} with reviewer timestamp.`);
+      await fetchClaims();
+      onClaimsUpdated?.();
+    } catch (err: any) {
+      showMessage('error', err.message);
+    }
+  };
+
+  const handleDeleteClaim = async (claimId: string) => {
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims/${claimId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: authHeaders()
       });
-      if (!res.ok) throw new Error('Failed to delete claim');
-      setClaimDeletingId(null);
-      await loadClaims();
-      if (onMutated) onMutated();
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to delete claim');
+      showMessage('success', 'Claim and associated evidence deleted.');
+      setConfirmDeleteClaimId(null);
+      await fetchClaims();
+      onClaimsUpdated?.();
     } catch (err: any) {
-      setError(err.message);
+      showMessage('error', err.message);
     }
   };
 
-  const handleSaveEvidence = async (e: React.FormEvent) => {
+  const openAddEvidence = (claimId: string) => {
+    setActiveEvidenceClaimId(claimId);
+    setEditingEvidenceId(null);
+    setEvidenceForm({
+      sourceTitle: '',
+      sourceUrl: '',
+      issuingAuthority: '',
+      legalInstrument: '',
+      publicationDate: '',
+      effectiveDate: '',
+      accessDate: new Date().toISOString().split('T')[0],
+      excerpt: '',
+      reviewerNotes: '',
+      status: 'NEEDS_REVIEW'
+    });
+  };
+
+  const openEditEvidence = (claimId: string, ev: EvidenceRecord) => {
+    setActiveEvidenceClaimId(claimId);
+    setEditingEvidenceId(ev.id);
+    setEvidenceForm({
+      sourceTitle: ev.sourceTitle || '',
+      sourceUrl: ev.sourceUrl || '',
+      issuingAuthority: ev.issuingAuthority || '',
+      legalInstrument: ev.legalInstrument || '',
+      publicationDate: ev.publicationDate || '',
+      effectiveDate: ev.effectiveDate || '',
+      accessDate: ev.accessDate || new Date().toISOString().split('T')[0],
+      excerpt: ev.excerpt || '',
+      reviewerNotes: ev.reviewerNotes || '',
+      status: (EVIDENCE_STATUSES.includes(ev.status as EvidenceStatus)
+        ? ev.status
+        : 'NEEDS_REVIEW') as EvidenceStatus
+    });
+  };
+
+  const handleSaveEvidence = async (e: React.FormEvent, claimId: string) => {
     e.preventDefault();
-    if (!editingEvidence) return;
-    const { claimId, evidence } = editingEvidence;
-    if (!evidence.sourceUrl?.trim()) {
-      setError('Official source URL is mandatory.');
+    if (!evidenceForm.sourceUrl.trim()) {
+      showMessage('error', 'Official source URL is mandatory for evidence.');
       return;
     }
     try {
       const res = await fetch(`/api/admin/visa-details/claims/${claimId}/evidence`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...evidence, programId })
+        headers: authHeaders(),
+        body: JSON.stringify({
+          id: editingEvidenceId || undefined,
+          programId,
+          ...evidenceForm
+        })
       });
       const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save evidence');
-      setEditingEvidence(null);
-      await loadClaims();
-      if (onMutated) onMutated();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to save evidence');
+      if (data.downgradedClaim) {
+        showMessage(
+          'error',
+          'Evidence saved, and parent claim was automatically downgraded from VERIFIED to NEEDS_EVIDENCE because qualifying official evidence is no longer active.'
+        );
+      } else {
+        showMessage(
+          'success',
+          editingEvidenceId ? 'Evidence record updated.' : 'Evidence record attached to claim.'
+        );
+      }
+      setActiveEvidenceClaimId(null);
+      setEditingEvidenceId(null);
+      await fetchClaims();
+      onClaimsUpdated?.();
     } catch (err: any) {
-      setError(err.message);
+      showMessage('error', err.message);
     }
   };
 
-  const handleQuickStatusUpdate = async (claimId: string, ev: any, newStatus: string) => {
+  const handleQuickEvidenceStatusChange = async (
+    claimId: string,
+    ev: EvidenceRecord,
+    newStatus: EvidenceStatus
+  ) => {
     try {
       const res = await fetch(`/api/admin/visa-details/claims/${claimId}/evidence`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...ev, status: newStatus, programId })
+        headers: authHeaders(),
+        body: JSON.stringify({
+          ...ev,
+          programId,
+          status: newStatus
+        })
       });
-      if (!res.ok) throw new Error('Failed to update evidence status');
-      await loadClaims();
-      if (onMutated) onMutated();
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to update evidence status');
+      if (data.downgradedClaim) {
+        showMessage(
+          'error',
+          `Evidence updated to ${newStatus}. Parent claim was automatically downgraded from VERIFIED to NEEDS_EVIDENCE because qualifying official evidence is no longer active.`
+        );
+      } else {
+        showMessage('success', `Evidence verification status updated to ${newStatus}.`);
+      }
+      await fetchClaims();
+      onClaimsUpdated?.();
     } catch (err: any) {
-      setError(err.message);
+      showMessage('error', err.message);
     }
   };
 
-  const handleConfirmDeleteEvidence = async () => {
-    if (!evidenceDeleting) return;
-    const { claimId, evidenceId } = evidenceDeleting;
+  const handleDeleteEvidence = async (claimId: string, evidenceId: string) => {
     try {
       const res = await fetch(
         `/api/admin/visa-details/claims/${claimId}/evidence/${evidenceId}?programId=${encodeURIComponent(programId)}`,
-        { method: 'DELETE' }
+        {
+          method: 'DELETE',
+          headers: authHeaders()
+        }
       );
-      if (!res.ok) throw new Error('Failed to delete evidence');
-      setEvidenceDeleting(null);
-      await loadClaims();
-      if (onMutated) onMutated();
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Failed to delete evidence');
+      if (data.downgradedClaim) {
+        showMessage(
+          'error',
+          'Evidence deleted. Parent claim was automatically downgraded from VERIFIED to NEEDS_EVIDENCE because no qualifying official evidence remains.'
+        );
+      } else {
+        showMessage('success', 'Evidence record deleted.');
+      }
+      setConfirmDeleteEvidence(null);
+      await fetchClaims();
+      onClaimsUpdated?.();
     } catch (err: any) {
-      setError(err.message);
+      showMessage('error', err.message);
     }
   };
 
-  const filteredClaims = claims.filter(c => sectionFilter === 'ALL' || c.section === sectionFilter);
-  const totalPages = Math.max(1, Math.ceil(filteredClaims.length / pageSize));
-  const paginatedClaims = filteredClaims.slice((page - 1) * pageSize, page * pageSize);
-
-  // Summary metrics for visual warnings
-  const missingEvidenceCount = claims.filter(c => !c.evidence || c.evidence.length === 0).length;
-  const outdatedCount = claims.filter(c =>
-    c.status === 'OUTDATED' || (c.evidence || []).some((e: any) => e.status === 'OUTDATED')
-  ).length;
-  const brokenLinkCount = claims.filter(c =>
-    (c.evidence || []).some((e: any) => e.status === 'BROKEN_LINK')
-  ).length;
-  const awaitingReviewCount = claims.filter(
-    c =>
-      c.status === 'NEEDS_EVIDENCE' ||
-      c.status === 'AWAITING_REVIEW' ||
-      c.status === 'UNVERIFIED' ||
-      (c.evidence || []).some((e: any) => e.status === 'NEEDS_REVIEW')
-  ).length;
-  const verifiedOfficialCount = claims.filter(
-    c =>
-      c.evidence &&
-      c.evidence.length > 0 &&
-      c.evidence.every((e: any) => e.status === 'VERIFIED_OFFICIAL')
-  ).length;
-
-  const getEvidenceStatusBadge = (status: string) => {
+  const getEvidenceBadgeStyle = (status: string) => {
     switch (status) {
       case 'VERIFIED_OFFICIAL':
         return 'bg-emerald-100 text-emerald-800 border-emerald-300';
       case 'OFFICIAL_BUT_NOT_FULLY_CONFIRMED':
-        return 'bg-blue-100 text-blue-800 border-blue-300';
+        return 'bg-teal-100 text-teal-800 border-teal-300';
       case 'SECONDARY_SOURCE':
-        return 'bg-purple-100 text-purple-800 border-purple-300';
+        return 'bg-amber-100 text-amber-800 border-amber-300';
       case 'OUTDATED':
-        return 'bg-amber-100 text-amber-900 border-amber-300';
       case 'BROKEN_LINK':
-        return 'bg-rose-100 text-rose-800 border-rose-300';
       case 'REJECTED':
-        return 'bg-red-100 text-red-900 border-red-300';
+        return 'bg-rose-100 text-rose-800 border-rose-300';
       default:
-        return 'bg-slate-100 text-slate-800 border-slate-300';
+        return 'bg-slate-100 text-slate-700 border-slate-300';
     }
   };
 
+  const getClaimStatusBadge = (status: string) => {
+    switch (status) {
+      case 'VERIFIED':
+        return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+      case 'PARTIAL':
+      case 'UNDER_REVIEW':
+        return 'bg-blue-100 text-blue-800 border-blue-300';
+      case 'REJECTED':
+      case 'OUTDATED':
+        return 'bg-rose-100 text-rose-800 border-rose-300';
+      default:
+        return 'bg-amber-100 text-amber-800 border-amber-300';
+    }
+  };
+
+  const claimsMissingEvidenceCount = claims.filter(
+    c => !c.evidence || c.evidence.length === 0
+  ).length;
+
+  const uniqueNationalities = useMemo(() => {
+    const set = new Set<string>(['ALL']);
+    claims.forEach(c => {
+      if (c.applicableNationality) set.add(c.applicableNationality);
+    });
+    return Array.from(set);
+  }, [claims]);
+
+  const filteredClaims = useMemo(() => {
+    return claims.filter(c => {
+      if (sectionFilter !== 'ALL' && c.section !== sectionFilter) return false;
+      if (
+        classificationFilter !== 'ALL' &&
+        c.requirementClassification !== classificationFilter
+      ) {
+        return false;
+      }
+      if (
+        nationalityFilter !== 'ALL_FILTER' &&
+        nationalityFilter !== 'ALL' &&
+        c.applicableNationality !== nationalityFilter
+      ) {
+        return false;
+      }
+      if (statusFilter === 'NO_EVIDENCE' && c.evidence && c.evidence.length > 0) return false;
+      if (
+        statusFilter !== 'ALL' &&
+        statusFilter !== 'NO_EVIDENCE' &&
+        c.status !== statusFilter
+      ) {
+        return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const hay = `${c.section} ${c.description} ${c.value} ${c.unit} ${c.applicableNationality} ${c.requirementClassification}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [claims, sectionFilter, classificationFilter, nationalityFilter, statusFilter, searchQuery]);
+
   if (loading) {
-    return <div className="p-8 text-center text-slate-500">Loading claims & official legal evidence...</div>;
+    return (
+      <div className="p-8 text-center text-slate-600 flex items-center justify-center gap-2">
+        <RefreshCw className="animate-spin" size={18} /> Loading 5-Tier Claims & Evidence Registry...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      {/* Header & Actions */}
-      <div className="flex flex-wrap justify-between items-center gap-4 border-b pb-4">
+      {/* Header & Summary */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-200 pb-4">
         <div>
-          <h3 className="font-bold text-xl text-slate-900">Claim-Level Legal Evidence Manager</h3>
-          <p className="text-sm text-slate-500">
-            Every factual visa claim (fees, stay limits, documents, financial thresholds) must be backed by verified statutory or consular sources.
+          <h3 className="font-bold text-xl text-slate-900 flex items-center gap-2">
+            <Scale size={20} className="text-indigo-600" />
+            5-Tier Claims & Official Evidence Governance
+          </h3>
+          <p className="text-sm text-slate-600 mt-0.5">
+            Classify every immigration rule across the 5-Tier Legal Standard, scope by applicant nationality, and verify against primary legal sources.
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={loadClaims}
-            className="flex items-center gap-1.5 px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-700 hover:bg-slate-50"
+            onClick={fetchClaims}
+            className="flex items-center gap-1.5 px-3 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 text-xs font-semibold"
           >
-            <RefreshCw size={15} /> Reload
+            <RefreshCw size={14} /> Reload
           </button>
           <button
             type="button"
-            onClick={() =>
-              setEditingClaim({
-                section: 'B. Visa Overview',
-                description: '',
-                value: '',
-                unit: '',
-                status: 'NEEDS_EVIDENCE',
-                reviewer: 'admin'
-              })
-            }
-            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700"
+            onClick={() => setShowAddClaim(!showAddClaim)}
+            className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-semibold shadow-sm"
           >
-            <Plus size={16} /> Add New Claim
+            <Plus size={16} /> {showAddClaim ? 'Cancel New Claim' : 'Draft New Claim'}
           </button>
         </div>
       </div>
 
-      {/* Visual Warning Summary Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3 rounded-xl border bg-rose-50 border-rose-200 flex items-center gap-2.5">
-          <AlertCircle className="text-rose-600 shrink-0" size={20} />
-          <div>
-            <div className="text-xs font-medium text-rose-700">Missing Evidence</div>
-            <div className="text-lg font-black text-rose-900">{missingEvidenceCount}</div>
-          </div>
+      {/* 5-Tier Standard Legend Bar */}
+      <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+        <div className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
+          <Info size={13} className="text-indigo-600" /> 5-Tier Requirement Classification Standard (Binding Law vs Guidance)
         </div>
-        <div className="p-3 rounded-xl border bg-amber-50 border-amber-200 flex items-center gap-2.5">
-          <Clock className="text-amber-600 shrink-0" size={20} />
-          <div>
-            <div className="text-xs font-medium text-amber-700">Outdated Evidence</div>
-            <div className="text-lg font-black text-amber-900">{outdatedCount}</div>
-          </div>
-        </div>
-        <div className="p-3 rounded-xl border bg-red-50 border-red-200 flex items-center gap-2.5">
-          <Link2Off className="text-red-600 shrink-0" size={20} />
-          <div>
-            <div className="text-xs font-medium text-red-700">Broken Links</div>
-            <div className="text-lg font-black text-red-900">{brokenLinkCount}</div>
-          </div>
-        </div>
-        <div className="p-3 rounded-xl border bg-slate-50 border-slate-200 flex items-center gap-2.5">
-          <ShieldAlert className="text-slate-600 shrink-0" size={20} />
-          <div>
-            <div className="text-xs font-medium text-slate-700">Awaiting Review</div>
-            <div className="text-lg font-black text-slate-900">{awaitingReviewCount}</div>
-          </div>
-        </div>
-        <div className="p-3 rounded-xl border bg-emerald-50 border-emerald-200 flex items-center gap-2.5">
-          <CheckCircle className="text-emerald-600 shrink-0" size={20} />
-          <div>
-            <div className="text-xs font-medium text-emerald-700">Verified Official</div>
-            <div className="text-lg font-black text-emerald-900">{verifiedOfficialCount}</div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+          {REQUIREMENT_CLASSIFICATION_META.map(tier => (
+            <div
+              key={tier.code}
+              className="p-2.5 bg-white border border-slate-200 rounded-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${tier.badgeClass}`}>
+                    {tier.shortLabel}
+                  </span>
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                      tier.isBindingLegalOrOfficial
+                        ? 'bg-indigo-50 text-indigo-700'
+                        : 'bg-amber-50 text-amber-700'
+                    }`}
+                  >
+                    {tier.isBindingLegalOrOfficial ? 'Binding / Official' : 'Non-Binding'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-600 leading-snug mt-1">{tier.description}</p>
+              </div>
+              <div className="mt-2 pt-1.5 border-t border-slate-100 flex justify-between items-center text-[11px] font-mono text-slate-500">
+                <span>{tier.code}</span>
+                <span className="font-bold text-slate-800">
+                  {claims.filter(c => c.requirementClassification === tier.code).length}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {error && (
-        <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-sm flex justify-between items-center">
-          <span>{error}</span>
-          <button onClick={() => setError(null)} className="text-rose-500 hover:text-rose-800">
+      {banner && (
+        <div
+          className={`p-3.5 rounded-lg border flex items-center justify-between text-sm font-medium ${
+            banner.type === 'success'
+              ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+              : 'bg-rose-50 border-rose-200 text-rose-800'
+          }`}
+        >
+          <span>{banner.text}</span>
+          <button type="button" onClick={() => setBanner(null)} className="text-slate-400 hover:text-slate-600">
             <X size={16} />
           </button>
         </div>
       )}
 
+      {/* Warning Banner if any claims lack evidence */}
+      {claimsMissingEvidenceCount > 0 && (
+        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-between gap-3 text-amber-900 text-xs font-medium">
+          <div className="flex items-center gap-2.5">
+            <ShieldAlert size={18} className="text-amber-600 shrink-0" />
+            <span>
+              <strong>Evidence Governance Alert:</strong> {claimsMissingEvidenceCount} claim(s) currently have{' '}
+              <strong>0 supporting official evidence records</strong>. Claims without verified primary sources cannot be marked VERIFIED.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setStatusFilter(statusFilter === 'NO_EVIDENCE' ? 'ALL' : 'NO_EVIDENCE')}
+            className="px-2.5 py-1 bg-amber-200/70 hover:bg-amber-200 text-amber-950 rounded font-bold shrink-0"
+          >
+            {statusFilter === 'NO_EVIDENCE' ? 'Show All Claims' : 'Filter Missing Evidence'}
+          </button>
+        </div>
+      )}
+
       {/* Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
-        <div className="flex items-center gap-2 text-sm">
-          <span className="font-semibold text-slate-700">Filter by Section (A–M):</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <div>
+          <label className="block text-[11px] font-bold text-slate-600 mb-1">Search Claims</label>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Filter by text, value, code..."
+            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+          />
+        </div>
+        <div>
+          <label className="block text-[11px] font-bold text-slate-600 mb-1">30-Section / Topic Filter</label>
           <select
             value={sectionFilter}
-            onChange={e => {
-              setSectionFilter(e.target.value);
-              setPage(1);
-            }}
-            className="p-1.5 border border-slate-300 rounded-lg bg-white text-sm"
+            onChange={e => setSectionFilter(e.target.value)}
+            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
           >
             <option value="ALL">All Sections ({claims.length})</option>
-            {A_TO_M_SECTIONS.map(sec => (
-              <option key={sec.code} value={sec.label}>
-                {sec.label}
+            {SIX_LIFECYCLE_STAGES.map(stage => (
+              <optgroup key={stage.stageNumber} label={stage.title}>
+                {THIRTY_SECTIONS_REGISTRY.filter(s => s.stageNumber === stage.stageNumber).map(sec => (
+                  <option key={sec.sectionKey} value={sec.claimSectionLabel}>
+                    {sec.claimSectionLabel}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+            <optgroup label="22 Applicant Special Topics">
+              {TWENTY_TWO_SPECIAL_TOPICS_REGISTRY.map(t => (
+                <option key={t.topicKey} value={`T${String(t.topicNumber).padStart(2, '0')}: ${t.shortTitle}`}>
+                  T{String(t.topicNumber).padStart(2, '0')}: {t.shortTitle}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="Legacy A–M Sections">
+              {SECTIONS_A_TO_M.map(s => (
+                <option key={s.code} value={s.label}>
+                  {s.label}
+                </option>
+              ))}
+            </optgroup>
+          </select>
+        </div>
+        <div>
+          <label className="block text-[11px] font-bold text-slate-600 mb-1">5-Tier Classification</label>
+          <select
+            value={classificationFilter}
+            onChange={e => setClassificationFilter(e.target.value)}
+            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+          >
+            <option value="ALL">All 5 Tiers</option>
+            {REQUIREMENT_CLASSIFICATION_META.map(m => (
+              <option key={m.code} value={m.code}>
+                {m.label}
               </option>
             ))}
           </select>
         </div>
-        <div className="text-xs text-slate-500">
-          Showing {paginatedClaims.length} of {filteredClaims.length} claims
+        <div>
+          <label className="block text-[11px] font-bold text-slate-600 mb-1">Applicable Nationality</label>
+          <select
+            value={nationalityFilter}
+            onChange={e => setNationalityFilter(e.target.value)}
+            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+          >
+            <option value="ALL">All Nationalities</option>
+            {uniqueNationalities.map(nat => (
+              <option key={nat} value={nat}>
+                Passport: {nat}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-[11px] font-bold text-slate-600 mb-1">Verification & Evidence State</label>
+          <select
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="NO_EVIDENCE">Missing Evidence (0 Sources)</option>
+            {CLAIM_STATUSES.map(st => (
+              <option key={st} value={st}>
+                Status: {st}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Add / Edit Claim Form Drawer */}
-      {editingClaim && (
-        <form onSubmit={handleSaveClaim} className="bg-indigo-50/60 border border-indigo-200 p-5 rounded-xl space-y-4">
-          <div className="flex justify-between items-center">
-            <h4 className="font-bold text-indigo-950">
-              {editingClaim.id ? `Edit Claim (${editingClaim.id})` : 'Create New Visa Claim'}
+      {/* Add Claim Modal/Panel */}
+      {showAddClaim && (
+        <form
+          onSubmit={handleCreateClaim}
+          className="p-5 bg-indigo-50/70 border border-indigo-200 rounded-lg space-y-4"
+        >
+          <div className="flex justify-between items-center border-b border-indigo-200 pb-2.5">
+            <h4 className="font-bold text-indigo-950 text-sm flex items-center gap-2">
+              <FileText size={16} /> Draft New Visa Requirement / Rule Claim (30-Section & 5-Tier Standard)
             </h4>
-            <button type="button" onClick={() => setEditingClaim(null)} className="text-slate-500 hover:text-slate-800">
-              <X size={18} />
+            <button
+              type="button"
+              onClick={() => setShowAddClaim(false)}
+              className="text-slate-500 hover:text-slate-700"
+            >
+              <X size={16} />
             </button>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Linked A–M Section *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Linked Lifecycle Section (1–30 or Topic) *
+              </label>
               <select
-                required
-                value={editingClaim.section}
-                onChange={e => setEditingClaim({ ...editingClaim, section: e.target.value })}
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
+                value={newClaim.section}
+                onChange={e => setNewClaim({ ...newClaim, section: e.target.value })}
+                className="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-xs font-medium"
               >
-                {A_TO_M_SECTIONS.map(sec => (
-                  <option key={sec.code} value={sec.label}>
-                    {sec.label}
+                {SIX_LIFECYCLE_STAGES.map(stage => (
+                  <optgroup key={stage.stageNumber} label={stage.title}>
+                    {THIRTY_SECTIONS_REGISTRY.filter(s => s.stageNumber === stage.stageNumber).map(sec => (
+                      <option key={sec.sectionKey} value={sec.claimSectionLabel}>
+                        {sec.title}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+                <optgroup label="Stage 6 — 22 Applicant Special Topics">
+                  {TWENTY_TWO_SPECIAL_TOPICS_REGISTRY.map(t => (
+                    <option key={t.topicKey} value={`T${String(t.topicNumber).padStart(2, '0')}: ${t.shortTitle}`}>
+                      {t.title}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Legacy A–M Sections">
+                  {SECTIONS_A_TO_M.map(s => (
+                    <option key={s.code} value={s.label}>
+                      {s.label}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                5-Tier Requirement Classification *
+              </label>
+              <select
+                value={newClaim.requirementClassification}
+                onChange={e =>
+                  setNewClaim({
+                    ...newClaim,
+                    requirementClassification: e.target.value as RequirementClassification
+                  })
+                }
+                className="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold"
+              >
+                {REQUIREMENT_CLASSIFICATION_META.map(m => (
+                  <option key={m.code} value={m.code}>
+                    {m.label}
                   </option>
                 ))}
               </select>
             </div>
+
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Claim Verification Status</label>
-              <select
-                value={editingClaim.status || 'NEEDS_EVIDENCE'}
-                onChange={e => setEditingClaim({ ...editingClaim, status: e.target.value })}
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-              >
-                {CLAIM_STATUSES.map(st => (
-                  <option key={st} value={st}>
-                    {st}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Reviewer</label>
-              <input
-                type="text"
-                value={editingClaim.reviewer || 'admin'}
-                onChange={e => setEditingClaim({ ...editingClaim, reviewer: e.target.value })}
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="Reviewer ID"
-              />
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Applicable Applicant Nationality *
+              </label>
+              <div className="flex gap-2">
+                <select
+                  value={newClaim.applicableNationality}
+                  onChange={e => setNewClaim({ ...newClaim, applicableNationality: e.target.value })}
+                  className="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-xs font-medium"
+                >
+                  {COMMON_NATIONALITY_OPTIONS.map(n => (
+                    <option key={n.code} value={n.code}>
+                      {n.label}
+                    </option>
+                  ))}
+                  <option value="CUSTOM">Custom ISO-2 Code (e.g., AR, CL, UA)...</option>
+                </select>
+                {newClaim.applicableNationality === 'CUSTOM' && (
+                  <input
+                    type="text"
+                    maxLength={10}
+                    value={newClaim.customNationality}
+                    onChange={e => setNewClaim({ ...newClaim, customNationality: e.target.value.toUpperCase() })}
+                    placeholder="ISO"
+                    className="w-24 p-2.5 border border-slate-300 rounded-lg bg-white text-xs font-mono uppercase"
+                  />
+                )}
+              </div>
             </div>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Factual Claim Description *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Claim / Requirement Statement *
+              </label>
               <input
                 type="text"
                 required
-                value={editingClaim.description || ''}
-                onChange={e => setEditingClaim({ ...editingClaim, description: e.target.value })}
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="e.g., Standard non-immigrant application fee for B1/B2"
+                value={newClaim.description}
+                onChange={e => setNewClaim({ ...newClaim, description: e.target.value })}
+                placeholder="e.g., Nonimmigrant visa application (MRV) fee for B1/B2 category"
+                className="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-sm"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Claim Value</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Value / Threshold</label>
               <input
                 type="text"
-                value={editingClaim.value || ''}
-                onChange={e => setEditingClaim({ ...editingClaim, value: e.target.value })}
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
+                value={newClaim.value}
+                onChange={e => setNewClaim({ ...newClaim, value: e.target.value })}
                 placeholder="e.g., 185"
+                className="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-sm font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Unit / Currency</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Unit / Format</label>
               <input
                 type="text"
-                value={editingClaim.unit || ''}
-                onChange={e => setEditingClaim({ ...editingClaim, unit: e.target.value })}
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="e.g., USD"
-              />
-            </div>
-          </div>
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              onClick={() => setEditingClaim(null)}
-              className="px-4 py-2 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700"
-            >
-              <Save size={15} /> Save Claim
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Add / Edit Evidence Form Modal */}
-      {editingEvidence && (
-        <form onSubmit={handleSaveEvidence} className="bg-emerald-50/70 border border-emerald-300 p-5 rounded-xl space-y-4">
-          <div className="flex justify-between items-center">
-            <h4 className="font-bold text-emerald-950 flex items-center gap-2">
-              <FileText size={18} />
-              {editingEvidence.evidence.id
-                ? `Edit Official Evidence (${editingEvidence.evidence.id})`
-                : `Attach Evidence to Claim (${editingEvidence.claimId})`}
-            </h4>
-            <button type="button" onClick={() => setEditingEvidence(null)} className="text-slate-500 hover:text-slate-800">
-              <X size={18} />
-            </button>
-          </div>
-          <p className="text-xs text-slate-600">
-            Note: Entering a URL does NOT automatically mark evidence as VERIFIED_OFFICIAL. Select the verified status only after confirming the primary statute or consular portal.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Source Title *</label>
-              <input
-                type="text"
-                required
-                value={editingEvidence.evidence.sourceTitle || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, sourceTitle: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="e.g., U.S. Department of State Fee Schedule"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Official Source URL *</label>
-              <input
-                type="url"
-                required
-                value={editingEvidence.evidence.sourceUrl || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, sourceUrl: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="https://travel.state.gov/..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Issuing Authority *</label>
-              <input
-                type="text"
-                required
-                value={editingEvidence.evidence.issuingAuthority || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, issuingAuthority: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="e.g., Bureau of Consular Affairs"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Exact Legal Provision / Article</label>
-              <input
-                type="text"
-                value={editingEvidence.evidence.legalInstrument || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, legalInstrument: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="e.g., INA § 214(b), 22 CFR 41.31"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Publication Date</label>
-              <input
-                type="date"
-                value={editingEvidence.evidence.publicationDate || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, publicationDate: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Effective Date</label>
-              <input
-                type="date"
-                value={editingEvidence.evidence.effectiveDate || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, effectiveDate: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Access Date</label>
-              <input
-                type="date"
-                value={editingEvidence.evidence.accessDate || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, accessDate: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
+                value={newClaim.unit}
+                onChange={e => setNewClaim({ ...newClaim, unit: e.target.value })}
+                placeholder="e.g., USD / Months / Days"
+                className="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-sm"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Evidence Verification Status *</label>
-              <select
-                value={editingEvidence.evidence.status || 'NEEDS_REVIEW'}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, status: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm font-medium"
-              >
-                {EVIDENCE_STATUSES.map(st => (
-                  <option key={st} value={st}>
-                    {st}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Reviewer Notes</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Destination Country ISO</label>
               <input
                 type="text"
-                value={editingEvidence.evidence.reviewerNotes || ''}
-                onChange={e =>
-                  setEditingEvidence({
-                    ...editingEvidence,
-                    evidence: { ...editingEvidence.evidence, reviewerNotes: e.target.value }
-                  })
-                }
-                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-sm"
-                placeholder="Cross-checked against embassy fee bulletin..."
+                value={newClaim.countryIso}
+                onChange={e => setNewClaim({ ...newClaim, countryIso: e.target.value.toUpperCase() })}
+                placeholder="US"
+                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs font-mono uppercase"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Visa Category</label>
+              <input
+                type="text"
+                value={newClaim.visaCategory}
+                onChange={e => setNewClaim({ ...newClaim, visaCategory: e.target.value })}
+                placeholder="Tourist / Visitor"
+                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Researcher / Reviewer ID</label>
+              <input
+                type="text"
+                value={newClaim.reviewer}
+                onChange={e => setNewClaim({ ...newClaim, reviewer: e.target.value })}
+                placeholder="admin"
+                className="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs"
               />
             </div>
           </div>
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-2">
             <button
               type="button"
-              onClick={() => setEditingEvidence(null)}
-              className="px-4 py-2 border border-slate-300 rounded-lg text-sm bg-white hover:bg-slate-50"
+              onClick={() => setShowAddClaim(false)}
+              className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 bg-white text-xs font-bold"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700"
+              className="flex items-center gap-1.5 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-xs font-bold shadow-sm"
             >
-              <Save size={15} /> Save Evidence
+              <Save size={14} /> Save Draft Claim
             </button>
           </div>
         </form>
       )}
 
       {/* Claims List */}
-      {paginatedClaims.length === 0 ? (
-        <div className="p-8 border border-dashed border-slate-300 rounded-xl text-center text-slate-500">
-          No claims recorded for this filter. Click &ldquo;Add New Claim&rdquo; to document a verifiable visa requirement.
+      {filteredClaims.length === 0 ? (
+        <div className="p-10 text-center bg-slate-50 rounded-lg border border-dashed border-slate-300">
+          <p className="text-slate-600 font-medium">
+            {claims.length === 0
+              ? 'No claims recorded for this visa program yet.'
+              : 'No claims match the active filter criteria.'}
+          </p>
+          <p className="text-xs text-slate-500 mt-1">
+            Click &ldquo;Draft New Claim&rdquo; above to add a classified requirement and link official evidence.
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
-          {paginatedClaims.map(claim => {
-            const evList: any[] = Array.isArray(claim.evidence) ? claim.evidence : [];
-            const hasMissing = evList.length === 0;
-            const hasBroken = evList.some(e => e.status === 'BROKEN_LINK');
-            const hasOutdated = claim.status === 'OUTDATED' || evList.some(e => e.status === 'OUTDATED');
-            const isVerifiedOfficial = evList.length > 0 && evList.every(e => e.status === 'VERIFIED_OFFICIAL');
+          {filteredClaims.map(claim => {
+            const isEditing = editingClaimId === claim.id;
+            const evidenceList = claim.evidence || [];
+            const hasVerifiedEvidence = evidenceList.some(
+              e => e.status === 'VERIFIED_OFFICIAL' || e.status === 'OFFICIAL_BUT_NOT_FULLY_CONFIRMED'
+            );
+            const tierMeta = getClassificationMeta(claim.requirementClassification);
 
             return (
               <div
                 key={claim.id}
-                className={`border rounded-xl p-4 space-y-3 transition ${
-                  hasMissing || hasBroken
-                    ? 'border-rose-300 bg-rose-50/20'
-                    : hasOutdated
-                    ? 'border-amber-300 bg-amber-50/20'
-                    : isVerifiedOfficial
-                    ? 'border-emerald-300 bg-emerald-50/10'
-                    : 'border-slate-200 bg-white'
-                }`}
+                className="border border-slate-200 rounded-lg bg-white shadow-sm overflow-hidden"
               >
-                <div className="flex flex-wrap justify-between items-start gap-2">
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="px-2.5 py-0.5 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800">
-                        {claim.section}
-                      </span>
-                      <span className="font-bold text-slate-900">{claim.description}</span>
-                      {(claim.value || claim.unit) && (
-                        <span className="px-2 py-0.5 text-xs font-mono bg-slate-100 text-slate-800 rounded border">
-                          {claim.value} {claim.unit}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                      <span>
-                        Claim Status: <strong className="text-slate-700">{claim.status}</strong>
-                      </span>
-                      {claim.reviewer && <span>Reviewer: {claim.reviewer}</span>}
-                      {claim.reviewTimestamp && (
-                        <span>Updated: {new Date(claim.reviewTimestamp).toLocaleDateString()}</span>
-                      )}
-                    </div>
-                  </div>
+                {/* Claim Top Bar */}
+                <div className="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+                  {isEditing ? (
+                    <div className="w-full space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Linked Lifecycle Section
+                          </label>
+                          <select
+                            value={editClaimForm.section}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, section: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-xs"
+                          >
+                            {SIX_LIFECYCLE_STAGES.map(stage => (
+                              <optgroup key={stage.stageNumber} label={stage.title}>
+                                {THIRTY_SECTIONS_REGISTRY.filter(
+                                  s => s.stageNumber === stage.stageNumber
+                                ).map(sec => (
+                                  <option key={sec.sectionKey} value={sec.claimSectionLabel}>
+                                    {sec.title}
+                                  </option>
+                                ))}
+                              </optgroup>
+                            ))}
+                            <optgroup label="Stage 6 — 22 Applicant Special Topics">
+                              {TWENTY_TWO_SPECIAL_TOPICS_REGISTRY.map(t => (
+                                <option
+                                  key={t.topicKey}
+                                  value={`T${String(t.topicNumber).padStart(2, '0')}: ${t.shortTitle}`}
+                                >
+                                  {t.title}
+                                </option>
+                              ))}
+                            </optgroup>
+                            <optgroup label="Legacy A–M Sections">
+                              {SECTIONS_A_TO_M.map(s => (
+                                <option key={s.code} value={s.label}>
+                                  {s.label}
+                                </option>
+                              ))}
+                            </optgroup>
+                            <option value={editClaimForm.section}>{editClaimForm.section}</option>
+                          </select>
+                        </div>
 
-                  {/* Warning Badges & Actions */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    {hasMissing && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded bg-rose-100 text-rose-800">
-                        <AlertCircle size={13} /> Missing Evidence
-                      </span>
-                    )}
-                    {hasBroken && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded bg-red-100 text-red-800">
-                        <Link2Off size={13} /> Broken Link
-                      </span>
-                    )}
-                    {hasOutdated && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded bg-amber-100 text-amber-900">
-                        <Clock size={13} /> Outdated
-                      </span>
-                    )}
-                    {isVerifiedOfficial && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded bg-emerald-100 text-emerald-800">
-                        <CheckCircle size={13} /> Verified Official
-                      </span>
-                    )}
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            5-Tier Classification
+                          </label>
+                          <select
+                            value={editClaimForm.requirementClassification}
+                            onChange={e =>
+                              setEditClaimForm({
+                                ...editClaimForm,
+                                requirementClassification: e.target.value as RequirementClassification
+                              })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-xs font-semibold"
+                          >
+                            {REQUIREMENT_CLASSIFICATION_META.map(m => (
+                              <option key={m.code} value={m.code}>
+                                {m.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setEditingEvidence({
-                          claimId: claim.id,
-                          evidence: {
-                            sourceTitle: '',
-                            sourceUrl: '',
-                            issuingAuthority: '',
-                            legalInstrument: '',
-                            publicationDate: '',
-                            effectiveDate: '',
-                            accessDate: new Date().toISOString().split('T')[0],
-                            reviewerNotes: '',
-                            status: 'NEEDS_REVIEW'
-                          }
-                        })
-                      }
-                      className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-emerald-600 text-white rounded hover:bg-emerald-700"
-                    >
-                      <Plus size={13} /> Add Evidence
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditingClaim(claim)}
-                      className="p-1.5 text-slate-600 hover:text-indigo-600 rounded border border-slate-200 bg-white"
-                      title="Edit Claim"
-                    >
-                      <Edit2 size={14} />
-                    </button>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Applicable Nationality (ISO or ALL)
+                          </label>
+                          <input
+                            type="text"
+                            value={editClaimForm.applicableNationality}
+                            onChange={e =>
+                              setEditClaimForm({
+                                ...editClaimForm,
+                                applicableNationality: e.target.value.toUpperCase()
+                              })
+                            }
+                            placeholder="ALL or ISO (e.g. IN, CN)"
+                            className="w-full p-2 border rounded-lg bg-white text-xs font-mono uppercase"
+                          />
+                        </div>
+                      </div>
 
-                    {claimDeletingId === claim.id ? (
-                      <div className="flex items-center gap-1 bg-rose-100 px-2 py-1 rounded border border-rose-300">
-                        <span className="text-xs text-rose-900 font-semibold">Confirm delete?</span>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div className="md:col-span-2">
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Description
+                          </label>
+                          <input
+                            type="text"
+                            value={editClaimForm.description}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, description: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Value</label>
+                          <input
+                            type="text"
+                            value={editClaimForm.value}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, value: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-sm font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Unit</label>
+                          <input
+                            type="text"
+                            value={editClaimForm.unit}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, unit: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Claim Status
+                          </label>
+                          <select
+                            value={editClaimForm.status}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, status: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-xs font-bold"
+                          >
+                            {CLAIM_STATUSES.map(st => (
+                              <option key={st} value={st}>
+                                {st}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Destination ISO
+                          </label>
+                          <input
+                            type="text"
+                            value={editClaimForm.countryIso}
+                            onChange={e =>
+                              setEditClaimForm({
+                                ...editClaimForm,
+                                countryIso: e.target.value.toUpperCase()
+                              })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-xs font-mono uppercase"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Visa Category
+                          </label>
+                          <input
+                            type="text"
+                            value={editClaimForm.visaCategory}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, visaCategory: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                            Reviewer ID
+                          </label>
+                          <input
+                            type="text"
+                            value={editClaimForm.reviewer}
+                            onChange={e =>
+                              setEditClaimForm({ ...editClaimForm, reviewer: e.target.value })
+                            }
+                            className="w-full p-2 border rounded-lg bg-white text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-2">
                         <button
                           type="button"
-                          onClick={() => handleConfirmDeleteClaim(claim.id)}
-                          className="text-xs font-bold text-white bg-rose-600 px-2 py-0.5 rounded hover:bg-rose-700"
+                          onClick={() => setEditingClaimId(null)}
+                          className="px-3 py-1.5 border rounded-lg text-xs font-semibold bg-white"
                         >
-                          Yes
+                          Cancel
                         </button>
                         <button
                           type="button"
-                          onClick={() => setClaimDeletingId(null)}
-                          className="text-xs text-slate-700 px-1"
+                          onClick={() => handleUpdateClaim(claim.id)}
+                          className="flex items-center gap-1 px-4 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold"
                         >
-                          No
+                          <Save size={13} /> Save Claim Changes
                         </button>
                       </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => setClaimDeletingId(claim.id)}
-                        className="p-1.5 text-slate-600 hover:text-rose-600 rounded border border-slate-200 bg-white"
-                        title="Delete Claim"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-1.5">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="px-2.5 py-0.5 bg-slate-800 text-white rounded text-xs font-bold">
+                            {claim.section}
+                          </span>
+                          <span
+                            className={`px-2.5 py-0.5 rounded text-xs font-bold border ${tierMeta.badgeClass}`}
+                            title={tierMeta.description}
+                          >
+                            {tierMeta.shortLabel}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                              tierMeta.isBindingLegalOrOfficial
+                                ? 'bg-indigo-50 text-indigo-800 border border-indigo-200'
+                                : 'bg-amber-50 text-amber-800 border border-amber-200'
+                            }`}
+                          >
+                            {tierMeta.isBindingLegalOrOfficial
+                              ? 'Binding / Official Rule'
+                              : 'Practical / Estimate'}
+                          </span>
+                          <span className="px-2 py-0.5 bg-blue-50 text-blue-800 border border-blue-200 rounded text-xs font-mono font-bold flex items-center gap-1">
+                            <Globe size={11} /> Nat: {claim.applicableNationality || 'ALL'}
+                          </span>
+                          {(claim.countryIso || claim.visaCategory) && (
+                            <span className="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded text-[11px] font-mono">
+                              {claim.countryIso || inferredCountryIso} • {claim.visaCategory || inferredCategory}
+                            </span>
+                          )}
+                          <span
+                            className={`px-2 py-0.5 rounded text-xs font-bold border ${getClaimStatusBadge(
+                              claim.status
+                            )}`}
+                          >
+                            {claim.status}
+                          </span>
+                          {hasVerifiedEvidence ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                              <CheckCircle size={13} /> Official Source Linked
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded text-xs font-bold">
+                              <AlertTriangle size={12} /> Needs Official Source ({evidenceList.length} attached)
+                            </span>
+                          )}
+                        </div>
+                        <div className="font-bold text-slate-900 text-base">{claim.description}</div>
+                        <div className="text-xs text-slate-600 flex flex-wrap items-center gap-3 font-mono">
+                          <span>
+                            Value:{' '}
+                            <strong className="text-slate-900">
+                              {claim.value || '—'} {claim.unit || ''}
+                            </strong>
+                          </span>
+                          <span>•</span>
+                          <span>Reviewer: {claim.reviewer || 'admin'}</span>
+                          {claim.reviewTimestamp && (
+                            <>
+                              <span>•</span>
+                              <span>
+                                Verified/Updated: {new Date(claim.reviewTimestamp).toLocaleString()}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        {Array.isArray(claim.warnings) && claim.warnings.length > 0 && (
+                          <div className="mt-2 space-y-1">
+                            {claim.warnings.map((w, idx) => (
+                              <div
+                                key={`${w.code}-${idx}`}
+                                className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] font-semibold text-amber-900"
+                              >
+                                <AlertTriangle size={12} className="text-amber-600 shrink-0" />
+                                <span>
+                                  [{w.code}] {w.message}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleQuickClaimDecision(claim, 'VERIFIED')}
+                          title="Approve and mark claim VERIFIED (requires official evidence)"
+                          className="flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md hover:bg-emerald-100 text-xs font-bold"
+                        >
+                          <CheckSquare size={13} /> Approve
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickClaimDecision(claim, 'REJECTED')}
+                          title="Reject unverified or inaccurate claim"
+                          className="flex items-center gap-1 px-2.5 py-1.5 bg-rose-50 text-rose-800 border border-rose-200 rounded-md hover:bg-rose-100 text-xs font-bold"
+                        >
+                          <XCircle size={13} /> Reject
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => openAddEvidence(claim.id)}
+                          className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-md hover:bg-indigo-100 text-xs font-bold"
+                        >
+                          <Plus size={13} /> Add Evidence
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => startEditClaim(claim)}
+                          className="flex items-center gap-1 px-2.5 py-1.5 bg-white text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 text-xs font-semibold"
+                        >
+                          <Edit2 size={13} /> Edit
+                        </button>
+                        {confirmDeleteClaimId === claim.id ? (
+                          <div className="flex items-center gap-1 bg-rose-50 border border-rose-300 px-2 py-1 rounded-md">
+                            <span className="text-[11px] font-bold text-rose-800">Confirm?</span>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteClaim(claim.id)}
+                              className="px-2 py-0.5 bg-rose-600 text-white rounded text-[11px] font-bold"
+                            >
+                              Yes
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteClaimId(null)}
+                              className="px-2 py-0.5 bg-white text-slate-600 border rounded text-[11px]"
+                            >
+                              No
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteClaimId(claim.id)}
+                            className="flex items-center gap-1 px-2.5 py-1.5 bg-white text-rose-600 border border-rose-200 rounded-md hover:bg-rose-50 text-xs font-semibold"
+                          >
+                            <Trash2 size={13} /> Delete
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                {/* Linked Evidence Records */}
-                <div className="pl-3 border-l-2 border-slate-200 space-y-2 mt-2">
-                  <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                    Linked Evidence Records ({evList.length})
+                {/* Associated Evidence List */}
+                <div className="p-4 space-y-3">
+                  <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                    <Link2 size={13} /> Associated Official Evidence Records ({evidenceList.length})
                   </div>
-                  {evList.length === 0 ? (
-                    <p className="text-xs text-rose-600 italic">
-                      No official source linked yet. Attach an official statute, gazette, or consular webpage.
-                    </p>
+
+                  {evidenceList.length === 0 ? (
+                    <div className="text-xs text-rose-700 bg-rose-50/70 p-3 rounded-lg border border-rose-200 flex items-center gap-2">
+                      <AlertTriangle size={14} className="shrink-0" />
+                      <span>
+                        No official evidence attached yet. Attach a government statute, immigration manual citation, or consular checklist URL to verify this claim.
+                      </span>
+                    </div>
                   ) : (
-                    <div className="space-y-2">
-                      {evList.map((ev: any) => (
+                    <div className="space-y-2.5">
+                      {evidenceList.map(ev => (
                         <div
                           key={ev.id}
-                          className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col md:flex-row justify-between gap-3 text-xs"
+                          className="p-3.5 rounded-lg border border-slate-200 bg-slate-50/60 flex flex-col lg:flex-row justify-between gap-3 text-xs"
                         >
-                          <div className="space-y-1">
+                          <div className="space-y-1.5 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-bold text-slate-900">
-                                {ev.sourceTitle || ev.legalInstrument || 'Official Source Document'}
+                              <span
+                                className={`px-2 py-0.5 rounded font-bold border text-[11px] ${getEvidenceBadgeStyle(
+                                  ev.status
+                                )}`}
+                              >
+                                {ev.status}
+                              </span>
+                              <span className="font-bold text-slate-900 text-sm">
+                                {ev.sourceTitle || 'Official Source Record'}
                               </span>
                               {ev.issuingAuthority && (
-                                <span className="text-slate-600">({ev.issuingAuthority})</span>
-                              )}
-                              {ev.legalInstrument && (
-                                <span className="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded border border-indigo-200 font-mono">
-                                  {ev.legalInstrument}
+                                <span className="text-slate-600 font-medium">
+                                  ({ev.issuingAuthority})
                                 </span>
                               )}
                             </div>
 
-                            <div>
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-600">
                               <a
                                 href={ev.sourceUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-indigo-600 hover:underline font-medium break-all"
+                                className="text-indigo-600 hover:underline font-medium inline-flex items-center gap-1 break-all"
                               >
-                                {ev.sourceUrl} <ExternalLink size={12} />
+                                {ev.sourceUrl} <ExternalLink size={11} />
                               </a>
+                              {ev.legalInstrument && (
+                                <span>
+                                  <strong>Legal Provision:</strong> {ev.legalInstrument}
+                                </span>
+                              )}
                             </div>
 
-                            <div className="flex flex-wrap gap-3 text-slate-500">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-500 font-mono text-[11px]">
                               {ev.publicationDate && <span>Published: {ev.publicationDate}</span>}
                               {ev.effectiveDate && <span>Effective: {ev.effectiveDate}</span>}
-                              {ev.accessDate && <span>Accessed: {ev.accessDate}</span>}
+                              {ev.accessDate && <span>Accessed/Verified: {ev.accessDate}</span>}
                             </div>
 
+                            {ev.excerpt && (
+                              <div className="text-slate-800 bg-indigo-50/60 p-2 rounded border border-indigo-200 mt-1 font-mono text-[11px]">
+                                <strong className="font-sans text-indigo-950">Exact Statutory/Policy Excerpt:</strong>{' '}
+                                &ldquo;{ev.excerpt}&rdquo;
+                              </div>
+                            )}
+
                             {ev.reviewerNotes && (
-                              <div className="text-slate-700 bg-white px-2.5 py-1 rounded border border-slate-200">
-                                <span className="font-semibold">Reviewer Note:</span> {ev.reviewerNotes}
+                              <div className="text-slate-700 bg-white p-2 rounded border border-slate-200 mt-1">
+                                <strong>Reviewer Notes:</strong> {ev.reviewerNotes}
                               </div>
                             )}
                           </div>
 
-                          <div className="flex flex-wrap md:flex-col items-end justify-between gap-2 shrink-0">
-                            <select
-                              value={ev.status || 'NEEDS_REVIEW'}
-                              onChange={e => handleQuickStatusUpdate(claim.id, ev, e.target.value)}
-                              className={`px-2 py-1 rounded border text-xs font-bold ${getEvidenceStatusBadge(
-                                ev.status || 'NEEDS_REVIEW'
-                              )}`}
-                            >
-                              {EVIDENCE_STATUSES.map(st => (
-                                <option key={st} value={st}>
-                                  {st}
-                                </option>
-                              ))}
-                            </select>
+                          <div className="flex flex-wrap lg:flex-col items-end justify-between gap-2 shrink-0">
+                            <div className="flex items-center gap-1.5">
+                              <label className="text-[10px] font-bold text-slate-500 uppercase">
+                                Status:
+                              </label>
+                              <select
+                                value={ev.status}
+                                onChange={e =>
+                                  handleQuickEvidenceStatusChange(
+                                    claim.id,
+                                    ev,
+                                    e.target.value as EvidenceStatus
+                                  )
+                                }
+                                className="p-1.5 border border-slate-300 rounded bg-white text-[11px] font-semibold"
+                              >
+                                {EVIDENCE_STATUSES.map(st => (
+                                  <option key={st} value={st}>
+                                    {st}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
 
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1.5">
                               <button
                                 type="button"
-                                onClick={() => setEditingEvidence({ claimId: claim.id, evidence: ev })}
-                                className="px-2 py-1 text-slate-700 hover:text-indigo-600 bg-white border rounded flex items-center gap-1"
+                                onClick={() => openEditEvidence(claim.id, ev)}
+                                className="px-2.5 py-1 bg-white border border-slate-300 rounded hover:bg-slate-100 text-slate-700 font-semibold inline-flex items-center gap-1"
                               >
-                                <Edit2 size={12} /> Edit
+                                <Edit2 size={11} /> Edit
                               </button>
-                              {evidenceDeleting?.evidenceId === ev.id ? (
-                                <div className="flex items-center gap-1 bg-rose-100 px-2 py-1 rounded border border-rose-300">
+
+                              {confirmDeleteEvidence?.evidenceId === ev.id ? (
+                                <div className="flex items-center gap-1 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded">
+                                  <span className="text-[10px] font-bold text-rose-800">Delete?</span>
                                   <button
                                     type="button"
-                                    onClick={handleConfirmDeleteEvidence}
-                                    className="text-white bg-rose-600 px-1.5 py-0.5 rounded font-bold"
+                                    onClick={() => handleDeleteEvidence(claim.id, ev.id)}
+                                    className="px-1.5 py-0.5 bg-rose-600 text-white rounded text-[10px] font-bold"
                                   >
-                                    Delete
+                                    Yes
                                   </button>
                                   <button
                                     type="button"
-                                    onClick={() => setEvidenceDeleting(null)}
-                                    className="text-slate-600 px-1"
+                                    onClick={() => setConfirmDeleteEvidence(null)}
+                                    className="px-1.5 py-0.5 bg-white text-slate-600 border rounded text-[10px]"
                                   >
-                                    Cancel
+                                    No
                                   </button>
                                 </div>
                               ) : (
                                 <button
                                   type="button"
-                                  onClick={() => setEvidenceDeleting({ claimId: claim.id, evidenceId: ev.id })}
-                                  className="px-2 py-1 text-rose-600 hover:bg-rose-50 bg-white border rounded flex items-center gap-1"
+                                  onClick={() =>
+                                    setConfirmDeleteEvidence({
+                                      claimId: claim.id,
+                                      evidenceId: ev.id
+                                    })
+                                  }
+                                  className="px-2.5 py-1 bg-white border border-rose-200 rounded hover:bg-rose-50 text-rose-600 font-semibold inline-flex items-center gap-1"
                                 >
-                                  <Trash2 size={12} /> Remove
+                                  <Trash2 size={11} /> Delete
                                 </button>
                               )}
                             </div>
@@ -867,37 +1601,220 @@ export function ClaimsManager({ programId, onMutated }: { programId: string; onM
                       ))}
                     </div>
                   )}
+
+                  {/* Add / Edit Evidence Form for this Claim */}
+                  {activeEvidenceClaimId === claim.id && (
+                    <form
+                      onSubmit={e => handleSaveEvidence(e, claim.id)}
+                      className="mt-3 p-4 bg-indigo-50/60 border border-indigo-200 rounded-lg space-y-3"
+                    >
+                      <div className="flex justify-between items-center border-b border-indigo-200 pb-2">
+                        <h5 className="font-bold text-xs text-indigo-950 flex items-center gap-1.5">
+                          <BookOpen size={14} />
+                          {editingEvidenceId
+                            ? 'Edit Official Evidence Record'
+                            : 'Attach New Official Evidence Record'}
+                        </h5>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveEvidenceClaimId(null);
+                            setEditingEvidenceId(null);
+                          }}
+                          className="text-slate-500 hover:text-slate-700"
+                        >
+                          <X size={15} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Source Title *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={evidenceForm.sourceTitle}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, sourceTitle: e.target.value })
+                            }
+                            placeholder="e.g., U.S. Department of State Fee Schedule"
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Official Source URL *
+                          </label>
+                          <input
+                            type="url"
+                            required
+                            value={evidenceForm.sourceUrl}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, sourceUrl: e.target.value })
+                            }
+                            placeholder="https://travel.state.gov/..."
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Issuing Authority *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={evidenceForm.issuingAuthority}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, issuingAuthority: e.target.value })
+                            }
+                            placeholder="e.g., U.S. Department of State / USCIS"
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Exact Legal Provision / Article / Checklist Ref
+                          </label>
+                          <input
+                            type="text"
+                            value={evidenceForm.legalInstrument}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, legalInstrument: e.target.value })
+                            }
+                            placeholder="e.g., INA § 214(b); 22 CFR § 41.31"
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Publication Date
+                          </label>
+                          <input
+                            type="date"
+                            value={evidenceForm.publicationDate}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, publicationDate: e.target.value })
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Effective Date
+                          </label>
+                          <input
+                            type="date"
+                            value={evidenceForm.effectiveDate}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, effectiveDate: e.target.value })
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Access / Verification Date
+                          </label>
+                          <input
+                            type="date"
+                            value={evidenceForm.accessDate}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, accessDate: e.target.value })
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Evidence Verification Status
+                          </label>
+                          <select
+                            value={evidenceForm.status}
+                            onChange={e =>
+                              setEvidenceForm({
+                                ...evidenceForm,
+                                status: e.target.value as EvidenceStatus
+                              })
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-semibold"
+                          >
+                            {EVIDENCE_STATUSES.map(st => (
+                              <option key={st} value={st}>
+                                {st}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Supporting Statutory / Consular Excerpt (Verbatim Quote)
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={evidenceForm.excerpt}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, excerpt: e.target.value })
+                            }
+                            placeholder="Quote exact statutory text, policy instruction, or fee schedule clause..."
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Reviewer Notes & Applicability Assessment
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={evidenceForm.reviewerNotes}
+                            onChange={e =>
+                              setEvidenceForm({ ...evidenceForm, reviewerNotes: e.target.value })
+                            }
+                            placeholder="Document verification context, consular post exceptions, or legal interpretation..."
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveEvidenceClaimId(null);
+                            setEditingEvidenceId(null);
+                          }}
+                          className="px-3 py-1.5 border border-slate-300 rounded bg-white text-slate-700 text-xs font-semibold"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="flex items-center gap-1 px-4 py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-xs font-bold"
+                        >
+                          <Save size={13} />{' '}
+                          {editingEvidenceId ? 'Update Evidence' : 'Attach Evidence'}
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             );
           })}
         </div>
       )}
-
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between pt-4 border-t border-slate-200 text-sm">
-          <button
-            type="button"
-            disabled={page <= 1}
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            className="flex items-center gap-1 px-3 py-1.5 border rounded-lg disabled:opacity-40"
-          >
-            <ChevronLeft size={16} /> Previous
-          </button>
-          <span className="text-slate-600">
-            Page <strong>{page}</strong> of <strong>{totalPages}</strong>
-          </span>
-          <button
-            type="button"
-            disabled={page >= totalPages}
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            className="flex items-center gap-1 px-3 py-1.5 border rounded-lg disabled:opacity-40"
-          >
-            Next <ChevronRight size={16} />
-          </button>
-        </div>
-      )}
     </div>
   );
-}
+};
+export default ClaimsManager;

@@ -23,6 +23,7 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
   const profile = getImmigrationProfileForCountry(normCode);
 
   const [activeCategory, setActiveCategory] = useState<ImmigrationCategoryKey>(parseCategoryFromUrl());
+  const [applicantNationality, setApplicantNationality] = useState<string>('ALL');
 
   useEffect(() => {
     setActiveCategory(parseCategoryFromUrl());
@@ -164,7 +165,12 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
 
         <div className="space-y-6">
           {currentCategoryPrograms.map((prog) => (
-            <ProgramCard key={prog.id} prog={prog} />
+            <ProgramCard
+              key={prog.id}
+              prog={prog}
+              applicantNationality={applicantNationality}
+              onNationalityChange={setApplicantNationality}
+            />
           ))}
         </div>
 
@@ -199,20 +205,41 @@ function renderStatusBadge(status: PathwayVerificationStatus) {
   }
 }
 
-function ProgramCard({ prog }: { prog: ImmigrationProgram }) {
+function ProgramCard({ prog, applicantNationality, onNationalityChange }: { prog: ImmigrationProgram; applicantNationality?: string; onNationalityChange?: (nat: string) => void }) {
   const [details, setDetails] = useState<any>(null);
+  const [currentNat, setCurrentNat] = useState<string>(applicantNationality || 'ALL');
+
+  useEffect(() => {
+    if (applicantNationality) {
+      setCurrentNat(applicantNationality);
+    }
+  }, [applicantNationality]);
 
   useEffect(() => {
     if (prog.verificationStatus === 'AVAILABLE_VERIFIED') {
-      fetch(`/api/visa-details/${prog.id}`)
+      const natQuery = currentNat && currentNat !== 'ALL' ? `?nationality=${encodeURIComponent(currentNat)}` : '';
+      fetch(`/api/visa-details/${prog.id}${natQuery}`)
         .then(res => res.json())
         .then(data => setDetails(data))
         .catch(() => {});
     }
-  }, [prog.id, prog.verificationStatus]);
+  }, [prog.id, prog.verificationStatus, currentNat]);
+
+  const handleNatChange = (nat: string) => {
+    setCurrentNat(nat);
+    if (onNationalityChange) {
+      onNationalityChange(nat);
+    }
+  };
 
   if (details) {
-    return <VisaDetailRenderer details={details} />;
+    return (
+      <VisaDetailRenderer
+        details={details}
+        selectedNationality={currentNat}
+        onNationalityChange={handleNatChange}
+      />
+    );
   }
 
   return (

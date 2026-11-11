@@ -1,6 +1,43 @@
 import pg from 'pg';
 import { Pool as NeonPool, neonConfig } from '@neondatabase/serverless';
 import { PGlite } from '@electric-sql/pglite';
+import {
+  REQUIREMENT_CLASSIFICATIONS,
+  EVIDENCE_STATUSES,
+  normalizeEvidenceStatus,
+  isQualifyingOfficialEvidence,
+  isInvalidatingEvidenceStatus,
+  isValidRequirementClassification,
+  normalizeVisaDetailTo30Sections,
+  denormalize30SectionsToLegacy13,
+  validateComprehensiveProfileHonesty,
+  evaluateClaimIntegrity
+} from '../types/visaComprehensiveProfile';
+import type {
+  RequirementClassification,
+  EvidenceStatus,
+  VisaComprehensiveProfile,
+  VisaApplicantSpecialTopics
+} from '../types/visaComprehensiveProfile';
+
+export {
+  REQUIREMENT_CLASSIFICATIONS,
+  EVIDENCE_STATUSES,
+  normalizeEvidenceStatus,
+  isQualifyingOfficialEvidence,
+  isInvalidatingEvidenceStatus,
+  isValidRequirementClassification,
+  normalizeVisaDetailTo30Sections,
+  denormalize30SectionsToLegacy13,
+  validateComprehensiveProfileHonesty,
+  evaluateClaimIntegrity
+};
+export type {
+  RequirementClassification,
+  EvidenceStatus,
+  VisaComprehensiveProfile,
+  VisaApplicantSpecialTopics
+};
 
 const { Pool: PgPool } = pg;
 
@@ -140,6 +177,7 @@ CREATE TABLE IF NOT EXISTS visa_details (
   cost_calculator_json TEXT,
   faq_json TEXT,
   legal_evidence_json TEXT,
+  comprehensive_sections_json TEXT DEFAULT '{}',
   last_updated TEXT,
   verification_status TEXT
 );
@@ -155,9 +193,15 @@ CREATE TABLE IF NOT EXISTS visa_detail_claims (
   unit TEXT,
   status TEXT NOT NULL DEFAULT 'NEEDS_EVIDENCE',
   reviewer TEXT,
-  review_timestamp TEXT
+  review_timestamp TEXT,
+  requirement_classification TEXT NOT NULL DEFAULT 'ADMIN_INSTRUCTION',
+  applicable_nationality TEXT NOT NULL DEFAULT 'ALL',
+  country_iso TEXT NOT NULL DEFAULT '',
+  visa_category TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_pg_claims_program ON visa_detail_claims(program_id);
+CREATE INDEX IF NOT EXISTS idx_pg_claims_classification ON visa_detail_claims(program_id, requirement_classification);
+CREATE INDEX IF NOT EXISTS idx_pg_claims_nationality ON visa_detail_claims(program_id, applicable_nationality);
 
 CREATE TABLE IF NOT EXISTS visa_detail_evidence (
   id TEXT PRIMARY KEY,
@@ -171,6 +215,7 @@ CREATE TABLE IF NOT EXISTS visa_detail_evidence (
   publication_date TEXT,
   access_date TEXT,
   reviewer_notes TEXT,
+  excerpt TEXT DEFAULT '',
   status TEXT DEFAULT 'NEEDS_REVIEW'
 );
 CREATE INDEX IF NOT EXISTS idx_pg_evidence_claim ON visa_detail_evidence(claim_id);
@@ -184,6 +229,17 @@ CREATE TABLE IF NOT EXISTS visa_detail_versions (
   change_reason TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_pg_versions_program ON visa_detail_versions(program_id);
+`;
+
+export const POSTGRES_PHASE_3_1_MIGRATION_DDL = `
+ALTER TABLE visa_details ADD COLUMN IF NOT EXISTS comprehensive_sections_json TEXT DEFAULT '{}';
+ALTER TABLE visa_detail_claims ADD COLUMN IF NOT EXISTS requirement_classification TEXT NOT NULL DEFAULT 'ADMIN_INSTRUCTION';
+ALTER TABLE visa_detail_claims ADD COLUMN IF NOT EXISTS applicable_nationality TEXT NOT NULL DEFAULT 'ALL';
+ALTER TABLE visa_detail_claims ADD COLUMN IF NOT EXISTS country_iso TEXT NOT NULL DEFAULT '';
+ALTER TABLE visa_detail_claims ADD COLUMN IF NOT EXISTS visa_category TEXT NOT NULL DEFAULT '';
+ALTER TABLE visa_detail_evidence ADD COLUMN IF NOT EXISTS excerpt TEXT DEFAULT '';
+CREATE INDEX IF NOT EXISTS idx_pg_claims_classification ON visa_detail_claims(program_id, requirement_classification);
+CREATE INDEX IF NOT EXISTS idx_pg_claims_nationality ON visa_detail_claims(program_id, applicable_nationality);
 `;
 
 /**
@@ -298,6 +354,15 @@ export async function createPostgresExecutor(
 export class PostgresImmigrationRepository {
   constructor(public readonly pg: PgExecutor) {}
 
+  async applyPhase31Migrations(): Promise<void> {
+    const statements = POSTGRES_PHASE_3_1_MIGRATION_DDL.split(';')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+    for (const stmt of statements) {
+      await this.pg.query(stmt);
+    }
+  }
+
   async initSchema(): Promise<void> {
     const statements = POSTGRES_ENRICHMENT_SCHEMA_DDL.split(';')
       .map(s => s.trim())
@@ -305,6 +370,7 @@ export class PostgresImmigrationRepository {
     for (const stmt of statements) {
       await this.pg.query(stmt);
     }
+    await this.applyPhase31Migrations();
   }
 
   async getBatchStateFromDb(): Promise<any | null> {
@@ -500,7 +566,17 @@ export class PostgresImmigrationRepository {
   }
 
   private mapVisaDetailRow(row: any) {
-    return {
+    let rawComp: any = null;
+    try {
+      const parsedComp = JSON.parse(row.comprehensive_sections_json || '{}');
+      if (parsedComp && parsedComp.sections) {
+        rawComp = parsedComp;
+      }
+    } catch {
+      rawComp = null;
+    }
+
+    const baseRecord: any = {
       id: row.id,
       programId: row.program_id,
       countryOverview: JSON.parse(row.country_overview_json || '{}'),
@@ -520,6 +596,13 @@ export class PostgresImmigrationRepository {
       lastUpdated: row.last_updated,
       verificationStatus: row.verification_status
     };
+
+    baseRecord.comprehensiveSections = normalizeVisaDetailTo30Sections({
+      ...baseRecord,
+      comprehensiveSections: rawComp
+    });
+
+    return baseRecord;
   }
 
   async getPaginatedVisaDetails(
@@ -561,6 +644,14 @@ export class PostgresImmigrationRepository {
   }
 
   async saveVisaDetails(details: any, exec: PgExecutor = this.pg): Promise<void> {
+    const lastUpdated = details.lastUpdated || new Date().toISOString();
+    const verificationStatus = details.verificationStatus || 'VERIFIED';
+    const normalizedComp = normalizeVisaDetailTo30Sections({
+      ...details,
+      lastUpdated,
+      verificationStatus
+    });
+
     await exec.query(
       `
       INSERT INTO visa_details (
@@ -568,9 +659,9 @@ export class PostgresImmigrationRepository {
         financial_json, document_checklist_json, application_fields_json,
         application_steps_json, interview_prep_json, embassy_directory_json,
         refusal_appeal_json, after_approval_json, cost_calculator_json,
-        faq_json, legal_evidence_json, last_updated, verification_status
+        faq_json, legal_evidence_json, comprehensive_sections_json, last_updated, verification_status
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19
       )
       ON CONFLICT(id) DO UPDATE SET
         country_overview_json = EXCLUDED.country_overview_json,
@@ -587,6 +678,7 @@ export class PostgresImmigrationRepository {
         cost_calculator_json = EXCLUDED.cost_calculator_json,
         faq_json = EXCLUDED.faq_json,
         legal_evidence_json = EXCLUDED.legal_evidence_json,
+        comprehensive_sections_json = EXCLUDED.comprehensive_sections_json,
         last_updated = EXCLUDED.last_updated,
         verification_status = EXCLUDED.verification_status
       `,
@@ -607,8 +699,9 @@ export class PostgresImmigrationRepository {
         JSON.stringify(details.costCalculator || {}),
         JSON.stringify(details.faq || []),
         JSON.stringify(details.legalEvidence || []),
-        details.lastUpdated || new Date().toISOString(),
-        details.verificationStatus || 'VERIFIED'
+        JSON.stringify(normalizedComp),
+        lastUpdated,
+        verificationStatus
       ]
     );
   }
@@ -620,13 +713,28 @@ export class PostgresImmigrationRepository {
     ]);
   }
 
-  async getVisaClaimsWithEvidence(programId: string, exec: PgExecutor = this.pg): Promise<any[]> {
+  async getVisaClaimsWithEvidence(
+    programId: string,
+    exec: PgExecutor = this.pg,
+    targetNationality?: string
+  ): Promise<any[]> {
     // Optimized 2-query batch fetch (avoids N+1 queries)
     const claimsRes = await exec.query(
       'SELECT * FROM visa_detail_claims WHERE program_id = $1 ORDER BY section ASC, description ASC',
       [programId]
     );
     if (claimsRes.rows.length === 0) return [];
+
+    let progRow: any = null;
+    try {
+      const pRes = await exec.query(
+        'SELECT country_code, category FROM immigration_programs WHERE id = $1',
+        [programId]
+      );
+      progRow = pRes.rows[0] || null;
+    } catch {
+      progRow = null;
+    }
 
     const claimIds = claimsRes.rows.map((r: any) => r.id);
     const placeholders = claimIds.map((_, i) => `$${i + 1}`).join(', ');
@@ -651,29 +759,128 @@ export class PostgresImmigrationRepository {
         publicationDate: r.publication_date || '',
         accessDate: r.access_date || r.last_checked_date || '',
         reviewerNotes: r.reviewer_notes || '',
-        status: r.status || 'NEEDS_REVIEW'
+        excerpt: r.excerpt || '',
+        rawStatus: r.status || 'NEEDS_REVIEW',
+        status: normalizeEvidenceStatus(r.status)
       });
     }
 
-    return claimsRes.rows.map((r: any) => ({
-      id: r.id,
-      programId: r.program_id,
-      section: r.section,
-      description: r.description,
-      value: r.value,
-      unit: r.unit,
-      status: r.status,
-      reviewer: r.reviewer,
-      reviewTimestamp: r.review_timestamp,
-      evidence: evByClaim[r.id] || []
+    return claimsRes.rows.map((r: any) => {
+      const claimWithEv = {
+        id: r.id,
+        programId: r.program_id,
+        section: r.section,
+        description: r.description,
+        value: r.value,
+        unit: r.unit,
+        status: r.status,
+        reviewer: r.reviewer,
+        reviewTimestamp: r.review_timestamp,
+        requirementClassification: isValidRequirementClassification(r.requirement_classification)
+          ? r.requirement_classification
+          : 'ADMIN_INSTRUCTION',
+        applicableNationality: r.applicable_nationality || 'ALL',
+        countryIso: r.country_iso || '',
+        visaCategory: r.visa_category || '',
+        evidence: evByClaim[r.id] || []
+      };
+      const integrity = evaluateClaimIntegrity(claimWithEv, {
+        expectedCountryIso: progRow?.country_code || (programId || '').split('-')[0] || '',
+        expectedVisaCategory: progRow?.category || '',
+        targetNationality
+      });
+      return {
+        ...claimWithEv,
+        staleOrMissingEvidence: integrity.staleOrMissingEvidence,
+        canPresentAsVerified: integrity.canPresentAsVerified,
+        warnings: integrity.warnings,
+        integrity
+      };
+    });
+  }
+
+  async reconcileClaimVerificationAfterEvidenceChange(
+    claimId: string,
+    reasonTrigger: string,
+    exec: PgExecutor = this.pg
+  ): Promise<{
+    downgraded: boolean;
+    previousStatus?: string;
+    newStatus?: string;
+    claimId: string;
+    programId?: string;
+    versionId?: string;
+  }> {
+    const claimRes = await exec.query('SELECT * FROM visa_detail_claims WHERE id = $1', [claimId]);
+    const claimRow = claimRes.rows[0];
+    if (!claimRow) return { downgraded: false, claimId };
+
+    const evRes = await exec.query('SELECT * FROM visa_detail_evidence WHERE claim_id = $1', [claimId]);
+    const currentEv = evRes.rows.map((r: any) => ({
+      ...r,
+      status: normalizeEvidenceStatus(r.status)
     }));
+
+    const integrity = evaluateClaimIntegrity({ ...claimRow, evidence: currentEv });
+
+    if (claimRow.status === 'VERIFIED' && !integrity.hasQualifyingOfficialEvidence) {
+      const nowIso = new Date().toISOString();
+      await exec.query(
+        'UPDATE visa_detail_claims SET status = $1, review_timestamp = $2 WHERE id = $3',
+        ['NEEDS_EVIDENCE', nowIso, claimId]
+      );
+
+      const programId = claimRow.program_id;
+      const details = await this.getVisaDetails(programId, exec);
+      const claimsSnapshot = await this.getVisaClaimsWithEvidence(programId, exec);
+      const versionId = `ver-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+      await this.saveVisaVersion(
+        {
+          id: versionId,
+          programId,
+          data: { details, claims: claimsSnapshot },
+          editorId: 'system-integrity-guard',
+          timestamp: nowIso,
+          changeReason: `Auto-downgraded claim ${claimId} from VERIFIED to NEEDS_EVIDENCE (${reasonTrigger})`
+        },
+        exec
+      );
+
+      return {
+        downgraded: true,
+        previousStatus: 'VERIFIED',
+        newStatus: 'NEEDS_EVIDENCE',
+        claimId,
+        programId,
+        versionId
+      };
+    }
+
+    return {
+      downgraded: false,
+      previousStatus: claimRow.status,
+      newStatus: claimRow.status,
+      claimId,
+      programId: claimRow.program_id
+    };
   }
 
   async saveVisaClaim(claim: any, exec: PgExecutor = this.pg): Promise<void> {
+    const rawClassification = claim.requirementClassification || claim.requirement_classification;
+    const requirementClassification: RequirementClassification = isValidRequirementClassification(rawClassification)
+      ? rawClassification
+      : 'ADMIN_INSTRUCTION';
+    const applicableNationality = String(claim.applicableNationality || claim.applicable_nationality || 'ALL').trim() || 'ALL';
+    const countryIso = String(claim.countryIso ?? claim.country_iso ?? '').trim();
+    const visaCategory = String(claim.visaCategory ?? claim.visa_category ?? '').trim();
+
     await exec.query(
       `
-      INSERT INTO visa_detail_claims (id, program_id, section, description, value, unit, status, reviewer, review_timestamp)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      INSERT INTO visa_detail_claims (
+        id, program_id, section, description, value, unit, status, reviewer, review_timestamp,
+        requirement_classification, applicable_nationality, country_iso, visa_category
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       ON CONFLICT(id) DO UPDATE SET
         section = EXCLUDED.section,
         description = EXCLUDED.description,
@@ -681,7 +888,11 @@ export class PostgresImmigrationRepository {
         unit = EXCLUDED.unit,
         status = EXCLUDED.status,
         reviewer = EXCLUDED.reviewer,
-        review_timestamp = EXCLUDED.review_timestamp
+        review_timestamp = EXCLUDED.review_timestamp,
+        requirement_classification = EXCLUDED.requirement_classification,
+        applicable_nationality = EXCLUDED.applicable_nationality,
+        country_iso = EXCLUDED.country_iso,
+        visa_category = EXCLUDED.visa_category
       `,
       [
         claim.id,
@@ -692,7 +903,11 @@ export class PostgresImmigrationRepository {
         claim.unit || '',
         claim.status || 'NEEDS_EVIDENCE',
         claim.reviewer || 'admin',
-        claim.reviewTimestamp || claim.review_timestamp || new Date().toISOString()
+        claim.reviewTimestamp || claim.review_timestamp || new Date().toISOString(),
+        requirementClassification,
+        applicableNationality,
+        countryIso,
+        visaCategory
       ]
     );
   }
@@ -702,14 +917,20 @@ export class PostgresImmigrationRepository {
     await exec.query('DELETE FROM visa_detail_claims WHERE id = $1', [claimId]);
   }
 
-  async saveVisaEvidence(evidence: any, exec: PgExecutor = this.pg): Promise<void> {
+  async saveVisaEvidence(
+    evidence: any,
+    exec: PgExecutor = this.pg,
+    options?: { skipReconcile?: boolean }
+  ): Promise<{ downgradedClaim?: boolean; newClaimStatus?: string; versionId?: string }> {
+    const normalizedStatus = normalizeEvidenceStatus(evidence.status);
+    const claimId = evidence.claimId || evidence.claim_id;
     await exec.query(
       `
       INSERT INTO visa_detail_evidence (
         id, claim_id, source_url, legal_instrument, effective_date, last_checked_date,
-        source_title, issuing_authority, publication_date, access_date, reviewer_notes, status
+        source_title, issuing_authority, publication_date, access_date, reviewer_notes, excerpt, status
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       ON CONFLICT(id) DO UPDATE SET
         source_url = EXCLUDED.source_url,
         legal_instrument = EXCLUDED.legal_instrument,
@@ -720,11 +941,12 @@ export class PostgresImmigrationRepository {
         publication_date = EXCLUDED.publication_date,
         access_date = EXCLUDED.access_date,
         reviewer_notes = EXCLUDED.reviewer_notes,
+        excerpt = EXCLUDED.excerpt,
         status = EXCLUDED.status
       `,
       [
         evidence.id,
-        evidence.claimId || evidence.claim_id,
+        claimId,
         evidence.sourceUrl || evidence.source_url || '',
         evidence.legalInstrument || evidence.legal_instrument || '',
         evidence.effectiveDate || evidence.effective_date || '',
@@ -734,13 +956,49 @@ export class PostgresImmigrationRepository {
         evidence.publicationDate || evidence.publication_date || '',
         evidence.accessDate || evidence.access_date || new Date().toISOString().split('T')[0],
         evidence.reviewerNotes || evidence.reviewer_notes || '',
-        evidence.status || 'NEEDS_REVIEW'
+        evidence.excerpt || '',
+        normalizedStatus
       ]
     );
+
+    if (!options?.skipReconcile && claimId) {
+      const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
+        claimId,
+        `Evidence ${evidence.id} status set to ${normalizedStatus}`,
+        exec
+      );
+      return {
+        downgradedClaim: rec.downgraded,
+        newClaimStatus: rec.newStatus,
+        versionId: rec.versionId
+      };
+    }
+    return {};
   }
 
-  async deleteVisaEvidence(evidenceId: string, exec: PgExecutor = this.pg): Promise<void> {
+  async deleteVisaEvidence(
+    evidenceId: string,
+    exec: PgExecutor = this.pg
+  ): Promise<{ downgradedClaim?: boolean; newClaimStatus?: string; claimId?: string; versionId?: string }> {
+    const evRes = await exec.query('SELECT claim_id FROM visa_detail_evidence WHERE id = $1', [
+      evidenceId
+    ]);
+    const claimId = evRes.rows[0]?.claim_id;
     await exec.query('DELETE FROM visa_detail_evidence WHERE id = $1', [evidenceId]);
+    if (claimId) {
+      const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
+        claimId,
+        `Evidence ${evidenceId} deleted`,
+        exec
+      );
+      return {
+        downgradedClaim: rec.downgraded,
+        newClaimStatus: rec.newStatus,
+        claimId,
+        versionId: rec.versionId
+      };
+    }
+    return {};
   }
 
   async getVisaVersions(programId: string, exec: PgExecutor = this.pg): Promise<any[]> {
@@ -807,7 +1065,7 @@ export class PostgresImmigrationRepository {
           await this.saveVisaClaim({ ...c, programId }, tx);
           if (Array.isArray(c.evidence)) {
             for (const ev of c.evidence) {
-              await this.saveVisaEvidence({ ...ev, claimId: c.id }, tx);
+              await this.saveVisaEvidence({ ...ev, claimId: c.id }, tx, { skipReconcile: true });
             }
           }
         }

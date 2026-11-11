@@ -1,0 +1,1682 @@
+import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  Save,
+  ArrowLeft,
+  Plus,
+  Trash2,
+  CheckCircle2,
+  AlertCircle,
+  AlertTriangle,
+  Layers,
+  Code2,
+  RotateCcw
+} from 'lucide-react';
+import { getStoredAdminToken } from '../utils/adminAuth';
+
+const A_TO_M_SECTIONS = [
+  { code: 'A', key: 'countryOverview', label: 'A. Country Overview' },
+  { code: 'B', key: 'visaOverview', label: 'B. Visa Overview' },
+  { code: 'C', key: 'eligibility', label: 'C. Eligibility Requirements' },
+  { code: 'D', key: 'financial', label: 'D. Financial Requirements, ITR & Bank Statements' },
+  { code: 'E', key: 'documentChecklist', label: 'E. Document Checklist' },
+  { code: 'F', key: 'applicationFields', label: 'F. Application Form Information' },
+  { code: 'G', key: 'applicationSteps', label: 'G. Step-by-Step Application Process' },
+  { code: 'H', key: 'interviewPrep', label: 'H. Interview Preparation' },
+  { code: 'I', key: 'embassyDirectory', label: 'I. Embassy & Consulate Directory' },
+  { code: 'J', key: 'refusalAppeal', label: 'J. Refusal, Appeals & Reapplication' },
+  { code: 'K', key: 'afterApproval', label: 'K. After Approval & Entry' },
+  { code: 'L', key: 'costCalculator', label: 'L. Cost Calculator' },
+  { code: 'M', key: 'faq', label: 'M. FAQs & Official Sources' }
+];
+
+const Comprehensive30SectionEditor = lazy(() =>
+  import('../components/admin/Comprehensive30SectionEditor').then(m => ({
+    default: m.Comprehensive30SectionEditor
+  }))
+);
+const ClaimsManager = lazy(() =>
+  import('../components/admin/ClaimsManager').then(m => ({ default: m.ClaimsManager }))
+);
+const VersionHistoryManager = lazy(() =>
+  import('../components/admin/VersionHistoryManager').then(m => ({ default: m.VersionHistoryManager }))
+);
+
+export function VisaDetailEditorPage() {
+  const { programId } = useParams();
+  const navigate = useNavigate();
+  const [details, setDetails] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('lifecycle30');
+  const [activeSectionCode, setActiveSectionCode] = useState('A');
+  const [changeReason, setChangeReason] = useState('');
+
+  const authHeaders = useCallback(() => {
+    const token = getStoredAdminToken();
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  }, []);
+
+  const loadDetails = useCallback(() => {
+    setLoading(true);
+    fetch(`/api/admin/visa-details/${programId}`, { headers: authHeaders() })
+      .then(res => {
+        if (!res.ok) throw new Error('Visa record not found or unauthorized');
+        return res.json();
+      })
+      .then(data => {
+        setDetails(
+          data.details || {
+            programId,
+            countryOverview: {},
+            visaOverview: {},
+            eligibility: {},
+            financial: {},
+            documentChecklist: [],
+            applicationFields: {},
+            applicationSteps: [],
+            interviewPrep: {},
+            embassyDirectory: [],
+            refusalAppeal: {},
+            afterApproval: {},
+            costCalculator: {},
+            faq: [],
+            legalEvidence: [],
+            verificationStatus: 'DRAFT'
+          }
+        );
+        setIsDirty(false);
+        setLoading(false);
+      })
+      .catch(err => {
+        setErrorMessage(err.message);
+        setLoading(false);
+      });
+  }, [programId, authHeaders]);
+
+  useEffect(() => {
+    loadDetails();
+  }, [loadDetails]);
+
+  // Warn before closing browser tab if there are unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
+
+  const updateSection = (sectionKey: string, data: any) => {
+    setIsDirty(true);
+    setDetails((prev: any) => ({ ...prev, [sectionKey]: data }));
+  };
+
+  const handle30SectionDetailsChange = (nextDetails: any) => {
+    setIsDirty(true);
+    setDetails(nextDetails);
+  };
+
+  const handleSaveAll = async () => {
+    setSaving(true);
+    setSaveMessage(null);
+    setErrorMessage(null);
+    try {
+      const res = await fetch('/api/admin/visa-details', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          ...details,
+          programId,
+          changeReason:
+            changeReason.trim() ||
+            (activeTab === 'lifecycle30'
+              ? 'Updated 30-Section Comprehensive Profile & 22 Special Topics'
+              : `Updated section ${activeSectionCode} in A–M Legacy Visa Editor`)
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save changes');
+      setChangeReason('');
+      setIsDirty(false);
+      setSaveMessage(
+        'Explicit Save Confirmed: All 30-Section, 22-Topic, and A–M Legacy changes persisted with a new audit version snapshot.'
+      );
+      loadDetails();
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleStatusChange = async (newStatus: string) => {
+    setSaveMessage(null);
+    setErrorMessage(null);
+    try {
+      const res = await fetch(`/api/admin/visa-details/${programId}/status`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (!res.ok) throw new Error('Failed to update workflow status');
+      setDetails((prev: any) => ({ ...prev, verificationStatus: newStatus }));
+      setSaveMessage(`Workflow status updated to ${newStatus}.`);
+    } catch (err: any) {
+      setErrorMessage(err.message);
+    }
+  };
+
+  if (loading) return <div className="p-10 text-center text-slate-600">Loading visa program editor...</div>;
+  if (!details) return <div className="p-10 text-center text-rose-600">{errorMessage || 'Record not found'}</div>;
+
+  // Normalize array-or-object fields for backward compatibility
+  const docChecklist: any[] = Array.isArray(details.documentChecklist) ? details.documentChecklist : [];
+  const appFieldsObj: any =
+    Array.isArray(details.applicationFields)
+      ? { legacyFieldsList: details.applicationFields.join(', ') }
+      : details.applicationFields || {};
+  const appSteps: any[] = Array.isArray(details.applicationSteps)
+    ? details.applicationSteps.map((s: any, idx: number) =>
+        typeof s === 'string'
+          ? { stepNumber: idx + 1, title: s, instructions: '', fees: '', appointmentRequired: '', officialLink: '' }
+          : s
+      )
+    : [];
+  const interviewObj: any = details.interviewPrep || {};
+  const interviewQuestions: any[] = Array.isArray(interviewObj.questions)
+    ? interviewObj.questions
+    : Array.isArray(interviewObj.commonQuestions)
+    ? interviewObj.commonQuestions.map((q: any) =>
+        typeof q === 'string' ? { question: q, guidance: '', supportingDocs: '' } : q
+      )
+    : [];
+  const embassies: any[] = Array.isArray(details.embassyDirectory) ? details.embassyDirectory : [];
+  const refusalObj: any = details.refusalAppeal || {};
+  const afterApprovalObj: any = details.afterApproval || {};
+  const costObj: any = details.costCalculator || {};
+  const faqs: any[] = Array.isArray(details.faq) ? details.faq : [];
+
+  return (
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+      {/* Top Bar */}
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <div className="space-y-1">
+          <button
+            type="button"
+            onClick={() => navigate('/admin/visa-management')}
+            className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800"
+          >
+            <ArrowLeft size={16} /> Back to Visa Management Admin
+          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Visa Program Editor: <span className="text-indigo-600 font-mono">{programId}</span>
+            </h1>
+            <span className="px-3 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300">
+              {details.verificationStatus || 'DRAFT'}
+            </span>
+            {isDirty && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                <AlertTriangle size={13} /> Unsaved Changes — Click &ldquo;Save All Changes&rdquo; to Persist
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {isDirty && (
+            <button
+              type="button"
+              onClick={loadDetails}
+              className="flex items-center gap-1.5 px-3 py-2.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 bg-white hover:bg-slate-50"
+            >
+              <RotateCcw size={14} /> Discard Unsaved
+            </button>
+          )}
+          <input
+            type="text"
+            value={changeReason}
+            onChange={e => setChangeReason(e.target.value)}
+            placeholder="Audit change summary (optional)..."
+            className="p-2.5 border border-slate-300 rounded-lg text-sm bg-white w-64"
+          />
+          <button
+            type="button"
+            onClick={handleSaveAll}
+            disabled={saving}
+            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-bold text-sm shadow-sm disabled:opacity-50"
+          >
+            <Save size={17} /> {saving ? 'Saving...' : 'Save All Changes'}
+          </button>
+        </div>
+      </div>
+
+      {/* Feedback Banners */}
+      {saveMessage && (
+        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center gap-2">
+          <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
+          <span>{saveMessage}</span>
+        </div>
+      )}
+      {errorMessage && (
+        <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-sm flex items-center gap-2">
+          <AlertCircle size={18} className="text-rose-600 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {/* Main Navigation Tabs */}
+      <div className="flex flex-wrap gap-2 border-b border-slate-200">
+        {[
+          { id: 'lifecycle30', label: '30-Section Lifecycle Editor (+22 Special Topics)' },
+          { id: 'sections', label: 'A–M Legacy View (13 Sections)' },
+          { id: 'claims', label: '5-Tier Claims & Evidence Manager' },
+          { id: 'workflow', label: 'Approval & Publishing Workflow' },
+          { id: 'history', label: 'Version History & Rollback' },
+          { id: 'rawjson', label: 'Raw JSON Inspector' }
+        ].map(tab => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2.5 text-sm transition ${
+              activeTab === tab.id
+                ? 'border-b-2 border-indigo-600 text-indigo-600 font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <div className="bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm">
+        {activeTab === 'lifecycle30' && (
+          <Suspense
+            fallback={
+              <div className="p-8 text-center text-slate-600">
+                Loading 30-Section Lifecycle Editor & 22 Special Topics...
+              </div>
+            }
+          >
+            <Comprehensive30SectionEditor
+              details={details}
+              onDetailsChange={handle30SectionDetailsChange}
+              onValidationNotice={(type, msg) => {
+                if (type === 'error') setErrorMessage(msg);
+                else setSaveMessage(msg);
+              }}
+            />
+          </Suspense>
+        )}
+
+        {activeTab === 'sections' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Sidebar: A-M Section Selector */}
+            <div className="lg:col-span-4 space-y-1 border-r border-slate-100 pr-2">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 pb-2">
+                Select Section (A–M)
+              </div>
+              {A_TO_M_SECTIONS.map(sec => (
+                <button
+                  key={sec.code}
+                  type="button"
+                  onClick={() => setActiveSectionCode(sec.code)}
+                  className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition flex items-center justify-between ${
+                    activeSectionCode === sec.code
+                      ? 'bg-indigo-600 text-white font-bold shadow-xs'
+                      : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  <span>{sec.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Right Pane: Active A-M Section Field-Level Form */}
+            <div className="lg:col-span-8 space-y-6">
+              {/* SECTION A: Country Overview */}
+              {activeSectionCode === 'A' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">A. Country Overview</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Country Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.countryOverview?.name || ''}
+                        onChange={e =>
+                          updateSection('countryOverview', { ...details.countryOverview, name: e.target.value })
+                        }
+                        placeholder="e.g., United States"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Capital City</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.countryOverview?.capital || ''}
+                        onChange={e =>
+                          updateSection('countryOverview', { ...details.countryOverview, capital: e.target.value })
+                        }
+                        placeholder="e.g., Washington, D.C."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Language(s)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.countryOverview?.language || ''}
+                        onChange={e =>
+                          updateSection('countryOverview', { ...details.countryOverview, language: e.target.value })
+                        }
+                        placeholder="e.g., English"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Currency</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.countryOverview?.currency || ''}
+                        onChange={e =>
+                          updateSection('countryOverview', { ...details.countryOverview, currency: e.target.value })
+                        }
+                        placeholder="e.g., USD ($)"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Best Travel Season</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.countryOverview?.bestTravelSeason || ''}
+                        onChange={e =>
+                          updateSection('countryOverview', {
+                            ...details.countryOverview,
+                            bestTravelSeason: e.target.value
+                          })
+                        }
+                        placeholder="e.g., April–May, September–October"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Time Zone / Emergency Info</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.countryOverview?.timeZone || ''}
+                        onChange={e =>
+                          updateSection('countryOverview', { ...details.countryOverview, timeZone: e.target.value })
+                        }
+                        placeholder="e.g., UTC-5 to UTC-10 / Emergency 911"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Safety & Security Notes</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={details.countryOverview?.safety || ''}
+                      onChange={e =>
+                        updateSection('countryOverview', { ...details.countryOverview, safety: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Official Travel Advisory</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={details.countryOverview?.travelAdvisory || ''}
+                      onChange={e =>
+                        updateSection('countryOverview', {
+                          ...details.countryOverview,
+                          travelAdvisory: e.target.value
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION B: Visa Overview */}
+              {activeSectionCode === 'B' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">B. Visa Overview</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Visa Name / Title</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.visaOverview?.name || details.visaOverview?.title || ''}
+                        onChange={e =>
+                          updateSection('visaOverview', {
+                            ...details.visaOverview,
+                            name: e.target.value,
+                            title: e.target.value
+                          })
+                        }
+                        placeholder="e.g., B1/B2 Visitor Visa"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Visa Subclass / Code</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.visaOverview?.code || ''}
+                        onChange={e =>
+                          updateSection('visaOverview', { ...details.visaOverview, code: e.target.value })
+                        }
+                        placeholder="e.g., B1/B2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Classification / Category</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.visaOverview?.category || ''}
+                        onChange={e =>
+                          updateSection('visaOverview', { ...details.visaOverview, category: e.target.value })
+                        }
+                        placeholder="e.g., Non-immigrant Visitor"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Visa Validity</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.visaOverview?.validity || ''}
+                        onChange={e =>
+                          updateSection('visaOverview', { ...details.visaOverview, validity: e.target.value })
+                        }
+                        placeholder="e.g., Up to 10 years"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Maximum Authorized Stay</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.visaOverview?.stay || ''}
+                        onChange={e =>
+                          updateSection('visaOverview', { ...details.visaOverview, stay: e.target.value })
+                        }
+                        placeholder="e.g., Up to 180 days per entry"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Number of Entries & Fee</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          className="w-full p-2 border rounded-lg text-sm"
+                          value={details.visaOverview?.entries || ''}
+                          onChange={e =>
+                            updateSection('visaOverview', { ...details.visaOverview, entries: e.target.value })
+                          }
+                          placeholder="Single / Multiple"
+                        />
+                        <input
+                          className="w-full p-2 border rounded-lg text-sm"
+                          value={details.visaOverview?.fee || ''}
+                          onChange={e =>
+                            updateSection('visaOverview', { ...details.visaOverview, fee: e.target.value })
+                          }
+                          placeholder="e.g., $185 USD"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Purpose & Description</label>
+                    <textarea
+                      rows={3}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={details.visaOverview?.purpose || details.visaOverview?.description || ''}
+                      onChange={e =>
+                        updateSection('visaOverview', {
+                          ...details.visaOverview,
+                          purpose: e.target.value,
+                          description: e.target.value
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION C: Eligibility */}
+              {activeSectionCode === 'C' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">C. Eligibility Requirements</h3>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Core Eligibility Summary / Rules</label>
+                    <textarea
+                      rows={3}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={details.eligibility?.summary || details.eligibility?.rules || ''}
+                      onChange={e =>
+                        updateSection('eligibility', {
+                          ...details.eligibility,
+                          summary: e.target.value,
+                          rules: e.target.value
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Restrictions & Prohibitions</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={details.eligibility?.restrictions || ''}
+                      onChange={e =>
+                        updateSection('eligibility', { ...details.eligibility, restrictions: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Age / Health / Character Rules</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.eligibility?.ageAndHealth || ''}
+                        onChange={e =>
+                          updateSection('eligibility', { ...details.eligibility, ageAndHealth: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Home Country Ties Requirement</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.eligibility?.homeTies || ''}
+                        onChange={e =>
+                          updateSection('eligibility', { ...details.eligibility, homeTies: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION D: Financial Requirements, ITR and Bank Statements */}
+              {activeSectionCode === 'D' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">
+                    D. Financial Requirements, ITR & Bank Statements
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum / Recommended Funds</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.financial?.recommendedFunds || ''}
+                        onChange={e =>
+                          updateSection('financial', { ...details.financial, recommendedFunds: e.target.value })
+                        }
+                        placeholder="e.g., $215 USD per day"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Bank Statement Duration & Rules</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.financial?.bankStatementRequirement || ''}
+                        onChange={e =>
+                          updateSection('financial', {
+                            ...details.financial,
+                            bankStatementRequirement: e.target.value
+                          })
+                        }
+                        placeholder="e.g., Last 6 months stamped statements"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Income Tax Returns (ITR) Rules</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.financial?.itrRequirement || ''}
+                        onChange={e =>
+                          updateSection('financial', { ...details.financial, itrRequirement: e.target.value })
+                        }
+                        placeholder="e.g., Last 3 years ITR-V acknowledgment"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Source of Funds & Sponsorship</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={details.financial?.sourceOfFunds || ''}
+                        onChange={e =>
+                          updateSection('financial', { ...details.financial, sourceOfFunds: e.target.value })
+                        }
+                        placeholder="e.g., Salary slips, Form 16, or Affidavit of Support"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Detailed Financial Notes</label>
+                    <textarea
+                      rows={3}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={details.financial?.requirements || ''}
+                      onChange={e =>
+                        updateSection('financial', { ...details.financial, requirements: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION E: Document Checklist */}
+              {activeSectionCode === 'E' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <h3 className="font-bold text-lg text-slate-900">E. Document Checklist</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSection('documentChecklist', [
+                          ...docChecklist,
+                          {
+                            item: '',
+                            mandatory: true,
+                            applicantCategory: 'All Applicants',
+                            validityRequirements: '',
+                            translationAttestation: '',
+                            officialSource: ''
+                          }
+                        ])
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700"
+                    >
+                      <Plus size={14} /> Add Document Item
+                    </button>
+                  </div>
+
+                  {docChecklist.length === 0 && (
+                    <p className="text-sm text-slate-500">No documents listed yet. Add checklist items above.</p>
+                  )}
+
+                  <div className="space-y-3">
+                    {docChecklist.map((doc, idx) => (
+                      <div key={idx} className="p-3.5 border rounded-xl bg-slate-50 space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-slate-500">Document #{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSection(
+                                'documentChecklist',
+                                docChecklist.filter((_, i) => i !== idx)
+                              )
+                            }
+                            className="text-rose-600 hover:text-rose-800 text-xs flex items-center gap-1"
+                          >
+                            <Trash2 size={13} /> Remove
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Document Name</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={doc.item || doc.name || ''}
+                              onChange={e => {
+                                const next = [...docChecklist];
+                                next[idx] = { ...doc, item: e.target.value, name: e.target.value };
+                                updateSection('documentChecklist', next);
+                              }}
+                              placeholder="e.g., Valid Passport"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Mandatory / Conditional</label>
+                            <select
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={doc.mandatory === false ? 'CONDITIONAL' : 'MANDATORY'}
+                              onChange={e => {
+                                const next = [...docChecklist];
+                                next[idx] = {
+                                  ...doc,
+                                  mandatory: e.target.value === 'MANDATORY',
+                                  requirementType: e.target.value
+                                };
+                                updateSection('documentChecklist', next);
+                              }}
+                            >
+                              <option value="MANDATORY">Mandatory</option>
+                              <option value="CONDITIONAL">Conditional</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Applicant Category</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={doc.applicantCategory || ''}
+                              onChange={e => {
+                                const next = [...docChecklist];
+                                next[idx] = { ...doc, applicantCategory: e.target.value };
+                                updateSection('documentChecklist', next);
+                              }}
+                              placeholder="e.g., Employed / Sponsored"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Validity Requirements</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={doc.validityRequirements || doc.reason || ''}
+                              onChange={e => {
+                                const next = [...docChecklist];
+                                next[idx] = { ...doc, validityRequirements: e.target.value, reason: e.target.value };
+                                updateSection('documentChecklist', next);
+                              }}
+                              placeholder="e.g., Valid 6 months beyond stay"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Translation & Attestation
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={doc.translationAttestation || ''}
+                              onChange={e => {
+                                const next = [...docChecklist];
+                                next[idx] = { ...doc, translationAttestation: e.target.value };
+                                updateSection('documentChecklist', next);
+                              }}
+                              placeholder="e.g., Certified English translation"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Official Source URL</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={doc.officialSource || ''}
+                              onChange={e => {
+                                const next = [...docChecklist];
+                                next[idx] = { ...doc, officialSource: e.target.value };
+                                updateSection('documentChecklist', next);
+                              }}
+                              placeholder="https://..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION F: Application Form Information */}
+              {activeSectionCode === 'F' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">F. Application Form Information</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Personal Information Fields</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={appFieldsObj.personalInfo || ''}
+                        onChange={e =>
+                          updateSection('applicationFields', { ...appFieldsObj, personalInfo: e.target.value })
+                        }
+                        placeholder="Full legal name, DOB, marital status, national ID..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Passport Information Fields</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={appFieldsObj.passportInfo || ''}
+                        onChange={e =>
+                          updateSection('applicationFields', { ...appFieldsObj, passportInfo: e.target.value })
+                        }
+                        placeholder="Passport number, issue/expiry date, issuing authority..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Family Information Fields</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={appFieldsObj.familyInfo || ''}
+                        onChange={e =>
+                          updateSection('applicationFields', { ...appFieldsObj, familyInfo: e.target.value })
+                        }
+                        placeholder="Parents' names/DOBs, spouse details, relatives in destination..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Employment & Education Fields</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={appFieldsObj.employmentInfo || ''}
+                        onChange={e =>
+                          updateSection('applicationFields', { ...appFieldsObj, employmentInfo: e.target.value })
+                        }
+                        placeholder="Current employer, address, monthly income, 5-year work history..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Financial Details Fields</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={appFieldsObj.financialDetails || ''}
+                        onChange={e =>
+                          updateSection('applicationFields', { ...appFieldsObj, financialDetails: e.target.value })
+                        }
+                        placeholder="Entity paying for trip, available liquid funds..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Sponsor & Host Information</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={appFieldsObj.sponsorHostInfo || ''}
+                        onChange={e =>
+                          updateSection('applicationFields', { ...appFieldsObj, sponsorHostInfo: e.target.value })
+                        }
+                        placeholder="U.S./Destination point of contact, hotel or host address..."
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION G: Application Steps */}
+              {activeSectionCode === 'G' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <h3 className="font-bold text-lg text-slate-900">G. Step-by-Step Application Process</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSection('applicationSteps', [
+                          ...appSteps,
+                          {
+                            stepNumber: appSteps.length + 1,
+                            title: '',
+                            instructions: '',
+                            fees: '',
+                            appointmentRequired: 'Yes',
+                            officialLink: ''
+                          }
+                        ])
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700"
+                    >
+                      <Plus size={14} /> Add Application Step
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {appSteps.map((st, idx) => (
+                      <div key={idx} className="p-3.5 border rounded-xl bg-slate-50 space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-indigo-700">Step #{st.stepNumber || idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSection(
+                                'applicationSteps',
+                                appSteps.filter((_, i) => i !== idx)
+                              )
+                            }
+                            className="text-rose-600 hover:text-rose-800 text-xs flex items-center gap-1"
+                          >
+                            <Trash2 size={13} /> Remove
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Step Number</label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={st.stepNumber ?? idx + 1}
+                              onChange={e => {
+                                const next = [...appSteps];
+                                next[idx] = { ...st, stepNumber: Number(e.target.value) };
+                                updateSection('applicationSteps', next);
+                              }}
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Step Title</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={st.title || ''}
+                              onChange={e => {
+                                const next = [...appSteps];
+                                next[idx] = { ...st, title: e.target.value };
+                                updateSection('applicationSteps', next);
+                              }}
+                              placeholder="e.g., Complete Form DS-160 Online"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">Detailed Instructions</label>
+                          <textarea
+                            rows={2}
+                            className="w-full p-2 border rounded bg-white text-sm"
+                            value={st.instructions || ''}
+                            onChange={e => {
+                              const next = [...appSteps];
+                              next[idx] = { ...st, instructions: e.target.value };
+                              updateSection('applicationSteps', next);
+                            }}
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Associated Fees</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={st.fees || ''}
+                              onChange={e => {
+                                const next = [...appSteps];
+                                next[idx] = { ...st, fees: e.target.value };
+                                updateSection('applicationSteps', next);
+                              }}
+                              placeholder="e.g., $185 MRV Fee"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Appointment Requirements</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={st.appointmentRequired || ''}
+                              onChange={e => {
+                                const next = [...appSteps];
+                                next[idx] = { ...st, appointmentRequired: e.target.value };
+                                updateSection('applicationSteps', next);
+                              }}
+                              placeholder="VAC Biometrics + Consular Interview"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Official Portal Link</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={st.officialLink || ''}
+                              onChange={e => {
+                                const next = [...appSteps];
+                                next[idx] = { ...st, officialLink: e.target.value };
+                                updateSection('applicationSteps', next);
+                              }}
+                              placeholder="https://ceac.state.gov/..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION H: Interview Preparation */}
+              {activeSectionCode === 'H' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <h3 className="font-bold text-lg text-slate-900">H. Interview Preparation</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSection('interviewPrep', {
+                          ...interviewObj,
+                          questions: [
+                            ...interviewQuestions,
+                            { question: '', guidance: '', supportingDocs: '' }
+                          ]
+                        })
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700"
+                    >
+                      <Plus size={14} /> Add Interview Question
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">General Consular Interview Tips</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={interviewObj.tips || ''}
+                      onChange={e =>
+                        updateSection('interviewPrep', { ...interviewObj, tips: e.target.value, questions: interviewQuestions })
+                      }
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    {interviewQuestions.map((qItem, idx) => (
+                      <div key={idx} className="p-3.5 border rounded-xl bg-slate-50 space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-slate-600">Question #{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSection('interviewPrep', {
+                                ...interviewObj,
+                                questions: interviewQuestions.filter((_, i) => i !== idx)
+                              })
+                            }
+                            className="text-rose-600 text-xs flex items-center gap-1"
+                          >
+                            <Trash2 size={13} /> Remove
+                          </button>
+                        </div>
+                        <input
+                          className="w-full p-2 border rounded bg-white text-sm"
+                          value={qItem.question || ''}
+                          onChange={e => {
+                            const next = [...interviewQuestions];
+                            next[idx] = { ...qItem, question: e.target.value };
+                            updateSection('interviewPrep', { ...interviewObj, questions: next });
+                          }}
+                          placeholder="Visa-specific question (e.g., Why are you traveling at this time?)"
+                        />
+                        <textarea
+                          rows={2}
+                          className="w-full p-2 border rounded bg-white text-sm"
+                          value={qItem.guidance || ''}
+                          onChange={e => {
+                            const next = [...interviewQuestions];
+                            next[idx] = { ...qItem, guidance: e.target.value };
+                            updateSection('interviewPrep', { ...interviewObj, questions: next });
+                          }}
+                          placeholder="Official answer guidance..."
+                        />
+                        <input
+                          className="w-full p-2 border rounded bg-white text-sm"
+                          value={qItem.supportingDocs || ''}
+                          onChange={e => {
+                            const next = [...interviewQuestions];
+                            next[idx] = { ...qItem, supportingDocs: e.target.value };
+                            updateSection('interviewPrep', { ...interviewObj, questions: next });
+                          }}
+                          placeholder="Supporting documents to present (e.g., Employer leave approval, itinerary)"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION I: Embassy and Consulate Directory */}
+              {activeSectionCode === 'I' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <h3 className="font-bold text-lg text-slate-900">I. Embassy & Consulate Directory</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSection('embassyDirectory', [
+                          ...embassies,
+                          {
+                            name: '',
+                            address: '',
+                            phone: '',
+                            email: '',
+                            jurisdiction: '',
+                            workingHours: '',
+                            appointmentLink: '',
+                            verificationDate: new Date().toISOString().split('T')[0]
+                          }
+                        ])
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700"
+                    >
+                      <Plus size={14} /> Add Embassy / Consulate
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {embassies.map((emb, idx) => (
+                      <div key={idx} className="p-3.5 border rounded-xl bg-slate-50 space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-slate-600">Consular Post #{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSection(
+                                'embassyDirectory',
+                                embassies.filter((_, i) => i !== idx)
+                              )
+                            }
+                            className="text-rose-600 text-xs flex items-center gap-1"
+                          >
+                            <Trash2 size={13} /> Remove
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Office Name</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.name || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, name: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                              placeholder="e.g., U.S. Embassy New Delhi"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Official Address</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.address || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, address: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                              placeholder="Shantipath, Chanakyapuri, New Delhi 110021"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Phone & Email</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.phone || emb.contact || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, phone: e.target.value, contact: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                              placeholder="+91-11-2419-8000 / support-india@ustraveldocs.com"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Jurisdiction</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.jurisdiction || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, jurisdiction: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                              placeholder="North India / All India"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Working Hours</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.workingHours || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, workingHours: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                              placeholder="Mon–Fri, 08:30 AM – 05:00 PM"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Official Appointment Link</label>
+                            <input
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.appointmentLink || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, appointmentLink: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                              placeholder="https://www.ustraveldocs.com/in/"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Verification Date</label>
+                            <input
+                              type="date"
+                              className="w-full p-2 border rounded bg-white text-sm"
+                              value={emb.verificationDate || ''}
+                              onChange={e => {
+                                const next = [...embassies];
+                                next[idx] = { ...emb, verificationDate: e.target.value };
+                                updateSection('embassyDirectory', next);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION J: Refusal, Appeals and Reapplication */}
+              {activeSectionCode === 'J' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">
+                    J. Refusal, Appeals & Reapplication
+                  </h3>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Statutory Refusal Grounds</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={refusalObj.grounds || ''}
+                      onChange={e =>
+                        updateSection('refusalAppeal', { ...refusalObj, grounds: e.target.value })
+                      }
+                      placeholder="e.g., INA Section 214(b) immigrant intent, Section 221(g) administrative processing"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Appeal or Review Procedure</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={refusalObj.appealProcedure || ''}
+                      onChange={e =>
+                        updateSection('refusalAppeal', { ...refusalObj, appealProcedure: e.target.value })
+                      }
+                      placeholder="Specify whether administrative appeal exists or if reapplication is required..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Reapplication Rules & Cooling-Off Period</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={refusalObj.reapplicationRules || ''}
+                      onChange={e =>
+                        updateSection('refusalAppeal', { ...refusalObj, reapplicationRules: e.target.value })
+                      }
+                      placeholder="Rules for submitting a fresh application after refusal..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Official Legal Sources</label>
+                    <input
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={refusalObj.officialLegalSources || ''}
+                      onChange={e =>
+                        updateSection('refusalAppeal', { ...refusalObj, officialLegalSources: e.target.value })
+                      }
+                      placeholder="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/visa-denials.html"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION K: After Approval and Entry */}
+              {activeSectionCode === 'K' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">K. After Approval & Entry</h3>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Port of Entry Requirements</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={afterApprovalObj.entryRequirements || afterApprovalObj.entryConditions || ''}
+                      onChange={e =>
+                        updateSection('afterApproval', {
+                          ...afterApprovalObj,
+                          entryRequirements: e.target.value,
+                          entryConditions: e.target.value
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Authorized Stay & I-94 / Stamp</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={afterApprovalObj.authorizedStay || ''}
+                        onChange={e =>
+                          updateSection('afterApproval', { ...afterApprovalObj, authorizedStay: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Permitted Activities</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={afterApprovalObj.permittedActivities || ''}
+                        onChange={e =>
+                          updateSection('afterApproval', { ...afterApprovalObj, permittedActivities: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Extension Rules</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={afterApprovalObj.extensionRules || ''}
+                        onChange={e =>
+                          updateSection('afterApproval', { ...afterApprovalObj, extensionRules: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Overstay Consequences</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={afterApprovalObj.overstayConsequences || ''}
+                        onChange={e =>
+                          updateSection('afterApproval', { ...afterApprovalObj, overstayConsequences: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION L: Cost Calculator */}
+              {activeSectionCode === 'L' && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-slate-900 border-b pb-2">L. Cost Calculator</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Government Visa Fee</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.governmentVisaFee ?? costObj.fees?.governmentFee ?? ''}
+                        onChange={e =>
+                          updateSection('costCalculator', {
+                            ...costObj,
+                            governmentVisaFee: e.target.value,
+                            fees: { ...(costObj.fees || {}), governmentFee: e.target.value }
+                          })
+                        }
+                        placeholder="e.g., 185 USD"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Reciprocity / Issuance Fee</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.issuanceFee || ''}
+                        onChange={e =>
+                          updateSection('costCalculator', { ...costObj, issuanceFee: e.target.value })
+                        }
+                        placeholder="e.g., 0 USD"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Application Centre (VFS/VAC) Charges</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.applicationCentreCharges ?? costObj.fees?.serviceFee ?? ''}
+                        onChange={e =>
+                          updateSection('costCalculator', {
+                            ...costObj,
+                            applicationCentreCharges: e.target.value,
+                            fees: { ...(costObj.fees || {}), serviceFee: e.target.value }
+                          })
+                        }
+                        placeholder="e.g., Included / 25 USD"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Biometrics Fee</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.biometricsFee || ''}
+                        onChange={e =>
+                          updateSection('costCalculator', { ...costObj, biometricsFee: e.target.value })
+                        }
+                        placeholder="e.g., Included / 85 CAD"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Medical & Translation Expenses</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.medicalTranslationExpenses || ''}
+                        onChange={e =>
+                          updateSection('costCalculator', {
+                            ...costObj,
+                            medicalTranslationExpenses: e.target.value
+                          })
+                        }
+                        placeholder="e.g., 50 USD (if applicable)"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Travel Insurance Estimate</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.insuranceEstimate || ''}
+                        onChange={e =>
+                          updateSection('costCalculator', { ...costObj, insuranceEstimate: e.target.value })
+                        }
+                        placeholder="e.g., 45 USD"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Travel & Accommodation Estimates</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.travelEstimates ?? costObj.estimates?.travel ?? ''}
+                        onChange={e =>
+                          updateSection('costCalculator', {
+                            ...costObj,
+                            travelEstimates: e.target.value,
+                            estimates: { ...(costObj.estimates || {}), travel: e.target.value }
+                          })
+                        }
+                        placeholder="e.g., 1500 USD"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Last Verified Date</label>
+                      <input
+                        type="date"
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={costObj.lastVerifiedDate || ''}
+                        onChange={e =>
+                          updateSection('costCalculator', { ...costObj, lastVerifiedDate: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION M: FAQs and Official Sources */}
+              {activeSectionCode === 'M' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <h3 className="font-bold text-lg text-slate-900">M. FAQs & Official Sources</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSection('faq', [
+                          ...faqs,
+                          {
+                            q: '',
+                            a: '',
+                            sourceReference: '',
+                            verificationStatus: 'VERIFIED_OFFICIAL',
+                            lastUpdated: new Date().toISOString().split('T')[0]
+                          }
+                        ])
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700"
+                    >
+                      <Plus size={14} /> Add FAQ Entry
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {faqs.map((item, idx) => (
+                      <div key={idx} className="p-3.5 border rounded-xl bg-slate-50 space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-slate-600">FAQ #{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSection(
+                                'faq',
+                                faqs.filter((_, i) => i !== idx)
+                              )
+                            }
+                            className="text-rose-600 text-xs flex items-center gap-1"
+                          >
+                            <Trash2 size={13} /> Remove
+                          </button>
+                        </div>
+                        <input
+                          className="w-full p-2 border rounded bg-white text-sm"
+                          value={item.q || item.question || ''}
+                          onChange={e => {
+                            const next = [...faqs];
+                            next[idx] = { ...item, q: e.target.value, question: e.target.value };
+                            updateSection('faq', next);
+                          }}
+                          placeholder="Question..."
+                        />
+                        <textarea
+                          rows={2}
+                          className="w-full p-2 border rounded bg-white text-sm"
+                          value={item.a || item.answer || ''}
+                          onChange={e => {
+                            const next = [...faqs];
+                            next[idx] = { ...item, a: e.target.value, answer: e.target.value };
+                            updateSection('faq', next);
+                          }}
+                          placeholder="Official Answer..."
+                        />
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          <input
+                            className="w-full p-2 border rounded bg-white text-sm"
+                            value={item.sourceReference || ''}
+                            onChange={e => {
+                              const next = [...faqs];
+                              next[idx] = { ...item, sourceReference: e.target.value };
+                              updateSection('faq', next);
+                            }}
+                            placeholder="Official source URL / citation"
+                          />
+                          <select
+                            className="w-full p-2 border rounded bg-white text-sm"
+                            value={item.verificationStatus || 'VERIFIED_OFFICIAL'}
+                            onChange={e => {
+                              const next = [...faqs];
+                              next[idx] = { ...item, verificationStatus: e.target.value };
+                              updateSection('faq', next);
+                            }}
+                          >
+                            <option value="VERIFIED_OFFICIAL">VERIFIED_OFFICIAL</option>
+                            <option value="NEEDS_REVIEW">NEEDS_REVIEW</option>
+                            <option value="OUTDATED">OUTDATED</option>
+                          </select>
+                          <input
+                            type="date"
+                            className="w-full p-2 border rounded bg-white text-sm"
+                            value={item.lastUpdated || ''}
+                            onChange={e => {
+                              const next = [...faqs];
+                              next[idx] = { ...item, lastUpdated: e.target.value };
+                              updateSection('faq', next);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'claims' && (
+          <Suspense fallback={<div className="p-8 text-center">Loading Claims Manager...</div>}>
+            <ClaimsManager programId={programId!} />
+          </Suspense>
+        )}
+
+        {activeTab === 'workflow' && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-bold text-xl text-slate-900">Verification & Publishing State Machine</h3>
+              <p className="text-sm text-slate-500">
+                Current Status: <span className="font-bold text-indigo-700">{details.verificationStatus}</span>
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                'DRAFT',
+                'NEEDS_EVIDENCE',
+                'UNDER_REVIEW',
+                'VERIFIED',
+                'APPROVED',
+                'PUBLISHED',
+                'UPDATE_REQUIRED',
+                'EXPIRED',
+                'REJECTED',
+                'QUARANTINED'
+              ].map(status => (
+                <button
+                  key={status}
+                  type="button"
+                  onClick={() => handleStatusChange(status)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition ${
+                    details.verificationStatus === status
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  Set {status}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'history' && (
+          <Suspense fallback={<div className="p-8 text-center">Loading Version History...</div>}>
+            <VersionHistoryManager programId={programId!} onRestored={loadDetails} />
+          </Suspense>
+        )}
+
+        {activeTab === 'rawjson' && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+              <div>
+                <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                  <Code2 size={18} className="text-indigo-600" /> Authorized Admin Raw JSON Inspector
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Read-only live inspection of the unified 30-Section Comprehensive Profile, 22 Special Topics, and Legacy A–M JSON payload.
+                </p>
+              </div>
+              <span className="px-2.5 py-1 rounded bg-slate-100 border border-slate-300 text-xs font-mono text-slate-700">
+                Program ID: {programId}
+              </span>
+            </div>
+            <pre className="p-4 bg-slate-900 text-slate-100 rounded-lg text-xs font-mono overflow-x-auto max-h-[680px]">
+              {JSON.stringify(details, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

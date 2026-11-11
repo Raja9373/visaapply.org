@@ -2,6 +2,69 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import {
+  REQUIREMENT_CLASSIFICATIONS,
+  REQUIREMENT_CLASSIFICATION_META,
+  THIRTY_SECTIONS_REGISTRY,
+  SIX_LIFECYCLE_STAGES,
+  TWENTY_TWO_SPECIAL_TOPICS_REGISTRY,
+  EVIDENCE_STATUSES,
+  QUALIFYING_OFFICIAL_EVIDENCE_STATUSES,
+  INVALIDATING_EVIDENCE_STATUSES,
+  normalizeEvidenceStatus,
+  isQualifyingOfficialEvidence,
+  isInvalidatingEvidenceStatus,
+  isValidRequirementClassification,
+  normalizeVisaDetailTo30Sections,
+  denormalize30SectionsToLegacy13,
+  sync30SectionsToLegacyDetails,
+  syncLegacyDetailsTo30Sections,
+  isSectionSubstantivelyPopulated,
+  isTopicSubstantivelyPopulated,
+  validateComprehensiveProfileHonesty,
+  evaluateClaimIntegrity,
+  createDefaultApplicantSpecialTopics,
+  sanitizeVisaDetailsForPublic
+} from '../types/visaComprehensiveProfile';
+import type {
+  RequirementClassification,
+  EvidenceStatus,
+  EvidenceVerificationStatus,
+  VisaComprehensiveProfile,
+  VisaApplicantSpecialTopics
+} from '../types/visaComprehensiveProfile';
+
+export {
+  REQUIREMENT_CLASSIFICATIONS,
+  REQUIREMENT_CLASSIFICATION_META,
+  THIRTY_SECTIONS_REGISTRY,
+  SIX_LIFECYCLE_STAGES,
+  TWENTY_TWO_SPECIAL_TOPICS_REGISTRY,
+  EVIDENCE_STATUSES,
+  QUALIFYING_OFFICIAL_EVIDENCE_STATUSES,
+  INVALIDATING_EVIDENCE_STATUSES,
+  normalizeEvidenceStatus,
+  isQualifyingOfficialEvidence,
+  isInvalidatingEvidenceStatus,
+  isValidRequirementClassification,
+  normalizeVisaDetailTo30Sections,
+  denormalize30SectionsToLegacy13,
+  sync30SectionsToLegacyDetails,
+  syncLegacyDetailsTo30Sections,
+  isSectionSubstantivelyPopulated,
+  isTopicSubstantivelyPopulated,
+  validateComprehensiveProfileHonesty,
+  evaluateClaimIntegrity,
+  createDefaultApplicantSpecialTopics,
+  sanitizeVisaDetailsForPublic
+};
+export type {
+  RequirementClassification,
+  EvidenceStatus,
+  EvidenceVerificationStatus,
+  VisaComprehensiveProfile,
+  VisaApplicantSpecialTopics
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +81,60 @@ export const db = new Database(DB_PATH);
 // Enable Write-Ahead Logging (WAL) for safe concurrent reads & writes
 db.pragma('journal_mode = WAL');
 db.pragma('synchronous = NORMAL');
+
+/**
+ * Additive, non-destructive Phase 3.1 schema migration for any SQLite Database instance.
+ * Can be tested independently on a database copy before or alongside active DB usage.
+ */
+export function applyPhase31SqliteMigrations(targetDb: Database.Database = db) {
+  targetDb.exec(`PRAGMA foreign_keys = ON;`);
+
+  // 1. Ensure Phase 2.10.5 & Phase 3.2 evidence columns exist
+  const evidenceCols = [
+    { name: 'source_title', type: 'TEXT' },
+    { name: 'issuing_authority', type: 'TEXT' },
+    { name: 'publication_date', type: 'TEXT' },
+    { name: 'access_date', type: 'TEXT' },
+    { name: 'reviewer_notes', type: 'TEXT' },
+    { name: 'excerpt', type: "TEXT DEFAULT ''" },
+    { name: 'status', type: "TEXT DEFAULT 'NEEDS_REVIEW'" }
+  ];
+  for (const col of evidenceCols) {
+    try {
+      targetDb.exec(`ALTER TABLE visa_detail_evidence ADD COLUMN ${col.name} ${col.type};`);
+    } catch {
+      // Ignored if column already exists
+    }
+  }
+
+  // 2. Phase 3.1: Add comprehensive_sections_json to visa_details
+  try {
+    targetDb.exec(`ALTER TABLE visa_details ADD COLUMN comprehensive_sections_json TEXT DEFAULT '{}';`);
+  } catch {
+    // Ignored if column already exists
+  }
+
+  // 3. Phase 3.1: Add 5-tier classification & nationality metadata to visa_detail_claims
+  const claimCols = [
+    { name: 'requirement_classification', type: "TEXT NOT NULL DEFAULT 'ADMIN_INSTRUCTION'" },
+    { name: 'applicable_nationality', type: "TEXT NOT NULL DEFAULT 'ALL'" },
+    { name: 'country_iso', type: "TEXT NOT NULL DEFAULT ''" },
+    { name: 'visa_category', type: "TEXT NOT NULL DEFAULT ''" }
+  ];
+  for (const col of claimCols) {
+    try {
+      targetDb.exec(`ALTER TABLE visa_detail_claims ADD COLUMN ${col.name} ${col.type};`);
+    } catch {
+      // Ignored if column already exists
+    }
+  }
+
+  // 4. Phase 3.1: Add indexes for claim classification and nationality queries
+  targetDb.exec(`
+    CREATE INDEX IF NOT EXISTS idx_claims_classification ON visa_detail_claims(program_id, requirement_classification);
+    CREATE INDEX IF NOT EXISTS idx_claims_nationality ON visa_detail_claims(program_id, applicable_nationality);
+  `);
+}
 
 /**
  * Initialize database schema
@@ -190,21 +307,7 @@ export function initDatabaseSchema() {
     CREATE INDEX IF NOT EXISTS idx_versions_program ON visa_detail_versions(program_id);
   `);
 
-  const evidenceCols = [
-    { name: 'source_title', type: 'TEXT' },
-    { name: 'issuing_authority', type: 'TEXT' },
-    { name: 'publication_date', type: 'TEXT' },
-    { name: 'access_date', type: 'TEXT' },
-    { name: 'reviewer_notes', type: 'TEXT' },
-    { name: 'status', type: "TEXT DEFAULT 'NEEDS_REVIEW'" }
-  ];
-  for (const col of evidenceCols) {
-    try {
-      db.exec(`ALTER TABLE visa_detail_evidence ADD COLUMN ${col.name} ${col.type};`);
-    } catch {
-      // Ignored if column already exists
-    }
-  }
+  applyPhase31SqliteMigrations(db);
 }
 
 initDatabaseSchema();
@@ -446,30 +549,51 @@ export function getCronExecutionLogsFromDb(limit: number = 20): any[] {
   }
 }
 
+function mapSqliteVisaDetailRow(row: any) {
+  let rawComp: any = null;
+  try {
+    const parsedComp = JSON.parse(row.comprehensive_sections_json || '{}');
+    if (parsedComp && parsedComp.sections) {
+      rawComp = parsedComp;
+    }
+  } catch {
+    rawComp = null;
+  }
+
+  const baseRecord: any = {
+    id: row.id,
+    programId: row.program_id,
+    countryOverview: JSON.parse(row.country_overview_json || '{}'),
+    visaOverview: JSON.parse(row.visa_overview_json || '{}'),
+    eligibility: JSON.parse(row.eligibility_json || '{}'),
+    financial: JSON.parse(row.financial_json || '{}'),
+    documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
+    applicationFields: JSON.parse(row.application_fields_json || '[]'),
+    applicationSteps: JSON.parse(row.application_steps_json || '[]'),
+    interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
+    embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
+    refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
+    afterApproval: JSON.parse(row.after_approval_json || '{}'),
+    costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
+    faq: JSON.parse(row.faq_json || '[]'),
+    legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
+    lastUpdated: row.last_updated,
+    verificationStatus: row.verification_status
+  };
+
+  baseRecord.comprehensiveSections = normalizeVisaDetailTo30Sections({
+    ...baseRecord,
+    comprehensiveSections: rawComp
+  });
+
+  return baseRecord;
+}
+
 export function getVisaDetails(programId: string): any | null {
   try {
     const row = db.prepare('SELECT * FROM visa_details WHERE program_id = ?').get(programId) as any;
     if (!row) return null;
-    return {
-      id: row.id,
-      programId: row.program_id,
-      countryOverview: JSON.parse(row.country_overview_json || '{}'),
-      visaOverview: JSON.parse(row.visa_overview_json || '{}'),
-      eligibility: JSON.parse(row.eligibility_json || '{}'),
-      financial: JSON.parse(row.financial_json || '{}'),
-      documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
-      applicationFields: JSON.parse(row.application_fields_json || '[]'),
-      applicationSteps: JSON.parse(row.application_steps_json || '[]'),
-      interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
-      embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
-      refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
-      afterApproval: JSON.parse(row.after_approval_json || '{}'),
-      costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
-      faq: JSON.parse(row.faq_json || '[]'),
-      legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
-      lastUpdated: row.last_updated,
-      verificationStatus: row.verification_status
-    };
+    return mapSqliteVisaDetailRow(row);
   } catch (e) {
     return null;
   }
@@ -490,9 +614,7 @@ export function getPaginatedVisaDetails(page: number, limit: number, search: str
       params.push(status);
     }
     if (category) {
-      // Need to join immigration_programs to filter by category
-      // Or if category is stored in visa_details (not directly)
-      // Actually, program_id foreign key allows joining.
+      // Reserved for category joins
     }
     
     const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
@@ -509,26 +631,7 @@ export function getPaginatedVisaDetails(page: number, limit: number, search: str
 
     return {
       total,
-      data: rows.map((row) => ({
-        id: row.id,
-        programId: row.program_id,
-        countryOverview: JSON.parse(row.country_overview_json || '{}'),
-        visaOverview: JSON.parse(row.visa_overview_json || '{}'),
-        eligibility: JSON.parse(row.eligibility_json || '{}'),
-        financial: JSON.parse(row.financial_json || '{}'),
-        documentChecklist: JSON.parse(row.document_checklist_json || '[]'),
-        applicationFields: JSON.parse(row.application_fields_json || '[]'),
-        applicationSteps: JSON.parse(row.application_steps_json || '[]'),
-        interviewPrep: JSON.parse(row.interview_prep_json || '{}'),
-        embassyDirectory: JSON.parse(row.embassy_directory_json || '[]'),
-        refusalAppeal: JSON.parse(row.refusal_appeal_json || '{}'),
-        afterApproval: JSON.parse(row.after_approval_json || '{}'),
-        costCalculator: JSON.parse(row.cost_calculator_json || '{}'),
-        faq: JSON.parse(row.faq_json || '[]'),
-        legalEvidence: JSON.parse(row.legal_evidence_json || '[]'),
-        lastUpdated: row.last_updated,
-        verificationStatus: row.verification_status
-      }))
+      data: rows.map((row) => mapSqliteVisaDetailRow(row))
     };
   } catch (e) {
     return { data: [], total: 0 };
@@ -536,14 +639,22 @@ export function getPaginatedVisaDetails(page: number, limit: number, search: str
 }
 
 export function saveVisaDetails(details: any) {
+  const lastUpdated = details.lastUpdated || new Date().toISOString();
+  const verificationStatus = details.verificationStatus || 'VERIFIED';
+  const normalizedComp = normalizeVisaDetailTo30Sections({
+    ...details,
+    lastUpdated,
+    verificationStatus
+  });
+
   const stmt = db.prepare(`
     INSERT INTO visa_details (
       id, program_id, country_overview_json, visa_overview_json, eligibility_json,
       financial_json, document_checklist_json, application_fields_json,
       application_steps_json, interview_prep_json, embassy_directory_json,
       refusal_appeal_json, after_approval_json, cost_calculator_json,
-      faq_json, legal_evidence_json, last_updated, verification_status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      faq_json, legal_evidence_json, comprehensive_sections_json, last_updated, verification_status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
       country_overview_json = excluded.country_overview_json,
       visa_overview_json = excluded.visa_overview_json,
@@ -559,11 +670,16 @@ export function saveVisaDetails(details: any) {
       cost_calculator_json = excluded.cost_calculator_json,
       faq_json = excluded.faq_json,
       legal_evidence_json = excluded.legal_evidence_json,
+      comprehensive_sections_json = excluded.comprehensive_sections_json,
       last_updated = excluded.last_updated,
       verification_status = excluded.verification_status
   `);
+  const recordId =
+    details.id && (!details.id.startsWith('vd-') || details.id === `vd-${details.programId}`)
+      ? details.id
+      : `vd-${details.programId}`;
   stmt.run(
-    details.id || `vd-${details.programId}`,
+    recordId,
     details.programId,
     JSON.stringify(details.countryOverview || {}),
     JSON.stringify(details.visaOverview || {}),
@@ -579,8 +695,9 @@ export function saveVisaDetails(details: any) {
     JSON.stringify(details.costCalculator || {}),
     JSON.stringify(details.faq || []),
     JSON.stringify(details.legalEvidence || []),
-    new Date().toISOString(),
-  details.verificationStatus || 'VERIFIED'
+    JSON.stringify(normalizedComp),
+    lastUpdated,
+    verificationStatus
   );
 }
 
@@ -644,7 +761,7 @@ export function restoreVersion(versionId: string, editorId: string = 'admin') {
         saveVisaClaim({ ...c, programId });
         if (Array.isArray(c.evidence)) {
           for (const ev of c.evidence) {
-            saveVisaEvidence({ ...ev, claimId: c.id });
+            saveVisaEvidence({ ...ev, claimId: c.id }, { skipReconcile: true });
           }
         }
       }
@@ -680,22 +797,143 @@ export function getVisaClaims(programId: string): any[] {
     unit: r.unit,
     status: r.status,
     reviewer: r.reviewer,
-    reviewTimestamp: r.review_timestamp
+    reviewTimestamp: r.review_timestamp,
+    requirementClassification: isValidRequirementClassification(r.requirement_classification)
+      ? r.requirement_classification
+      : 'ADMIN_INSTRUCTION',
+    applicableNationality: r.applicable_nationality || 'ALL',
+    countryIso: r.country_iso || '',
+    visaCategory: r.visa_category || ''
   }));
 }
 
-export function getVisaClaimsWithEvidence(programId: string): any[] {
+export function getVisaClaimsWithEvidence(programId: string, targetNationality?: string): any[] {
   const claims = getVisaClaims(programId);
-  return claims.map(c => ({
-    ...c,
-    evidence: getVisaEvidence(c.id)
-  }));
+  let progRow: any = null;
+  try {
+    progRow = db
+      .prepare('SELECT country_code, category FROM immigration_programs WHERE id = ?')
+      .get(programId) as any;
+  } catch {
+    progRow = null;
+  }
+
+  return claims.map(c => {
+    const evidence = getVisaEvidence(c.id);
+    const claimWithEv = { ...c, evidence };
+    const integrity = evaluateClaimIntegrity(claimWithEv, {
+      expectedCountryIso: progRow?.country_code || (programId || '').split('-')[0] || '',
+      expectedVisaCategory: progRow?.category || '',
+      targetNationality
+    });
+    return {
+      ...claimWithEv,
+      staleOrMissingEvidence: integrity.staleOrMissingEvidence,
+      canPresentAsVerified: integrity.canPresentAsVerified,
+      warnings: integrity.warnings,
+      integrity
+    };
+  });
+}
+
+export function getVisaClaimById(claimId: string): any | null {
+  const r = db.prepare('SELECT * FROM visa_detail_claims WHERE id = ?').get(claimId) as any;
+  if (!r) return null;
+  return {
+    id: r.id,
+    programId: r.program_id,
+    section: r.section,
+    description: r.description,
+    value: r.value,
+    unit: r.unit,
+    status: r.status,
+    reviewer: r.reviewer,
+    reviewTimestamp: r.review_timestamp,
+    requirementClassification: isValidRequirementClassification(r.requirement_classification)
+      ? r.requirement_classification
+      : 'ADMIN_INSTRUCTION',
+    applicableNationality: r.applicable_nationality || 'ALL',
+    countryIso: r.country_iso || '',
+    visaCategory: r.visa_category || ''
+  };
+}
+
+export function reconcileClaimVerificationAfterEvidenceChange(
+  claimId: string,
+  reasonTrigger: string
+): {
+  downgraded: boolean;
+  previousStatus?: string;
+  newStatus?: string;
+  claimId: string;
+  programId?: string;
+  versionId?: string;
+} {
+  const claimRow = db.prepare('SELECT * FROM visa_detail_claims WHERE id = ?').get(claimId) as any;
+  if (!claimRow) return { downgraded: false, claimId };
+
+  const currentEv = getVisaEvidence(claimId);
+  const integrity = evaluateClaimIntegrity({ ...claimRow, evidence: currentEv });
+
+  if (claimRow.status === 'VERIFIED' && !integrity.hasQualifyingOfficialEvidence) {
+    const tx = db.transaction(() => {
+      const nowIso = new Date().toISOString();
+      db.prepare('UPDATE visa_detail_claims SET status = ?, review_timestamp = ? WHERE id = ?').run(
+        'NEEDS_EVIDENCE',
+        nowIso,
+        claimId
+      );
+
+      const programId = claimRow.program_id;
+      const details = getVisaDetails(programId);
+      const claimsSnapshot = getVisaClaimsWithEvidence(programId);
+      const versionId = `ver-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+      saveVisaVersion({
+        id: versionId,
+        programId,
+        data: { details, claims: claimsSnapshot },
+        editorId: 'system-integrity-guard',
+        timestamp: nowIso,
+        changeReason: `Auto-downgraded claim ${claimId} from VERIFIED to NEEDS_EVIDENCE (${reasonTrigger})`
+      });
+
+      return {
+        downgraded: true,
+        previousStatus: 'VERIFIED',
+        newStatus: 'NEEDS_EVIDENCE',
+        claimId,
+        programId,
+        versionId
+      };
+    });
+
+    return tx();
+  }
+
+  return {
+    downgraded: false,
+    previousStatus: claimRow.status,
+    newStatus: claimRow.status,
+    claimId,
+    programId: claimRow.program_id
+  };
 }
 
 export function saveVisaClaim(claim: any) {
+  const rawClassification = claim.requirementClassification || claim.requirement_classification;
+  const requirementClassification: RequirementClassification = isValidRequirementClassification(rawClassification)
+    ? rawClassification
+    : 'ADMIN_INSTRUCTION';
+  const applicableNationality = String(claim.applicableNationality || claim.applicable_nationality || 'ALL').trim() || 'ALL';
+  const countryIso = String(claim.countryIso ?? claim.country_iso ?? '').trim();
+  const visaCategory = String(claim.visaCategory ?? claim.visa_category ?? '').trim();
+
   const stmt = db.prepare(`
-    INSERT INTO visa_detail_claims (id, program_id, section, description, value, unit, status, reviewer, review_timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO visa_detail_claims (
+      id, program_id, section, description, value, unit, status, reviewer, review_timestamp,
+      requirement_classification, applicable_nationality, country_iso, visa_category
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
       section = excluded.section,
       description = excluded.description,
@@ -703,18 +941,26 @@ export function saveVisaClaim(claim: any) {
       unit = excluded.unit,
       status = excluded.status,
       reviewer = excluded.reviewer,
-      review_timestamp = excluded.review_timestamp
+      review_timestamp = excluded.review_timestamp,
+      requirement_classification = excluded.requirement_classification,
+      applicable_nationality = excluded.applicable_nationality,
+      country_iso = excluded.country_iso,
+      visa_category = excluded.visa_category
   `);
   stmt.run(
     claim.id,
-    claim.programId,
+    claim.programId || claim.program_id,
     claim.section,
     claim.description,
     claim.value || '',
     claim.unit || '',
     claim.status || 'NEEDS_EVIDENCE',
     claim.reviewer || 'admin',
-    claim.reviewTimestamp || new Date().toISOString()
+    claim.reviewTimestamp || claim.review_timestamp || new Date().toISOString(),
+    requirementClassification,
+    applicableNationality,
+    countryIso,
+    visaCategory
   );
 }
 
@@ -737,17 +983,24 @@ export function getVisaEvidence(claimId: string): any[] {
     publicationDate: r.publication_date || '',
     accessDate: r.access_date || r.last_checked_date || '',
     reviewerNotes: r.reviewer_notes || '',
-    status: r.status || 'NEEDS_REVIEW'
+    excerpt: r.excerpt || '',
+    rawStatus: r.status || 'NEEDS_REVIEW',
+    status: normalizeEvidenceStatus(r.status)
   }));
 }
 
-export function saveVisaEvidence(evidence: any) {
+export function saveVisaEvidence(
+  evidence: any,
+  options?: { skipReconcile?: boolean }
+): { downgradedClaim?: boolean; newClaimStatus?: string; versionId?: string } {
+  const normalizedStatus = normalizeEvidenceStatus(evidence.status);
+  const claimId = evidence.claimId || evidence.claim_id;
   const stmt = db.prepare(`
     INSERT INTO visa_detail_evidence (
       id, claim_id, source_url, legal_instrument, effective_date, last_checked_date,
-      source_title, issuing_authority, publication_date, access_date, reviewer_notes, status
+      source_title, issuing_authority, publication_date, access_date, reviewer_notes, excerpt, status
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
       source_url = excluded.source_url,
       legal_instrument = excluded.legal_instrument,
@@ -758,11 +1011,12 @@ export function saveVisaEvidence(evidence: any) {
       publication_date = excluded.publication_date,
       access_date = excluded.access_date,
       reviewer_notes = excluded.reviewer_notes,
+      excerpt = excluded.excerpt,
       status = excluded.status
   `);
   stmt.run(
     evidence.id,
-    evidence.claimId || evidence.claim_id,
+    claimId,
     evidence.sourceUrl || evidence.source_url || '',
     evidence.legalInstrument || evidence.legal_instrument || '',
     evidence.effectiveDate || evidence.effective_date || '',
@@ -772,12 +1026,47 @@ export function saveVisaEvidence(evidence: any) {
     evidence.publicationDate || evidence.publication_date || '',
     evidence.accessDate || evidence.access_date || evidence.lastCheckedDate || evidence.last_checked_date || new Date().toISOString().split('T')[0],
     evidence.reviewerNotes || evidence.reviewer_notes || '',
-    evidence.status || 'NEEDS_REVIEW'
+    evidence.excerpt || '',
+    normalizedStatus
   );
+
+  if (!options?.skipReconcile && claimId) {
+    const rec = reconcileClaimVerificationAfterEvidenceChange(
+      claimId,
+      `Evidence ${evidence.id} status set to ${normalizedStatus}`
+    );
+    return {
+      downgradedClaim: rec.downgraded,
+      newClaimStatus: rec.newStatus,
+      versionId: rec.versionId
+    };
+  }
+  return {};
 }
 
-export function deleteVisaEvidence(evidenceId: string) {
+export function deleteVisaEvidence(evidenceId: string): {
+  downgradedClaim?: boolean;
+  newClaimStatus?: string;
+  claimId?: string;
+  versionId?: string;
+} {
+  const evRow = db
+    .prepare('SELECT claim_id FROM visa_detail_evidence WHERE id = ?')
+    .get(evidenceId) as any;
   db.prepare('DELETE FROM visa_detail_evidence WHERE id = ?').run(evidenceId);
+  if (evRow?.claim_id) {
+    const rec = reconcileClaimVerificationAfterEvidenceChange(
+      evRow.claim_id,
+      `Evidence ${evidenceId} deleted`
+    );
+    return {
+      downgradedClaim: rec.downgraded,
+      newClaimStatus: rec.newStatus,
+      claimId: evRow.claim_id,
+      versionId: rec.versionId
+    };
+  }
+  return {};
 }
 
 export function getVisaVersions(programId: string): any[] {

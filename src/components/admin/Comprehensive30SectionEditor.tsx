@@ -1,0 +1,5126 @@
+import React, { useState, useMemo } from 'react';
+import {
+  ChevronDown,
+  ChevronRight,
+  Search,
+  CheckCircle2,
+  AlertTriangle,
+  Clock,
+  Slash,
+  Plus,
+  Trash2,
+  ShieldCheck,
+  BookOpen,
+  Globe,
+  ExternalLink,
+  Layers,
+  Sparkles,
+  FileCheck2
+} from 'lucide-react';
+import {
+  SIX_LIFECYCLE_STAGES,
+  THIRTY_SECTIONS_REGISTRY,
+  TWENTY_TWO_SPECIAL_TOPICS_REGISTRY,
+  REQUIREMENT_CLASSIFICATION_META,
+  REQUIREMENT_CLASSIFICATIONS,
+  normalizeVisaDetailTo30Sections,
+  sync30SectionsToLegacyDetails,
+  isSectionSubstantivelyPopulated,
+  isTopicSubstantivelyPopulated
+} from '../../types/visaComprehensiveProfile';
+import type {
+  VisaComprehensiveProfile,
+  SectionKey30,
+  SpecialTopicKey22,
+  SectionMetadata,
+  SectionVerificationState,
+  RequirementClassification,
+  ApplicantSpecialTopicEntry
+} from '../../types/visaComprehensiveProfile';
+
+export { isSectionSubstantivelyPopulated, isTopicSubstantivelyPopulated };
+
+interface Props {
+  profile?: VisaComprehensiveProfile;
+  onChange?: (nextProfile: VisaComprehensiveProfile) => void;
+  details?: any;
+  onDetailsChange?: (nextDetails: any) => void;
+  onValidationNotice?: (type: 'error' | 'success', msg: string) => void;
+}
+
+const VERIFICATION_STATES: readonly {
+  code: SectionVerificationState;
+  label: string;
+  badgeClass: string;
+}[] = [
+  {
+    code: 'VERIFIED',
+    label: 'VERIFIED (Official Evidence Confirmed)',
+    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300'
+  },
+  {
+    code: 'PARTIAL',
+    label: 'PARTIAL (In Progress / Partially Verified)',
+    badgeClass: 'bg-blue-100 text-blue-800 border-blue-300'
+  },
+  {
+    code: 'AWAITING_VERIFICATION',
+    label: 'AWAITING_VERIFICATION (Unverified / Needs Source)',
+    badgeClass: 'bg-amber-100 text-amber-800 border-amber-300'
+  },
+  {
+    code: 'NOT_APPLICABLE',
+    label: 'NOT_APPLICABLE (Confirmed By Law/Policy)',
+    badgeClass: 'bg-slate-200 text-slate-700 border-slate-300'
+  }
+];
+
+function getVerificationBadge(state: SectionVerificationState) {
+  switch (state) {
+    case 'VERIFIED':
+      return {
+        icon: <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />,
+        badge: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        short: 'VERIFIED'
+      };
+    case 'PARTIAL':
+      return {
+        icon: <Clock size={13} className="text-blue-600 shrink-0" />,
+        badge: 'bg-blue-100 text-blue-800 border-blue-300',
+        short: 'PARTIAL'
+      };
+    case 'NOT_APPLICABLE':
+      return {
+        icon: <Slash size={13} className="text-slate-500 shrink-0" />,
+        badge: 'bg-slate-200 text-slate-700 border-slate-300',
+        short: 'N/A'
+      };
+    default:
+      return {
+        icon: <AlertTriangle size={13} className="text-amber-600 shrink-0" />,
+        badge: 'bg-amber-100 text-amber-800 border-amber-300',
+        short: 'AWAITING'
+      };
+  }
+}
+
+function splitCsv(val: string): string[] {
+  return val
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function joinCsv(arr: string[] | null | undefined): string {
+  return Array.isArray(arr) ? arr.join(', ') : '';
+}
+
+function TriStateSelect({
+  value,
+  onChange,
+  label
+}: {
+  value: boolean | null | undefined;
+  onChange: (next: boolean | null) => void;
+  label: string;
+}) {
+  const strVal = value === true ? 'true' : value === false ? 'false' : 'null';
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-slate-700 mb-1">{label}</label>
+      <select
+        value={strVal}
+        onChange={e => {
+          const v = e.target.value;
+          onChange(v === 'true' ? true : v === 'false' ? false : null);
+        }}
+        className="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs font-medium"
+      >
+        <option value="null">Unknown / Awaiting Verification (null)</option>
+        <option value="true">Yes / Required (true)</option>
+        <option value="false">No / Not Required (false)</option>
+      </select>
+    </div>
+  );
+}
+
+export const Comprehensive30SectionEditor: React.FC<Props> = ({
+  profile: externalProfile,
+  onChange: externalOnChange,
+  details,
+  onDetailsChange,
+  onValidationNotice
+}) => {
+  const [activeMode, setActiveMode] = useState<'SECTION' | 'TOPIC'>('SECTION');
+  const [activeSectionKey, setActiveSectionKey] = useState<SectionKey30>('s01_countryOverview');
+  const [activeTopicKey, setActiveTopicKey] = useState<SpecialTopicKey22>(
+    't01_passportValidityAndBlankPages'
+  );
+  const [expandedStages, setExpandedStages] = useState<Record<number, boolean>>({
+    1: true,
+    2: true,
+    3: true,
+    4: true,
+    5: true,
+    6: true
+  });
+  const [navSearch, setNavSearch] = useState('');
+
+  const profile = useMemo(() => {
+    if (externalProfile) return externalProfile;
+    return normalizeVisaDetailTo30Sections(details || {});
+  }, [externalProfile, details]);
+
+  const emitProfileChange = (nextProfile: VisaComprehensiveProfile) => {
+    if (externalOnChange) {
+      externalOnChange(nextProfile);
+    }
+    if (onDetailsChange && details) {
+      const synced = sync30SectionsToLegacyDetails(details, nextProfile);
+      onDetailsChange(synced);
+    }
+  };
+
+  const s = profile.sections;
+  const topics = profile.applicantSpecialTopics;
+
+  const inferredCountryIso = useMemo(() => {
+    const p = (profile.programId || '').split('-')[0];
+    return p && p.length === 2 ? p.toUpperCase() : 'US';
+  }, [profile.programId]);
+
+  const inferredVisaCategory = useMemo(() => {
+    return s.s02_visaProgramOverview.category || 'Visitor / Tourist';
+  }, [s.s02_visaProgramOverview.category]);
+
+  const updateSectionObj = <K extends SectionKey30>(
+    key: K,
+    updater: (prev: VisaComprehensiveProfile['sections'][K]) => VisaComprehensiveProfile['sections'][K]
+  ) => {
+    const nextSec = updater(profile.sections[key]);
+    emitProfileChange({
+      ...profile,
+      sections: {
+        ...profile.sections,
+        [key]: nextSec
+      }
+    });
+  };
+
+  const updateSectionMeta = (key: SectionKey30, patch: Partial<SectionMetadata>) => {
+    const currentSec = profile.sections[key];
+    const nextMeta: SectionMetadata = {
+      ...currentSec.meta,
+      ...patch
+    };
+
+    // Content Honesty Gate 1: Never allow empty content to be marked VERIFIED
+    if (patch.verificationState === 'VERIFIED') {
+      const hasData = isSectionSubstantivelyPopulated(currentSec);
+      const hasSource = Boolean(nextMeta.officialSourceUrl && nextMeta.officialSourceUrl.trim());
+      if (!hasData || !hasSource) {
+        onValidationNotice?.(
+          'error',
+          `Honesty Gate Blocked: Section ${currentSec.meta.sectionNumber} (${currentSec.meta.title}) cannot be marked VERIFIED without populated substantive fields AND an Official Source URL.`
+        );
+        return;
+      }
+    }
+
+    // Content Honesty Gate 2: Display NOT_APPLICABLE only when supported by statutory/consular reason
+    if (patch.verificationState === 'NOT_APPLICABLE') {
+      const hasReason = Boolean(nextMeta.applicabilityReason && nextMeta.applicabilityReason.trim());
+      if (!hasReason) {
+        onValidationNotice?.(
+          'error',
+          `Honesty Gate Blocked: Enter an explicit statutory/consular "Not Applicable Reason" before marking Section ${currentSec.meta.sectionNumber} as NOT_APPLICABLE.`
+        );
+        return;
+      }
+    }
+
+    updateSectionObj(key, prev => ({
+      ...prev,
+      meta: nextMeta
+    }));
+  };
+
+  const updateTopicObj = <K extends SpecialTopicKey22>(
+    key: K,
+    updater: (prev: VisaComprehensiveProfile['applicantSpecialTopics'][K]) => VisaComprehensiveProfile['applicantSpecialTopics'][K]
+  ) => {
+    const nextTopic = updater(profile.applicantSpecialTopics[key]);
+    emitProfileChange({
+      ...profile,
+      applicantSpecialTopics: {
+        ...profile.applicantSpecialTopics,
+        [key]: nextTopic
+      }
+    });
+  };
+
+  const updateTopicMeta = <K extends SpecialTopicKey22>(
+    key: K,
+    patch: Partial<VisaComprehensiveProfile['applicantSpecialTopics'][K]>
+  ) => {
+    const currentTopic = profile.applicantSpecialTopics[key];
+    const merged = { ...currentTopic, ...patch };
+
+    if (patch.verificationState === 'VERIFIED') {
+      const hasData = isTopicSubstantivelyPopulated(merged);
+      const hasSource = Boolean(merged.officialSourceUrl && merged.officialSourceUrl.trim());
+      if (!hasData || !hasSource) {
+        onValidationNotice?.(
+          'error',
+          `Honesty Gate Blocked: Special Topic T${String(currentTopic.topicNumber).padStart(2, '0')} cannot be marked VERIFIED without summary/details AND an Official Source URL.`
+        );
+        return;
+      }
+    }
+
+    if (patch.verificationState === 'NOT_APPLICABLE') {
+      const hasReason = Boolean(merged.applicabilityReason && merged.applicabilityReason.trim());
+      if (!hasReason) {
+        onValidationNotice?.(
+          'error',
+          `Honesty Gate Blocked: Provide an explicit "Not Applicable Reason" before marking Topic T${String(currentTopic.topicNumber).padStart(2, '0')} as NOT_APPLICABLE.`
+        );
+        return;
+      }
+    }
+
+    updateTopicObj(key, () => merged);
+  };
+
+  // Completion statistics
+  const completionStats = useMemo(() => {
+    let verifiedSec = 0;
+    let partialSec = 0;
+    let awaitingSec = 0;
+    let naSec = 0;
+    for (const item of THIRTY_SECTIONS_REGISTRY) {
+      const st = s[item.sectionKey]?.meta?.verificationState || 'AWAITING_VERIFICATION';
+      if (st === 'VERIFIED') verifiedSec++;
+      else if (st === 'PARTIAL') partialSec++;
+      else if (st === 'NOT_APPLICABLE') naSec++;
+      else awaitingSec++;
+    }
+
+    let verifiedTop = 0;
+    let partialTop = 0;
+    let awaitingTop = 0;
+    let naTop = 0;
+    for (const t of TWENTY_TWO_SPECIAL_TOPICS_REGISTRY) {
+      const st = topics[t.topicKey]?.verificationState || 'AWAITING_VERIFICATION';
+      if (st === 'VERIFIED') verifiedTop++;
+      else if (st === 'PARTIAL') partialTop++;
+      else if (st === 'NOT_APPLICABLE') naTop++;
+      else awaitingTop++;
+    }
+
+    return {
+      verifiedSec,
+      partialSec,
+      awaitingSec,
+      naSec,
+      verifiedTop,
+      partialTop,
+      awaitingTop,
+      naTop
+    };
+  }, [s, topics]);
+
+  const handleQuickJump = (val: string) => {
+    if (!val) return;
+    if (val.startsWith('TOPIC:')) {
+      const tKey = val.replace('TOPIC:', '') as SpecialTopicKey22;
+      setActiveMode('TOPIC');
+      setActiveTopicKey(tKey);
+      setExpandedStages(prev => ({ ...prev, 6: true }));
+    } else {
+      const sKey = val as SectionKey30;
+      const found = THIRTY_SECTIONS_REGISTRY.find(r => r.sectionKey === sKey);
+      if (found) {
+        setActiveMode('SECTION');
+        setActiveSectionKey(sKey);
+        setExpandedStages(prev => ({ ...prev, [found.stageNumber]: true }));
+      }
+    }
+  };
+
+  const activeSectionReg = useMemo(
+    () => THIRTY_SECTIONS_REGISTRY.find(r => r.sectionKey === activeSectionKey)!,
+    [activeSectionKey]
+  );
+
+  const activeTopicReg = useMemo(
+    () => TWENTY_TWO_SPECIAL_TOPICS_REGISTRY.find(r => r.topicKey === activeTopicKey)!,
+    [activeTopicKey]
+  );
+
+  const renderSectionResearchMetadataPanel = (key: SectionKey30) => {
+    const meta = s[key].meta;
+    const populated = isSectionSubstantivelyPopulated(s[key]);
+
+    return (
+      <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-3 mb-5">
+        <div className="flex flex-wrap justify-between items-center gap-2 border-b border-slate-200 pb-2.5">
+          <div className="flex items-center gap-2">
+            <ShieldCheck size={16} className="text-indigo-600" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+              Section-Level Research, Legal Basis & 5-Tier Classification Metadata
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className={`px-2 py-0.5 rounded text-[11px] font-bold border ${
+                populated
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
+              }`}
+            >
+              {populated ? 'Substantive Fields Populated' : 'Empty / Unpopulated'}
+            </span>
+            {meta.legacySectionCode && (
+              <span className="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-mono font-bold">
+                Maps to Legacy Section {meta.legacySectionCode}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Section Verification Status *
+            </label>
+            <select
+              value={meta.verificationState}
+              onChange={e =>
+                updateSectionMeta(key, {
+                  verificationState: e.target.value as SectionVerificationState
+                })
+              }
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-bold"
+            >
+              {VERIFICATION_STATES.map(vs => (
+                <option key={vs.code} value={vs.code}>
+                  {vs.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              5-Tier Requirement Classification *
+            </label>
+            <select
+              value={meta.requirementClassification}
+              onChange={e =>
+                updateSectionMeta(key, {
+                  requirementClassification: e.target.value as RequirementClassification | 'MIXED' | 'UNKNOWN'
+                })
+              }
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-semibold"
+            >
+              <option value="UNKNOWN">UNKNOWN (Unclassified)</option>
+              <option value="MIXED">MIXED (Contains Multiple Tiers)</option>
+              {REQUIREMENT_CLASSIFICATION_META.map(m => (
+                <option key={m.code} value={m.code}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Applicable Nationality (ISO or ALL)
+            </label>
+            <input
+              type="text"
+              value={meta.applicableNationality ?? 'ALL'}
+              onChange={e =>
+                updateSectionMeta(key, {
+                  applicableNationality: e.target.value.toUpperCase()
+                })
+              }
+              placeholder="ALL or ISO-2 (e.g. IN, PH)"
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono uppercase"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Country ISO</label>
+              <input
+                type="text"
+                value={meta.countryIso ?? inferredCountryIso}
+                onChange={e =>
+                  updateSectionMeta(key, { countryIso: e.target.value.toUpperCase() })
+                }
+                className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono uppercase"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Visa Category</label>
+              <input
+                type="text"
+                value={meta.visaCategory ?? inferredVisaCategory}
+                onChange={e => updateSectionMeta(key, { visaCategory: e.target.value })}
+                className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Official Source URL
+            </label>
+            <input
+              type="url"
+              value={meta.officialSourceUrl || ''}
+              onChange={e =>
+                updateSectionMeta(key, { officialSourceUrl: e.target.value || null })
+              }
+              placeholder="https://travel.state.gov/..."
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Issuing Authority
+            </label>
+            <input
+              type="text"
+              value={meta.issuingAuthority || ''}
+              onChange={e =>
+                updateSectionMeta(key, { issuingAuthority: e.target.value || null })
+              }
+              placeholder="e.g., U.S. Department of State / CBP / USCIS"
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Exact Law, Regulation, Policy or Checklist Reference
+            </label>
+            <input
+              type="text"
+              value={meta.legalBasis || ''}
+              onChange={e => updateSectionMeta(key, { legalBasis: e.target.value || null })}
+              placeholder="e.g., INA § 101(a)(15)(B); 9 FAM 402.2"
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Publication Date
+            </label>
+            <input
+              type="date"
+              value={meta.publicationDate || ''}
+              onChange={e =>
+                updateSectionMeta(key, { publicationDate: e.target.value || null })
+              }
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Effective Date
+            </label>
+            <input
+              type="date"
+              value={meta.effectiveDate || ''}
+              onChange={e =>
+                updateSectionMeta(key, { effectiveDate: e.target.value || null })
+              }
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Last Verified Date
+            </label>
+            <input
+              type="date"
+              value={(meta.lastVerifiedAt || '').split('T')[0]}
+              onChange={e =>
+                updateSectionMeta(key, { lastVerifiedAt: e.target.value || null })
+              }
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Not Applicable Reason (Required if N/A)
+            </label>
+            <input
+              type="text"
+              value={meta.applicabilityReason || ''}
+              onChange={e =>
+                updateSectionMeta(key, { applicabilityReason: e.target.value || null })
+              }
+              placeholder="Statutory reason if Not Applicable..."
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Supporting Evidence / Verbatim Statutory Excerpt
+            </label>
+            <textarea
+              rows={2}
+              value={meta.supportingExcerpts || ''}
+              onChange={e =>
+                updateSectionMeta(key, { supportingExcerpts: e.target.value || null })
+              }
+              placeholder="Verbatim quote from official statute, immigration manual, or consular instruction..."
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              Reviewer Notes & Audit Commentary
+            </label>
+            <textarea
+              rows={2}
+              value={meta.reviewerNotes || ''}
+              onChange={e =>
+                updateSectionMeta(key, { reviewerNotes: e.target.value || null })
+              }
+              placeholder="Internal research notes, post-specific caveats, or verification observations..."
+              className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Top Lifecycle Completion & Jump Bar */}
+      <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
+          <span className="font-sans font-bold text-slate-800 flex items-center gap-1.5">
+            <Layers size={15} className="text-indigo-600" /> 30-Section & 22-Topic Coverage:
+          </span>
+          <span className="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold">
+            VERIFIED: {completionStats.verifiedSec}/30 Sec • {completionStats.verifiedTop}/22 Topics
+          </span>
+          <span className="px-2.5 py-1 rounded bg-blue-100 text-blue-800 border border-blue-300 font-bold">
+            PARTIAL: {completionStats.partialSec}/30 Sec • {completionStats.partialTop}/22 Topics
+          </span>
+          <span className="px-2.5 py-1 rounded bg-amber-100 text-amber-800 border border-amber-300 font-bold">
+            AWAITING: {completionStats.awaitingSec}/30 Sec • {completionStats.awaitingTop}/22 Topics
+          </span>
+          <span className="px-2.5 py-1 rounded bg-slate-200 text-slate-700 border border-slate-300 font-bold">
+            N/A: {completionStats.naSec}/30 Sec • {completionStats.naTop}/22 Topics
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+          <select
+            value={activeMode === 'SECTION' ? activeSectionKey : `TOPIC:${activeTopicKey}`}
+            onChange={e => handleQuickJump(e.target.value)}
+            className="p-2 border border-slate-300 rounded-lg bg-white text-xs font-semibold min-w-[260px]"
+          >
+            {SIX_LIFECYCLE_STAGES.map(st => (
+              <optgroup key={st.stageNumber} label={st.title}>
+                {THIRTY_SECTIONS_REGISTRY.filter(r => r.stageNumber === st.stageNumber).map(sec => (
+                  <option key={sec.sectionKey} value={sec.sectionKey}>
+                    {sec.title} [{s[sec.sectionKey].meta.verificationState}]
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+            <optgroup label="Stage 6 — 22 Applicant Special Topics">
+              {TWENTY_TWO_SPECIAL_TOPICS_REGISTRY.map(top => (
+                <option key={top.topicKey} value={`TOPIC:${top.topicKey}`}>
+                  {top.title} [{topics[top.topicKey].verificationState}]
+                </option>
+              ))}
+            </optgroup>
+          </select>
+
+          <button
+            type="button"
+            onClick={() =>
+              setExpandedStages({ 1: true, 2: true, 3: true, 4: true, 5: true, 6: true })
+            }
+            className="px-2.5 py-1.5 bg-white border border-slate-300 rounded text-xs font-semibold text-slate-700 hover:bg-slate-100"
+          >
+            Expand All
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setExpandedStages({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false })
+            }
+            className="px-2.5 py-1.5 bg-white border border-slate-300 rounded text-xs font-semibold text-slate-700 hover:bg-slate-100"
+          >
+            Collapse All
+          </button>
+        </div>
+      </div>
+
+      {/* Main Split Workspace: Left 6-Stage Collapsible Tree + Right Active Section/Topic Editor */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Navigation Sidebar */}
+        <div className="lg:col-span-4 xl:col-span-3 space-y-2.5">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+            <input
+              type="text"
+              value={navSearch}
+              onChange={e => setNavSearch(e.target.value)}
+              placeholder="Search 30 sections & 22 topics..."
+              className="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg bg-white text-xs"
+            />
+          </div>
+
+          <div className="space-y-2 max-h-[760px] overflow-y-auto pr-1">
+            {SIX_LIFECYCLE_STAGES.map(stage => {
+              const stageSections = THIRTY_SECTIONS_REGISTRY.filter(
+                r =>
+                  r.stageNumber === stage.stageNumber &&
+                  (!navSearch.trim() ||
+                    r.title.toLowerCase().includes(navSearch.toLowerCase()) ||
+                    r.sectionKey.toLowerCase().includes(navSearch.toLowerCase()))
+              );
+
+              const matchingTopics = stage.includesSpecialTopics
+                ? TWENTY_TWO_SPECIAL_TOPICS_REGISTRY.filter(
+                    t =>
+                      !navSearch.trim() ||
+                      t.title.toLowerCase().includes(navSearch.toLowerCase()) ||
+                      t.topicKey.toLowerCase().includes(navSearch.toLowerCase())
+                  )
+                : [];
+
+              if (
+                navSearch.trim() &&
+                stageSections.length === 0 &&
+                matchingTopics.length === 0
+              ) {
+                return null;
+              }
+
+              const isExpanded = Boolean(expandedStages[stage.stageNumber]) || Boolean(navSearch.trim());
+              const totalInStage = stage.sectionKeys.length;
+              const populatedInStage = stage.sectionKeys.filter(
+                k => s[k].meta.verificationState === 'VERIFIED' || s[k].meta.verificationState === 'PARTIAL'
+              ).length;
+
+              return (
+                <div
+                  key={stage.stageNumber}
+                  className="border border-slate-200 rounded-lg bg-white overflow-hidden"
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedStages(prev => ({
+                        ...prev,
+                        [stage.stageNumber]: !prev[stage.stageNumber]
+                      }))
+                    }
+                    className="w-full p-2.5 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-left border-b border-slate-200"
+                  >
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      {isExpanded ? (
+                        <ChevronDown size={15} className="text-slate-600 shrink-0" />
+                      ) : (
+                        <ChevronRight size={15} className="text-slate-600 shrink-0" />
+                      )}
+                      <span className="text-xs font-bold text-slate-900 truncate">
+                        {stage.title}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 shrink-0">
+                      {populatedInStage}/{totalInStage}
+                    </span>
+                  </button>
+
+                  {isExpanded && (
+                    <div className="p-1.5 space-y-1">
+                      {stageSections.map(sec => {
+                        const secState = s[sec.sectionKey].meta.verificationState;
+                        const badgeInfo = getVerificationBadge(secState);
+                        const isSelected =
+                          activeMode === 'SECTION' && activeSectionKey === sec.sectionKey;
+
+                        return (
+                          <button
+                            key={sec.sectionKey}
+                            type="button"
+                            onClick={() => {
+                              setActiveMode('SECTION');
+                              setActiveSectionKey(sec.sectionKey);
+                            }}
+                            className={`w-full text-left px-2.5 py-2 rounded-md text-xs flex items-center justify-between gap-2 transition ${
+                              isSelected
+                                ? 'bg-indigo-600 text-white font-bold'
+                                : 'text-slate-700 hover:bg-slate-100 font-medium'
+                            }`}
+                          >
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              {!isSelected && badgeInfo.icon}
+                              <span className="truncate">
+                                {sec.sectionNumber}. {sec.shortTitle}
+                              </span>
+                            </div>
+                            <span
+                              className={`text-[9px] font-mono px-1.5 py-0.5 rounded border shrink-0 ${
+                                isSelected
+                                  ? 'bg-indigo-700 text-white border-indigo-400'
+                                  : badgeInfo.badge
+                              }`}
+                            >
+                              {badgeInfo.short}
+                            </span>
+                          </button>
+                        );
+                      })}
+
+                      {stage.includesSpecialTopics && (
+                        <div className="pt-2 mt-2 border-t border-slate-200 space-y-1">
+                          <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 rounded">
+                            22 Applicant Special Topics (T01–T22)
+                          </div>
+                          {matchingTopics.map(top => {
+                            const topState = topics[top.topicKey].verificationState;
+                            const badgeInfo = getVerificationBadge(topState);
+                            const isSelected =
+                              activeMode === 'TOPIC' && activeTopicKey === top.topicKey;
+
+                            return (
+                              <button
+                                key={top.topicKey}
+                                type="button"
+                                onClick={() => {
+                                  setActiveMode('TOPIC');
+                                  setActiveTopicKey(top.topicKey);
+                                }}
+                                className={`w-full text-left px-2.5 py-1.5 rounded-md text-[11px] flex items-center justify-between gap-2 transition ${
+                                  isSelected
+                                    ? 'bg-indigo-600 text-white font-bold'
+                                    : 'text-slate-700 hover:bg-slate-100 font-medium'
+                                }`}
+                              >
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  {!isSelected && badgeInfo.icon}
+                                  <span className="truncate">
+                                    T{String(top.topicNumber).padStart(2, '0')}. {top.shortTitle}
+                                  </span>
+                                </div>
+                                <span
+                                  className={`text-[9px] font-mono px-1.5 py-0.5 rounded border shrink-0 ${
+                                    isSelected
+                                      ? 'bg-indigo-700 text-white border-indigo-400'
+                                      : badgeInfo.badge
+                                  }`}
+                                >
+                                  {badgeInfo.short}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right Active Section / Special Topic Editor */}
+        <div className="lg:col-span-8 xl:col-span-9 border border-slate-200 rounded-lg p-5 bg-white">
+          {activeMode === 'SECTION' && (
+            <div>
+              {/* Section Title Header */}
+              <div className="flex flex-wrap justify-between items-center gap-2 border-b border-slate-200 pb-3 mb-4">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+                    Stage {activeSectionReg.stageNumber} • Section {activeSectionReg.sectionNumber} of 30
+                  </span>
+                  <h3 className="font-bold text-xl text-slate-900 mt-0.5">
+                    {activeSectionReg.title}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeSectionReg.sectionNumber > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const prev = THIRTY_SECTIONS_REGISTRY[activeSectionReg.sectionNumber - 2];
+                        if (prev) setActiveSectionKey(prev.sectionKey);
+                      }}
+                      className="px-3 py-1.5 border border-slate-300 rounded text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      ← Prev Section
+                    </button>
+                  )}
+                  {activeSectionReg.sectionNumber < 30 ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = THIRTY_SECTIONS_REGISTRY[activeSectionReg.sectionNumber];
+                        if (next) setActiveSectionKey(next.sectionKey);
+                      }}
+                      className="px-3 py-1.5 bg-indigo-50 border border-indigo-200 rounded text-xs font-bold text-indigo-700 hover:bg-indigo-100"
+                    >
+                      Next Section →
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveMode('TOPIC');
+                        setActiveTopicKey('t01_passportValidityAndBlankPages');
+                      }}
+                      className="px-3 py-1.5 bg-indigo-50 border border-indigo-200 rounded text-xs font-bold text-indigo-700 hover:bg-indigo-100"
+                    >
+                      Go to 22 Special Topics →
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Reusable Section Research & Legal Metadata Panel */}
+              {renderSectionResearchMetadataPanel(activeSectionKey)}
+
+              {/* SECTION 1: Country Overview */}
+              {activeSectionKey === 's01_countryOverview' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Country Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.name || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({ ...prev, name: e.target.value || null }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Capital City</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.capital || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({ ...prev, capital: e.target.value || null }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Currency</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.currency || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({ ...prev, currency: e.target.value || null }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Language(s)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.officialLanguage || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({
+                            ...prev,
+                            officialLanguage: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Primary Immigration Agency</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.primaryImmigrationAgency || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({
+                            ...prev,
+                            primaryImmigrationAgency: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., USCIS / Department of State"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Border Control Agency</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.borderControlAgency || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({
+                            ...prev,
+                            borderControlAgency: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., U.S. Customs and Border Protection (CBP)"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Immigration Portal URL</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.officialPortalUrl || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({
+                            ...prev,
+                            officialPortalUrl: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Best Travel / Intake Season</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s01_countryOverview.bestTravelSeason || ''}
+                        onChange={e =>
+                          updateSectionObj('s01_countryOverview', prev => ({
+                            ...prev,
+                            bestTravelSeason: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Country Immigration Summary</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s01_countryOverview.summary || ''}
+                      onChange={e =>
+                        updateSectionObj('s01_countryOverview', prev => ({ ...prev, summary: e.target.value || null }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Primary Legal Framework Summary (Statutes & Codes)</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s01_countryOverview.legalFrameworkSummary || ''}
+                      onChange={e =>
+                        updateSectionObj('s01_countryOverview', prev => ({
+                          ...prev,
+                          legalFrameworkSummary: e.target.value || null
+                        }))
+                      }
+                      placeholder="e.g., Immigration and Nationality Act (INA), 8 U.S.C., 22 CFR Part 41..."
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 2: Visa Program Overview */}
+              {activeSectionKey === 's02_visaProgramOverview' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Visa Display Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.visaName || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            visaName: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Statutory Program Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.officialProgramName || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            officialProgramName: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Statutory Subclass / Code</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s02_visaProgramOverview.statutoryCode || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            statutoryCode: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., B-1/B-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Visa Category</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.category || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            category: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Authorized Stay Duration</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.stayDuration || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            stayDuration: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Visa Foil Validity</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.validity || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            validity: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Entry Type (Single / Multiple)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.entryType || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            entryType: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Headline Government Fee Summary</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s02_visaProgramOverview.feeSummary || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            feeSummary: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Permitted Purpose of Travel / Residence</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s02_visaProgramOverview.purpose || ''}
+                      onChange={e =>
+                        updateSectionObj('s02_visaProgramOverview', prev => ({
+                          ...prev,
+                          purpose: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Who Should Apply</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.whoShouldApply || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            whoShouldApply: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Who Should NOT Apply (Alternative Visas)</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s02_visaProgramOverview.whoShouldNotApply || ''}
+                        onChange={e =>
+                          updateSectionObj('s02_visaProgramOverview', prev => ({
+                            ...prev,
+                            whoShouldNotApply: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 3: Available Visa Categories & Subcategories */}
+              {activeSectionKey === 's03_categoriesAndSubcategories' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Category Hierarchy & Sub-Stream Overview Notes</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s03_categoriesAndSubcategories.categoryHierarchyNotes || ''}
+                      onChange={e =>
+                        updateSectionObj('s03_categoriesAndSubcategories', prev => ({
+                          ...prev,
+                          categoryHierarchyNotes: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Visa Subcategories / Streams ({s.s03_categoriesAndSubcategories.streams.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s03_categoriesAndSubcategories', prev => ({
+                          ...prev,
+                          streams: [
+                            ...prev.streams,
+                            {
+                              streamCode: '',
+                              streamName: '',
+                              targetApplicant: null,
+                              keyRulesSummary: null,
+                              maxStay: null,
+                              switchingPermitted: null,
+                              requirementClassification: 'LEGAL_REQUIREMENT'
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Subcategory Stream
+                    </button>
+                  </div>
+                  {s.s03_categoriesAndSubcategories.streams.map((st, idx) => (
+                    <div key={idx} className="p-3.5 border rounded-lg bg-slate-50 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">Stream #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s03_categoriesAndSubcategories', prev => ({
+                              ...prev,
+                              streams: prev.streams.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input
+                          className="p-2 border rounded bg-white text-xs font-mono"
+                          placeholder="Stream Code (e.g. B-1)"
+                          value={st.streamCode}
+                          onChange={e => {
+                            const next = [...s.s03_categoriesAndSubcategories.streams];
+                            next[idx] = { ...st, streamCode: e.target.value };
+                            updateSectionObj('s03_categoriesAndSubcategories', prev => ({ ...prev, streams: next }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Stream Name (e.g. Business Visitor)"
+                          value={st.streamName}
+                          onChange={e => {
+                            const next = [...s.s03_categoriesAndSubcategories.streams];
+                            next[idx] = { ...st, streamName: e.target.value };
+                            updateSectionObj('s03_categoriesAndSubcategories', prev => ({ ...prev, streams: next }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Max Stay (e.g. Up to 6 months)"
+                          value={st.maxStay || ''}
+                          onChange={e => {
+                            const next = [...s.s03_categoriesAndSubcategories.streams];
+                            next[idx] = { ...st, maxStay: e.target.value || null };
+                            updateSectionObj('s03_categoriesAndSubcategories', prev => ({ ...prev, streams: next }));
+                          }}
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded bg-white text-xs"
+                        placeholder="Target applicant & key rules summary..."
+                        value={st.keyRulesSummary || ''}
+                        onChange={e => {
+                          const next = [...s.s03_categoriesAndSubcategories.streams];
+                          next[idx] = { ...st, keyRulesSummary: e.target.value || null };
+                          updateSectionObj('s03_categoriesAndSubcategories', prev => ({ ...prev, streams: next }));
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 4: Nationality-Specific Eligibility Rules */}
+              {activeSectionKey === 's04_nationalitySpecificRules' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Default Bilateral Nationality Rule Summary</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s04_nationalitySpecificRules.defaultRuleSummary || ''}
+                      onChange={e =>
+                        updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                          ...prev,
+                          defaultRuleSummary: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Visa-Exempt Nationalities (Comma-separated ISO codes)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs font-mono"
+                        value={joinCsv(s.s04_nationalitySpecificRules.exemptNationalities)}
+                        onChange={e =>
+                          updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                            ...prev,
+                            exemptNationalities: splitCsv(e.target.value)
+                          }))
+                        }
+                        placeholder="CA, BM, GB, FR, DE, JP..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Restricted / Special-Clearance Nationalities (ISO codes)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs font-mono"
+                        value={joinCsv(s.s04_nationalitySpecificRules.restrictedNationalities)}
+                        onChange={e =>
+                          updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                            ...prev,
+                            restrictedNationalities: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Nationality-Specific Overrides ({s.s04_nationalitySpecificRules.nationalityOverrides.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                          ...prev,
+                          nationalityOverrides: [
+                            ...prev.nationalityOverrides,
+                            {
+                              nationalityIso: 'IN',
+                              visaRequired: true,
+                              exemptionOrSpecialProgramName: null,
+                              reciprocityFee: '$0 USD',
+                              maxValidityOverride: '120 months',
+                              biometricsExempt: false,
+                              notes: null,
+                              requirementClassification: 'LEGAL_REQUIREMENT'
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Nationality Override
+                    </button>
+                  </div>
+                  {s.s04_nationalitySpecificRules.nationalityOverrides.map((ov, idx) => (
+                    <div key={idx} className="p-3.5 border rounded-lg bg-slate-50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold font-mono text-slate-700">
+                          Passport ISO: {ov.nationalityIso}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                              ...prev,
+                              nationalityOverrides: prev.nationalityOverrides.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                        <input
+                          className="p-2 border rounded bg-white text-xs font-mono uppercase"
+                          placeholder="ISO (e.g. IN)"
+                          value={ov.nationalityIso}
+                          onChange={e => {
+                            const next = [...s.s04_nationalitySpecificRules.nationalityOverrides];
+                            next[idx] = { ...ov, nationalityIso: e.target.value.toUpperCase() };
+                            updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                              ...prev,
+                              nationalityOverrides: next
+                            }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Reciprocity Fee"
+                          value={ov.reciprocityFee || ''}
+                          onChange={e => {
+                            const next = [...s.s04_nationalitySpecificRules.nationalityOverrides];
+                            next[idx] = { ...ov, reciprocityFee: e.target.value || null };
+                            updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                              ...prev,
+                              nationalityOverrides: next
+                            }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Max Validity Override"
+                          value={ov.maxValidityOverride || ''}
+                          onChange={e => {
+                            const next = [...s.s04_nationalitySpecificRules.nationalityOverrides];
+                            next[idx] = { ...ov, maxValidityOverride: e.target.value || null };
+                            updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                              ...prev,
+                              nationalityOverrides: next
+                            }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Notes / Special Program"
+                          value={ov.notes || ''}
+                          onChange={e => {
+                            const next = [...s.s04_nationalitySpecificRules.nationalityOverrides];
+                            next[idx] = { ...ov, notes: e.target.value || null };
+                            updateSectionObj('s04_nationalitySpecificRules', prev => ({
+                              ...prev,
+                              nationalityOverrides: next
+                            }));
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 5: Core Eligibility Requirements */}
+              {activeSectionKey === 's05_coreEligibilityRequirements' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Core Eligibility Summary</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s05_coreEligibilityRequirements.summary || ''}
+                      onChange={e =>
+                        updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                          ...prev,
+                          summary: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum Age</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s05_coreEligibilityRequirements.minAge ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                            ...prev,
+                            minAge: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Maximum Age</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s05_coreEligibilityRequirements.maxAge ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                            ...prev,
+                            maxAge: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Health Insurance Required?"
+                      value={s.s05_coreEligibilityRequirements.healthInsuranceRequired}
+                      onChange={val =>
+                        updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                          ...prev,
+                          healthInsuranceRequired: val
+                        }))
+                      }
+                    />
+                    <TriStateSelect
+                      label="Police Clearance Required?"
+                      value={s.s05_coreEligibilityRequirements.policeClearanceRequired}
+                      onChange={val =>
+                        updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                          ...prev,
+                          policeClearanceRequired: val
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Character & Good Conduct Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s05_coreEligibilityRequirements.characterAndGoodConductRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                            ...prev,
+                            characterAndGoodConductRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Genuine Intent & Home Ties Criteria (e.g. INA 214(b))</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s05_coreEligibilityRequirements.genuineIntentAndTiesCriteria || ''}
+                        onChange={e =>
+                          updateSectionObj('s05_coreEligibilityRequirements', prev => ({
+                            ...prev,
+                            genuineIntentAndTiesCriteria: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 6: Educational Qualification & Credential Rules */}
+              {activeSectionKey === 's06_educationalQualifications' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum Education Level</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s06_educationalQualifications.educationLevel || ''}
+                        onChange={e =>
+                          updateSectionObj('s06_educationalQualifications', prev => ({
+                            ...prev,
+                            educationLevel: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Foreign Credential Evaluation (ECA) Required?"
+                      value={s.s06_educationalQualifications.credentialEvaluationRequired}
+                      onChange={val =>
+                        updateSectionObj('s06_educationalQualifications', prev => ({
+                          ...prev,
+                          credentialEvaluationRequired: val
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Designated Evaluation Bodies (Comma-separated, e.g. WES, IQAS, ENIC)</label>
+                    <input
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={joinCsv(s.s06_educationalQualifications.designatedEvaluationBodies)}
+                      onChange={e =>
+                        updateSectionObj('s06_educationalQualifications', prev => ({
+                          ...prev,
+                          designatedEvaluationBodies: splitCsv(e.target.value)
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Professional Licensing / Registration Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s06_educationalQualifications.professionalLicensingRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s06_educationalQualifications', prev => ({
+                            ...prev,
+                            professionalLicensingRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Degree Attestation / Apostille Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s06_educationalQualifications.attestationOrApostilleRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s06_educationalQualifications', prev => ({
+                            ...prev,
+                            attestationOrApostilleRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 7: Employment, Occupation & Experience Rules */}
+              {activeSectionKey === 's07_employmentAndOccupation' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum Work Experience (Years)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s07_employmentAndOccupation.workExperienceYears ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s07_employmentAndOccupation', prev => ({
+                            ...prev,
+                            workExperienceYears: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Occupation Classification System</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s07_employmentAndOccupation.occupationClassificationSystem || ''}
+                        onChange={e =>
+                          updateSectionObj('s07_employmentAndOccupation', prev => ({
+                            ...prev,
+                            occupationClassificationSystem: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., NOC TEER / SOC 2020 / ANZSCO"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum Salary Threshold</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s07_employmentAndOccupation.minSalaryThreshold || ''}
+                        onChange={e =>
+                          updateSectionObj('s07_employmentAndOccupation', prev => ({
+                            ...prev,
+                            minSalaryThreshold: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Eligible Occupation Codes (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs font-mono"
+                        value={joinCsv(s.s07_employmentAndOccupation.eligibleOccupationCodes)}
+                        onChange={e =>
+                          updateSectionObj('s07_employmentAndOccupation', prev => ({
+                            ...prev,
+                            eligibleOccupationCodes: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Labor Market Test (LMIA / PERM) Required?"
+                      value={s.s07_employmentAndOccupation.laborMarketTestRequired}
+                      onChange={val =>
+                        updateSectionObj('s07_employmentAndOccupation', prev => ({
+                          ...prev,
+                          laborMarketTestRequired: val
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Shortage Occupation List URL</label>
+                    <input
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s07_employmentAndOccupation.shortageOccupationListUrl || ''}
+                      onChange={e =>
+                        updateSectionObj('s07_employmentAndOccupation', prev => ({
+                          ...prev,
+                          shortageOccupationListUrl: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 8: Language Requirements */}
+              {activeSectionKey === 's08_languageRequirements' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Language Requirement Summary</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s08_languageRequirements.languageRequirementSummary || ''}
+                        onChange={e =>
+                          updateSectionObj('s08_languageRequirements', prev => ({
+                            ...prev,
+                            languageRequirementSummary: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">CEFR or CLB Benchmark Level</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s08_languageRequirements.cefrOrClbLevel || ''}
+                        onChange={e =>
+                          updateSectionObj('s08_languageRequirements', prev => ({
+                            ...prev,
+                            cefrOrClbLevel: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., CEFR B1 / CLB 7"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Test Validity Period (Years)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s08_languageRequirements.testValidityYears ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s08_languageRequirements', prev => ({
+                            ...prev,
+                            testValidityYears: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    {(['reading', 'writing', 'listening', 'speaking', 'overall'] as const).map(skill => (
+                      <div key={skill}>
+                        <label className="block text-[11px] font-bold uppercase text-slate-600 mb-1">
+                          Min {skill}
+                        </label>
+                        <input
+                          className="w-full p-2 border rounded-lg text-xs font-mono"
+                          value={s.s08_languageRequirements.minScoresBySkill[skill] || ''}
+                          onChange={e =>
+                            updateSectionObj('s08_languageRequirements', prev => ({
+                              ...prev,
+                              minScoresBySkill: {
+                                ...prev.minScoresBySkill,
+                                [skill]: e.target.value || null
+                              }
+                            }))
+                          }
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Accepted Test Providers (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s08_languageRequirements.acceptedTestProviders)}
+                        onChange={e =>
+                          updateSectionObj('s08_languageRequirements', prev => ({
+                            ...prev,
+                            acceptedTestProviders: splitCsv(e.target.value)
+                          }))
+                        }
+                        placeholder="IELTS, CELPIP, TOEFL iBT, PTE Academic..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Exemptions (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s08_languageRequirements.exemptions)}
+                        onChange={e =>
+                          updateSectionObj('s08_languageRequirements', prev => ({
+                            ...prev,
+                            exemptions: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 9: Financial Requirements & Proof of Funds */}
+              {activeSectionKey === 's09_financialAndProofOfFunds' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum Bank Balance (Statutory)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s09_financialAndProofOfFunds.minBankBalance ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            minBankBalance: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Recommended Funds (Practical Guidance)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s09_financialAndProofOfFunds.recommendedFunds || ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            recommendedFunds: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Currency</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s09_financialAndProofOfFunds.currency || ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            currency: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Bank Statement History (Months)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s09_financialAndProofOfFunds.bankStatementMonths ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            bankStatementMonths: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Income Requirement</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s09_financialAndProofOfFunds.incomeRequirement || ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            incomeRequirement: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Tax Return (ITR) Requirement</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s09_financialAndProofOfFunds.itrRequirement || ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            itrRequirement: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Dependent Additional Funds Formula</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s09_financialAndProofOfFunds.dependentAdditionalFundsFormula || ''}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            dependentAdditionalFundsFormula: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Accepted Proof Types (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s09_financialAndProofOfFunds.acceptedProofTypes)}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            acceptedProofTypes: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Unaccepted Asset Types (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s09_financialAndProofOfFunds.unacceptedAssetTypes)}
+                        onChange={e =>
+                          updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                            ...prev,
+                            unacceptedAssetTypes: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Financial Guidance Notes</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s09_financialAndProofOfFunds.notes || ''}
+                      onChange={e =>
+                        updateSectionObj('s09_financialAndProofOfFunds', prev => ({
+                          ...prev,
+                          notes: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 10: Sponsor & Financial Sponsorship Rules */}
+              {activeSectionKey === 's10_sponsorAndSponsorshipRules' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <TriStateSelect
+                      label="Financial Sponsorship Allowed?"
+                      value={s.s10_sponsorAndSponsorshipRules.sponsorshipAllowed}
+                      onChange={val =>
+                        updateSectionObj('s10_sponsorAndSponsorshipRules', prev => ({
+                          ...prev,
+                          sponsorshipAllowed: val
+                        }))
+                      }
+                    />
+                    <TriStateSelect
+                      label="Employer Sponsor License Required?"
+                      value={s.s10_sponsorAndSponsorshipRules.employerSponsorLicenseRequired}
+                      onChange={val =>
+                        updateSectionObj('s10_sponsorAndSponsorshipRules', prev => ({
+                          ...prev,
+                          employerSponsorLicenseRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Undertaking Form Code</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s10_sponsorAndSponsorshipRules.undertakingFormCode || ''}
+                        onChange={e =>
+                          updateSectionObj('s10_sponsorAndSponsorshipRules', prev => ({
+                            ...prev,
+                            undertakingFormCode: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., Form I-134 / Verpflichtungserklärung"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Sponsor Minimum Income Requirement</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s10_sponsorAndSponsorshipRules.sponsorMinimumIncomeRequirement || ''}
+                        onChange={e =>
+                          updateSectionObj('s10_sponsorAndSponsorshipRules', prev => ({
+                            ...prev,
+                            sponsorMinimumIncomeRequirement: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Eligible Sponsor Types (Comma-separated)</label>
+                    <input
+                      className="w-full p-2 border rounded-lg text-xs"
+                      value={joinCsv(s.s10_sponsorAndSponsorshipRules.eligibleSponsorTypes)}
+                      onChange={e =>
+                        updateSectionObj('s10_sponsorAndSponsorshipRules', prev => ({
+                          ...prev,
+                          eligibleSponsorTypes: splitCsv(e.target.value)
+                        }))
+                      }
+                      placeholder="Immediate Family, Inviting Corporation, University..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Sponsorship Evidence & Legal Notes</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s10_sponsorAndSponsorshipRules.sponsorshipNotes || ''}
+                      onChange={e =>
+                        updateSectionObj('s10_sponsorAndSponsorshipRules', prev => ({
+                          ...prev,
+                          sponsorshipNotes: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 11: Complete Document Checklist */}
+              {activeSectionKey === 's11_completeDocumentChecklist' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Checklist Items ({s.s11_completeDocumentChecklist.documents.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s11_completeDocumentChecklist', prev => ({
+                          ...prev,
+                          documents: [
+                            ...prev.documents,
+                            {
+                              name: '',
+                              description: null,
+                              mandatory: true,
+                              applicantCategory: 'All Applicants',
+                              format: 'Original / Copy',
+                              validityRequirements: null,
+                              requirementClassification: 'CONSULAR_CHECKLIST',
+                              translationRequired: false,
+                              apostilleOrNotarizationRequired: false,
+                              issuingAuthority: null,
+                              rawItem: {}
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Document Item
+                    </button>
+                  </div>
+                  {s.s11_completeDocumentChecklist.documents.map((doc, idx) => (
+                    <div key={idx} className="p-3.5 border rounded-lg bg-slate-50 space-y-2.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">Document #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({
+                              ...prev,
+                              documents: prev.documents.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <input
+                          className="p-2 border rounded bg-white text-xs font-semibold"
+                          placeholder="Document Name *"
+                          value={doc.name}
+                          onChange={e => {
+                            const next = [...s.s11_completeDocumentChecklist.documents];
+                            next[idx] = { ...doc, name: e.target.value };
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({ ...prev, documents: next }));
+                          }}
+                        />
+                        <select
+                          className="p-2 border rounded bg-white text-xs font-semibold"
+                          value={doc.requirementClassification}
+                          onChange={e => {
+                            const next = [...s.s11_completeDocumentChecklist.documents];
+                            next[idx] = {
+                              ...doc,
+                              requirementClassification: e.target.value as RequirementClassification
+                            };
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({ ...prev, documents: next }));
+                          }}
+                        >
+                          {REQUIREMENT_CLASSIFICATION_META.map(m => (
+                            <option key={m.code} value={m.code}>
+                              {m.shortLabel}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          className="p-2 border rounded bg-white text-xs"
+                          value={doc.mandatory ? 'true' : 'false'}
+                          onChange={e => {
+                            const next = [...s.s11_completeDocumentChecklist.documents];
+                            next[idx] = { ...doc, mandatory: e.target.value === 'true' };
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({ ...prev, documents: next }));
+                          }}
+                        >
+                          <option value="true">Mandatory</option>
+                          <option value="false">Optional / Supporting</option>
+                        </select>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Format (e.g. Original Passport)"
+                          value={doc.format || ''}
+                          onChange={e => {
+                            const next = [...s.s11_completeDocumentChecklist.documents];
+                            next[idx] = { ...doc, format: e.target.value || null };
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({ ...prev, documents: next }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Issuing Authority"
+                          value={doc.issuingAuthority || ''}
+                          onChange={e => {
+                            const next = [...s.s11_completeDocumentChecklist.documents];
+                            next[idx] = { ...doc, issuingAuthority: e.target.value || null };
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({ ...prev, documents: next }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Description / Instructions"
+                          value={doc.description || ''}
+                          onChange={e => {
+                            const next = [...s.s11_completeDocumentChecklist.documents];
+                            next[idx] = { ...doc, description: e.target.value || null };
+                            updateSectionObj('s11_completeDocumentChecklist', prev => ({ ...prev, documents: next }));
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 12: Document Formatting & Technical Specifications */}
+              {activeSectionKey === 's12_documentFormattingAndTechSpecs' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Photo Dimensions (mm / inches)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s12_documentFormattingAndTechSpecs.photoDimensionsMm || ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            photoDimensionsMm: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., 51mm x 51mm (2x2 in)"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Photo Background Color</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s12_documentFormattingAndTechSpecs.photoBackgroundColor || ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            photoBackgroundColor: e.target.value || null
+                          }))
+                        }
+                        placeholder="Plain white / off-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Max Upload File Size (MB)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s12_documentFormattingAndTechSpecs.maxFileSizeMb ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            maxFileSizeMb: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Scanner DPI Requirement</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s12_documentFormattingAndTechSpecs.scannerDpiRequirement ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            scannerDpiRequirement: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Accepted Upload Formats (Comma-separated)</label>
+                    <input
+                      className="w-full p-2 border rounded-lg text-xs font-mono"
+                      value={joinCsv(s.s12_documentFormattingAndTechSpecs.acceptedFileFormats)}
+                      onChange={e =>
+                        updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                          ...prev,
+                          acceptedFileFormats: splitCsv(e.target.value)
+                        }))
+                      }
+                      placeholder="PDF, JPEG, PNG"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Biometric Photo Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s12_documentFormattingAndTechSpecs.biometricPhotoRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            biometricPhotoRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Certified Translation Standard</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s12_documentFormattingAndTechSpecs.certifiedTranslationStandard || ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            certifiedTranslationStandard: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Apostille & Consular Legalization Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s12_documentFormattingAndTechSpecs.apostilleAndLegalizationRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s12_documentFormattingAndTechSpecs', prev => ({
+                            ...prev,
+                            apostilleAndLegalizationRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 13: Official Application Forms & Field-by-Field Guidance */}
+              {activeSectionKey === 's13_officialFormsAndFieldGuide' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Form Code</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s13_officialFormsAndFieldGuide.officialFormCode || ''}
+                        onChange={e =>
+                          updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({
+                            ...prev,
+                            officialFormCode: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., Form DS-160"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Form Portal URL</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s13_officialFormsAndFieldGuide.officialFormUrl || ''}
+                        onChange={e =>
+                          updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({
+                            ...prev,
+                            officialFormUrl: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Session Timeout Warning</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s13_officialFormsAndFieldGuide.sessionTimeoutWarning || ''}
+                        onChange={e =>
+                          updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({
+                            ...prev,
+                            sessionTimeoutWarning: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Digital Signature Rules</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s13_officialFormsAndFieldGuide.digitalSignatureRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({
+                            ...prev,
+                            digitalSignatureRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Form Field Guidance Entries ({s.s13_officialFormsAndFieldGuide.fields.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({
+                          ...prev,
+                          fields: [
+                            ...prev.fields,
+                            {
+                              fieldName: '',
+                              section: 'General',
+                              type: 'TEXT',
+                              instructions: null,
+                              commonMistake: null,
+                              rawField: {}
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Form Field Guide
+                    </button>
+                  </div>
+                  {s.s13_officialFormsAndFieldGuide.fields.map((fld, idx) => (
+                    <div key={idx} className="p-3 border rounded-lg bg-slate-50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">Field #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({
+                              ...prev,
+                              fields: prev.fields.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          className="p-2 border rounded bg-white text-xs font-semibold"
+                          placeholder="Field Name"
+                          value={fld.fieldName}
+                          onChange={e => {
+                            const next = [...s.s13_officialFormsAndFieldGuide.fields];
+                            next[idx] = { ...fld, fieldName: e.target.value };
+                            updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({ ...prev, fields: next }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Form Section"
+                          value={fld.section || ''}
+                          onChange={e => {
+                            const next = [...s.s13_officialFormsAndFieldGuide.fields];
+                            next[idx] = { ...fld, section: e.target.value || null };
+                            updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({ ...prev, fields: next }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Common Mistake to Avoid"
+                          value={fld.commonMistake || ''}
+                          onChange={e => {
+                            const next = [...s.s13_officialFormsAndFieldGuide.fields];
+                            next[idx] = { ...fld, commonMistake: e.target.value || null };
+                            updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({ ...prev, fields: next }));
+                          }}
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded bg-white text-xs"
+                        placeholder="Field completion instructions..."
+                        value={fld.instructions || ''}
+                        onChange={e => {
+                          const next = [...s.s13_officialFormsAndFieldGuide.fields];
+                          next[idx] = { ...fld, instructions: e.target.value || null };
+                          updateSectionObj('s13_officialFormsAndFieldGuide', prev => ({ ...prev, fields: next }));
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 14: Step-by-Step Application Procedure */}
+              {activeSectionKey === 's14_stepByStepApplicationProcedure' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Application Procedure Steps ({s.s14_stepByStepApplicationProcedure.steps.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s14_stepByStepApplicationProcedure', prev => ({
+                          ...prev,
+                          steps: [
+                            ...prev.steps,
+                            {
+                              stepNumber: prev.steps.length + 1,
+                              title: '',
+                              description: null,
+                              channel: 'ONLINE_PORTAL',
+                              fees: null,
+                              estimatedDuration: null,
+                              appointmentRequired: null,
+                              officialActionUrl: null,
+                              rawStep: {}
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Procedure Step
+                    </button>
+                  </div>
+                  {s.s14_stepByStepApplicationProcedure.steps.map((st, idx) => (
+                    <div key={idx} className="p-3.5 border rounded-lg bg-slate-50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">Step #{st.stepNumber || idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s14_stepByStepApplicationProcedure', prev => ({
+                              ...prev,
+                              steps: prev.steps.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          className="p-2 border rounded bg-white text-xs font-semibold"
+                          placeholder="Step Title"
+                          value={st.title}
+                          onChange={e => {
+                            const next = [...s.s14_stepByStepApplicationProcedure.steps];
+                            next[idx] = { ...st, title: e.target.value };
+                            updateSectionObj('s14_stepByStepApplicationProcedure', prev => ({ ...prev, steps: next }));
+                          }}
+                        />
+                        <select
+                          className="p-2 border rounded bg-white text-xs"
+                          value={st.channel}
+                          onChange={e => {
+                            const next = [...s.s14_stepByStepApplicationProcedure.steps];
+                            next[idx] = { ...st, channel: e.target.value as any };
+                            updateSectionObj('s14_stepByStepApplicationProcedure', prev => ({ ...prev, steps: next }));
+                          }}
+                        >
+                          <option value="ONLINE_PORTAL">ONLINE_PORTAL</option>
+                          <option value="VAC_IN_PERSON">VAC_IN_PERSON</option>
+                          <option value="EMBASSY_CONSULATE">EMBASSY_CONSULATE</option>
+                          <option value="BORDER_PORT">BORDER_PORT</option>
+                          <option value="MIXED">MIXED</option>
+                          <option value="UNKNOWN">UNKNOWN</option>
+                        </select>
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Official Action URL"
+                          value={st.officialActionUrl || ''}
+                          onChange={e => {
+                            const next = [...s.s14_stepByStepApplicationProcedure.steps];
+                            next[idx] = { ...st, officialActionUrl: e.target.value || null };
+                            updateSectionObj('s14_stepByStepApplicationProcedure', prev => ({ ...prev, steps: next }));
+                          }}
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded bg-white text-xs"
+                        placeholder="Detailed step instructions..."
+                        value={st.description || ''}
+                        onChange={e => {
+                          const next = [...s.s14_stepByStepApplicationProcedure.steps];
+                          next[idx] = { ...st, description: e.target.value || null };
+                          updateSectionObj('s14_stepByStepApplicationProcedure', prev => ({ ...prev, steps: next }));
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 15: Appointment, Biometrics & Medical Rules */}
+              {activeSectionKey === 's15_appointmentBiometricsAndMedical' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <TriStateSelect
+                      label="Biometrics (Fingerprints/Photo) Required?"
+                      value={s.s15_appointmentBiometricsAndMedical.biometricsRequired}
+                      onChange={val =>
+                        updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                          ...prev,
+                          biometricsRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Biometric Age Range</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s15_appointmentBiometricsAndMedical.biometricAgeRange || ''}
+                        onChange={e =>
+                          updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                            ...prev,
+                            biometricAgeRange: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., 14 to 79 years"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Biometric Reuse / Validity Period</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s15_appointmentBiometricsAndMedical.biometricValidityPeriod || ''}
+                        onChange={e =>
+                          updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                            ...prev,
+                            biometricValidityPeriod: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">VAC Operator Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s15_appointmentBiometricsAndMedical.vacOperatorName || ''}
+                        onChange={e =>
+                          updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                            ...prev,
+                            vacOperatorName: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., VFS Global / TLScontact / USTravelDocs"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Appointment Booking URL</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s15_appointmentBiometricsAndMedical.appointmentBookingUrl || ''}
+                        onChange={e =>
+                          updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                            ...prev,
+                            appointmentBookingUrl: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Panel Physician Medical Exam Required?"
+                      value={s.s15_appointmentBiometricsAndMedical.medicalExamRequired}
+                      onChange={val =>
+                        updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                          ...prev,
+                          medicalExamRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Panel Physician Directory URL</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s15_appointmentBiometricsAndMedical.panelPhysicianDirectoryUrl || ''}
+                        onChange={e =>
+                          updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                            ...prev,
+                            panelPhysicianDirectoryUrl: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Required Medical Screenings (Comma-separated, e.g. Chest X-Ray TB, IGRA)</label>
+                    <input
+                      className="w-full p-2 border rounded-lg text-xs"
+                      value={joinCsv(s.s15_appointmentBiometricsAndMedical.requiredMedicalScreenings)}
+                      onChange={e =>
+                        updateSectionObj('s15_appointmentBiometricsAndMedical', prev => ({
+                          ...prev,
+                          requiredMedicalScreenings: splitCsv(e.target.value)
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 16: Interview Preparation & Verification Rules */}
+              {activeSectionKey === 's16_interviewPreparationAndVerification' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <TriStateSelect
+                      label="Consular Interview Required?"
+                      value={s.s16_interviewPreparationAndVerification.interviewRequired}
+                      onChange={val =>
+                        updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                          ...prev,
+                          interviewRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Interview Waiver / Dropbox Eligibility Rules</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s16_interviewPreparationAndVerification.interviewWaiverEligibility || ''}
+                        onChange={e =>
+                          updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                            ...prev,
+                            interviewWaiverEligibility: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">General Consular Interview Tips</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s16_interviewPreparationAndVerification.tips || ''}
+                        onChange={e =>
+                          updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                            ...prev,
+                            tips: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Administrative Processing (e.g. 221(g)) & Background Verification</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s16_interviewPreparationAndVerification.administrativeProcessingInfo || ''}
+                        onChange={e =>
+                          updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                            ...prev,
+                            administrativeProcessingInfo: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Interview Questions ({s.s16_interviewPreparationAndVerification.questions.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                          ...prev,
+                          questions: [
+                            ...prev.questions,
+                            {
+                              question: '',
+                              idealAnswerOrGuidance: null,
+                              redFlag: null,
+                              supportingDocs: null,
+                              rawQuestion: {}
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Interview Question
+                    </button>
+                  </div>
+                  {s.s16_interviewPreparationAndVerification.questions.map((q, idx) => (
+                    <div key={idx} className="p-3 border rounded-lg bg-slate-50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">Question #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                              ...prev,
+                              questions: prev.questions.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <input
+                        className="w-full p-2 border rounded bg-white text-xs font-semibold"
+                        placeholder="Question"
+                        value={q.question}
+                        onChange={e => {
+                          const next = [...s.s16_interviewPreparationAndVerification.questions];
+                          next[idx] = { ...q, question: e.target.value };
+                          updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                            ...prev,
+                            questions: next
+                          }));
+                        }}
+                      />
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded bg-white text-xs"
+                        placeholder="Ideal answer guidance..."
+                        value={q.idealAnswerOrGuidance || ''}
+                        onChange={e => {
+                          const next = [...s.s16_interviewPreparationAndVerification.questions];
+                          next[idx] = { ...q, idealAnswerOrGuidance: e.target.value || null };
+                          updateSectionObj('s16_interviewPreparationAndVerification', prev => ({
+                            ...prev,
+                            questions: next
+                          }));
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 17: Official Embassy, Consulate & VAC Directory */}
+              {activeSectionKey === 's17_embassyConsulateAndVacDirectory' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      Consular Posts & VAC Facilities ({s.s17_embassyConsulateAndVacDirectory.facilities.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                          ...prev,
+                          facilities: [
+                            ...prev.facilities,
+                            {
+                              name: '',
+                              city: null,
+                              facilityType: 'EMBASSY',
+                              address: null,
+                              phone: null,
+                              email: null,
+                              bookingUrl: null,
+                              jurisdictionCoverage: null,
+                              operatingHours: null,
+                              rawFacility: {}
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add Consular Post / VAC
+                    </button>
+                  </div>
+                  {s.s17_embassyConsulateAndVacDirectory.facilities.map((fac, idx) => (
+                    <div key={idx} className="p-3.5 border rounded-lg bg-slate-50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">Facility #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: prev.facilities.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          className="p-2 border rounded bg-white text-xs font-semibold"
+                          placeholder="Facility Name"
+                          value={fac.name || ''}
+                          onChange={e => {
+                            const next = [...s.s17_embassyConsulateAndVacDirectory.facilities];
+                            next[idx] = { ...fac, name: e.target.value || null };
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: next
+                            }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="City"
+                          value={fac.city || ''}
+                          onChange={e => {
+                            const next = [...s.s17_embassyConsulateAndVacDirectory.facilities];
+                            next[idx] = { ...fac, city: e.target.value || null };
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: next
+                            }));
+                          }}
+                        />
+                        <select
+                          className="p-2 border rounded bg-white text-xs"
+                          value={fac.facilityType}
+                          onChange={e => {
+                            const next = [...s.s17_embassyConsulateAndVacDirectory.facilities];
+                            next[idx] = { ...fac, facilityType: e.target.value as any };
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: next
+                            }));
+                          }}
+                        >
+                          <option value="EMBASSY">EMBASSY</option>
+                          <option value="CONSULATE">CONSULATE</option>
+                          <option value="VAC">VAC</option>
+                          <option value="UNKNOWN">UNKNOWN</option>
+                        </select>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Address"
+                          value={fac.address || ''}
+                          onChange={e => {
+                            const next = [...s.s17_embassyConsulateAndVacDirectory.facilities];
+                            next[idx] = { ...fac, address: e.target.value || null };
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: next
+                            }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Phone"
+                          value={fac.phone || ''}
+                          onChange={e => {
+                            const next = [...s.s17_embassyConsulateAndVacDirectory.facilities];
+                            next[idx] = { ...fac, phone: e.target.value || null };
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: next
+                            }));
+                          }}
+                        />
+                        <input
+                          className="p-2 border rounded bg-white text-xs"
+                          placeholder="Booking URL"
+                          value={fac.bookingUrl || ''}
+                          onChange={e => {
+                            const next = [...s.s17_embassyConsulateAndVacDirectory.facilities];
+                            next[idx] = { ...fac, bookingUrl: e.target.value || null };
+                            updateSectionObj('s17_embassyConsulateAndVacDirectory', prev => ({
+                              ...prev,
+                              facilities: next
+                            }));
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* SECTION 18: Official Fees & Full Cost Breakdown */}
+              {activeSectionKey === 's18_officialFeesAndCostBreakdown' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Government Visa Fee</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s18_officialFeesAndCostBreakdown.governmentFee ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            governmentFee: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Service / VAC Fee</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s18_officialFeesAndCostBreakdown.serviceOrVacFee ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            serviceOrVacFee: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Biometric Fee</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s18_officialFeesAndCostBreakdown.biometricFee ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            biometricFee: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Healthcare Surcharge</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s18_officialFeesAndCostBreakdown.healthcareSurcharge ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            healthcareSurcharge: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Priority / Super-Priority</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s18_officialFeesAndCostBreakdown.priorityProcessingFee ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            priorityProcessingFee: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Currency</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s18_officialFeesAndCostBreakdown.currency || ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            currency: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <TriStateSelect
+                      label="Refundable on Refusal?"
+                      value={s.s18_officialFeesAndCostBreakdown.isRefundableOnRefusal}
+                      onChange={val =>
+                        updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                          ...prev,
+                          isRefundableOnRefusal: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Issuance / Reciprocity Fee Note</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s18_officialFeesAndCostBreakdown.issuanceReciprocityFeeNote || ''}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            issuanceReciprocityFeeNote: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Accepted Payment Methods (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s18_officialFeesAndCostBreakdown.acceptedPaymentMethods)}
+                        onChange={e =>
+                          updateSectionObj('s18_officialFeesAndCostBreakdown', prev => ({
+                            ...prev,
+                            acceptedPaymentMethods: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 19: Official Processing Times & Timelines */}
+              {activeSectionKey === 's19_processingTimesAndTimelines' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Standard Processing Window</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s19_processingTimesAndTimelines.standardProcessingWindow || ''}
+                        onChange={e =>
+                          updateSectionObj('s19_processingTimesAndTimelines', prev => ({
+                            ...prev,
+                            standardProcessingWindow: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., 3 to 5 weeks after interview"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Peak Season Processing Window</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s19_processingTimesAndTimelines.peakSeasonProcessingWindow || ''}
+                        onChange={e =>
+                          updateSectionObj('s19_processingTimesAndTimelines', prev => ({
+                            ...prev,
+                            peakSeasonProcessingWindow: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Live Wait Time URL</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s19_processingTimesAndTimelines.officialLiveWaitTimeUrl || ''}
+                        onChange={e =>
+                          updateSectionObj('s19_processingTimesAndTimelines', prev => ({
+                            ...prev,
+                            officialLiveWaitTimeUrl: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Earliest Apply Days Before Travel</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s19_processingTimesAndTimelines.earliestApplyDaysBeforeTravel ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s19_processingTimesAndTimelines', prev => ({
+                            ...prev,
+                            earliestApplyDaysBeforeTravel: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Recommended Lead Time (Days)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s19_processingTimesAndTimelines.recommendedLeadTimeDays ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s19_processingTimesAndTimelines', prev => ({
+                            ...prev,
+                            recommendedLeadTimeDays: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Expedited / Emergency Processing Available?"
+                      value={s.s19_processingTimesAndTimelines.expeditedProcessingAvailable}
+                      onChange={val =>
+                        updateSectionObj('s19_processingTimesAndTimelines', prev => ({
+                          ...prev,
+                          expeditedProcessingAvailable: val
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 20: Visa Conditions, Validity & Permitted Activities */}
+              {activeSectionKey === 's20_visaConditionsAndPermittedActivities' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Authorized Stay Duration per Entry</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s20_visaConditionsAndPermittedActivities.authorizedStayDuration || ''}
+                        onChange={e =>
+                          updateSectionObj('s20_visaConditionsAndPermittedActivities', prev => ({
+                            ...prev,
+                            authorizedStayDuration: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Rolling Stay Window Rule (e.g. 90/180)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s20_visaConditionsAndPermittedActivities.rollingStayWindowRule || ''}
+                        onChange={e =>
+                          updateSectionObj('s20_visaConditionsAndPermittedActivities', prev => ({
+                            ...prev,
+                            rollingStayWindowRule: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">No Recourse to Public Funds Rule</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s20_visaConditionsAndPermittedActivities.noRecourseToPublicFundsRule || ''}
+                        onChange={e =>
+                          updateSectionObj('s20_visaConditionsAndPermittedActivities', prev => ({
+                            ...prev,
+                            noRecourseToPublicFundsRule: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Visa Foil Validity vs Authorized Stay Duration Rule</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s20_visaConditionsAndPermittedActivities.visaValidityVsStayDurationRule || ''}
+                      onChange={e =>
+                        updateSectionObj('s20_visaConditionsAndPermittedActivities', prev => ({
+                          ...prev,
+                          visaValidityVsStayDurationRule: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Permitted Activities (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s20_visaConditionsAndPermittedActivities.permittedActivities)}
+                        onChange={e =>
+                          updateSectionObj('s20_visaConditionsAndPermittedActivities', prev => ({
+                            ...prev,
+                            permittedActivities: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Prohibited Activities (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s20_visaConditionsAndPermittedActivities.prohibitedActivities)}
+                        onChange={e =>
+                          updateSectionObj('s20_visaConditionsAndPermittedActivities', prev => ({
+                            ...prev,
+                            prohibitedActivities: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 21: Work Authorization & Employment Conditions */}
+              {activeSectionKey === 's21_workAuthorizationAndEmployment' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <TriStateSelect
+                      label="Employment / Paid Work Permitted?"
+                      value={s.s21_workAuthorizationAndEmployment.workPermitted}
+                      onChange={val =>
+                        updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                          ...prev,
+                          workPermitted: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Authorization Type</label>
+                      <select
+                        className="w-full p-2 border rounded-lg bg-white text-xs font-semibold"
+                        value={s.s21_workAuthorizationAndEmployment.authorizationType}
+                        onChange={e =>
+                          updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                            ...prev,
+                            authorizationType: e.target.value as any
+                          }))
+                        }
+                      >
+                        <option value="UNKNOWN">UNKNOWN</option>
+                        <option value="NONE">NONE (No Work Permitted)</option>
+                        <option value="BUSINESS_VISITOR_ONLY">BUSINESS_VISITOR_ONLY</option>
+                        <option value="EMPLOYER_TIED">EMPLOYER_TIED</option>
+                        <option value="OPEN_WORK">OPEN_WORK</option>
+                        <option value="RESTRICTED_HOURS">RESTRICTED_HOURS</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Work Rights Summary</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s21_workAuthorizationAndEmployment.workRightsSummary || ''}
+                        onChange={e =>
+                          updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                            ...prev,
+                            workRightsSummary: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Max Hours/Week (Term Time)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s21_workAuthorizationAndEmployment.maxHoursPerWeekTermTime ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                            ...prev,
+                            maxHoursPerWeekTermTime: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Max Hours/Week (Holidays)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s21_workAuthorizationAndEmployment.maxHoursPerWeekHolidays ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                            ...prev,
+                            maxHoursPerWeekHolidays: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Self-Employment / Freelance Allowed?"
+                      value={s.s21_workAuthorizationAndEmployment.selfEmploymentOrFreelanceAllowed}
+                      onChange={val =>
+                        updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                          ...prev,
+                          selfEmploymentOrFreelanceAllowed: val
+                        }))
+                      }
+                    />
+                    <TriStateSelect
+                      label="Remote Work for Foreign Employer Allowed?"
+                      value={s.s21_workAuthorizationAndEmployment.remoteWorkForForeignEmployerAllowed}
+                      onChange={val =>
+                        updateSectionObj('s21_workAuthorizationAndEmployment', prev => ({
+                          ...prev,
+                          remoteWorkForForeignEmployerAllowed: val
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 22: Study Authorization & Academic Conditions */}
+              {activeSectionKey === 's22_studyAuthorizationAndAcademicRules' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <TriStateSelect
+                      label="Academic / Short Study Permitted?"
+                      value={s.s22_studyAuthorizationAndAcademicRules.studyPermitted}
+                      onChange={val =>
+                        updateSectionObj('s22_studyAuthorizationAndAcademicRules', prev => ({
+                          ...prev,
+                          studyPermitted: val
+                        }))
+                      }
+                    />
+                    <TriStateSelect
+                      label="Designated Learning Institution (SEVP/DLI) Required?"
+                      value={s.s22_studyAuthorizationAndAcademicRules.designatedInstitutionRequired}
+                      onChange={val =>
+                        updateSectionObj('s22_studyAuthorizationAndAcademicRules', prev => ({
+                          ...prev,
+                          designatedInstitutionRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Max Short Course Duration</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s22_studyAuthorizationAndAcademicRules.maxShortCourseDuration || ''}
+                        onChange={e =>
+                          updateSectionObj('s22_studyAuthorizationAndAcademicRules', prev => ({
+                            ...prev,
+                            maxShortCourseDuration: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Institution Change Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s22_studyAuthorizationAndAcademicRules.institutionChangeRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s22_studyAuthorizationAndAcademicRules', prev => ({
+                            ...prev,
+                            institutionChangeRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Attendance & Course Load Compliance Rules</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s22_studyAuthorizationAndAcademicRules.attendanceComplianceRules || ''}
+                        onChange={e =>
+                          updateSectionObj('s22_studyAuthorizationAndAcademicRules', prev => ({
+                            ...prev,
+                            attendanceComplianceRules: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 23: Family & Dependent Rules */}
+              {activeSectionKey === 's23_familyAndDependentRules' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <TriStateSelect
+                      label="Accompanying Dependents Allowed?"
+                      value={s.s23_familyAndDependentRules.dependentsAllowed}
+                      onChange={val =>
+                        updateSectionObj('s23_familyAndDependentRules', prev => ({
+                          ...prev,
+                          dependentsAllowed: val
+                        }))
+                      }
+                    />
+                    <TriStateSelect
+                      label="Separate Visa Application Required per Dependent?"
+                      value={s.s23_familyAndDependentRules.separateApplicationRequired}
+                      onChange={val =>
+                        updateSectionObj('s23_familyAndDependentRules', prev => ({
+                          ...prev,
+                          separateApplicationRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Max Dependent Child Age</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s23_familyAndDependentRules.maxDependentChildAge ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s23_familyAndDependentRules', prev => ({
+                            ...prev,
+                            maxDependentChildAge: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Eligible Relationships (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s23_familyAndDependentRules.eligibleRelationships)}
+                        onChange={e =>
+                          updateSectionObj('s23_familyAndDependentRules', prev => ({
+                            ...prev,
+                            eligibleRelationships: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Dependent Financial Requirement Note</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s23_familyAndDependentRules.dependentFinancialRequirementNote || ''}
+                        onChange={e =>
+                          updateSectionObj('s23_familyAndDependentRules', prev => ({
+                            ...prev,
+                            dependentFinancialRequirementNote: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Dependent Work Rights</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s23_familyAndDependentRules.dependentWorkRights || ''}
+                        onChange={e =>
+                          updateSectionObj('s23_familyAndDependentRules', prev => ({
+                            ...prev,
+                            dependentWorkRights: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Dependent Study Rights</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s23_familyAndDependentRules.dependentStudyRights || ''}
+                        onChange={e =>
+                          updateSectionObj('s23_familyAndDependentRules', prev => ({
+                            ...prev,
+                            dependentStudyRights: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 24: Travel Preparation & Pre-Departure Checklist */}
+              {activeSectionKey === 's24_travelPreparationAndPreDeparture' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <TriStateSelect
+                      label="Travel Insurance Mandatory?"
+                      value={s.s24_travelPreparationAndPreDeparture.travelInsuranceMandatory}
+                      onChange={val =>
+                        updateSectionObj('s24_travelPreparationAndPreDeparture', prev => ({
+                          ...prev,
+                          travelInsuranceMandatory: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Minimum Insurance Coverage Amount</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s24_travelPreparationAndPreDeparture.minInsuranceCoverageAmount || ''}
+                        onChange={e =>
+                          updateSectionObj('s24_travelPreparationAndPreDeparture', prev => ({
+                            ...prev,
+                            minInsuranceCoverageAmount: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Onward / Return Ticket Required?"
+                      value={s.s24_travelPreparationAndPreDeparture.onwardOrReturnTicketRequired}
+                      onChange={val =>
+                        updateSectionObj('s24_travelPreparationAndPreDeparture', prev => ({
+                          ...prev,
+                          onwardOrReturnTicketRequired: val
+                        }))
+                      }
+                    />
+                    <TriStateSelect
+                      label="Accommodation Proof Required?"
+                      value={s.s24_travelPreparationAndPreDeparture.accommodationProofRequired}
+                      onChange={val =>
+                        updateSectionObj('s24_travelPreparationAndPreDeparture', prev => ({
+                          ...prev,
+                          accommodationProofRequired: val
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Customs, Prescription Medication & Pre-Departure Rules</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s24_travelPreparationAndPreDeparture.customsAndMedicationRules || ''}
+                      onChange={e =>
+                        updateSectionObj('s24_travelPreparationAndPreDeparture', prev => ({
+                          ...prev,
+                          customsAndMedicationRules: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 25: Arrival, Border Control & Entry Procedure */}
+              {activeSectionKey === 's25_arrivalBorderControlAndEntry' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Port of Entry Requirements Summary</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s25_arrivalBorderControlAndEntry.entryRequirementsSummary || ''}
+                      onChange={e =>
+                        updateSectionObj('s25_arrivalBorderControlAndEntry', prev => ({
+                          ...prev,
+                          entryRequirementsSummary: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Digital Arrival Card Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s25_arrivalBorderControlAndEntry.digitalArrivalCardName || ''}
+                        onChange={e =>
+                          updateSectionObj('s25_arrivalBorderControlAndEntry', prev => ({
+                            ...prev,
+                            digitalArrivalCardName: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., CBP Form I-94 / SG Arrival Card"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Digital Arrival Card Official URL</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s25_arrivalBorderControlAndEntry.digitalArrivalCardUrl || ''}
+                        onChange={e =>
+                          updateSectionObj('s25_arrivalBorderControlAndEntry', prev => ({
+                            ...prev,
+                            digitalArrivalCardUrl: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Admission Stamp & I-94 Verification Rule</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s25_arrivalBorderControlAndEntry.admissionStampAndI94VerificationRule || ''}
+                        onChange={e =>
+                          updateSectionObj('s25_arrivalBorderControlAndEntry', prev => ({
+                            ...prev,
+                            admissionStampAndI94VerificationRule: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Documents to Carry in Hand Luggage (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s25_arrivalBorderControlAndEntry.handLuggageDocuments)}
+                        onChange={e =>
+                          updateSectionObj('s25_arrivalBorderControlAndEntry', prev => ({
+                            ...prev,
+                            handLuggageDocuments: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Border Officer Inspection Topics (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s25_arrivalBorderControlAndEntry.borderInspectionTopics)}
+                        onChange={e =>
+                          updateSectionObj('s25_arrivalBorderControlAndEntry', prev => ({
+                            ...prev,
+                            borderInspectionTopics: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 26: Post-Arrival Registration & Local Compliance */}
+              {activeSectionKey === 's26_postArrivalRegistrationAndCompliance' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <TriStateSelect
+                      label="Local Police / Municipal Registration Required?"
+                      value={s.s26_postArrivalRegistrationAndCompliance.localRegistrationRequired}
+                      onChange={val =>
+                        updateSectionObj('s26_postArrivalRegistrationAndCompliance', prev => ({
+                          ...prev,
+                          localRegistrationRequired: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Registration Authority Name</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={s.s26_postArrivalRegistrationAndCompliance.registrationAuthorityName || ''}
+                        onChange={e =>
+                          updateSectionObj('s26_postArrivalRegistrationAndCompliance', prev => ({
+                            ...prev,
+                            registrationAuthorityName: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Registration Deadline (Days After Arrival)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s26_postArrivalRegistrationAndCompliance.registrationDeadlineDays ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s26_postArrivalRegistrationAndCompliance', prev => ({
+                            ...prev,
+                            registrationDeadlineDays: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Registration Requirements Summary</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s26_postArrivalRegistrationAndCompliance.registrationRequirementsSummary || ''}
+                        onChange={e =>
+                          updateSectionObj('s26_postArrivalRegistrationAndCompliance', prev => ({
+                            ...prev,
+                            registrationRequirementsSummary: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Residence Permit Collection & Address Reporting Rule</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s26_postArrivalRegistrationAndCompliance.residencePermitCollectionRule || ''}
+                        onChange={e =>
+                          updateSectionObj('s26_postArrivalRegistrationAndCompliance', prev => ({
+                            ...prev,
+                            residencePermitCollectionRule: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 27: Renewal, Extension & Status Change Rules */}
+              {activeSectionKey === 's27_renewalExtensionAndStatusChange' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Extension Possible?</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm"
+                        value={
+                          s.s27_renewalExtensionAndStatusChange.extensionPossible === null
+                            ? ''
+                            : String(s.s27_renewalExtensionAndStatusChange.extensionPossible)
+                        }
+                        onChange={e =>
+                          updateSectionObj('s27_renewalExtensionAndStatusChange', prev => ({
+                            ...prev,
+                            extensionPossible: e.target.value || null
+                          }))
+                        }
+                        placeholder="true / false / Up to 6 months via I-539"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Official Extension Form Code</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s27_renewalExtensionAndStatusChange.extensionFormCode || ''}
+                        onChange={e =>
+                          updateSectionObj('s27_renewalExtensionAndStatusChange', prev => ({
+                            ...prev,
+                            extensionFormCode: e.target.value || null
+                          }))
+                        }
+                        placeholder="e.g., Form I-539"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Recommended Apply Days Before Expiry</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s27_renewalExtensionAndStatusChange.recommendedApplyDaysBeforeExpiry ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s27_renewalExtensionAndStatusChange', prev => ({
+                            ...prev,
+                            recommendedApplyDaysBeforeExpiry: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="In-Country Status Switching Allowed?"
+                      value={s.s27_renewalExtensionAndStatusChange.inCountrySwitchingAllowed}
+                      onChange={val =>
+                        updateSectionObj('s27_renewalExtensionAndStatusChange', prev => ({
+                          ...prev,
+                          inCountrySwitchingAllowed: val
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Maintained / Bridging Status Rule While Pending</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s27_renewalExtensionAndStatusChange.maintainedStatusWhilePendingRule || ''}
+                        onChange={e =>
+                          updateSectionObj('s27_renewalExtensionAndStatusChange', prev => ({
+                            ...prev,
+                            maintainedStatusWhilePendingRule: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Eligible Switch Target Categories (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s27_renewalExtensionAndStatusChange.eligibleSwitchTargets)}
+                        onChange={e =>
+                          updateSectionObj('s27_renewalExtensionAndStatusChange', prev => ({
+                            ...prev,
+                            eligibleSwitchTargets: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 28: Refusal, Administrative Review, Appeal & Reapplication */}
+              {activeSectionKey === 's28_refusalAppealAndReapplication' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <TriStateSelect
+                      label="Statutory Appeal Possible?"
+                      value={s.s28_refusalAppealAndReapplication.appealPossible}
+                      onChange={val =>
+                        updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                          ...prev,
+                          appealPossible: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Review / Appeal Mechanism</label>
+                      <select
+                        className="w-full p-2 border rounded-lg bg-white text-xs font-semibold"
+                        value={s.s28_refusalAppealAndReapplication.reviewType}
+                        onChange={e =>
+                          updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                            ...prev,
+                            reviewType: e.target.value as any
+                          }))
+                        }
+                      >
+                        <option value="UNKNOWN">UNKNOWN</option>
+                        <option value="REAPPLICATION_ONLY">REAPPLICATION_ONLY</option>
+                        <option value="ADMINISTRATIVE_REVIEW">ADMINISTRATIVE_REVIEW</option>
+                        <option value="STATUTORY_APPEAL">STATUTORY_APPEAL</option>
+                        <option value="REMONSTRATION">REMONSTRATION</option>
+                        <option value="JUDICIAL_REVIEW">JUDICIAL_REVIEW</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Appeal Filing Deadline (Days)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s28_refusalAppealAndReapplication.appealDeadlineDays ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                            ...prev,
+                            appealDeadlineDays: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Reapplication Wait / Cooling-Off (Days)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s28_refusalAppealAndReapplication.reapplicationWaitDays ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                            ...prev,
+                            reapplicationWaitDays: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Common Refusal Reasons (Comma-separated)</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={joinCsv(s.s28_refusalAppealAndReapplication.commonRefusalReasons)}
+                        onChange={e =>
+                          updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                            ...prev,
+                            commonRefusalReasons: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Statutory Refusal Codes (Comma-separated, e.g. INA 214(b), 221(g))</label>
+                      <input
+                        className="w-full p-2 border rounded-lg text-xs font-mono"
+                        value={joinCsv(s.s28_refusalAppealAndReapplication.statutoryRefusalCodes)}
+                        onChange={e =>
+                          updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                            ...prev,
+                            statutoryRefusalCodes: splitCsv(e.target.value)
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Appeal & Reapplication Procedure</label>
+                    <textarea
+                      rows={2}
+                      className="w-full p-2 border rounded-lg text-sm"
+                      value={s.s28_refusalAppealAndReapplication.appealAndReapplicationProcedure || ''}
+                      onChange={e =>
+                        updateSectionObj('s28_refusalAppealAndReapplication', prev => ({
+                          ...prev,
+                          appealAndReapplicationProcedure: e.target.value || null
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 29: Permanent Residence, Settlement & Citizenship Pathways */}
+              {activeSectionKey === 's29_permanentResidenceAndCitizenship' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <TriStateSelect
+                      label="Counts Directly Toward PR?"
+                      value={s.s29_permanentResidenceAndCitizenship.countsTowardPermanentResidence}
+                      onChange={val =>
+                        updateSectionObj('s29_permanentResidenceAndCitizenship', prev => ({
+                          ...prev,
+                          countsTowardPermanentResidence: val
+                        }))
+                      }
+                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Min Years to Permanent Residence</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s29_permanentResidenceAndCitizenship.minYearsToPermanentResidence ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s29_permanentResidenceAndCitizenship', prev => ({
+                            ...prev,
+                            minYearsToPermanentResidence: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Min Years to Citizenship / Naturalization</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded-lg text-sm font-mono"
+                        value={s.s29_permanentResidenceAndCitizenship.minYearsToCitizenship ?? ''}
+                        onChange={e =>
+                          updateSectionObj('s29_permanentResidenceAndCitizenship', prev => ({
+                            ...prev,
+                            minYearsToCitizenship: e.target.value ? Number(e.target.value) : null
+                          }))
+                        }
+                      />
+                    </div>
+                    <TriStateSelect
+                      label="Dual Citizenship Permitted?"
+                      value={s.s29_permanentResidenceAndCitizenship.dualCitizenshipPermitted}
+                      onChange={val =>
+                        updateSectionObj('s29_permanentResidenceAndCitizenship', prev => ({
+                          ...prev,
+                          dualCitizenshipPermitted: val
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">Settlement Pathway Summary</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s29_permanentResidenceAndCitizenship.settlementPathSummary || ''}
+                        onChange={e =>
+                          updateSectionObj('s29_permanentResidenceAndCitizenship', prev => ({
+                            ...prev,
+                            settlementPathSummary: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">PR Language & Civic Integration Requirements</label>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded-lg text-xs"
+                        value={s.s29_permanentResidenceAndCitizenship.prLanguageAndCivicRequirements || ''}
+                        onChange={e =>
+                          updateSectionObj('s29_permanentResidenceAndCitizenship', prev => ({
+                            ...prev,
+                            prLanguageAndCivicRequirements: e.target.value || null
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 30: FAQs, Edge Cases & Official Sources */}
+              {activeSectionKey === 's30_faqsEdgeCasesAndOfficialSources' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">
+                      FAQs & Edge Case Guidance ({s.s30_faqsEdgeCasesAndOfficialSources.faqs.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateSectionObj('s30_faqsEdgeCasesAndOfficialSources', prev => ({
+                          ...prev,
+                          faqs: [
+                            ...prev.faqs,
+                            {
+                              question: '',
+                              answer: '',
+                              verificationStatus: 'VERIFIED_OFFICIAL',
+                              requirementClassification: 'ADMIN_INSTRUCTION',
+                              rawFaq: {}
+                            }
+                          ]
+                        }))
+                      }
+                      className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded text-xs font-bold"
+                    >
+                      <Plus size={13} /> Add FAQ Entry
+                    </button>
+                  </div>
+                  {s.s30_faqsEdgeCasesAndOfficialSources.faqs.map((f, idx) => (
+                    <div key={idx} className="p-3 border rounded-lg bg-slate-50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-700">FAQ #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateSectionObj('s30_faqsEdgeCasesAndOfficialSources', prev => ({
+                              ...prev,
+                              faqs: prev.faqs.filter((_, i) => i !== idx)
+                            }))
+                          }
+                          className="text-rose-600 text-xs flex items-center gap-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          className="sm:col-span-2 p-2 border rounded bg-white text-xs font-semibold"
+                          placeholder="Question"
+                          value={f.question}
+                          onChange={e => {
+                            const next = [...s.s30_faqsEdgeCasesAndOfficialSources.faqs];
+                            next[idx] = { ...f, question: e.target.value };
+                            updateSectionObj('s30_faqsEdgeCasesAndOfficialSources', prev => ({ ...prev, faqs: next }));
+                          }}
+                        />
+                        <select
+                          className="p-2 border rounded bg-white text-xs"
+                          value={f.requirementClassification}
+                          onChange={e => {
+                            const next = [...s.s30_faqsEdgeCasesAndOfficialSources.faqs];
+                            next[idx] = {
+                              ...f,
+                              requirementClassification: e.target.value as RequirementClassification
+                            };
+                            updateSectionObj('s30_faqsEdgeCasesAndOfficialSources', prev => ({ ...prev, faqs: next }));
+                          }}
+                        >
+                          {REQUIREMENT_CLASSIFICATION_META.map(m => (
+                            <option key={m.code} value={m.code}>
+                              {m.shortLabel}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <textarea
+                        rows={2}
+                        className="w-full p-2 border rounded bg-white text-xs"
+                        placeholder="Answer"
+                        value={f.answer}
+                        onChange={e => {
+                          const next = [...s.s30_faqsEdgeCasesAndOfficialSources.faqs];
+                          next[idx] = { ...f, answer: e.target.value };
+                          updateSectionObj('s30_faqsEdgeCasesAndOfficialSources', prev => ({ ...prev, faqs: next }));
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* SPECIAL TOPICS EDITOR (T01 - T22) */}
+          {activeMode === 'TOPIC' && (
+            <div>
+              {(() => {
+                const top = topics[activeTopicKey];
+                const populated = isTopicSubstantivelyPopulated(top);
+                return (
+                  <div className="space-y-4">
+                    <div className="flex flex-wrap justify-between items-center gap-2 border-b border-slate-200 pb-3">
+                      <div>
+                        <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+                          Stage 6 • Applicant Special Topic {activeTopicReg.topicNumber} of 22
+                        </span>
+                        <h3 className="font-bold text-xl text-slate-900 mt-0.5">
+                          {activeTopicReg.title}
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {activeTopicReg.topicNumber > 1 ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const prev =
+                                TWENTY_TWO_SPECIAL_TOPICS_REGISTRY[activeTopicReg.topicNumber - 2];
+                              if (prev) setActiveTopicKey(prev.topicKey);
+                            }}
+                            className="px-3 py-1.5 border border-slate-300 rounded text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                          >
+                            ← Prev Topic
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveMode('SECTION');
+                              setActiveSectionKey('s30_faqsEdgeCasesAndOfficialSources');
+                            }}
+                            className="px-3 py-1.5 border border-slate-300 rounded text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                          >
+                            ← Section 30
+                          </button>
+                        )}
+                        {activeTopicReg.topicNumber < 22 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next =
+                                TWENTY_TWO_SPECIAL_TOPICS_REGISTRY[activeTopicReg.topicNumber];
+                              if (next) setActiveTopicKey(next.topicKey);
+                            }}
+                            className="px-3 py-1.5 bg-indigo-50 border border-indigo-200 rounded text-xs font-bold text-indigo-700 hover:bg-indigo-100"
+                          >
+                            Next Topic →
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Topic Research & Governance Metadata Panel */}
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-3">
+                      <div className="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                          <ShieldCheck size={15} className="text-indigo-600" />
+                          Special Topic Verification & 5-Tier Legal Metadata
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-[11px] font-bold border ${
+                            populated
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              : 'bg-amber-50 text-amber-700 border-amber-200'
+                          }`}
+                        >
+                          {populated ? 'Substantive Fields Populated' : 'Empty / Unpopulated'}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Verification Status *
+                          </label>
+                          <select
+                            value={top.verificationState}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                verificationState: e.target.value as SectionVerificationState
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-bold"
+                          >
+                            {VERIFICATION_STATES.map(vs => (
+                              <option key={vs.code} value={vs.code}>
+                                {vs.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            5-Tier Classification *
+                          </label>
+                          <select
+                            value={top.requirementClassification}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                requirementClassification: e.target.value as any
+                              })
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-semibold"
+                          >
+                            <option value="UNKNOWN">UNKNOWN</option>
+                            {REQUIREMENT_CLASSIFICATION_META.map(m => (
+                              <option key={m.code} value={m.code}>
+                                {m.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Applicable Nationality
+                          </label>
+                          <input
+                            type="text"
+                            value={top.applicableNationality ?? 'ALL'}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                applicableNationality: e.target.value.toUpperCase()
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono uppercase"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Issuing Authority
+                          </label>
+                          <input
+                            type="text"
+                            value={top.issuingAuthority || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                issuingAuthority: e.target.value || null
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Official Source URL
+                          </label>
+                          <input
+                            type="url"
+                            value={top.officialSourceUrl || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                officialSourceUrl: e.target.value || null
+                              } as any)
+                            }
+                            placeholder="https://..."
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Exact Legal / Statutory Reference
+                          </label>
+                          <input
+                            type="text"
+                            value={top.legalReference || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                legalReference: e.target.value || null
+                              } as any)
+                            }
+                            placeholder="e.g., INA § 212(a)(7)(B)"
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Not Applicable Reason (If N/A)
+                          </label>
+                          <input
+                            type="text"
+                            value={top.applicabilityReason || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                applicabilityReason: e.target.value || null
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Publication Date
+                          </label>
+                          <input
+                            type="date"
+                            value={top.publicationDate || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                publicationDate: e.target.value || null
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Effective Date
+                          </label>
+                          <input
+                            type="date"
+                            value={top.effectiveDate || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                effectiveDate: e.target.value || null
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                            Last Verified Date
+                          </label>
+                          <input
+                            type="date"
+                            value={top.lastVerifiedAt || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                lastVerifiedAt: e.target.value || null
+                              } as any)
+                            }
+                            className="w-full p-2 border border-slate-300 rounded bg-white text-xs font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Topic Substantive Fields */}
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Applicant-Oriented Rule & Guidance Summary
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={top.summary || ''}
+                          onChange={e =>
+                            updateTopicMeta(activeTopicKey, {
+                              summary: e.target.value || null
+                            } as any)
+                          }
+                          placeholder="Detailed, accurate, applicant-oriented rule explanation..."
+                          className="w-full p-2.5 border rounded-lg text-sm"
+                        />
+                      </div>
+
+                      {/* Topic-Specific Structured Inputs */}
+                      {activeTopicKey === 't01_passportValidityAndBlankPages' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Minimum Passport Validity Beyond Stay (Months)
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded-lg text-sm font-mono"
+                              value={topics.t01_passportValidityAndBlankPages.minPassportValidityMonthsBeyondStay ?? ''}
+                              onChange={e =>
+                                updateTopicObj('t01_passportValidityAndBlankPages', prev => ({
+                                  ...prev,
+                                  minPassportValidityMonthsBeyondStay: e.target.value
+                                    ? Number(e.target.value)
+                                    : null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Minimum Blank Visa Pages Required
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded-lg text-sm font-mono"
+                              value={topics.t01_passportValidityAndBlankPages.minBlankPages ?? ''}
+                              onChange={e =>
+                                updateTopicObj('t01_passportValidityAndBlankPages', prev => ({
+                                  ...prev,
+                                  minBlankPages: e.target.value ? Number(e.target.value) : null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't02_priorRefusalsAndViolations' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Mandatory Disclosure of Prior Refusals Required?"
+                            value={topics.t02_priorRefusalsAndViolations.mandatoryDisclosureRequired}
+                            onChange={val =>
+                              updateTopicObj('t02_priorRefusalsAndViolations', prev => ({
+                                ...prev,
+                                mandatoryDisclosureRequired: val
+                              }))
+                            }
+                          />
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Inadmissibility Waiver Form Code
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-sm font-mono"
+                              value={topics.t02_priorRefusalsAndViolations.waiverFormCode || ''}
+                              onChange={e =>
+                                updateTopicObj('t02_priorRefusalsAndViolations', prev => ({
+                                  ...prev,
+                                  waiverFormCode: e.target.value || null
+                                }))
+                              }
+                              placeholder="e.g., Form I-192 / INA 212(d)(3)"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't03_criminalRecordAndPoliceClearance' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Police Clearance Certificate (PCC) Trigger Rule
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-sm"
+                              value={topics.t03_criminalRecordAndPoliceClearance.pccTriggerRule || ''}
+                              onChange={e =>
+                                updateTopicObj('t03_criminalRecordAndPoliceClearance', prev => ({
+                                  ...prev,
+                                  pccTriggerRule: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Certificate Max Age (Months)
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded-lg text-sm font-mono"
+                              value={topics.t03_criminalRecordAndPoliceClearance.certificateMaxAgeMonths ?? ''}
+                              onChange={e =>
+                                updateTopicObj('t03_criminalRecordAndPoliceClearance', prev => ({
+                                  ...prev,
+                                  certificateMaxAgeMonths: e.target.value ? Number(e.target.value) : null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't04_medicalVaccinationsAndHealthInsurance' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Mandatory Vaccinations (Comma-separated)
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={joinCsv(topics.t04_medicalVaccinationsAndHealthInsurance.mandatoryVaccinations)}
+                              onChange={e =>
+                                updateTopicObj('t04_medicalVaccinationsAndHealthInsurance', prev => ({
+                                  ...prev,
+                                  mandatoryVaccinations: splitCsv(e.target.value)
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Medical Inadmissibility Grounds
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t04_medicalVaccinationsAndHealthInsurance.medicalInadmissibilityGrounds || ''}
+                              onChange={e =>
+                                updateTopicObj('t04_medicalVaccinationsAndHealthInsurance', prev => ({
+                                  ...prev,
+                                  medicalInadmissibilityGrounds: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't05_minorsParentalConsentAndCustody' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Notarized Parental Consent Required?"
+                            value={topics.t05_minorsParentalConsentAndCustody.notarizedParentalConsentRequired}
+                            onChange={val =>
+                              updateTopicObj('t05_minorsParentalConsentAndCustody', prev => ({
+                                ...prev,
+                                notarizedParentalConsentRequired: val
+                              }))
+                            }
+                          />
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Custody Order & Accompanying Adult Rules
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t05_minorsParentalConsentAndCustody.custodyOrderRules || ''}
+                              onChange={e =>
+                                updateTopicObj('t05_minorsParentalConsentAndCustody', prev => ({
+                                  ...prev,
+                                  custodyOrderRules: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't06_elderlyAndAccessibilityAccommodations' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Biometric Age Exemption Rule
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t06_elderlyAndAccessibilityAccommodations.biometricAgeExemptionRule || ''}
+                              onChange={e =>
+                                updateTopicObj('t06_elderlyAndAccessibilityAccommodations', prev => ({
+                                  ...prev,
+                                  biometricAgeExemptionRule: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Interview Age Waiver Rule
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t06_elderlyAndAccessibilityAccommodations.interviewAgeWaiverRule || ''}
+                              onChange={e =>
+                                updateTopicObj('t06_elderlyAndAccessibilityAccommodations', prev => ({
+                                  ...prev,
+                                  interviewAgeWaiverRule: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Accessibility Request Procedure
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t06_elderlyAndAccessibilityAccommodations.accessibilityRequestProcedure || ''}
+                              onChange={e =>
+                                updateTopicObj('t06_elderlyAndAccessibilityAccommodations', prev => ({
+                                  ...prev,
+                                  accessibilityRequestProcedure: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't07_dualNationalityAndStatelessDocuments' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Dual Citizen Entry Passport Rule
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t07_dualNationalityAndStatelessDocuments.dualCitizenEntryPassportRule || ''}
+                              onChange={e =>
+                                updateTopicObj('t07_dualNationalityAndStatelessDocuments', prev => ({
+                                  ...prev,
+                                  dualCitizenEntryPassportRule: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <TriStateSelect
+                            label="1951 Refugee / Stateless Travel Document Accepted?"
+                            value={topics.t07_dualNationalityAndStatelessDocuments.refugeeTravelDocumentAccepted}
+                            onChange={val =>
+                              updateTopicObj('t07_dualNationalityAndStatelessDocuments', prev => ({
+                                ...prev,
+                                refugeeTravelDocumentAccepted: val
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't08_thirdCountryApplicationRules' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Third-Country / Non-Resident Application Allowed?"
+                            value={topics.t08_thirdCountryApplicationRules.nonResidentApplicationAllowed}
+                            onChange={val =>
+                              updateTopicObj('t08_thirdCountryApplicationRules', prev => ({
+                                ...prev,
+                                nonResidentApplicationAllowed: val
+                              }))
+                            }
+                          />
+                          <TriStateSelect
+                            label="Proof of Legal Residence in Third Country Required?"
+                            value={topics.t08_thirdCountryApplicationRules.proofOfLegalResidenceRequired}
+                            onChange={val =>
+                              updateTopicObj('t08_thirdCountryApplicationRules', prev => ({
+                                ...prev,
+                                proofOfLegalResidenceRequired: val
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't09_transitAndAirportTransitRules' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Airside / Direct Transit Visa Required?"
+                            value={topics.t09_transitAndAirportTransitRules.airsideTransitVisaRequired}
+                            onChange={val =>
+                              updateTopicObj('t09_transitAndAirportTransitRules', prev => ({
+                                ...prev,
+                                airsideTransitVisaRequired: val
+                              }))
+                            }
+                          />
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Third-Country Visa Exemptions (Comma-separated)
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={joinCsv(topics.t09_transitAndAirportTransitRules.thirdCountryVisaExemptions)}
+                              onChange={e =>
+                                updateTopicObj('t09_transitAndAirportTransitRules', prev => ({
+                                  ...prev,
+                                  thirdCountryVisaExemptions: splitCsv(e.target.value)
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't10_borderEntryRefusalVsVisaApproval' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Port of Entry Authority Name
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t10_borderEntryRefusalVsVisaApproval.portOfEntryAuthorityName || ''}
+                              onChange={e =>
+                                updateTopicObj('t10_borderEntryRefusalVsVisaApproval', prev => ({
+                                  ...prev,
+                                  portOfEntryAuthorityName: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Secondary Inspection & Expedited Removal Procedure
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t10_borderEntryRefusalVsVisaApproval.secondaryInspectionProcedure || ''}
+                              onChange={e =>
+                                updateTopicObj('t10_borderEntryRefusalVsVisaApproval', prev => ({
+                                  ...prev,
+                                  secondaryInspectionProcedure: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't11_customsCashAndProhibitedItems' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Mandatory Currency / Cash Declaration Threshold
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs font-mono"
+                              value={topics.t11_customsCashAndProhibitedItems.cashDeclarationThreshold || ''}
+                              onChange={e =>
+                                updateTopicObj('t11_customsCashAndProhibitedItems', prev => ({
+                                  ...prev,
+                                  cashDeclarationThreshold: e.target.value || null
+                                }))
+                              }
+                              placeholder="e.g., $10,000 USD / €10,000 EUR"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Prohibited / Restricted Items Summary
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t11_customsCashAndProhibitedItems.prohibitedItemsSummary || ''}
+                              onChange={e =>
+                                updateTopicObj('t11_customsCashAndProhibitedItems', prev => ({
+                                  ...prev,
+                                  prohibitedItemsSummary: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't12_taxResidencyImplications' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Statutory Tax Residency Day-Count Trigger (Days)
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded-lg text-xs font-mono"
+                              value={topics.t12_taxResidencyImplications.statutoryDayCountTrigger ?? ''}
+                              onChange={e =>
+                                updateTopicObj('t12_taxResidencyImplications', prev => ({
+                                  ...prev,
+                                  statutoryDayCountTrigger: e.target.value ? Number(e.target.value) : null
+                                }))
+                              }
+                              placeholder="e.g., 183"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Official Tax Authority URL
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t12_taxResidencyImplications.taxAuthorityUrl || ''}
+                              onChange={e =>
+                                updateTopicObj('t12_taxResidencyImplications', prev => ({
+                                  ...prev,
+                                  taxAuthorityUrl: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't13_socialSecurityHealthcareAndPublicFunds' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="No Recourse to Public Funds (NRPF) Enforced?"
+                            value={topics.t13_socialSecurityHealthcareAndPublicFunds.publicFundsProhibited}
+                            onChange={val =>
+                              updateTopicObj('t13_socialSecurityHealthcareAndPublicFunds', prev => ({
+                                ...prev,
+                                publicFundsProhibited: val
+                              }))
+                            }
+                          />
+                          <TriStateSelect
+                            label="Eligible for Public / National Healthcare?"
+                            value={topics.t13_socialSecurityHealthcareAndPublicFunds.publicHealthcareEligible}
+                            onChange={val =>
+                              updateTopicObj('t13_socialSecurityHealthcareAndPublicFunds', prev => ({
+                                ...prev,
+                                publicHealthcareEligible: val
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't14_addressEmployerAndStatusChangeReporting' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Address Change Reporting Deadline (Days)
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded-lg text-xs font-mono"
+                              value={topics.t14_addressEmployerAndStatusChangeReporting.addressChangeReportingDeadlineDays ?? ''}
+                              onChange={e =>
+                                updateTopicObj('t14_addressEmployerAndStatusChangeReporting', prev => ({
+                                  ...prev,
+                                  addressChangeReportingDeadlineDays: e.target.value ? Number(e.target.value) : null
+                                }))
+                              }
+                              placeholder="e.g., 10 days (Form AR-11)"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Reporting Form Code or Portal
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t14_addressEmployerAndStatusChangeReporting.reportingFormOrPortal || ''}
+                              onChange={e =>
+                                updateTopicObj('t14_addressEmployerAndStatusChangeReporting', prev => ({
+                                  ...prev,
+                                  reportingFormOrPortal: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't15_rightsWhileApplicationOrRenewalPending' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Maintained / Bridging Status Applies While Pending?"
+                            value={topics.t15_rightsWhileApplicationOrRenewalPending.maintainedOrBridgingStatusApplies}
+                            onChange={val =>
+                              updateTopicObj('t15_rightsWhileApplicationOrRenewalPending', prev => ({
+                                ...prev,
+                                maintainedOrBridgingStatusApplies: val
+                              }))
+                            }
+                          />
+                          <TriStateSelect
+                            label="Existing Work Rights Continue While Renewal Pending?"
+                            value={topics.t15_rightsWhileApplicationOrRenewalPending.workRightsContinueWhilePending}
+                            onChange={val =>
+                              updateTopicObj('t15_rightsWhileApplicationOrRenewalPending', prev => ({
+                                ...prev,
+                                workRightsContinueWhilePending: val
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't16_travelOutsideCountryWhilePending' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Leaving Country Cancels Pending Application?"
+                            value={topics.t16_travelOutsideCountryWhilePending.leavingCancelsPendingApplication}
+                            onChange={val =>
+                              updateTopicObj('t16_travelOutsideCountryWhilePending', prev => ({
+                                ...prev,
+                                leavingCancelsPendingApplication: val
+                              }))
+                            }
+                          />
+                          <TriStateSelect
+                            label="Advance Parole / Re-Entry Permit Required Before Departure?"
+                            value={topics.t16_travelOutsideCountryWhilePending.advanceParoleOrReEntryPermitRequired}
+                            onChange={val =>
+                              updateTopicObj('t16_travelOutsideCountryWhilePending', prev => ({
+                                ...prev,
+                                advanceParoleOrReEntryPermitRequired: val
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't17_lostOrStolenPassportOrResidenceCard' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <TriStateSelect
+                            label="Local Police Report Mandatory?"
+                            value={topics.t17_lostOrStolenPassportOrResidenceCard.policeReportRequired}
+                            onChange={val =>
+                              updateTopicObj('t17_lostOrStolenPassportOrResidenceCard', prev => ({
+                                ...prev,
+                                policeReportRequired: val
+                              }))
+                            }
+                          />
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Replacement Visa Foil / Card Transfer Procedure
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t17_lostOrStolenPassportOrResidenceCard.replacementVisaOrTransferProcedure || ''}
+                              onChange={e =>
+                                updateTopicObj('t17_lostOrStolenPassportOrResidenceCard', prev => ({
+                                  ...prev,
+                                  replacementVisaOrTransferProcedure: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't18_visaCancellationCurtailmentAndRevocation' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Curtailment Grace Period (Days)
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full p-2 border rounded-lg text-xs font-mono"
+                              value={topics.t18_visaCancellationCurtailmentAndRevocation.curtailmentGracePeriodDays ?? ''}
+                              onChange={e =>
+                                updateTopicObj('t18_visaCancellationCurtailmentAndRevocation', prev => ({
+                                  ...prev,
+                                  curtailmentGracePeriodDays: e.target.value ? Number(e.target.value) : null
+                                }))
+                              }
+                              placeholder="e.g., 60 days"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Statutory Revocation / Curtailment Grounds
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t18_visaCancellationCurtailmentAndRevocation.revocationGroundsSummary || ''}
+                              onChange={e =>
+                                updateTopicObj('t18_visaCancellationCurtailmentAndRevocation', prev => ({
+                                  ...prev,
+                                  revocationGroundsSummary: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't19_overstayConsequencesFinesAndBans' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Statutory Re-Entry Ban Thresholds (e.g. 3-year / 10-year ban)
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t19_overstayConsequencesFinesAndBans.reEntryBanThresholds || ''}
+                              onChange={e =>
+                                updateTopicObj('t19_overstayConsequencesFinesAndBans', prev => ({
+                                  ...prev,
+                                  reEntryBanThresholds: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Daily Fine / Administrative Penalty Rule
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t19_overstayConsequencesFinesAndBans.dailyFineOrPenaltyRule || ''}
+                              onChange={e =>
+                                updateTopicObj('t19_overstayConsequencesFinesAndBans', prev => ({
+                                  ...prev,
+                                  dailyFineOrPenaltyRule: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't20_immigrationLawChangesDuringProcessing' && (
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Filing Date Lock-In vs Decision Date Rule
+                          </label>
+                          <input
+                            className="w-full p-2 border rounded-lg text-xs"
+                            value={topics.t20_immigrationLawChangesDuringProcessing.filingDateVsDecisionDateRule || ''}
+                            onChange={e =>
+                              updateTopicObj('t20_immigrationLawChangesDuringProcessing', prev => ({
+                                ...prev,
+                                filingDateVsDecisionDateRule: e.target.value || null
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't21_humanitarianAsylumAndProtectionDisclaimers' && (
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Official Protection / Asylum Agency URL
+                          </label>
+                          <input
+                            className="w-full p-2 border rounded-lg text-xs"
+                            value={topics.t21_humanitarianAsylumAndProtectionDisclaimers.officialProtectionAgencyUrl || ''}
+                            onChange={e =>
+                              updateTopicObj('t21_humanitarianAsylumAndProtectionDisclaimers', prev => ({
+                                ...prev,
+                                officialProtectionAgencyUrl: e.target.value || null
+                              }))
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {activeTopicKey === 't22_licensedImmigrationAdvisorGuidance' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Official Regulator Name (e.g. State Bar / EOIR / CICC / OISC / MARA)
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t22_licensedImmigrationAdvisorGuidance.officialRegulatorName || ''}
+                              onChange={e =>
+                                updateTopicObj('t22_licensedImmigrationAdvisorGuidance', prev => ({
+                                  ...prev,
+                                  officialRegulatorName: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                              Official Regulator License Verification URL
+                            </label>
+                            <input
+                              className="w-full p-2 border rounded-lg text-xs"
+                              value={topics.t22_licensedImmigrationAdvisorGuidance.officialRegulatorVerifyUrl || ''}
+                              onChange={e =>
+                                updateTopicObj('t22_licensedImmigrationAdvisorGuidance', prev => ({
+                                  ...prev,
+                                  officialRegulatorVerifyUrl: e.target.value || null
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Supporting Statutory Excerpt
+                          </label>
+                          <textarea
+                            rows={2}
+                            className="w-full p-2 border rounded-lg text-xs font-mono"
+                            value={top.supportingExcerpts || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                supportingExcerpts: e.target.value || null
+                              } as any)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Reviewer Notes
+                          </label>
+                          <textarea
+                            rows={2}
+                            className="w-full p-2 border rounded-lg text-xs"
+                            value={top.reviewerNotes || ''}
+                            onChange={e =>
+                              updateTopicMeta(activeTopicKey, {
+                                reviewerNotes: e.target.value || null
+                              } as any)
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Comprehensive30SectionEditor;

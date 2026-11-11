@@ -1,6 +1,18 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, ArrowLeft, Plus, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  Save,
+  ArrowLeft,
+  Plus,
+  Trash2,
+  CheckCircle2,
+  AlertCircle,
+  AlertTriangle,
+  Layers,
+  Code2,
+  RotateCcw
+} from 'lucide-react';
+import { getStoredAdminToken } from '../utils/adminAuth';
 
 const A_TO_M_SECTIONS = [
   { code: 'A', key: 'countryOverview', label: 'A. Country Overview' },
@@ -18,6 +30,11 @@ const A_TO_M_SECTIONS = [
   { code: 'M', key: 'faq', label: 'M. FAQs & Official Sources' }
 ];
 
+const Comprehensive30SectionEditor = lazy(() =>
+  import('../components/admin/Comprehensive30SectionEditor').then(m => ({
+    default: m.Comprehensive30SectionEditor
+  }))
+);
 const ClaimsManager = lazy(() =>
   import('../components/admin/ClaimsManager').then(m => ({ default: m.ClaimsManager }))
 );
@@ -31,15 +48,31 @@ export function VisaDetailEditorPage() {
   const [details, setDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('sections');
+  const [activeTab, setActiveTab] = useState('lifecycle30');
   const [activeSectionCode, setActiveSectionCode] = useState('A');
   const [changeReason, setChangeReason] = useState('');
+  const syncLegacyFnRef = useRef<((legacyDetails: any, existingComprehensive?: any) => any) | null>(null);
 
-  const loadDetails = () => {
+  useEffect(() => {
+    import('../types/visaComprehensiveProfile').then(m => {
+      syncLegacyFnRef.current = m.syncLegacyDetailsTo30Sections;
+    });
+  }, []);
+
+  const authHeaders = useCallback(() => {
+    const token = getStoredAdminToken();
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  }, []);
+
+  const loadDetails = useCallback(() => {
     setLoading(true);
-    fetch(`/api/admin/visa-details/${programId}`)
+    fetch(`/api/admin/visa-details/${programId}`, { headers: authHeaders() })
       .then(res => {
         if (!res.ok) throw new Error('Visa record not found or unauthorized');
         return res.json();
@@ -65,20 +98,45 @@ export function VisaDetailEditorPage() {
             verificationStatus: 'DRAFT'
           }
         );
+        setIsDirty(false);
         setLoading(false);
       })
       .catch(err => {
         setErrorMessage(err.message);
         setLoading(false);
       });
-  };
+  }, [programId, authHeaders]);
 
   useEffect(() => {
     loadDetails();
-  }, [programId]);
+  }, [loadDetails]);
+
+  // Warn before closing browser tab if there are unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
 
   const updateSection = (sectionKey: string, data: any) => {
-    setDetails((prev: any) => ({ ...prev, [sectionKey]: data }));
+    setIsDirty(true);
+    setDetails((prev: any) => {
+      const next = { ...prev, [sectionKey]: data };
+      if (syncLegacyFnRef.current) {
+        return syncLegacyFnRef.current(next, prev?.comprehensiveSections);
+      }
+      return next;
+    });
+  };
+
+  const handle30SectionDetailsChange = (nextDetails: any) => {
+    setIsDirty(true);
+    setDetails(nextDetails);
   };
 
   const handleSaveAll = async () => {
@@ -88,17 +146,25 @@ export function VisaDetailEditorPage() {
     try {
       const res = await fetch('/api/admin/visa-details', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({
           ...details,
           programId,
-          changeReason: changeReason.trim() || `Updated section ${activeSectionCode} in A–M Visa Editor`
+          changeReason:
+            changeReason.trim() ||
+            (activeTab === 'lifecycle30'
+              ? 'Updated 30-Section Comprehensive Profile & 22 Special Topics'
+              : `Updated section ${activeSectionCode} in A–M Legacy Visa Editor`)
         })
       });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save changes');
       setChangeReason('');
-      setSaveMessage('All A–M section changes saved and new version snapshot recorded.');
+      setIsDirty(false);
+      setSaveMessage(
+        'Explicit Save Confirmed: All 30-Section, 22-Topic, and A–M Legacy changes persisted with a new audit version snapshot.'
+      );
+      loadDetails();
     } catch (err: any) {
       setErrorMessage(err.message || 'Save failed');
     } finally {
@@ -112,7 +178,7 @@ export function VisaDetailEditorPage() {
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/status`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ status: newStatus })
       });
       if (!res.ok) throw new Error('Failed to update workflow status');
@@ -165,29 +231,43 @@ export function VisaDetailEditorPage() {
           >
             <ArrowLeft size={16} /> Back to Visa Management Admin
           </button>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
               Visa Program Editor: <span className="text-indigo-600 font-mono">{programId}</span>
             </h1>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border">
+            <span className="px-3 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300">
               {details.verificationStatus || 'DRAFT'}
             </span>
+            {isDirty && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                <AlertTriangle size={13} /> Unsaved Changes — Click &ldquo;Save All Changes&rdquo; to Persist
+              </span>
+            )}
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {isDirty && (
+            <button
+              type="button"
+              onClick={loadDetails}
+              className="flex items-center gap-1.5 px-3 py-2.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 bg-white hover:bg-slate-50"
+            >
+              <RotateCcw size={14} /> Discard Unsaved
+            </button>
+          )}
           <input
             type="text"
             value={changeReason}
             onChange={e => setChangeReason(e.target.value)}
             placeholder="Audit change summary (optional)..."
-            className="p-2.5 border border-slate-300 rounded-xl text-sm bg-white w-64"
+            className="p-2.5 border border-slate-300 rounded-lg text-sm bg-white w-64"
           />
           <button
             type="button"
             onClick={handleSaveAll}
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-bold text-sm shadow-sm disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-bold text-sm shadow-sm disabled:opacity-50"
           >
             <Save size={17} /> {saving ? 'Saving...' : 'Save All Changes'}
           </button>
@@ -196,13 +276,13 @@ export function VisaDetailEditorPage() {
 
       {/* Feedback Banners */}
       {saveMessage && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm flex items-center gap-2">
+        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center gap-2">
           <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
           <span>{saveMessage}</span>
         </div>
       )}
       {errorMessage && (
-        <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-center gap-2">
+        <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-sm flex items-center gap-2">
           <AlertCircle size={18} className="text-rose-600 shrink-0" />
           <span>{errorMessage}</span>
         </div>
@@ -211,10 +291,12 @@ export function VisaDetailEditorPage() {
       {/* Main Navigation Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200">
         {[
-          { id: 'sections', label: 'A–M Structured Sections' },
-          { id: 'claims', label: 'Claims & Evidence Manager' },
+          { id: 'lifecycle30', label: '30-Section Lifecycle Editor (+22 Special Topics)' },
+          { id: 'sections', label: 'A–M Legacy View (13 Sections)' },
+          { id: 'claims', label: '5-Tier Claims & Evidence Manager' },
           { id: 'workflow', label: 'Approval & Publishing Workflow' },
-          { id: 'history', label: 'Version History & Rollback' }
+          { id: 'history', label: 'Version History & Rollback' },
+          { id: 'rawjson', label: 'Raw JSON Inspector' }
         ].map(tab => (
           <button
             key={tab.id}
@@ -232,7 +314,26 @@ export function VisaDetailEditorPage() {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm">
+        {activeTab === 'lifecycle30' && (
+          <Suspense
+            fallback={
+              <div className="p-8 text-center text-slate-600">
+                Loading 30-Section Lifecycle Editor & 22 Special Topics...
+              </div>
+            }
+          >
+            <Comprehensive30SectionEditor
+              details={details}
+              onDetailsChange={handle30SectionDetailsChange}
+              onValidationNotice={(type, msg) => {
+                if (type === 'error') setErrorMessage(msg);
+                else setSaveMessage(msg);
+              }}
+            />
+          </Suspense>
+        )}
+
         {activeTab === 'sections' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left Sidebar: A-M Section Selector */}
@@ -1566,6 +1667,27 @@ export function VisaDetailEditorPage() {
           <Suspense fallback={<div className="p-8 text-center">Loading Version History...</div>}>
             <VersionHistoryManager programId={programId!} onRestored={loadDetails} />
           </Suspense>
+        )}
+
+        {activeTab === 'rawjson' && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+              <div>
+                <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                  <Code2 size={18} className="text-indigo-600" /> Authorized Admin Raw JSON Inspector
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Read-only live inspection of the unified 30-Section Comprehensive Profile, 22 Special Topics, and Legacy A–M JSON payload.
+                </p>
+              </div>
+              <span className="px-2.5 py-1 rounded bg-slate-100 border border-slate-300 text-xs font-mono text-slate-700">
+                Program ID: {programId}
+              </span>
+            </div>
+            <pre className="p-4 bg-slate-900 text-slate-100 rounded-lg text-xs font-mono overflow-x-auto max-h-[680px]">
+              {JSON.stringify(details, null, 2)}
+            </pre>
+          </div>
         )}
       </div>
     </div>
