@@ -48,6 +48,8 @@ const OciPioGuidePage = React.lazy(() => import('./pages/OciPioGuidePage').then(
 const ScholarshipFinderPage = React.lazy(() => import('./pages/ScholarshipFinderPage').then(m => ({ default: m.ScholarshipFinderPage })));
 const GlobalImmigrationHubPage = React.lazy(() => import('./pages/GlobalImmigrationHubPage').then(m => ({ default: m.GlobalImmigrationHubPage })));
 const CountryImmigrationDetailPage = React.lazy(() => import('./pages/CountryImmigrationDetailPage').then(m => ({ default: m.CountryImmigrationDetailPage })));
+const CostCalculatorPage = React.lazy(() => import('./pages/tools/CostCalculatorPage').then(m => ({ default: m.CostCalculatorPage })));
+const FundsCalculatorPage = React.lazy(() => import('./pages/tools/FundsCalculatorPage').then(m => ({ default: m.FundsCalculatorPage })));
 
 function PageLoadingFallback() {
   return (
@@ -2756,6 +2758,8 @@ export default function App() {
   const isSitemap = routePath === '/sitemap';
   const isAudit = routePath === '/audit';
   const isVerification = routePath === '/verification';
+  const isCostCalculator = routePath === '/tools/cost-calculator' || routePath === '/tools/cost-calculator/';
+  const isFundsCalculator = routePath === '/tools/funds-calculator' || routePath === '/tools/funds-calculator/';
 
   // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
   const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
@@ -2790,7 +2794,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && 
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -3376,6 +3380,10 @@ export default function App() {
           <AuditPage navigate={navigate} />
         ) : isVerification ? (
           <VerificationView navigate={navigate} />
+        ) : isCostCalculator ? (
+          <CostCalculatorPage onNavigate={navigate} />
+        ) : isFundsCalculator ? (
+          <FundsCalculatorPage onNavigate={navigate} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (

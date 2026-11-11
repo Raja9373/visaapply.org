@@ -72,37 +72,118 @@ export async function getLiveWeather(lat: number, lon: number): Promise<{ temp: 
   }
 }
 
-export async function getCurrencyRate(toCurrency: string): Promise<string> {
-  const code = (toCurrency || "USD").toUpperCase();
-  if (code === "INR") return "1 INR = 1.0000 INR";
-  if (currencyCache.has(code)) {
-    return currencyCache.get(code)!;
+export type CurrencyRateStatus = 'LIVE_RATE' | 'CACHED_RATE' | 'FALLBACK_STATIC_RATE' | 'UNAVAILABLE';
+
+export interface CurrencyRateDetails {
+  sourceCurrency: string;
+  targetCurrency: string;
+  rate: number;
+  timestamp: string | null;
+  status: CurrencyRateStatus;
+  isEstimate: boolean;
+  disclaimer: string;
+}
+
+const currencyTimestampMap = new Map<string, string>();
+
+export async function getCurrencyRateDetails(toCurrency: string, fromCurrency = 'USD'): Promise<CurrencyRateDetails> {
+  const targetCurrency = (toCurrency || 'USD').toUpperCase();
+  const sourceCurrency = (fromCurrency || 'USD').toUpperCase();
+
+  if (targetCurrency === sourceCurrency) {
+    return {
+      sourceCurrency,
+      targetCurrency,
+      rate: 1.0,
+      timestamp: new Date().toISOString(),
+      status: 'LIVE_RATE',
+      isEstimate: false,
+      disclaimer: `Official base currency rate (${sourceCurrency} to ${targetCurrency}).`
+    };
   }
+
+  const isCachedInMemory = currencyCache.has(targetCurrency);
+
   try {
     if (!allRatesCache) {
       if (!allRatesFetchPromise) {
         allRatesFetchPromise = (async () => {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 5000);
-          const res = await fetch(`https://api.exchangerate-api.com/v4/latest/INR`, { signal: controller.signal });
+          const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${sourceCurrency}`, { signal: controller.signal });
           clearTimeout(timeoutId);
           const data = await res.json();
           allRatesCache = data?.rates || null;
+          if (allRatesCache) {
+            currencyTimestampMap.set(sourceCurrency, new Date().toISOString());
+          }
           return allRatesCache;
         })();
       }
       await allRatesFetchPromise;
     }
-    const rate = allRatesCache?.[code];
+
+    const rate = allRatesCache?.[targetCurrency];
     if (rate) {
-      const formatted = `1 INR = ${rate.toFixed(4)} ${code}`;
-      currencyCache.set(code, formatted);
-      return formatted;
+      const timestamp = currencyTimestampMap.get(sourceCurrency) || new Date().toISOString();
+      const status: CurrencyRateStatus = isCachedInMemory ? 'CACHED_RATE' : 'LIVE_RATE';
+      const formatted = `1 ${sourceCurrency} = ${rate.toFixed(4)} ${targetCurrency}`;
+      currencyCache.set(targetCurrency, formatted);
+
+      return {
+        sourceCurrency,
+        targetCurrency,
+        rate,
+        timestamp,
+        status,
+        isEstimate: false,
+        disclaimer: `Indicative conversion based on market rate (${status === 'LIVE_RATE' ? 'Live API' : 'Cached'}). Official consular fees are billed in source currency.`
+      };
     }
-    return `1 INR = 0.0120 ${code}`;
   } catch (e) {
-    return `1 INR = 0.0120 ${code}`;
+    // Fallback handling
   }
+
+  const fallbackRates: Record<string, number> = {
+    USD: 1.0,
+    EUR: 0.92,
+    GBP: 0.79,
+    CAD: 1.35,
+    AUD: 1.52,
+    INR: 83.2,
+    AED: 3.67
+  };
+
+  const fallbackRate = fallbackRates[targetCurrency];
+  if (fallbackRate) {
+    return {
+      sourceCurrency,
+      targetCurrency,
+      rate: fallbackRate,
+      timestamp: null,
+      status: 'FALLBACK_STATIC_RATE',
+      isEstimate: true,
+      disclaimer: `External exchange rate service unavailable. Using offline fallback static reference rate. Indicative only.`
+    };
+  }
+
+  return {
+    sourceCurrency,
+    targetCurrency,
+    rate: 1.0,
+    timestamp: null,
+    status: 'UNAVAILABLE',
+    isEstimate: true,
+    disclaimer: `Conversion unavailable for ${targetCurrency}. Displaying original currency.`
+  };
+}
+
+export async function getCurrencyRate(toCurrency: string): Promise<string> {
+  const details = await getCurrencyRateDetails(toCurrency, 'USD');
+  if (details.status === 'UNAVAILABLE') {
+    return `CONVERSION UNAVAILABLE`;
+  }
+  return `1 USD = ${details.rate.toFixed(4)} ${details.targetCurrency} (${details.status})`;
 }
 
 export function parseHotelPriceUSD(hotelPrice: string): number {

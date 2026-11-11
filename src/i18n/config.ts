@@ -119,6 +119,20 @@ export interface I18nStrings {
   continentOceania: string;
   originBadge: string;
   fromCountryPrefix: string;
+  costCalculatorTitle?: string;
+  costCalculatorSub?: string;
+  fundsCalculatorTitle?: string;
+  fundsCalculatorSub?: string;
+  govFees?: string;
+  vacBiometrics?: string;
+  optionalExpenses?: string;
+  totalOfficialMandatory?: string;
+  totalWithOptional?: string;
+  statutoryMinimum?: string;
+  practicalRecommendation?: string;
+  personalBudget?: string;
+  officialFeeAwaitingVerification?: string;
+  statutoryFundsAwaitingVerification?: string;
 }
 
 export const UI_TRANSLATIONS_10: Record<SupportedLangCode, I18nStrings> = {
@@ -166,6 +180,20 @@ export const UI_TRANSLATIONS_10: Record<SupportedLangCode, I18nStrings> = {
     continentOceania: 'Oceania',
     originBadge: 'Your Origin Country',
     fromCountryPrefix: 'From',
+    costCalculatorTitle: 'Visa Cost & Fee Calculator',
+    costCalculatorSub: 'Classified fee breakdown adhering to 3-tier government and administrative standards.',
+    fundsCalculatorTitle: 'Proof of Funds & Maintenance Calculator',
+    fundsCalculatorSub: 'Statutory financial subsistence calculator complying with Section s09 verification rules.',
+    govFees: 'Government Application Fees',
+    vacBiometrics: 'Mandatory VAC & Biometric Fees',
+    optionalExpenses: 'Optional Ancillary Expenses',
+    totalOfficialMandatory: 'Total Official Mandatory Costs',
+    totalWithOptional: 'Total Including Optional Expenses',
+    statutoryMinimum: 'Statutory Minimum Balance',
+    practicalRecommendation: 'Practical Recommendation (+25% Buffer)',
+    personalBudget: 'Personal Travel Budget Estimate',
+    officialFeeAwaitingVerification: 'OFFICIAL FEE AWAITING VERIFICATION',
+    statutoryFundsAwaitingVerification: 'STATUTORY FINANCIAL REQUIREMENT AWAITING OFFICIAL VERIFICATION',
   },
   de: {
     navHome: 'Startseite',
