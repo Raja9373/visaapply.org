@@ -189,6 +189,22 @@ export function initDatabaseSchema() {
     );
     CREATE INDEX IF NOT EXISTS idx_versions_program ON visa_detail_versions(program_id);
   `);
+
+  const evidenceCols = [
+    { name: 'source_title', type: 'TEXT' },
+    { name: 'issuing_authority', type: 'TEXT' },
+    { name: 'publication_date', type: 'TEXT' },
+    { name: 'access_date', type: 'TEXT' },
+    { name: 'reviewer_notes', type: 'TEXT' },
+    { name: 'status', type: "TEXT DEFAULT 'NEEDS_REVIEW'" }
+  ];
+  for (const col of evidenceCols) {
+    try {
+      db.exec(`ALTER TABLE visa_detail_evidence ADD COLUMN ${col.name} ${col.type};`);
+    } catch {
+      // Ignored if column already exists
+    }
+  }
 }
 
 initDatabaseSchema();
@@ -605,17 +621,75 @@ export function updateVisaStatus(programId: string, status: string) {
   stmt.run(status, programId);
 }
 
-export function restoreVersion(versionId: string) {
+export function restoreVersion(versionId: string, editorId: string = 'admin') {
   const version = db.prepare('SELECT * FROM visa_detail_versions WHERE id = ?').get(versionId) as any;
   if (!version) throw new Error('Version not found');
   
-  const data = JSON.parse(version.data_json);
-  saveVisaDetails(data);
+  const parsed = JSON.parse(version.data_json);
+  const details = parsed.details || parsed;
+  const programId = version.program_id;
+
+  const tx = db.transaction(() => {
+    saveVisaDetails({ ...details, programId });
+
+    if (Array.isArray(parsed.claims)) {
+      // Clear current claims/evidence for this program before restoring exact snapshot state
+      const existingClaims = db.prepare('SELECT id FROM visa_detail_claims WHERE program_id = ?').all(programId) as any[];
+      for (const ec of existingClaims) {
+        db.prepare('DELETE FROM visa_detail_evidence WHERE claim_id = ?').run(ec.id);
+      }
+      db.prepare('DELETE FROM visa_detail_claims WHERE program_id = ?').run(programId);
+
+      for (const c of parsed.claims) {
+        saveVisaClaim({ ...c, programId });
+        if (Array.isArray(c.evidence)) {
+          for (const ev of c.evidence) {
+            saveVisaEvidence({ ...ev, claimId: c.id });
+          }
+        }
+      }
+    }
+
+    // Create a new version for the restoration event (never erases history)
+    const newVersionId = `ver-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    saveVisaVersion({
+      id: newVersionId,
+      programId,
+      data: parsed,
+      editorId,
+      timestamp: new Date().toISOString(),
+      changeReason: `Restored from version ${versionId} (${version.change_reason || 'Previous state'})`
+    });
+
+    return { success: true, restoredVersionId: versionId, newVersionId };
+  });
+
+  return tx();
 }
+
 // --- Claims, Evidence, Versions ---
 
 export function getVisaClaims(programId: string): any[] {
-  return db.prepare('SELECT * FROM visa_detail_claims WHERE program_id = ?').all(programId) as any[];
+  const rows = db.prepare('SELECT * FROM visa_detail_claims WHERE program_id = ? ORDER BY section ASC, description ASC').all(programId) as any[];
+  return rows.map(r => ({
+    id: r.id,
+    programId: r.program_id,
+    section: r.section,
+    description: r.description,
+    value: r.value,
+    unit: r.unit,
+    status: r.status,
+    reviewer: r.reviewer,
+    reviewTimestamp: r.review_timestamp
+  }));
+}
+
+export function getVisaClaimsWithEvidence(programId: string): any[] {
+  const claims = getVisaClaims(programId);
+  return claims.map(c => ({
+    ...c,
+    evidence: getVisaEvidence(c.id)
+  }));
 }
 
 export function saveVisaClaim(claim: any) {
@@ -631,28 +705,91 @@ export function saveVisaClaim(claim: any) {
       reviewer = excluded.reviewer,
       review_timestamp = excluded.review_timestamp
   `);
-  stmt.run(claim.id, claim.programId, claim.section, claim.description, claim.value, claim.unit, claim.status, claim.reviewer, claim.reviewTimestamp);
+  stmt.run(
+    claim.id,
+    claim.programId,
+    claim.section,
+    claim.description,
+    claim.value || '',
+    claim.unit || '',
+    claim.status || 'NEEDS_EVIDENCE',
+    claim.reviewer || 'admin',
+    claim.reviewTimestamp || new Date().toISOString()
+  );
+}
+
+export function deleteVisaClaim(claimId: string) {
+  db.prepare('DELETE FROM visa_detail_evidence WHERE claim_id = ?').run(claimId);
+  db.prepare('DELETE FROM visa_detail_claims WHERE id = ?').run(claimId);
 }
 
 export function getVisaEvidence(claimId: string): any[] {
-  return db.prepare('SELECT * FROM visa_detail_evidence WHERE claim_id = ?').all(claimId) as any[];
+  const rows = db.prepare('SELECT * FROM visa_detail_evidence WHERE claim_id = ?').all(claimId) as any[];
+  return rows.map(r => ({
+    id: r.id,
+    claimId: r.claim_id,
+    sourceUrl: r.source_url,
+    legalInstrument: r.legal_instrument,
+    effectiveDate: r.effective_date,
+    lastCheckedDate: r.last_checked_date,
+    sourceTitle: r.source_title || '',
+    issuingAuthority: r.issuing_authority || '',
+    publicationDate: r.publication_date || '',
+    accessDate: r.access_date || r.last_checked_date || '',
+    reviewerNotes: r.reviewer_notes || '',
+    status: r.status || 'NEEDS_REVIEW'
+  }));
 }
 
 export function saveVisaEvidence(evidence: any) {
   const stmt = db.prepare(`
-    INSERT INTO visa_detail_evidence (id, claim_id, source_url, legal_instrument, effective_date, last_checked_date)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO visa_detail_evidence (
+      id, claim_id, source_url, legal_instrument, effective_date, last_checked_date,
+      source_title, issuing_authority, publication_date, access_date, reviewer_notes, status
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
       source_url = excluded.source_url,
       legal_instrument = excluded.legal_instrument,
       effective_date = excluded.effective_date,
-      last_checked_date = excluded.last_checked_date
+      last_checked_date = excluded.last_checked_date,
+      source_title = excluded.source_title,
+      issuing_authority = excluded.issuing_authority,
+      publication_date = excluded.publication_date,
+      access_date = excluded.access_date,
+      reviewer_notes = excluded.reviewer_notes,
+      status = excluded.status
   `);
-  stmt.run(evidence.id, evidence.claimId, evidence.sourceUrl, evidence.legalInstrument, evidence.effectiveDate, evidence.lastCheckedDate);
+  stmt.run(
+    evidence.id,
+    evidence.claimId || evidence.claim_id,
+    evidence.sourceUrl || evidence.source_url || '',
+    evidence.legalInstrument || evidence.legal_instrument || '',
+    evidence.effectiveDate || evidence.effective_date || '',
+    evidence.lastCheckedDate || evidence.last_checked_date || new Date().toISOString().split('T')[0],
+    evidence.sourceTitle || evidence.source_title || '',
+    evidence.issuingAuthority || evidence.issuing_authority || '',
+    evidence.publicationDate || evidence.publication_date || '',
+    evidence.accessDate || evidence.access_date || evidence.lastCheckedDate || evidence.last_checked_date || new Date().toISOString().split('T')[0],
+    evidence.reviewerNotes || evidence.reviewer_notes || '',
+    evidence.status || 'NEEDS_REVIEW'
+  );
+}
+
+export function deleteVisaEvidence(evidenceId: string) {
+  db.prepare('DELETE FROM visa_detail_evidence WHERE id = ?').run(evidenceId);
 }
 
 export function getVisaVersions(programId: string): any[] {
-  return db.prepare('SELECT * FROM visa_detail_versions WHERE program_id = ? ORDER BY timestamp DESC').all(programId) as any[];
+  const rows = db.prepare('SELECT * FROM visa_detail_versions WHERE program_id = ? ORDER BY timestamp DESC').all(programId) as any[];
+  return rows.map(r => ({
+    id: r.id,
+    programId: r.program_id,
+    data: JSON.parse(r.data_json || '{}'),
+    editorId: r.editor_id,
+    timestamp: r.timestamp,
+    changeReason: r.change_reason
+  }));
 }
 
 export function saveVisaVersion(version: any) {
@@ -662,3 +799,4 @@ export function saveVisaVersion(version: any) {
   `);
   stmt.run(version.id, version.programId, JSON.stringify(version.data), version.editorId, version.timestamp, version.changeReason);
 }
+

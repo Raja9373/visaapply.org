@@ -32,9 +32,12 @@ import {
   getPaginatedVisaDetails,
   saveVisaDetails,
   getVisaClaims,
+  getVisaClaimsWithEvidence,
   saveVisaClaim,
+  deleteVisaClaim,
   getVisaEvidence,
   saveVisaEvidence,
+  deleteVisaEvidence,
   getVisaVersions,
   saveVisaVersion,
   getDashboardStats,
@@ -1060,44 +1063,222 @@ app.get('/api/admin/visa-details/:programId', requireAdminAuth, (req, res) => {
 app.post('/api/admin/visa-details', requireAdminAuth, (req, res) => {
   try {
     const details = req.body;
+    if (!details || !details.programId) {
+      return res.status(400).json({ success: false, error: 'Missing programId in visa details' });
+    }
     saveVisaDetails(details);
+
+    // Auto-create an audit snapshot version on save
+    try {
+      const claimsSnapshot = getVisaClaimsWithEvidence(details.programId);
+      const versionId = `ver-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+      saveVisaVersion({
+        id: versionId,
+        programId: details.programId,
+        data: { details, claims: claimsSnapshot },
+        editorId: 'admin',
+        timestamp: new Date().toISOString(),
+        changeReason: details.changeReason || 'Saved visa details via admin editor'
+      });
+    } catch (verErr: any) {
+      console.warn('Auto-version creation warning:', verErr.message);
+    }
+
     res.json({ success: true, message: 'Visa details saved successfully.' });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Admin: Get Claims
+// Admin: Get Claims (with embedded evidence to prevent N+1 queries)
 app.get('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res) => {
-  res.json({ success: true, claims: getVisaClaims(req.params.programId) });
+  try {
+    const claims = getVisaClaimsWithEvidence(req.params.programId);
+    res.json({ success: true, claims });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Admin: Save Claim
+// Helper: Create an audit snapshot version of details + claims + evidence
+function recordAuditVersionSnapshot(programId: string, editorId: string, changeReason: string) {
+  try {
+    if (!programId) return null;
+    const details = getVisaDetails(programId);
+    const claimsSnapshot = getVisaClaimsWithEvidence(programId);
+    const versionId = `ver-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    saveVisaVersion({
+      id: versionId,
+      programId,
+      data: { details, claims: claimsSnapshot },
+      editorId: editorId || 'admin',
+      timestamp: new Date().toISOString(),
+      changeReason
+    });
+    return versionId;
+  } catch (verErr: any) {
+    console.warn('Auto-version creation warning:', verErr.message);
+    return null;
+  }
+}
+
+// Admin: Save / Update Claim
 app.post('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res) => {
-  saveVisaClaim({ ...req.body, programId: req.params.programId });
-  res.json({ success: true });
+  try {
+    const { id, section, description, value, unit, status, reviewer } = req.body;
+    if (!section || !description) {
+      return res.status(400).json({ success: false, error: 'Section and description are required for a claim' });
+    }
+    const claimId = id || `claim-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    const claimData = {
+      id: claimId,
+      programId: req.params.programId,
+      section,
+      description,
+      value: value || '',
+      unit: unit || '',
+      status: status || 'NEEDS_EVIDENCE',
+      reviewer: reviewer || 'admin',
+      reviewTimestamp: new Date().toISOString()
+    };
+    saveVisaClaim(claimData);
+    const versionId = recordAuditVersionSnapshot(
+      req.params.programId,
+      claimData.reviewer,
+      `${id ? 'Updated' : 'Created'} claim [${section}]: ${description.slice(0, 50)}`
+    );
+    res.json({ success: true, claim: claimData, versionId });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Admin: Get Evidence
+// Admin: Delete Claim (cascading delete of linked evidence)
+app.delete('/api/admin/visa-details/:programId/claims/:claimId', requireAdminAuth, (req, res) => {
+  try {
+    deleteVisaClaim(req.params.claimId);
+    const versionId = recordAuditVersionSnapshot(
+      req.params.programId,
+      'admin',
+      `Deleted claim ${req.params.claimId}`
+    );
+    res.json({ success: true, message: 'Claim and linked evidence deleted successfully', versionId });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Get Evidence for a claim
 app.get('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (req, res) => {
-  res.json({ success: true, evidence: getVisaEvidence(req.params.claimId) });
+  try {
+    const evidence = getVisaEvidence(req.params.claimId);
+    res.json({ success: true, evidence });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Admin: Save Evidence
+// Admin: Save / Update Evidence
 app.post('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (req, res) => {
-  saveVisaEvidence({ ...req.body, claimId: req.params.claimId });
-  res.json({ success: true });
+  try {
+    const { id, programId, sourceUrl, source_url, sourceTitle, source_title, issuingAuthority, issuing_authority, legalInstrument, legal_instrument, publicationDate, publication_date, effectiveDate, effective_date, accessDate, access_date, reviewerNotes, reviewer_notes, status } = req.body;
+    const url = sourceUrl || source_url;
+    if (!url || typeof url !== 'string' || !url.trim()) {
+      return res.status(400).json({ success: false, error: 'Official source URL is mandatory for evidence' });
+    }
+    const allowedStatuses = [
+      'VERIFIED_OFFICIAL',
+      'OFFICIAL_BUT_NOT_FULLY_CONFIRMED',
+      'SECONDARY_SOURCE',
+      'OUTDATED',
+      'BROKEN_LINK',
+      'NEEDS_REVIEW',
+      'REJECTED'
+    ];
+    // Never mark evidence VERIFIED automatically because a URL was entered
+    const safeStatus = allowedStatuses.includes(status) ? status : 'NEEDS_REVIEW';
+    const evidenceId = id || `ev-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    const evidenceData = {
+      id: evidenceId,
+      claimId: req.params.claimId,
+      sourceUrl: url.trim(),
+      sourceTitle: (sourceTitle || source_title || '').trim(),
+      issuingAuthority: (issuingAuthority || issuing_authority || '').trim(),
+      legalInstrument: (legalInstrument || legal_instrument || '').trim(),
+      publicationDate: (publicationDate || publication_date || '').trim(),
+      effectiveDate: (effectiveDate || effective_date || '').trim(),
+      accessDate: (accessDate || access_date || new Date().toISOString().split('T')[0]).trim(),
+      reviewerNotes: (reviewerNotes || reviewer_notes || '').trim(),
+      status: safeStatus
+    };
+    saveVisaEvidence(evidenceData);
+    let versionId = null;
+    if (programId) {
+      versionId = recordAuditVersionSnapshot(
+        programId,
+        'admin',
+        `${id ? 'Updated' : 'Attached'} evidence (${safeStatus}) on claim ${req.params.claimId}`
+      );
+    }
+    res.json({ success: true, evidence: evidenceData, versionId });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: Delete Evidence
+app.delete('/api/admin/visa-details/claims/:claimId/evidence/:evidenceId', requireAdminAuth, (req, res) => {
+  try {
+    const programId = (req.query.programId as string) || req.body?.programId;
+    deleteVisaEvidence(req.params.evidenceId);
+    let versionId = null;
+    if (programId) {
+      versionId = recordAuditVersionSnapshot(
+        programId,
+        'admin',
+        `Deleted evidence ${req.params.evidenceId} from claim ${req.params.claimId}`
+      );
+    }
+    res.json({ success: true, message: 'Evidence deleted successfully', versionId });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Admin: Get Versions
 app.get('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, res) => {
-  res.json({ success: true, versions: getVisaVersions(req.params.programId) });
+  try {
+    const versions = getVisaVersions(req.params.programId);
+    res.json({ success: true, versions });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Admin: Save Version (Rollback)
+// Admin: Save Explicit Version Snapshot
 app.post('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, res) => {
-  saveVisaVersion({ ...req.body, programId: req.params.programId });
-  res.json({ success: true });
+  try {
+    if (req.body.data) {
+      const versionId = req.body.id || `ver-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+      saveVisaVersion({
+        id: versionId,
+        programId: req.params.programId,
+        data: req.body.data,
+        editorId: req.body.editorId || 'admin',
+        timestamp: req.body.timestamp || new Date().toISOString(),
+        changeReason: req.body.changeReason || 'Manual snapshot'
+      });
+      return res.json({ success: true, versionId });
+    }
+    const versionId = recordAuditVersionSnapshot(
+      req.params.programId,
+      req.body.editorId || 'admin',
+      req.body.changeReason || 'Manual snapshot'
+    );
+    res.json({ success: true, versionId });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Admin: Dashboard Stats
@@ -1116,14 +1297,19 @@ app.post('/api/admin/visa-details/:programId/status', requireAdminAuth, (req, re
   const { status } = req.body;
   if (!allowedStatuses.includes(status)) return res.status(400).json({ error: 'Invalid status' });
   updateVisaStatus(req.params.programId, status);
-  res.json({ success: true });
+  const versionId = recordAuditVersionSnapshot(
+    req.params.programId,
+    'admin',
+    `Workflow status updated to ${status}`
+  );
+  res.json({ success: true, versionId });
 });
 
-// Admin: Restore Version
+// Admin: Restore Version (creates a new auditable version without deleting history)
 app.post('/api/admin/visa-details/:programId/versions/:versionId/restore', requireAdminAuth, (req, res) => {
   try {
-    restoreVersion(req.params.versionId);
-    res.json({ success: true });
+    const result = restoreVersion(req.params.versionId, req.body?.editorId || 'admin');
+    res.json({ success: true, ...result });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

@@ -1209,7 +1209,8 @@ export function getImmigrationProfileForCountry(countryCode: string): CountryImm
         work: 'Skilled Work & Employment Permit Schedule',
         family: 'Family & Spouse Reunification Guidelines',
         business: 'Business & Investor Residency Framework',
-        digital_nomad: 'Digital Nomad & Remote Work Pathway'
+        digital_nomad: 'Digital Nomad & Remote Work Pathway',
+        tourist: 'Tourist & Short-Term Visitor Visa Schedule'
       };
 
       const sourceCatUrl = officialSource.categorySources[cat] || officialSource.consularPortalUrl;
@@ -1333,7 +1334,8 @@ export function getImmigrationDatabaseAuditMetrics() {
     work: { verified: 0, unavailable: 0, total: 0 },
     family: { verified: 0, unavailable: 0, total: 0 },
     business: { verified: 0, unavailable: 0, total: 0 },
-    digital_nomad: { verified: 0, unavailable: 0, total: 0 }
+    digital_nomad: { verified: 0, unavailable: 0, total: 0 },
+    tourist: { verified: 0, unavailable: 0, total: 0 }
   };
 
   const uniqueProgramIds = new Set<string>();
