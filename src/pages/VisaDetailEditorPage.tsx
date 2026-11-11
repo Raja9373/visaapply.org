@@ -8,6 +8,7 @@ export function VisaDetailEditorPage() {
   const [details, setDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState('sections');
 
   useEffect(() => {
     fetch(`/api/admin/visa-details/${programId}`) 
@@ -36,28 +37,15 @@ export function VisaDetailEditorPage() {
 
   if (loading) return <div className="p-10 text-center">Loading...</div>;
 
-  const sections = [
-    { key: 'countryOverview', label: 'Country Overview' },
-    { key: 'visaOverview', label: 'Visa Overview' },
-    { key: 'eligibility', label: 'Eligibility' },
-    { key: 'financial', label: 'Financial Requirements' },
-    { key: 'documentChecklist', label: 'Document Checklist' },
-    { key: 'applicationSteps', label: 'Application Process' },
-    { key: 'faq', label: 'FAQs' },
-  ];
-
-  const [activeTab, setActiveTab] = useState('sections');
-
   const handleStatusChange = async (newStatus: string) => {
     await fetch(`/api/admin/visa-details/${programId}/status`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
     });
-    // Reload details...
+    // For simplicity, just reload
+    window.location.reload();
   };
-
-  if (loading) return <div className="p-10 text-center">Loading...</div>;
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
@@ -76,13 +64,19 @@ export function VisaDetailEditorPage() {
 
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         {activeTab === 'sections' && (
-          <div className="space-y-4">
-            <h3 className="font-bold">Visa Overview</h3>
+          <div className="space-y-6">
+            <h3 className="font-bold text-lg">Country & Visa Overview</h3>
             <input className="w-full p-2 border rounded" placeholder="Visa Title" value={details.visaOverview?.title || ''} onChange={(e) => updateSection('visaOverview', {...details.visaOverview, title: e.target.value})} />
             <textarea className="w-full p-2 border rounded" placeholder="Description" value={details.visaOverview?.description || ''} onChange={(e) => updateSection('visaOverview', {...details.visaOverview, description: e.target.value})} />
+            
+            <h3 className="font-bold text-lg">Eligibility</h3>
+            <textarea className="w-full p-2 border rounded" placeholder="Eligibility Rules" value={details.eligibility?.rules || ''} onChange={(e) => updateSection('eligibility', {...details.eligibility, rules: e.target.value})} />
+
+            <h3 className="font-bold text-lg">Financial Requirements</h3>
+            <textarea className="w-full p-2 border rounded" placeholder="Financial Requirements" value={details.financial?.requirements || ''} onChange={(e) => updateSection('financial', {...details.financial, requirements: e.target.value})} />
           </div>
         )}
-        {activeTab === 'claims' && <p>Claims & Evidence Manager</p>}
+        {activeTab === 'claims' && <p className="text-slate-500">Claims & Evidence Manager UI pending implementation.</p>}
         {activeTab === 'workflow' && (
           <div className="space-y-4">
             <p>Current Status: <span className="font-bold">{details.verificationStatus}</span></p>
@@ -95,7 +89,7 @@ export function VisaDetailEditorPage() {
             </div>
           </div>
         )}
-        {activeTab === 'history' && <p>Version History</p>}
+        {activeTab === 'history' && <p className="text-slate-500">Version History UI pending implementation.</p>}
       </div>
       
       <div className="flex justify-end gap-4">
