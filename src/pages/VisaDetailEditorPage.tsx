@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft } from 'lucide-react';
+import { ClaimsManager } from '../components/admin/ClaimsManager';
+import { VersionHistoryManager } from '../components/admin/VersionHistoryManager';
 
 export function VisaDetailEditorPage() {
   const { programId } = useParams();
@@ -43,7 +45,6 @@ export function VisaDetailEditorPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
     });
-    // For simplicity, just reload
     window.location.reload();
   };
 
@@ -76,7 +77,7 @@ export function VisaDetailEditorPage() {
             <textarea className="w-full p-2 border rounded" placeholder="Financial Requirements" value={details.financial?.requirements || ''} onChange={(e) => updateSection('financial', {...details.financial, requirements: e.target.value})} />
           </div>
         )}
-        {activeTab === 'claims' && <p className="text-slate-500">Claims & Evidence Manager UI pending implementation.</p>}
+        {activeTab === 'claims' && <ClaimsManager programId={programId!} />}
         {activeTab === 'workflow' && (
           <div className="space-y-4">
             <p>Current Status: <span className="font-bold">{details.verificationStatus}</span></p>
@@ -89,7 +90,7 @@ export function VisaDetailEditorPage() {
             </div>
           </div>
         )}
-        {activeTab === 'history' && <p className="text-slate-500">Version History UI pending implementation.</p>}
+        {activeTab === 'history' && <VersionHistoryManager programId={programId!} />}
       </div>
       
       <div className="flex justify-end gap-4">
