@@ -20,7 +20,7 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
       path: '/tools/cost-calculator',
       badge: 'NEW',
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
-      subText: 'Calculate Govt & Total Fees'
+      subText: 'Govt & Total Fees'
     },
     {
       title: 'Proof of Funds Calculator',
@@ -29,25 +29,25 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
       path: '/tools/funds-calculator',
       badge: 'NEW',
       badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
-      subText: 'Statutory Balance Check'
+      subText: 'Statutory Balance'
     },
     {
-      title: 'Visa Timeline Planner',
-      shortTitle: 'Timeline Planner',
-      icon: '📅',
-      path: '/tools/timeline-planner',
+      title: 'Visa Stay & Expiry Calculator',
+      shortTitle: 'Stay Calculator',
+      icon: '⏳',
+      path: '/tools/stay-calculator',
       badge: 'NEW',
       badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-400/40',
-      subText: 'Milestone Roadmap'
+      subText: 'Schengen 90/180 & Validity'
     },
     {
-      title: 'Smart Document Checklist',
-      shortTitle: 'Document Checklist',
-      icon: '📋',
-      path: '/tools/document-checklist',
+      title: 'Visa Readiness Checker',
+      shortTitle: 'Readiness Checker',
+      icon: '🛡️',
+      path: '/tools/readiness-checker',
       badge: 'NEW',
       badgeColor: 'bg-amber-500/25 text-amber-300 border-amber-400/40',
-      subText: 'Interactive Evidence Vault'
+      subText: '5-Pillar Evidence Audit'
     }
   ];
 
