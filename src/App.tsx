@@ -60,6 +60,7 @@ const VisaComparisonPage = React.lazy(() => import('./pages/tools/VisaComparison
 const SourceVerifierPage = React.lazy(() => import('./pages/tools/SourceVerifierPage').then(m => ({ default: m.SourceVerifierPage })));
 const IntelligenceHubPage = React.lazy(() => import('./pages/tools/IntelligenceHubPage').then(m => ({ default: m.IntelligenceHubPage })));
 const GlobalDataCoveragePage = React.lazy(() => import('./pages/GlobalDataCoveragePage').then(m => ({ default: m.GlobalDataCoveragePage })));
+const GlobalVerificationPilotPage = React.lazy(() => import('./pages/GlobalVerificationPilotPage').then(m => ({ default: m.GlobalVerificationPilotPage })));
 
 function PageLoadingFallback() {
   return (
@@ -2781,6 +2782,7 @@ export default function App() {
   const intelligenceHubPaths = ['/tools/intelligence-hub', '/tools/intelligence-hub/', '/immigration-hub', '/immigration-hub/'];
   const isIntelligenceHub = intelligenceHubPaths.includes(routePath);
   const isGlobalDataCoverage = routePath === '/admin/global-data-coverage' || routePath === '/admin/global-data-coverage/';
+  const isGlobalVerificationPilot = routePath === '/admin/global-data-verification-pilot' || routePath === '/admin/global-data-verification-pilot/';
 
   // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
   const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
@@ -2815,7 +2817,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage &&
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -3425,6 +3427,8 @@ export default function App() {
           <IntelligenceHubPage onNavigate={navigate} />
         ) : isGlobalDataCoverage ? (
           <GlobalDataCoveragePage onNavigate={navigate} adminToken={adminToken} />
+        ) : isGlobalVerificationPilot ? (
+          <GlobalVerificationPilotPage onNavigate={navigate} adminToken={adminToken} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (
