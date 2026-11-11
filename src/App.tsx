@@ -50,6 +50,8 @@ const GlobalImmigrationHubPage = React.lazy(() => import('./pages/GlobalImmigrat
 const CountryImmigrationDetailPage = React.lazy(() => import('./pages/CountryImmigrationDetailPage').then(m => ({ default: m.CountryImmigrationDetailPage })));
 const CostCalculatorPage = React.lazy(() => import('./pages/tools/CostCalculatorPage').then(m => ({ default: m.CostCalculatorPage })));
 const FundsCalculatorPage = React.lazy(() => import('./pages/tools/FundsCalculatorPage').then(m => ({ default: m.FundsCalculatorPage })));
+const TimelinePlannerPage = React.lazy(() => import('./pages/tools/TimelinePlannerPage').then(m => ({ default: m.TimelinePlannerPage })));
+const DocumentChecklistPage = React.lazy(() => import('./pages/tools/DocumentChecklistPage').then(m => ({ default: m.DocumentChecklistPage })));
 
 function PageLoadingFallback() {
   return (
@@ -2760,6 +2762,8 @@ export default function App() {
   const isVerification = routePath === '/verification';
   const isCostCalculator = routePath === '/tools/cost-calculator' || routePath === '/tools/cost-calculator/';
   const isFundsCalculator = routePath === '/tools/funds-calculator' || routePath === '/tools/funds-calculator/';
+  const isTimelinePlanner = routePath === '/tools/timeline-planner' || routePath === '/tools/timeline-planner/';
+  const isDocumentChecklist = routePath === '/tools/document-checklist' || routePath === '/tools/document-checklist/';
 
   // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
   const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
@@ -2794,7 +2798,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator &&
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -3384,6 +3388,10 @@ export default function App() {
           <CostCalculatorPage onNavigate={navigate} />
         ) : isFundsCalculator ? (
           <FundsCalculatorPage onNavigate={navigate} />
+        ) : isTimelinePlanner ? (
+          <TimelinePlannerPage onNavigate={navigate} />
+        ) : isDocumentChecklist ? (
+          <DocumentChecklistPage onNavigate={navigate} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (

@@ -14,40 +14,40 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
 }) => {
   const tools = [
     {
-      title: 'Dummy Ticket - Flight / Hotel',
-      shortTitle: 'Dummy Ticket',
-      icon: '✈️',
-      path: '/dummy-ticket',
-      badge: 'FREE GUIDE',
+      title: 'Visa Cost Calculator',
+      shortTitle: 'Cost Calculator',
+      icon: '💵',
+      path: '/tools/cost-calculator',
+      badge: 'NEW',
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
-      subText: 'Flight + Hotel Reservation - FREE Guide'
+      subText: 'Calculate Govt & Total Fees'
     },
     {
-      title: 'Cover Letter Generator',
-      shortTitle: 'Cover Letter',
-      icon: '📄',
-      path: '/cover-letter-generator',
-      badge: 'FREE',
+      title: 'Proof of Funds Calculator',
+      shortTitle: 'Funds Calculator',
+      icon: '🏦',
+      path: '/tools/funds-calculator',
+      badge: 'NEW',
       badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
-      subText: 'Use Free'
+      subText: 'Statutory Balance Check'
     },
     {
-      title: 'Embassy Slot Alert',
-      shortTitle: 'Slot Alert',
-      icon: '🔔',
-      path: '/embassy-slot-alert',
-      badge: 'FREE',
-      badgeColor: 'bg-amber-500/25 text-amber-300 border-amber-400/40',
-      subText: 'Use Free'
-    },
-    {
-      title: 'Visa Photo Resizer (300 DPI)',
-      shortTitle: 'Photo Resizer',
-      icon: '📷',
-      path: '/photo-resizer',
-      badge: 'FREE',
+      title: 'Visa Timeline Planner',
+      shortTitle: 'Timeline Planner',
+      icon: '📅',
+      path: '/tools/timeline-planner',
+      badge: 'NEW',
       badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-400/40',
-      subText: 'Use Free'
+      subText: 'Milestone Roadmap'
+    },
+    {
+      title: 'Smart Document Checklist',
+      shortTitle: 'Document Checklist',
+      icon: '📋',
+      path: '/tools/document-checklist',
+      badge: 'NEW',
+      badgeColor: 'bg-amber-500/25 text-amber-300 border-amber-400/40',
+      subText: 'Interactive Evidence Vault'
     }
   ];
 
