@@ -14,40 +14,40 @@ export const TopFreeToolsStrip: React.FC<TopFreeToolsStripProps> = ({
 }) => {
   const tools = [
     {
-      title: 'Visa Cost Calculator',
-      shortTitle: 'Cost Calculator',
-      icon: '💵',
-      path: '/tools/cost-calculator',
+      title: 'Immigration Intelligence Hub',
+      shortTitle: 'Intelligence Hub',
+      icon: '🧭',
+      path: '/tools/intelligence-hub',
       badge: 'NEW',
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
-      subText: 'Govt & Total Fees'
+      subText: 'Unified Discovery Portal'
     },
     {
-      title: 'Proof of Funds Calculator',
-      shortTitle: 'Funds Calculator',
-      icon: '🏦',
-      path: '/tools/funds-calculator',
+      title: 'Public Source Verifier',
+      shortTitle: 'Source Verifier',
+      icon: '🌐',
+      path: '/tools/source-verifier',
       badge: 'NEW',
       badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
-      subText: 'Statutory Balance'
+      subText: 'Official Portal Audit'
     },
     {
-      title: 'Visa Stay & Expiry Calculator',
-      shortTitle: 'Stay Calculator',
-      icon: '⏳',
-      path: '/tools/stay-calculator',
+      title: 'Advanced Eligibility Checker',
+      shortTitle: 'Eligibility Checker',
+      icon: '✅',
+      path: '/tools/eligibility-checker',
       badge: 'NEW',
       badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-400/40',
-      subText: 'Schengen 90/180 & Validity'
+      subText: 'Statutory Audit'
     },
     {
-      title: 'Visa Readiness Checker',
-      shortTitle: 'Readiness Checker',
-      icon: '🛡️',
-      path: '/tools/readiness-checker',
+      title: 'Family Visa Planner',
+      shortTitle: 'Family Planner',
+      icon: '👨‍👩‍👧‍👦',
+      path: '/tools/family-planner',
       badge: 'NEW',
       badgeColor: 'bg-amber-500/25 text-amber-300 border-amber-400/40',
-      subText: '5-Pillar Evidence Audit'
+      subText: 'Dependants & Fee Caps'
     }
   ];
 

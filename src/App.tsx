@@ -54,6 +54,12 @@ const TimelinePlannerPage = React.lazy(() => import('./pages/tools/TimelinePlann
 const DocumentChecklistPage = React.lazy(() => import('./pages/tools/DocumentChecklistPage').then(m => ({ default: m.DocumentChecklistPage })));
 const StayCalculatorPage = React.lazy(() => import('./pages/tools/StayCalculatorPage').then(m => ({ default: m.StayCalculatorPage })));
 const ReadinessCheckerPage = React.lazy(() => import('./pages/tools/ReadinessCheckerPage').then(m => ({ default: m.ReadinessCheckerPage })));
+const EligibilityCheckerPage = React.lazy(() => import('./pages/tools/EligibilityCheckerPage').then(m => ({ default: m.EligibilityCheckerPage })));
+const FamilyPlannerPage = React.lazy(() => import('./pages/tools/FamilyPlannerPage').then(m => ({ default: m.FamilyPlannerPage })));
+const VisaComparisonPage = React.lazy(() => import('./pages/tools/VisaComparisonPage').then(m => ({ default: m.VisaComparisonPage })));
+const SourceVerifierPage = React.lazy(() => import('./pages/tools/SourceVerifierPage').then(m => ({ default: m.SourceVerifierPage })));
+const IntelligenceHubPage = React.lazy(() => import('./pages/tools/IntelligenceHubPage').then(m => ({ default: m.IntelligenceHubPage })));
+const GlobalDataCoveragePage = React.lazy(() => import('./pages/GlobalDataCoveragePage').then(m => ({ default: m.GlobalDataCoveragePage })));
 
 function PageLoadingFallback() {
   return (
@@ -2768,6 +2774,13 @@ export default function App() {
   const isDocumentChecklist = routePath === '/tools/document-checklist' || routePath === '/tools/document-checklist/';
   const isStayCalculator = routePath === '/tools/stay-calculator' || routePath === '/tools/stay-calculator/';
   const isReadinessChecker = routePath === '/tools/readiness-checker' || routePath === '/tools/readiness-checker/';
+  const isEligibilityChecker = routePath === '/tools/eligibility-checker' || routePath === '/tools/eligibility-checker/';
+  const isFamilyPlanner = routePath === '/tools/family-planner' || routePath === '/tools/family-planner/';
+  const isVisaComparison = routePath === '/tools/visa-comparison' || routePath === '/tools/visa-comparison/';
+  const isSourceVerifier = routePath === '/tools/source-verifier' || routePath === '/tools/source-verifier/';
+  const intelligenceHubPaths = ['/tools/intelligence-hub', '/tools/intelligence-hub/', '/immigration-hub', '/immigration-hub/'];
+  const isIntelligenceHub = intelligenceHubPaths.includes(routePath);
+  const isGlobalDataCoverage = routePath === '/admin/global-data-coverage' || routePath === '/admin/global-data-coverage/';
 
   // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
   const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
@@ -2802,7 +2815,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker &&
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -3400,6 +3413,18 @@ export default function App() {
           <StayCalculatorPage onNavigate={navigate} />
         ) : isReadinessChecker ? (
           <ReadinessCheckerPage onNavigate={navigate} />
+        ) : isEligibilityChecker ? (
+          <EligibilityCheckerPage onNavigate={navigate} />
+        ) : isFamilyPlanner ? (
+          <FamilyPlannerPage onNavigate={navigate} />
+        ) : isVisaComparison ? (
+          <VisaComparisonPage onNavigate={navigate} />
+        ) : isSourceVerifier ? (
+          <SourceVerifierPage onNavigate={navigate} />
+        ) : isIntelligenceHub ? (
+          <IntelligenceHubPage onNavigate={navigate} />
+        ) : isGlobalDataCoverage ? (
+          <GlobalDataCoveragePage onNavigate={navigate} adminToken={adminToken} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (
