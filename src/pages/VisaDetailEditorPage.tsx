@@ -46,24 +46,56 @@ export function VisaDetailEditorPage() {
     { key: 'faq', label: 'FAQs' },
   ];
 
+  const [activeTab, setActiveTab] = useState('sections');
+
+  const handleStatusChange = async (newStatus: string) => {
+    await fetch(`/api/admin/visa-details/${programId}/status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+    // Reload details...
+  };
+
+  if (loading) return <div className="p-10 text-center">Loading...</div>;
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
       <button onClick={() => navigate('/admin/visa-management')} className="flex items-center gap-2 text-slate-500 hover:text-slate-800">
         <ArrowLeft size={16} /> Back to Admin
       </button>
-      <h1 className="text-3xl font-extrabold text-slate-900">Edit Visa Details: {programId}</h1>
+      <h1 className="text-3xl font-extrabold text-slate-900">Edit: {programId}</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {sections.map(section => (
-          <div key={section.key} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-800 mb-4">{section.label}</h2>
-            <textarea 
-              className="w-full h-32 p-3 border rounded-lg text-sm"
-              value={JSON.stringify(details[section.key] || {}, null, 2)}
-              onChange={(e) => updateSection(section.key, JSON.parse(e.target.value))}
-            />
-          </div>
+      <div className="flex gap-4 border-b">
+        {['sections', 'claims', 'workflow', 'history'].map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)} className={`capitalize px-4 py-2 ${activeTab === tab ? 'border-b-2 border-indigo-600 font-bold' : ''}`}>
+                {tab}
+            </button>
         ))}
+      </div>
+
+      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        {activeTab === 'sections' && (
+          <div className="space-y-4">
+            <h3 className="font-bold">Visa Overview</h3>
+            <input className="w-full p-2 border rounded" placeholder="Visa Title" value={details.visaOverview?.title || ''} onChange={(e) => updateSection('visaOverview', {...details.visaOverview, title: e.target.value})} />
+            <textarea className="w-full p-2 border rounded" placeholder="Description" value={details.visaOverview?.description || ''} onChange={(e) => updateSection('visaOverview', {...details.visaOverview, description: e.target.value})} />
+          </div>
+        )}
+        {activeTab === 'claims' && <p>Claims & Evidence Manager</p>}
+        {activeTab === 'workflow' && (
+          <div className="space-y-4">
+            <p>Current Status: <span className="font-bold">{details.verificationStatus}</span></p>
+            <div className="flex gap-2">
+              {['DRAFT', 'UNDER_REVIEW', 'VERIFIED', 'APPROVED', 'PUBLISHED'].map(status => (
+                <button key={status} onClick={() => handleStatusChange(status)} className="px-3 py-1 bg-slate-200 rounded hover:bg-slate-300">
+                  Set to {status}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {activeTab === 'history' && <p>Version History</p>}
       </div>
       
       <div className="flex justify-end gap-4">

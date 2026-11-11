@@ -3,10 +3,6 @@
     {
       "path": "/api/cron/immigration-sync",
       "schedule": "30 21 * * *"
-    },
-    {
-      "path": "/api/cron/slot-check",
-      "schedule": "*/30 * * * *"
     }
   ],
   "redirects": [

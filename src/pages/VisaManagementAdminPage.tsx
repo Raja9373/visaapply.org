@@ -3,39 +3,55 @@ import { Shield, Search, AlertCircle, CheckCircle, Clock, Edit } from 'lucide-re
 
 export function VisaManagementAdminPage({ navigate }: { navigate: (path: string) => void }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [stats, setStats] = useState<any>({ total: 0, enriched: 0, awaiting: 0 });
+  const [stats, setStats] = useState<any>({});
   const [records, setRecords] = useState<any[]>([]);
+  const [statusFilter, setStatusFilter] = useState('');
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetch(`/api/admin/visa-details?page=${page}&limit=${limit}&search=${searchQuery}`)
+    fetch('/api/admin/dashboard-stats')
+      .then(res => res.json())
+      .then(data => data.success && setStats(data.stats))
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    fetch(`/api/admin/visa-details?page=${page}&limit=${limit}&search=${searchQuery}&status=${statusFilter}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
           setRecords(data.data);
           setTotalPages(Math.ceil(data.total / limit));
-          setStats({
-            total: data.total,
-            enriched: 0, // Need to implement a separate stats endpoint or fetch from db
-            awaiting: 0
-          });
         }
       })
       .catch(console.error);
-  }, [page, limit, searchQuery]);
+  }, [page, limit, searchQuery, statusFilter]);
+
+  const statsItems = [
+    { label: 'Total', key: 'total' },
+    { label: 'Draft', key: 'draft' },
+    { label: 'Needs Evidence', key: 'needs_evidence' },
+    { label: 'Under Review', key: 'under_review' },
+    { label: 'Verified', key: 'verified' },
+    { label: 'Approved', key: 'approved' },
+    { label: 'Published', key: 'published' },
+    { label: 'Update Required', key: 'update_required' },
+  ];
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
       <h1 className="text-3xl font-extrabold text-slate-900">Visa Management Admin</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-500">Total Visa Records</h3>
-          <p className="text-3xl font-black text-slate-900 mt-2">{stats.total}</p>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {statsItems.map(item => (
+          <div key={item.key} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:border-indigo-300" onClick={() => setStatusFilter(item.key === 'total' ? '' : item.key.toUpperCase())}>
+            <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{item.label}</h3>
+            <p className="text-2xl font-black text-slate-900 mt-1">{stats[item.key] || 0}</p>
+          </div>
+        ))}
       </div>
 
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
