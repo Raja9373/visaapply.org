@@ -1091,6 +1091,38 @@ export const PRIORITY2_AUDIT_SUMMARY = {
     path: '/app/applet/backup_phase_3_6_5_1.tar.gz',
     sizeBytes: 796606871,
     sha256: 'eb0297e0eae5a4038f4a2c1af1238e7c26d72107f5c69bd72aa4ea83d7f46f6b'
+  },
+  preChangeBackupPhase36511: {
+    path: '/app/applet/backup_phase_3_6_5_1_1.tar.gz',
+    sizeBytes: 13420847,
+    sha256: '09311b82ae7401b6747e6fa62076370ac36dd3e38f26451f45c684a0d9b138b8'
+  },
+  preChangeBackupPhase36512: {
+    path: '/app/applet/backup_phase_3_6_5_1_2.tar.gz',
+    sizeBytes: 13428337,
+    sha256: '01f9f71bd8ea07b0c71f869696f686cb3542ae1162a270fa6fb6255f65f9daaf'
+  },
+  preChangeBackupPhase36513: {
+    path: '/app/applet/backup_phase_3_6_5_1_3.tar.gz',
+    sizeBytes: 13483570,
+    sha256: '3cfb6c492a421b7dc12a99ef0f7be2230f22e4899daaea103fee35ccb6bf660c'
+  },
+  phase36513Metrics: {
+    claimsAuditedCount: 900,
+    claimsGlobalCount: 570,
+    claimsChangedFromGlobal: 330,
+    claimsVerifiedCount: 829,
+    claimsPartiallyVerifiedCount: 71,
+    sectionsVerifiedCount: 269,
+    sectionsPartiallyVerifiedCount: 31,
+    scopeDistribution: {
+      GLOBAL: 570,
+      NATIONALITY_SPECIFIC: 80,
+      NATIONALITY_GROUP: 140,
+      RESIDENCE_SPECIFIC: 80,
+      CONSULAR_JURISDICTION_SPECIFIC: 30,
+      UNKNOWN: 0
+    }
   }
 };
 
