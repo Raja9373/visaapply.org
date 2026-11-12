@@ -63,6 +63,7 @@ const GlobalDataCoveragePage = React.lazy(() => import('./pages/GlobalDataCovera
 const GlobalVerificationPilotPage = React.lazy(() => import('./pages/GlobalVerificationPilotPage').then(m => ({ default: m.GlobalVerificationPilotPage })));
 const EvidenceTraceabilityAuditPage = React.lazy(() => import('./pages/EvidenceTraceabilityAuditPage').then(m => ({ default: m.EvidenceTraceabilityAuditPage })));
 const OfficialSourceMonitoringPage = React.lazy(() => import('./pages/OfficialSourceMonitoringPage').then(m => ({ default: m.OfficialSourceMonitoringPage })));
+const GlobalVisaCoverageAuditPage = React.lazy(() => import('./pages/GlobalVisaCoverageAuditPage').then(m => ({ default: m.GlobalVisaCoverageAuditPage })));
 
 function PageLoadingFallback() {
   return (
@@ -2787,6 +2788,7 @@ export default function App() {
   const isGlobalVerificationPilot = routePath === '/admin/global-data-verification-pilot' || routePath === '/admin/global-data-verification-pilot/';
   const isEvidenceTraceability = routePath === '/admin/evidence-traceability' || routePath === '/admin/evidence-traceability/';
   const isOfficialSourceMonitoring = routePath === '/admin/official-source-monitoring' || routePath === '/admin/official-source-monitoring/';
+  const isGlobalVisaCoverageAudit = routePath === '/admin/global-visa-coverage-audit' || routePath === '/admin/global-visa-coverage-audit/';
 
   // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
   const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
@@ -2821,7 +2823,7 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring &&
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring && !isGlobalVisaCoverageAudit &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
         cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
@@ -3437,6 +3439,8 @@ export default function App() {
           <EvidenceTraceabilityAuditPage onNavigate={navigate} adminToken={adminToken} />
         ) : isOfficialSourceMonitoring ? (
           <OfficialSourceMonitoringPage onNavigate={navigate} adminToken={adminToken} />
+        ) : isGlobalVisaCoverageAudit ? (
+          <GlobalVisaCoverageAuditPage onNavigate={navigate} adminToken={adminToken} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (
