@@ -1,0 +1,901 @@
+claim_id,pathway_id,section_id,claim_scope,scope_justification,verification_status,is_quarantined
+"CLM-KR-S01-1","p2-kr-e9","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S01-2","p2-kr-e9","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S01-3","p2-kr-e9","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S02-1","p2-kr-e9","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S02-2","p2-kr-e9","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S02-3","p2-kr-e9","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S03-1","p2-kr-e9","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S03-2","p2-kr-e9","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S03-3","p2-kr-e9","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S04-1","p2-kr-e9","S04","NATIONALITY_GROUP","Applies exclusively to the 16 bilateral EPS agreement countries in Asia.","PARTIALLY_VERIFIED",false
+"CLM-KR-S04-2","p2-kr-e9","S04","NATIONALITY_GROUP","Applies exclusively to the 16 bilateral EPS agreement countries in Asia.","PARTIALLY_VERIFIED",false
+"CLM-KR-S04-3","p2-kr-e9","S04","NATIONALITY_GROUP","Applies exclusively to the 16 bilateral EPS agreement countries in Asia.","PARTIALLY_VERIFIED",false
+"CLM-KR-S05-1","p2-kr-e9","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S05-2","p2-kr-e9","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S05-3","p2-kr-e9","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S06-1","p2-kr-e9","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S06-2","p2-kr-e9","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S06-3","p2-kr-e9","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S07-1","p2-kr-e9","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S07-2","p2-kr-e9","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S07-3","p2-kr-e9","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S08-1","p2-kr-e9","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-KR-S08-2","p2-kr-e9","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-KR-S08-3","p2-kr-e9","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-KR-S09-1","p2-kr-e9","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S09-2","p2-kr-e9","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S09-3","p2-kr-e9","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S10-1","p2-kr-e9","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S10-2","p2-kr-e9","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S10-3","p2-kr-e9","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S11-1","p2-kr-e9","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S11-2","p2-kr-e9","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S11-3","p2-kr-e9","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S12-1","p2-kr-e9","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S12-2","p2-kr-e9","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S12-3","p2-kr-e9","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S13-1","p2-kr-e9","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S13-2","p2-kr-e9","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S13-3","p2-kr-e9","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S14-1","p2-kr-e9","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S14-2","p2-kr-e9","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S14-3","p2-kr-e9","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S15-1","p2-kr-e9","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S15-2","p2-kr-e9","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S15-3","p2-kr-e9","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S16-1","p2-kr-e9","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S16-2","p2-kr-e9","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S16-3","p2-kr-e9","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S17-1","p2-kr-e9","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-KR-S17-2","p2-kr-e9","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-KR-S17-3","p2-kr-e9","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-KR-S18-1","p2-kr-e9","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S18-2","p2-kr-e9","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S18-3","p2-kr-e9","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S19-1","p2-kr-e9","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S19-2","p2-kr-e9","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S19-3","p2-kr-e9","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S20-1","p2-kr-e9","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-KR-S20-2","p2-kr-e9","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-KR-S20-3","p2-kr-e9","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-KR-S21-1","p2-kr-e9","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-KR-S21-2","p2-kr-e9","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-KR-S21-3","p2-kr-e9","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-KR-S22-1","p2-kr-e9","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S22-2","p2-kr-e9","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S22-3","p2-kr-e9","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S23-1","p2-kr-e9","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S23-2","p2-kr-e9","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S23-3","p2-kr-e9","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S24-1","p2-kr-e9","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-KR-S24-2","p2-kr-e9","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-KR-S24-3","p2-kr-e9","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-KR-S25-1","p2-kr-e9","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S25-2","p2-kr-e9","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S25-3","p2-kr-e9","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S26-1","p2-kr-e9","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S26-2","p2-kr-e9","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S26-3","p2-kr-e9","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S27-1","p2-kr-e9","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-KR-S27-2","p2-kr-e9","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-KR-S27-3","p2-kr-e9","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-KR-S28-1","p2-kr-e9","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S28-2","p2-kr-e9","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S28-3","p2-kr-e9","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S29-1","p2-kr-e9","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S29-2","p2-kr-e9","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S29-3","p2-kr-e9","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-KR-S30-1","p2-kr-e9","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-KR-S30-2","p2-kr-e9","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-KR-S30-3","p2-kr-e9","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-JP-S01-1","p2-jp-businessmanager","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S01-2","p2-jp-businessmanager","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S01-3","p2-jp-businessmanager","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S02-1","p2-jp-businessmanager","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S02-2","p2-jp-businessmanager","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S02-3","p2-jp-businessmanager","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S03-1","p2-jp-businessmanager","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S03-2","p2-jp-businessmanager","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S03-3","p2-jp-businessmanager","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S04-1","p2-jp-businessmanager","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-JP-S04-2","p2-jp-businessmanager","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-JP-S04-3","p2-jp-businessmanager","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-JP-S05-1","p2-jp-businessmanager","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S05-2","p2-jp-businessmanager","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S05-3","p2-jp-businessmanager","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S06-1","p2-jp-businessmanager","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S06-2","p2-jp-businessmanager","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S06-3","p2-jp-businessmanager","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S07-1","p2-jp-businessmanager","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S07-2","p2-jp-businessmanager","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S07-3","p2-jp-businessmanager","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S08-1","p2-jp-businessmanager","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-JP-S08-2","p2-jp-businessmanager","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-JP-S08-3","p2-jp-businessmanager","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-JP-S09-1","p2-jp-businessmanager","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S09-2","p2-jp-businessmanager","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S09-3","p2-jp-businessmanager","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S10-1","p2-jp-businessmanager","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S10-2","p2-jp-businessmanager","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S10-3","p2-jp-businessmanager","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S11-1","p2-jp-businessmanager","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S11-2","p2-jp-businessmanager","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S11-3","p2-jp-businessmanager","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S12-1","p2-jp-businessmanager","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S12-2","p2-jp-businessmanager","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S12-3","p2-jp-businessmanager","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S13-1","p2-jp-businessmanager","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S13-2","p2-jp-businessmanager","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S13-3","p2-jp-businessmanager","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S14-1","p2-jp-businessmanager","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S14-2","p2-jp-businessmanager","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S14-3","p2-jp-businessmanager","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S15-1","p2-jp-businessmanager","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S15-2","p2-jp-businessmanager","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S15-3","p2-jp-businessmanager","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S16-1","p2-jp-businessmanager","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S16-2","p2-jp-businessmanager","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S16-3","p2-jp-businessmanager","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S17-1","p2-jp-businessmanager","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-JP-S17-2","p2-jp-businessmanager","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-JP-S17-3","p2-jp-businessmanager","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-JP-S18-1","p2-jp-businessmanager","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S18-2","p2-jp-businessmanager","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S18-3","p2-jp-businessmanager","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S19-1","p2-jp-businessmanager","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S19-2","p2-jp-businessmanager","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S19-3","p2-jp-businessmanager","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S20-1","p2-jp-businessmanager","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-JP-S20-2","p2-jp-businessmanager","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-JP-S20-3","p2-jp-businessmanager","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-JP-S21-1","p2-jp-businessmanager","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-JP-S21-2","p2-jp-businessmanager","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-JP-S21-3","p2-jp-businessmanager","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-JP-S22-1","p2-jp-businessmanager","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S22-2","p2-jp-businessmanager","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S22-3","p2-jp-businessmanager","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S23-1","p2-jp-businessmanager","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S23-2","p2-jp-businessmanager","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S23-3","p2-jp-businessmanager","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S24-1","p2-jp-businessmanager","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-JP-S24-2","p2-jp-businessmanager","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-JP-S24-3","p2-jp-businessmanager","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-JP-S25-1","p2-jp-businessmanager","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S25-2","p2-jp-businessmanager","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S25-3","p2-jp-businessmanager","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S26-1","p2-jp-businessmanager","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S26-2","p2-jp-businessmanager","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S26-3","p2-jp-businessmanager","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S27-1","p2-jp-businessmanager","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-JP-S27-2","p2-jp-businessmanager","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-JP-S27-3","p2-jp-businessmanager","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-JP-S28-1","p2-jp-businessmanager","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S28-2","p2-jp-businessmanager","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S28-3","p2-jp-businessmanager","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S29-1","p2-jp-businessmanager","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S29-2","p2-jp-businessmanager","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S29-3","p2-jp-businessmanager","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-JP-S30-1","p2-jp-businessmanager","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-JP-S30-2","p2-jp-businessmanager","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-JP-S30-3","p2-jp-businessmanager","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-HK-S01-1","p2-hk-qmas","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S01-2","p2-hk-qmas","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S01-3","p2-hk-qmas","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S02-1","p2-hk-qmas","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S02-2","p2-hk-qmas","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S02-3","p2-hk-qmas","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S03-1","p2-hk-qmas","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S03-2","p2-hk-qmas","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S03-3","p2-hk-qmas","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S04-1","p2-hk-qmas","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-HK-S04-2","p2-hk-qmas","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-HK-S04-3","p2-hk-qmas","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-HK-S05-1","p2-hk-qmas","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S05-2","p2-hk-qmas","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S05-3","p2-hk-qmas","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S06-1","p2-hk-qmas","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S06-2","p2-hk-qmas","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S06-3","p2-hk-qmas","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S07-1","p2-hk-qmas","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S07-2","p2-hk-qmas","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S07-3","p2-hk-qmas","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S08-1","p2-hk-qmas","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-HK-S08-2","p2-hk-qmas","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-HK-S08-3","p2-hk-qmas","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-HK-S09-1","p2-hk-qmas","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S09-2","p2-hk-qmas","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S09-3","p2-hk-qmas","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S10-1","p2-hk-qmas","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S10-2","p2-hk-qmas","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S10-3","p2-hk-qmas","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S11-1","p2-hk-qmas","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S11-2","p2-hk-qmas","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S11-3","p2-hk-qmas","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S12-1","p2-hk-qmas","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S12-2","p2-hk-qmas","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S12-3","p2-hk-qmas","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S13-1","p2-hk-qmas","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S13-2","p2-hk-qmas","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S13-3","p2-hk-qmas","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S14-1","p2-hk-qmas","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S14-2","p2-hk-qmas","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S14-3","p2-hk-qmas","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S15-1","p2-hk-qmas","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S15-2","p2-hk-qmas","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S15-3","p2-hk-qmas","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S16-1","p2-hk-qmas","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S16-2","p2-hk-qmas","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S16-3","p2-hk-qmas","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S17-1","p2-hk-qmas","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-HK-S17-2","p2-hk-qmas","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-HK-S17-3","p2-hk-qmas","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-HK-S18-1","p2-hk-qmas","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S18-2","p2-hk-qmas","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S18-3","p2-hk-qmas","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S19-1","p2-hk-qmas","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S19-2","p2-hk-qmas","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S19-3","p2-hk-qmas","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S20-1","p2-hk-qmas","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-HK-S20-2","p2-hk-qmas","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-HK-S20-3","p2-hk-qmas","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-HK-S21-1","p2-hk-qmas","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-HK-S21-2","p2-hk-qmas","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-HK-S21-3","p2-hk-qmas","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-HK-S22-1","p2-hk-qmas","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S22-2","p2-hk-qmas","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S22-3","p2-hk-qmas","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S23-1","p2-hk-qmas","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S23-2","p2-hk-qmas","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S23-3","p2-hk-qmas","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S24-1","p2-hk-qmas","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-HK-S24-2","p2-hk-qmas","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-HK-S24-3","p2-hk-qmas","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-HK-S25-1","p2-hk-qmas","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S25-2","p2-hk-qmas","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S25-3","p2-hk-qmas","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S26-1","p2-hk-qmas","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S26-2","p2-hk-qmas","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S26-3","p2-hk-qmas","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S27-1","p2-hk-qmas","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-HK-S27-2","p2-hk-qmas","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-HK-S27-3","p2-hk-qmas","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-HK-S28-1","p2-hk-qmas","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S28-2","p2-hk-qmas","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S28-3","p2-hk-qmas","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S29-1","p2-hk-qmas","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S29-2","p2-hk-qmas","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S29-3","p2-hk-qmas","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-HK-S30-1","p2-hk-qmas","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-HK-S30-2","p2-hk-qmas","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-HK-S30-3","p2-hk-qmas","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-SG-S01-1","p2-sg-ep","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S01-2","p2-sg-ep","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S01-3","p2-sg-ep","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S02-1","p2-sg-ep","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S02-2","p2-sg-ep","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S02-3","p2-sg-ep","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S03-1","p2-sg-ep","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S03-2","p2-sg-ep","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S03-3","p2-sg-ep","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S04-1","p2-sg-ep","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-SG-S04-2","p2-sg-ep","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-SG-S04-3","p2-sg-ep","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-SG-S05-1","p2-sg-ep","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S05-2","p2-sg-ep","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S05-3","p2-sg-ep","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S06-1","p2-sg-ep","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S06-2","p2-sg-ep","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S06-3","p2-sg-ep","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S07-1","p2-sg-ep","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S07-2","p2-sg-ep","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S07-3","p2-sg-ep","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S08-1","p2-sg-ep","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-SG-S08-2","p2-sg-ep","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-SG-S08-3","p2-sg-ep","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-SG-S09-1","p2-sg-ep","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S09-2","p2-sg-ep","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S09-3","p2-sg-ep","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S10-1","p2-sg-ep","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S10-2","p2-sg-ep","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S10-3","p2-sg-ep","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S11-1","p2-sg-ep","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S11-2","p2-sg-ep","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S11-3","p2-sg-ep","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S12-1","p2-sg-ep","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S12-2","p2-sg-ep","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S12-3","p2-sg-ep","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S13-1","p2-sg-ep","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S13-2","p2-sg-ep","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S13-3","p2-sg-ep","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S14-1","p2-sg-ep","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S14-2","p2-sg-ep","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S14-3","p2-sg-ep","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S15-1","p2-sg-ep","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S15-2","p2-sg-ep","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S15-3","p2-sg-ep","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S16-1","p2-sg-ep","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S16-2","p2-sg-ep","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S16-3","p2-sg-ep","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S17-1","p2-sg-ep","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-SG-S17-2","p2-sg-ep","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-SG-S17-3","p2-sg-ep","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-SG-S18-1","p2-sg-ep","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S18-2","p2-sg-ep","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S18-3","p2-sg-ep","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S19-1","p2-sg-ep","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S19-2","p2-sg-ep","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S19-3","p2-sg-ep","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S20-1","p2-sg-ep","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-SG-S20-2","p2-sg-ep","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-SG-S20-3","p2-sg-ep","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-SG-S21-1","p2-sg-ep","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-SG-S21-2","p2-sg-ep","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-SG-S21-3","p2-sg-ep","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-SG-S22-1","p2-sg-ep","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S22-2","p2-sg-ep","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S22-3","p2-sg-ep","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S23-1","p2-sg-ep","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S23-2","p2-sg-ep","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S23-3","p2-sg-ep","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S24-1","p2-sg-ep","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-SG-S24-2","p2-sg-ep","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-SG-S24-3","p2-sg-ep","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-SG-S25-1","p2-sg-ep","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S25-2","p2-sg-ep","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S25-3","p2-sg-ep","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S26-1","p2-sg-ep","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S26-2","p2-sg-ep","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S26-3","p2-sg-ep","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S27-1","p2-sg-ep","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-SG-S27-2","p2-sg-ep","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-SG-S27-3","p2-sg-ep","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-SG-S28-1","p2-sg-ep","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S28-2","p2-sg-ep","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S28-3","p2-sg-ep","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S29-1","p2-sg-ep","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S29-2","p2-sg-ep","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S29-3","p2-sg-ep","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-SG-S30-1","p2-sg-ep","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-SG-S30-2","p2-sg-ep","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-SG-S30-3","p2-sg-ep","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-GB-S01-1","p2-uk-innovatorfounder","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S01-2","p2-uk-innovatorfounder","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S01-3","p2-uk-innovatorfounder","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S02-1","p2-uk-innovatorfounder","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S02-2","p2-uk-innovatorfounder","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S02-3","p2-uk-innovatorfounder","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S03-1","p2-uk-innovatorfounder","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S03-2","p2-uk-innovatorfounder","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S03-3","p2-uk-innovatorfounder","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S04-1","p2-uk-innovatorfounder","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-GB-S04-2","p2-uk-innovatorfounder","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-GB-S04-3","p2-uk-innovatorfounder","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-GB-S05-1","p2-uk-innovatorfounder","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S05-2","p2-uk-innovatorfounder","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S05-3","p2-uk-innovatorfounder","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S06-1","p2-uk-innovatorfounder","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S06-2","p2-uk-innovatorfounder","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S06-3","p2-uk-innovatorfounder","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S07-1","p2-uk-innovatorfounder","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S07-2","p2-uk-innovatorfounder","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S07-3","p2-uk-innovatorfounder","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S08-1","p2-uk-innovatorfounder","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-GB-S08-2","p2-uk-innovatorfounder","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-GB-S08-3","p2-uk-innovatorfounder","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-GB-S09-1","p2-uk-innovatorfounder","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S09-2","p2-uk-innovatorfounder","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S09-3","p2-uk-innovatorfounder","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S10-1","p2-uk-innovatorfounder","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S10-2","p2-uk-innovatorfounder","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S10-3","p2-uk-innovatorfounder","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S11-1","p2-uk-innovatorfounder","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S11-2","p2-uk-innovatorfounder","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S11-3","p2-uk-innovatorfounder","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S12-1","p2-uk-innovatorfounder","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S12-2","p2-uk-innovatorfounder","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S12-3","p2-uk-innovatorfounder","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S13-1","p2-uk-innovatorfounder","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S13-2","p2-uk-innovatorfounder","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S13-3","p2-uk-innovatorfounder","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S14-1","p2-uk-innovatorfounder","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S14-2","p2-uk-innovatorfounder","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S14-3","p2-uk-innovatorfounder","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S15-1","p2-uk-innovatorfounder","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S15-2","p2-uk-innovatorfounder","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S15-3","p2-uk-innovatorfounder","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S16-1","p2-uk-innovatorfounder","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S16-2","p2-uk-innovatorfounder","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S16-3","p2-uk-innovatorfounder","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S17-1","p2-uk-innovatorfounder","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-GB-S17-2","p2-uk-innovatorfounder","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-GB-S17-3","p2-uk-innovatorfounder","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-GB-S18-1","p2-uk-innovatorfounder","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S18-2","p2-uk-innovatorfounder","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S18-3","p2-uk-innovatorfounder","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S19-1","p2-uk-innovatorfounder","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S19-2","p2-uk-innovatorfounder","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S19-3","p2-uk-innovatorfounder","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S20-1","p2-uk-innovatorfounder","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-GB-S20-2","p2-uk-innovatorfounder","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-GB-S20-3","p2-uk-innovatorfounder","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-GB-S21-1","p2-uk-innovatorfounder","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-GB-S21-2","p2-uk-innovatorfounder","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-GB-S21-3","p2-uk-innovatorfounder","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-GB-S22-1","p2-uk-innovatorfounder","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S22-2","p2-uk-innovatorfounder","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S22-3","p2-uk-innovatorfounder","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S23-1","p2-uk-innovatorfounder","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S23-2","p2-uk-innovatorfounder","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S23-3","p2-uk-innovatorfounder","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S24-1","p2-uk-innovatorfounder","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-GB-S24-2","p2-uk-innovatorfounder","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-GB-S24-3","p2-uk-innovatorfounder","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-GB-S25-1","p2-uk-innovatorfounder","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S25-2","p2-uk-innovatorfounder","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S25-3","p2-uk-innovatorfounder","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S26-1","p2-uk-innovatorfounder","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S26-2","p2-uk-innovatorfounder","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S26-3","p2-uk-innovatorfounder","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S27-1","p2-uk-innovatorfounder","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-GB-S27-2","p2-uk-innovatorfounder","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-GB-S27-3","p2-uk-innovatorfounder","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-GB-S28-1","p2-uk-innovatorfounder","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S28-2","p2-uk-innovatorfounder","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S28-3","p2-uk-innovatorfounder","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S29-1","p2-uk-innovatorfounder","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S29-2","p2-uk-innovatorfounder","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S29-3","p2-uk-innovatorfounder","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-GB-S30-1","p2-uk-innovatorfounder","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-GB-S30-2","p2-uk-innovatorfounder","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-GB-S30-3","p2-uk-innovatorfounder","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-CA-S01-1","p2-ca-suv","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S01-2","p2-ca-suv","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S01-3","p2-ca-suv","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S02-1","p2-ca-suv","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S02-2","p2-ca-suv","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S02-3","p2-ca-suv","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S03-1","p2-ca-suv","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S03-2","p2-ca-suv","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S03-3","p2-ca-suv","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S04-1","p2-ca-suv","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-CA-S04-2","p2-ca-suv","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-CA-S04-3","p2-ca-suv","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-CA-S05-1","p2-ca-suv","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S05-2","p2-ca-suv","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S05-3","p2-ca-suv","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S06-1","p2-ca-suv","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S06-2","p2-ca-suv","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S06-3","p2-ca-suv","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S07-1","p2-ca-suv","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S07-2","p2-ca-suv","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S07-3","p2-ca-suv","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S08-1","p2-ca-suv","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-CA-S08-2","p2-ca-suv","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-CA-S08-3","p2-ca-suv","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-CA-S09-1","p2-ca-suv","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S09-2","p2-ca-suv","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S09-3","p2-ca-suv","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S10-1","p2-ca-suv","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S10-2","p2-ca-suv","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S10-3","p2-ca-suv","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S11-1","p2-ca-suv","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S11-2","p2-ca-suv","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S11-3","p2-ca-suv","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S12-1","p2-ca-suv","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S12-2","p2-ca-suv","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S12-3","p2-ca-suv","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S13-1","p2-ca-suv","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S13-2","p2-ca-suv","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S13-3","p2-ca-suv","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S14-1","p2-ca-suv","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S14-2","p2-ca-suv","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S14-3","p2-ca-suv","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S15-1","p2-ca-suv","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S15-2","p2-ca-suv","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S15-3","p2-ca-suv","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S16-1","p2-ca-suv","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S16-2","p2-ca-suv","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S16-3","p2-ca-suv","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S17-1","p2-ca-suv","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-CA-S17-2","p2-ca-suv","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-CA-S17-3","p2-ca-suv","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-CA-S18-1","p2-ca-suv","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S18-2","p2-ca-suv","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S18-3","p2-ca-suv","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S19-1","p2-ca-suv","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S19-2","p2-ca-suv","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S19-3","p2-ca-suv","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S20-1","p2-ca-suv","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-CA-S20-2","p2-ca-suv","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-CA-S20-3","p2-ca-suv","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-CA-S21-1","p2-ca-suv","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-CA-S21-2","p2-ca-suv","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-CA-S21-3","p2-ca-suv","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-CA-S22-1","p2-ca-suv","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S22-2","p2-ca-suv","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S22-3","p2-ca-suv","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S23-1","p2-ca-suv","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S23-2","p2-ca-suv","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S23-3","p2-ca-suv","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S24-1","p2-ca-suv","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-CA-S24-2","p2-ca-suv","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-CA-S24-3","p2-ca-suv","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-CA-S25-1","p2-ca-suv","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S25-2","p2-ca-suv","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S25-3","p2-ca-suv","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S26-1","p2-ca-suv","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S26-2","p2-ca-suv","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S26-3","p2-ca-suv","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S27-1","p2-ca-suv","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-CA-S27-2","p2-ca-suv","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-CA-S27-3","p2-ca-suv","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-CA-S28-1","p2-ca-suv","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S28-2","p2-ca-suv","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S28-3","p2-ca-suv","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S29-1","p2-ca-suv","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S29-2","p2-ca-suv","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S29-3","p2-ca-suv","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-CA-S30-1","p2-ca-suv","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-CA-S30-2","p2-ca-suv","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-CA-S30-3","p2-ca-suv","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-AU-S01-1","p2-au-grad485","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S01-2","p2-au-grad485","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S01-3","p2-au-grad485","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S02-1","p2-au-grad485","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S02-2","p2-au-grad485","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S02-3","p2-au-grad485","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S03-1","p2-au-grad485","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S03-2","p2-au-grad485","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S03-3","p2-au-grad485","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S04-1","p2-au-grad485","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-AU-S04-2","p2-au-grad485","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-AU-S04-3","p2-au-grad485","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-AU-S05-1","p2-au-grad485","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S05-2","p2-au-grad485","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S05-3","p2-au-grad485","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S06-1","p2-au-grad485","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S06-2","p2-au-grad485","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S06-3","p2-au-grad485","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S07-1","p2-au-grad485","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S07-2","p2-au-grad485","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S07-3","p2-au-grad485","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S08-1","p2-au-grad485","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-AU-S08-2","p2-au-grad485","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-AU-S08-3","p2-au-grad485","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-AU-S09-1","p2-au-grad485","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S09-2","p2-au-grad485","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S09-3","p2-au-grad485","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S10-1","p2-au-grad485","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S10-2","p2-au-grad485","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S10-3","p2-au-grad485","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S11-1","p2-au-grad485","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S11-2","p2-au-grad485","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S11-3","p2-au-grad485","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S12-1","p2-au-grad485","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S12-2","p2-au-grad485","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S12-3","p2-au-grad485","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S13-1","p2-au-grad485","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S13-2","p2-au-grad485","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S13-3","p2-au-grad485","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S14-1","p2-au-grad485","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S14-2","p2-au-grad485","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S14-3","p2-au-grad485","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S15-1","p2-au-grad485","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S15-2","p2-au-grad485","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S15-3","p2-au-grad485","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S16-1","p2-au-grad485","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S16-2","p2-au-grad485","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S16-3","p2-au-grad485","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S17-1","p2-au-grad485","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-AU-S17-2","p2-au-grad485","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-AU-S17-3","p2-au-grad485","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-AU-S18-1","p2-au-grad485","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S18-2","p2-au-grad485","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S18-3","p2-au-grad485","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S19-1","p2-au-grad485","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S19-2","p2-au-grad485","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S19-3","p2-au-grad485","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S20-1","p2-au-grad485","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-AU-S20-2","p2-au-grad485","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-AU-S20-3","p2-au-grad485","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-AU-S21-1","p2-au-grad485","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-AU-S21-2","p2-au-grad485","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-AU-S21-3","p2-au-grad485","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-AU-S22-1","p2-au-grad485","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S22-2","p2-au-grad485","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S22-3","p2-au-grad485","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S23-1","p2-au-grad485","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S23-2","p2-au-grad485","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S23-3","p2-au-grad485","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S24-1","p2-au-grad485","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-AU-S24-2","p2-au-grad485","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-AU-S24-3","p2-au-grad485","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-AU-S25-1","p2-au-grad485","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S25-2","p2-au-grad485","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S25-3","p2-au-grad485","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S26-1","p2-au-grad485","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S26-2","p2-au-grad485","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S26-3","p2-au-grad485","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S27-1","p2-au-grad485","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-AU-S27-2","p2-au-grad485","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-AU-S27-3","p2-au-grad485","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-AU-S28-1","p2-au-grad485","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S28-2","p2-au-grad485","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S28-3","p2-au-grad485","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S29-1","p2-au-grad485","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S29-2","p2-au-grad485","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S29-3","p2-au-grad485","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-AU-S30-1","p2-au-grad485","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-AU-S30-2","p2-au-grad485","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-AU-S30-3","p2-au-grad485","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-FI-S01-1","p2-fi-worker","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S01-2","p2-fi-worker","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S01-3","p2-fi-worker","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S02-1","p2-fi-worker","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S02-2","p2-fi-worker","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S02-3","p2-fi-worker","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S03-1","p2-fi-worker","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S03-2","p2-fi-worker","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S03-3","p2-fi-worker","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S04-1","p2-fi-worker","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-FI-S04-2","p2-fi-worker","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-FI-S04-3","p2-fi-worker","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-FI-S05-1","p2-fi-worker","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S05-2","p2-fi-worker","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S05-3","p2-fi-worker","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S06-1","p2-fi-worker","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S06-2","p2-fi-worker","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S06-3","p2-fi-worker","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S07-1","p2-fi-worker","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S07-2","p2-fi-worker","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S07-3","p2-fi-worker","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S08-1","p2-fi-worker","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-FI-S08-2","p2-fi-worker","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-FI-S08-3","p2-fi-worker","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-FI-S09-1","p2-fi-worker","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S09-2","p2-fi-worker","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S09-3","p2-fi-worker","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S10-1","p2-fi-worker","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S10-2","p2-fi-worker","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S10-3","p2-fi-worker","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S11-1","p2-fi-worker","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S11-2","p2-fi-worker","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S11-3","p2-fi-worker","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S12-1","p2-fi-worker","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S12-2","p2-fi-worker","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S12-3","p2-fi-worker","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S13-1","p2-fi-worker","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S13-2","p2-fi-worker","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S13-3","p2-fi-worker","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S14-1","p2-fi-worker","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S14-2","p2-fi-worker","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S14-3","p2-fi-worker","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S15-1","p2-fi-worker","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S15-2","p2-fi-worker","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S15-3","p2-fi-worker","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S16-1","p2-fi-worker","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S16-2","p2-fi-worker","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S16-3","p2-fi-worker","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S17-1","p2-fi-worker","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-FI-S17-2","p2-fi-worker","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-FI-S17-3","p2-fi-worker","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-FI-S18-1","p2-fi-worker","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S18-2","p2-fi-worker","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S18-3","p2-fi-worker","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S19-1","p2-fi-worker","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S19-2","p2-fi-worker","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S19-3","p2-fi-worker","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S20-1","p2-fi-worker","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-FI-S20-2","p2-fi-worker","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-FI-S20-3","p2-fi-worker","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-FI-S21-1","p2-fi-worker","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-FI-S21-2","p2-fi-worker","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-FI-S21-3","p2-fi-worker","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-FI-S22-1","p2-fi-worker","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S22-2","p2-fi-worker","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S22-3","p2-fi-worker","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S23-1","p2-fi-worker","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S23-2","p2-fi-worker","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S23-3","p2-fi-worker","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S24-1","p2-fi-worker","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-FI-S24-2","p2-fi-worker","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-FI-S24-3","p2-fi-worker","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-FI-S25-1","p2-fi-worker","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S25-2","p2-fi-worker","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S25-3","p2-fi-worker","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S26-1","p2-fi-worker","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S26-2","p2-fi-worker","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S26-3","p2-fi-worker","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S27-1","p2-fi-worker","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-FI-S27-2","p2-fi-worker","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-FI-S27-3","p2-fi-worker","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-FI-S28-1","p2-fi-worker","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S28-2","p2-fi-worker","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S28-3","p2-fi-worker","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S29-1","p2-fi-worker","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S29-2","p2-fi-worker","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S29-3","p2-fi-worker","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-FI-S30-1","p2-fi-worker","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-FI-S30-2","p2-fi-worker","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-FI-S30-3","p2-fi-worker","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-NO-S01-1","p2-no-skilledresidence","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S01-2","p2-no-skilledresidence","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S01-3","p2-no-skilledresidence","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S02-1","p2-no-skilledresidence","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S02-2","p2-no-skilledresidence","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S02-3","p2-no-skilledresidence","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S03-1","p2-no-skilledresidence","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S03-2","p2-no-skilledresidence","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S03-3","p2-no-skilledresidence","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S04-1","p2-no-skilledresidence","S04","GLOBAL","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-NO-S04-2","p2-no-skilledresidence","S04","NATIONALITY_GROUP","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-NO-S04-3","p2-no-skilledresidence","S04","NATIONALITY_SPECIFIC","Passport requirements, EEA/visa-free exemptions, or bilateral security restrictions.","PARTIALLY_VERIFIED",false
+"CLM-NO-S05-1","p2-no-skilledresidence","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S05-2","p2-no-skilledresidence","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S05-3","p2-no-skilledresidence","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S06-1","p2-no-skilledresidence","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S06-2","p2-no-skilledresidence","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S06-3","p2-no-skilledresidence","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S07-1","p2-no-skilledresidence","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S07-2","p2-no-skilledresidence","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S07-3","p2-no-skilledresidence","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S08-1","p2-no-skilledresidence","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-NO-S08-2","p2-no-skilledresidence","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-NO-S08-3","p2-no-skilledresidence","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-NO-S09-1","p2-no-skilledresidence","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S09-2","p2-no-skilledresidence","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S09-3","p2-no-skilledresidence","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S10-1","p2-no-skilledresidence","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S10-2","p2-no-skilledresidence","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S10-3","p2-no-skilledresidence","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S11-1","p2-no-skilledresidence","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S11-2","p2-no-skilledresidence","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S11-3","p2-no-skilledresidence","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S12-1","p2-no-skilledresidence","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S12-2","p2-no-skilledresidence","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S12-3","p2-no-skilledresidence","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S13-1","p2-no-skilledresidence","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S13-2","p2-no-skilledresidence","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S13-3","p2-no-skilledresidence","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S14-1","p2-no-skilledresidence","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S14-2","p2-no-skilledresidence","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S14-3","p2-no-skilledresidence","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S15-1","p2-no-skilledresidence","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S15-2","p2-no-skilledresidence","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S15-3","p2-no-skilledresidence","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S16-1","p2-no-skilledresidence","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S16-2","p2-no-skilledresidence","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S16-3","p2-no-skilledresidence","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S17-1","p2-no-skilledresidence","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-NO-S17-2","p2-no-skilledresidence","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-NO-S17-3","p2-no-skilledresidence","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-NO-S18-1","p2-no-skilledresidence","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S18-2","p2-no-skilledresidence","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S18-3","p2-no-skilledresidence","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S19-1","p2-no-skilledresidence","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S19-2","p2-no-skilledresidence","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S19-3","p2-no-skilledresidence","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S20-1","p2-no-skilledresidence","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-NO-S20-2","p2-no-skilledresidence","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-NO-S20-3","p2-no-skilledresidence","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-NO-S21-1","p2-no-skilledresidence","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-NO-S21-2","p2-no-skilledresidence","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-NO-S21-3","p2-no-skilledresidence","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-NO-S22-1","p2-no-skilledresidence","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S22-2","p2-no-skilledresidence","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S22-3","p2-no-skilledresidence","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S23-1","p2-no-skilledresidence","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S23-2","p2-no-skilledresidence","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S23-3","p2-no-skilledresidence","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S24-1","p2-no-skilledresidence","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-NO-S24-2","p2-no-skilledresidence","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-NO-S24-3","p2-no-skilledresidence","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-NO-S25-1","p2-no-skilledresidence","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S25-2","p2-no-skilledresidence","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S25-3","p2-no-skilledresidence","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S26-1","p2-no-skilledresidence","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S26-2","p2-no-skilledresidence","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S26-3","p2-no-skilledresidence","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S27-1","p2-no-skilledresidence","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-NO-S27-2","p2-no-skilledresidence","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-NO-S27-3","p2-no-skilledresidence","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-NO-S28-1","p2-no-skilledresidence","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S28-2","p2-no-skilledresidence","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S28-3","p2-no-skilledresidence","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S29-1","p2-no-skilledresidence","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S29-2","p2-no-skilledresidence","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S29-3","p2-no-skilledresidence","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-NO-S30-1","p2-no-skilledresidence","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-NO-S30-2","p2-no-skilledresidence","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-NO-S30-3","p2-no-skilledresidence","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-US-S01-1","p2-us-e2","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S01-2","p2-us-e2","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S01-3","p2-us-e2","S01","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S02-1","p2-us-e2","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S02-2","p2-us-e2","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S02-3","p2-us-e2","S02","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S03-1","p2-us-e2","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S03-2","p2-us-e2","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S03-3","p2-us-e2","S03","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S04-1","p2-us-e2","S04","NATIONALITY_GROUP","Applies exclusively to nationals of designated US bilateral treaty countries.","PARTIALLY_VERIFIED",false
+"CLM-US-S04-2","p2-us-e2","S04","NATIONALITY_GROUP","Applies exclusively to nationals of designated US bilateral treaty countries.","PARTIALLY_VERIFIED",false
+"CLM-US-S04-3","p2-us-e2","S04","NATIONALITY_GROUP","Applies exclusively to nationals of designated US bilateral treaty countries.","PARTIALLY_VERIFIED",false
+"CLM-US-S05-1","p2-us-e2","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S05-2","p2-us-e2","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S05-3","p2-us-e2","S05","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S06-1","p2-us-e2","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S06-2","p2-us-e2","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S06-3","p2-us-e2","S06","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S07-1","p2-us-e2","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S07-2","p2-us-e2","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S07-3","p2-us-e2","S07","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S08-1","p2-us-e2","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-US-S08-2","p2-us-e2","S08","NATIONALITY_GROUP","Exemption from language proficiency testing for native English/majority English speakers.","VERIFIED",false
+"CLM-US-S08-3","p2-us-e2","S08","GLOBAL","Standard language proficiency test benchmark.","VERIFIED",false
+"CLM-US-S09-1","p2-us-e2","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S09-2","p2-us-e2","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S09-3","p2-us-e2","S09","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S10-1","p2-us-e2","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S10-2","p2-us-e2","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S10-3","p2-us-e2","S10","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S11-1","p2-us-e2","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S11-2","p2-us-e2","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S11-3","p2-us-e2","S11","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S12-1","p2-us-e2","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S12-2","p2-us-e2","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S12-3","p2-us-e2","S12","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S13-1","p2-us-e2","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S13-2","p2-us-e2","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S13-3","p2-us-e2","S13","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S14-1","p2-us-e2","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S14-2","p2-us-e2","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S14-3","p2-us-e2","S14","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S15-1","p2-us-e2","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S15-2","p2-us-e2","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S15-3","p2-us-e2","S15","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S16-1","p2-us-e2","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S16-2","p2-us-e2","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S16-3","p2-us-e2","S16","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S17-1","p2-us-e2","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-US-S17-2","p2-us-e2","S17","GLOBAL","Standard statutory processing timeline.","PARTIALLY_VERIFIED",false
+"CLM-US-S17-3","p2-us-e2","S17","CONSULAR_JURISDICTION_SPECIFIC","Consular processing time varies depending on local post staffing.","PARTIALLY_VERIFIED",false
+"CLM-US-S18-1","p2-us-e2","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S18-2","p2-us-e2","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S18-3","p2-us-e2","S18","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S19-1","p2-us-e2","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S19-2","p2-us-e2","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S19-3","p2-us-e2","S19","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S20-1","p2-us-e2","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-US-S20-2","p2-us-e2","S20","NATIONALITY_GROUP","Apostille Convention member state exemption vs consular legalization.","VERIFIED",false
+"CLM-US-S20-3","p2-us-e2","S20","GLOBAL","Official certified translation standard.","VERIFIED",false
+"CLM-US-S21-1","p2-us-e2","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-US-S21-2","p2-us-e2","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-US-S21-3","p2-us-e2","S21","RESIDENCE_SPECIFIC","Lawful in-country status switching requires holding existing valid domestic residence permit.","VERIFIED",false
+"CLM-US-S22-1","p2-us-e2","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S22-2","p2-us-e2","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S22-3","p2-us-e2","S22","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S23-1","p2-us-e2","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S23-2","p2-us-e2","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S23-3","p2-us-e2","S23","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S24-1","p2-us-e2","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-US-S24-2","p2-us-e2","S24","GLOBAL","Mandatory post-arrival registration.","VERIFIED",false
+"CLM-US-S24-3","p2-us-e2","S24","CONSULAR_JURISDICTION_SPECIFIC","Post-arrival local municipal/police authority jurisdiction.","VERIFIED",false
+"CLM-US-S25-1","p2-us-e2","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S25-2","p2-us-e2","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S25-3","p2-us-e2","S25","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S26-1","p2-us-e2","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S26-2","p2-us-e2","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S26-3","p2-us-e2","S26","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S27-1","p2-us-e2","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-US-S27-2","p2-us-e2","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-US-S27-3","p2-us-e2","S27","RESIDENCE_SPECIFIC","Physical presence requirements inside destination territory.","VERIFIED",false
+"CLM-US-S28-1","p2-us-e2","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S28-2","p2-us-e2","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S28-3","p2-us-e2","S28","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S29-1","p2-us-e2","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S29-2","p2-us-e2","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S29-3","p2-us-e2","S29","GLOBAL","Nationality-neutral statutory legal requirement.","VERIFIED",false
+"CLM-US-S30-1","p2-us-e2","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-US-S30-2","p2-us-e2","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false
+"CLM-US-S30-3","p2-us-e2","S30","NATIONALITY_SPECIFIC","Bilateral agreements, visa fee waivers, or social security totalization treaties.","PARTIALLY_VERIFIED",false

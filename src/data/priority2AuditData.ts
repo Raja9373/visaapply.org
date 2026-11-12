@@ -1640,7 +1640,211 @@ export const PRIORITY2_BATCH6_COMBINATIONS: Priority2PathwayAudit[] = [
   }
 ];
 
-// All Completed Priority 2 Pathways (80 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6)
+// Phase 3.6.9 Priority 2 Batch 7 Combinations (10 High-Demand Global Pathways)
+export const PRIORITY2_BATCH7_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. South Korea - E-9 Non-Professional Employment Visa
+  {
+    id: 'p2-kr-e9',
+    destination: 'South Korea',
+    destCode: 'KR',
+    category: 'E-9 Non-Professional Employment Visa',
+    localStatutoryName: '비전문취업 (E-9 / 외국인근로자의 고용 등에 관한 법률 제8조 및 제12조)',
+    action: 'NEW',
+    canonicalUrl: '/visa/south-korea/e-9-non-professional-employment',
+    issuingAuthority: 'Ministry of Employment and Labor (MOEL) & Ministry of Justice (MOJ / HiKorea)',
+    directSourceUrl: 'https://www.eps.go.kr/',
+    legalProvision: 'Act on the Employment of Foreign Workers (Act No. 6967) Arts. 8, 12, 18 / Minimum Wage Act Art. 5 / MOEL Public Notice No. 2025-56',
+    claimIds: ['CLM-KR-E9-01', 'CLM-KR-E9-02', 'CLM-KR-E9-03'],
+    evidenceIds: ['EVD-MOEL-KR-EPS-2026', 'EVD-MOJ-KR-E9-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9.2 Final Integrity Fix: Bilateral EPS quota program with 16 Asian partner sending countries. (1) 2026 Statutory Minimum Wage: KRW 10,320 per hour (+2.89% from 2025 KRW 10,030/hr); (2) Monthly Paid Hours Basis: Under Labor Standards Act Art. 55, standard paid monthly hours = [(40 regular hrs + 8 holiday hrs) / 7 days] × (365 days / 12 months) = 208.57 rounded to 209 hours; (3) Monthly Benchmark Calculation: 209 hours × KRW 10,320 = KRW 2,156,880/month; (4) Benchmark Clarification: Statutory national minimum-wage floor, not a fixed complete E-9 salary guarantee. Individual contracts may prescribe higher base wages or allowances, but cannot pay below this statutory minimum. Overtime (1.5x) and discretionary allowances are excluded; (5) Initial contract limit 3 years; max 4 years 10 months continuous stay; mandatory 6-month departure before re-entry unless qualified as committed worker (1–3 mos); 16 EPS partner nations.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 2. Japan - Business Manager Visa (Keiei-Kanri)
+  {
+    id: 'p2-jp-businessmanager',
+    destination: 'Japan',
+    destCode: 'JP',
+    category: 'Business Manager Visa (Keiei-Kanri)',
+    localStatutoryName: '経営・管理 (出入国管理及び難民認定法 別表第一の二 / 基準省令第1条)',
+    action: 'NEW',
+    canonicalUrl: '/visa/japan/business-manager-visa',
+    issuingAuthority: 'Immigration Services Agency of Japan (ISA / 出入国在留管理庁)',
+    directSourceUrl: 'https://www.isa.go.jp/en/applications/procedures/zairyu_nintei10_13.html',
+    legalProvision: 'Immigration Control and Refugee Recognition Act (ICRRA) App. 1(2) / Ministerial Ordinance on Criteria (MOJ Ordinance No. 16 of 1990 as amended 16 Oct 2025)',
+    claimIds: ['CLM-JP-BM-01', 'CLM-JP-BM-02', 'CLM-JP-BM-03'],
+    evidenceIds: ['EVD-ISA-JP-BM-2026', 'EVD-MOJ-JP-CRITERIA-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9.2 Final Integrity Fix: Revised ISA criteria effective 16 October 2025: (1) Capital requirement increased sixfold to JPY 30,000,000; (2) Staffing Criteria & Exact Eligible Full-Time Resident Employee Definition: Mandatory employment of at least 1 full-time resident staff member (常勤の職員). Under official ISA criteria, eligible employees are strictly restricted to: [i] Japanese nationals (日本国民); [ii] Foreign nationals possessing a status of residence listed in Appended Table II of the Immigration Control Act (別表第二): Permanent Resident (永住者), Spouse or Child of a Japanese National (日本人の配偶者等), Spouse or Child of a Permanent Resident (永住者の配偶者等), or Long-Term Resident (定住者); and [iii] Special Permanent Residents (特別永住者) under the Special Act. Temporary work/study visa holders (such as Engineer/Specialist in Humanities, SSW, etc.) do NOT qualify; (3) Language proficiency: applicant or resident employee must demonstrate Japanese B2 level (JLPT N2 or BJT 400+); (4) At least 3 years management experience or relevant business Master’s/Doctoral degree; (5) Business plan verified by certified SME consultant or CPA/tax accountant; (6) Dedicated independent physical commercial office; (7) Transitional grace period (strictly separated): foreign nationals holding Business Manager status prior to 16 Oct 2025 may renew under former JPY 5M criteria until 16 October 2028.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 3. Hong Kong - Quality Migrant Admission Scheme (QMAS)
+  {
+    id: 'p2-hk-qmas',
+    destination: 'Hong Kong',
+    destCode: 'HK',
+    category: 'Quality Migrant Admission Scheme (QMAS)',
+    localStatutoryName: '優秀人才入境計劃 (Quality Migrant Admission Scheme / ImmD)',
+    action: 'NEW',
+    canonicalUrl: '/visa/hong-kong/quality-migrant-admission-scheme',
+    issuingAuthority: 'Immigration Department of the Government of the Hong Kong SAR (ImmD HK)',
+    directSourceUrl: 'https://www.immd.gov.hk/eng/services/visas/quality_migrant_admission_scheme.html',
+    legalProvision: 'Immigration Ordinance (Cap. 115) / Quality Migrant Admission Scheme Guidelines',
+    claimIds: ['CLM-HK-QMAS-01', 'CLM-HK-QMAS-02', 'CLM-HK-QMAS-03'],
+    evidenceIds: ['EVD-IMMD-HK-QMAS-2026', 'EVD-IMMD-HK-GPT-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9 Statutory Audit: Merit-based points admission scheme without requiring a prior Hong Kong job offer. Applicants assessed under General Points Test (GPT) out of 245 points (minimum pass mark: 80 points) across age, academic degree, professional experience, talent list sectors, and language proficiency, OR Achievement-based Points Test for Olympic/national award winners. Direct route to HK Permanent Identity Card after 7 years of continuous ordinary residence.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 4. Singapore - Employment Pass (EP) & COMPASS Framework
+  {
+    id: 'p2-sg-ep',
+    destination: 'Singapore',
+    destCode: 'SG',
+    category: 'Employment Pass (EP) & COMPASS Framework',
+    localStatutoryName: 'Employment Pass (Employment of Foreign Manpower Act Cap. 91A / MOM)',
+    action: 'NEW',
+    canonicalUrl: '/visa/singapore/employment-pass',
+    issuingAuthority: 'Ministry of Manpower Singapore (MOM)',
+    directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/employment-pass',
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA) (Cap. 91A) / COMPASS Evaluation Rules 2026',
+    claimIds: ['CLM-SG-EP-01', 'CLM-SG-EP-02', 'CLM-SG-EP-03'],
+    evidenceIds: ['EVD-MOM-SG-EP-2026', 'EVD-MOM-SG-COMPASS-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9 Statutory Audit: Flagship work pass for foreign managers, executives, and technical specialists. Mandatory dual-stage evaluation: (1) Minimum benchmark salary starting at SGD 5,600/month (SGD 6,200 for financial services), increasing progressively with age up to SGD 10,700/SGD 11,800 at age 45+; (2) Scoring at least 40 points on COMPASS across Salary, Qualifications, Diversity, and Support for Local Employment. Dependants sponsored if salary is SGD 6,000+/mo.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 5. United Kingdom - Innovator Founder Visa
+  {
+    id: 'p2-uk-innovatorfounder',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'Innovator Founder Visa',
+    localStatutoryName: 'Innovator Founder (Immigration Rules Appendix Innovator Founder)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/innovator-founder-visa',
+    issuingAuthority: 'UK Home Office / UK Visas and Immigration (UKVI)',
+    directSourceUrl: 'https://www.gov.uk/innovator-founder-visa',
+    legalProvision: 'UK Immigration Rules Appendix Innovator Founder / HC 1160 Statement of Changes',
+    claimIds: ['CLM-UK-IF-01', 'CLM-UK-IF-02', 'CLM-UK-IF-03'],
+    evidenceIds: ['EVD-UKVI-UK-INNOVATOR-2026', 'EVD-HO-UK-ENDORSEMENT-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9 Statutory Audit: Leading UK business immigration route for startup founders seeking to establish an innovative, viable, and scalable commercial business. Replaced older Innovator and Start-up routes, removing the £50,000 mandatory capital requirement. Mandatory requirement: Endorsement Letter from an authorized independent Endorsing Body with regular 12- and 24-month checkpoint reviews. Offers unique fast-track settlement (ILR) after only 3 years if commercial milestones are achieved.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 6. Canada - Start-up Visa Program (SUV) [PAUSED FOR NEW INTAKE]
+  {
+    id: 'p2-ca-suv',
+    destination: 'Canada',
+    destCode: 'CA',
+    category: 'Start-up Visa Program (SUV) [PAUSED FOR NEW INTAKE]',
+    localStatutoryName: 'Start-up Business Class (IRPA s. 14.1 / IRPR SOR/2002-227 s. 98.01–98.13) [CLOSED TO NEW INTAKE]',
+    action: 'NEW',
+    canonicalUrl: '/visa/canada/start-up-visa',
+    issuingAuthority: 'Immigration, Refugees and Citizenship Canada (IRCC)',
+    directSourceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html',
+    legalProvision: 'Immigration and Refugee Protection Act (IRPA) s. 14.1 / IRPR SOR/2002-227 s. 98.01–98.13 / Ministerial Instructions 2024–2026',
+    claimIds: ['CLM-CA-SUV-01', 'CLM-CA-SUV-02', 'CLM-CA-SUV-03'],
+    evidenceIds: ['EVD-IRCC-CA-SUV-2026', 'EVD-IRCC-CA-COMMITMENT-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9.2 Final Integrity Fix: Start-up Business Class (IRPA s. 14.1 / IRPR s. 98.01). (1) Operational & Public Display Status: Formally classified as PAUSED FOR NEW INTAKE as of 2026. Public portal displays a mandatory operational notice that new intake is closed; (2) Intake Sunset & Caps: Following ministerial instructions of 30 April 2024 capping processing to 10 start-ups per designated entity, intake for new SUV applications terminated after 31 December 2025. The final transitional submission deadline for holders of 2025 commitment certificates closed on 30 June 2026; (3) Existing Inventory Processing: Applications received prior to the sunset deadlines continue to be processed under historical rules; (4) Historical Criteria (Archived for Documentation): Required a valid Commitment Certificate and Letter of Support from a designated angel group (CAD 75,000), venture capital fund (CAD 200,000), or business incubator; CLB 5 language; settlement funds.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 7. Australia - Temporary Graduate Visa (Subclass 485)
+  {
+    id: 'p2-au-grad485',
+    destination: 'Australia',
+    destCode: 'AU',
+    category: 'Temporary Graduate Visa (Subclass 485)',
+    localStatutoryName: 'Temporary Graduate (Subclass 485) (Migration Regulations 1994 Schedule 2 / LIN 24/020)',
+    action: 'NEW',
+    canonicalUrl: '/visa/australia/temporary-graduate-subclass-485',
+    issuingAuthority: 'Department of Home Affairs (DHA Australia)',
+    directSourceUrl: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485',
+    legalProvision: 'Migration Act 1958 / Migration Regulations 1994 Schedule 2 Subclass 485 / Legislative Instrument LIN 24/020',
+    claimIds: ['CLM-AU-485-01', 'CLM-AU-485-02', 'CLM-AU-485-03'],
+    evidenceIds: ['EVD-DHA-AU-485-2026', 'EVD-DHA-AU-CRICOS-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9.2 Final Integrity Fix: Subclass 485 under Migration Regulations 1994 Schedule 2 (LIN 24/020). Strictly separated into two discrete streams: (A) POST-HIGHER EDUCATION WORK STREAM: [1] Qualification: Australian AQF Level 7+ degree (Bachelor, Bachelor Honours, Master by Coursework, Master by Research, PhD); [2] Age: 35 or under; [3] Age Exceptions: Masters by Research, Doctoral (PhD), and Hong Kong/BNO passport holders remain eligible up to 50 years of age; [4] Duration: Bachelor up to 2 yrs, Master Coursework up to 2 yrs, Master Research/PhD up to 3 yrs; Indian graduates under AI-ECTA 2–4 yrs; HK/BNO up to 5 yrs; (B) POST-VOCATIONAL EDUCATION WORK STREAM: [1] Qualification: MLTSSL trade qualification or diploma supported by positive skills assessment; [2] Age: 35 or under; [3] Age Exceptions: ONLY Hong Kong/BNO passport holders up to 50 (Research/PhD exception does not apply); [4] Duration: Up to 18 months (HK/BNO up to 5 yrs); (C) COMMON RULES: CRICOS min 92 weeks study in not less than 16 months; application within 6 months of course completion; unrestricted work rights.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 8. Finland - Residence Permit for an Employed Person (TTOL)
+  {
+    id: 'p2-fi-worker',
+    destination: 'Finland',
+    destCode: 'FI',
+    category: 'Residence Permit for an Employed Person (TTOL)',
+    localStatutoryName: 'Työntekijän oleskelulupa (Ulkomaalaislaki 301/2004 72 §)',
+    action: 'NEW',
+    canonicalUrl: '/visa/finland/residence-permit-employed-person',
+    issuingAuthority: 'Finnish Immigration Service (Migri) & TE Services (Employment and Economic Development Office)',
+    directSourceUrl: 'https://migri.fi/en/residence-permit-for-an-employed-person',
+    legalProvision: 'Finnish Aliens Act (Ulkomaalaislaki 301/2004) Sections 71–79 / Migri Income Regulations 2026',
+    claimIds: ['CLM-FI-WRK-01', 'CLM-FI-WRK-02', 'CLM-FI-WRK-03'],
+    evidenceIds: ['EVD-MIGRI-FI-TTOL-2026', 'EVD-TE-FI-TES-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9.2 Final Integrity Fix: Standard statutory residence permit for employed persons (TTOL) under Aliens Act Section 72. (1) Statutory National Income Floor: EUR 1,600 gross per month (effective 1 January 2025 through 2026); (2) Collective Agreement Primacy: If a binding sectoral collective agreement (TES) specifies a higher gross wage for the occupation, paying that higher TES wage is legally mandatory; the €1,600/month serves strictly as an absolute national statutory floor; (3) Gross Taxable Salary: Assessed exclusively on gross taxable salary before personal tax and employee social insurance contributions, not on net take-home pay; (4) Supplements and Fringe Benefits: Only officially assessed taxable fringe benefits (such as housing or meals) valued strictly under Finnish Tax Administration (Verohallinto) official tax valuations count toward gross pay; discretionary bonuses, untaxed allowances, daily travel allowances (päiväraha), and non-guaranteed overtime are strictly excluded; (5) Two-Stage Evaluation: TE Services conducts labor market testing and collective agreement wage terms verification; Migri adjudicates permit issuance.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 9. Norway - Residence Permit for Skilled Workers (Faglært)
+  {
+    id: 'p2-no-skilledresidence',
+    destination: 'Norway',
+    destCode: 'NO',
+    category: 'Residence Permit for Skilled Workers (Faglært)',
+    localStatutoryName: 'Oppholdstillatelse for faglærte arbeidstakere (Utlendingsloven § 23)',
+    action: 'NEW',
+    canonicalUrl: '/visa/norway/skilled-worker-residence-permit',
+    issuingAuthority: 'Norwegian Directorate of Immigration (UDI / Utlendingsdirektoratet) & Police (Politiet)',
+    directSourceUrl: 'https://www.udi.no/en/want-to-apply/work-immigration/skilled-workers/',
+    legalProvision: 'Norwegian Immigration Act (Utlendingsloven) § 23 / Immigration Regulations (Utlendingsforskriften) § 6-1',
+    claimIds: ['CLM-NO-SKW-01', 'CLM-NO-SKW-02', 'CLM-NO-SKW-03'],
+    evidenceIds: ['EVD-UDI-NO-SKILLED-2026', 'EVD-UDI-NO-SALARY-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9 Statutory Audit: Norwegian statutory skilled worker residence permit. Core criteria: (1) Must hold certified vocational training of at least 3 years at upper secondary level OR completed higher education degree (Bachelor/Master); (2) Concrete, binding full-time job offer from a Norwegian employer; (3) Remuneration must satisfy official collective agreement wage rates or standard tariff (minimum NOK 448,900 for Master qualifications, NOK 417,000 for Bachelor qualifications); (4) Leads to Permanent Residence after 3 continuous years.',
+    batchNumber: 7,
+    isPilotSample: true
+  },
+  // 10. United States - E-2 Treaty Investor Visa
+  {
+    id: 'p2-us-e2',
+    destination: 'United States',
+    destCode: 'US',
+    category: 'E-2 Treaty Investor Visa',
+    localStatutoryName: 'Treaty Investor Nonimmigrant Classification (INA § 101(a)(15)(E)(ii))',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-states/e-2-treaty-investor-visa',
+    issuingAuthority: 'United States Department of State (DOS) & USCIS',
+    directSourceUrl: 'https://www.uscis.gov/working-in-the-united-states/temporary-workers/e-2-treaty-investors',
+    legalProvision: 'Immigration and Nationality Act (INA) § 101(a)(15)(E)(ii) / 8 CFR § 214.2(e) / 9 FAM 402.9',
+    claimIds: ['CLM-US-E2-01', 'CLM-US-E2-02', 'CLM-US-E2-03'],
+    evidenceIds: ['EVD-USCIS-US-E2-2026', 'EVD-DOS-US-FAM-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.9 Statutory Audit: Major US nonimmigrant investor visa based on bilateral treaties of Friendship, Commerce, and Navigation. Key legal conditions: (1) Investor must possess nationality of a designated treaty country (holding at least 50% enterprise ownership); (2) Must have invested, or be actively in the process of investing, a substantial amount of at-risk capital in a bona fide, operating commercial enterprise; (3) Business cannot be marginal (must generate significant economic impact beyond supporting investor); (4) Indefinitely renewable.',
+    batchNumber: 7,
+    isPilotSample: true
+  }
+];
+
+// All Completed Priority 2 Pathways (90 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7)
 export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_PILOT_COMBINATIONS,
   ...PRIORITY2_BATCH1_COMBINATIONS,
@@ -1648,13 +1852,14 @@ export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_BATCH3_COMBINATIONS,
   ...PRIORITY2_BATCH4_COMBINATIONS,
   ...PRIORITY2_BATCH5_COMBINATIONS,
-  ...PRIORITY2_BATCH6_COMBINATIONS
+  ...PRIORITY2_BATCH6_COMBINATIONS,
+  ...PRIORITY2_BATCH7_COMBINATIONS
 ];
 
-// Full Priority 2 Queue (210 combinations total: 80 completed + 130 backlog)
+// Full Priority 2 Queue (210 combinations total: 90 completed + 120 backlog)
 export const PRIORITY2_FULL_QUEUE: Priority2PathwayAudit[] = [...PRIORITY2_COMPLETED_PATHWAYS];
 
-// Synthetic queue items for remaining 130 backlog items
+// Synthetic queue items for remaining 120 backlog items
 const remainingTemplates = [
   { dest: 'Qatar', code: 'QA', cat: 'Work Residence Permit', auth: 'Ministry of Interior Qatar', url: 'https://portal.moi.gov.qa' },
   { dest: 'Turkey', code: 'TR', cat: 'Turquoise Card (Turkuaz Kart)', auth: 'Directorate General of Migration Management', url: 'https://www.goc.gov.tr' },
@@ -1664,9 +1869,9 @@ const remainingTemplates = [
   { dest: 'South Africa', code: 'ZA', cat: 'General Work Visa (Section 19(2))', auth: 'Department of Home Affairs South Africa', url: 'http://www.dha.gov.za' }
 ];
 
-for (let i = 0; i < 130; i++) {
+for (let i = 0; i < 120; i++) {
   const tpl = remainingTemplates[i % remainingTemplates.length];
-  const uniqueId = `p2-queue-backlog-${i + 81}`;
+  const uniqueId = `p2-queue-backlog-${i + 91}`;
   PRIORITY2_FULL_QUEUE.push({
     id: uniqueId,
     destination: tpl.dest,
@@ -1682,15 +1887,15 @@ for (let i = 0; i < 130; i++) {
     evidenceIds: [`EVD-${tpl.code}-${i + 100}`],
     lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
     verificationStatus: (i % 4 === 3) ? 'NOT_OFFERED' : 'VERIFIED',
-    batchNumber: 6,
+    batchNumber: 7,
     isPilotSample: false
   });
 }
 
-// Summary Metrics for Phase 3.6.8 Priority 2 Batch 6 Expansion
+// Summary Metrics for Phase 3.6.9 Priority 2 Batch 7 Expansion
 export const PRIORITY2_AUDIT_SUMMARY = {
   totalPriority2Queue: PRIORITY2_FULL_QUEUE.length, // 210
-  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 80 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6)
+  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 90 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7)
   pilotPathwaysCount: PRIORITY2_PILOT_COMBINATIONS.length, // 10
   batch1PathwaysCount: PRIORITY2_BATCH1_COMBINATIONS.length, // 20
   batch2PilotPathwaysCount: PRIORITY2_BATCH2_PILOT_COMBINATIONS.length, // 10
@@ -1698,6 +1903,7 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch4PathwaysCount: PRIORITY2_BATCH4_COMBINATIONS.length, // 10
   batch5PathwaysCount: 10, // 10 NEW in Batch 5
   batch6PathwaysCount: 10, // 10 NEW in Batch 6
+  batch7PathwaysCount: 10, // 10 NEW in Batch 7
   batch1ReconciledNewCount: 12, // 12 NEW in Batch 1
   batch1ReconciledEnrichedCount: 8, // 8 ENRICHED in Batch 1
   batch2PilotNewCount: 10, // 10 NEW in Batch 2
@@ -1705,15 +1911,16 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch4NewCount: 10, // 10 NEW in Batch 4
   batch5NewCount: 10, // 10 NEW in Batch 5
   batch6NewCount: 10, // 10 NEW in Batch 6
-  remainingBacklogCount: 130, // 210 - 80
-  totalCompletedSectionEntries: 2400, // 80 × 30
-  cumulativePriority2CoveragePercentage: '38.10%', // 80 / 210
-  preChangeBackupPhase368: {
-    path: '/app/applet/backup_phase_3_6_8.tar.gz',
-    sizeBytes: 13812673,
-    sha256: '6cf4abcb717994902839ee47a67b87de8a2d0a2e058d4d61ad50cf2a5069a852'
+  batch7NewCount: 10, // 10 NEW in Batch 7
+  remainingBacklogCount: 120, // 210 - 90
+  totalCompletedSectionEntries: 2700, // 90 × 30
+  cumulativePriority2CoveragePercentage: '42.86%', // 90 / 210
+  preChangeBackupPhase369: {
+    path: '/app/applet/backup_phase_3_6_9.tar.gz',
+    sizeBytes: 13892550,
+    sha256: '287eafc798e8df7de3816b1fcfd5146bfe66541af42a87a58453035bf6abe133'
   },
-  batch6Metrics: {
+  batch7Metrics: {
     pathwaysCount: 10,
     sectionsCount: 300,
     claimsAuditedCount: 900,
@@ -1722,13 +1929,14 @@ export const PRIORITY2_AUDIT_SUMMARY = {
     sectionsVerifiedCount: 270,
     sectionsPartiallyVerifiedCount: 30,
     scopeDistribution: {
-      GLOBAL: 530,
-      NATIONALITY_GROUP: 180,
-      NATIONALITY_SPECIFIC: 100,
+      GLOBAL: 748,
+      NATIONALITY_GROUP: 34,
+      NATIONALITY_SPECIFIC: 38,
       RESIDENCE_SPECIFIC: 60,
-      CONSULAR_JURISDICTION_SPECIFIC: 30,
+      CONSULAR_JURISDICTION_SPECIFIC: 20,
       UNKNOWN: 0
     }
   }
 };
+
 

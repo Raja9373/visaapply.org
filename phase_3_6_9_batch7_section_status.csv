@@ -1,0 +1,301 @@
+pathway_id,section_id,section_name,verification_status,statutory_coverage,claim_count,is_quarantined
+"p2-kr-e9","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-kr-e9","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-jp-businessmanager","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-hk-qmas","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-sg-ep","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-uk-innovatorfounder","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-ca-suv","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-au-grad485","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-fi-worker","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-no-skilledresidence","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S01","Basic Identity & Classification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S02","Sovereign Authority & Statutory Basis","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S03","Primary Eligibility Criteria","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S05","Financial Requirements & Minimum Funds","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S06","Health Insurance & Medical Examination","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S07","Police Clearance & Security Screening","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S08","Language Proficiency Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S09","Permitted Activities & Employment Rights","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S10","Prohibited Activities & Restrictions","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S11","Maximum Duration of Stay & Validity","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S12","Extension & Renewal Procedures","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S13","Path to Permanent Residency / Settlement","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S14","Path to Citizenship & Naturalization","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S15","Family & Dependant Sponsorship","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S16","Application Channels & Portals","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S18","Government Application & Visa Fees","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S19","Biometrics & Identity Verification","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S20","Document Legalization & Translations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S21","In-Country Status Switching","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S22","Appeals, Administrative Review & Remedies","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S23","Tax Residency & Fiscal Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S24","Mandatory Post-Arrival Registration","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S25","Employer / Sponsor Obligations","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S26","Quotas, Annual Caps & Limits","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S27","In-Country Physical Presence Requirements","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S28","Grounds for Revocation & Cancellation","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S29","Overstay Penalties & Exit Controls","VERIFIED","STATUTORY_GAZETTED",3,false
+"p2-us-e2","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED","STATUTORY_GAZETTED",3,false
