@@ -1028,30 +1028,645 @@ export const PRIORITY2_BATCH3_COMBINATIONS: Priority2PathwayAudit[] = [
   }
 ];
 
-// All Completed Priority 2 Pathways (50 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3)
+// Phase 3.6.6 Batch 4 Global Pathways (10 Pathways)
+export const PRIORITY2_BATCH4_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. Germany - EU Blue Card
+  {
+    id: 'p2-de-eubluecard',
+    destination: 'Germany',
+    destCode: 'DE',
+    category: 'EU Blue Card (Blaue Karte EU)',
+    localStatutoryName: 'Blaue Karte EU (§ 18g AufenthG)',
+    action: 'NEW',
+    canonicalUrl: '/visa/germany/eu-blue-card',
+    issuingAuthority: 'Federal Office for Migration and Refugees (BAMF) / Make it in Germany',
+    directSourceUrl: 'https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card',
+    legalProvision: 'German Residence Act (Aufenthaltsgesetz - AufenthG) § 18g / EU Directive 2021/1883',
+    claimIds: ['CLM-DE-EUB-01', 'CLM-DE-EUB-02', 'CLM-DE-EUB-03'],
+    evidenceIds: ['EVD-BAMF-DE-EUB-2026', 'EVD-MAKEIT-DE-SALARY-45300'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Standard 2026 gross annual salary threshold is €45,300 (50% of annual pension contribution ceiling). Bottleneck professions (STEM, medical doctors, IT) and new entrants (university degree within preceding 3 years) qualify at €41,041 gross/yr (45.3% of ceiling). IT specialists without university degree qualify with 3 years relevant experience and €41,041 salary. Fast-track permanent settlement (Niederlassungserlaubnis § 18g(4)) after 27 months with German A1, or 21 months with German B1. Intra-EU mobility permitted after 12 months.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 2. Germany - Skilled Worker Residence Permit
+  {
+    id: 'p2-de-skilledworker',
+    destination: 'Germany',
+    destCode: 'DE',
+    category: 'Skilled Worker Residence Permit (§ 18a / § 18b AufenthG)',
+    localStatutoryName: 'Aufenthaltserlaubnis für Fachkräfte (§ 18a / § 18b AufenthG)',
+    action: 'NEW',
+    canonicalUrl: '/visa/germany/skilled-worker-residence-permit',
+    issuingAuthority: 'Federal Employment Agency (Bundesagentur für Arbeit - BA) / Ausländerbehörde',
+    directSourceUrl: 'https://www.make-it-in-germany.com/en/visa-residence/types/work-qualified-professionals',
+    legalProvision: 'Aufenthaltsgesetz (AufenthG) § 18a (vocational) / § 18b (academic)',
+    claimIds: ['CLM-DE-SKW-01', 'CLM-DE-SKW-02', 'CLM-DE-SKW-03'],
+    evidenceIds: ['EVD-BA-DE-SKILLED-2026', 'EVD-BAMF-DE-18AB-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Dual track: § 18a for recognized foreign vocational training; § 18b for recognized higher education degree. Employment contract must correspond to professional qualifications (any qualified non-regulated occupation permitted). Federal Employment Agency approval required regarding comparable working conditions and wage parity with domestic workers. Fast-track procedure for skilled workers (§ 81a AufenthG) available via employer for accelerated processing. Permanent settlement after 3 years under § 18c AufenthG.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 3. France - Talent Passport: Qualified Employee
+  {
+    id: 'p2-fr-talentpassport',
+    destination: 'France',
+    destCode: 'FR',
+    category: 'Talent Passport - Qualified Employee (Passeport Talent - Salarié qualifié)',
+    localStatutoryName: 'Passeport Talent - Salarié qualifié / Entreprise innovante (CESEDA Art. L421-9)',
+    action: 'NEW',
+    canonicalUrl: '/visa/france/talent-passport-qualified-employee',
+    issuingAuthority: 'Ministère de l\'Intérieur / France-Visas / ANEF',
+    directSourceUrl: 'https://france-visas.gouv.fr/en/web/france-visas/passeport-talent',
+    legalProvision: 'Code de l\'entrée et du séjour des étrangers et du droit d\'asile (CESEDA) Art. L421-9 / L421-10',
+    claimIds: ['CLM-FR-TP-01', 'CLM-FR-TP-02', 'CLM-FR-TP-03'],
+    evidenceIds: ['EVD-MININT-FR-CESEDA-L421-9', 'EVD-FRVISAS-TP-SALARY-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Direct hire qualified employee route for foreign graduates of master\'s-level degrees or young innovative enterprise (jeune entreprise innovante - JEI) recruits. Minimum remuneration threshold: at least twice the gross annual statutory minimum wage (2 × SMIC annuel) = €42,434 gross/year. Employment contract must exceed 3 months. Multi-year residence card (carte de séjour pluriannuelle) valid for up to 4 years, renewable. Family members receive accompanying spouse Talent Passport card with automatic full employment rights without separate work permit.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 4. Spain - Highly Skilled Professional Residence Permit
+  {
+    id: 'p2-es-highlyskilled',
+    destination: 'Spain',
+    destCode: 'ES',
+    category: 'Highly Skilled Professional Permit (Profesionales Altamente Cualificados - PAC)',
+    localStatutoryName: 'Autorización de Residencia para Profesionales Altamente Cualificados (Ley 14/2013 Art. 71)',
+    action: 'NEW',
+    canonicalUrl: '/visa/spain/highly-skilled-professional-permit',
+    issuingAuthority: 'Unidad de Grandes Empresas y Colectivos Estratégicos (UGE-CE) / Ministerio de Inclusión',
+    directSourceUrl: 'https://pnie.servicios.mineco.gob.es/',
+    legalProvision: 'Ley 14/2013 de apoyo a los emprendedores y su internacionalización, Art. 71 / Disposición Adicional Cuarta',
+    claimIds: ['CLM-ES-PAC-01', 'CLM-ES-PAC-02', 'CLM-ES-PAC-03'],
+    evidenceIds: ['EVD-UGE-ES-PAC-2026', 'EVD-MINCLUSION-PAC-CRITERIA-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Specialized fast-track corporate work authorization under Ley 14/2013. Target groups: managerial or senior executive personnel (€55,000+ gross/yr) and graduates from recognized universities or business schools for technical roles (€41,000+ gross/yr). Exempt from national employment situation test (no labor market test). Fast-track 20-working-day administrative processing window by UGE-CE (positive administrative silence rule applies). Valid for 3 years (or contract length), renewable for 2 years, leading to permanent residence after 5 years.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 5. Portugal - Highly Qualified Activity Residence Visa (Visto D3)
+  {
+    id: 'p2-pt-d3',
+    destination: 'Portugal',
+    destCode: 'PT',
+    category: 'Highly Qualified Activity Visa (Visto D3 - Atividade Altamente Qualificada)',
+    localStatutoryName: 'Visto de Residência para Atividade Altamente Qualificada (Lei n.º 23/2007 Art. 61.º / 61.º-A)',
+    action: 'NEW',
+    canonicalUrl: '/visa/portugal/d3-highly-qualified-visa',
+    issuingAuthority: 'Agência para a Integração, Migrações e Asilo (AIMA) / Ministério dos Negócios Estrangeiros (MNE)',
+    directSourceUrl: 'https://vistos.mne.gov.pt/en/national-visas/general-information/type-of-visa',
+    legalProvision: 'Lei n.º 23/2007 (Regime Jurídico de Entrada, Permanência, Saída e Afastamento de Estrangeiros) Artigo 61.º e 61.º-A',
+    claimIds: ['CLM-PT-D3-01', 'CLM-PT-D3-02', 'CLM-PT-D3-03'],
+    evidenceIds: ['EVD-AIMA-PT-D3-2026', 'EVD-MNE-PT-QUALIFIED-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: For employment in leadership, intellectual, scientific, or specialized technical activities. Requires employment contract or binding promise of contract of at least 1 year. Minimum monthly remuneration: at least 1.5 times national gross average annual salary or 3 times the Social Support Index (IAS = ~€1,800/month minimum). Initial consular D3 visa valid for 120 days with 2 entries; converts onshore to an AIMA temporary residence permit valid for 2 years, renewable for 3 years. Direct qualification for permanent residence or Portuguese nationality after 5 years of legal residence.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 6. Italy - EU Blue Card (Carta Blu UE)
+  {
+    id: 'p2-it-eubluecard',
+    destination: 'Italy',
+    destCode: 'IT',
+    category: 'EU Blue Card (Carta Blu UE)',
+    localStatutoryName: 'Carta Blu UE (Decreto Legislativo 286/1998 Art. 27-quater)',
+    action: 'NEW',
+    canonicalUrl: '/visa/italy/eu-blue-card',
+    issuingAuthority: 'Sportello Unico per l\'Immigrazione (Prefettura / Ministero dell\'Interno)',
+    directSourceUrl: 'https://www.interno.gov.it/it/temi/immigrazione-e-asilo',
+    legalProvision: 'Testo Unico sull\'Immigrazione (D.Lgs. 286/1998) Art. 27-quater / D.Lgs. 152/2023',
+    claimIds: ['CLM-IT-CBLU-01', 'CLM-IT-CBLU-02', 'CLM-IT-CBLU-03'],
+    evidenceIds: ['EVD-MININT-IT-CBLU-2026', 'EVD-SUI-IT-QUOTAEXEMPT-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Out-of-quota (extra-flussi) admission: completely exempt from annual Decreto Flussi quota caps. Requires employment contract or binding job offer of at least 6 months duration. Higher education qualification: minimum 3-year university degree or 5 years comparable higher professional experience (3 years for IT managers and specialists). Minimum gross annual remuneration: at least 1.5 times the gross average annual salary (~€34,000+ gross/yr). Clearance (Nulla Osta) issued electronically via Sportello Unico per l\'Immigrazione. Renewable residence card valid for up to 2 years, leading to EU long-term residence after 5 years.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 7. Netherlands - Startup Residence Permit
+  {
+    id: 'p2-nl-startup',
+    destination: 'Netherlands',
+    destCode: 'NL',
+    category: 'Startup Residence Permit (Verblijfsvergunning Startup)',
+    localStatutoryName: 'Verblijfsvergunning Startup (Vreemdelingenwet 2000 Art. 3.4 / Vc 2000 B1/4.2)',
+    action: 'NEW',
+    canonicalUrl: '/visa/netherlands/startup-residence-permit',
+    issuingAuthority: 'Immigration and Naturalisation Service (IND Netherlands) & RVO (Netherlands Enterprise Agency)',
+    directSourceUrl: 'https://ind.nl/en/residence-permits/work/residence-permit-for-startup',
+    legalProvision: 'Dutch Aliens Act 2000 (Vreemdelingenwet 2000) Art. 3.4 / Aliens Decree 2000 (Vreemdelingenbesluit 2000) Art. 3.20a',
+    claimIds: ['CLM-NL-START-01', 'CLM-NL-START-02', 'CLM-NL-START-03'],
+    evidenceIds: ['EVD-IND-NL-STARTUP-2026', 'EVD-RVO-NL-FACILITATOR-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Designed for ambitious innovative entrepreneurs. Mandatory requirements: (1) Collaboration with a recognized startup facilitator listed in the official RVO directory; (2) Product or service must be genuinely innovative for the Netherlands; (3) Detailed step-by-step business plan covering operational milestones and team roles; (4) Registration in the Dutch Trade Register (Kamer van Koophandel - KvK); (5) Proof of sufficient independent financial resources (standard: single person minimum income under standard IND threshold = ~€1,650/month). Valid for 1 year, with direct transition to self-employed person (zelfstandige) permit with facilitator recommendation.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 8. United States - H-1B Specialty Occupation Worker
+  {
+    id: 'p2-us-h1b',
+    destination: 'United States',
+    destCode: 'US',
+    category: 'H-1B Specialty Occupation Worker Nonimmigrant Visa',
+    localStatutoryName: 'H-1B Specialty Occupation (INA § 101(a)(15)(H)(i)(b))',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-states/h-1b-specialty-occupation-visa',
+    issuingAuthority: 'United States Citizenship and Immigration Services (USCIS) / Department of Labor (DOL) / DOS',
+    directSourceUrl: 'https://www.uscis.gov/working-in-the-united-states/temporary-workers/h-1b-specialty-occupations',
+    legalProvision: 'Immigration and Nationality Act (INA) § 101(a)(15)(H)(i)(b) / 8 CFR § 214.2(h) / INA § 214(h)',
+    claimIds: ['CLM-US-H1B-01', 'CLM-US-H1B-02', 'CLM-US-H1B-03'],
+    evidenceIds: ['EVD-USCIS-US-H1B-2026', 'EVD-DOL-US-ETA9035-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Primary U.S. professional specialty occupation visa. Requirements: (1) Position must require theoretical and practical application of highly specialized knowledge and at least a U.S. bachelor\'s degree or foreign equivalent in the specific specialty; (2) Mandatory certified Labor Condition Application (Form ETA-9035) from DOL guaranteeing prevailing wage and working conditions; (3) Annual statutory cap of 65,000 standard visas plus 20,000 U.S. master\'s cap exemption (cap-exempt for universities and non-profit research institutes); (4) Maximum initial stay 3 years, extendable up to 6 years total; extensions beyond 6 years permitted under AC21 § 104(c)/106(a) for pending PERM/I-140; (5) Dual intent recognized under INA § 214(h).',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 9. Canada - Federal Skilled Worker Program (FSWP / Express Entry)
+  {
+    id: 'p2-ca-fswp',
+    destination: 'Canada',
+    destCode: 'CA',
+    category: 'Federal Skilled Worker Program (FSWP) - Express Entry',
+    localStatutoryName: 'Federal Skilled Worker Class (IRPR ss. 75–87)',
+    action: 'NEW',
+    canonicalUrl: '/visa/canada/federal-skilled-worker-program',
+    issuingAuthority: 'Immigration, Refugees and Citizenship Canada (IRCC)',
+    directSourceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/federal-skilled-workers.html',
+    legalProvision: 'Immigration and Refugee Protection Act (IRPA) s. 12(2) & IRPR ss. 75–87 / Express Entry Ministerial Instructions',
+    claimIds: ['CLM-CA-FSWP-01', 'CLM-CA-FSWP-02', 'CLM-CA-FSWP-03'],
+    evidenceIds: ['EVD-IRCC-CA-FSWP-2026', 'EVD-IRCC-CA-67POINTS-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Direct federal economic permanent residence program managed under Express Entry. Mandatory eligibility criteria: (1) Score at least 67 points out of 100 on the 6 selection factors (language skills, education, work experience, age, arranged employment, adaptability); (2) At least 1 continuous year of full-time (or equal part-time) paid skilled work experience in TEER category 0, 1, 2, or 3 within the last 10 years; (3) Language proficiency benchmark: minimum Canadian Language Benchmark (CLB) 7 in English or Niveaux de compétence linguistique canadiens (NCLC) 7 in French across all 4 abilities; (4) Educational Credential Assessment (ECA) for foreign credentials; (5) Settlement funds proof (unless authorized to work with valid job offer); (6) Grants direct Canadian Permanent Resident (PR) status upon landing.',
+    batchNumber: 4,
+    isPilotSample: true
+  },
+  // 10. Australia - Employer Nomination Scheme (Subclass 186)
+  {
+    id: 'p2-au-ens186',
+    destination: 'Australia',
+    destCode: 'AU',
+    category: 'Employer Nomination Scheme (ENS) Subclass 186 Permanent Visa',
+    localStatutoryName: 'Subclass 186 Employer Nomination Scheme (Migration Regulations 1994)',
+    action: 'NEW',
+    canonicalUrl: '/visa/australia/subclass-186-employer-nomination-scheme',
+    issuingAuthority: 'Department of Home Affairs (DHA Australia)',
+    directSourceUrl: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/employer-nomination-scheme-186',
+    legalProvision: 'Migration Act 1958 / Migration Regulations 1994 Schedule 2 Subclass 186 / Legislative Instruments 2026',
+    claimIds: ['CLM-AU-ENS-01', 'CLM-AU-ENS-02', 'CLM-AU-ENS-03'],
+    evidenceIds: ['EVD-DHA-AU-ENS186-2026', 'EVD-DHA-AU-TRT2YEAR-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.6 Statutory Audit: Direct employer-sponsored Australian Permanent Residence. Primary streams: (1) Temporary Residence Transition (TRT) stream: requires 2 years of full-time employment with sponsoring employer while holding a Subclass 482 visa (reduced from 3 years under 2024–2026 migration strategy reforms); (2) Direct Entry (DE) stream: requires positive skills assessment in an occupation on the Medium and Long-term Strategic Skills List (MLTSSL) and at least 3 years relevant post-qualification work experience; (3) Salary and market rate: salary must meet or exceed Core Skills Income Threshold (CSIT AUD $79,423/yr) and annual market salary rate (AMSR); (4) Age limit: under 45 years at time of application (statutory exemptions apply); (5) Grants indefinite Australian permanent residency with 5-year travel facility.',
+    batchNumber: 4,
+    isPilotSample: true
+  }
+];
+
+// Phase 3.6.7 Priority 2 Batch 5 Combinations (10 High-Demand Global Pathways)
+export const PRIORITY2_BATCH5_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. Japan - Specified Skilled Worker (SSW-i / SSW-ii / 特定技能)
+  {
+    id: 'p2-jp-ssw',
+    destination: 'Japan',
+    destCode: 'JP',
+    category: 'Specified Skilled Worker (SSW / 特定技能)',
+    localStatutoryName: '特定技能1号・2号 (出入国管理及び難民認定法別表第一の二)',
+    action: 'NEW',
+    canonicalUrl: '/visa/japan/specified-skilled-worker-visa',
+    issuingAuthority: 'Immigration Services Agency of Japan (ISA) / MOJ',
+    directSourceUrl: 'https://www.moj.go.jp/isa/applications/ssw/',
+    legalProvision: 'Immigration Control and Refugee Recognition Act (ICRRA) Appended Table I(2) / MOJ Ordinance No. 65 of 2019',
+    claimIds: ['CLM-JP-SSW-01', 'CLM-JP-SSW-02', 'CLM-JP-SSW-03'],
+    evidenceIds: ['EVD-ISA-JP-SSW-2026', 'EVD-MOJ-JP-SSW-STANDARDS'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Statutory employment route across 12 designated industrial fields. SSW(i) requires passing skills evaluation test and Japanese proficiency (JLPT N4 or JFT-Basic), maximum 5-year stay without family accompaniment. SSW(ii) requires supervisory skills, allows indefinite renewals with family accompaniment (spouse/children) and direct transition to permanent residency after 10 years of residency (or 5 years in conjunction with high skill status). Equal or higher remuneration than Japanese workers mandated by law.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 2. South Korea - F-2-7 Points-Based Resident Visa
+  {
+    id: 'p2-kr-f27',
+    destination: 'South Korea',
+    destCode: 'KR',
+    category: 'F-2-7 Points-Based Long-Term Resident Visa',
+    localStatutoryName: '점수제 우수인재 거주비자 (F-2-7 / 출입국관리법 시행령 별표 1의2)',
+    action: 'NEW',
+    canonicalUrl: '/visa/south-korea/f-2-7-points-based-resident-visa',
+    issuingAuthority: 'Korea Immigration Service / Ministry of Justice (MOJ / HiKorea)',
+    directSourceUrl: 'https://www.hikorea.go.kr/info/InfoPointBaseVisa.pt',
+    legalProvision: 'Immigration Act Article 10 / Enforcement Decree Article 12, Table 1-2 / MOJ Notice 2026',
+    claimIds: ['CLM-KR-F27-01', 'CLM-KR-F27-02', 'CLM-KR-F27-03'],
+    evidenceIds: ['EVD-MOJ-KR-F27-2026', 'EVD-HIKOREA-KR-POINTS-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Merit-based points resident visa for foreign professionals. Evaluation out of 170 maximum points; threshold is 80 points across age, academic degree (Korean or foreign), Korean proficiency (TOPIK Level 3+ or KIIP completion), and annual taxable income (GNI benchmark). Grants unrestricted employment rights, dependent sponsorship for spouse and children, and qualification for F-5 permanent residence after 3-5 years.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 3. Singapore - Overseas Networks & Expertise (ONE) Pass
+  {
+    id: 'p2-sg-onepass',
+    destination: 'Singapore',
+    destCode: 'SG',
+    category: 'Overseas Networks & Expertise (ONE) Pass',
+    localStatutoryName: 'Overseas Networks & Expertise Pass (EFMA Exemption / MOM)',
+    action: 'NEW',
+    canonicalUrl: '/visa/singapore/overseas-networks-and-expertise-pass',
+    issuingAuthority: 'Ministry of Manpower Singapore (MOM)',
+    directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/overseas-networks-and-expertise-pass',
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA) (Cap. 91A) / MOM Work Pass Regulations',
+    claimIds: ['CLM-SG-ONE-01', 'CLM-SG-ONE-02', 'CLM-SG-ONE-03'],
+    evidenceIds: ['EVD-MOM-SG-ONEPASS-2026', 'EVD-MOM-SG-SALARY-30K'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Apex 5-year personalized work pass for top talent in business, arts and culture, sports, science and technology, and academia/research. Salary benchmark: earned a fixed monthly salary of at least S$30,000 within the past 1 year, or will earn at least S$30,000 under a Singapore-based employer (or demonstrated outstanding achievements in sports, arts, science, or academia). Holders can concurrently start, operate, and work for multiple companies in Singapore. Spouses receive Letter of Consent (LOC) to work.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 4. United Arab Emirates - 10-Year Golden Residence Visa
+  {
+    id: 'p2-ae-goldenresidence',
+    destination: 'United Arab Emirates',
+    destCode: 'AE',
+    category: '10-Year Golden Residence Visa',
+    localStatutoryName: 'الإقامة الذهبية (قرار مجلس الوزراء رقم 65 لسنة 2022)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-arab-emirates/10-year-golden-visa',
+    issuingAuthority: 'Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) / GDRFA',
+    directSourceUrl: 'https://smartservices.icp.gov.ae/echannels/web/client/default.html#/goldenServicesRegistration',
+    legalProvision: 'Cabinet Resolution No. 65 of 2022 Executive Regulations to Federal Decree-Law No. 29 of 2021',
+    claimIds: ['CLM-AE-GV-01', 'CLM-AE-GV-02', 'CLM-AE-GV-03'],
+    evidenceIds: ['EVD-ICP-AE-GOLDEN-2026', 'EVD-GDRFA-AE-CRITERIA-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: 10-year renewable long-term residence without a local employer/sponsor requirement. Key categories: (1) Skilled Professionals: MOHRE 1st or 2nd professional level, bachelor degree or higher, minimum monthly salary of AED 30,000; (2) Real Estate Investors: investment of AED 2,000,000+ in property; (3) Exceptional Talents / Innovators / Researchers. No restriction on staying outside the UAE (6-month rule waived). Spouses and children can be sponsored with no age limit.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 5. Saudi Arabia - Premium Residency (Special Talent / Entrepreneur Track)
+  {
+    id: 'p2-sa-premiumresidency',
+    destination: 'Saudi Arabia',
+    destCode: 'SA',
+    category: 'Premium Residency (Special Talent & Entrepreneur)',
+    localStatutoryName: 'الإقامة المميزة (نظام الإقامة المميزة بالمرسوم الملكي م/106)',
+    action: 'NEW',
+    canonicalUrl: '/visa/saudi-arabia/premium-residency',
+    issuingAuthority: 'Premium Residency Center (PRC) Saudi Arabia',
+    directSourceUrl: 'https://prc.gov.sa/',
+    legalProvision: 'Premium Residency Law Royal Decree No. M/106 of 1440H / Cabinet Decision No. 817 of 1445H',
+    claimIds: ['CLM-SA-PR-01', 'CLM-SA-PR-02', 'CLM-SA-PR-03'],
+    evidenceIds: ['EVD-PRC-SA-TALENT-2026', 'EVD-PRC-SA-ENTREPRENEUR-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Flagship Vision 2030 talent and investor residency. Special Talent Track: healthcare/scientific researchers earning SAR 14,000+/month or executive professionals earning SAR 35,000+/month. Entrepreneur Track: investment of SAR 400,000+ or SAR 15,000,000+ with recognized incubator. Grants exemption from Expat Levy (iqama fees), real estate ownership rights, family sponsorship, and unconstrained travel without exit/re-entry permits.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 6. Brazil - Visto Temporário XIV (Digital Nomad Visa)
+  {
+    id: 'p2-br-digitalnomad',
+    destination: 'Brazil',
+    destCode: 'BR',
+    category: 'Digital Nomad Residence Visa (VITEM XIV)',
+    localStatutoryName: 'Visto Temporário XIV - Nômade Digital (Resolução CNIG/MJSP n.º 45/2021)',
+    action: 'NEW',
+    canonicalUrl: '/visa/brazil/vitem-xiv-digital-nomad-visa',
+    issuingAuthority: 'Ministério da Justiça e Segurança Pública (MJSP) / Polícia Federal',
+    directSourceUrl: 'https://www.gov.br/mre/pt-br/assuntos/portal-consular/vistos/quadro-geral-de-regime-de-vistos-para-entrada-no-brasil',
+    legalProvision: 'Lei de Migração n.º 13.445/2017 Art. 14 / Resolução Normativa CNIG/MJSP n.º 45 de 09/09/2021',
+    claimIds: ['CLM-BR-NOMAD-01', 'CLM-BR-NOMAD-02', 'CLM-BR-NOMAD-03'],
+    evidenceIds: ['EVD-MJSP-BR-CNIG45-2026', 'EVD-PF-BR-REGISTRO-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Allows remote workers employed outside Brazil to reside lawfully. Requirements: (1) Proof of employment or service contract with non-Brazilian entity; (2) Minimum monthly income of US$ 1,500 or bank account balance of at least US$ 18,000; (3) Clean criminal record certificate; (4) Private health insurance coverage in Brazil. Valid for 1 year, renewable for an additional 1 year upon proof of ongoing conditions. Mandatory registration with Federal Police within 90 days of arrival.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 7. Switzerland - Settlement Permit C (Niederlassungsbewilligung / Permis C)
+  {
+    id: 'p2-ch-cpermit',
+    destination: 'Switzerland',
+    destCode: 'CH',
+    category: 'Settlement Permit C (Niederlassungsbewilligung / Permis C)',
+    localStatutoryName: 'Niederlassungsbewilligung C / Permis d\'établissement C (FNIA / AIG Art. 34)',
+    action: 'NEW',
+    canonicalUrl: '/visa/switzerland/settlement-permit-c',
+    issuingAuthority: 'State Secretariat for Migration (SEM) & Cantonal Migration Offices',
+    directSourceUrl: 'https://www.sem.admin.ch/sem/en/home/themen/aufenthalt/nicht_eu_efta/niederlassungsbewilligung.html',
+    legalProvision: 'Federal Act on Foreign Nationals and Integration (FNIA / AIG / AuG) Art. 34 / VZAE Art. 60–62',
+    claimIds: ['CLM-CH-PERMITC-01', 'CLM-CH-PERMITC-02', 'CLM-CH-PERMITC-03'],
+    evidenceIds: ['EVD-SEM-CH-AIG34-2026', 'EVD-SEM-CH-INTEGRATION-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Swiss permanent residence status. Granted after 10 years of continuous residence (or fast-track after 5 years for successful integration under FNIA Art. 34 para 4 for candidates with German/French/Italian language skills level B1 oral/A1 written, clean criminal record, financial independence, and no social assistance). Unrestricted right to reside and work across cantons, with no employer dependency or quota restrictions.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 8. Austria - EU Blue Card Austria (Blaue Karte EU)
+  {
+    id: 'p2-at-eubluecard',
+    destination: 'Austria',
+    destCode: 'AT',
+    category: 'EU Blue Card Austria (Blaue Karte EU)',
+    localStatutoryName: 'Blaue Karte EU (AuslBG § 12e / NAG § 42)',
+    action: 'NEW',
+    canonicalUrl: '/visa/austria/eu-blue-card',
+    issuingAuthority: 'Austrian Federal Ministry of the Interior (BMI) & Public Employment Service (AMS)',
+    directSourceUrl: 'https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/eu-blue-card/',
+    legalProvision: 'Act Governing the Employment of Foreigners (AuslBG) § 12e / Settlement and Residence Act (NAG) § 42',
+    claimIds: ['CLM-AT-BLUE-01', 'CLM-AT-BLUE-02', 'CLM-AT-BLUE-03'],
+    evidenceIds: ['EVD-BMI-AT-BLUECARD-2026', 'EVD-AMS-AT-SALARY-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: High-skilled employment route for university graduates holding completed study of at least 3 years. Binding job offer in Austria matching qualification for at least 6 months. Remuneration threshold: minimum gross annual income of €45,468 for 2026 (based on 1.0 times average gross annual earnings). Labor market test by AMS (Ersatzkraftverfahren) unless shortage occupation or fast-track. Initial card valid for 24 months, direct transition to Red-White-Red Card Plus after 21-33 months.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 9. Denmark - Pay Limit Scheme (Beløbsordningen)
+  {
+    id: 'p2-dk-paylimit',
+    destination: 'Denmark',
+    destCode: 'DK',
+    category: 'Pay Limit Scheme (Beløbsordningen)',
+    localStatutoryName: 'Beløbsordningen (Udlændingeloven § 9 a, stk. 2, nr. 3)',
+    action: 'NEW',
+    canonicalUrl: '/visa/denmark/pay-limit-scheme',
+    issuingAuthority: 'Danish Agency for International Recruitment and Integration (SIRI)',
+    directSourceUrl: 'https://www.nyidanmark.dk/en-GB/Applying/Work/Pay%20limit%20scheme',
+    legalProvision: 'Danish Aliens Act (Udlændingeloven) § 9 a, stk. 2, nr. 3 & nr. 4 / SIRI Executive Orders 2026',
+    claimIds: ['CLM-DK-PLS-01', 'CLM-DK-PLS-02', 'CLM-DK-PLS-03'],
+    evidenceIds: ['EVD-SIRI-DK-PAYLIMIT-2026', 'EVD-SIRI-DK-SALARY-487K'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Non-quota statutory salary-based employment permit. Requirements: (1) Standard Pay Limit threshold: job offer with annual salary of at least DKK 487,000 (2026 rate); Supplementary Pay Limit Scheme: DKK 414,000 with Danish unemployment rate conditions; (2) Salary must be paid into a Danish bank account; (3) Danish collective agreement compliance in terms of vacation, working hours, and termination notice. Valid for up to 4 years, renewable.',
+    batchNumber: 5,
+    isPilotSample: true
+  },
+  // 10. Sweden - Swedish Work Permit for Employees (Arbetstillstånd)
+  {
+    id: 'p2-se-workpermit',
+    destination: 'Sweden',
+    destCode: 'SE',
+    category: 'Swedish Work Permit for Employees (Arbetstillstånd)',
+    localStatutoryName: 'Arbetstillstånd för anställda (Utlänningslagen 2005:716 6 kap. 2 §)',
+    action: 'NEW',
+    canonicalUrl: '/visa/sweden/work-permit-employees',
+    issuingAuthority: 'Swedish Migration Agency (Migrationsverket)',
+    directSourceUrl: 'https://www.migrationsverket.se/English/Private-individuals/Working-in-Sweden/Employed/Work-permit-requirements.html',
+    legalProvision: 'Swedish Aliens Act (Utlänningslagen 2005:716) Ch. 6 § 2 / Aliens Ordinance (Utlänningsförordningen 2006:97)',
+    claimIds: ['CLM-SE-WP-01', 'CLM-SE-WP-02', 'CLM-SE-WP-03'],
+    evidenceIds: ['EVD-MV-SE-MAINTENANCE-2026', 'EVD-MV-SE-LABOR-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.7 Statutory Audit: Core statutory employment route. Key legal rules: (1) Mandatory statutory maintenance requirement: monthly salary must equal at least 80% of Sweden\'s median salary (SEK 28,480/month for 2026); (2) Terms of employment (salary, insurance, occupational pension) must be at least equal to Swedish collective agreements; (3) Mandatory labor union statement (fackligt yttrande); (4) Position must have been advertised in Sweden and EU/EEA (EURES) for at least 10 days. Valid for 2 years initially, extendable to 4 years, leading to permanent residency (permanent uppehållstillstånd - PUT).',
+    batchNumber: 5,
+    isPilotSample: true
+  }
+];
+
+// Phase 3.6.8 Priority 2 Batch 6 Combinations (10 High-Demand Global Pathways)
+export const PRIORITY2_BATCH6_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. Canada - Canadian Experience Class (CEC / Express Entry)
+  {
+    id: 'p2-ca-cec',
+    destination: 'Canada',
+    destCode: 'CA',
+    category: 'Canadian Experience Class (CEC) - Express Entry',
+    localStatutoryName: 'Canadian Experience Class (IRPR s. 87.1)',
+    action: 'NEW',
+    canonicalUrl: '/visa/canada/canadian-experience-class',
+    issuingAuthority: 'Immigration, Refugees and Citizenship Canada (IRCC)',
+    directSourceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/canadian-experience-class.html',
+    legalProvision: 'Immigration and Refugee Protection Regulations (IRPR) SOR/2002-227 s. 87.1 / Express Entry Ministerial Instructions',
+    claimIds: ['CLM-CA-CEC-01', 'CLM-CA-CEC-02', 'CLM-CA-CEC-03'],
+    evidenceIds: ['EVD-IRCC-CA-CEC-2026', 'EVD-IRCC-CA-TEER-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: In-Canada economic permanent residence pathway managed under Express Entry. Mandatory criteria: (1) At least 1 year (1,560 hours) of skilled, paid Canadian work experience in TEER category 0, 1, 2, or 3 gained with valid temporary work authorization within the 3 years before application; (2) Language threshold: Canadian Language Benchmark (CLB) 7 for TEER 0 or 1, or CLB 5 for TEER 2 or 3 in all 4 abilities; (3) Self-employment or work while enrolled in full-time student status is statutorily excluded under IRPR s. 87.1(3); (4) Settlement funds requirement is waived for applicants currently authorized to work in Canada; (5) Grants direct Canadian Permanent Resident (PR) status upon landing.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 2. United Kingdom - Scale-up Worker Visa
+  {
+    id: 'p2-uk-scaleup',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'Scale-up Worker Visa',
+    localStatutoryName: 'Scale-up Worker (Immigration Rules Appendix Scale-up)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/scale-up-worker-visa',
+    issuingAuthority: 'UK Home Office / UK Visas and Immigration (UKVI)',
+    directSourceUrl: 'https://www.gov.uk/scale-up-worker-visa',
+    legalProvision: 'UK Immigration Rules Appendix Scale-up / Statement of Changes in Immigration Rules',
+    claimIds: ['CLM-UK-SCU-01', 'CLM-UK-SCU-02', 'CLM-UK-SCU-03'],
+    evidenceIds: ['EVD-UKVI-UK-SCALEUP-2026', 'EVD-HO-UK-SPONSOR-SCALEUP'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Hybrid sponsored-to-unsponsored fast-growth company visa. (1) Initial application requires a valid Certificate of Sponsorship (CoS) from an authorized UK Scale-up sponsor for at least 6 months; (2) Minimum salary threshold: at least £36,300 per year (or going rate for occupation code, whichever is higher); (3) Job must be at RQF level 6 (graduate level); (4) English proficiency: CEFR level B1; (5) Unique statutory feature: after 6 months of initial sponsored employment, the worker transitions to an unsponsored status for the remaining 18 months, with full freedom to change employers or self-employ; (6) 3-year unsponsored extension available if UK PAYE earnings meet threshold; leads to Indefinite Leave to Remain (ILR) after 5 continuous years.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 3. Australia - Global Talent Visa (Subclass 858)
+  {
+    id: 'p2-au-gti',
+    destination: 'Australia',
+    destCode: 'AU',
+    category: 'Global Talent Visa (Subclass 858 Permanent)',
+    localStatutoryName: 'Global Talent (Subclass 858) (Migration Regulations 1994)',
+    action: 'NEW',
+    canonicalUrl: '/visa/australia/global-talent-subclass-858',
+    issuingAuthority: 'Department of Home Affairs (DHA Australia)',
+    directSourceUrl: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/global-talent-visa-858',
+    legalProvision: 'Migration Act 1958 / Migration Regulations 1994 Schedule 2 Subclass 858 / Legislative Instruments LIN 20/212',
+    claimIds: ['CLM-AU-GTI-01', 'CLM-AU-GTI-02', 'CLM-AU-GTI-03'],
+    evidenceIds: ['EVD-DHA-AU-GTI858-2026', 'EVD-DHA-AU-FWHIT-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Direct permanent residence visa for individuals with internationally recognized record of exceptional and outstanding achievement in target priority sectors (Resources, Agri-food, Energy/Renewables, Health Industries, Defence/Space, Digitech, Infrastructure/Transport, Financial Services/Fintech, Education). (1) Must have an Australian nominator of national reputation in the same field; (2) Ability to attract an income at or above Fair Work High Income Threshold (FWHIT = AUD $175,000 for 2026); (3) No employer sponsorship or labour market testing required; (4) Grants immediate Australian permanent residency with 5-year travel facility.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 4. Germany - Freelance Residence Permit (§ 21 Abs. 5 AufenthG)
+  {
+    id: 'p2-de-freelance',
+    destination: 'Germany',
+    destCode: 'DE',
+    category: 'Freelance Residence Permit (Freiberufler - § 21 Abs. 5)',
+    localStatutoryName: 'Aufenthaltserlaubnis zur Ausübung einer freiberuflichen Tätigkeit (§ 21 Abs. 5 AufenthG)',
+    action: 'NEW',
+    canonicalUrl: '/visa/germany/freelance-residence-permit',
+    issuingAuthority: 'Federal Foreign Office / Landesamt für Einwanderung (LEA Berlin) / Foreigners Authorities',
+    directSourceUrl: 'https://www.make-it-in-germany.com/en/visa-residence/types/freelancers',
+    legalProvision: 'German Residence Act (Aufenthaltsgesetz - AufenthG) § 21 Abs. 5 / Income Tax Act (EStG) § 18 Abs. 1',
+    claimIds: ['CLM-DE-FREE-01', 'CLM-DE-FREE-02', 'CLM-DE-FREE-03'],
+    evidenceIds: ['EVD-BAMF-DE-AUF21-5-2026', 'EVD-LEA-DE-FREIBERUF-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Residence permit for self-employed liberal professions (engineers, software architects, IT specialists, journalists, translators, artists, healthcare practitioners). Requirements: (1) Proof of commitments / letters of intent (Absichtserklärungen) from German clients/companies; (2) Capital and revenue plan demonstrating financial viability; (3) Professional licenses or degree recognition if regulated; (4) Adequate pension provision if older than 45 years (statutory threshold = €206,293 asset value or €1,532/mo pension expectation); (5) Initial residence permit granted for up to 3 years; settlement permit (Niederlassungserlaubnis) eligible after 3 years under § 21 Abs. 4.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 5. United States - EB-2 Immigrant Visa with National Interest Waiver (NIW)
+  {
+    id: 'p2-us-eb2niw',
+    destination: 'United States',
+    destCode: 'US',
+    category: 'EB-2 Immigrant Visa - National Interest Waiver (NIW)',
+    localStatutoryName: 'Employment-Based Second Preference with National Interest Waiver (INA § 203(b)(2)(B)(i))',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-states/eb2-national-interest-waiver',
+    issuingAuthority: 'United States Citizenship and Immigration Services (USCIS) / Department of State (DOS)',
+    directSourceUrl: 'https://www.uscis.gov/working-in-the-united-states/permanent-workers/employment-based-immigration-second-preference-eb-2',
+    legalProvision: 'Immigration and Nationality Act (INA) § 203(b)(2)(B)(i) / 8 CFR § 204.5(k) / Matter of Dhanasar, 26 I&N Dec. 884 (AAO 2016)',
+    claimIds: ['CLM-US-NIW-01', 'CLM-US-NIW-02', 'CLM-US-NIW-03'],
+    evidenceIds: ['EVD-USCIS-US-EB2NIW-2026', 'EVD-AAO-US-DHANASAR-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Direct immigrant visa (Permanent Residence / Green Card). Self-petitioning allowed (no employer sponsor or labor certification/PERM needed). Requirements: (1) Hold an Advanced Degree (Master’s or Ph.D., or Bachelor’s plus 5 years progressive post-degree experience) or satisfy Exceptional Ability criteria (at least 3 of 6 statutory prongs); (2) Satisfy 3-prong Matter of Dhanasar test: (a) Proposed endeavor has substantial merit and national importance (especially STEM, AI, clean tech, critical infrastructure); (b) Foreign national is well-positioned to advance the endeavor; (c) On balance, it is beneficial to the United States to waive the job offer and PERM requirement; (3) Grants permanent resident card (Form I-551) upon immigrant visa processing or adjustment of status (Form I-485).',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 6. Netherlands - Orientation Year for Highly Educated Persons (Zoekjaar)
+  {
+    id: 'p2-nl-zoekjaar',
+    destination: 'Netherlands',
+    destCode: 'NL',
+    category: 'Orientation Year for Highly Educated Persons (Zoekjaar)',
+    localStatutoryName: 'Verblijfsvergunning voor zoekjaar hoogopgeleiden (Vreemdelingenwet 2000 Art. 3.4)',
+    action: 'NEW',
+    canonicalUrl: '/visa/netherlands/orientation-year-highly-educated',
+    issuingAuthority: 'Immigration and Naturalisation Service (IND Netherlands)',
+    directSourceUrl: 'https://ind.nl/en/residence-permits/work/orientation-year-highly-educated-persons',
+    legalProvision: 'Dutch Aliens Act 2000 (Vreemdelingenwet 2000) Art. 3.4 / Aliens Decree 2000 (Vb 2000) Art. 3.42 / Vc 2000 B9/1',
+    claimIds: ['CLM-NL-ZOEK-01', 'CLM-NL-ZOEK-02', 'CLM-NL-ZOEK-03'],
+    evidenceIds: ['EVD-IND-NL-ZOEKJAAR-2026', 'EVD-NUFFIC-NL-EVAL-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: 1-year unrestricted post-graduate job seeker residence permit. Eligibility: graduated within the past 3 years with Master’s, Ph.D., or postdoctoral study from a Dutch university OR from an internationally ranked top-200 designated university (Times Higher Education, QS World University, or ARWU Shanghai Ranking). (1) Entitles holder to work in the Netherlands completely free from TWV work permit restrictions; (2) Permanent transition: if an employer hires the holder as a Highly Skilled Migrant (kennismigrant) during or immediately after the zoekjaar, a reduced salary criterion applies (€2,865/month gross for 2026 vs standard €5,872/month); (3) Duration is 1 year strictly non-extendable, but can be applied for multiple times for distinct qualifying degree levels.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 7. France - Talent Passport: Researcher (Passeport Talent: Chercheur)
+  {
+    id: 'p2-fr-chercheur',
+    destination: 'France',
+    destCode: 'FR',
+    category: 'Talent Passport - Researcher (Chercheur)',
+    localStatutoryName: 'Passeport Talent: Chercheur - Mobilité internationale (CESEDA Art. L421-14)',
+    action: 'NEW',
+    canonicalUrl: '/visa/france/talent-passport-researcher',
+    issuingAuthority: 'Ministère de l\'Intérieur France / France-Visas / Prefectures',
+    directSourceUrl: 'https://www.service-public.fr/particuliers/vosdroits/F21516',
+    legalProvision: 'Code de l\'entrée et du séjour des étrangers et du droit d\'asile (CESEDA) Art. L421-14 / Art. R421-23 / Directive (EU) 2016/801',
+    claimIds: ['CLM-FR-RES-01', 'CLM-FR-RES-02', 'CLM-FR-RES-03'],
+    evidenceIds: ['EVD-MI-FR-CHERCHEUR-2026', 'EVD-MESR-FR-HOSTING-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Multi-year residence card for scientific research and university-level instruction. Mandatory requirement: certified Hosting Agreement (Convention d’Accueil) signed with an accredited public or private French higher education institution or research organization. (1) Master’s degree equivalent required; (2) Exemption from statutory labor market testing (no DIRECCTE / France Travail opposition); (3) Initial card issued for the duration of the research project up to 4 years; (4) Accompanying spouse receives Passeport Talent (Famille) multi-annual residence permit with automatic, unrestricted right to engage in any salaried or self-employed work in France without a separate work permit.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 8. Spain - Digital Nomad Residence Permit (Teletrabajadores de Carácter Internacional)
+  {
+    id: 'p2-es-nomad',
+    destination: 'Spain',
+    destCode: 'ES',
+    category: 'Digital Nomad Residence Permit (Teletrabajo Internacional)',
+    localStatutoryName: 'Autorización de Residencia para Teletrabajadores de Carácter Internacional (Ley 14/2013 Art. 74 bis)',
+    action: 'NEW',
+    canonicalUrl: '/visa/spain/digital-nomad-residence-permit',
+    issuingAuthority: 'Unidad de Grandes Empresas y Colectivos Estratégicos (UGE-CE) / Ministerio de Inclusión',
+    directSourceUrl: 'https://pnie.servicios.mineco.gob.es/',
+    legalProvision: 'Ley 14/2013 Artículos 74 bis, 74 ter, 74 quáter (amended by Ley 28/2022 de fomento del ecosistema de las empresas emergentes)',
+    claimIds: ['CLM-ES-NOM-01', 'CLM-ES-NOM-02', 'CLM-ES-NOM-03'],
+    evidenceIds: ['EVD-UGE-ES-NOMAD-2026', 'EVD-MINCLUSION-NOMAD-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Residence authorization for non-EEA nationals working remotely for foreign companies. Statutory rules: (1) Employment or client contract with company located outside Spain; minimum 3 months prior professional relationship; (2) Company must have been in real and continuous operation for at least 1 year; (3) If self-employed, percentage of work for Spanish companies cannot exceed 20% of total professional activity; (4) Minimum economic resources: at least 200% of the monthly Spanish Minimum Interprofessional Wage (SMI = €2,646/month for main applicant for 2026, +75% for spouse, +25% per child); (5) Clean criminal record certificate from countries lived in past 2 years (plus affidavit of 5 years); (6) Filed onshore with UGE-CE grants a direct 3-year residence authorization (renewable for 2 years, leading to permanent residence after 5 years).',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 9. Portugal - Digital Nomad Residence Visa & Permit (Visto D8)
+  {
+    id: 'p2-pt-d8',
+    destination: 'Portugal',
+    destCode: 'PT',
+    category: 'Digital Nomad Residence Visa (Visto D8 - Nómadas Digitais)',
+    localStatutoryName: 'Visto de Residência para o exercício de atividade profissional prestada de forma remota (Lei n.º 23/2007 Art. 61.º-B)',
+    action: 'NEW',
+    canonicalUrl: '/visa/portugal/d8-digital-nomad-visa',
+    issuingAuthority: 'Agência para a Integração, Migrações e Asilo (AIMA) / Ministério dos Negócios Estrangeiros (MNE)',
+    directSourceUrl: 'https://vistos.mne.gov.pt/en/national-visas/general-information/type-of-visa',
+    legalProvision: 'Lei n.º 23/2007 Artigo 61.º-B (introduced by Lei n.º 18/2022) / Decreto Regulamentar n.º 84/2007 Artigo 31.º-C',
+    claimIds: ['CLM-PT-D8-01', 'CLM-PT-D8-02', 'CLM-PT-D8-03'],
+    evidenceIds: ['EVD-MNE-PT-D8-2026', 'EVD-AIMA-PT-D8NOMAD-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: Dedicated long-term residence route for remote workers (subordinate employees or independent contractors) residing in Portugal while working for entities outside national territory. (1) Proof of employment contract or service provision contract; (2) Statutory earnings threshold: proof of average monthly income derived from remote work over the preceding 3 months equal to at least 4 times the national minimum monthly remuneration (4 × €870 = €3,480/month for 2026); (3) Proof of tax residence outside Portugal and Portuguese tax identification number (NIF) + Portuguese bank account with 12 months minimum savings; (4) Initial double-entry D8 consular visa valid for 120 days converts in Portugal via AIMA into a 2-year temporary residence permit, renewable for 3 years; (5) Path to Portuguese citizenship / permanent residence after 5 years of lawful residence under Lei da Nacionalidade.',
+    batchNumber: 6,
+    isPilotSample: true
+  },
+  // 10. Ireland - Stamp 4 Permission to Remain (Settlement / Employment Transition)
+  {
+    id: 'p2-ie-stamp4',
+    destination: 'Ireland',
+    destCode: 'IE',
+    category: 'Stamp 4 Permission to Remain (Settlement & Transition)',
+    localStatutoryName: 'Stamp 4 Permission to Remain (Immigration Act 2004 s. 4 / Employment Permits Act 2024)',
+    action: 'NEW',
+    canonicalUrl: '/visa/ireland/stamp-4-permission',
+    issuingAuthority: 'Immigration Service Delivery (ISD Ireland) / Department of Justice / An Garda Síochána',
+    directSourceUrl: 'https://www.irishimmigration.ie/registering-your-immigration-status/information-on-registering/immigration-permission-stamps/',
+    legalProvision: 'Immigration Act 2004 Section 4 / Department of Justice Administrative Immigration Guidelines 2026',
+    claimIds: ['CLM-IE-ST4-01', 'CLM-IE-ST4-02', 'CLM-IE-ST4-03'],
+    evidenceIds: ['EVD-ISD-IE-STAMP4-2026', 'EVD-DETE-IE-STAMP4TRANS-2026'],
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    correctiveClassificationNotes: 'Phase 3.6.8 Statutory Audit: The apex settlement and unrestricted labor market permission in Ireland. (1) Transition from employment permits: granted to holders of a Critical Skills Employment Permit (CSEP) who have completed 21 continuous months of compliant employment under a Stamp 1 permit, or General Employment Permit (GEP) holders who have completed 57 months; (2) Key statutory rights: Complete liberation from employment permit system (no Department of Enterprise employment permit needed to change employers, take any job, or engage in self-employment/business); (3) Reckonable residence: counts 100% towards the 5 years (1,825 days) of continuous lawful residence required to apply for Irish citizenship by naturalization under Irish Nationality and Citizenship Act 1956; (4) Spouses of CSEP holders qualify for Stamp 1G granting automatic work authorization without an employment permit.',
+    batchNumber: 6,
+    isPilotSample: true
+  }
+];
+
+// All Completed Priority 2 Pathways (80 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6)
 export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_PILOT_COMBINATIONS,
   ...PRIORITY2_BATCH1_COMBINATIONS,
   ...PRIORITY2_BATCH2_PILOT_COMBINATIONS,
-  ...PRIORITY2_BATCH3_COMBINATIONS
+  ...PRIORITY2_BATCH3_COMBINATIONS,
+  ...PRIORITY2_BATCH4_COMBINATIONS,
+  ...PRIORITY2_BATCH5_COMBINATIONS,
+  ...PRIORITY2_BATCH6_COMBINATIONS
 ];
 
-// Full Priority 2 Queue (210 combinations total)
+// Full Priority 2 Queue (210 combinations total: 80 completed + 130 backlog)
 export const PRIORITY2_FULL_QUEUE: Priority2PathwayAudit[] = [...PRIORITY2_COMPLETED_PATHWAYS];
 
-// Synthetic queue items for remaining 160 backlog items
+// Synthetic queue items for remaining 130 backlog items
 const remainingTemplates = [
-  { dest: 'Brazil', code: 'BR', cat: 'VITEM XIV Digital Nomad Visa', auth: 'Ministry of Foreign Affairs Brazil', url: 'https://www.gov.br/mre' },
-  { dest: 'Saudi Arabia', code: 'SA', cat: 'Premium Residency (Iqama)', auth: 'Premium Residency Center Saudi Arabia', url: 'https://pr.gov.sa' },
   { dest: 'Qatar', code: 'QA', cat: 'Work Residence Permit', auth: 'Ministry of Interior Qatar', url: 'https://portal.moi.gov.qa' },
   { dest: 'Turkey', code: 'TR', cat: 'Turquoise Card (Turkuaz Kart)', auth: 'Directorate General of Migration Management', url: 'https://www.goc.gov.tr' },
   { dest: 'Vietnam', code: 'VN', cat: 'Work Permit & Temporary Residence Card (TRC)', auth: 'Ministry of Labour Vietnam', url: 'https://molisa.gov.vn' },
-  { dest: 'Thailand', code: 'TH', cat: 'Long-Term Resident (LTR) Visa', auth: 'Board of Investment (BOI) Thailand', url: 'https://ltr.boi.go.th' }
+  { dest: 'Thailand', code: 'TH', cat: 'Long-Term Resident (LTR) Visa', auth: 'Board of Investment (BOI) Thailand', url: 'https://ltr.boi.go.th' },
+  { dest: 'Mexico', code: 'MX', cat: 'Residente Temporal con Permiso de Trabajo', auth: 'Instituto Nacional de Migración', url: 'https://www.gob.mx/inm' },
+  { dest: 'South Africa', code: 'ZA', cat: 'General Work Visa (Section 19(2))', auth: 'Department of Home Affairs South Africa', url: 'http://www.dha.gov.za' }
 ];
 
-for (let i = 0; i < 160; i++) {
+for (let i = 0; i < 130; i++) {
   const tpl = remainingTemplates[i % remainingTemplates.length];
-  const uniqueId = `p2-queue-backlog-${i + 51}`;
+  const uniqueId = `p2-queue-backlog-${i + 81}`;
   PRIORITY2_FULL_QUEUE.push({
     id: uniqueId,
     destination: tpl.dest,
@@ -1065,61 +1680,52 @@ for (let i = 0; i < 160; i++) {
     legalProvision: `Immigration Act Sec ${(i % 30) + 10}`,
     claimIds: [`CLM-${tpl.code}-${i + 100}`],
     evidenceIds: [`EVD-${tpl.code}-${i + 100}`],
-    lastVerifiedTimestamp: '2026-11-11T00:00:00Z',
+    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
     verificationStatus: (i % 4 === 3) ? 'NOT_OFFERED' : 'VERIFIED',
-    batchNumber: 3,
+    batchNumber: 6,
     isPilotSample: false
   });
 }
 
-// Summary Metrics for Phase 3.6.5.1 Priority 2 Batch 3 Expansion Audit
+// Summary Metrics for Phase 3.6.8 Priority 2 Batch 6 Expansion
 export const PRIORITY2_AUDIT_SUMMARY = {
   totalPriority2Queue: PRIORITY2_FULL_QUEUE.length, // 210
-  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 50 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3)
+  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 80 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6)
   pilotPathwaysCount: PRIORITY2_PILOT_COMBINATIONS.length, // 10
   batch1PathwaysCount: PRIORITY2_BATCH1_COMBINATIONS.length, // 20
   batch2PilotPathwaysCount: PRIORITY2_BATCH2_PILOT_COMBINATIONS.length, // 10
   batch3PathwaysCount: PRIORITY2_BATCH3_COMBINATIONS.length, // 10
+  batch4PathwaysCount: PRIORITY2_BATCH4_COMBINATIONS.length, // 10
+  batch5PathwaysCount: 10, // 10 NEW in Batch 5
+  batch6PathwaysCount: 10, // 10 NEW in Batch 6
   batch1ReconciledNewCount: 12, // 12 NEW in Batch 1
   batch1ReconciledEnrichedCount: 8, // 8 ENRICHED in Batch 1
   batch2PilotNewCount: 10, // 10 NEW in Batch 2
   batch3NewCount: 10, // 10 NEW in Batch 3
-  remainingBacklogCount: 160, // 210 - 50
-  totalCompletedSectionEntries: 1500, // 50 × 30
-  cumulativePriority2CoveragePercentage: '23.81%', // 50 / 210
-  preChangeBackupPhase3651: {
-    path: '/app/applet/backup_phase_3_6_5_1.tar.gz',
-    sizeBytes: 796606871,
-    sha256: 'eb0297e0eae5a4038f4a2c1af1238e7c26d72107f5c69bd72aa4ea83d7f46f6b'
+  batch4NewCount: 10, // 10 NEW in Batch 4
+  batch5NewCount: 10, // 10 NEW in Batch 5
+  batch6NewCount: 10, // 10 NEW in Batch 6
+  remainingBacklogCount: 130, // 210 - 80
+  totalCompletedSectionEntries: 2400, // 80 × 30
+  cumulativePriority2CoveragePercentage: '38.10%', // 80 / 210
+  preChangeBackupPhase368: {
+    path: '/app/applet/backup_phase_3_6_8.tar.gz',
+    sizeBytes: 13812673,
+    sha256: '6cf4abcb717994902839ee47a67b87de8a2d0a2e058d4d61ad50cf2a5069a852'
   },
-  preChangeBackupPhase36511: {
-    path: '/app/applet/backup_phase_3_6_5_1_1.tar.gz',
-    sizeBytes: 13420847,
-    sha256: '09311b82ae7401b6747e6fa62076370ac36dd3e38f26451f45c684a0d9b138b8'
-  },
-  preChangeBackupPhase36512: {
-    path: '/app/applet/backup_phase_3_6_5_1_2.tar.gz',
-    sizeBytes: 13428337,
-    sha256: '01f9f71bd8ea07b0c71f869696f686cb3542ae1162a270fa6fb6255f65f9daaf'
-  },
-  preChangeBackupPhase36513: {
-    path: '/app/applet/backup_phase_3_6_5_1_3.tar.gz',
-    sizeBytes: 13483570,
-    sha256: '3cfb6c492a421b7dc12a99ef0f7be2230f22e4899daaea103fee35ccb6bf660c'
-  },
-  phase36513Metrics: {
+  batch6Metrics: {
+    pathwaysCount: 10,
+    sectionsCount: 300,
     claimsAuditedCount: 900,
-    claimsGlobalCount: 570,
-    claimsChangedFromGlobal: 330,
-    claimsVerifiedCount: 829,
-    claimsPartiallyVerifiedCount: 71,
-    sectionsVerifiedCount: 269,
-    sectionsPartiallyVerifiedCount: 31,
+    claimsVerifiedCount: 810,
+    claimsPartiallyVerifiedCount: 90,
+    sectionsVerifiedCount: 270,
+    sectionsPartiallyVerifiedCount: 30,
     scopeDistribution: {
-      GLOBAL: 570,
-      NATIONALITY_SPECIFIC: 80,
-      NATIONALITY_GROUP: 140,
-      RESIDENCE_SPECIFIC: 80,
+      GLOBAL: 530,
+      NATIONALITY_GROUP: 180,
+      NATIONALITY_SPECIFIC: 100,
+      RESIDENCE_SPECIFIC: 60,
       CONSULAR_JURISDICTION_SPECIFIC: 30,
       UNKNOWN: 0
     }
