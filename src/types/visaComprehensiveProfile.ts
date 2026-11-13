@@ -85,7 +85,12 @@ export function isInvalidatingEvidenceStatus(status: unknown): boolean {
 export type SectionVerificationState =
   | 'VERIFIED'
   | 'PARTIAL'
+  | 'PARTIALLY_VERIFIED'
   | 'AWAITING_VERIFICATION'
+  | 'AWAITING_OFFICIAL_VERIFICATION'
+  | 'CONFLICTING'
+  | 'CONFLICTING_EVIDENCE'
+  | 'EXPIRED'
   | 'NOT_APPLICABLE'
   | 'UNKNOWN';
 
@@ -2558,8 +2563,10 @@ export function sanitizeVisaDetailsForPublic(
 
   const sanitizedClaims = rawClaims
     .filter(c => {
-      // Do not expose REJECTED, QUARANTINED, or OUTDATED claims to public as verified guidance
-      if (['REJECTED', 'QUARANTINED'].includes(c.status)) return false;
+      // Do not expose REJECTED, QUARANTINED, or explicitly quarantined claims to public guidance
+      if (c?.isQuarantined === true) return false;
+      const st = String(c?.status || c?.verificationStatus || '').toUpperCase();
+      if (['REJECTED', 'QUARANTINED'].includes(st)) return false;
       // Filter by nationality: include universal ('ALL') and matching target nationality
       if (targetNat && targetNat !== 'ALL') {
         const claimNat = String(c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase();
@@ -2595,13 +2602,18 @@ export function sanitizeVisaDetailsForPublic(
         }
       );
 
-      // Public presentation status: never display as VERIFIED if integrity check fails
+      const rawSt = String(c.status || c.verificationStatus || 'AWAITING_VERIFICATION').toUpperCase();
+      // Public presentation status: never display as VERIFIED if integrity check fails; preserve honest EXPIRED / CONFLICTING / NOT_APPLICABLE / PARTIALLY_VERIFIED states
       const publicStatus =
-        c.status === 'VERIFIED' && integrity.canPresentAsVerified
+        rawSt === 'VERIFIED' && integrity.canPresentAsVerified
           ? 'VERIFIED'
-          : c.status === 'VERIFIED'
+          : rawSt === 'VERIFIED'
           ? 'AWAITING_VERIFICATION'
-          : c.status || 'NEEDS_EVIDENCE';
+          : rawSt === 'NEEDS_EVIDENCE'
+          ? 'AWAITING_VERIFICATION'
+          : rawSt;
+
+      const canPresent = publicStatus === 'VERIFIED' && integrity.canPresentAsVerified;
 
       return {
         id: c.id,
@@ -2617,7 +2629,7 @@ export function sanitizeVisaDetailsForPublic(
         applicableNationality: (c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase(),
         countryIso: c.countryIso || c.country_iso || '',
         visaCategory: c.visaCategory || c.visa_category || '',
-        canPresentAsVerified: integrity.canPresentAsVerified,
+        canPresentAsVerified: canPresent,
         staleOrMissingEvidence: integrity.staleOrMissingEvidence,
         warnings: integrity.warnings,
         evidence: sanitizedEvidence
@@ -2635,6 +2647,9 @@ export function sanitizeVisaDetailsForPublic(
       if (sec?.meta) {
         delete sec.meta.reviewerNotes;
         delete sec.meta.internalReviewNotes;
+        delete sec.meta.correctiveClassificationNotes;
+        delete sec.meta.reviewer;
+        delete sec.meta.editorId;
       }
     }
   }
@@ -2645,6 +2660,9 @@ export function sanitizeVisaDetailsForPublic(
       if (top) {
         delete top.reviewerNotes;
         delete top.internalReviewNotes;
+        delete top.correctiveClassificationNotes;
+        delete top.reviewer;
+        delete top.editorId;
       }
     }
   }

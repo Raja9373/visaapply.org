@@ -43,19 +43,19 @@ export const BATCH7_PATHWAYS: Batch7Pathway[] = [
     destination: 'South Korea',
     destCode: 'KR',
     category: 'E-9 Non-Professional Employment Visa',
-    localStatutoryName: '비전문취업 (E-9 / 외국인근로자의 고용 등에 관한 법률 제8조 및 제12조)',
+    localStatutoryName: '비전문취업 (E-9 / 외국인근로자의 고용 등에 관한 법률 제8조, 제9조 및 제12조)',
     action: 'NEW',
     canonicalUrl: '/visa/south-korea/e-9-non-professional-employment',
-    issuingAuthority: 'Ministry of Employment and Labor (MOEL) & Ministry of Justice (MOJ / HiKorea)',
-    directSourceUrl: 'https://www.eps.go.kr/',
-    secondarySourceUrl: 'https://www.moel.go.kr/english/',
-    legalProvision: 'Act on the Employment of Foreign Workers (Act No. 6967) Arts. 8, 12, 18 / Minimum Wage Act Art. 5 / MOEL Public Notice No. 2025-56',
-    salaryOrInvestmentThreshold: 'KRW 2,156,880 / month benchmark (KRW 10,320/hr × 209 statutory paid hours; minimum statutory wage floor, not an E-9 contract ceiling)',
+    issuingAuthority: 'Ministry of Employment and Labor (MOEL), Minimum Wage Commission, MOLEG EasyLaw & Ministry of Justice (MOJ)',
+    directSourceUrl: 'https://www.minimumwage.go.kr/english/introduce/minWage.do',
+    secondarySourceUrl: 'https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144',
+    legalProvision: 'Act on the Employment of Foreign Workers Arts. 8, 9, 10, 12, 18 (KLRI) / Minimum Wage Act Arts. 4–6 / MOEL Public Notice No. 2025-47 (고용노동부 고시 제2025-47호, 2025-08-05)',
+    salaryOrInvestmentThreshold: 'Hourly: KRW 10,320 | Paid-Hours Basis: 209 hours | Formula: KRW 10,320 × 209 hours = KRW 2,156,880 | Monthly Result: KRW 2,156,880 (Standard monthly minimum-wage benchmark; NOT a guaranteed complete E-9 salary; excludes overtime, night premiums, holiday premiums, bonuses)',
     currency: 'KRW',
     validityPeriod: '3 years initial contract, extendable once up to 1 year 10 months (max 4 years 10 months stay)',
-    processingSlaDays: '45-90 days via EPS roster, EPS-TOPIK examination, and employer selection',
+    processingSlaDays: '45-90 days via EPS roster, EPS-TOPIK examination, and employer selection (PARTIALLY_VERIFIED: eps.go.kr portal returned system error on 2026-11-13)',
     settlementEligible: false,
-    notes: 'Phase 3.6.9.2 Final Integrity Fix: Statutory Employment Permit System (EPS) government-to-government bilateral quota program with 16 sending countries. (1) 2026 National Minimum Wage: Gazetted at KRW 10,320 per hour (+2.89% from KRW 10,030 in 2025) pursuant to MOEL Public Notice No. 2025-56; (2) Statutory Monthly Working Hours Basis: Under Korean Labor Standards Act Article 55, paid monthly hours = [(40 regular weekly hours + 8 paid weekly holiday allowance) / 7 days] × (365 days / 12 months) = 208.57 rounded to 209 paid hours; (3) Monthly Benchmark Calculation: 209 hours × KRW 10,320/hour = KRW 2,156,880/month; (4) Benchmark Clarification: This KRW 2,156,880/month amount serves strictly as a mandatory national statutory minimum-wage floor, not a fixed complete E-9 salary guarantee. Individual standard labor contracts may stipulate higher contractual base wages or industry-specific hazard/skill allowances, but cannot lawfully pay below this threshold. Discretionary bonuses, overtime (1.5x), and non-guaranteed allowances are excluded from the basic subsistence floor; (5) Durations: Initial employment contract is limited to 3 years; extendable once for up to 1 year and 10 months with the same employer, for an absolute cumulative continuous stay of 4 years and 10 months (58 months) under Act on the Employment of Foreign Workers Article 18; (6) Re-entry Rules: Requires a mandatory 6-month departure before re-entry under a new E-9 contract, reduced to 1 to 3 months for re-hired "committed foreign workers" (성실외국인근로자); (7) 16 EPS Partner Nations: Philippines, Mongolia, Sri Lanka, Vietnam, Thailand, Indonesia, Uzbekistan, Pakistan, Cambodia, China, Bangladesh, Kyrgyzstan, Nepal, Myanmar, Timor-Leste, Laos.'
+    notes: 'Phase 3.6.9.3 Micro-Cleanup: Statutory Employment Permit System (EPS) government-to-government bilateral quota program with 16 sending countries. (1) 2026 Statutory Hourly Minimum Wage: Gazetted at KRW 10,320 per hour (+2.9% / +KRW 290 from 2025 KRW 10,030/hr) effective 2026-01-01 to 2026-12-31 pursuant to MOEL Public Notice No. 2025-47 (고용노동부 고시 제2025-47호, published 2025-08-05). (2) Standard Monthly Paid-Hours Calculation Basis: 209 hours per month under Korean Labor Standards Act Article 55 [(40 regular weekly hours + 8 paid weekly holiday allowance hours) / 7 days × (365 / 12) = 208.57 rounded to 209 hours]. (3) Explicit Calculation Formula & Result: KRW 10,320 × 209 hours = KRW 2,156,880 per month. (4) Statutory Benchmark Clarification: KRW 2,156,880 is the standard monthly minimum-wage benchmark (statutory floor), NOT a guaranteed complete E-9 salary. This basic calculation strictly excludes overtime, night premiums, holiday premiums, and discretionary bonuses. (5) E-9 Contract & Stay Rules (MOLEG EasyLaw & KLRI): Initial employment contract up to 3 years; extendable once up to 1 year 10 months (max 4 years 10 months cumulative stay under Art. 18 & 18-2). Note: eps.go.kr and hikorea.go.kr/info/InfoStayE9.pt returned portal errors on 2026-11-13 automated verification; operational portal claims remain PARTIALLY_VERIFIED.'
   },
   {
     id: 'p2-jp-businessmanager',
@@ -405,24 +405,58 @@ export function generateBatch7Exports() {
         );
 
         let specificStatement = `Statutory mandate for ${p.category} under ${s.name}: ${p.notes.substring(0, 150)}...`;
-        if (s.secId === 'S05') {
-          specificStatement = `Financial / Remuneration Requirement: ${p.salaryOrInvestmentThreshold} pursuant to ${p.legalProvision}.`;
-        } else if (s.secId === 'S11') {
-          specificStatement = `Statutory Validity and Maximum Stay: ${p.validityPeriod}.`;
-        } else if (s.secId === 'S17') {
-          specificStatement = `Processing Standard SLA: ${p.processingSlaDays}.`;
+        let claimSourceUrl = p.directSourceUrl;
+        let claimEvidenceId = `EVD-${p.destCode}-${s.secId}`;
+        if (p.id === 'p2-kr-e9') {
+          if (s.secId === 'S05') {
+            if (cIdx === 1) {
+              specificStatement = '2026 Statutory Hourly Minimum Wage: KRW 10,320/hour (+2.9% from 2025 KRW 10,030/hr), effective 2026-01-01 to 2026-12-31 under MOEL Public Notice No. 2025-47 (고용노동부 고시 제2025-47호).';
+              claimSourceUrl = 'https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144';
+              claimEvidenceId = 'EVD-KR-MOEL-NOTICE-2025-47';
+            } else if (cIdx === 2) {
+              specificStatement = 'Standard Monthly Paid-Hours Calculation Basis & Formula: 209 hours/month [(40 regular weekly hours + 8 paid weekly holiday hours) / 7 × (365 / 12) = 209 hours]. Formula: KRW 10,320 × 209 hours = KRW 2,156,880.';
+              claimSourceUrl = 'https://www.minimumwage.go.kr/english/introduce/minWage.do';
+              claimEvidenceId = 'EVD-KR-MWC-2026-TABLE';
+            } else {
+              specificStatement = 'Standard Monthly Minimum-Wage Benchmark Clarification: KRW 2,156,880/month is the standard monthly minimum-wage benchmark (statutory wage floor), NOT a guaranteed complete E-9 salary. Excludes overtime, night premiums, holiday premiums, and bonuses.';
+              claimSourceUrl = 'https://elaw.klri.re.kr/eng_mobile/viewer.do?hseq=48699&type=part&key=1';
+              claimEvidenceId = 'EVD-KR-KLRI-MWA-2026';
+            }
+          } else if (s.secId === 'S11') {
+            specificStatement = `Statutory Validity and Maximum Stay: ${p.validityPeriod} (Act on the Employment of Foreign Workers Arts. 18 & 18-2).`;
+            claimSourceUrl = 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+            claimEvidenceId = 'EVD-KR-EASYLAW-E9-2026';
+          } else if (s.secId === 'S17') {
+            specificStatement = `Processing Standard SLA: ${p.processingSlaDays}. Note: eps.go.kr returned a system error on 2026-11-13 verification; live roster processing times remain PARTIALLY_VERIFIED.`;
+            claimSourceUrl = 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+            claimEvidenceId = 'EVD-KR-EPS-PORTAL-UNREACHABLE';
+          } else if (s.secId === 'S02' || s.secId === 'S09' || s.secId === 'S25') {
+            specificStatement = `Statutory mandate for ${p.category} under ${s.name}: Governed by Act on the Employment of Foreign Workers (KLRI) & MOLEG EasyLaw E-9 Employment Procedures.`;
+            claimSourceUrl = s.secId === 'S02' ? 'https://elaw.klri.re.kr/eng_service/lawView.do?hseq=60984&lang=ENG' : 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+            claimEvidenceId = s.secId === 'S02' ? 'EVD-KR-KLRI-AEFW-2026' : 'EVD-KR-EASYLAW-E9-2026';
+          } else {
+            claimSourceUrl = 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+          }
+        } else {
+          if (s.secId === 'S05') {
+            specificStatement = `Financial / Remuneration Requirement: ${p.salaryOrInvestmentThreshold} pursuant to ${p.legalProvision}.`;
+          } else if (s.secId === 'S11') {
+            specificStatement = `Statutory Validity and Maximum Stay: ${p.validityPeriod}.`;
+          } else if (s.secId === 'S17') {
+            specificStatement = `Processing Standard SLA: ${p.processingSlaDays}.`;
+          }
         }
 
         const claimObj = {
           claimId,
           sectionId: s.secId,
-          evidenceId: `EVD-${p.destCode}-${s.secId}`,
+          evidenceId: claimEvidenceId,
           statement: specificStatement,
           scope,
           scopeJustification: just,
           verificationStatus: vStatus,
           legalProvision: p.legalProvision,
-          officialSourceUrl: p.directSourceUrl,
+          officialSourceUrl: claimSourceUrl,
           isQuarantined: false
         };
         sectionObj.claims.push(claimObj);
@@ -456,12 +490,21 @@ export function generateBatch7Exports() {
     'pathway_id,destination,authority_name,tier_level,primary_official_url,secondary_official_url,statutory_code'
   ];
   for (const p of BATCH7_PATHWAYS) {
-    sourceRows.push(
-      `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')}","TIER_1_SOVEREIGN","${p.directSourceUrl}","${p.secondarySourceUrl}","${p.legalProvision.replace(/"/g, '""')}"`
-    );
-    sourceRows.push(
-      `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')} (Secondary Gazetted Notice)","TIER_1_SOVEREIGN","${p.secondarySourceUrl}","${p.directSourceUrl}","${p.legalProvision.replace(/"/g, '""')}"`
-    );
+    if (p.id === 'p2-kr-e9') {
+      sourceRows.push(
+        `"p2-kr-e9","South Korea","Minimum Wage Commission (최저임금위원회) — 2026 Minimum Wage Decision Table","TIER_1_SOVEREIGN","https://www.minimumwage.go.kr/english/introduce/minWage.do","https://www.minimumwage.go.kr/customer/notice/view.do?bultnId=4657","Minimum Wage Act Arts. 4–6 / MOEL Public Notice No. 2025-47"`
+      );
+      sourceRows.push(
+        `"p2-kr-e9","South Korea","Ministry of Employment and Labor (MOEL) — 2026 Minimum Wage Announcement (Notice No. 2025-47)","TIER_1_SOVEREIGN","https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144","https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1","MOEL Public Notice No. 2025-47 (2025-08-05) / Act on the Employment of Foreign Workers Arts. 8, 9, 12, 18"`
+      );
+    } else {
+      sourceRows.push(
+        `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')}","TIER_1_SOVEREIGN","${p.directSourceUrl}","${p.secondarySourceUrl}","${p.legalProvision.replace(/"/g, '""')}"`
+      );
+      sourceRows.push(
+        `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')} (Secondary Gazetted Notice)","TIER_1_SOVEREIGN","${p.secondarySourceUrl}","${p.directSourceUrl}","${p.legalProvision.replace(/"/g, '""')}"`
+      );
+    }
   }
   fs.writeFileSync(path.join(process.cwd(), 'phase_3_6_9_batch7_source_registry.csv'), sourceRows.join('\n'), 'utf8');
   console.log('✓ phase_3_6_9_batch7_source_registry.csv written (20 rows)');
@@ -483,20 +526,57 @@ export function generateBatch7Exports() {
         let param = s.name;
         let val = 'Compliant with statutory standard';
         let curr = p.currency;
-        if (s.secId === 'S05') {
-          param = 'Minimum Remuneration / Investment Threshold';
-          val = p.salaryOrInvestmentThreshold;
-        } else if (s.secId === 'S11') {
-          param = 'Maximum Duration & Validity';
-          val = p.validityPeriod;
-          curr = 'N/A';
-        } else if (s.secId === 'S17') {
-          param = 'Standard Processing Timeline SLA';
-          val = p.processingSlaDays;
-          curr = 'Days';
+        let claimUrl = p.directSourceUrl;
+        let claimStatus = 'VERIFIED';
+
+        if (p.id === 'p2-kr-e9') {
+          const isPartialSection = s.secId === 'S04' || s.secId === 'S17' || s.secId === 'S30';
+          claimStatus = isPartialSection ? 'PARTIALLY_VERIFIED' : 'VERIFIED';
+          if (s.secId === 'S05') {
+            if (c === 1) {
+              param = '2026 Statutory Hourly Minimum Wage';
+              val = 'KRW 10,320 / hour (MOEL Public Notice No. 2025-47, effective 2026-01-01 to 2026-12-31)';
+              claimUrl = 'https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144';
+            } else if (c === 2) {
+              param = 'Standard Monthly Paid-Hours Calculation Basis & Formula';
+              val = '209 hours/month | Formula: KRW 10,320 × 209 hours = KRW 2,156,880';
+              claimUrl = 'https://www.minimumwage.go.kr/english/introduce/minWage.do';
+            } else {
+              param = 'Standard Monthly Minimum-Wage Benchmark & Exclusions';
+              val = 'KRW 2,156,880 / month (Standard monthly minimum-wage benchmark, NOT a guaranteed complete E-9 salary; excludes overtime, night premiums, holiday premiums, bonuses)';
+              claimUrl = 'https://elaw.klri.re.kr/eng_mobile/viewer.do?hseq=48699&type=part&key=1';
+            }
+          } else if (s.secId === 'S11') {
+            param = 'Maximum Duration & Validity';
+            val = p.validityPeriod;
+            curr = 'N/A';
+            claimUrl = 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+          } else if (s.secId === 'S17') {
+            param = 'Standard Processing Timeline SLA';
+            val = `${p.processingSlaDays} — eps.go.kr returned system error on 2026-11-13 access check`;
+            curr = 'Days';
+            claimUrl = 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+          } else if (s.secId === 'S02') {
+            claimUrl = 'https://elaw.klri.re.kr/eng_service/lawView.do?hseq=60984&lang=ENG';
+          } else {
+            claimUrl = 'https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1';
+          }
+        } else {
+          if (s.secId === 'S05') {
+            param = 'Minimum Remuneration / Investment Threshold';
+            val = p.salaryOrInvestmentThreshold;
+          } else if (s.secId === 'S11') {
+            param = 'Maximum Duration & Validity';
+            val = p.validityPeriod;
+            curr = 'N/A';
+          } else if (s.secId === 'S17') {
+            param = 'Standard Processing Timeline SLA';
+            val = p.processingSlaDays;
+            curr = 'Days';
+          }
         }
         correctedClaimRows.push(
-          `"${claimId}","${p.id}","${p.destination}","${s.secId}","${s.name}","GLOBAL","Statutory legal requirement","${param}","${val.replace(/"/g, '""')}","${curr}","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
+          `"${claimId}","${p.id}","${p.destination}","${s.secId}","${s.name}","GLOBAL","Statutory legal requirement","${param}","${val.replace(/"/g, '""')}","${curr}","${p.legalProvision.replace(/"/g, '""')}","${claimUrl}","${claimStatus}"`
         );
       }
     }
@@ -509,30 +589,69 @@ export function generateBatch7Exports() {
     'pathway_id,destination,issuing_authority,source_role,source_title,canonical_direct_url,statutory_citation,access_check_date,verification_status'
   ];
   for (const p of fivePathways) {
-    directSourceRows.push(
-      `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')}","PRIMARY_PORTAL","Official Visa Application & Statutory Authority","${p.directSourceUrl}","${p.legalProvision.replace(/"/g, '""')}","2026-11-12","VERIFIED"`
-    );
-    directSourceRows.push(
-      `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')}","SECONDARY_GAZETTE","Ministerial Gazetted Notice & Guidance","${p.secondarySourceUrl}","${p.legalProvision.replace(/"/g, '""')}","2026-11-12","VERIFIED"`
-    );
+    if (p.id === 'p2-kr-e9') {
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Minimum Wage Commission (최저임금위원회)","MINIMUM_WAGE_TABLE","Minimum Wage Decision Status (2026 Rate: KRW 10,320/hr | 209 hrs | KRW 2,156,880/mo)","https://www.minimumwage.go.kr/english/introduce/minWage.do","Minimum Wage Act Arts. 4–5 / Effective 2026-01-01 to 2026-12-31","2026-11-13","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Ministry of Employment and Labor (MOEL)","MOEL_ANNOUNCEMENT","2026년 적용 최저임금 시간급 10,320원 (2026 Applicable Minimum Wage Announcement)","https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144","MOEL Announcement (2025-08-05) / 209-hour monthly basis KRW 2,156,880","2026-11-13","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Minimum Wage Commission (최저임금위원회)","MOEL_PUBLIC_NOTICE","2026년 적용 최저임금 고시 (고용노동부 고시 제2025-47호 / MOEL Notice No. 2025-47)","https://www.minimumwage.go.kr/customer/notice/view.do?bultnId=4657","MOEL Public Notice No. 2025-47 (2025-08-05)","2026-11-13","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Ministry of Government Legislation (MOLEG EasyLaw)","EPS_E9_PROCEDURES","Employment of Foreign Workers > Procedures for Non-professional Employment (E-9) & Standard Contract","https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1","Act on the Employment of Foreign Workers Arts. 5, 8, 9, 10, 18, 18-2","2026-11-13","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Korea Legislation Research Institute (KLRI e-Law)","PRIMARY_LEGISLATION","ACT ON THE EMPLOYMENT OF FOREIGN WORKERS (Official English Statute)","https://elaw.klri.re.kr/eng_service/lawView.do?hseq=60984&lang=ENG","Act on the Employment of Foreign Workers","2026-11-13","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Korea Legislation Research Institute (KLRI e-Law)","PRIMARY_LEGISLATION","MINIMUM WAGE ACT Articles 4–6 (Official English Statute)","https://elaw.klri.re.kr/eng_mobile/viewer.do?hseq=48699&type=part&key=1","Minimum Wage Act Arts. 4–6","2026-11-13","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Human Resources Development Service of Korea (HRD Korea / EPS Portal)","EPS_PORTAL_UNREACHABLE","EPS Official Portal (Returned <title>:: EPS - 시스템 오류 ::</title> on HTTP check)","https://www.eps.go.kr/eo/index.html","Operational EPS Roster Portal (System Error on 2026-11-13 check)","2026-11-13","AWAITING_VERIFICATION"`
+      );
+      directSourceRows.push(
+        `"p2-kr-e9","South Korea","Ministry of Justice Korea Immigration Service (HiKorea)","HIKOREA_UNREACHABLE","HiKorea E-9 Stay Information (Returned <title>에러</title> on HTTP check)","https://www.hikorea.go.kr/info/InfoStayE9.pt","E-9 Stay Guide (Portal Error on 2026-11-13 check)","2026-11-13","AWAITING_VERIFICATION"`
+      );
+    } else {
+      directSourceRows.push(
+        `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')}","PRIMARY_PORTAL","Official Visa Application & Statutory Authority","${p.directSourceUrl}","${p.legalProvision.replace(/"/g, '""')}","2026-11-12","VERIFIED"`
+      );
+      directSourceRows.push(
+        `"${p.id}","${p.destination}","${p.issuingAuthority.replace(/"/g, '""')} (Secondary Gazetted Notice)","TIER_1_SOVEREIGN","${p.secondarySourceUrl}","${p.legalProvision.replace(/"/g, '""')}","2026-11-12","VERIFIED"`
+      );
+    }
   }
   fs.writeFileSync(path.join(process.cwd(), 'phase_3_6_9_2_direct_source_registry.csv'), directSourceRows.join('\n'), 'utf8');
-  console.log('✓ phase_3_6_9_2_direct_source_registry.csv written (10 sources across 5 pathways)');
+  console.log('✓ phase_3_6_9_2_direct_source_registry.csv written (p2-kr-e9 exact official URLs + 4 pathways)');
 
   // Deliverable 3: Numeric Claims Export CSV
   const numericExportRows = [
     'claim_id,pathway_id,statutory_parameter,threshold_value,calculation_basis_and_statutory_rule,currency,statutory_reference,official_direct_url,verification_status'
   ];
   for (const p of fivePathways) {
-    numericExportRows.push(
-      `"CLM-${p.destCode}-S05-1","${p.id}","Minimum Remuneration / Investment","${p.salaryOrInvestmentThreshold.replace(/"/g, '""')}","${p.notes.substring(0, 200).replace(/"/g, '""')}","${p.currency}","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
-    );
-    numericExportRows.push(
-      `"CLM-${p.destCode}-S11-1","${p.id}","Maximum Duration & Validity","${p.validityPeriod.replace(/"/g, '""')}","Statutory period specified under governing immigration act","N/A","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
-    );
-    numericExportRows.push(
-      `"CLM-${p.destCode}-S17-1","${p.id}","Processing Standard SLA","${p.processingSlaDays.replace(/"/g, '""')}","Standard statutory application processing timeline","Days","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
-    );
+    if (p.id === 'p2-kr-e9') {
+      numericExportRows.push(
+        `"CLM-KR-S05-1","p2-kr-e9","2026 Minimum Wage Hourly, 209-Hour Basis & Monthly Benchmark","Hourly: KRW 10,320 | Monthly Hours: 209 hours | Monthly Result: KRW 2,156,880","2026 Statutory Hourly Minimum Wage: KRW 10,320/hour (+2.9% vs 2025 KRW 10,030/hr) | Standard Monthly Paid-Hours Calculation Basis: 209 hours [(40 regular weekly hours + 8 paid weekly holiday hours) / 7 × (365 / 12) = 208.57 rounded to 209 hours] | Explicit Formula: KRW 10,320 × 209 hours = KRW 2,156,880 | Benchmark Rule: KRW 2,156,880 is the standard monthly minimum-wage benchmark (statutory floor), NOT a guaranteed complete E-9 salary. Does NOT include overtime, night premiums, holiday premiums, or bonuses.","KRW","Minimum Wage Act Arts. 4–6 / MOEL Public Notice No. 2025-47 (2025-08-05)","https://www.minimumwage.go.kr/english/introduce/minWage.do","VERIFIED"`
+      );
+      numericExportRows.push(
+        `"CLM-KR-S11-1","p2-kr-e9","Maximum Duration & Validity","${p.validityPeriod.replace(/"/g, '""')}","Initial contract up to 3 years; one-time extension up to 1 year 10 months (max cumulative continuous stay 4 years 10 months under Act on Employment of Foreign Workers Arts. 18 & 18-2).","N/A","Act on the Employment of Foreign Workers Arts. 18, 18-2 (KLRI)","https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1","VERIFIED"`
+      );
+      numericExportRows.push(
+        `"CLM-KR-S17-1","p2-kr-e9","Processing Standard SLA","45-90 days via EPS roster, EPS-TOPIK examination, and employer selection","Standard EPS G2G processing window; eps.go.kr and hikorea.go.kr/info/InfoStayE9.pt returned portal errors during 2026-11-13 automated verification check so live roster SLA remains PARTIALLY_VERIFIED.","Days","Act on the Employment of Foreign Workers Arts. 8–10","https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1","PARTIALLY_VERIFIED"`
+      );
+    } else {
+      numericExportRows.push(
+        `"CLM-${p.destCode}-S05-1","${p.id}","Minimum Remuneration / Investment","${p.salaryOrInvestmentThreshold.replace(/"/g, '""')}","${p.notes.substring(0, 200).replace(/"/g, '""')}","${p.currency}","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
+      );
+      numericExportRows.push(
+        `"CLM-${p.destCode}-S11-1","${p.id}","Maximum Duration & Validity","${p.validityPeriod.replace(/"/g, '""')}","Statutory period specified under governing immigration act","N/A","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
+      );
+      numericExportRows.push(
+        `"CLM-${p.destCode}-S17-1","${p.id}","Processing Standard SLA","${p.processingSlaDays.replace(/"/g, '""')}","Standard statutory application processing timeline","Days","${p.legalProvision.replace(/"/g, '""')}","${p.directSourceUrl}","VERIFIED"`
+      );
+    }
   }
   fs.writeFileSync(path.join(process.cwd(), 'phase_3_6_9_2_numeric_claims_export.csv'), numericExportRows.join('\n'), 'utf8');
   console.log('✓ phase_3_6_9_2_numeric_claims_export.csv written (15 numeric claims across 5 pathways)');
@@ -542,10 +661,10 @@ export function generateBatch7Exports() {
     'pathway_id,destination,parameter_topic,baseline_value,phase_3_6_9_2_corrected_value,calculation_basis_or_statutory_rule,effective_date,official_canonical_url,verification_status'
   ];
   beforeAfterRows.push(
-    `"p2-kr-e9","South Korea","Minimum Wage Rate & Monthly Threshold","KRW 2,096,270 / mo (preliminary 2025 calculation)","KRW 2,156,880 / month benchmark (KRW 10,320/hr × 209 statutory paid hours)","Under Korean Labor Standards Act Art. 55: [(40 regular hrs + 8 holiday hrs)/7] * (365/12) = 209 hrs. 209 * 10,320 = KRW 2,156,880. Statutory minimum floor, not an E-9 contract ceiling.","2026-01-01","https://www.eps.go.kr/","VERIFIED"`
+    `"p2-kr-e9","South Korea","Minimum Wage Rate, 209-Hour Formula & Benchmark","Truncated calculation basis + Notice No. 2025-56 + eps.go.kr homepage","Hourly: KRW 10,320 | Monthly Paid-Hours Basis: 209 hours | Formula: KRW 10,320 × 209 hours = KRW 2,156,880 | Monthly Benchmark: KRW 2,156,880 (NOT a guaranteed complete E-9 salary; excludes overtime, night premiums, holiday premiums, bonuses)","MOEL Public Notice No. 2025-47 (고용노동부 고시 제2025-47호, 2025-08-05); Labor Standards Act Art. 55 209 paid-hour standard; Minimum Wage Act Arts. 4–6.","2026-01-01","https://www.minimumwage.go.kr/english/introduce/minWage.do","VERIFIED"`
   );
   beforeAfterRows.push(
-    `"p2-kr-e9","South Korea","Contract Limits & Stay Duration","Stated as general 3 years","Initial contract 3 years max; extendable once up to 1 yr 10 mos (cumulative continuous stay max 4 yrs 10 mos)","Act on the Employment of Foreign Workers Art. 18; 16 EPS partner nations; mandatory 6-month departure before re-entry unless qualified as committed worker (1-3 mos).","Current Law (2026)","https://www.eps.go.kr/","VERIFIED"`
+    `"p2-kr-e9","South Korea","Contract Limits, Stay Duration & Exact Official URLs","Generic eps.go.kr homepage (returned system error on HTTP check)","Initial contract 3 years max; extendable once up to 1 yr 10 mos (max 4 yrs 10 mos stay); exact verified MOLEG EasyLaw E-9 & KLRI statute URLs linked; eps.go.kr/hikorea SLA marked PARTIALLY_VERIFIED","MOLEG EasyLaw E-9 Procedures (csmSeq=1271) & KLRI Act on Employment of Foreign Workers (hseq=60984). eps.go.kr and hikorea.go.kr/info/InfoStayE9.pt returned portal errors on 2026-11-13 check.","Current Law (2026)","https://www.easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1","VERIFIED"`
   );
   beforeAfterRows.push(
     `"p2-jp-businessmanager","Japan","Staffing Criteria & Full-Time Resident Employee Definition","Generic 1-2 resident employees without specific legal classes","Mandatory hiring of at least 1 full-time resident employee (常勤の職員) strictly restricted to: Japanese nationals, Table II status holders (Permanent Resident, Spouse/Child of Japanese National, Spouse/Child of Permanent Resident, Long-Term Resident), or Special Permanent Residents. Temporary work visas excluded.","MOJ Ministerial Ordinance on Criteria (Amended 16 Oct 2025); JPY 30M capital; N2/B2 Japanese; 3 yrs experience or Master degree; CPA/SME verified business plan.","2025-10-16","https://www.isa.go.jp/en/applications/procedures/zairyu_nintei10_13.html","VERIFIED"`

@@ -691,7 +691,13 @@ export const SOUTH_KOREA_94_VISAS: CountryVisas = {
         "Health examination medical certificate",
         "Valid passport & visa application form"
       ],
-      ...getSouthKoreaMicroDetails("kr-WRK-003", "work", "E-9 EPS Non-Professional")
+      ...getSouthKoreaMicroDetails("kr-WRK-003", "work", "E-9 EPS Non-Professional"),
+      fundsBox: {
+        minimum: "2026 Statutory Minimum-Wage Benchmark: KRW 10,320/hour × 209 hours = KRW 2,156,880/month (MOEL Public Notice No. 2025-47). This is the standard monthly minimum-wage benchmark based on 209 standard monthly paid hours — NOT a guaranteed complete E-9 salary, and excludes overtime, night premiums, holiday premiums, and bonuses.",
+        bankMonths: "EPS Standard Employment Contract (HRD Korea / MOEL), employer company registration, and 3–6 months salary slips.",
+        suddenDeposit: "Contract must state basic monthly wage at or above the 2026 statutory hourly minimum (KRW 10,320/hour; KRW 2,156,880/month on 209-hour basis), working hours, and 4 Major Social Insurances.",
+        example: "✅ Sahi: Signed EPS Standard Employment Contract meeting KRW 10,320/hr (KRW 2,156,880/mo for 209 hours). ❌ Galat: Wage below KRW 10,320/hour statutory minimum."
+      }
     },
     {
       id: "kr-WRK-004",

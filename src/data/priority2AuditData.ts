@@ -17,6 +17,9 @@ export interface Priority2PathwayAudit {
   verificationStatus: 'VERIFIED' | 'PARTIALLY_VERIFIED' | 'AWAITING_VERIFICATION' | 'NOT_OFFERED' | 'NEEDS_RECLASSIFICATION';
   correctiveClassificationNotes?: string;
   officialStatusNotice?: string;
+  operationalStatus?: string;
+  quarantinedClaimsCount?: number;
+  publishedClaimsCount?: number;
   batchNumber?: number; // 0 for Pilot, 1 for Batch 1, etc.
   isPilotSample?: boolean;
 }
@@ -1648,17 +1651,17 @@ export const PRIORITY2_BATCH7_COMBINATIONS: Priority2PathwayAudit[] = [
     destination: 'South Korea',
     destCode: 'KR',
     category: 'E-9 Non-Professional Employment Visa',
-    localStatutoryName: '비전문취업 (E-9 / 외국인근로자의 고용 등에 관한 법률 제8조 및 제12조)',
+    localStatutoryName: '비전문취업 (E-9 / 외국인근로자의 고용 등에 관한 법률 제8조, 제9조 및 제12조)',
     action: 'NEW',
     canonicalUrl: '/visa/south-korea/e-9-non-professional-employment',
-    issuingAuthority: 'Ministry of Employment and Labor (MOEL) & Ministry of Justice (MOJ / HiKorea)',
-    directSourceUrl: 'https://www.eps.go.kr/',
-    legalProvision: 'Act on the Employment of Foreign Workers (Act No. 6967) Arts. 8, 12, 18 / Minimum Wage Act Art. 5 / MOEL Public Notice No. 2025-56',
+    issuingAuthority: 'Ministry of Employment and Labor (MOEL), Minimum Wage Commission, MOLEG EasyLaw & Ministry of Justice (MOJ)',
+    directSourceUrl: 'https://www.minimumwage.go.kr/english/introduce/minWage.do',
+    legalProvision: 'Act on the Employment of Foreign Workers Arts. 8, 9, 10, 12, 18 (KLRI) / Minimum Wage Act Arts. 4–6 / MOEL Public Notice No. 2025-47 (고용노동부 고시 제2025-47호, 2025-08-05)',
     claimIds: ['CLM-KR-E9-01', 'CLM-KR-E9-02', 'CLM-KR-E9-03'],
-    evidenceIds: ['EVD-MOEL-KR-EPS-2026', 'EVD-MOJ-KR-E9-2026'],
-    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
+    evidenceIds: ['EVD-KR-MOEL-NOTICE-2025-47', 'EVD-KR-MWC-2026-TABLE', 'EVD-KR-EASYLAW-E9-2026', 'EVD-KR-KLRI-AEFW-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
     verificationStatus: 'VERIFIED',
-    correctiveClassificationNotes: 'Phase 3.6.9.2 Final Integrity Fix: Bilateral EPS quota program with 16 Asian partner sending countries. (1) 2026 Statutory Minimum Wage: KRW 10,320 per hour (+2.89% from 2025 KRW 10,030/hr); (2) Monthly Paid Hours Basis: Under Labor Standards Act Art. 55, standard paid monthly hours = [(40 regular hrs + 8 holiday hrs) / 7 days] × (365 days / 12 months) = 208.57 rounded to 209 hours; (3) Monthly Benchmark Calculation: 209 hours × KRW 10,320 = KRW 2,156,880/month; (4) Benchmark Clarification: Statutory national minimum-wage floor, not a fixed complete E-9 salary guarantee. Individual contracts may prescribe higher base wages or allowances, but cannot pay below this statutory minimum. Overtime (1.5x) and discretionary allowances are excluded; (5) Initial contract limit 3 years; max 4 years 10 months continuous stay; mandatory 6-month departure before re-entry unless qualified as committed worker (1–3 mos); 16 EPS partner nations.',
+    correctiveClassificationNotes: 'Phase 3.6.9.3 Micro-Cleanup: Bilateral EPS quota program with 16 Asian partner sending countries. (1) 2026 Statutory Hourly Minimum Wage: KRW 10,320 per hour (+2.9% / +KRW 290 from 2025 KRW 10,030/hr), effective 2026-01-01 to 2026-12-31 under MOEL Public Notice No. 2025-47 (고용노동부 고시 제2025-47호, 2025-08-05; moel.go.kr/news/enews/report/enewsView.do?news_seq=18144 & minimumwage.go.kr/customer/notice/view.do?bultnId=4657). (2) Standard Monthly Paid-Hours Calculation Basis: 209 hours per month under Labor Standards Act Art. 55 [(40 regular hrs + 8 paid weekly holiday hrs) / 7 × (365 / 12) = 209 hours]. (3) Explicit Formula & Monthly Result: KRW 10,320 × 209 hours = KRW 2,156,880 per month (verified on minimumwage.go.kr/english/introduce/minWage.do). (4) Statutory Benchmark Clarification: KRW 2,156,880 is the standard monthly minimum-wage benchmark (statutory floor), NOT a guaranteed complete E-9 salary; excludes overtime, night premiums, holiday premiums, and bonuses. (5) E-9 Contract & Stay Rules (easylaw.go.kr/CSM/CsmOvSave.laf?csmSeq=1271&ccfNo=3&cciNo=2&cnpClsNo=1 & elaw.klri.re.kr/eng_service/lawView.do?hseq=60984&lang=ENG): Initial contract up to 3 years; extendable once up to 1 yr 10 mos (max 4 yrs 10 mos stay). Note: eps.go.kr and hikorea.go.kr/info/InfoStayE9.pt returned portal errors on 2026-11-13 HTTP check; operational roster SLA claims remain PARTIALLY_VERIFIED.',
     batchNumber: 7,
     isPilotSample: true
   },
@@ -1844,7 +1847,718 @@ export const PRIORITY2_BATCH7_COMBINATIONS: Priority2PathwayAudit[] = [
   }
 ];
 
-// All Completed Priority 2 Pathways (90 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7)
+// Phase 3.7 Priority 2 Batch 8 Combinations (10 New Global Pathways: 91–100 / 210)
+export const PRIORITY2_BATCH8_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. Thailand - Long-Term Resident (LTR) Visa
+  {
+    id: 'p2-th-ltr',
+    destination: 'Thailand',
+    destCode: 'TH',
+    category: 'Long-Term Resident (LTR) Visa',
+    localStatutoryName: 'Long-Term Resident Visa (BOI Announcement No. Por. 3/2568)',
+    action: 'NEW',
+    canonicalUrl: '/visa/thailand/long-term-resident-ltr-visa',
+    issuingAuthority: 'Thailand Board of Investment (BOI) & Immigration Bureau',
+    directSourceUrl: 'https://ltr.boi.go.th/',
+    legalProvision: 'Immigration Act B.E. 2522 / Cabinet Resolution & BOI Announcement No. Por. 3/2568',
+    claimIds: ['CLM-TH-B8-S01-1', 'CLM-TH-B8-S05-1', 'CLM-TH-B8-S18-1'],
+    evidenceIds: ['EVD-B8-TH-BOI-LTR-2026', 'EVD-B8-TH-BROCHURE-2025'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 89,
+    quarantinedClaimsCount: 1,
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit (HTTP 200 verified on ltr.boi.go.th, 2025-LTR.pdf & page/faq.html): 10-year multiple-entry visa across 4 tracks (Wealthy Global Citizen USD 1M assets + USD 500k investment; Wealthy Pensioner 50+ USD 80k/yr or USD 40k+USD 250k; Work-From-Thailand USD 80k/yr or USD 40k+Master/IP & employer USD 150M 3-yr revenue; Highly-Skilled USD 80k/yr). THB 50,000 issuance fee in Thailand; THB 3,000/yr digital work permit. Legacy Wealthy Global Citizen USD 80k personal income prerequisite quarantined as EXPIRED.',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 2. Turkey - Turquoise Card (Turkuaz Kart)
+  {
+    id: 'p2-tr-turquoisecard',
+    destination: 'Turkey',
+    destCode: 'TR',
+    category: 'Turquoise Card (Turkuaz Kart)',
+    localStatutoryName: 'Turkuaz Kart (6735 sayılı Uluslararası İşgücü Kanunu md. 11)',
+    action: 'NEW',
+    canonicalUrl: '/visa/turkey/turquoise-card',
+    issuingAuthority: 'Republic of Türkiye Ministry of Labour and Social Security (ÇSGB / UİGM)',
+    directSourceUrl: 'https://www.csgb.gov.tr/uigm/en/turkuaz-kart/',
+    legalProvision: 'International Labour Force Law No. 6735 Art. 11 / Turquoise Card Regulation (Gazette No. 30007)',
+    claimIds: ['CLM-TR-B8-S01-1', 'CLM-TR-B8-S05-1', 'CLM-TR-B8-S11-1'],
+    evidenceIds: ['EVD-B8-TR-CSGB-TK-2026', 'EVD-B8-TR-UIGM-DOCS-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit (HTTP 200 verified on csgb.gov.tr/uigm/en/turkuaz-kart/ & calismaizni.csgb.gov.tr): Grants indefinite work and residence rights following an initial 3-year transition period (transition lift requested in final 180 days). Grants Relative Card to spouse and dependent children. No standalone Turkish exam or annual numerical cap.',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 3. Mexico - Temporary Resident Visa with Work Authorization
+  {
+    id: 'p2-mx-workresident',
+    destination: 'Mexico',
+    destCode: 'MX',
+    category: 'Temporary Resident Visa with Work Authorization',
+    localStatutoryName: 'Visa de Residencia Temporal por Oferta de Empleo (Ley de Migración Art. 52 fracc. VII)',
+    action: 'NEW',
+    canonicalUrl: '/visa/mexico/temporary-resident-work-visa',
+    issuingAuthority: 'Instituto Nacional de Migración (INM) & Secretaría de Relaciones Exteriores (SRE)',
+    directSourceUrl: 'https://www.gob.mx/sre/acciones-y-programas/visa-de-residencia-temporal',
+    legalProvision: 'Ley de Migración Arts. 40, 52 fracc. VII, 53 / Reglamento Art. 107',
+    claimIds: ['CLM-MX-B8-S01-1', 'CLM-MX-B8-S16-1', 'CLM-MX-B8-S17-1'],
+    evidenceIds: ['EVD-B8-MX-SRE-2026', 'EVD-B8-MX-INM-NUT-PDF-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit (HTTP 200 verified on gob.mx/sre & inm.gob.mx/static/Tramites/autorizacion_visa_oferta_empleo.pdf): Employer obtains INM NUT authorization -> applicant books SRE MiConsulado interview within 30 business days -> exchanges consular visa for Temporary Resident Card at INM within 30 calendar days of entry (valid 180 days to 4 years; permanent residency eligible at 4 years).',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 4. Qatar - Work Residence Permit (Company Sponsorship QID)
+  {
+    id: 'p2-qa-workresidence',
+    destination: 'Qatar',
+    destCode: 'QA',
+    category: 'Work Residence Permit (Company Sponsorship QID)',
+    localStatutoryName: 'Work Visa & Residence Permit (Law No. 21 of 2015 Regulating Entry, Exit & Residence of Expatriates)',
+    action: 'NEW',
+    canonicalUrl: '/visa/qatar/work-residence-permit',
+    issuingAuthority: 'Ministry of Interior Qatar (MOI), Ministry of Labour (MOL), Ministry of Justice (MOJ) & Hukoomi',
+    directSourceUrl: 'https://portal.moi.gov.qa',
+    legalProvision: 'Law No. 21 of 2015 Arts. 10–11 (amended by Law No. 1 of 2017, Law No. 13 of 2018 & Decree-Law No. 19 of 2020) / Decision No. 25 of 2019 / Labour Law No. 14 of 2004',
+    claimIds: ['CLM-QA-B8-S01-1', 'CLM-QA-B8-S16-1', 'CLM-QA-B8-S18-1'],
+    evidenceIds: ['EVD-B8-QA-MOI-WAF-BLOCKED', 'EVD-B8-QA-HUKOOMI-403', 'EVD-B8-QA-ALMEEZAN-TIMEOUT'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 76,
+    quarantinedClaimsCount: 14,
+    officialStatusNotice: 'QUARANTINE NOTICE (14 Section Claims + 2 Special Topics Quarantined = 16 Items): portal.moi.gov.qa returned WAF Request Rejected, hukoomi.gov.qa/en/services/work-visa returned HTTP 403 Maintenance Page, mol.gov.qa and almeezan.qa/LawPage.aspx?id=6816 timed out, and mofa.gov.qa/en/services/visas returned 404 on 2026-11-13. Live fee schedules, portal SLAs, and nationality block-visa quotas remain AWAITING_VERIFICATION and quarantined.',
+    correctiveClassificationNotes: 'Phase 3.7.1 Recovery Review: Law No. 21 of 2015 Art. 10 mandates 30-day post-arrival QID medical/CEID processing (Art. 11 exempts <=30-day visits); employer bears statutory fees. All 14 unreachable MOI/Hukoomi/MOL portal/fee/SLA/quota claims and 2 special topics strictly preserved as AWAITING_VERIFICATION and quarantined.',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 5. Vietnam - Work Permit & Temporary Residence Card (LD1/LD2)
+  {
+    id: 'p2-vn-workpermit',
+    destination: 'Vietnam',
+    destCode: 'VN',
+    category: 'Work Permit & Temporary Residence Card (LĐ1/LĐ2)',
+    localStatutoryName: 'Giấy phép lao động & Thẻ tạm trú ký hiệu LĐ1/LĐ2 (Nghị định 152/2020/NĐ-CP & 70/2023/NĐ-CP)',
+    action: 'NEW',
+    canonicalUrl: '/visa/vietnam/work-permit-temporary-residence-card',
+    issuingAuthority: 'Ministry of Labour, Invalids and Social Affairs (MOLISA / DOLISA) & Vietnam Immigration Department',
+    directSourceUrl: 'https://vietnam.gov.vn/work-permits-68947',
+    legalProvision: 'Labor Code 2019 Arts. 151–157 / Decree 70/2023/ND-CP / Law No. 47/2014/QH13 amended 23/2023/QH15',
+    claimIds: ['CLM-VN-B8-S01-1', 'CLM-VN-B8-S05-1', 'CLM-VN-B8-S11-1'],
+    evidenceIds: ['EVD-B8-VN-GOV-WP-2026', 'EVD-B8-VN-IMM-TRC-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit (HTTP 200 verified on vietnam.gov.vn/work-permits-68947 & xuatnhapcanh.gov.vn/en): Requires degree/training + ≥3 yrs experience, domestic job pre-posting & DOLISA approval; Work Permit up to 2 years (1 extension up to 2 yrs), paired with LĐ1/LĐ2 TRC up to 2 years (passport valid ≥13 months).',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 6. South Africa - General Work Visa (Sec 19(2) & 100-Pt PBS)
+  {
+    id: 'p2-za-generalwork',
+    destination: 'South Africa',
+    destCode: 'ZA',
+    category: 'General Work Visa (Section 19(2) & 100-Pt PBS)',
+    localStatutoryName: 'General Work Visa (Immigration Act No. 13 of 2002 Sec. 19(2) & Gazette Notice 5448)',
+    action: 'NEW',
+    canonicalUrl: '/visa/south-africa/general-work-visa',
+    issuingAuthority: 'Department of Home Affairs (DHA South Africa)',
+    directSourceUrl: 'https://www.gov.za/sites/default/files/gcis_document/202410/51416gon5448.pdf',
+    legalProvision: 'Immigration Act No. 13 of 2002 Sec. 19(2) / Government Gazette Vol. 712 No. 51416 Notice 5448',
+    claimIds: ['CLM-ZA-B8-S01-1', 'CLM-ZA-B8-S05-1', 'CLM-ZA-B8-S25-3'],
+    evidenceIds: ['EVD-B8-ZA-GAZETTE-5448', 'EVD-B8-ZA-DHA-TIMEOUT'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 76,
+    quarantinedClaimsCount: 14,
+    officialStatusNotice: 'QUARANTINE NOTICE (14 Claims Quarantined): Government Gazette Notice 5448 PDF verified HTTP 200 (100-point PBS; legacy DoL waiver marked EXPIRED & quarantined). Live dha.gov.za portal timed out and gov.za/services returned 404 on 2026-11-13, keeping DHA filing portals, fee tables, SLA, and VFS biometrics AWAITING_VERIFICATION.',
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit: Gazette Notice 5448 (HTTP 200) enforces 100-point PBS across SAQA qualifications, work experience, salary, Trusted Employer Scheme, and official language proficiency. Legacy Department of Labour certificate requirement quarantined as EXPIRED; unreachable DHA portal details quarantined as AWAITING_VERIFICATION (14 claims total).',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 7. India - Employment Visa (E Visa)
+  {
+    id: 'p2-in-employment',
+    destination: 'India',
+    destCode: 'IN',
+    category: 'Employment Visa (E Visa)',
+    localStatutoryName: 'Employment Visa (E Visa) — Foreigners Act 1946 & MHA Visa Manual Guidelines',
+    action: 'NEW',
+    canonicalUrl: '/visa/india/employment-visa',
+    issuingAuthority: 'Ministry of Home Affairs (MHA), Bureau of Immigration (BOI), FRRO & Indian Missions',
+    directSourceUrl: 'https://boi.gov.in/boi/',
+    legalProvision: 'Foreigners Act 1946 / Passport (Entry into India) Rules / MHA Employment Visa Guidelines',
+    claimIds: ['CLM-IN-B8-S05-1', 'CLM-IN-B8-S05-2', 'CLM-IN-B8-S05-3'],
+    evidenceIds: ['EVD-B8-IN-BOI-2026', 'EVD-B8-IN-FRRO-2026', 'EVD-B8-IN-CGISF-2026', 'EVD-B8-IN-HCIKL-PDF'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 88,
+    quarantinedClaimsCount: 2,
+    officialStatusNotice: 'CONFLICT QUARANTINED (2 Claims): Published Indian Mission pages/PDFs (cgisf.gov.in, hcikl.gov.in, eoiparis.gov.in — HTTP 200) explicitly state USD 25,000 / Rs. 16.25 lakhs per annum, conflicting with reported 2026 domestic FRRO renewal enforcement of INR 24.00 lakh p.a. without an accessible MHA public circular (mha.gov.in/MHA1/TourVisa.html 404; indianfrro.gov.in/efrro/ login-only). Conflicting claims kept CONFLICTING & quarantined.',
+    correctiveClassificationNotes: 'Phase 3.7.1 Conflict Review: HTTP 200 confirmed across boi.gov.in, indianfrro.gov.in/efrro/, cgisf.gov.in, hcikl.gov.in & eoiparis.gov.in PDFs. Statutory exemptions verified verbatim on cgisf.gov.in (₹9.10L Central Higher Ed teaching, ₹3.60L PIO/spouse; mission cooks, non-English teachers/translators, artistes, coaches exempt). Distinguishes consular mission baseline (₹16.25L) vs reported FRRO domestic enforcement (₹24.00L); both remain CONFLICTING & quarantined pending primary MHA circular.',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 8. Philippines - 9(g) Pre-Arranged Employment Visa (Commercial)
+  {
+    id: 'p2-ph-9g',
+    destination: 'Philippines',
+    destCode: 'PH',
+    category: '9(g) Pre-Arranged Employment Visa (Commercial)',
+    localStatutoryName: 'Non-Immigrant Pre-Arranged Employment Visa — Sec. 9(g) (Commonwealth Act No. 613)',
+    action: 'NEW',
+    canonicalUrl: '/visa/philippines/9g-pre-arranged-employment-visa',
+    issuingAuthority: 'Bureau of Immigration (BI) & Department of Labor and Employment (DOLE)',
+    directSourceUrl: 'https://tokyo.philembassy.net/consular-section/services/visa/non-immigrant-visa-requirements/non-immigrant-visa-requirements-for-pre-arranged-employment-9g/',
+    legalProvision: 'Commonwealth Act No. 613 Sec. 9(g) / Labor Code Art. 40 (DOLE AEP)',
+    claimIds: ['CLM-PH-B8-S01-1', 'CLM-PH-B8-S17-1', 'CLM-PH-B8-S18-1'],
+    evidenceIds: ['EVD-B8-PH-TOKYO-9G', 'EVD-B8-PH-BI-HOME', 'EVD-B8-PH-DOLE-403'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 78,
+    quarantinedClaimsCount: 12,
+    officialStatusNotice: 'QUARANTINE NOTICE (12 Claims Quarantined): Philippine Embassy checklists and BI homepage verified HTTP 200, while dole.gov.ph/alien-employment-permit/ returned HTTP 403 and BI 9(g) subpage timed out on 2026-11-13. Live DOLE AEP publication SLAs and BI fee schedules quarantined as AWAITING_VERIFICATION.',
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit: Dual-agency DOLE AEP + BI 9(g) + ACR I-Card framework (1–3 yrs, employer-tied, PWP interim option). Unreachable DOLE AEP and BI 9(g) fee/SLA subpages quarantined (12 claims).',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 9. Mauritius - Occupation Permit
+  {
+    id: 'p2-mu-occupation',
+    destination: 'Mauritius',
+    destCode: 'MU',
+    category: 'Occupation Permit (Professional / Investor / Self-Employed)',
+    localStatutoryName: 'Occupation Permit (Economic Development Board Act & Immigration Act 2022)',
+    action: 'NEW',
+    canonicalUrl: '/visa/mauritius/occupation-permit',
+    issuingAuthority: 'Economic Development Board (EDB Mauritius) & Passport and Immigration Office (PIO)',
+    directSourceUrl: 'https://edbmauritius.org/wp-content/uploads/2022/10/EDB-Act-2023.pdf',
+    legalProvision: 'Economic Development Board Act (consolidated through Act 12 of 2023, First Schedule Part I) / Immigration Act 2022 / Finance Act Updates',
+    claimIds: ['CLM-MU-B8-S05-1', 'CLM-MU-B8-S05-2', 'CLM-MU-B8-S05-3'],
+    evidenceIds: ['EVD-B8-MU-EDB-ACT2023', 'EVD-B8-MU-EDB-AUG2026', 'EVD-B8-MU-NELS-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 88,
+    quarantinedClaimsCount: 2,
+    officialStatusNotice: 'PARTIAL QUARANTINE (2 Claims): EDB-Act-2023.pdf (HTTP 200, First Schedule Part I Item 5) codifies USD 35,000 initial investment for Self-Employed (services sector only), whereas USD 50,000 applied to 2023 Investor (Item 1) and later EDB/Finance Act guidance cited USD 50,000 for Self-Employed. Newsletter follow-up timed out; CLM-MU-B8-S05-2 stays CONFLICTING and CLM-MU-B8-S05-3 stays EXPIRED (both quarantined).',
+    correctiveClassificationNotes: 'Phase 3.7.1 Conflict Review: Verified HTTP 200 on EDB-Act-2023.pdf & business.edbmauritius.org NELS portal. Distinguishes Self-Employed (EDB Act Item 5 USD 35,000 services vs 2026 USD 50,000 guidance — CONFLICTING & quarantined), Investor (superseded 2023 USD 50,000 -> USD 100,000 + turnover), and Professional (superseded Act 12/2023 MUR 30,000/45,000 ICT tiers -> flat MUR 50,000/mo, legacy EXPIRED & quarantined).',
+    batchNumber: 8,
+    isPilotSample: true
+  },
+  // 10. Canada - Family Class: Spousal & Common-Law Partner Sponsorship
+  {
+    id: 'p2-ca-spousal',
+    destination: 'Canada',
+    destCode: 'CA',
+    category: 'Family Class — Spouse, Common-Law & Conjugal Partner Sponsorship',
+    localStatutoryName: 'Family Class Spousal / Common-Law Partner Sponsorship (IRPA s. 12(1) / IRPR ss. 123–129)',
+    action: 'NEW',
+    canonicalUrl: '/visa/canada/spousal-common-law-sponsorship',
+    issuingAuthority: 'Immigration, Refugees and Citizenship Canada (IRCC)',
+    directSourceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/family-sponsorship/spouse-partner-children.html',
+    legalProvision: 'Immigration and Refugee Protection Act (IRPA) s. 12(1) / IRPR SOR/2002-227 ss. 117, 123–129',
+    claimIds: ['CLM-CA-B8-S01-1', 'CLM-CA-B8-S05-2', 'CLM-CA-B8-S18-1'],
+    evidenceIds: ['EVD-B8-CA-IRCC-SPOUSAL-2026', 'EVD-B8-CA-IRCC-FEES-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.7 Batch 8 Audit (HTTP 200 verified across canada.ca overview/eligibility/apply & ircc.canada.ca fees): Direct PR sponsorship for married spouses, common-law partners (≥12 months continuous cohabitation), and conjugal partners. Sponsor aged 18+ signs 3-year financial undertaking. LICO minimum income cutoff, language test, and labor quota marked NOT_APPLICABLE for standard spousal cases. Official fees CAD 1,260–1,345.',
+    batchNumber: 8,
+    isPilotSample: true
+  }
+];
+
+// Phase 3.8 Priority 2 Batch 9 Combinations (10 New Global Pathways: 101–110 / 210)
+export const PRIORITY2_BATCH9_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. Thailand - SMART Visa (Types T / I / E / S / O)
+  {
+    id: 'p2-th-smartvisa',
+    destination: 'Thailand',
+    destCode: 'TH',
+    category: 'SMART Visa (Types T / I / E / S / O)',
+    localStatutoryName: 'SMART Visa (BOI Announcement No. Por. 12/2561 & Immigration Act B.E. 2522)',
+    action: 'NEW',
+    canonicalUrl: '/visa/thailand/smart-visa',
+    issuingAuthority: 'Thailand Board of Investment (BOI) — SMART Visa Unit & Immigration Bureau',
+    directSourceUrl: 'https://smart-visa.boi.go.th/smart/pages/smart_t.html',
+    legalProvision: 'Immigration Act B.E. 2522 / Cabinet Resolution & BOI SMART Visa Announcements (Targeted S-Curve Industries)',
+    claimIds: ['CLM-TH-B9-S01-1', 'CLM-TH-B9-S05-1', 'CLM-TH-B9-S25-2'],
+    evidenceIds: ['EVD-B9-TH-SMART-T', 'EVD-B9-TH-SMART-I', 'EVD-B9-TH-SMART-S'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit (HTTP 200 verified across smart-visa.boi.go.th/smart/pages/smart_t.html, smart_i.html, smart_e.html, smart_s.html, smart_o.html): SMART-T ≥ THB 100,000/mo (THB 50,000/mo startup/retired); SMART-I THB 20M direct equity (or THB 5M startup/accelerator); SMART-E ≥ THB 200,000/mo + Bachelor + 10 yrs exp; SMART-S THB 600,000 bank savings (+ THB 180k/dependant); SMART-O family work rights without separate WP. Up to 4 years validity with 1-year immigration reporting; 4:1 Thai employee ratio NOT_APPLICABLE.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 2. Turkey - Türkiye Tech Visa
+  {
+    id: 'p2-tr-techvisa',
+    destination: 'Turkey',
+    destCode: 'TR',
+    category: 'Türkiye Tech Visa (Startups & Tech Talents Track)',
+    localStatutoryName: 'Türkiye TechVisa Programı (Ministry of Industry and Technology & Law No. 6735 Art. 16)',
+    action: 'NEW',
+    canonicalUrl: '/visa/turkey/turkiye-tech-visa',
+    issuingAuthority: 'Republic of Türkiye Ministry of Industry and Technology (Sanayi ve Teknoloji Bakanlığı) & ÇSGB',
+    directSourceUrl: 'https://turkiyetechvisa.sanayi.gov.tr/en/',
+    legalProvision: 'International Labour Force Law No. 6735 Art. 16 (Exceptional Work Permit) & Technology Development Zones Law No. 4691',
+    claimIds: ['CLM-TR-B9-S01-1', 'CLM-TR-B9-S18-1', 'CLM-TR-B9-S25-2'],
+    evidenceIds: ['EVD-B9-TR-TECHVISA-2026', 'EVD-B9-TR-CSGB-DOCS'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'PARTIAL QUARANTINE (3 Claims): turkiyetechvisa.sanayi.gov.tr/en/ & calismaizni.csgb.gov.tr verified HTTP 200, but static consular fee tables are not published on the TechVisa portal. Section 18 government fee claims remain AWAITING_VERIFICATION and quarantined.',
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit (HTTP 200 verified on turkiyetechvisa.sanayi.gov.tr/en/): Dedicated Startups & Tech Talents 3-year work/residence track backed by Ministry of Industry & Technology Teknoparks. Standard 5-Turkish-employee domestic quota requirement is NOT_APPLICABLE. Unlisted Section 18 consular fee schedule quarantined (3 claims).',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 3. Vietnam - Investor Visa & TRC (ĐT1–ĐT4)
+  {
+    id: 'p2-vn-investor',
+    destination: 'Vietnam',
+    destCode: 'VN',
+    category: 'Investor Visa & Temporary Residence Card (ĐT1–ĐT4)',
+    localStatutoryName: 'Thị thực đầu tư & Thẻ tạm trú ký hiệu ĐT1, ĐT2, ĐT3, ĐT4 (Luật 47/2014/QH13 & Luật 51/2019/QH14)',
+    action: 'NEW',
+    canonicalUrl: '/visa/vietnam/investor-visa-dt1-dt4',
+    issuingAuthority: 'Vietnam Immigration Department (Ministry of Public Security) & Department of Planning and Investment (DPI)',
+    directSourceUrl: 'https://xuatnhapcanh.gov.vn/en',
+    legalProvision: 'Law No. 47/2014/QH13 Arts. 8 & 38 as amended by Law No. 51/2019/QH14 (eff. 1 July 2020) / Circular 25/2021/TT-BTC',
+    claimIds: ['CLM-VN-B9-S01-1', 'CLM-VN-B9-S05-3', 'CLM-VN-B9-S18-1'],
+    evidenceIds: ['EVD-B9-VN-IMM-SPA', 'EVD-B9-VN-GOV-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 78,
+    quarantinedClaimsCount: 12,
+    officialStatusNotice: 'QUARANTINE NOTICE (12 Claims + 2 Special Topics): xuatnhapcanh.gov.vn/en returned HTTP 200 with empty SPA body (len=0) and dichvucong.bocongan.gov.vn requires dynamic loading on 2026-11-13. Portal workflows, Circular fee tables, SLAs, and reciprocity schedules remain AWAITING_VERIFICATION (11) alongside legacy single-ĐT EXPIRED rule (1).',
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit: Law No. 51/2019/QH14 tiers investors into ĐT1 (≥ VND 100B, up to 5-yr visa / 10-yr TRC), ĐT2 (VND 50B–<100B, up to 5 yrs), ĐT3 (VND 3B–<50B, up to 3 yrs), and ĐT4 (< VND 3B, max 12 mos, no TRC). Superseded undifferentiated ĐT category quarantined as EXPIRED; live portal/fee/SLA claims quarantined as AWAITING_VERIFICATION.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 4. Mexico - Temporary Resident Visa by Economic Solvency
+  {
+    id: 'p2-mx-solvency',
+    destination: 'Mexico',
+    destCode: 'MX',
+    category: 'Temporary Resident Visa by Economic Solvency (Residente Temporal por Solvencia Económica)',
+    localStatutoryName: 'Visa de Residente Temporal sin Permiso para Realizar Actividades Remuneradas — Solvencia Económica (Ley de Migración Art. 52 fracc. VII)',
+    action: 'NEW',
+    canonicalUrl: '/visa/mexico/temporary-resident-economic-solvency',
+    issuingAuthority: 'Secretaría de Relaciones Exteriores (SRE) & Instituto Nacional de Migración (INM)',
+    directSourceUrl: 'https://www.gob.mx/inm',
+    legalProvision: 'Ley de Migración Arts. 40, 52 fracc. VII / Lineamientos Generales para la Expedición de Visas (UMA indexation)',
+    claimIds: ['CLM-MX-B9-S01-1', 'CLM-MX-B9-S05-2', 'CLM-MX-B9-S05-3'],
+    evidenceIds: ['EVD-B9-MX-INM-2026', 'EVD-B9-MX-SRE-VEDA'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 74,
+    quarantinedClaimsCount: 16,
+    officialStatusNotice: 'QUARANTINE NOTICE (16 Claims + 2 Special Topics): gob.mx/inm & gob.mx/sre returned HTTP 200 summary/electoral veda notices, while gob.mx/inm criteria subpage returned HTTP 404 and consulmex.sre.gob.mx presented Radware captcha on 2026-11-13. Live post-level UMA USD/MXN tables, fees, SLAs, biometrics, and bilateral reciprocity remain quarantined (15 AWAITING_VERIFICATION + 1 EXPIRED legacy minimum-wage formula).',
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit: Non-lucrative residency route via consular interview + 30-day post-arrival INM canje (card 1–4 yrs; PR eligible at 4 yrs). Statutory UMA indexation (680 days UMA monthly income × 6 mos or 11,460 days UMA average balance × 12 mos) superseded legacy 300/5,000 minimum wage rules (EXPIRED & quarantined). Live post tables and fees quarantined.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 5. South Africa - Intra-Company Transfer (ICT) Work Visa
+  {
+    id: 'p2-za-ict',
+    destination: 'South Africa',
+    destCode: 'ZA',
+    category: 'Intra-Company Transfer (ICT) Work Visa (Section 19(5))',
+    localStatutoryName: 'Intra-Company Transfer Work Visa (Immigration Act No. 13 of 2002 Sec. 19(5) & Reg. 18(7))',
+    action: 'NEW',
+    canonicalUrl: '/visa/south-africa/intra-company-transfer-work-visa',
+    issuingAuthority: 'Department of Home Affairs (DHA South Africa)',
+    directSourceUrl: 'https://www.gov.za/documents/immigration-act',
+    legalProvision: 'Immigration Act No. 13 of 2002 Section 19(5) & Immigration Regulations Regulation 18(7)',
+    claimIds: ['CLM-ZA-B9-S01-1', 'CLM-ZA-B9-S18-1', 'CLM-ZA-B9-S26-1'],
+    evidenceIds: ['EVD-B9-ZA-ACT-2026', 'EVD-B9-ZA-DHA-TIMEOUT'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 76,
+    quarantinedClaimsCount: 14,
+    officialStatusNotice: 'QUARANTINE NOTICE (14 Claims + 2 Special Topics): gov.za/documents/immigration-act verified HTTP 200, while dha.gov.za timed out on 2026-11-13. Live DHA-1738 filing portals, fee tables, SLAs, VFS biometrics, and bilateral reciprocity remain AWAITING_VERIFICATION and quarantined.',
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit: Section 19(5) authorizes corporate secondment up to 4 years maximum (non-renewable & non-extendable in-country) with ≥ 6 months prior affiliated employment and a mandatory skills transfer plan. Section 19(2) 100-pt PBS and DoL waiver are NOT_APPLICABLE. Unreachable DHA portal/fee/SLA items quarantined (14 claims).',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 6. United Kingdom - Family Visa: Partner or Spouse
+  {
+    id: 'p2-uk-familypartner',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'Family Visa: Partner or Spouse (Appendix FM)',
+    localStatutoryName: 'Family Visa — Apply as a Partner or Spouse (Immigration Rules Appendix FM)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/family-partner-spouse-visa',
+    issuingAuthority: 'UK Visas and Immigration (UKVI — Home Office)',
+    directSourceUrl: 'https://www.gov.uk/uk-family-visa',
+    legalProvision: 'Immigration Rules Appendix FM / HC 590 (11 April 2024 MIR Reform)',
+    claimIds: ['CLM-GB-B9-S01-1', 'CLM-GB-B9-S05-1', 'CLM-GB-B9-S18-1'],
+    evidenceIds: ['EVD-B9-GB-GOVUK-FAM-2026', 'EVD-B9-GB-GOVUK-INC-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 89,
+    quarantinedClaimsCount: 1,
+    officialStatusNotice: 'PARTIAL QUARANTINE (1 Claim): Prior GBP 18,600 Minimum Income Requirement (+ child supplements) for brand-new initial applications expired on 11 April 2024 and is strictly quarantined as EXPIRED (transitional protection noted separately for pre-11 Apr 2024 route holders).',
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit (HTTP 200 verbatim verified on gov.uk/uk-family-visa & /proof-income-partner, 2026-11-13): Out-of-UK fee GBP 2,064, inside-UK fee GBP 1,407 (+ IHS); MIR GBP 29,000 gross p.a. or GBP 88,500 cash savings (≥6 mos); CEFR English A1 -> A2 -> B1/Life in UK across 5-yr ILR route. Legacy pre-Apr 2024 GBP 18,600 initial MIR quarantined as EXPIRED.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 7. New Zealand - Post Study Work Visa
+  {
+    id: 'p2-nz-poststudy',
+    destination: 'New Zealand',
+    destCode: 'NZ',
+    category: 'Post Study Work Visa',
+    localStatutoryName: 'Post Study Work Visa (Immigration Instructions WD — Post-Study Work Instructions)',
+    action: 'NEW',
+    canonicalUrl: '/visa/new-zealand/post-study-work-visa',
+    issuingAuthority: 'Immigration New Zealand (INZ — MBIE)',
+    directSourceUrl: 'https://www.immigration.govt.nz/visas/post-study-work-visa/',
+    legalProvision: 'Immigration Act 2009 / INZ Operational Manual (WD Post-Study Work Visa Instructions; 16 Nov 2026 online-only & 23 Nov 2026 eligibility extension)',
+    claimIds: ['CLM-NZ-B9-S01-1', 'CLM-NZ-B9-S05-1', 'CLM-NZ-B9-S17-1', 'CLM-NZ-B9-S17-2', 'CLM-NZ-B9-S18-1', 'CLM-NZ-B9-S18-3'],
+    evidenceIds: ['EVD-B9-NZ-S05-1', 'EVD-B9-NZ-S17-1', 'EVD-B9-NZ-S17-2', 'EVD-B9-NZ-S18-1', 'EVD-B9-NZ-S18-3'],
+    lastVerifiedTimestamp: '2026-11-13T09:54:55Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    officialStatusNotice: 'TRANSIENT INCIDENT OBSERVATION (Observed Active 2026-11-13T09:54:55Z; INZ Notice Issued 13 Nov 2026 09:50 NZDT): immigration.govt.nz reported a temporary processing & Immigration Online pause caused by a global Microsoft outage, postponing 16 Nov 2026 PSWV eligibility changes to 23 Nov 2026. Verify live INZ status rather than treating this transient incident as continuously ongoing. Rolling 4-week wait times (50% = 2 weeks; 80% = 3.5 weeks in working days, checked 2026-11-13T09:54Z) are retrospective empirical statistics, not a guaranteed SLA (Section 17 PARTIALLY_VERIFIED).',
+    correctiveClassificationNotes: 'Phase 3.8.1 Cleanup (HTTP 200 verbatim checked 2026-11-13T09:54:55Z on post-study-work-visa/, work-visa-wait-times/ & impact-of-microsoft-outage/): Up to 3 years open work rights, NZD $5,000 funds, cost From NZD $1,670 (S18-3 PARTIALLY_VERIFIED as country/location varies), online-only from 16 Nov 2026, NZQCF Level 7 graduate diploma + bachelor eligibility extension 23 Nov 2026. Labour market check & cap NOT_APPLICABLE.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 8. Australia - Skilled Independent Visa (Subclass 189)
+  {
+    id: 'p2-au-189',
+    destination: 'Australia',
+    destCode: 'AU',
+    category: 'Skilled Independent Visa (Subclass 189 — Points-Tested Stream)',
+    localStatutoryName: 'Skilled Independent visa (subclass 189) — Points-tested stream (Migration Regulations 1994 Sch. 2 Subclass 189)',
+    action: 'NEW',
+    canonicalUrl: '/visa/australia/skilled-independent-subclass-189',
+    issuingAuthority: 'Department of Home Affairs (Australia)',
+    directSourceUrl: 'https://www.legislation.gov.au/F1996B03551/latest/text',
+    legalProvision: 'Migration Act 1958 / Migration Regulations 1994 Compilation 290 (2026-11-01) Sch. 1 Item 1137, Reg. 2.12C, Sch. 2 Subclass 189, Sch. 6D & F2026L00874 (1 July 2026)',
+    claimIds: ['CLM-AU-B9-S01-1', 'CLM-AU-B9-S17-1', 'CLM-AU-B9-S18-1', 'CLM-AU-B9-S18-2', 'CLM-AU-B9-S18-3'],
+    evidenceIds: ['EVD-B9-AU-S17-1', 'EVD-B9-AU-S18-1', 'EVD-B9-AU-S18-2', 'EVD-B9-AU-S18-3'],
+    lastVerifiedTimestamp: '2026-11-13T09:55:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'PARTIAL QUARANTINE (3 Claims — Section 17 Live Processing Times Only): Phase 3.8.1 resolved the Section 18 VAC fee conflict via primary Commonwealth legislation on legislation.gov.au (F2026L00874 effective 1 July 2026 & Migration Regulations 1994 Compilation 290 in force 2026-11-01): AUD 6,135 primary / 3,070 (18+) / 1,540 (<18) standard (Subitem 1137(3)(b)); AUD 5,030 / 2,515 / 1,260 Pacific concession (Subitem 1137(3)(a)); AUD 4,885 2nd instalment (1137(4)); AUD 700 STAC & AUD 80 non-Internet (Reg. 2.12C). Live immi.homeaffairs.gov.au processing times (Section 17: 3 claims) remain SPA-rendered (API HTTP 500) and strictly quarantined.',
+    correctiveClassificationNotes: 'Phase 3.8.1 Cleanup: Verified statutory Subclass 189 VAC schedule directly from Federal Register of Legislation (HTTP 200 on F2026L00874 & Compilation 290 F1996B03551), resolving Section 18 (3 claims) and Special Topic t20 from CONFLICTING to VERIFIED/PARTIALLY_VERIFIED while distinguishing statutory VAC from third-party skills assessment, medical, English test, and police clearance fees. Section 17 live SLAs remain AWAITING_VERIFICATION and quarantined.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 9. Portugal - D7 Passive Income / Retirement Residence Visa
+  {
+    id: 'p2-pt-d7',
+    destination: 'Portugal',
+    destCode: 'PT',
+    category: 'D7 Passive Income / Retirement Residence Visa (Visto D7)',
+    localStatutoryName: 'Visto de Residência para Reformados, Religiosos e Pessoas com Rendimentos Próprios (Lei n.º 23/2007 Art. 58.º)',
+    action: 'NEW',
+    canonicalUrl: '/visa/portugal/d7-passive-income-residence-visa',
+    issuingAuthority: 'Ministério dos Negócios Estrangeiros (MNE Portugal) & Agência para a Integração, Migrações e Asilo (AIMA)',
+    directSourceUrl: 'https://vistos.mne.gov.pt/en/national-visas/necessary-documentation/residency',
+    legalProvision: 'Lei n.º 23/2007 Art. 58.º / Portaria n.º 1563/2007 / PCM Regulatory Decree n.º 139/2025 (29 Dec 2025 RMMG €920)',
+    claimIds: ['CLM-PT-B9-S01-1', 'CLM-PT-B9-S05-1', 'CLM-PT-B9-S05-3'],
+    evidenceIds: ['EVD-B9-PT-MNE-RES-2026', 'EVD-B9-PT-MNE-SUBS-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 86,
+    quarantinedClaimsCount: 4,
+    officialStatusNotice: 'PARTIAL QUARANTINE (4 Claims): Superseded EUR 870 (2025) and EUR 820 (2024) RMMG thresholds quarantined as EXPIRED (1 claim) following PCM Regulatory Decree n.º 139/2025 raising 2026 RMMG to EUR 920/month; static EUR consular fee table missing on fetched MNE /fees HTML (3 Section 18 claims quarantined as AWAITING_VERIFICATION).',
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit (HTTP 200 verbatim verified on vistos.mne.gov.pt residency & means-of-subsistence, 2026-11-13): 2026 RMMG baseline verified verbatim as EUR 920/month (100% first adult, +50% additional adult = EUR 460/mo, +30% dependent child = EUR 276/mo) under PCM Regulatory Decree n.º 139/2025 of 29 December. Employer sponsorship NOT_APPLICABLE.',
+    batchNumber: 9,
+    isPilotSample: true
+  },
+  // 10. Singapore - S Pass
+  {
+    id: 'p2-sg-spass',
+    destination: 'Singapore',
+    destCode: 'SG',
+    category: 'S Pass (Mid-Skilled Associate Professional & Technician Track)',
+    localStatutoryName: 'S Pass (Employment of Foreign Manpower Act Cap. 91A — Work Passes)',
+    action: 'NEW',
+    canonicalUrl: '/visa/singapore/s-pass',
+    issuingAuthority: 'Ministry of Manpower (MOM Singapore)',
+    directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/s-pass',
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A) / Work Passes Regulations (S Pass Quota, Levy & Age-Scaled Salary)',
+    claimIds: ['CLM-SG-B9-S01-1', 'CLM-SG-B9-S05-1', 'CLM-SG-B9-S26-1'],
+    evidenceIds: ['EVD-B9-SG-MOM-SPASS-2026', 'EVD-B9-SG-MOM-ELIG-2026'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.8 Batch 9 Audit (HTTP 200 verbatim verified on mom.gov.sg/passes-and-permits/s-pass, /eligibility & /apply-for-a-pass updated Aug 2026): Min qualifying salary SGD 3,300/month (General, age-scaling to SGD 4,800) / SGD 3,800/month (Financial Services, up to SGD 5,650), SGD 650/month employer levy, sector DRC quotas, 10 business days online SLA. Scheduled 1 Jan 2027 increase to SGD 3,600/4,000 noted; COMPASS NOT_APPLICABLE.',
+    batchNumber: 9,
+    isPilotSample: true
+  }
+];
+
+// Phase 3.9 Batch 10 Pathways (10 New Global Immigration Pathways — Total 120 Completed / 210)
+export const PRIORITY2_BATCH10_COMBINATIONS: Priority2PathwayAudit[] = [
+  {
+    id: 'p2-de-settlement',
+    destination: 'Germany',
+    destCode: 'DE',
+    category: 'Permanent Settlement Permit (Niederlassungserlaubnis — §§ 9 & 18c AufenthG)',
+    localStatutoryName: 'Niederlassungserlaubnis (Aufenthaltsgesetz §§ 9, 18c & Aufenthaltsverordnung § 44)',
+    action: 'NEW',
+    canonicalUrl: '/visa/germany/permanent-settlement-permit',
+    issuingAuthority: 'Local Foreigners Authority (Ausländerbehörde) under Federal Ministry of the Interior (BMI)',
+    directSourceUrl: 'https://www.gesetze-im-internet.de/englisch_aufenthg/englisch_aufenthg.html',
+    legalProvision: 'Aufenthaltsgesetz (AufenthG) § 9 (General 5-yr) & § 18c (Skilled Workers / EU Blue Card 21–27 mo) / AufenthV § 44',
+    claimIds: ['CLM-DE-B10-S01-1', 'CLM-DE-B10-S05-1', 'CLM-DE-B10-S08-2', 'CLM-DE-B10-S13-3', 'CLM-DE-B10-S17-1', 'CLM-DE-B10-S18-1'],
+    evidenceIds: ['EVD-B10-DE-S01-1', 'EVD-B10-DE-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 86,
+    quarantinedClaimsCount: 4,
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verified directly on gesetze-im-internet.de/englisch_aufenthg & aufenthv/__44.html; make-it-in-germany returned Radware interstitial 2026-11-13): § 9 standard 5-yr / § 18c 3-yr skilled worker / 21–27 mo Blue Card settlement rules & § 44 AufenthV fees (EUR 113 standard, EUR 124 self-employed, EUR 147 highly qualified) verified. Pre-Nov 2023 timelines marked EXPIRED & quarantined; municipal Ausländerbehörde appointment SLAs quarantined.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-fr-salarie',
+    destination: 'France',
+    destCode: 'FR',
+    category: 'Employee Work Authorization & Salarié Residence Permit (Autorisation de travail — Salarié)',
+    localStatutoryName: 'Autorisation de travail & Carte de séjour temporaire « Salarié » (CESEDA Art. L.421-1 & Code du travail Art. R.5221-1)',
+    action: 'NEW',
+    canonicalUrl: '/visa/france/salarie-work-authorization',
+    issuingAuthority: 'Ministère de l’Intérieur (Plateforme ANEF) & DREETS / OFII',
+    directSourceUrl: 'https://www.service-public.fr/particuliers/vosdroits/F2728',
+    legalProvision: 'CESEDA Art. L.421-1 / Code du travail Arts. L.5221-2 & R.5221-1 ff. / Art. L.436-10 (OFII Employer Tax)',
+    claimIds: ['CLM-FR-B10-S01-1', 'CLM-FR-B10-S05-1', 'CLM-FR-B10-S16-2', 'CLM-FR-B10-S17-1', 'CLM-FR-B10-S18-1', 'CLM-FR-B10-S25-1'],
+    evidenceIds: ['EVD-B10-FR-S01-1', 'EVD-B10-FR-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 82,
+    quarantinedClaimsCount: 8,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: france-visas.gouv.fr returned HTTP 403 bot challenge on 2026-11-13; consular VLS-TS fee & appointment SLAs quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on service-public.fr/particuliers/vosdroits/F2728, 389 KB): Distinct non-Talent-Passport Salarié route. Verifies 2026 OFII employer tax (55% under EUR 4,667.54; cap EUR 2,567.15 >= EUR 4,667.54; seasonal EUR 50/mo), France Travail 3-week job-posting exemption at >= EUR 2,800.53 (1.5x SMIC), and 2-business-day employer status verification rule. 8 claims on consular VLS-TS fees/SLAs & unknown bilateral rules strictly quarantined.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-uk-graduate',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'Graduate Visa (Post-Study Route — Appendix Graduate)',
+    localStatutoryName: 'Graduate Route Visa (UK Immigration Rules Appendix Graduate)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/graduate-visa',
+    issuingAuthority: 'UK Visas and Immigration (UKVI — Home Office)',
+    directSourceUrl: 'https://www.gov.uk/graduate-visa',
+    legalProvision: 'UK Immigration Rules Appendix Graduate (transitional duration reduction effective 1 January 2027)',
+    claimIds: ['CLM-GB-B10-S01-1', 'CLM-GB-B10-S11-1', 'CLM-GB-B10-S11-3', 'CLM-GB-B10-S18-1', 'CLM-GB-B10-S21-1', 'CLM-GB-B10-S25-1'],
+    evidenceIds: ['EVD-B10-GB-S01-1', 'EVD-B10-GB-S11-1', 'EVD-B10-GB-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 89,
+    quarantinedClaimsCount: 1,
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on gov.uk/graduate-visa & /how-much-it-costs): Fee GBP 937 + IHS GBP 1,035/yr (GBP 1,552.50 18m / GBP 2,070 2y / GBP 3,105 3y), 8-week in-UK SLA. Non-PhD duration cut-off codified: 2 years on/before 31 Dec 2026, transitioning to 18 months on/after 1 Jan 2027 (PhD stays 3 years). Legacy closed Tier 1 PSW rule flagged EXPIRED & quarantined (1 claim); employer CoS & salary floor marked NOT_APPLICABLE.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-nz-straighttoresidence',
+    destination: 'New Zealand',
+    destCode: 'NZ',
+    category: 'Straight to Residence Visa (Green List Tier 1)',
+    localStatutoryName: 'Straight to Residence Visa — Green List Tier 1 (Immigration Act 2009 / INZ SR3 Instructions)',
+    action: 'NEW',
+    canonicalUrl: '/visa/new-zealand/straight-to-residence-visa',
+    issuingAuthority: 'Immigration New Zealand (INZ — MBIE)',
+    directSourceUrl: 'https://www.immigration.govt.nz/visas/straight-to-residence-visa/',
+    legalProvision: 'Immigration Act 2009 / INZ Operational Manual SR3 (Green List Tier 1 Direct Residence Instructions)',
+    claimIds: ['CLM-NZ-B10-S01-1', 'CLM-NZ-B10-S05-1', 'CLM-NZ-B10-S17-1', 'CLM-NZ-B10-S17-2', 'CLM-NZ-B10-S18-1'],
+    evidenceIds: ['EVD-B10-NZ-S01-1', 'EVD-B10-NZ-S17-1', 'EVD-B10-NZ-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T09:54:55Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    officialStatusNotice: 'TRANSIENT INCIDENT OBSERVED 2026-11-13T09:50 NZDT: INZ advised temporary processing/portal pause from global Microsoft outage; rolling 4-week wait stat (8.5 wks 50% / 4 mos 80%) is NOT a fixed SLA.',
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on immigration.govt.nz/visas/straight-to-residence-visa/ & resident-visa-wait-times/ at 2026-11-13T09:54:55Z): Age <=55, Green List Tier 1 accredited-employer offer (>=12 mos permanent/fixed or >=6 mos contract), Visa Cost From NZD $6,450, PR after 2 years. Dynamic 4-week wait stat (8.5 wks 50% / 4 mos 80%) and Microsoft outage banner flagged PARTIALLY_VERIFIED with live re-check caveat.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-sg-entrepass',
+    destination: 'Singapore',
+    destCode: 'SG',
+    category: 'EntrePass (Entrepreneurship & Venture-Backed Innovation Pass)',
+    localStatutoryName: 'EntrePass (Employment of Foreign Manpower Act Cap. 91A — Entrepreneur Work Pass)',
+    action: 'NEW',
+    canonicalUrl: '/visa/singapore/entrepass',
+    issuingAuthority: 'Ministry of Manpower (MOM Singapore), Enterprise Singapore & IMDA',
+    directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/entrepass',
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A) / MOM EntrePass Key Facts & Innovation Criteria',
+    claimIds: ['CLM-SG-B10-S01-1', 'CLM-SG-B10-S05-1', 'CLM-SG-B10-S05-2', 'CLM-SG-B10-S18-1', 'CLM-SG-B10-S26-1'],
+    evidenceIds: ['EVD-B10-SG-S01-1', 'EVD-B10-SG-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on mom.gov.sg/passes-and-permits/entrepass, /key-facts, /eligibility & /apply-for-a-pass updated 14 Aug 2026): SGD $105 application + $225 issuance (+ $30 MJV), >=30% ACRA Pte Ltd equity (<=12 mos), >=SGD 100,000 VC/angel funding or incubator/IP/research tie-up, 1-yr initial -> 2-yr subsequent renewals, within 6 weeks typical processing. No min salary floor and no levy/DRC quota (NOT_APPLICABLE).',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-jp-gijinkoku',
+    destination: 'Japan',
+    destCode: 'JP',
+    category: 'Engineer / Specialist in Humanities / International Services (Gijinkoku)',
+    localStatutoryName: '技術・人文知識・国際業務 (Immigration Control and Refugee Recognition Act Annexed Table I-2)',
+    action: 'NEW',
+    canonicalUrl: '/visa/japan/engineer-humanities-international-services-visa',
+    issuingAuthority: 'Immigration Services Agency of Japan (ISA / 出入国在留管理庁)',
+    directSourceUrl: 'https://www.moj.go.jp/isa/applications/status/gijinkoku.html',
+    legalProvision: 'Immigration Control and Refugee Recognition Act Annexed Table I-2 & Ministerial Landing Criteria Ordinance (incl. 15 Apr 2026 CEFR B2 rule)',
+    claimIds: ['CLM-JP-B10-S01-1', 'CLM-JP-B10-S05-1', 'CLM-JP-B10-S08-1', 'CLM-JP-B10-S08-3', 'CLM-JP-B10-S17-1', 'CLM-JP-B10-S18-1'],
+    evidenceIds: ['EVD-B10-JP-S01-1', 'EVD-B10-JP-S08-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 81,
+    quarantinedClaimsCount: 9,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: Revenue-stamp fee revision page (tesuryo_kaitei_2025.html) returned HTTP 404/redirect on 2026-11-13; Section 18 fees & Section 17 ISA SLAs strictly quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verified on moj.go.jp/isa/applications/status/gijinkoku.html, 78 KB): Employer Category 1–4 rules (Cat. 2 >= JPY 10,000,000 withholding tax), effective 15 April 2026 CEFR B2+ (JLPT N2+, BJT 400+, EJU 200+, JPT 525+) rule for Cat. 3 & 4 customer-facing/interpretation roles, and 13 July 2026 dispatch guidance verified. Pre-15 Apr 2026 exemption marked EXPIRED & quarantined; 9 claims quarantined.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-hk-iang',
+    destination: 'Hong Kong',
+    destCode: 'HK',
+    category: 'Immigration Arrangements for Non-local Graduates (IANG — HK & GBA Campus)',
+    localStatutoryName: 'Immigration Arrangements for Non-local Graduates (非本地畢業生留港／回港就業安排 — ImmD IANG)',
+    action: 'NEW',
+    canonicalUrl: '/visa/hong-kong/iang-non-local-graduates',
+    issuingAuthority: 'Immigration Department, Government of the Hong Kong Special Administrative Region (ImmD)',
+    directSourceUrl: 'https://www.immd.gov.hk/eng/services/visas/IANG.html',
+    legalProvision: 'Immigration Ordinance Cap. 115 / ImmD IANG Policy (Fresh Graduates, Returning Graduates & GBA Campus Arrangement)',
+    claimIds: ['CLM-HK-B10-S01-1', 'CLM-HK-B10-S04-2', 'CLM-HK-B10-S04-3', 'CLM-HK-B10-S18-1', 'CLM-HK-B10-S26-1'],
+    evidenceIds: ['EVD-B10-HK-S01-1', 'EVD-B10-HK-S04-2', 'EVD-B10-HK-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 90,
+    quarantinedClaimsCount: 0,
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on immd.gov.hk/eng/services/visas/IANG.html & fee-tables/index.html): Quota-free and non-sector-specific HK & GBA campus graduate scheme; statutory fees HK$1,300 (>180d) / HK$600 (<=180d); 24m initial -> 3+3 or 6-yr top-tier (>=HK$2M income); 2-wk/4-wk SLAs. Explicitly encodes Laos/Nepal/Vietnam UGC group rule & Afghanistan/Cuba/DPRK exclusion.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-tr-workpermit',
+    destination: 'Turkey',
+    destCode: 'TR',
+    category: 'Fixed-Term & Permanent Work Permit for Foreigners (Süreli / Süresiz Çalışma İzni — Law No. 6735 Art. 10)',
+    localStatutoryName: 'Süreli / Süresiz / Bağımsız Çalışma İzni (Uluslararası İşgücü Kanunu No. 6735 Art. 10)',
+    action: 'NEW',
+    canonicalUrl: '/visa/turkey/standard-work-permit',
+    issuingAuthority: 'Ministry of Labour and Social Security (ÇSGB — Directorate General of International Labour Force)',
+    directSourceUrl: 'https://calismaizni.csgb.gov.tr/en/general-information/documents-issued-to-foreigners/',
+    legalProvision: 'International Labour Force Law No. 6735 Art. 10 (5 permit classes) & Art. 12 (Residence Permit Equivalence)',
+    claimIds: ['CLM-TR-B10-S01-1', 'CLM-TR-B10-S05-1', 'CLM-TR-B10-S17-1', 'CLM-TR-B10-S18-1', 'CLM-TR-B10-S26-1'],
+    evidenceIds: ['EVD-B10-TR-S01-1', 'EVD-B10-TR-S02-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 78,
+    quarantinedClaimsCount: 12,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: ÇSGB evaluation-criteria/ subpage returned HTTP 404 on 2026-11-13; Section 05 salary multipliers, Section 18 TRY fees, Section 17 SLA, and Section 26 5:1 ratio exceptions quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verified on calismaizni.csgb.gov.tr/en/general-information/documents-issued-to-foreigners/): Confirms 5 statutory work permit classes under Law No. 6735 Art. 10, QR check at izinsorgula.csgb.gov.tr, and Art. 12 residence equivalence. 12 claims covering HTTP 404 evaluation criteria, minimum-wage multipliers, fees, SLAs & unknown bilateral rules strictly quarantined.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-br-vitemxi',
+    destination: 'Brazil',
+    destCode: 'BR',
+    category: 'Temporary Visa XI — Family Reunion (Visto Temporário XI — Reunião Familiar)',
+    localStatutoryName: 'Visto Temporário XI — Reunião Familiar (Lei n.º 13.445/2017 Art. 37 & Decreto n.º 9.199/2017)',
+    action: 'NEW',
+    canonicalUrl: '/visa/brazil/vitem-xi-family-reunion-visa',
+    issuingAuthority: 'Ministério das Relações Exteriores (MRE Consular Network) & Polícia Federal (SISMIGRA)',
+    directSourceUrl: 'https://www.gov.br/mre/pt-br/assuntos/portal-consular/vistos/informacoes-sobre-vistos-para-estrangeiros-viajarem-ao-brasil',
+    legalProvision: 'Lei de Migração n.º 13.445/2017 Art. 14 § 1º (XI) & Art. 37 / Decreto n.º 9.199/2017 / Portaria Interministerial MJSP/MRE n.º 12/2018',
+    claimIds: ['CLM-BR-B10-S01-1', 'CLM-BR-B10-S04-2', 'CLM-BR-B10-S05-2', 'CLM-BR-B10-S17-1', 'CLM-BR-B10-S18-1'],
+    evidenceIds: ['EVD-B10-BR-S01-1', 'EVD-B10-BR-S04-2'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 82,
+    quarantinedClaimsCount: 8,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: MRE quadro-geral consular fee table returned HTTP 404 on 2026-11-13; Section 18 reciprocity fees, Section 17 consular SLAs, and unknown bilateral reciprocity quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verified on MRE Portal Consular, 209 KB): Codifies statutory VITEM XI family reunion under Law No. 13.445/2017 Art. 37, distinct from Mercosur Decree 6.975/2009 VITEM XIII and Digital Nomad VITEM XIV. Open employment authorization after 90-day Polícia Federal RNM registration; no fixed caller income floor or employer sponsorship (NOT_APPLICABLE). 8 claims quarantined pending live MRE reciprocity & post SLA verification.',
+    batchNumber: 10,
+    isPilotSample: true
+  },
+  {
+    id: 'p2-cl-retiree',
+    destination: 'Chile',
+    destCode: 'CL',
+    category: 'Temporary Residence for Retirees & Passive-Income Holders (Residencia Temporal — Jubilado y Rentista)',
+    localStatutoryName: 'Permiso de Residencia Temporal — Subcategoría Jubilado y Rentista (Ley N° 21.325 & Decreto N° 177)',
+    action: 'NEW',
+    canonicalUrl: '/visa/chile/jubilado-rentista-temporary-residence',
+    issuingAuthority: 'Servicio Nacional de Migraciones (SERMIG Chile)',
+    directSourceUrl: 'https://serviciomigraciones.cl/en/residencia-temporal/',
+    legalProvision: 'Ley de Migración y Extranjería N° 21.325 / Decreto Supremo N° 177 (Subcategorías de Residencia Temporal) / Decreto Supremo N° 296 (Reciprocity)',
+    claimIds: ['CLM-CL-B10-S01-1', 'CLM-CL-B10-S05-1', 'CLM-CL-B10-S05-3', 'CLM-CL-B10-S17-1', 'CLM-CL-B10-S18-1'],
+    evidenceIds: ['EVD-B10-CL-S01-1', 'EVD-B10-CL-S02-1'],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 78,
+    quarantinedClaimsCount: 12,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: SERMIG aranceles-migratorios (DS N° 296) uses a client-side JS calculator and pension floors reside on dynamic Tramites forms; Section 05, Section 17, and Section 18 numeric values quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verified on serviciomigraciones.cl/en/residencia-temporal/ 249 KB & aranceles-migratorios/ 204 KB updated 2 Nov 2026): Establishes Law No. 21.325 & DS No. 177 Jubilado y Rentista retiree/passive-income track distinct from Motivos Laborales. Superseded DL No. 1.094 rules flagged EXPIRED & quarantined; 12 claims covering dynamic JS reciprocity USD fees, exact pension floor, dynamic portal step, and SLAs strictly quarantined.',
+    batchNumber: 10,
+    isPilotSample: true
+  }
+];
+
+// All Completed Priority 2 Pathways (120 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10)
 export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_PILOT_COMBINATIONS,
   ...PRIORITY2_BATCH1_COMBINATIONS,
@@ -1853,25 +2567,28 @@ export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_BATCH4_COMBINATIONS,
   ...PRIORITY2_BATCH5_COMBINATIONS,
   ...PRIORITY2_BATCH6_COMBINATIONS,
-  ...PRIORITY2_BATCH7_COMBINATIONS
+  ...PRIORITY2_BATCH7_COMBINATIONS,
+  ...PRIORITY2_BATCH8_COMBINATIONS,
+  ...PRIORITY2_BATCH9_COMBINATIONS,
+  ...PRIORITY2_BATCH10_COMBINATIONS
 ];
 
-// Full Priority 2 Queue (210 combinations total: 90 completed + 120 backlog)
+// Full Priority 2 Queue (210 combinations total: 120 completed + 90 backlog)
 export const PRIORITY2_FULL_QUEUE: Priority2PathwayAudit[] = [...PRIORITY2_COMPLETED_PATHWAYS];
 
-// Synthetic queue items for remaining 120 backlog items
+// Synthetic queue items for remaining 90 backlog items
 const remainingTemplates = [
-  { dest: 'Qatar', code: 'QA', cat: 'Work Residence Permit', auth: 'Ministry of Interior Qatar', url: 'https://portal.moi.gov.qa' },
-  { dest: 'Turkey', code: 'TR', cat: 'Turquoise Card (Turkuaz Kart)', auth: 'Directorate General of Migration Management', url: 'https://www.goc.gov.tr' },
-  { dest: 'Vietnam', code: 'VN', cat: 'Work Permit & Temporary Residence Card (TRC)', auth: 'Ministry of Labour Vietnam', url: 'https://molisa.gov.vn' },
-  { dest: 'Thailand', code: 'TH', cat: 'Long-Term Resident (LTR) Visa', auth: 'Board of Investment (BOI) Thailand', url: 'https://ltr.boi.go.th' },
-  { dest: 'Mexico', code: 'MX', cat: 'Residente Temporal con Permiso de Trabajo', auth: 'Instituto Nacional de Migración', url: 'https://www.gob.mx/inm' },
-  { dest: 'South Africa', code: 'ZA', cat: 'General Work Visa (Section 19(2))', auth: 'Department of Home Affairs South Africa', url: 'http://www.dha.gov.za' }
+  { dest: 'Qatar', code: 'QA', cat: 'Special Purpose & Sectoral Work Permit', auth: 'Ministry of Interior Qatar', url: 'https://portal.moi.gov.qa' },
+  { dest: 'Turkey', code: 'TR', cat: 'Exceptional Work Permit & Academic Track', auth: 'Ministry of Labour and Social Security (ÇSGB)', url: 'https://www.csgb.gov.tr' },
+  { dest: 'Vietnam', code: 'VN', cat: 'Expert & Family Visit Long-Stay Track', auth: 'Vietnam Immigration Department', url: 'https://xuatnhapcanh.gov.vn/en' },
+  { dest: 'Thailand', code: 'TH', cat: 'Non-Immigrant B & O-A Long-Stay Visa', auth: 'Board of Investment (BOI) & MFA Thailand', url: 'https://www.boi.go.th' },
+  { dest: 'Mexico', code: 'MX', cat: 'Family Unity & Permanent Resident Track', auth: 'Instituto Nacional de Migración', url: 'https://www.gob.mx/inm' },
+  { dest: 'South Africa', code: 'ZA', cat: 'Corporate & Business Visa Section 15', auth: 'Department of Home Affairs South Africa', url: 'https://www.dha.gov.za' }
 ];
 
-for (let i = 0; i < 120; i++) {
+for (let i = 0; i < 90; i++) {
   const tpl = remainingTemplates[i % remainingTemplates.length];
-  const uniqueId = `p2-queue-backlog-${i + 91}`;
+  const uniqueId = `p2-queue-backlog-${i + 121}`;
   PRIORITY2_FULL_QUEUE.push({
     id: uniqueId,
     destination: tpl.dest,
@@ -1883,19 +2600,19 @@ for (let i = 0; i < 120; i++) {
     issuingAuthority: tpl.auth,
     directSourceUrl: tpl.url,
     legalProvision: `Immigration Act Sec ${(i % 30) + 10}`,
-    claimIds: [`CLM-${tpl.code}-${i + 100}`],
-    evidenceIds: [`EVD-${tpl.code}-${i + 100}`],
-    lastVerifiedTimestamp: '2026-11-12T00:00:00Z',
-    verificationStatus: (i % 4 === 3) ? 'NOT_OFFERED' : 'VERIFIED',
-    batchNumber: 7,
+    claimIds: [`CLM-${tpl.code}-${i + 121}`],
+    evidenceIds: [`EVD-${tpl.code}-${i + 121}`],
+    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
+    verificationStatus: (i % 4 === 3) ? 'NOT_OFFERED' : 'AWAITING_VERIFICATION',
+    batchNumber: 10,
     isPilotSample: false
   });
 }
 
-// Summary Metrics for Phase 3.6.9 Priority 2 Batch 7 Expansion
+// Summary Metrics for Phase 3.9 Priority 2 Batch 10 Expansion
 export const PRIORITY2_AUDIT_SUMMARY = {
   totalPriority2Queue: PRIORITY2_FULL_QUEUE.length, // 210
-  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 90 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7)
+  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 120 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10)
   pilotPathwaysCount: PRIORITY2_PILOT_COMBINATIONS.length, // 10
   batch1PathwaysCount: PRIORITY2_BATCH1_COMBINATIONS.length, // 20
   batch2PilotPathwaysCount: PRIORITY2_BATCH2_PILOT_COMBINATIONS.length, // 10
@@ -1904,21 +2621,32 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch5PathwaysCount: 10, // 10 NEW in Batch 5
   batch6PathwaysCount: 10, // 10 NEW in Batch 6
   batch7PathwaysCount: 10, // 10 NEW in Batch 7
-  batch1ReconciledNewCount: 12, // 12 NEW in Batch 1
-  batch1ReconciledEnrichedCount: 8, // 8 ENRICHED in Batch 1
-  batch2PilotNewCount: 10, // 10 NEW in Batch 2
-  batch3NewCount: 10, // 10 NEW in Batch 3
-  batch4NewCount: 10, // 10 NEW in Batch 4
-  batch5NewCount: 10, // 10 NEW in Batch 5
-  batch6NewCount: 10, // 10 NEW in Batch 6
-  batch7NewCount: 10, // 10 NEW in Batch 7
-  remainingBacklogCount: 120, // 210 - 90
-  totalCompletedSectionEntries: 2700, // 90 × 30
-  cumulativePriority2CoveragePercentage: '42.86%', // 90 / 210
-  preChangeBackupPhase369: {
-    path: '/app/applet/backup_phase_3_6_9.tar.gz',
-    sizeBytes: 13892550,
-    sha256: '287eafc798e8df7de3816b1fcfd5146bfe66541af42a87a58453035bf6abe133'
+  batch8PathwaysCount: PRIORITY2_BATCH8_COMBINATIONS.length, // 10 NEW in Batch 8
+  batch9PathwaysCount: PRIORITY2_BATCH9_COMBINATIONS.length, // 10 NEW in Batch 9
+  batch10PathwaysCount: PRIORITY2_BATCH10_COMBINATIONS.length, // 10 NEW in Batch 10
+  batch1ReconciledNewCount: 12,
+  batch1ReconciledEnrichedCount: 8,
+  batch2PilotNewCount: 10,
+  batch3NewCount: 10,
+  batch4NewCount: 10,
+  batch5NewCount: 10,
+  batch6NewCount: 10,
+  batch7NewCount: 10,
+  batch8NewCount: 10,
+  batch9NewCount: 10,
+  batch10NewCount: 10,
+  remainingBacklogCount: 90, // 210 - 120
+  totalCompletedSectionEntries: 3600, // 120 × 30
+  cumulativePriority2CoveragePercentage: '57.14%', // 120 / 210
+  preChangeBackupPhase37: {
+    path: '/app/applet/backup_phase_3_7.tar.gz',
+    sizeBytes: 64138,
+    sha256: '7e1ca3d1919203bc78aa597b3889884eee49907ed915325ec83d7204de322131'
+  },
+  preChangeBackupPhase38: {
+    path: '/app/applet/backup_phase_3_8.tar.gz',
+    sizeBytes: 54867,
+    sha256: 'e65c3b5270b7580b3bd2edc93c16ac0c8111da374177a807ab3b65a26a7f5199'
   },
   batch7Metrics: {
     pathwaysCount: 10,
@@ -1936,7 +2664,112 @@ export const PRIORITY2_AUDIT_SUMMARY = {
       CONSULAR_JURISDICTION_SPECIFIC: 20,
       UNKNOWN: 0
     }
+  },
+  batch8Metrics: {
+    pathwaysCount: 10,
+    sectionsCount: 300,
+    specialTopicsPerPathway: 22,
+    claimsAuditedCount: 900,
+    claimsPublishedCount: 853,
+    claimsQuarantinedCount: 47,
+    verificationStatusCounts: {
+      VERIFIED: 750,
+      PARTIALLY_VERIFIED: 75,
+      AWAITING_VERIFICATION: 41,
+      CONFLICTING: 3,
+      EXPIRED: 3,
+      NOT_APPLICABLE: 28
+    },
+    sectionStatusCounts: {
+      VERIFIED: 242,
+      PARTIALLY_VERIFIED: 43,
+      AWAITING_VERIFICATION: 10,
+      CONFLICTING: 2,
+      NOT_APPLICABLE: 3
+    },
+    scopeDistribution: {
+      GLOBAL: 721,
+      NATIONALITY_GROUP: 29,
+      NATIONALITY_SPECIFIC: 41,
+      RESIDENCE_SPECIFIC: 76,
+      CONSULAR_JURISDICTION_SPECIFIC: 26,
+      UNKNOWN: 7
+    }
+  },
+  preChangeBackupPhase381: {
+    path: '/app/applet/backup_phase_3_8_1.tar.gz',
+    sizeBytes: 147907,
+    sha256: '9379e7d7db858a8908a1d45e4bc13a88c3affe4c8a93420a003bb56d5e4e8aab'
+  },
+  batch9Metrics: {
+    pathwaysCount: 10,
+    sectionsCount: 300,
+    specialTopicsPerPathway: 22,
+    claimsAuditedCount: 900,
+    claimsPublishedCount: 847,
+    claimsQuarantinedCount: 53,
+    verificationStatusCounts: {
+      VERIFIED: 730,
+      PARTIALLY_VERIFIED: 73,
+      AWAITING_VERIFICATION: 49,
+      CONFLICTING: 0,
+      EXPIRED: 4,
+      NOT_APPLICABLE: 44
+    },
+    sectionStatusCounts: {
+      VERIFIED: 233,
+      PARTIALLY_VERIFIED: 46,
+      AWAITING_VERIFICATION: 14,
+      CONFLICTING: 0,
+      NOT_APPLICABLE: 7
+    },
+    scopeDistribution: {
+      GLOBAL: 715,
+      NATIONALITY_GROUP: 31,
+      NATIONALITY_SPECIFIC: 38,
+      RESIDENCE_SPECIFIC: 78,
+      CONSULAR_JURISDICTION_SPECIFIC: 32,
+      UNKNOWN: 6
+    }
+  },
+  preChangeBackupPhase39: {
+    path: '/app/applet/backup_phase_3_9_batch10.tar.gz',
+    sizeBytes: 59730,
+    sha256: 'f783ce2e3d82b209c6ddce83f7711d3e7254da6d4695b3487dd602256b3a7cf0'
+  },
+  batch10Metrics: {
+    pathwaysCount: 10,
+    sectionsCount: 300,
+    specialTopicsPerPathway: 22,
+    claimsAuditedCount: 900,
+    claimsPublishedCount: 846,
+    claimsQuarantinedCount: 54,
+    verificationStatusCounts: {
+      VERIFIED: 740,
+      PARTIALLY_VERIFIED: 67,
+      AWAITING_VERIFICATION: 50,
+      CONFLICTING: 0,
+      EXPIRED: 4,
+      NOT_APPLICABLE: 39
+    },
+    sectionStatusCounts: {
+      VERIFIED: 231,
+      PARTIALLY_VERIFIED: 58,
+      AWAITING_VERIFICATION: 11,
+      CONFLICTING: 0,
+      NOT_APPLICABLE: 0
+    },
+    scopeDistribution: {
+      GLOBAL: 688,
+      NATIONALITY_GROUP: 27,
+      NATIONALITY_SPECIFIC: 36,
+      RESIDENCE_SPECIFIC: 104,
+      CONSULAR_JURISDICTION_SPECIFIC: 35,
+      UNKNOWN: 10
+    }
   }
 };
+
+
 
 

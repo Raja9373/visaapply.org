@@ -1,0 +1,301 @@
+pathway_id,section_id,section_name,verification_status,published_claim_count,quarantined_claim_count,is_quarantined
+"p2-th-ltr","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-th-ltr","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-th-ltr","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-th-ltr","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-th-ltr","S05","Financial Requirements & Minimum Funds","PARTIALLY_VERIFIED",2,1,false
+"p2-th-ltr","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-th-ltr","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-th-ltr","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-th-ltr","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-th-ltr","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-th-ltr","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-th-ltr","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-th-ltr","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-th-ltr","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-th-ltr","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-th-ltr","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-th-ltr","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-th-ltr","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-th-ltr","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-th-ltr","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-th-ltr","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-th-ltr","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-th-ltr","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-th-ltr","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-th-ltr","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-th-ltr","S26","Quotas, Annual Caps & Limits","NOT_APPLICABLE",3,0,false
+"p2-th-ltr","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-th-ltr","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-th-ltr","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-th-ltr","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false
+"p2-tr-turquoisecard","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-tr-turquoisecard","S05","Financial Requirements & Minimum Funds","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-tr-turquoisecard","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-tr-turquoisecard","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S26","Quotas, Annual Caps & Limits","NOT_APPLICABLE",3,0,false
+"p2-tr-turquoisecard","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-tr-turquoisecard","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false
+"p2-mx-workresident","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-mx-workresident","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-mx-workresident","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-mx-workresident","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-mx-workresident","S05","Financial Requirements & Minimum Funds","VERIFIED",3,0,false
+"p2-mx-workresident","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-mx-workresident","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-mx-workresident","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-mx-workresident","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-mx-workresident","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-mx-workresident","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-mx-workresident","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-mx-workresident","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-mx-workresident","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-mx-workresident","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-mx-workresident","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-mx-workresident","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-mx-workresident","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-mx-workresident","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-mx-workresident","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-mx-workresident","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-mx-workresident","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-mx-workresident","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-mx-workresident","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-mx-workresident","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-mx-workresident","S26","Quotas, Annual Caps & Limits","VERIFIED",3,0,false
+"p2-mx-workresident","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-mx-workresident","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-mx-workresident","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-mx-workresident","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false
+"p2-qa-workresidence","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-qa-workresidence","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-qa-workresidence","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-qa-workresidence","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",2,1,false
+"p2-qa-workresidence","S05","Financial Requirements & Minimum Funds","PARTIALLY_VERIFIED",2,1,false
+"p2-qa-workresidence","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-qa-workresidence","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-qa-workresidence","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-qa-workresidence","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-qa-workresidence","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-qa-workresidence","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-qa-workresidence","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-qa-workresidence","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-qa-workresidence","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-qa-workresidence","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-qa-workresidence","S16","Application Channels & Portals","AWAITING_VERIFICATION",0,3,true
+"p2-qa-workresidence","S17","Processing Times & Standard SLA","AWAITING_VERIFICATION",0,3,true
+"p2-qa-workresidence","S18","Government Application & Visa Fees","AWAITING_VERIFICATION",0,3,true
+"p2-qa-workresidence","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-qa-workresidence","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-qa-workresidence","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-qa-workresidence","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-qa-workresidence","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-qa-workresidence","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-qa-workresidence","S25","Employer / Sponsor Obligations","PARTIALLY_VERIFIED",2,1,false
+"p2-qa-workresidence","S26","Quotas, Annual Caps & Limits","PARTIALLY_VERIFIED",2,1,false
+"p2-qa-workresidence","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-qa-workresidence","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-qa-workresidence","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-qa-workresidence","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",2,1,false
+"p2-vn-workpermit","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-vn-workpermit","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-vn-workpermit","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-vn-workpermit","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-vn-workpermit","S05","Financial Requirements & Minimum Funds","VERIFIED",3,0,false
+"p2-vn-workpermit","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-vn-workpermit","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-vn-workpermit","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-vn-workpermit","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-vn-workpermit","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-vn-workpermit","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-vn-workpermit","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-vn-workpermit","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-vn-workpermit","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-vn-workpermit","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-vn-workpermit","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-vn-workpermit","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-vn-workpermit","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-vn-workpermit","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-vn-workpermit","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-vn-workpermit","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-vn-workpermit","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-vn-workpermit","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-vn-workpermit","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-vn-workpermit","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-vn-workpermit","S26","Quotas, Annual Caps & Limits","VERIFIED",3,0,false
+"p2-vn-workpermit","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-vn-workpermit","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-vn-workpermit","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-vn-workpermit","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false
+"p2-za-generalwork","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-za-generalwork","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-za-generalwork","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-za-generalwork","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",2,1,false
+"p2-za-generalwork","S05","Financial Requirements & Minimum Funds","VERIFIED",3,0,false
+"p2-za-generalwork","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-za-generalwork","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-za-generalwork","S08","Language Proficiency Requirements","VERIFIED",3,0,false
+"p2-za-generalwork","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-za-generalwork","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-za-generalwork","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-za-generalwork","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-za-generalwork","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-za-generalwork","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-za-generalwork","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-za-generalwork","S16","Application Channels & Portals","AWAITING_VERIFICATION",0,3,true
+"p2-za-generalwork","S17","Processing Times & Standard SLA","AWAITING_VERIFICATION",0,3,true
+"p2-za-generalwork","S18","Government Application & Visa Fees","AWAITING_VERIFICATION",0,3,true
+"p2-za-generalwork","S19","Biometrics & Identity Verification","AWAITING_VERIFICATION",0,3,true
+"p2-za-generalwork","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-za-generalwork","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-za-generalwork","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-za-generalwork","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-za-generalwork","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-za-generalwork","S25","Employer / Sponsor Obligations","PARTIALLY_VERIFIED",1,2,false
+"p2-za-generalwork","S26","Quotas, Annual Caps & Limits","VERIFIED",3,0,false
+"p2-za-generalwork","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-za-generalwork","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-za-generalwork","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-za-generalwork","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",2,1,false
+"p2-in-employment","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-in-employment","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-in-employment","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-in-employment","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-in-employment","S05","Financial Requirements & Minimum Funds","CONFLICTING",1,2,false
+"p2-in-employment","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-in-employment","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-in-employment","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-in-employment","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-in-employment","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-in-employment","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-in-employment","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-in-employment","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-in-employment","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-in-employment","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-in-employment","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-in-employment","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-in-employment","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-in-employment","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-in-employment","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-in-employment","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-in-employment","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-in-employment","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-in-employment","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-in-employment","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-in-employment","S26","Quotas, Annual Caps & Limits","VERIFIED",3,0,false
+"p2-in-employment","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-in-employment","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-in-employment","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-in-employment","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false
+"p2-ph-9g","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-ph-9g","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-ph-9g","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-ph-9g","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",2,1,false
+"p2-ph-9g","S05","Financial Requirements & Minimum Funds","VERIFIED",3,0,false
+"p2-ph-9g","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-ph-9g","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-ph-9g","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-ph-9g","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-ph-9g","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-ph-9g","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-ph-9g","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-ph-9g","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-ph-9g","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-ph-9g","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-ph-9g","S16","Application Channels & Portals","AWAITING_VERIFICATION",0,3,true
+"p2-ph-9g","S17","Processing Times & Standard SLA","AWAITING_VERIFICATION",0,3,true
+"p2-ph-9g","S18","Government Application & Visa Fees","AWAITING_VERIFICATION",0,3,true
+"p2-ph-9g","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-ph-9g","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-ph-9g","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-ph-9g","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-ph-9g","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-ph-9g","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-ph-9g","S25","Employer / Sponsor Obligations","PARTIALLY_VERIFIED",2,1,false
+"p2-ph-9g","S26","Quotas, Annual Caps & Limits","VERIFIED",3,0,false
+"p2-ph-9g","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-ph-9g","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-ph-9g","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-ph-9g","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",2,1,false
+"p2-mu-occupation","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-mu-occupation","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-mu-occupation","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-mu-occupation","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-mu-occupation","S05","Financial Requirements & Minimum Funds","CONFLICTING",1,2,false
+"p2-mu-occupation","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-mu-occupation","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-mu-occupation","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-mu-occupation","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-mu-occupation","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-mu-occupation","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-mu-occupation","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-mu-occupation","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-mu-occupation","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-mu-occupation","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-mu-occupation","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-mu-occupation","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-mu-occupation","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-mu-occupation","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-mu-occupation","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-mu-occupation","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-mu-occupation","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-mu-occupation","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-mu-occupation","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-mu-occupation","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-mu-occupation","S26","Quotas, Annual Caps & Limits","VERIFIED",3,0,false
+"p2-mu-occupation","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-mu-occupation","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-mu-occupation","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-mu-occupation","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false
+"p2-ca-spousal","S01","Basic Identity & Classification","VERIFIED",3,0,false
+"p2-ca-spousal","S02","Sovereign Authority & Statutory Basis","VERIFIED",3,0,false
+"p2-ca-spousal","S03","Primary Eligibility Criteria","VERIFIED",3,0,false
+"p2-ca-spousal","S04","Nationality & Passport Restrictions","PARTIALLY_VERIFIED",3,0,false
+"p2-ca-spousal","S05","Financial Requirements & Minimum Funds","PARTIALLY_VERIFIED",3,0,false
+"p2-ca-spousal","S06","Health Insurance & Medical Examination","VERIFIED",3,0,false
+"p2-ca-spousal","S07","Police Clearance & Security Screening","VERIFIED",3,0,false
+"p2-ca-spousal","S08","Language Proficiency Requirements","PARTIALLY_VERIFIED",3,0,false
+"p2-ca-spousal","S09","Permitted Activities & Employment Rights","VERIFIED",3,0,false
+"p2-ca-spousal","S10","Prohibited Activities & Restrictions","VERIFIED",3,0,false
+"p2-ca-spousal","S11","Maximum Duration of Stay & Validity","VERIFIED",3,0,false
+"p2-ca-spousal","S12","Extension & Renewal Procedures","VERIFIED",3,0,false
+"p2-ca-spousal","S13","Path to Permanent Residency / Settlement","VERIFIED",3,0,false
+"p2-ca-spousal","S14","Path to Citizenship & Naturalization","VERIFIED",3,0,false
+"p2-ca-spousal","S15","Family & Dependant Sponsorship","VERIFIED",3,0,false
+"p2-ca-spousal","S16","Application Channels & Portals","VERIFIED",3,0,false
+"p2-ca-spousal","S17","Processing Times & Standard SLA","PARTIALLY_VERIFIED",3,0,false
+"p2-ca-spousal","S18","Government Application & Visa Fees","VERIFIED",3,0,false
+"p2-ca-spousal","S19","Biometrics & Identity Verification","VERIFIED",3,0,false
+"p2-ca-spousal","S20","Document Legalization & Translations","VERIFIED",3,0,false
+"p2-ca-spousal","S21","In-Country Status Switching","VERIFIED",3,0,false
+"p2-ca-spousal","S22","Appeals, Administrative Review & Remedies","VERIFIED",3,0,false
+"p2-ca-spousal","S23","Tax Residency & Fiscal Obligations","VERIFIED",3,0,false
+"p2-ca-spousal","S24","Mandatory Post-Arrival Registration","VERIFIED",3,0,false
+"p2-ca-spousal","S25","Employer / Sponsor Obligations","VERIFIED",3,0,false
+"p2-ca-spousal","S26","Quotas, Annual Caps & Limits","NOT_APPLICABLE",3,0,false
+"p2-ca-spousal","S27","In-Country Physical Presence Requirements","VERIFIED",3,0,false
+"p2-ca-spousal","S28","Grounds for Revocation & Cancellation","VERIFIED",3,0,false
+"p2-ca-spousal","S29","Overstay Penalties & Exit Controls","VERIFIED",3,0,false
+"p2-ca-spousal","S30","Bilateral Treaties & Special Accords","PARTIALLY_VERIFIED",3,0,false

@@ -1,0 +1,191 @@
+{
+  "phase": "3.8.1",
+  "title": "Targeted Integrity Cleanup — Post Batch 9 (Australia Subclass 189 & New Zealand Post Study Work Visa)",
+  "executedAtUtc": "2026-11-13T09:57:00Z",
+  "scopeConstraint": "Strictly limited to p2-au-189 and p2-nz-poststudy. Zero new pathways implemented. Zero changes to Batches 0-8 or other 8 Batch 9 pathways. Zero production DB/SQLite/Neon/cron modifications.",
+  "preChangeBackup": {
+    "path": "/app/applet/backup_phase_3_8_1.tar.gz",
+    "sizeBytes": 147907,
+    "sha256": "9379e7d7db858a8908a1d45e4bc13a88c3affe4c8a93420a003bb56d5e4e8aab"
+  },
+  "preservedPlatformBaselines": {
+    "targetPriority2Pathways": 210,
+    "completedPriority2Pathways": 110,
+    "remainingBacklogPathways": 100,
+    "cumulativeCompletedSections": 3300,
+    "batch9PathwaysCount": 10,
+    "batch9TotalClaimsCount": 900,
+    "batch10Started": false,
+    "cronSchedule": "30 21 * * *"
+  },
+  "beforeAfterMetrics": {
+    "beforePhase38": {
+      "claimsPublishedCount": 844,
+      "claimsQuarantinedCount": 56,
+      "verificationStatusCounts": {
+        "VERIFIED": 728,
+        "PARTIALLY_VERIFIED": 72,
+        "AWAITING_VERIFICATION": 49,
+        "CONFLICTING": 3,
+        "EXPIRED": 4,
+        "NOT_APPLICABLE": 44
+      },
+      "sectionStatusCounts": {
+        "VERIFIED": 233,
+        "PARTIALLY_VERIFIED": 45,
+        "AWAITING_VERIFICATION": 14,
+        "CONFLICTING": 1,
+        "NOT_APPLICABLE": 7
+      },
+      "scopeCounts": {
+        "GLOBAL": 718,
+        "NATIONALITY_GROUP": 30,
+        "NATIONALITY_SPECIFIC": 38,
+        "RESIDENCE_SPECIFIC": 77,
+        "CONSULAR_JURISDICTION_SPECIFIC": 31,
+        "UNKNOWN": 6
+      }
+    },
+    "afterPhase381": {
+      "claimsPublishedCount": 847,
+      "claimsQuarantinedCount": 53,
+      "verificationStatusCounts": {
+        "VERIFIED": 730,
+        "PARTIALLY_VERIFIED": 73,
+        "AWAITING_VERIFICATION": 49,
+        "CONFLICTING": 0,
+        "EXPIRED": 4,
+        "NOT_APPLICABLE": 44
+      },
+      "sectionStatusCounts": {
+        "VERIFIED": 233,
+        "PARTIALLY_VERIFIED": 46,
+        "AWAITING_VERIFICATION": 14,
+        "CONFLICTING": 0,
+        "NOT_APPLICABLE": 7
+      },
+      "scopeCounts": {
+        "GLOBAL": 715,
+        "NATIONALITY_GROUP": 31,
+        "NATIONALITY_SPECIFIC": 38,
+        "RESIDENCE_SPECIFIC": 78,
+        "CONSULAR_JURISDICTION_SPECIFIC": 32,
+        "UNKNOWN": 6
+      }
+    }
+  },
+  "changesByPathway": [
+    {
+      "pathwayId": "p2-au-189",
+      "workstream": "A",
+      "publishedClaimsBefore": 84,
+      "publishedClaimsAfter": 87,
+      "quarantinedClaimsBefore": 6,
+      "quarantinedClaimsAfter": 3,
+      "modifiedClaims": [
+        {
+          "claimId": "CLM-AU-B9-S18-1",
+          "beforeStatus": "CONFLICTING",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "GLOBAL",
+          "summary": "Confirmed Subitem 1137(3)(b) standard first-instalment VAC: AUD 6,135 primary, AUD 3,070 (18+), AUD 1,540 (<18) effective 1 July 2026 under F2026L00874 & Compilation 290 (in force 2026-11-01)."
+        },
+        {
+          "claimId": "CLM-AU-B9-S18-2",
+          "beforeStatus": "CONFLICTING",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "NATIONALITY_GROUP",
+          "summary": "Confirmed Subitem 1137(3)(a) Pacific regional country passport concession VAC: AUD 5,030 primary, AUD 2,515 (18+), AUD 1,260 (<18)."
+        },
+        {
+          "claimId": "CLM-AU-B9-S18-3",
+          "beforeStatus": "CONFLICTING",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "RESIDENCE_SPECIFIC",
+          "summary": "Confirmed Subitem 1137(4) 2nd instalment AUD 4,885 (age >=18 without functional English) and Reg. 2.12C(5)-(9) AUD 700 STAC & AUD 80 non-Internet charge; separated external third-party costs."
+        }
+      ],
+      "modifiedSpecialTopics": [
+        {
+          "topicKey": "t20_immigrationLawChangesDuringProcessing",
+          "beforeStatus": "CONFLICTING",
+          "afterStatus": "PARTIALLY_VERIFIED",
+          "summary": "1 July 2026 VAC legislative commencement verified via F2026L00874; live Home Affairs processing time updates remain SPA-quarantined."
+        }
+      ],
+      "unchangedQuarantinedSections": ["S17 (CLM-AU-B9-S17-1..3 remain AWAITING_VERIFICATION)"]
+    },
+    {
+      "pathwayId": "p2-nz-poststudy",
+      "workstream": "B",
+      "publishedClaimsBefore": 90,
+      "publishedClaimsAfter": 90,
+      "quarantinedClaimsBefore": 0,
+      "quarantinedClaimsAfter": 0,
+      "modifiedClaims": [
+        {
+          "claimId": "CLM-NZ-B9-S17-1",
+          "beforeStatus": "PARTIALLY_VERIFIED",
+          "afterStatus": "PARTIALLY_VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "GLOBAL",
+          "summary": "Separated retrospective 4-week rolling statistical wait times (50% = 2 weeks; 80% within 3.5 weeks, working days, checked 2026-11-13T09:54:55Z on work-visa-wait-times/) from guaranteed SLAs."
+        },
+        {
+          "claimId": "CLM-NZ-B9-S17-2",
+          "beforeStatus": "PARTIALLY_VERIFIED",
+          "afterStatus": "PARTIALLY_VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "GLOBAL",
+          "summary": "Separated transient Microsoft outage advisory with explicit observation timestamp (2026-11-13T09:54:55Z) and INZ issue time (13 Nov 2026 09:50 NZDT), recording 1-week postponement of PSWV eligibility extension to 23 Nov 2026 with live re-verification caveat."
+        },
+        {
+          "claimId": "CLM-NZ-B9-S17-3",
+          "beforeStatus": "PARTIALLY_VERIFIED",
+          "afterStatus": "PARTIALLY_VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "CONSULAR_JURISDICTION_SPECIFIC",
+          "summary": "Recorded INZ explicit caveat that processing times vary by applicant country and application location."
+        },
+        {
+          "claimId": "CLM-NZ-B9-S18-3",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "PARTIALLY_VERIFIED",
+          "beforeScope": "NATIONALITY_SPECIFIC",
+          "afterScope": "NATIONALITY_SPECIFIC",
+          "summary": "Downgraded country/location-specific fee calculation above base From NZD $1,670 floor to PARTIALLY_VERIFIED because exact payable total depends on INZ Fee Finder inputs."
+        }
+      ],
+      "modifiedSpecialTopics": [
+        {
+          "topicKey": "t20_immigrationLawChangesDuringProcessing",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "PARTIALLY_VERIFIED",
+          "summary": "Documented 16 Nov 2026 online-only filing and 23 Nov 2026 PSWV eligibility extension postponement from Microsoft outage."
+        }
+      ]
+    }
+  ],
+  "modifiedFiles": [
+    "scripts/executePhase38Batch9Audit.ts",
+    "src/data/priority2AuditData.ts",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx",
+    "phase_3_8_batch9_claim_evidence_audit.json",
+    "phase_3_8_batch9_pathway_registry.csv",
+    "phase_3_8_batch9_section_status.csv",
+    "phase_3_8_batch9_nationality_scope_matrix.csv",
+    "phase_3_8_batch9_numeric_claims.csv",
+    "phase_3_8_batch9_source_registry.csv"
+  ],
+  "deliverablesCreated": [
+    "phase_3_8_1_australia_189_fee_review.csv",
+    "phase_3_8_1_new_zealand_processing_review.csv",
+    "phase_3_8_1_source_registry.csv",
+    "phase_3_8_1_change_manifest.json",
+    "phase_3_8_1_report.md",
+    "backup_phase_3_8_1.tar.gz"
+  ]
+}

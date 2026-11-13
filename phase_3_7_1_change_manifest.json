@@ -1,0 +1,121 @@
+{
+  "phase": "3.7.1",
+  "title": "Targeted Integrity Cleanup (Post Batch 8)",
+  "timestamp": "2026-11-13T09:20:00Z",
+  "budgetSpentInr": 0,
+  "batch9Started": false,
+  "productionDeployed": false,
+  "dbMigrated": false,
+  "cronSchedulePreserved": "30 21 * * * UTC",
+  "preChangeBackup": {
+    "path": "/app/applet/backup_phase_3_7_1.tar.gz",
+    "sizeBytes": 134900,
+    "sha256": "4a9e2ecbd76e1ade02ab4348387c9c8db412967c93cb290fdf426edd68e6bf43",
+    "excludedNestedTarballs": true
+  },
+  "baselinePreserved": {
+    "priority2Completed": 100,
+    "priority2Target": 210,
+    "priority2Remaining": 110,
+    "batch8TotalClaims": 900,
+    "batch8PublishedClaims": 853,
+    "batch8QuarantinedClaims": 47,
+    "verificationStatusCounts": {
+      "VERIFIED": 750,
+      "PARTIALLY_VERIFIED": 75,
+      "AWAITING_VERIFICATION": 41,
+      "CONFLICTING": 3,
+      "EXPIRED": 3,
+      "NOT_APPLICABLE": 28
+    }
+  },
+  "filesModified": [
+    "src/types/visaComprehensiveProfile.ts",
+    "src/components/VisaDetailRenderer.tsx",
+    "src/pages/CountryImmigrationDetailPage.tsx",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx",
+    "src/data/priority2AuditData.ts",
+    "scripts/executePhase37Batch8Audit.ts"
+  ],
+  "batch8ExportsSynced": [
+    "phase_3_7_batch8_pathway_registry.csv",
+    "phase_3_7_batch8_section_status.csv",
+    "phase_3_7_batch8_nationality_scope_matrix.csv",
+    "phase_3_7_batch8_numeric_claims.csv",
+    "phase_3_7_batch8_source_registry.csv",
+    "phase_3_7_batch8_claim_evidence_audit.json"
+  ],
+  "deliverablesCreated": [
+    "phase_3_7_1_qatar_source_recovery.csv",
+    "phase_3_7_1_india_conflict_review.csv",
+    "phase_3_7_1_mauritius_conflict_review.csv",
+    "phase_3_7_1_verification_display_audit.csv",
+    "phase_3_7_1_change_manifest.json",
+    "phase_3_7_1_report.md"
+  ],
+  "workstreamOutcomes": {
+    "workstreamA_qatar": {
+      "pathwayId": "p2-qa-workresidence",
+      "auditedAwaitingSectionClaims": 14,
+      "auditedQuarantinedSpecialTopics": 2,
+      "promotedToVerified": 0,
+      "retainedAwaitingAndQuarantined": 16,
+      "reconciliationFix": "Aligned priority2AuditData.ts p2-qa-workresidence counts to publishedClaimsCount=76, quarantinedClaimsCount=14 (plus 2 special topics quarantined = 16 items total).",
+      "legislativeReferencesRecorded": [
+        "Law No. 21 of 2015 Arts. 10-11 (amended by Law No. 1 of 2017, Law No. 13 of 2018 & Decree-Law No. 19 of 2020)",
+        "Decision No. 25 of 2019",
+        "Labour Law No. 14 of 2004"
+      ]
+    },
+    "workstreamB_india": {
+      "pathwayId": "p2-in-employment",
+      "conflictingClaims": ["CLM-IN-B8-S05-1", "CLM-IN-B8-S05-2"],
+      "verifiedExemptionClaim": "CLM-IN-B8-S05-3",
+      "retainedConflictingAndQuarantined": 2,
+      "evidenceVerifiedHttp200": [
+        "https://www.cgisf.gov.in/page/employment-visa/",
+        "https://www.hcikl.gov.in/pdf/EmploymentVisa.pdf",
+        "https://www.eoiparis.gov.in/content/EMPLOYMENT%20VISA.pdf",
+        "https://boi.gov.in/boi/",
+        "https://indianfrro.gov.in/efrro/"
+      ],
+      "unresolvedEndpoints": [
+        "https://mha.gov.in/MHA1/TourVisa.html (HTTP 404)",
+        "https://investindia.gov.in/faq-pdf/59/en (HTTP 403)",
+        "https://www.hcilondon.gov.in/page/employment-visa/ (HTTP 403 Cloudflare)"
+      ]
+    },
+    "workstreamC_mauritius": {
+      "pathwayId": "p2-mu-occupation",
+      "conflictingClaim": "CLM-MU-B8-S05-2",
+      "expiredClaim": "CLM-MU-B8-S05-3",
+      "retainedConflictingAndQuarantined": 1,
+      "retainedExpiredAndQuarantined": 1,
+      "evidenceVerifiedHttp200": [
+        "https://edbmauritius.org/wp-content/uploads/2022/10/EDB-Act-2023.pdf",
+        "https://business.edbmauritius.org",
+        "https://residency.mu/"
+      ],
+      "followUpTimeouts": [
+        "https://edbmauritius.org/newsletter-august-2026-op (Timeout on 2026-11-13 follow-up)",
+        "govmu.org PIO links (Timeout)"
+      ]
+    },
+    "workstreamD_publicDisplay": {
+      "statusesCovered": [
+        "VERIFIED",
+        "PARTIALLY_VERIFIED",
+        "AWAITING_VERIFICATION",
+        "CONFLICTING",
+        "EXPIRED",
+        "NOT_APPLICABLE"
+      ],
+      "sanitizationHardening": [
+        "Filter c.isQuarantined === true alongside status REJECTED/QUARANTINED in sanitizeVisaDetailsForPublic",
+        "Preserve EXPIRED, CONFLICTING, NOT_APPLICABLE, AWAITING_VERIFICATION, PARTIALLY_VERIFIED statuses honestly without inflating to VERIFIED",
+        "Strip reviewerNotes, internalReviewNotes, correctiveClassificationNotes, reviewer, editorId from sanitized sections and topics",
+        "Suppress StructuredSectionContent for EXPIRED and NOT_APPLICABLE sections and isolate non-quarantined EXPIRED claims into dedicated historical block in VisaDetailRenderer"
+      ]
+    }
+  }
+}

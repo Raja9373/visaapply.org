@@ -143,9 +143,25 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
                       ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
                       : status === 'NOT_AVAILABLE_CONFIRMED'
                       ? 'bg-slate-100 text-slate-600 border border-slate-300'
+                      : status === 'EXPIRED'
+                      ? 'bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/30'
+                      : status === 'NEEDS_REVIEW'
+                      ? 'bg-orange-500/20 text-orange-800 dark:text-orange-300 border border-orange-500/30'
+                      : status === 'TEMPORARILY_CLOSED'
+                      ? 'bg-purple-500/20 text-purple-800 dark:text-purple-300 border border-purple-500/30'
                       : 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30'
                   }`}>
-                    {status === 'AVAILABLE_VERIFIED' ? 'Verified' : status === 'NOT_AVAILABLE_CONFIRMED' ? 'Not Available' : 'Audit Pending'}
+                    {status === 'AVAILABLE_VERIFIED'
+                      ? 'Verified'
+                      : status === 'NOT_AVAILABLE_CONFIRMED'
+                      ? 'Not Applicable'
+                      : status === 'EXPIRED'
+                      ? 'Expired / Historical'
+                      : status === 'NEEDS_REVIEW'
+                      ? 'Conflicting / Review'
+                      : status === 'TEMPORARILY_CLOSED'
+                      ? 'Temporarily Closed'
+                      : 'Awaiting Verification'}
                   </span>
                 </div>
               </button>
@@ -270,6 +286,24 @@ function ProgramCard({ prog, applicantNationality, onNationalityChange }: { prog
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       </div>
+
+      {prog.verificationStatus === 'EXPIRED' && (
+        <div className="my-4 p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-xs text-rose-950 font-medium">
+          <strong>Historical / Expired Program (Not Currently Active):</strong> This immigration program has ended or been superseded. Details shown below are retained strictly for historical context and do not represent an active application route.
+        </div>
+      )}
+
+      {(prog.verificationStatus === 'AWAITING_OFFICIAL_VERIFICATION' || prog.verificationStatus === 'NEEDS_REVIEW') && (
+        <div className="my-4 p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 font-medium">
+          <strong>{prog.verificationStatus === 'NEEDS_REVIEW' ? 'Conflicting / Under Review:' : 'Awaiting Official Verification:'}</strong> Primary statutory confirmation is incomplete or conflicting. Treat details below as unconfirmed until verified directly on the sovereign authority portal.
+        </div>
+      )}
+
+      {prog.verificationStatus === 'NOT_AVAILABLE_CONFIRMED' && (
+        <div className="my-4 p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-800 font-medium">
+          <strong>Not Applicable / Confirmed Unavailable:</strong> This visa category is confirmed not offered under current law or policy.
+        </div>
+      )}
 
       <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700 my-4 space-y-1">
         <div className="font-bold text-slate-900 flex items-center gap-1.5">

@@ -88,9 +88,11 @@ export function VisaDetailRenderer({
     );
   };
 
-  const renderVerificationBadge = (state?: SectionVerificationState, reason?: string | null) => {
-    switch (state) {
+  const renderVerificationBadge = (state?: SectionVerificationState | string, reason?: string | null) => {
+    const normalized = String(state || 'AWAITING_VERIFICATION').trim().toUpperCase();
+    switch (normalized) {
       case 'VERIFIED':
+      case 'AVAILABLE_VERIFIED':
         return (
           <span
             className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300"
@@ -101,16 +103,39 @@ export function VisaDetailRenderer({
           </span>
         );
       case 'PARTIAL':
+      case 'PARTIALLY_VERIFIED':
         return (
           <span
             className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-800 border border-blue-300"
-            title="Partially verified or undergoing consular review"
+            title="Core statutory basis confirmed; some procedural or post-level details remain unconfirmed"
           >
             <Clock size={12} className="text-blue-700" />
-            PARTIAL VERIFICATION
+            PARTIALLY VERIFIED (SOME DETAILS UNCONFIRMED)
+          </span>
+        );
+      case 'CONFLICTING':
+      case 'CONFLICTING_EVIDENCE':
+        return (
+          <span
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-orange-100 text-orange-900 border border-orange-300"
+            title={reason || 'Conflicting primary or administrative enforcement thresholds reported; verify directly with sovereign authority'}
+          >
+            <AlertTriangle size={12} className="text-orange-700" />
+            CONFLICTING EVIDENCE (QUARANTINED)
+          </span>
+        );
+      case 'EXPIRED':
+        return (
+          <span
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-rose-100 text-rose-900 border border-rose-300"
+            title={reason || 'Historical / expired rule — NOT currently in force'}
+          >
+            <Slash size={12} className="text-rose-700" />
+            EXPIRED / HISTORICAL (NOT CURRENT)
           </span>
         );
       case 'NOT_APPLICABLE':
+      case 'NOT_AVAILABLE_CONFIRMED':
         return (
           <span
             className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-200 text-slate-800 border border-slate-300"
@@ -120,11 +145,14 @@ export function VisaDetailRenderer({
             NOT APPLICABLE
           </span>
         );
+      case 'AWAITING_VERIFICATION':
+      case 'AWAITING_OFFICIAL_VERIFICATION':
+      case 'UNKNOWN':
       default:
         return (
           <span
             className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300"
-            title="Awaiting official consular verification"
+            title="Awaiting official primary source verification — do not treat as confirmed current rule"
           >
             <AlertTriangle size={12} className="text-amber-700" />
             AWAITING OFFICIAL VERIFICATION
@@ -145,8 +173,26 @@ export function VisaDetailRenderer({
 
   const activeClaims = useMemo(() => {
     const list: any[] = Array.isArray(details?.claims) ? details.claims : [];
-    if (!activeNationality || activeNationality === 'ALL') return list;
-    return list.filter(c => {
+    const safeList = list.filter(c => {
+      if (c?.isQuarantined === true) return false;
+      const st = String(c?.status || '').toUpperCase();
+      return !['QUARANTINED', 'REJECTED', 'EXPIRED'].includes(st);
+    });
+    if (!activeNationality || activeNationality === 'ALL') return safeList;
+    return safeList.filter(c => {
+      const nat = String(c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase();
+      return nat === 'ALL' || nat === activeNationality;
+    });
+  }, [details, activeNationality]);
+
+  const expiredClaims = useMemo(() => {
+    const list: any[] = Array.isArray(details?.claims) ? details.claims : [];
+    const expList = list.filter(c => {
+      if (c?.isQuarantined === true) return false;
+      return String(c?.status || '').toUpperCase() === 'EXPIRED';
+    });
+    if (!activeNationality || activeNationality === 'ALL') return expList;
+    return expList.filter(c => {
       const nat = String(c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase();
       return nat === 'ALL' || nat === activeNationality;
     });
@@ -284,7 +330,7 @@ export function VisaDetailRenderer({
                 : 'border-transparent text-slate-500 hover:text-slate-900'
             }`}
           >
-            <span>Verified Legal Claims &amp; Evidence</span>
+            <span>Legal Claims &amp; Verification Status</span>
             <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 text-slate-700 border border-slate-200">
               {activeClaims.length}
             </span>
@@ -369,12 +415,42 @@ export function VisaDetailRenderer({
 
                   {isExpanded && (
                     <div className="p-5 sm:p-6 space-y-4 text-xs sm:text-sm text-slate-800">
-                      {/* Honesty Status Banner if unverified or empty */}
-                      {!isPopulated && meta?.verificationState !== 'NOT_APPLICABLE' && (
-                        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-2 text-amber-900 text-xs">
-                          <AlertTriangle size={16} className="text-amber-700 shrink-0" />
+                      {/* Explicit Verification Status Banners */}
+                      {(meta?.verificationState === 'CONFLICTING' || meta?.verificationState === 'CONFLICTING_EVIDENCE') && (
+                        <div className="p-3.5 bg-orange-50 border border-orange-300 rounded-xl flex items-start gap-2 text-orange-950 text-xs">
+                          <AlertTriangle size={16} className="text-orange-700 shrink-0 mt-0.5" />
                           <span>
-                            <strong>Awaiting Official Consular Verification:</strong> Specific details for this section have not yet been certified against primary consular regulations.
+                            <strong>Conflicting Official / Enforcement Guidance:</strong> Divergent thresholds or instructions exist across official sources or local authorities. Do not rely on a single figure as settled fact without checking the competent authority directly.
+                          </span>
+                        </div>
+                      )}
+
+                      {meta?.verificationState === 'EXPIRED' && (
+                        <div className="p-3.5 bg-rose-50 border border-rose-300 rounded-xl flex items-start gap-2 text-rose-950 text-xs">
+                          <Slash size={16} className="text-rose-700 shrink-0 mt-0.5" />
+                          <span>
+                            <strong>Historical / Expired Rule (Not Currently in Force):</strong> This section reflects superseded or expired provisions retained only for historical reference and is not a current application requirement.
+                          </span>
+                        </div>
+                      )}
+
+                      {(meta?.verificationState === 'PARTIAL' || meta?.verificationState === 'PARTIALLY_VERIFIED') && (
+                        <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-2 text-blue-950 text-xs">
+                          <Clock size={16} className="text-blue-700 shrink-0 mt-0.5" />
+                          <span>
+                            <strong>Partially Verified:</strong> Core statutory rules are confirmed, while some post-level, fee, or bilateral details remain unconfirmed and subject to consular variation.
+                          </span>
+                        </div>
+                      )}
+
+                      {((!isPopulated && meta?.verificationState !== 'NOT_APPLICABLE' && meta?.verificationState !== 'EXPIRED') ||
+                        meta?.verificationState === 'AWAITING_VERIFICATION' ||
+                        meta?.verificationState === 'AWAITING_OFFICIAL_VERIFICATION' ||
+                        meta?.verificationState === 'UNKNOWN') && (
+                        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2 text-amber-900 text-xs">
+                          <AlertTriangle size={16} className="text-amber-700 shrink-0 mt-0.5" />
+                          <span>
+                            <strong>Awaiting Official Consular Verification:</strong> Specific details for this section could not be confirmed from live primary sources and must not be treated as established current rules.
                           </span>
                         </div>
                       )}
@@ -386,13 +462,15 @@ export function VisaDetailRenderer({
                         </div>
                       )}
 
-                      {/* Render Structured Content */}
-                      <StructuredSectionContent
-                        sectionKey={reg.sectionKey}
-                        secObj={secObj}
-                        programId={details.programId}
-                        legacyDetails={details}
-                      />
+                      {/* Render Structured Content only when NOT expired and NOT inapplicable */}
+                      {meta?.verificationState !== 'NOT_APPLICABLE' && meta?.verificationState !== 'EXPIRED' && (
+                        <StructuredSectionContent
+                          sectionKey={reg.sectionKey}
+                          secObj={secObj}
+                          programId={details.programId}
+                          legacyDetails={details}
+                        />
+                      )}
 
                       {/* Official Source & Verification Metadata Box */}
                       {meta?.officialSourceUrl && (
@@ -495,9 +573,21 @@ export function VisaDetailRenderer({
 
                   {isExpanded && (
                     <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/40 space-y-3 text-xs text-slate-800">
-                      {!isPopulated && (
+                      {topObj?.verificationState === 'EXPIRED' ? (
+                        <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-950 text-xs">
+                          <strong>Historical / Expired Rule:</strong> This topic rule has expired or been superseded and is NOT currently in force.
+                        </div>
+                      ) : topObj?.verificationState === 'CONFLICTING' || topObj?.verificationState === 'CONFLICTING_EVIDENCE' ? (
+                        <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg text-orange-950 text-xs">
+                          <strong>Conflicting Guidance:</strong> Primary or administrative sources conflict; treat as unconfirmed pending sovereign clarification.
+                        </div>
+                      ) : topObj?.verificationState === 'NOT_APPLICABLE' ? (
+                        <div className="p-3 bg-slate-100 border border-slate-300 rounded-lg text-slate-700 text-xs">
+                          <strong>Not Applicable:</strong> Confirmed not applicable to this pathway.
+                        </div>
+                      ) : (!isPopulated || topObj?.verificationState === 'AWAITING_VERIFICATION' || topObj?.verificationState === 'AWAITING_OFFICIAL_VERIFICATION') && (
                         <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-xs">
-                          <strong>Awaiting Official Verification:</strong> Specific statutory rules for this topic have not yet been codified.
+                          <strong>Awaiting Official Verification:</strong> Specific statutory rules for this topic have not yet been verified and must not be treated as confirmed facts.
                         </div>
                       )}
 
@@ -553,7 +643,7 @@ export function VisaDetailRenderer({
 
           {activeClaims.length === 0 ? (
             <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500 text-xs">
-              No claims recorded for this program and selected nationality filter.
+              No active non-quarantined claims recorded for this program and selected nationality filter.
             </div>
           ) : (
             <div className="space-y-3">
@@ -565,7 +655,11 @@ export function VisaDetailRenderer({
                 return (
                   <div
                     key={claim.id}
-                    className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3"
+                    className={`p-5 rounded-2xl border shadow-xs space-y-3 ${
+                      claim.status === 'CONFLICTING' || claim.status === 'CONFLICTING_EVIDENCE'
+                        ? 'bg-orange-50/40 border-orange-200'
+                        : 'bg-white border-slate-200'
+                    }`}
                   >
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -586,6 +680,17 @@ export function VisaDetailRenderer({
                         Value: <strong>{claim.value || 'N/A'} {claim.unit || ''}</strong>
                       </div>
                     </div>
+
+                    {(claim.status === 'CONFLICTING' || claim.status === 'CONFLICTING_EVIDENCE') && (
+                      <div className="text-[11px] font-semibold text-orange-900 bg-orange-100/70 border border-orange-200 px-3 py-1.5 rounded-lg">
+                        Conflicting Guidance — Reported values diverge across authorities; do not rely on as settled fact.
+                      </div>
+                    )}
+                    {(claim.status === 'AWAITING_VERIFICATION' || claim.status === 'AWAITING_OFFICIAL_VERIFICATION') && (
+                      <div className="text-[11px] font-semibold text-amber-900 bg-amber-100/70 border border-amber-200 px-3 py-1.5 rounded-lg">
+                        Unconfirmed — Awaiting live official primary source verification.
+                      </div>
+                    )}
 
                     <div className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
                       {claim.description}
@@ -646,6 +751,23 @@ export function VisaDetailRenderer({
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {expiredClaims.length > 0 && (
+            <div className="space-y-3 pt-4 border-t border-rose-200">
+              <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-950">
+                <strong>Historical / Expired Rules ({expiredClaims.length}) — Not Currently in Force:</strong> Retained strictly for statutory history; do not apply these superseded rules to current applications.
+              </div>
+              {expiredClaims.map(claim => (
+                <div key={claim.id} className="p-4 rounded-2xl border border-rose-200 bg-rose-50/40 space-y-2 text-xs">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-slate-800 text-white">{claim.section}</span>
+                    {renderVerificationBadge('EXPIRED')}
+                  </div>
+                  <div className="font-bold text-slate-900">{claim.description}</div>
+                </div>
+              ))}
             </div>
           )}
         </div>

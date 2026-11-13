@@ -1,0 +1,901 @@
+claim_id,pathway_id,section_id,claim_scope,scope_justification,verification_status,is_quarantined,is_published
+"CLM-DE-B10-S01-1","p2-de-settlement","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S01-2","p2-de-settlement","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S01-3","p2-de-settlement","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S02-1","p2-de-settlement","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S02-2","p2-de-settlement","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S02-3","p2-de-settlement","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S03-1","p2-de-settlement","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S03-2","p2-de-settlement","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S03-3","p2-de-settlement","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S04-1","p2-de-settlement","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-DE-B10-S04-2","p2-de-settlement","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-DE-B10-S04-3","p2-de-settlement","S04","NATIONALITY_SPECIFIC","Country-specific diplomatic clearance or fee reciprocity rules.","PARTIALLY_VERIFIED",false,true
+"CLM-DE-B10-S05-1","p2-de-settlement","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S05-2","p2-de-settlement","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S05-3","p2-de-settlement","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S06-1","p2-de-settlement","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S06-2","p2-de-settlement","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S06-3","p2-de-settlement","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S07-1","p2-de-settlement","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S07-2","p2-de-settlement","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S07-3","p2-de-settlement","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S08-1","p2-de-settlement","S08","GLOBAL","Statutory AufenthG language rule.","VERIFIED",false,true
+"CLM-DE-B10-S08-2","p2-de-settlement","S08","RESIDENCE_SPECIFIC","Prior EU Blue Card employment duration determines A1 vs B1 timeline.","VERIFIED",false,true
+"CLM-DE-B10-S08-3","p2-de-settlement","S08","GLOBAL","Statutory AufenthG language rule.","VERIFIED",false,true
+"CLM-DE-B10-S09-1","p2-de-settlement","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S09-2","p2-de-settlement","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S09-3","p2-de-settlement","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S10-1","p2-de-settlement","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S10-2","p2-de-settlement","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S10-3","p2-de-settlement","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S11-1","p2-de-settlement","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S11-2","p2-de-settlement","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S11-3","p2-de-settlement","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S12-1","p2-de-settlement","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S12-2","p2-de-settlement","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S12-3","p2-de-settlement","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S13-1","p2-de-settlement","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-DE-B10-S13-2","p2-de-settlement","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-DE-B10-S13-3","p2-de-settlement","S13","GLOBAL","Pre-November 2023 Skilled Immigration Act settlement wait periods superseded by modernized § 18c AufenthG.","EXPIRED",true,false
+"CLM-DE-B10-S14-1","p2-de-settlement","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S14-2","p2-de-settlement","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S14-3","p2-de-settlement","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S15-1","p2-de-settlement","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S15-2","p2-de-settlement","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S15-3","p2-de-settlement","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S16-1","p2-de-settlement","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-DE-B10-S16-2","p2-de-settlement","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-DE-B10-S16-3","p2-de-settlement","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-DE-B10-S17-1","p2-de-settlement","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-DE-B10-S17-2","p2-de-settlement","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-DE-B10-S17-3","p2-de-settlement","S17","CONSULAR_JURISDICTION_SPECIFIC","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-DE-B10-S18-1","p2-de-settlement","S18","GLOBAL","Statutory fee schedule codified verbatim in § 44 AufenthV (HTTP 200 verified).","VERIFIED",false,true
+"CLM-DE-B10-S18-2","p2-de-settlement","S18","RESIDENCE_SPECIFIC","Statutory fee schedule codified verbatim in § 44 AufenthV (HTTP 200 verified).","VERIFIED",false,true
+"CLM-DE-B10-S18-3","p2-de-settlement","S18","GLOBAL","Statutory fee schedule codified verbatim in § 44 AufenthV (HTTP 200 verified).","VERIFIED",false,true
+"CLM-DE-B10-S19-1","p2-de-settlement","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S19-2","p2-de-settlement","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S19-3","p2-de-settlement","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S20-1","p2-de-settlement","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-DE-B10-S20-2","p2-de-settlement","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-DE-B10-S20-3","p2-de-settlement","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-DE-B10-S21-1","p2-de-settlement","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-DE-B10-S21-2","p2-de-settlement","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-DE-B10-S21-3","p2-de-settlement","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-DE-B10-S22-1","p2-de-settlement","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S22-2","p2-de-settlement","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S22-3","p2-de-settlement","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S23-1","p2-de-settlement","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S23-2","p2-de-settlement","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S23-3","p2-de-settlement","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S24-1","p2-de-settlement","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-DE-B10-S24-2","p2-de-settlement","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-DE-B10-S24-3","p2-de-settlement","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-DE-B10-S25-1","p2-de-settlement","S25","GLOBAL","Permanent Settlement Permit (Niederlassungserlaubnis — §§ 9 & 18c AufenthG) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-DE-B10-S25-2","p2-de-settlement","S25","GLOBAL","Permanent Settlement Permit (Niederlassungserlaubnis — §§ 9 & 18c AufenthG) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-DE-B10-S25-3","p2-de-settlement","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S26-1","p2-de-settlement","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-DE-B10-S26-2","p2-de-settlement","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S26-3","p2-de-settlement","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S27-1","p2-de-settlement","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-DE-B10-S27-2","p2-de-settlement","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-DE-B10-S27-3","p2-de-settlement","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-DE-B10-S28-1","p2-de-settlement","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S28-2","p2-de-settlement","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S28-3","p2-de-settlement","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S29-1","p2-de-settlement","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S29-2","p2-de-settlement","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S29-3","p2-de-settlement","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-DE-B10-S30-1","p2-de-settlement","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-DE-B10-S30-2","p2-de-settlement","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-DE-B10-S30-3","p2-de-settlement","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-FR-B10-S01-1","p2-fr-salarie","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S01-2","p2-fr-salarie","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S01-3","p2-fr-salarie","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S02-1","p2-fr-salarie","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S02-2","p2-fr-salarie","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S02-3","p2-fr-salarie","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S03-1","p2-fr-salarie","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S03-2","p2-fr-salarie","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S03-3","p2-fr-salarie","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S04-1","p2-fr-salarie","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-FR-B10-S04-2","p2-fr-salarie","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-FR-B10-S04-3","p2-fr-salarie","S04","UNKNOWN","Bilateral consular visa-exemption or nationality security vetting matrix unreachable statically (403/404/JS calculator).","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S05-1","p2-fr-salarie","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S05-2","p2-fr-salarie","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S05-3","p2-fr-salarie","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S06-1","p2-fr-salarie","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S06-2","p2-fr-salarie","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S06-3","p2-fr-salarie","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S07-1","p2-fr-salarie","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S07-2","p2-fr-salarie","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S07-3","p2-fr-salarie","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S08-1","p2-fr-salarie","S08","GLOBAL","Initial work authorization / carte Salarié requires no A2 French test (A2 applies later at multi-year/resident card stage per CESEDA).","NOT_APPLICABLE",false,true
+"CLM-FR-B10-S08-2","p2-fr-salarie","S08","GLOBAL","Initial work authorization / carte Salarié requires no A2 French test (A2 applies later at multi-year/resident card stage per CESEDA).","NOT_APPLICABLE",false,true
+"CLM-FR-B10-S08-3","p2-fr-salarie","S08","GLOBAL","Initial work authorization / carte Salarié requires no A2 French test (A2 applies later at multi-year/resident card stage per CESEDA).","PARTIALLY_VERIFIED",false,true
+"CLM-FR-B10-S09-1","p2-fr-salarie","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S09-2","p2-fr-salarie","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S09-3","p2-fr-salarie","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S10-1","p2-fr-salarie","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S10-2","p2-fr-salarie","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S10-3","p2-fr-salarie","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S11-1","p2-fr-salarie","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S11-2","p2-fr-salarie","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S11-3","p2-fr-salarie","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S12-1","p2-fr-salarie","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S12-2","p2-fr-salarie","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S12-3","p2-fr-salarie","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S13-1","p2-fr-salarie","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-FR-B10-S13-2","p2-fr-salarie","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-FR-B10-S13-3","p2-fr-salarie","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-FR-B10-S14-1","p2-fr-salarie","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S14-2","p2-fr-salarie","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S14-3","p2-fr-salarie","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S15-1","p2-fr-salarie","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S15-2","p2-fr-salarie","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S15-3","p2-fr-salarie","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S16-1","p2-fr-salarie","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-FR-B10-S16-2","p2-fr-salarie","S16","RESIDENCE_SPECIFIC","france-visas.gouv.fr consular portal returned HTTP 403 challenge during 2026-11-13 check.","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S16-3","p2-fr-salarie","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-FR-B10-S17-1","p2-fr-salarie","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S17-2","p2-fr-salarie","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S17-3","p2-fr-salarie","S17","CONSULAR_JURISDICTION_SPECIFIC","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S18-1","p2-fr-salarie","S18","GLOBAL","2026 employer OFII tax codified verbatim on service-public.fr F2728.","VERIFIED",false,true
+"CLM-FR-B10-S18-2","p2-fr-salarie","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S18-3","p2-fr-salarie","S18","NATIONALITY_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-FR-B10-S19-1","p2-fr-salarie","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S19-2","p2-fr-salarie","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S19-3","p2-fr-salarie","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S20-1","p2-fr-salarie","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-FR-B10-S20-2","p2-fr-salarie","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-FR-B10-S20-3","p2-fr-salarie","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-FR-B10-S21-1","p2-fr-salarie","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-FR-B10-S21-2","p2-fr-salarie","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-FR-B10-S21-3","p2-fr-salarie","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-FR-B10-S22-1","p2-fr-salarie","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S22-2","p2-fr-salarie","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S22-3","p2-fr-salarie","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S23-1","p2-fr-salarie","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S23-2","p2-fr-salarie","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S23-3","p2-fr-salarie","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S24-1","p2-fr-salarie","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-FR-B10-S24-2","p2-fr-salarie","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-FR-B10-S24-3","p2-fr-salarie","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-FR-B10-S25-1","p2-fr-salarie","S25","GLOBAL","Verified verbatim on service-public.fr/particuliers/vosdroits/F2728.","VERIFIED",false,true
+"CLM-FR-B10-S25-2","p2-fr-salarie","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S25-3","p2-fr-salarie","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S26-1","p2-fr-salarie","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-FR-B10-S26-2","p2-fr-salarie","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S26-3","p2-fr-salarie","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S27-1","p2-fr-salarie","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-FR-B10-S27-2","p2-fr-salarie","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-FR-B10-S27-3","p2-fr-salarie","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-FR-B10-S28-1","p2-fr-salarie","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S28-2","p2-fr-salarie","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S28-3","p2-fr-salarie","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S29-1","p2-fr-salarie","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S29-2","p2-fr-salarie","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S29-3","p2-fr-salarie","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-FR-B10-S30-1","p2-fr-salarie","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-FR-B10-S30-2","p2-fr-salarie","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-FR-B10-S30-3","p2-fr-salarie","S30","UNKNOWN","Bilateral reciprocity protocol status not publicly verifiable while consular subpage returned 403/404 or dynamic JS.","AWAITING_VERIFICATION",true,false
+"CLM-GB-B10-S01-1","p2-uk-graduate","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S01-2","p2-uk-graduate","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S01-3","p2-uk-graduate","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S02-1","p2-uk-graduate","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S02-2","p2-uk-graduate","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S02-3","p2-uk-graduate","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S03-1","p2-uk-graduate","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S03-2","p2-uk-graduate","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S03-3","p2-uk-graduate","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S04-1","p2-uk-graduate","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S04-2","p2-uk-graduate","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S04-3","p2-uk-graduate","S04","NATIONALITY_SPECIFIC","Country-specific diplomatic clearance or fee reciprocity rules.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S05-1","p2-uk-graduate","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S05-2","p2-uk-graduate","S05","GLOBAL","UK Appendix Graduate does not impose a minimum sponsor salary or bank-balance maintenance threshold once student condition is met.","NOT_APPLICABLE",false,true
+"CLM-GB-B10-S05-3","p2-uk-graduate","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S06-1","p2-uk-graduate","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S06-2","p2-uk-graduate","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S06-3","p2-uk-graduate","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S07-1","p2-uk-graduate","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S07-2","p2-uk-graduate","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S07-3","p2-uk-graduate","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S08-1","p2-uk-graduate","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-GB-B10-S08-2","p2-uk-graduate","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-GB-B10-S08-3","p2-uk-graduate","S08","NATIONALITY_GROUP","Certified translation rules depend on document issuing language.","VERIFIED",false,true
+"CLM-GB-B10-S09-1","p2-uk-graduate","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S09-2","p2-uk-graduate","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S09-3","p2-uk-graduate","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S10-1","p2-uk-graduate","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S10-2","p2-uk-graduate","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S10-3","p2-uk-graduate","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S11-1","p2-uk-graduate","S11","RESIDENCE_SPECIFIC","GOV.UK statutory application-date cut-off determines 2-year vs 18-month grant for Bachelor’s/Master’s graduates.","VERIFIED",false,true
+"CLM-GB-B10-S11-2","p2-uk-graduate","S11","GLOBAL","PhD and doctoral qualifications remain unchanged at 3 years.","VERIFIED",false,true
+"CLM-GB-B10-S11-3","p2-uk-graduate","S11","GLOBAL","Post-2021 Graduate route replaced legacy Tier 1 (Post-Study Work) scheme closed in 2012.","EXPIRED",true,false
+"CLM-GB-B10-S12-1","p2-uk-graduate","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S12-2","p2-uk-graduate","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S12-3","p2-uk-graduate","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S13-1","p2-uk-graduate","S13","RESIDENCE_SPECIFIC","Graduate Visa (Post-Study Route — Appendix Graduate) does not grant direct settlement/ILR; applicants must switch into an eligible settlement route (e.g., UK Skilled Worker / Global Talent).","VERIFIED",false,true
+"CLM-GB-B10-S13-2","p2-uk-graduate","S13","RESIDENCE_SPECIFIC","Graduate Visa (Post-Study Route — Appendix Graduate) does not grant direct settlement/ILR; applicants must switch into an eligible settlement route (e.g., UK Skilled Worker / Global Talent).","VERIFIED",false,true
+"CLM-GB-B10-S13-3","p2-uk-graduate","S13","RESIDENCE_SPECIFIC","Graduate Visa (Post-Study Route — Appendix Graduate) does not grant direct settlement/ILR; applicants must switch into an eligible settlement route (e.g., UK Skilled Worker / Global Talent).","VERIFIED",false,true
+"CLM-GB-B10-S14-1","p2-uk-graduate","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S14-2","p2-uk-graduate","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S14-3","p2-uk-graduate","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S15-1","p2-uk-graduate","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S15-2","p2-uk-graduate","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S15-3","p2-uk-graduate","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S16-1","p2-uk-graduate","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-GB-B10-S16-2","p2-uk-graduate","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-GB-B10-S16-3","p2-uk-graduate","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-GB-B10-S17-1","p2-uk-graduate","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S17-2","p2-uk-graduate","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S17-3","p2-uk-graduate","S17","CONSULAR_JURISDICTION_SPECIFIC","Local centre workload / complexity may alter decision timing.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S18-1","p2-uk-graduate","S18","GLOBAL","Published verbatim on GOV.UK /graduate-visa/how-much-it-costs (HTTP 200).","VERIFIED",false,true
+"CLM-GB-B10-S18-2","p2-uk-graduate","S18","GLOBAL","Published verbatim on GOV.UK /graduate-visa/how-much-it-costs (HTTP 200).","VERIFIED",false,true
+"CLM-GB-B10-S18-3","p2-uk-graduate","S18","GLOBAL","Published verbatim on GOV.UK /graduate-visa/how-much-it-costs (HTTP 200).","VERIFIED",false,true
+"CLM-GB-B10-S19-1","p2-uk-graduate","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S19-2","p2-uk-graduate","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S19-3","p2-uk-graduate","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S20-1","p2-uk-graduate","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-GB-B10-S20-2","p2-uk-graduate","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-GB-B10-S20-3","p2-uk-graduate","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-GB-B10-S21-1","p2-uk-graduate","S21","RESIDENCE_SPECIFIC","Must apply strictly from inside the United Kingdom while holding valid Student/Tier 4 leave.","VERIFIED",false,true
+"CLM-GB-B10-S21-2","p2-uk-graduate","S21","RESIDENCE_SPECIFIC","Must apply strictly from inside the United Kingdom while holding valid Student/Tier 4 leave.","VERIFIED",false,true
+"CLM-GB-B10-S21-3","p2-uk-graduate","S21","RESIDENCE_SPECIFIC","Must apply strictly from inside the United Kingdom while holding valid Student/Tier 4 leave.","VERIFIED",false,true
+"CLM-GB-B10-S22-1","p2-uk-graduate","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S22-2","p2-uk-graduate","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S22-3","p2-uk-graduate","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S23-1","p2-uk-graduate","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S23-2","p2-uk-graduate","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S23-3","p2-uk-graduate","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S24-1","p2-uk-graduate","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-GB-B10-S24-2","p2-uk-graduate","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-GB-B10-S24-3","p2-uk-graduate","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-GB-B10-S25-1","p2-uk-graduate","S25","GLOBAL","Graduate Visa (Post-Study Route — Appendix Graduate) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-GB-B10-S25-2","p2-uk-graduate","S25","GLOBAL","Graduate Visa (Post-Study Route — Appendix Graduate) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-GB-B10-S25-3","p2-uk-graduate","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S26-1","p2-uk-graduate","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-GB-B10-S26-2","p2-uk-graduate","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S26-3","p2-uk-graduate","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S27-1","p2-uk-graduate","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-GB-B10-S27-2","p2-uk-graduate","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-GB-B10-S27-3","p2-uk-graduate","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-GB-B10-S28-1","p2-uk-graduate","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S28-2","p2-uk-graduate","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S28-3","p2-uk-graduate","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S29-1","p2-uk-graduate","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S29-2","p2-uk-graduate","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S29-3","p2-uk-graduate","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-GB-B10-S30-1","p2-uk-graduate","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S30-2","p2-uk-graduate","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-GB-B10-S30-3","p2-uk-graduate","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S01-1","p2-nz-straighttoresidence","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S01-2","p2-nz-straighttoresidence","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S01-3","p2-nz-straighttoresidence","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S02-1","p2-nz-straighttoresidence","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S02-2","p2-nz-straighttoresidence","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S02-3","p2-nz-straighttoresidence","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S03-1","p2-nz-straighttoresidence","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S03-2","p2-nz-straighttoresidence","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S03-3","p2-nz-straighttoresidence","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S04-1","p2-nz-straighttoresidence","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S04-2","p2-nz-straighttoresidence","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S04-3","p2-nz-straighttoresidence","S04","NATIONALITY_SPECIFIC","Country-specific diplomatic clearance or fee reciprocity rules.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S05-1","p2-nz-straighttoresidence","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S05-2","p2-nz-straighttoresidence","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S05-3","p2-nz-straighttoresidence","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S06-1","p2-nz-straighttoresidence","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S06-2","p2-nz-straighttoresidence","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S06-3","p2-nz-straighttoresidence","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S07-1","p2-nz-straighttoresidence","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S07-2","p2-nz-straighttoresidence","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S07-3","p2-nz-straighttoresidence","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S08-1","p2-nz-straighttoresidence","S08","GLOBAL","Minimum standard of English required for Straight to Residence applicants.","VERIFIED",false,true
+"CLM-NZ-B10-S08-2","p2-nz-straighttoresidence","S08","NATIONALITY_GROUP","INZ English-speaking country passport exemptions.","VERIFIED",false,true
+"CLM-NZ-B10-S08-3","p2-nz-straighttoresidence","S08","GLOBAL","Minimum standard of English required for Straight to Residence applicants.","VERIFIED",false,true
+"CLM-NZ-B10-S09-1","p2-nz-straighttoresidence","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S09-2","p2-nz-straighttoresidence","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S09-3","p2-nz-straighttoresidence","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S10-1","p2-nz-straighttoresidence","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S10-2","p2-nz-straighttoresidence","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S10-3","p2-nz-straighttoresidence","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S11-1","p2-nz-straighttoresidence","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S11-2","p2-nz-straighttoresidence","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S11-3","p2-nz-straighttoresidence","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S12-1","p2-nz-straighttoresidence","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S12-2","p2-nz-straighttoresidence","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S12-3","p2-nz-straighttoresidence","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S13-1","p2-nz-straighttoresidence","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-NZ-B10-S13-2","p2-nz-straighttoresidence","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-NZ-B10-S13-3","p2-nz-straighttoresidence","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-NZ-B10-S14-1","p2-nz-straighttoresidence","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S14-2","p2-nz-straighttoresidence","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S14-3","p2-nz-straighttoresidence","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S15-1","p2-nz-straighttoresidence","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S15-2","p2-nz-straighttoresidence","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S15-3","p2-nz-straighttoresidence","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S16-1","p2-nz-straighttoresidence","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-NZ-B10-S16-2","p2-nz-straighttoresidence","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-NZ-B10-S16-3","p2-nz-straighttoresidence","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-NZ-B10-S17-1","p2-nz-straighttoresidence","S17","GLOBAL","Retrospective 4-week rolling wait-time statistic (checked 2026-11-13T09:54Z, updated weekly; NOT a statutory SLA).","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S17-2","p2-nz-straighttoresidence","S17","GLOBAL","Timestamped temporary operational incident advisory (observed active 2026-11-13T09:54Z, issued 13 Nov 2026 09:50 NZDT; subject to live restoration).","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S17-3","p2-nz-straighttoresidence","S17","CONSULAR_JURISDICTION_SPECIFIC","Application complexity, medical/character clearances, and location affect Straight to Residence timeframes.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S18-1","p2-nz-straighttoresidence","S18","GLOBAL","Published INZ base fee From NZD $6,450; payable total varies by applicant country/location.","VERIFIED",false,true
+"CLM-NZ-B10-S18-2","p2-nz-straighttoresidence","S18","GLOBAL","Published INZ base fee From NZD $6,450; payable total varies by applicant country/location.","VERIFIED",false,true
+"CLM-NZ-B10-S18-3","p2-nz-straighttoresidence","S18","NATIONALITY_SPECIFIC","Published INZ base fee From NZD $6,450; payable total varies by applicant country/location.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S19-1","p2-nz-straighttoresidence","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S19-2","p2-nz-straighttoresidence","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S19-3","p2-nz-straighttoresidence","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S20-1","p2-nz-straighttoresidence","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-NZ-B10-S20-2","p2-nz-straighttoresidence","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-NZ-B10-S20-3","p2-nz-straighttoresidence","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-NZ-B10-S21-1","p2-nz-straighttoresidence","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-NZ-B10-S21-2","p2-nz-straighttoresidence","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-NZ-B10-S21-3","p2-nz-straighttoresidence","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-NZ-B10-S22-1","p2-nz-straighttoresidence","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S22-2","p2-nz-straighttoresidence","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S22-3","p2-nz-straighttoresidence","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S23-1","p2-nz-straighttoresidence","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S23-2","p2-nz-straighttoresidence","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S23-3","p2-nz-straighttoresidence","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S24-1","p2-nz-straighttoresidence","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-NZ-B10-S24-2","p2-nz-straighttoresidence","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-NZ-B10-S24-3","p2-nz-straighttoresidence","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-NZ-B10-S25-1","p2-nz-straighttoresidence","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S25-2","p2-nz-straighttoresidence","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S25-3","p2-nz-straighttoresidence","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S26-1","p2-nz-straighttoresidence","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-NZ-B10-S26-2","p2-nz-straighttoresidence","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S26-3","p2-nz-straighttoresidence","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S27-1","p2-nz-straighttoresidence","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-NZ-B10-S27-2","p2-nz-straighttoresidence","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-NZ-B10-S27-3","p2-nz-straighttoresidence","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-NZ-B10-S28-1","p2-nz-straighttoresidence","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S28-2","p2-nz-straighttoresidence","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S28-3","p2-nz-straighttoresidence","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S29-1","p2-nz-straighttoresidence","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S29-2","p2-nz-straighttoresidence","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S29-3","p2-nz-straighttoresidence","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-NZ-B10-S30-1","p2-nz-straighttoresidence","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S30-2","p2-nz-straighttoresidence","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-NZ-B10-S30-3","p2-nz-straighttoresidence","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S01-1","p2-sg-entrepass","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S01-2","p2-sg-entrepass","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S01-3","p2-sg-entrepass","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S02-1","p2-sg-entrepass","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S02-2","p2-sg-entrepass","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S02-3","p2-sg-entrepass","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S03-1","p2-sg-entrepass","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S03-2","p2-sg-entrepass","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S03-3","p2-sg-entrepass","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S04-1","p2-sg-entrepass","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S04-2","p2-sg-entrepass","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S04-3","p2-sg-entrepass","S04","NATIONALITY_SPECIFIC","Country-specific diplomatic clearance or fee reciprocity rules.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S05-1","p2-sg-entrepass","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S05-2","p2-sg-entrepass","S05","GLOBAL","MOM explicitly confirms EntrePass imposes no stipulated minimum fixed monthly salary threshold.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S05-3","p2-sg-entrepass","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S06-1","p2-sg-entrepass","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S06-2","p2-sg-entrepass","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S06-3","p2-sg-entrepass","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S07-1","p2-sg-entrepass","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S07-2","p2-sg-entrepass","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S07-3","p2-sg-entrepass","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S08-1","p2-sg-entrepass","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S08-2","p2-sg-entrepass","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S08-3","p2-sg-entrepass","S08","NATIONALITY_GROUP","Certified translation rules depend on document issuing language.","VERIFIED",false,true
+"CLM-SG-B10-S09-1","p2-sg-entrepass","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S09-2","p2-sg-entrepass","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S09-3","p2-sg-entrepass","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S10-1","p2-sg-entrepass","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S10-2","p2-sg-entrepass","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S10-3","p2-sg-entrepass","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S11-1","p2-sg-entrepass","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S11-2","p2-sg-entrepass","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S11-3","p2-sg-entrepass","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S12-1","p2-sg-entrepass","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S12-2","p2-sg-entrepass","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S12-3","p2-sg-entrepass","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S13-1","p2-sg-entrepass","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-SG-B10-S13-2","p2-sg-entrepass","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-SG-B10-S13-3","p2-sg-entrepass","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-SG-B10-S14-1","p2-sg-entrepass","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S14-2","p2-sg-entrepass","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S14-3","p2-sg-entrepass","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S15-1","p2-sg-entrepass","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S15-2","p2-sg-entrepass","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S15-3","p2-sg-entrepass","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S16-1","p2-sg-entrepass","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-SG-B10-S16-2","p2-sg-entrepass","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-SG-B10-S16-3","p2-sg-entrepass","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-SG-B10-S17-1","p2-sg-entrepass","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S17-2","p2-sg-entrepass","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S17-3","p2-sg-entrepass","S17","CONSULAR_JURISDICTION_SPECIFIC","Local centre workload / complexity may alter decision timing.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S18-1","p2-sg-entrepass","S18","GLOBAL","Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).","VERIFIED",false,true
+"CLM-SG-B10-S18-2","p2-sg-entrepass","S18","GLOBAL","Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).","VERIFIED",false,true
+"CLM-SG-B10-S18-3","p2-sg-entrepass","S18","GLOBAL","Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).","VERIFIED",false,true
+"CLM-SG-B10-S19-1","p2-sg-entrepass","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S19-2","p2-sg-entrepass","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S19-3","p2-sg-entrepass","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S20-1","p2-sg-entrepass","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-SG-B10-S20-2","p2-sg-entrepass","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-SG-B10-S20-3","p2-sg-entrepass","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-SG-B10-S21-1","p2-sg-entrepass","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-SG-B10-S21-2","p2-sg-entrepass","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-SG-B10-S21-3","p2-sg-entrepass","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-SG-B10-S22-1","p2-sg-entrepass","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S22-2","p2-sg-entrepass","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S22-3","p2-sg-entrepass","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S23-1","p2-sg-entrepass","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S23-2","p2-sg-entrepass","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S23-3","p2-sg-entrepass","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S24-1","p2-sg-entrepass","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-SG-B10-S24-2","p2-sg-entrepass","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-SG-B10-S24-3","p2-sg-entrepass","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-SG-B10-S25-1","p2-sg-entrepass","S25","GLOBAL","EntrePass (Entrepreneurship & Venture-Backed Innovation Pass) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S25-2","p2-sg-entrepass","S25","GLOBAL","EntrePass (Entrepreneurship & Venture-Backed Innovation Pass) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S25-3","p2-sg-entrepass","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S26-1","p2-sg-entrepass","S26","GLOBAL","MOM EntrePass is exempt from foreign worker quotas (DRC) and monthly levies.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S26-2","p2-sg-entrepass","S26","GLOBAL","MOM EntrePass is exempt from foreign worker quotas (DRC) and monthly levies.","NOT_APPLICABLE",false,true
+"CLM-SG-B10-S26-3","p2-sg-entrepass","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S27-1","p2-sg-entrepass","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-SG-B10-S27-2","p2-sg-entrepass","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-SG-B10-S27-3","p2-sg-entrepass","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-SG-B10-S28-1","p2-sg-entrepass","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S28-2","p2-sg-entrepass","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S28-3","p2-sg-entrepass","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S29-1","p2-sg-entrepass","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S29-2","p2-sg-entrepass","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S29-3","p2-sg-entrepass","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-SG-B10-S30-1","p2-sg-entrepass","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S30-2","p2-sg-entrepass","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-SG-B10-S30-3","p2-sg-entrepass","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-JP-B10-S01-1","p2-jp-gijinkoku","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S01-2","p2-jp-gijinkoku","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S01-3","p2-jp-gijinkoku","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S02-1","p2-jp-gijinkoku","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S02-2","p2-jp-gijinkoku","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S02-3","p2-jp-gijinkoku","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S03-1","p2-jp-gijinkoku","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S03-2","p2-jp-gijinkoku","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S03-3","p2-jp-gijinkoku","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S04-1","p2-jp-gijinkoku","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-JP-B10-S04-2","p2-jp-gijinkoku","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-JP-B10-S04-3","p2-jp-gijinkoku","S04","UNKNOWN","Bilateral consular visa-exemption or nationality security vetting matrix unreachable statically (403/404/JS calculator).","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S05-1","p2-jp-gijinkoku","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S05-2","p2-jp-gijinkoku","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S05-3","p2-jp-gijinkoku","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S06-1","p2-jp-gijinkoku","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S06-2","p2-jp-gijinkoku","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S06-3","p2-jp-gijinkoku","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S07-1","p2-jp-gijinkoku","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S07-2","p2-jp-gijinkoku","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S07-3","p2-jp-gijinkoku","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S08-1","p2-jp-gijinkoku","S08","RESIDENCE_SPECIFIC","15 April 2026 ISA rule applies specifically to Category 3 & 4 customer-facing/translation/interpretation positions.","VERIFIED",false,true
+"CLM-JP-B10-S08-2","p2-jp-gijinkoku","S08","GLOBAL","Category 1 & 2 employers and pure engineering roles outside customer-facing scope.","NOT_APPLICABLE",false,true
+"CLM-JP-B10-S08-3","p2-jp-gijinkoku","S08","GLOBAL","Pre-15 April 2026 Category 3 & 4 customer-facing exemption rule.","EXPIRED",true,false
+"CLM-JP-B10-S09-1","p2-jp-gijinkoku","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S09-2","p2-jp-gijinkoku","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S09-3","p2-jp-gijinkoku","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S10-1","p2-jp-gijinkoku","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S10-2","p2-jp-gijinkoku","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S10-3","p2-jp-gijinkoku","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S11-1","p2-jp-gijinkoku","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S11-2","p2-jp-gijinkoku","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S11-3","p2-jp-gijinkoku","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S12-1","p2-jp-gijinkoku","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S12-2","p2-jp-gijinkoku","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S12-3","p2-jp-gijinkoku","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S13-1","p2-jp-gijinkoku","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-JP-B10-S13-2","p2-jp-gijinkoku","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-JP-B10-S13-3","p2-jp-gijinkoku","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-JP-B10-S14-1","p2-jp-gijinkoku","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S14-2","p2-jp-gijinkoku","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S14-3","p2-jp-gijinkoku","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S15-1","p2-jp-gijinkoku","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S15-2","p2-jp-gijinkoku","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S15-3","p2-jp-gijinkoku","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S16-1","p2-jp-gijinkoku","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-JP-B10-S16-2","p2-jp-gijinkoku","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-JP-B10-S16-3","p2-jp-gijinkoku","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-JP-B10-S17-1","p2-jp-gijinkoku","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S17-2","p2-jp-gijinkoku","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S17-3","p2-jp-gijinkoku","S17","CONSULAR_JURISDICTION_SPECIFIC","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S18-1","p2-jp-gijinkoku","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S18-2","p2-jp-gijinkoku","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S18-3","p2-jp-gijinkoku","S18","NATIONALITY_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-JP-B10-S19-1","p2-jp-gijinkoku","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S19-2","p2-jp-gijinkoku","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S19-3","p2-jp-gijinkoku","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S20-1","p2-jp-gijinkoku","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-JP-B10-S20-2","p2-jp-gijinkoku","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-JP-B10-S20-3","p2-jp-gijinkoku","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-JP-B10-S21-1","p2-jp-gijinkoku","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-JP-B10-S21-2","p2-jp-gijinkoku","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-JP-B10-S21-3","p2-jp-gijinkoku","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-JP-B10-S22-1","p2-jp-gijinkoku","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S22-2","p2-jp-gijinkoku","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S22-3","p2-jp-gijinkoku","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S23-1","p2-jp-gijinkoku","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S23-2","p2-jp-gijinkoku","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S23-3","p2-jp-gijinkoku","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S24-1","p2-jp-gijinkoku","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-JP-B10-S24-2","p2-jp-gijinkoku","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-JP-B10-S24-3","p2-jp-gijinkoku","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-JP-B10-S25-1","p2-jp-gijinkoku","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S25-2","p2-jp-gijinkoku","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S25-3","p2-jp-gijinkoku","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S26-1","p2-jp-gijinkoku","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-JP-B10-S26-2","p2-jp-gijinkoku","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S26-3","p2-jp-gijinkoku","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S27-1","p2-jp-gijinkoku","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-JP-B10-S27-2","p2-jp-gijinkoku","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-JP-B10-S27-3","p2-jp-gijinkoku","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-JP-B10-S28-1","p2-jp-gijinkoku","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S28-2","p2-jp-gijinkoku","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S28-3","p2-jp-gijinkoku","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S29-1","p2-jp-gijinkoku","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S29-2","p2-jp-gijinkoku","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S29-3","p2-jp-gijinkoku","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-JP-B10-S30-1","p2-jp-gijinkoku","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-JP-B10-S30-2","p2-jp-gijinkoku","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-JP-B10-S30-3","p2-jp-gijinkoku","S30","UNKNOWN","Bilateral reciprocity protocol status not publicly verifiable while consular subpage returned 403/404 or dynamic JS.","AWAITING_VERIFICATION",true,false
+"CLM-HK-B10-S01-1","p2-hk-iang","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S01-2","p2-hk-iang","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S01-3","p2-hk-iang","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S02-1","p2-hk-iang","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S02-2","p2-hk-iang","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S02-3","p2-hk-iang","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S03-1","p2-hk-iang","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S03-2","p2-hk-iang","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S03-3","p2-hk-iang","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S04-1","p2-hk-iang","S04","GLOBAL","Standard valid travel document and HK/GBA campus degree completion eligibility.","VERIFIED",false,true
+"CLM-HK-B10-S04-2","p2-hk-iang","S04","NATIONALITY_GROUP","Laos, Nepal, and Vietnam nationals face statutory UGC/programme-scope limits under ImmD IANG policy.","VERIFIED",false,true
+"CLM-HK-B10-S04-3","p2-hk-iang","S04","NATIONALITY_SPECIFIC","Afghanistan, Cuba, and Korea (DPRK) nationals explicitly excluded under Hong Kong ImmD IANG rules.","VERIFIED",false,true
+"CLM-HK-B10-S05-1","p2-hk-iang","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S05-2","p2-hk-iang","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S05-3","p2-hk-iang","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S06-1","p2-hk-iang","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S06-2","p2-hk-iang","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S06-3","p2-hk-iang","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S07-1","p2-hk-iang","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S07-2","p2-hk-iang","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S07-3","p2-hk-iang","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S08-1","p2-hk-iang","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-HK-B10-S08-2","p2-hk-iang","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-HK-B10-S08-3","p2-hk-iang","S08","NATIONALITY_GROUP","Certified translation rules depend on document issuing language.","VERIFIED",false,true
+"CLM-HK-B10-S09-1","p2-hk-iang","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S09-2","p2-hk-iang","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S09-3","p2-hk-iang","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S10-1","p2-hk-iang","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S10-2","p2-hk-iang","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S10-3","p2-hk-iang","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S11-1","p2-hk-iang","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S11-2","p2-hk-iang","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S11-3","p2-hk-iang","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S12-1","p2-hk-iang","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S12-2","p2-hk-iang","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S12-3","p2-hk-iang","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S13-1","p2-hk-iang","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-HK-B10-S13-2","p2-hk-iang","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-HK-B10-S13-3","p2-hk-iang","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-HK-B10-S14-1","p2-hk-iang","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S14-2","p2-hk-iang","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S14-3","p2-hk-iang","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S15-1","p2-hk-iang","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S15-2","p2-hk-iang","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S15-3","p2-hk-iang","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S16-1","p2-hk-iang","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-HK-B10-S16-2","p2-hk-iang","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-HK-B10-S16-3","p2-hk-iang","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-HK-B10-S17-1","p2-hk-iang","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
+"CLM-HK-B10-S17-2","p2-hk-iang","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
+"CLM-HK-B10-S17-3","p2-hk-iang","S17","CONSULAR_JURISDICTION_SPECIFIC","Local centre workload / complexity may alter decision timing.","PARTIALLY_VERIFIED",false,true
+"CLM-HK-B10-S18-1","p2-hk-iang","S18","GLOBAL","Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).","VERIFIED",false,true
+"CLM-HK-B10-S18-2","p2-hk-iang","S18","GLOBAL","Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).","VERIFIED",false,true
+"CLM-HK-B10-S18-3","p2-hk-iang","S18","RESIDENCE_SPECIFIC","Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).","VERIFIED",false,true
+"CLM-HK-B10-S19-1","p2-hk-iang","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S19-2","p2-hk-iang","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S19-3","p2-hk-iang","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S20-1","p2-hk-iang","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-HK-B10-S20-2","p2-hk-iang","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-HK-B10-S20-3","p2-hk-iang","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-HK-B10-S21-1","p2-hk-iang","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-HK-B10-S21-2","p2-hk-iang","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-HK-B10-S21-3","p2-hk-iang","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-HK-B10-S22-1","p2-hk-iang","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S22-2","p2-hk-iang","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S22-3","p2-hk-iang","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S23-1","p2-hk-iang","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S23-2","p2-hk-iang","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S23-3","p2-hk-iang","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S24-1","p2-hk-iang","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-HK-B10-S24-2","p2-hk-iang","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-HK-B10-S24-3","p2-hk-iang","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-HK-B10-S25-1","p2-hk-iang","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S25-2","p2-hk-iang","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S25-3","p2-hk-iang","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S26-1","p2-hk-iang","S26","GLOBAL","ImmD specifies IANG is strictly quota-free and non-sector-specific.","NOT_APPLICABLE",false,true
+"CLM-HK-B10-S26-2","p2-hk-iang","S26","GLOBAL","ImmD specifies IANG is strictly quota-free and non-sector-specific.","NOT_APPLICABLE",false,true
+"CLM-HK-B10-S26-3","p2-hk-iang","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S27-1","p2-hk-iang","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-HK-B10-S27-2","p2-hk-iang","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-HK-B10-S27-3","p2-hk-iang","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-HK-B10-S28-1","p2-hk-iang","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S28-2","p2-hk-iang","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S28-3","p2-hk-iang","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S29-1","p2-hk-iang","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S29-2","p2-hk-iang","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S29-3","p2-hk-iang","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-HK-B10-S30-1","p2-hk-iang","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-HK-B10-S30-2","p2-hk-iang","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-HK-B10-S30-3","p2-hk-iang","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-TR-B10-S01-1","p2-tr-workpermit","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S01-2","p2-tr-workpermit","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S01-3","p2-tr-workpermit","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S02-1","p2-tr-workpermit","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S02-2","p2-tr-workpermit","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S02-3","p2-tr-workpermit","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S03-1","p2-tr-workpermit","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S03-2","p2-tr-workpermit","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S03-3","p2-tr-workpermit","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S04-1","p2-tr-workpermit","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-TR-B10-S04-2","p2-tr-workpermit","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-TR-B10-S04-3","p2-tr-workpermit","S04","UNKNOWN","Bilateral consular visa-exemption or nationality security vetting matrix unreachable statically (403/404/JS calculator).","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S05-1","p2-tr-workpermit","S05","GLOBAL","ÇSGB evaluation-criteria subpage returned HTTP 404 on 2026-11-13; 2026 minimum-wage multipliers cannot be confirmed statically.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S05-2","p2-tr-workpermit","S05","GLOBAL","ÇSGB evaluation-criteria subpage returned HTTP 404 on 2026-11-13; 2026 minimum-wage multipliers cannot be confirmed statically.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S05-3","p2-tr-workpermit","S05","GLOBAL","Nationality-neutral statutory legal rule.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S06-1","p2-tr-workpermit","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S06-2","p2-tr-workpermit","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S06-3","p2-tr-workpermit","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S07-1","p2-tr-workpermit","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S07-2","p2-tr-workpermit","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S07-3","p2-tr-workpermit","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S08-1","p2-tr-workpermit","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-TR-B10-S08-2","p2-tr-workpermit","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-TR-B10-S08-3","p2-tr-workpermit","S08","NATIONALITY_GROUP","Certified translation rules depend on document issuing language.","VERIFIED",false,true
+"CLM-TR-B10-S09-1","p2-tr-workpermit","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S09-2","p2-tr-workpermit","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S09-3","p2-tr-workpermit","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S10-1","p2-tr-workpermit","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S10-2","p2-tr-workpermit","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S10-3","p2-tr-workpermit","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S11-1","p2-tr-workpermit","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S11-2","p2-tr-workpermit","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S11-3","p2-tr-workpermit","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S12-1","p2-tr-workpermit","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S12-2","p2-tr-workpermit","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S12-3","p2-tr-workpermit","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S13-1","p2-tr-workpermit","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-TR-B10-S13-2","p2-tr-workpermit","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-TR-B10-S13-3","p2-tr-workpermit","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-TR-B10-S14-1","p2-tr-workpermit","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S14-2","p2-tr-workpermit","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S14-3","p2-tr-workpermit","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S15-1","p2-tr-workpermit","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S15-2","p2-tr-workpermit","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S15-3","p2-tr-workpermit","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S16-1","p2-tr-workpermit","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-TR-B10-S16-2","p2-tr-workpermit","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-TR-B10-S16-3","p2-tr-workpermit","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-TR-B10-S17-1","p2-tr-workpermit","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S17-2","p2-tr-workpermit","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S17-3","p2-tr-workpermit","S17","CONSULAR_JURISDICTION_SPECIFIC","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S18-1","p2-tr-workpermit","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S18-2","p2-tr-workpermit","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S18-3","p2-tr-workpermit","S18","NATIONALITY_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S19-1","p2-tr-workpermit","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S19-2","p2-tr-workpermit","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S19-3","p2-tr-workpermit","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S20-1","p2-tr-workpermit","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-TR-B10-S20-2","p2-tr-workpermit","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-TR-B10-S20-3","p2-tr-workpermit","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-TR-B10-S21-1","p2-tr-workpermit","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-TR-B10-S21-2","p2-tr-workpermit","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-TR-B10-S21-3","p2-tr-workpermit","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-TR-B10-S22-1","p2-tr-workpermit","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S22-2","p2-tr-workpermit","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S22-3","p2-tr-workpermit","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S23-1","p2-tr-workpermit","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S23-2","p2-tr-workpermit","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S23-3","p2-tr-workpermit","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S24-1","p2-tr-workpermit","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-TR-B10-S24-2","p2-tr-workpermit","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-TR-B10-S24-3","p2-tr-workpermit","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-TR-B10-S25-1","p2-tr-workpermit","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S25-2","p2-tr-workpermit","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S25-3","p2-tr-workpermit","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S26-1","p2-tr-workpermit","S26","GLOBAL","ÇSGB evaluation-criteria subpage detailing the 5:1 Turkish employee quota returned HTTP 404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-TR-B10-S26-2","p2-tr-workpermit","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S26-3","p2-tr-workpermit","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S27-1","p2-tr-workpermit","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-TR-B10-S27-2","p2-tr-workpermit","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-TR-B10-S27-3","p2-tr-workpermit","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-TR-B10-S28-1","p2-tr-workpermit","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S28-2","p2-tr-workpermit","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S28-3","p2-tr-workpermit","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S29-1","p2-tr-workpermit","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S29-2","p2-tr-workpermit","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S29-3","p2-tr-workpermit","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-TR-B10-S30-1","p2-tr-workpermit","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-TR-B10-S30-2","p2-tr-workpermit","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-TR-B10-S30-3","p2-tr-workpermit","S30","UNKNOWN","Bilateral reciprocity protocol status not publicly verifiable while consular subpage returned 403/404 or dynamic JS.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S01-1","p2-br-vitemxi","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S01-2","p2-br-vitemxi","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S01-3","p2-br-vitemxi","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S02-1","p2-br-vitemxi","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S02-2","p2-br-vitemxi","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S02-3","p2-br-vitemxi","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S03-1","p2-br-vitemxi","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S03-2","p2-br-vitemxi","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S03-3","p2-br-vitemxi","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S04-1","p2-br-vitemxi","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S04-2","p2-br-vitemxi","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S04-3","p2-br-vitemxi","S04","UNKNOWN","Bilateral consular visa-exemption or nationality security vetting matrix unreachable statically (403/404/JS calculator).","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S05-1","p2-br-vitemxi","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S05-2","p2-br-vitemxi","S05","GLOBAL","Law No. 13.445/2017 Art. 37 establishes family reunion without a fixed sponsor income floor.","NOT_APPLICABLE",false,true
+"CLM-BR-B10-S05-3","p2-br-vitemxi","S05","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S06-1","p2-br-vitemxi","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S06-2","p2-br-vitemxi","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S06-3","p2-br-vitemxi","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S07-1","p2-br-vitemxi","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S07-2","p2-br-vitemxi","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S07-3","p2-br-vitemxi","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S08-1","p2-br-vitemxi","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-BR-B10-S08-2","p2-br-vitemxi","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-BR-B10-S08-3","p2-br-vitemxi","S08","NATIONALITY_GROUP","Certified translation rules depend on document issuing language.","VERIFIED",false,true
+"CLM-BR-B10-S09-1","p2-br-vitemxi","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S09-2","p2-br-vitemxi","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S09-3","p2-br-vitemxi","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S10-1","p2-br-vitemxi","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S10-2","p2-br-vitemxi","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S10-3","p2-br-vitemxi","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S11-1","p2-br-vitemxi","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S11-2","p2-br-vitemxi","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S11-3","p2-br-vitemxi","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S12-1","p2-br-vitemxi","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S12-2","p2-br-vitemxi","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S12-3","p2-br-vitemxi","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S13-1","p2-br-vitemxi","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-BR-B10-S13-2","p2-br-vitemxi","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-BR-B10-S13-3","p2-br-vitemxi","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-BR-B10-S14-1","p2-br-vitemxi","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S14-2","p2-br-vitemxi","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S14-3","p2-br-vitemxi","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S15-1","p2-br-vitemxi","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S15-2","p2-br-vitemxi","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S15-3","p2-br-vitemxi","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S16-1","p2-br-vitemxi","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-BR-B10-S16-2","p2-br-vitemxi","S16","RESIDENCE_SPECIFIC","In-country filing contingent on holding lawful domestic stay.","VERIFIED",false,true
+"CLM-BR-B10-S16-3","p2-br-vitemxi","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-BR-B10-S17-1","p2-br-vitemxi","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S17-2","p2-br-vitemxi","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S17-3","p2-br-vitemxi","S17","CONSULAR_JURISDICTION_SPECIFIC","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S18-1","p2-br-vitemxi","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S18-2","p2-br-vitemxi","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S18-3","p2-br-vitemxi","S18","NATIONALITY_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-BR-B10-S19-1","p2-br-vitemxi","S19","CONSULAR_JURISDICTION_SPECIFIC","Post-level biometric booking slots vary across VFS/Consulates and SERMIG offices.","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S19-2","p2-br-vitemxi","S19","CONSULAR_JURISDICTION_SPECIFIC","Post-level biometric booking slots vary across VFS/Consulates and SERMIG offices.","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S19-3","p2-br-vitemxi","S19","CONSULAR_JURISDICTION_SPECIFIC","Post-level biometric booking slots vary across VFS/Consulates and SERMIG offices.","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S20-1","p2-br-vitemxi","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-BR-B10-S20-2","p2-br-vitemxi","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-BR-B10-S20-3","p2-br-vitemxi","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-BR-B10-S21-1","p2-br-vitemxi","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-BR-B10-S21-2","p2-br-vitemxi","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-BR-B10-S21-3","p2-br-vitemxi","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-BR-B10-S22-1","p2-br-vitemxi","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S22-2","p2-br-vitemxi","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S22-3","p2-br-vitemxi","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S23-1","p2-br-vitemxi","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S23-2","p2-br-vitemxi","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S23-3","p2-br-vitemxi","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S24-1","p2-br-vitemxi","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-BR-B10-S24-2","p2-br-vitemxi","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-BR-B10-S24-3","p2-br-vitemxi","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-BR-B10-S25-1","p2-br-vitemxi","S25","GLOBAL","Temporary Visa XI — Family Reunion (Visto Temporário XI — Reunião Familiar) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-BR-B10-S25-2","p2-br-vitemxi","S25","GLOBAL","Temporary Visa XI — Family Reunion (Visto Temporário XI — Reunião Familiar) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-BR-B10-S25-3","p2-br-vitemxi","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S26-1","p2-br-vitemxi","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-BR-B10-S26-2","p2-br-vitemxi","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S26-3","p2-br-vitemxi","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S27-1","p2-br-vitemxi","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-BR-B10-S27-2","p2-br-vitemxi","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-BR-B10-S27-3","p2-br-vitemxi","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-BR-B10-S28-1","p2-br-vitemxi","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S28-2","p2-br-vitemxi","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S28-3","p2-br-vitemxi","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S29-1","p2-br-vitemxi","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S29-2","p2-br-vitemxi","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S29-3","p2-br-vitemxi","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-BR-B10-S30-1","p2-br-vitemxi","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S30-2","p2-br-vitemxi","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-BR-B10-S30-3","p2-br-vitemxi","S30","UNKNOWN","Bilateral reciprocity protocol status not publicly verifiable while consular subpage returned 403/404 or dynamic JS.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S01-1","p2-cl-retiree","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S01-2","p2-cl-retiree","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S01-3","p2-cl-retiree","S01","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S02-1","p2-cl-retiree","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S02-2","p2-cl-retiree","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S02-3","p2-cl-retiree","S02","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S03-1","p2-cl-retiree","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S03-2","p2-cl-retiree","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S03-3","p2-cl-retiree","S03","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S04-1","p2-cl-retiree","S04","GLOBAL","Minimum valid passport requirement applicable to all third-country applicants.","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S04-2","p2-cl-retiree","S04","NATIONALITY_GROUP","Regional freedom-of-movement or prior-entry waiver nationality groups (e.g., EU/EEA/Mercosur/Privileged Nationalities).","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S04-3","p2-cl-retiree","S04","UNKNOWN","Bilateral consular visa-exemption or nationality security vetting matrix unreachable statically (403/404/JS calculator).","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S05-1","p2-cl-retiree","S05","GLOBAL","SERMIG Jubilado y Rentista pension floor lives on dynamic Tramites Digitales forms; unavailable statically.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S05-2","p2-cl-retiree","S05","GLOBAL","SERMIG Jubilado y Rentista pension floor lives on dynamic Tramites Digitales forms; unavailable statically.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S05-3","p2-cl-retiree","S05","GLOBAL","Legacy Decreto Ley N° 1.094 temporary retiree categories superseded by Ley N° 21.325 & Decreto Supremo N° 177.","EXPIRED",true,false
+"CLM-CL-B10-S06-1","p2-cl-retiree","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S06-2","p2-cl-retiree","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S06-3","p2-cl-retiree","S06","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S07-1","p2-cl-retiree","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S07-2","p2-cl-retiree","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S07-3","p2-cl-retiree","S07","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S08-1","p2-cl-retiree","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-CL-B10-S08-2","p2-cl-retiree","S08","GLOBAL","No mandatory language proficiency exam imposed by statute for this pathway.","NOT_APPLICABLE",false,true
+"CLM-CL-B10-S08-3","p2-cl-retiree","S08","NATIONALITY_GROUP","Certified translation rules depend on document issuing language.","VERIFIED",false,true
+"CLM-CL-B10-S09-1","p2-cl-retiree","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S09-2","p2-cl-retiree","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S09-3","p2-cl-retiree","S09","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S10-1","p2-cl-retiree","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S10-2","p2-cl-retiree","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S10-3","p2-cl-retiree","S10","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S11-1","p2-cl-retiree","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S11-2","p2-cl-retiree","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S11-3","p2-cl-retiree","S11","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S12-1","p2-cl-retiree","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S12-2","p2-cl-retiree","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S12-3","p2-cl-retiree","S12","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S13-1","p2-cl-retiree","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-CL-B10-S13-2","p2-cl-retiree","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-CL-B10-S13-3","p2-cl-retiree","S13","RESIDENCE_SPECIFIC","Permanent residence accrual depends on lawful continuous physical residence and statutory contributions.","VERIFIED",false,true
+"CLM-CL-B10-S14-1","p2-cl-retiree","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S14-2","p2-cl-retiree","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S14-3","p2-cl-retiree","S14","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S15-1","p2-cl-retiree","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S15-2","p2-cl-retiree","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S15-3","p2-cl-retiree","S15","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S16-1","p2-cl-retiree","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-CL-B10-S16-2","p2-cl-retiree","S16","RESIDENCE_SPECIFIC","Dynamic SERMIG Tramites Digitales wizard steps cannot be read statically.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S16-3","p2-cl-retiree","S16","GLOBAL","Primary official electronic application portal.","VERIFIED",false,true
+"CLM-CL-B10-S17-1","p2-cl-retiree","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S17-2","p2-cl-retiree","S17","GLOBAL","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S17-3","p2-cl-retiree","S17","CONSULAR_JURISDICTION_SPECIFIC","Static official processing-time SLA table unavailable or subpage 403/404 on 2026-11-13.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S18-1","p2-cl-retiree","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S18-2","p2-cl-retiree","S18","CONSULAR_JURISDICTION_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S18-3","p2-cl-retiree","S18","NATIONALITY_SPECIFIC","Consular/stamp/reciprocity fee schedule subpage returned 403/404 or required live JS calculator.","AWAITING_VERIFICATION",true,false
+"CLM-CL-B10-S19-1","p2-cl-retiree","S19","CONSULAR_JURISDICTION_SPECIFIC","Post-level biometric booking slots vary across VFS/Consulates and SERMIG offices.","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S19-2","p2-cl-retiree","S19","CONSULAR_JURISDICTION_SPECIFIC","Post-level biometric booking slots vary across VFS/Consulates and SERMIG offices.","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S19-3","p2-cl-retiree","S19","CONSULAR_JURISDICTION_SPECIFIC","Post-level biometric booking slots vary across VFS/Consulates and SERMIG offices.","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S20-1","p2-cl-retiree","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-CL-B10-S20-2","p2-cl-retiree","S20","NATIONALITY_GROUP","Hague Apostille Convention contracting states exempt from full embassy legalization.","VERIFIED",false,true
+"CLM-CL-B10-S20-3","p2-cl-retiree","S20","GLOBAL","Official document authentication and certified translation standard.","VERIFIED",false,true
+"CLM-CL-B10-S21-1","p2-cl-retiree","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-CL-B10-S21-2","p2-cl-retiree","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-CL-B10-S21-3","p2-cl-retiree","S21","RESIDENCE_SPECIFIC","In-country status conversion depends on holding eligible domestic stay.","VERIFIED",false,true
+"CLM-CL-B10-S22-1","p2-cl-retiree","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S22-2","p2-cl-retiree","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S22-3","p2-cl-retiree","S22","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S23-1","p2-cl-retiree","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S23-2","p2-cl-retiree","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S23-3","p2-cl-retiree","S23","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S24-1","p2-cl-retiree","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-CL-B10-S24-2","p2-cl-retiree","S24","GLOBAL","Mandatory post-arrival registration timeline.","VERIFIED",false,true
+"CLM-CL-B10-S24-3","p2-cl-retiree","S24","CONSULAR_JURISDICTION_SPECIFIC","Local municipal/police registration jurisdiction post-arrival.","VERIFIED",false,true
+"CLM-CL-B10-S25-1","p2-cl-retiree","S25","GLOBAL","Temporary Residence for Retirees & Passive-Income Holders (Residencia Temporal — Jubilado y Rentista) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-CL-B10-S25-2","p2-cl-retiree","S25","GLOBAL","Temporary Residence for Retirees & Passive-Income Holders (Residencia Temporal — Jubilado y Rentista) does not require an employer CoS, LMIA, or local labor market test.","NOT_APPLICABLE",false,true
+"CLM-CL-B10-S25-3","p2-cl-retiree","S25","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S26-1","p2-cl-retiree","S26","GLOBAL","No fixed statutory annual numerical quota published under governing statute.","NOT_APPLICABLE",false,true
+"CLM-CL-B10-S26-2","p2-cl-retiree","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S26-3","p2-cl-retiree","S26","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S27-1","p2-cl-retiree","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-CL-B10-S27-2","p2-cl-retiree","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-CL-B10-S27-3","p2-cl-retiree","S27","RESIDENCE_SPECIFIC","Continuous physical presence / absence limits govern renewal and PR preservation.","VERIFIED",false,true
+"CLM-CL-B10-S28-1","p2-cl-retiree","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S28-2","p2-cl-retiree","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S28-3","p2-cl-retiree","S28","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S29-1","p2-cl-retiree","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S29-2","p2-cl-retiree","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S29-3","p2-cl-retiree","S29","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
+"CLM-CL-B10-S30-1","p2-cl-retiree","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S30-2","p2-cl-retiree","S30","NATIONALITY_SPECIFIC","Bilateral social security totalization, double-taxation, or mobility accords.","PARTIALLY_VERIFIED",false,true
+"CLM-CL-B10-S30-3","p2-cl-retiree","S30","UNKNOWN","Bilateral reciprocity protocol status not publicly verifiable while consular subpage returned 403/404 or dynamic JS.","AWAITING_VERIFICATION",true,false
