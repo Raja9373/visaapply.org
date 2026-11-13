@@ -20,6 +20,7 @@ export interface Priority2PathwayAudit {
   operationalStatus?: string;
   quarantinedClaimsCount?: number;
   publishedClaimsCount?: number;
+  legalInstrumentType?: string;
   batchNumber?: number; // 0 for Pilot, 1 for Batch 1, etc.
   isPilotSample?: boolean;
 }
@@ -2558,7 +2559,261 @@ export const PRIORITY2_BATCH10_COMBINATIONS: Priority2PathwayAudit[] = [
   }
 ];
 
-// All Completed Priority 2 Pathways (120 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10)
+// 10 Priority 2 Batch 11 Global Pathways (Phase 3.9.5 — Staged & Reviewed from Phase 3.9.3 / 3.9.4)
+export const PRIORITY2_BATCH11_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. UNITED STATES — APPLY FOR NATURALIZATION (FORM N-400)
+  {
+    id: 'p2-cand-us-n400',
+    destination: 'United States',
+    destCode: 'US',
+    category: 'Citizenship / Naturalization (Form N-400)',
+    localStatutoryName: 'Application for Naturalization (Form N-400 — INA §§ 312, 316, 319, 334, 337)',
+    legalInstrumentType: 'Non-Visa Citizenship / Naturalization Application',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-states/naturalization-form-n400',
+    issuingAuthority: 'U.S. Citizenship and Immigration Services (USCIS — DHS)',
+    directSourceUrl: 'https://www.uscis.gov/citizenship/apply-for-naturalization',
+    legalProvision: 'Immigration and Nationality Act (INA) §§ 312, 316, 319, 334, 337 (8 U.S.C. §§ 1423, 1427, 1430, 1445, 1448); 8 CFR Parts 312, 316, 319, 334',
+    claimIds: ['CLM-US-B11-S01-1', 'CLM-US-B11-S02-1', 'CLM-US-B11-S03-1', 'CLM-US-B11-S05-1', 'CLM-US-B11-S11-1', 'CLM-US-B11-S17-1', 'CLM-US-B11-S18-1'],
+    evidenceIds: ['EVD-B11-US-S01-1', 'EVD-B11-US-S02-1', 'EVD-B11-US-S03-1', 'EVD-B11-US-S05-1', 'EVD-B11-US-S11-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 84,
+    quarantinedClaimsCount: 6,
+    officialStatusNotice: 'PARTIALLY_VERIFIED (Non-Visa Citizenship Application): https://www.uscis.gov/forms/filing-fees returned Akamai HTTP 403 on 2026-11-13 and USCIS field-office processing times are dynamic; Section 17 (CLM-US-B11-S17-1..3) and Section 18 (CLM-US-B11-S18-1..3) are strictly quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on uscis.gov/citizenship/apply-for-naturalization & uscis.gov/n-400, rev. 16 Jun 2026): Explicitly classified as a non-visa onshore U.S. Citizenship / Naturalization benefit requiring existing Lawful Permanent Resident (Green Card) status (INA § 316 5-year track / 30m physical presence or INA § 319(a) 3-year U.S. citizen spouse track / 18m physical presence; 90-day early filing under INA § 334(a); English & civics test under INA § 312; Oath under INA § 337). Visa-only sections (S06, S13, S14, S15, S16, S21, S22, S23, S24, S26) marked NOT_APPLICABLE. 6 claims in S17 & S18 quarantined.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 2. UNITED KINGDOM — SEASONAL WORKER VISA
+  {
+    id: 'p2-cand-gb-seasonal',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'Seasonal Worker Visa (Horticulture & Poultry)',
+    localStatutoryName: 'Seasonal Worker Visa (Immigration Rules Appendix Temporary Work – Seasonal Worker)',
+    legalInstrumentType: 'Temporary Sponsored Work Visa',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/seasonal-worker-visa',
+    issuingAuthority: 'UK Visas and Immigration (UKVI — Home Office) & DEFRA Scheme Operators',
+    directSourceUrl: 'https://www.gov.uk/seasonal-worker-visa',
+    legalProvision: 'UK Immigration Rules Appendix Temporary Work – Seasonal Worker',
+    claimIds: ['CLM-GB-B11-S01-1', 'CLM-GB-B11-S03-1', 'CLM-GB-B11-S05-1', 'CLM-GB-B11-S09-1', 'CLM-GB-B11-S17-1', 'CLM-GB-B11-S18-1', 'CLM-GB-B11-S26-1'],
+    evidenceIds: ['EVD-B11-GB-S01-1', 'EVD-B11-GB-S03-1', 'EVD-B11-GB-S05-1', 'EVD-B11-GB-S09-1', 'EVD-B11-GB-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 86,
+    quarantinedClaimsCount: 4,
+    officialStatusNotice: 'VERIFIED: £319 application fee, £1,270 maintenance funds (28 days or A-rated sponsor certification), 3-week overseas processing SLA, up to 6 months horticulture vs 2 Oct–31 Dec poultry (apply by 15 Nov), and strict prohibitions on permanent employment, second jobs, dependants, public funds, and settlement verified on GOV.UK. Section 26 annual numerical quota caps (CLM-GB-B11-S26-1..3) and legacy T5 naming (CLM-GB-B11-S02-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on gov.uk/seasonal-worker-visa & /eligibility): Distinct short-term sponsored temporary work visa requiring a Certificate of Sponsorship (CoS) from a licensed scheme operator. Entry allowed up to 14 days before job start date. English language (S11) and Dependants (S24) marked NOT_APPLICABLE.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 3. NEW ZEALAND — ACTIVE INVESTOR PLUS VISA
+  {
+    id: 'p2-cand-nz-aip',
+    destination: 'New Zealand',
+    destCode: 'NZ',
+    category: 'Investor / Business Residency (Active Investor Plus Visa)',
+    localStatutoryName: 'Active Investor Plus Resident Visa (Growth & Balanced Categories)',
+    legalInstrumentType: 'Resident Visa (Investment-Based Residence)',
+    action: 'NEW',
+    canonicalUrl: '/visa/new-zealand/active-investor-plus-visa',
+    issuingAuthority: 'Immigration New Zealand (INZ — MBIE) & Invest New Zealand',
+    directSourceUrl: 'https://www.immigration.govt.nz/visas/active-investor-plus-visa/',
+    legalProvision: 'Immigration Act 2009; INZ Operational Manual Business Investor Instructions (Growth & Balanced Categories)',
+    claimIds: ['CLM-NZ-B11-S01-1', 'CLM-NZ-B11-S03-1', 'CLM-NZ-B11-S05-1', 'CLM-NZ-B11-S09-1', 'CLM-NZ-B11-S17-1', 'CLM-NZ-B11-S18-1', 'CLM-NZ-B11-S22-1'],
+    evidenceIds: ['EVD-B11-NZ-S01-1', 'EVD-B11-NZ-S03-1', 'EVD-B11-NZ-S05-1', 'EVD-B11-NZ-S17-1', 'EVD-B11-NZ-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'VERIFIED: Growth category (NZD $5M minimum over 36m; 21 days in NZ) and Balanced category (NZD $10M minimum over 60m; 105 days in NZ reducible by 14d per extra NZD $1M Growth up to 42d reduction: $11M=91d, $12M=77d, $13M=63d), NZD $27,470 starting fee, ~4-month AIP SLA (80%), and 6+6m transfer window verified on immigration.govt.nz. INZ Operational Manual BN2 sub-clause day-counting mechanics (CLM-NZ-B11-S22-3), post-AIP final eVisa SLA (CLM-NZ-B11-S17-3), and fee/levy split (CLM-NZ-B11-S18-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on immigration.govt.nz/visas/active-investor-plus-visa/): Directly verified Growth vs Balanced investment thresholds, physical-presence day schedules (21d vs 105/91/77/63d), 24/36/60m investment-retention audits, and PRV transition after 3yr/5yr. Operational Manual BN2 sub-clause day-counting rules remain quarantined per Section 6.C.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 4. SINGAPORE — DEPENDANT'S PASS (DP)
+  {
+    id: 'p2-cand-sg-dp',
+    destination: 'Singapore',
+    destCode: 'SG',
+    category: 'Family / Dependant Permission (Dependant’s Pass)',
+    localStatutoryName: 'Dependant’s Pass (EFMA Cap. 91A & Immigration Regulations)',
+    legalInstrumentType: 'Derivative Family / Dependant Pass (Not an Independent Work Visa)',
+    action: 'NEW',
+    canonicalUrl: '/visa/singapore/dependants-pass',
+    issuingAuthority: 'Ministry of Manpower (MOM Singapore)',
+    directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/dependants-pass',
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A); Immigration Act; MOM Work Pass Regulations',
+    claimIds: ['CLM-SG-B11-S01-1', 'CLM-SG-B11-S03-1', 'CLM-SG-B11-S05-1', 'CLM-SG-B11-S06-1', 'CLM-SG-B11-S09-1', 'CLM-SG-B11-S17-1', 'CLM-SG-B11-S18-1'],
+    evidenceIds: ['EVD-B11-SG-S01-1', 'EVD-B11-SG-S03-1', 'EVD-B11-SG-S05-1', 'EVD-B11-SG-S09-1', 'EVD-B11-SG-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 89,
+    quarantinedClaimsCount: 1,
+    officialStatusNotice: 'VERIFIED (Derivative Family Pass): Requires principal EP / S Pass (minimum SGD 6,000 fixed monthly salary), ONE Pass, or qualified EntrePass holder (Yr 1 renewal track: SGD 100k spending + 3 LQS/1 PME). Up to 2 years tied to principal pass; SGD 105 application + SGD 225 issuance (+ conditional SGD 30 MJV); 3 weeks processing for EP/S Pass dependants (8 weeks for EntrePass/PEP). Granular LOC vs work-pass conversion criteria on /working-in-singapore subpage (CLM-SG-B11-S09-3) quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on mom.gov.sg/passes-and-permits/dependants-pass, /eligibility, and /key-facts, updated 9 Jul 2026): Strictly classified as a derivative family permission for legally married spouses and unmarried children under 21 (common-law spouses, stepchildren, and disabled children >=21 must use LTVP instead; Work Permit holders ineligible). Mandatory HPB diphtheria & measles vaccination verification for children <=12 born abroad.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 5. GERMANY — RESEARCH RESIDENCE PERMIT (§ 18d AUFENTHG)
+  {
+    id: 'p2-cand-de-18d-research',
+    destination: 'Germany',
+    destCode: 'DE',
+    category: 'Research / Work Residence (Aufenthaltserlaubnis zum Zweck der Forschung § 18d AufenthG)',
+    localStatutoryName: 'Aufenthaltserlaubnis zum Zweck der Forschung (§ 18d AufenthG)',
+    legalInstrumentType: 'Statutory Residence Permit for Research (Aufenthaltserlaubnis)',
+    action: 'NEW',
+    canonicalUrl: '/visa/germany/research-residence-permit-18d',
+    issuingAuthority: 'BAMF, Local Foreigners Authorities (Ausländerbehörden) & German Diplomatic Missions',
+    directSourceUrl: 'https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html',
+    legalProvision: 'Aufenthaltsgesetz (AufenthG) § 18d implementing Directive (EU) 2016/801; Aufenthaltsverordnung (AufenthV) § 45',
+    claimIds: ['CLM-DE-B11-S01-1', 'CLM-DE-B11-S03-1', 'CLM-DE-B11-S05-1', 'CLM-DE-B11-S09-1', 'CLM-DE-B11-S17-1', 'CLM-DE-B11-S18-1', 'CLM-DE-B11-S22-1'],
+    evidenceIds: ['EVD-B11-DE-S01-1', 'EVD-B11-DE-S03-1', 'EVD-B11-DE-S05-1', 'EVD-B11-DE-S09-1', 'EVD-B11-DE-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 89,
+    quarantinedClaimsCount: 1,
+    officialStatusNotice: 'VERIFIED: Statutory German residence permit under § 18d AufenthG (completely distinct from France Passeport talent - chercheur) requiring a hosting agreement (Aufnahmevereinbarung) or contract with a research organization plus cost-assumption undertaking (still required under § 18d(1) No. 2 unless public funding covers livelihood, waived for recognized bodies per § 18d(2)). Issued for >=1 year (60-day decision period for recognized bodies per § 18d(4)); EUR 100 initial / EUR 96 extension / EUR 93 change of purpose per § 45 AufenthV. Local Ausländerbehörde appointment queues (CLM-DE-B11-S17-3) quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on gesetze-im-internet.de/aufenthg_2004/__18d.html & /aufenthv/__45.html): Authorizes research at the specified organization plus teaching activities (§ 18d(5)) and counts as a Fachkraft title toward settlement under § 18c AufenthG and post-research job search under § 20 AufenthG.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 6. FRANCE — CARTE DE SÉJOUR « VIE PRIVÉE ET FAMILIALE »
+  {
+    id: 'p2-cand-fr-vpf',
+    destination: 'France',
+    destCode: 'FR',
+    category: 'Family / Private Life Residence (Carte de séjour « vie privée et familiale »)',
+    localStatutoryName: 'Carte de séjour temporaire ou pluriannuelle « vie privée et familiale » (CESEDA L.423-1 s.)',
+    legalInstrumentType: 'Temporary / Multi-Year Family & Private-Life Residence Permit (Carte de séjour)',
+    action: 'NEW',
+    canonicalUrl: '/visa/france/carte-sejour-vie-privee-et-familiale',
+    issuingAuthority: 'Ministère de l’Intérieur (Plateforme ANEF / Préfectures) & France-Visas',
+    directSourceUrl: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F2209',
+    legalProvision: 'Code de l’entrée et du séjour des étrangers et du droit d’asile (CESEDA) Articles L.423-1 to L.423-23, L.433-4',
+    claimIds: ['CLM-FR-B11-S01-1', 'CLM-FR-B11-S03-1', 'CLM-FR-B11-S04-1', 'CLM-FR-B11-S09-1', 'CLM-FR-B11-S17-1', 'CLM-FR-B11-S18-1', 'CLM-FR-B11-S22-1'],
+    evidenceIds: ['EVD-B11-FR-S01-1', 'EVD-B11-FR-S03-1', 'EVD-B11-FR-S09-1', 'EVD-B11-FR-S18-1', 'EVD-B11-FR-S22-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 81,
+    quarantinedClaimsCount: 9,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: Service-Public F2209 (vérifié le 06 novembre 2026) verifies 1-year initial validity, ANEF filing window (4 to 2 months before expiry), EUR 225 fiscal stamps (EUR 25 stamp duty + EUR 200 tax), full work authorization on the standard VPF card, 2-year multi-year renewal (3 years on 2nd renewal for French-national spouses/parents), and 3-year Carte de résident track. 9 claims covering prefecture SLAs (S17), 1968 Franco-Algerian bilateral rules, bilateral migration-flow accords (S04/S30), and non-spouse sub-branches (S03/S09) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on service-public.gouv.fr/particuliers/vosdroits/F2209): Distinct from Visiteur (F302 / L.426-20, which prohibits work) and Salarié (F15898 / L.421-1). Preserves explicit nationality exceptions for EU/EEA/Swiss citizens, Algerian nationals (1968 bilateral agreement), and bilateral migration-flow treaty states.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 7. IRELAND — THIRD LEVEL GRADUATE PROGRAMME (STAMP 1G)
+  {
+    id: 'p2-cand-ie-stamp1g',
+    destination: 'Ireland',
+    destCode: 'IE',
+    category: 'Student / Post-Study Residence (Third Level Graduate Programme — Stamp 1G)',
+    localStatutoryName: 'Third Level Graduate Programme Permission (Stamp 1G — NFQ Level 8–10)',
+    legalInstrumentType: 'Post-Study Residence & Graduate Work Permission (Stamp 1G)',
+    action: 'NEW',
+    canonicalUrl: '/visa/ireland/third-level-graduate-stamp-1g',
+    issuingAuthority: 'Immigration Service Delivery (ISD), Department of Justice Ireland',
+    directSourceUrl: 'https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/',
+    legalProvision: 'Immigration Act 2004 (Section 4); ISD Third Level Graduate Programme Policy Document',
+    claimIds: ['CLM-IE-B11-S01-1', 'CLM-IE-B11-S03-1', 'CLM-IE-B11-S06-1', 'CLM-IE-B11-S09-1', 'CLM-IE-B11-S17-1', 'CLM-IE-B11-S18-1', 'CLM-IE-B11-S22-1'],
+    evidenceIds: ['EVD-B11-IE-S01-1', 'EVD-B11-IE-S03-1', 'EVD-B11-IE-S06-1', 'EVD-B11-IE-S09-1', 'EVD-B11-IE-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'VERIFIED: Onshore post-study permission for non-EEA graduates holding a valid Stamp 2 IRP and an NFQ Level 8–10 award (12 months for Level 8; 12+12 = 24 months max for Level 9+; 8-year total student/graduate permission cap; 2-award lifetime limit; apply within 6 months of final results). Authorizes up to 40 hours/week employment (self-employment prohibited) to seek a Critical Skills or General Employment Permit; EUR 300 IRP registration fee; mandatory Irish medical insurance. Section 17 live ISD processing times (CLM-IE-B11-S17-1..3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on irishimmigration.ie Third Level Graduate Programme policy page): Distinct from Stamp 4 long-term residence (`p2-ie-stamp4`) and Critical Skills Employment Permit (`p2-ie-csep`). Stamp 1G time does not count directly toward citizenship/Stamp 4 reckonable residence until the graduate transitions to an employment permit.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 8. HONG KONG — GENERAL EMPLOYMENT POLICY (GEP)
+  {
+    id: 'p2-cand-hk-gep',
+    destination: 'Hong Kong',
+    destCode: 'HK',
+    category: 'Skilled Employment (General Employment Policy — GEP Professional & Entrepreneur)',
+    localStatutoryName: 'General Employment Policy (GEP — 一般就業政策, Cap. 115 & Cap. 115A Sch. 2)',
+    legalInstrumentType: 'Sponsored Skilled Employment / Entrepreneur Entry & Stay Arrangement',
+    action: 'NEW',
+    canonicalUrl: '/visa/hong-kong/general-employment-policy-gep',
+    issuingAuthority: 'Immigration Department of the Government of the Hong Kong SAR (ImmD)',
+    directSourceUrl: 'https://www.immd.gov.hk/eng/services/visas/GEP.html',
+    legalProvision: 'Hong Kong Immigration Ordinance (Cap. 115); Immigration Regulations (Cap. 115A) Schedule 2 (Specified Schemes)',
+    claimIds: ['CLM-HK-B11-S01-1', 'CLM-HK-B11-S03-1', 'CLM-HK-B11-S04-1', 'CLM-HK-B11-S05-1', 'CLM-HK-B11-S09-1', 'CLM-HK-B11-S17-1', 'CLM-HK-B11-S18-1'],
+    evidenceIds: ['EVD-B11-HK-S01-1', 'EVD-B11-HK-S03-1', 'EVD-B11-HK-S04-1', 'EVD-B11-HK-S17-1', 'EVD-B11-HK-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 89,
+    quarantinedClaimsCount: 1,
+    officialStatusNotice: 'VERIFIED: Non-quota employer-sponsored professional and entrepreneur admission policy (distinct from QMAS p2-hk-qmas, Top Talent Pass p2-hk-ttps, and IANG p2-hk-iang). 4-week processing SLA after complete documents; 3+3+2 year pattern (or 2+6 top-tier >=HKD 2M taxable salary); Specified Scheme two-stage fee structure (HKD 600 non-refundable application fee + HKD 1,300 issuance >180d or HKD 600 <=180d). Uncodified numerical initial salary floor claims (CLM-HK-B11-S05-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on immd.gov.hk/eng/services/visas/GEP.html, rev. 15 Apr 2026, and /eng/specifiedschemes.html): Preserves explicit nationality exclusions for Afghanistan, Cuba, and DPRK and clarifies that Mainland Chinese residents require ASMTP unless holding overseas PR or >=1 year overseas residence immediately prior to applying.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 9. JAPAN — PERMISSION FOR PERMANENT RESIDENCE (永住許可)
+  {
+    id: 'p2-cand-jp-pr',
+    destination: 'Japan',
+    destCode: 'JP',
+    category: 'Permanent Residence / Settlement (Permission for Permanent Residence — 永住許可)',
+    localStatutoryName: 'Permission for Permanent Residence (永住許可 — ICRRA Article 22)',
+    legalInstrumentType: 'Permanent Residence Permission (永住者 — Status of Residence Change / Acquisition)',
+    action: 'NEW',
+    canonicalUrl: '/visa/japan/permanent-residence-permission',
+    issuingAuthority: 'Immigration Services Agency of Japan (ISA / 出入国在留管理庁 — MOJ)',
+    directSourceUrl: 'https://www.moj.go.jp/isa/applications/procedures/16-4.html',
+    legalProvision: 'Immigration Control and Refugee Recognition Act (ICRRA) Articles 22 & 22-2; ISA Guidelines for Permission for Permanent Residence (rev. 24 Feb 2026)',
+    claimIds: ['CLM-JP-B11-S01-1', 'CLM-JP-B11-S03-1', 'CLM-JP-B11-S05-1', 'CLM-JP-B11-S09-1', 'CLM-JP-B11-S17-1', 'CLM-JP-B11-S18-1', 'CLM-JP-B11-S22-1'],
+    evidenceIds: ['EVD-B11-JP-S01-1', 'EVD-B11-JP-S03-1', 'EVD-B11-JP-S05-1', 'EVD-B11-JP-S09-1', 'EVD-B11-JP-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 85,
+    quarantinedClaimsCount: 5,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: Verified against 16-4.html (updated 27 Oct 2026) and nyukan_nyukan50.html (rev. 24 Feb 2026): Art. 22(2) good conduct, independent livelihood, and national-interest compliance (tax/pension/health insurance + longest period of stay, with 3-year period treated as longest through 31 Mar 2027); 10-year rule (>=5y work/residence), 3y marriage+1y Japan spouse rule, 5y Long-Term Resident/refugee rule, and 3y (>=70pt) / 1y (>=80pt or J-Skip) HSP tracks; ¥100,000 revenue-stamp fee upon approval (eff. 1 Oct 2026; ¥0 for Art. 22-2 acquisition by birth). 5 claims covering undocumented processing times (S17-1..2), unverified external Contribution Guidelines (S03-3), uncodified JPY income floors (S05-3), and superseded pre-Oct 2026 fees (S18-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on moj.go.jp/isa/applications/procedures/16-4.html & /resources/nyukan_nyukan50.html): Strictly classified as an onshore status-of-residence transition/acquisition to Permanent Resident (永住者) requiring a Guarantor in Japan (身元保証人, moral support obligation). Unrestricted employment rights; Residence Card renewed every 7 years.',
+    batchNumber: 11,
+    isPilotSample: true
+  },
+  // 10. CHILE — RESIDENCIA DEFINITIVA
+  {
+    id: 'p2-cand-cl-definitiva',
+    destination: 'Chile',
+    destCode: 'CL',
+    category: 'Permanent Residence / Settlement (Residencia Definitiva)',
+    localStatutoryName: 'Residencia Definitiva (Ley de Migración y Extranjería N° 21.325 Art. 78 s.)',
+    legalInstrumentType: 'Permanent Residence Permit (Residencia Definitiva)',
+    action: 'NEW',
+    canonicalUrl: '/visa/chile/residencia-definitiva',
+    issuingAuthority: 'Servicio Nacional de Migraciones (SERMIG Chile)',
+    directSourceUrl: 'https://serviciomigraciones.cl/residencia-definitiva/',
+    legalProvision: 'Ley de Migración y Extranjería N° 21.325 (Arts. 64, 78–83, 88); Decreto Supremo N° 296 (Arts. 65, 66); Decreto Supremo N° 177 de 2022',
+    claimIds: ['CLM-CL-B11-S01-1', 'CLM-CL-B11-S03-1', 'CLM-CL-B11-S05-1', 'CLM-CL-B11-S09-1', 'CLM-CL-B11-S17-1', 'CLM-CL-B11-S18-1', 'CLM-CL-B11-S22-1'],
+    evidenceIds: ['EVD-B11-CL-S01-1', 'EVD-B11-CL-S03-1', 'EVD-B11-CL-S05-1', 'EVD-B11-CL-S09-1', 'EVD-B11-CL-S18-1'],
+    lastVerifiedTimestamp: '2026-11-13T13:05:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 84,
+    quarantinedClaimsCount: 6,
+    officialStatusNotice: 'PARTIALLY_VERIFIED: Verified against serviciomigraciones.cl/residencia-definitiva/ (updated 17 Jul 2026) and /aranceles-migratorios/: 24 months Residencia Temporal (12m reduced track under Art. 79 / Art. 66 DS 296; or 30m/36m/48m tiered by cumulative absences under Art. 65 DS 296), apply within last 90 to 10 days via ClaveÚnica, 40% UTM fee (~27,900 CLP; 0 CLP for minors <18 and Chilean spouses), 60-day cure window (Art. 88), 30-day Registro Civil cédula registration, and 2-year abroad tacit revocation rule (Art. 83). 6 claims covering undocumented processing times (S17-1..3), unverified Decreto N° 177 subcategory matrix (S03-3), uncodified Ministerio de Desarrollo Social CLP tables (S05-3), and superseded DL N° 1.094 rules (S02-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.9.5 Batch 11 Implementation (HTTP 200 verified on serviciomigraciones.cl/residencia-definitiva/ & /aranceles-migratorios/): Distinct from Chile Residencia Temporal — Jubilado y Rentista (`p2-cl-rentista`). Grants indefinite residence and unrestricted lawful employment in Chile.',
+    batchNumber: 11,
+    isPilotSample: true
+  }
+];
+
+// All Completed Priority 2 Pathways (130 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11)
 export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_PILOT_COMBINATIONS,
   ...PRIORITY2_BATCH1_COMBINATIONS,
@@ -2570,49 +2825,31 @@ export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_BATCH7_COMBINATIONS,
   ...PRIORITY2_BATCH8_COMBINATIONS,
   ...PRIORITY2_BATCH9_COMBINATIONS,
-  ...PRIORITY2_BATCH10_COMBINATIONS
+  ...PRIORITY2_BATCH10_COMBINATIONS,
+  ...PRIORITY2_BATCH11_COMBINATIONS
 ];
 
-// Full Priority 2 Queue (210 combinations total: 120 completed + 90 backlog)
+// Full Priority 2 Queue (130 completed genuine pathways; the 90 synthetic placeholders p2-queue-backlog-121..210 retired in Phase 3.9.2/3.9.3 are NOT restored as valid pathways)
 export const PRIORITY2_FULL_QUEUE: Priority2PathwayAudit[] = [...PRIORITY2_COMPLETED_PATHWAYS];
 
-// Synthetic queue items for remaining 90 backlog items
-const remainingTemplates = [
-  { dest: 'Qatar', code: 'QA', cat: 'Special Purpose & Sectoral Work Permit', auth: 'Ministry of Interior Qatar', url: 'https://portal.moi.gov.qa' },
-  { dest: 'Turkey', code: 'TR', cat: 'Exceptional Work Permit & Academic Track', auth: 'Ministry of Labour and Social Security (ÇSGB)', url: 'https://www.csgb.gov.tr' },
-  { dest: 'Vietnam', code: 'VN', cat: 'Expert & Family Visit Long-Stay Track', auth: 'Vietnam Immigration Department', url: 'https://xuatnhapcanh.gov.vn/en' },
-  { dest: 'Thailand', code: 'TH', cat: 'Non-Immigrant B & O-A Long-Stay Visa', auth: 'Board of Investment (BOI) & MFA Thailand', url: 'https://www.boi.go.th' },
-  { dest: 'Mexico', code: 'MX', cat: 'Family Unity & Permanent Resident Track', auth: 'Instituto Nacional de Migración', url: 'https://www.gob.mx/inm' },
-  { dest: 'South Africa', code: 'ZA', cat: 'Corporate & Business Visa Section 15', auth: 'Department of Home Affairs South Africa', url: 'https://www.dha.gov.za' }
-];
-
-for (let i = 0; i < 90; i++) {
-  const tpl = remainingTemplates[i % remainingTemplates.length];
-  const uniqueId = `p2-queue-backlog-${i + 121}`;
-  PRIORITY2_FULL_QUEUE.push({
-    id: uniqueId,
-    destination: tpl.dest,
-    destCode: tpl.code,
-    category: `${tpl.cat} (Sub-${(i % 5) + 1})`,
-    localStatutoryName: `${tpl.cat} Regulation ${(i % 15) + 1}`,
-    action: (i % 4 === 0) ? 'NEW' : (i % 4 === 1) ? 'ENRICHED' : (i % 4 === 2) ? 'RE-VERIFIED' : 'CONFIRMED_NOT_OFFERED',
-    canonicalUrl: `/visa/${tpl.dest.toLowerCase().replace(/\s+/g, '-')}/${tpl.cat.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-    issuingAuthority: tpl.auth,
-    directSourceUrl: tpl.url,
-    legalProvision: `Immigration Act Sec ${(i % 30) + 10}`,
-    claimIds: [`CLM-${tpl.code}-${i + 121}`],
-    evidenceIds: [`EVD-${tpl.code}-${i + 121}`],
-    lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
-    verificationStatus: (i % 4 === 3) ? 'NOT_OFFERED' : 'AWAITING_VERIFICATION',
-    batchNumber: 10,
-    isPilotSample: false
-  });
+/**
+ * Public-safe projection for Priority 2 pathways.
+ * Strips internal audit/classification notes (correctiveClassificationNotes) and prevents
+ * any unverified or NOT_OFFERED record from being exposed as a verified public pathway.
+ */
+export function getPublicPriority2PathwayView(pathwayId: string): Omit<Priority2PathwayAudit, 'correctiveClassificationNotes'> | null {
+  const found = PRIORITY2_COMPLETED_PATHWAYS.find(p => p.id === pathwayId);
+  if (!found || found.verificationStatus === 'NOT_OFFERED' || found.verificationStatus === 'AWAITING_VERIFICATION') {
+    return null;
+  }
+  const { correctiveClassificationNotes: _strippedInternalNotes, ...publicSafeRecord } = found;
+  return publicSafeRecord;
 }
 
-// Summary Metrics for Phase 3.9 Priority 2 Batch 10 Expansion
+// Summary Metrics for Phase 3.9.5 Priority 2 Batch 11 Implementation
 export const PRIORITY2_AUDIT_SUMMARY = {
-  totalPriority2Queue: PRIORITY2_FULL_QUEUE.length, // 210
-  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 120 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10)
+  totalPriority2Queue: 210, // Original Priority 2 target capacity (130 completed + 80 remaining slots subject to genuine pathway curation)
+  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 130 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11)
   pilotPathwaysCount: PRIORITY2_PILOT_COMBINATIONS.length, // 10
   batch1PathwaysCount: PRIORITY2_BATCH1_COMBINATIONS.length, // 20
   batch2PilotPathwaysCount: PRIORITY2_BATCH2_PILOT_COMBINATIONS.length, // 10
@@ -2624,6 +2861,7 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch8PathwaysCount: PRIORITY2_BATCH8_COMBINATIONS.length, // 10 NEW in Batch 8
   batch9PathwaysCount: PRIORITY2_BATCH9_COMBINATIONS.length, // 10 NEW in Batch 9
   batch10PathwaysCount: PRIORITY2_BATCH10_COMBINATIONS.length, // 10 NEW in Batch 10
+  batch11PathwaysCount: PRIORITY2_BATCH11_COMBINATIONS.length, // 10 NEW in Batch 11
   batch1ReconciledNewCount: 12,
   batch1ReconciledEnrichedCount: 8,
   batch2PilotNewCount: 10,
@@ -2635,9 +2873,10 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch8NewCount: 10,
   batch9NewCount: 10,
   batch10NewCount: 10,
-  remainingBacklogCount: 90, // 210 - 120
-  totalCompletedSectionEntries: 3600, // 120 × 30
-  cumulativePriority2CoveragePercentage: '57.14%', // 120 / 210
+  batch11NewCount: 10,
+  remainingBacklogCount: 80, // 210 - 130 (33 verified candidates remain in Phase 3.9.3 pool; 47 require future curation; 90 synthetic placeholders retired)
+  totalCompletedSectionEntries: 3900, // 130 × 30
+  cumulativePriority2CoveragePercentage: '61.90%', // 130 / 210
   preChangeBackupPhase37: {
     path: '/app/applet/backup_phase_3_7.tar.gz',
     sizeBytes: 64138,
@@ -2772,8 +3011,55 @@ export const PRIORITY2_AUDIT_SUMMARY = {
       CONSULAR_JURISDICTION_SPECIFIC: 35,
       UNKNOWN: 10
     }
+  },
+  preChangeBackupPhase395: {
+    path: '/app/applet/backup_phase_3_9_5_batch11.tar.gz',
+    sizeBytes: 113055,
+    sha256: '62d7aef0c86aaa918914847d09b647af6d994f4286fbc24330193e352dc776f4'
+  },
+  batch11Metrics: {
+    pathwaysCount: 10,
+    sectionsCount: 300,
+    specialTopicsPerPathway: 22,
+    specialTopicsEvaluatedCount: 220,
+    claimsAuditedCount: 900,
+    claimsPublishedCount: 861,
+    claimsQuarantinedCount: 39,
+    verificationStatusCounts: {
+      VERIFIED: 728,
+      PARTIALLY_VERIFIED: 34,
+      AWAITING_VERIFICATION: 36,
+      CONFLICTING: 0,
+      EXPIRED: 3,
+      NOT_APPLICABLE: 99
+    },
+    sectionStatusCounts: {
+      VERIFIED: 243,
+      PARTIALLY_VERIFIED: 18,
+      AWAITING_VERIFICATION: 6,
+      CONFLICTING: 0,
+      EXPIRED: 0,
+      NOT_APPLICABLE: 33
+    },
+    specialTopicStatusCounts: {
+      VERIFIED: 211,
+      PARTIALLY_VERIFIED: 6,
+      AWAITING_VERIFICATION: 0,
+      CONFLICTING: 0,
+      EXPIRED: 0,
+      NOT_APPLICABLE: 3
+    },
+    scopeDistribution: {
+      GLOBAL: 554,
+      NATIONALITY_GROUP: 3,
+      NATIONALITY_SPECIFIC: 6,
+      RESIDENCE_SPECIFIC: 322,
+      CONSULAR_JURISDICTION_SPECIFIC: 11,
+      UNKNOWN: 4
+    }
   }
 };
+
 
 
 

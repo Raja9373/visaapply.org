@@ -1,0 +1,83 @@
+{
+  "phase": "3.9.5",
+  "phaseTitle": "Priority 2 Batch 11 Implementation (10 Pathways | 300 Profile Sections | 220 Special Topics)",
+  "status": "COMPLETE",
+  "budgetUsedINR": 0,
+  "preImplementationBackup": {
+    "archivePath": "/app/applet/backup_phase_3_9_5_batch11.tar.gz",
+    "sizeBytes": 113055,
+    "sha256": "62d7aef0c86aaa918914847d09b647af6d994f4286fbc24330193e352dc776f4",
+    "integrityVerified": true
+  },
+  "modifiedApplicationFiles": [
+    "src/data/priority2AuditData.ts",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx"
+  ],
+  "untouchedCriticalAssets": {
+    "historicalBatches0To10": "PRESERVED (120 pathways untouched)",
+    "priority1Pathways": "PRESERVED (142 pathways untouched)",
+    "countriesRegistry": "PRESERVED (249 countries untouched)",
+    "consularAuthorities": "PRESERVED (195 authorities untouched)",
+    "bilateralRoutes": "PRESERVED (61,752 routes untouched)",
+    "staticVisaRecords": "PRESERVED (11,704 records untouched)",
+    "enrichmentOverlays": "PRESERVED (1,494 records untouched)",
+    "supportedLanguages": "PRESERVED (15 languages untouched)",
+    "productionSqliteDb": "UNTOUCHED",
+    "neonTestDb": "UNTOUCHED",
+    "vercelCron": "30 21 * * * UTC UNCHANGED"
+  },
+  "batch11Summary": {
+    "pathwaysImplemented": 10,
+    "priority2CompletedTotal": 130,
+    "priority2OriginalTarget": 210,
+    "remainingOriginalSlots": 80,
+    "profileSectionsEvaluated": 300,
+    "specialTopicsEvaluated": 220,
+    "totalClaims": 900,
+    "publishedClaims": 861,
+    "quarantinedClaims": 39,
+    "claimStatusCounts": {
+      "VERIFIED": 728,
+      "PARTIALLY_VERIFIED": 34,
+      "AWAITING_VERIFICATION": 36,
+      "CONFLICTING": 0,
+      "EXPIRED": 3,
+      "NOT_APPLICABLE": 99
+    },
+    "sectionStatusCounts": {
+      "VERIFIED": 243,
+      "PARTIALLY_VERIFIED": 18,
+      "AWAITING_VERIFICATION": 6,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 33
+    },
+    "specialTopicStatusCounts": {
+      "VERIFIED": 211,
+      "PARTIALLY_VERIFIED": 6,
+      "AWAITING_VERIFICATION": 0,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 3
+    },
+    "scopeDistribution": {
+      "GLOBAL": 554,
+      "NATIONALITY_GROUP": 3,
+      "NATIONALITY_SPECIFIC": 6,
+      "RESIDENCE_SPECIFIC": 322,
+      "CONSULAR_JURISDICTION_SPECIFIC": 11,
+      "UNKNOWN": 4
+    }
+  },
+  "deliverablesCreated": [
+    "phase_3_9_5_batch11_implementation_report.md",
+    "phase_3_9_5_batch11_pathway_manifest.json",
+    "phase_3_9_5_batch11_claim_evidence_registry.csv",
+    "phase_3_9_5_batch11_section_status.csv",
+    "phase_3_9_5_batch11_special_topics_status.csv",
+    "phase_3_9_5_batch11_quarantine_register.csv",
+    "phase_3_9_5_batch11_source_registry.csv",
+    "phase_3_9_5_change_manifest.json",
+    "backup_phase_3_9_5_batch11.tar.gz"
+  ]
+}
