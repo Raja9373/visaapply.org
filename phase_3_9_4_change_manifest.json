@@ -1,0 +1,99 @@
+{
+  "phase": "3.9.4",
+  "phaseName": "Batch 11 Final Candidate Approval & Implementation Preflight",
+  "budgetUsedINR": 0,
+  "implementationStarted": false,
+  "productionDeploymentOrMigrationAuthorized": false,
+  "modifiedSourceFiles": [],
+  "modifiedDatabases": {
+    "productionSqlite": false,
+    "neonTestDb": false
+  },
+  "cronSchedulePreserved": "30 21 * * *",
+  "completedPriority2PathwaysPreserved": 120,
+  "completedPriority1PathwaysPreserved": 142,
+  "batch11CandidatesReviewed": 10,
+  "decisionsSummary": {
+    "APPROVAL_READY": 6,
+    "APPROVAL_READY_WITH_DISCLOSED_GAPS": 4,
+    "NEEDS_MORE_EVIDENCE": 0,
+    "CONFLICTING": 0,
+    "REJECT_DUPLICATE": 0,
+    "REJECT_INVALID_CLASSIFICATION": 0
+  },
+  "candidateDecisions": [
+    {
+      "slot": 1,
+      "candidateId": "p2-cand-us-n400",
+      "iso": "US",
+      "decision": "APPROVAL_READY_WITH_DISCLOSED_GAPS"
+    },
+    {
+      "slot": 2,
+      "candidateId": "p2-cand-gb-seasonal",
+      "iso": "GB",
+      "decision": "APPROVAL_READY"
+    },
+    {
+      "slot": 3,
+      "candidateId": "p2-cand-nz-aip",
+      "iso": "NZ",
+      "decision": "APPROVAL_READY"
+    },
+    {
+      "slot": 4,
+      "candidateId": "p2-cand-sg-dp",
+      "iso": "SG",
+      "decision": "APPROVAL_READY"
+    },
+    {
+      "slot": 5,
+      "candidateId": "p2-cand-de-18d-research",
+      "iso": "DE",
+      "decision": "APPROVAL_READY"
+    },
+    {
+      "slot": 6,
+      "candidateId": "p2-cand-fr-vpf",
+      "iso": "FR",
+      "decision": "APPROVAL_READY_WITH_DISCLOSED_GAPS"
+    },
+    {
+      "slot": 7,
+      "candidateId": "p2-cand-ie-stamp1g",
+      "iso": "IE",
+      "decision": "APPROVAL_READY"
+    },
+    {
+      "slot": 8,
+      "candidateId": "p2-cand-jp-pr",
+      "iso": "JP",
+      "decision": "APPROVAL_READY_WITH_DISCLOSED_GAPS"
+    },
+    {
+      "slot": 9,
+      "candidateId": "p2-cand-hk-gep",
+      "iso": "HK",
+      "decision": "APPROVAL_READY"
+    },
+    {
+      "slot": 10,
+      "candidateId": "p2-cand-cl-definitiva",
+      "iso": "CL",
+      "decision": "APPROVAL_READY_WITH_DISCLOSED_GAPS"
+    }
+  ],
+  "schemaReadinessSummary": {
+    "totalCandidates": 10,
+    "sectionsPerCandidate": 30,
+    "specialTopicsPerCandidate": 22,
+    "totalReadinessMatrixRows": 520
+  },
+  "deliverablesCreated": [
+    "phase_3_9_4_batch11_approval_report.md",
+    "phase_3_9_4_candidate_approval_matrix.csv",
+    "phase_3_9_4_profile_schema_readiness.csv",
+    "phase_3_9_4_official_source_recheck.csv",
+    "phase_3_9_4_change_manifest.json"
+  ]
+}

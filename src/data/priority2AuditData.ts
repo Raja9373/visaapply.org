@@ -2430,15 +2430,15 @@ export const PRIORITY2_BATCH10_COMBINATIONS: Priority2PathwayAudit[] = [
     canonicalUrl: '/visa/singapore/entrepass',
     issuingAuthority: 'Ministry of Manpower (MOM Singapore), Enterprise Singapore & IMDA',
     directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/entrepass',
-    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A) / MOM EntrePass Key Facts & Innovation Criteria',
-    claimIds: ['CLM-SG-B10-S01-1', 'CLM-SG-B10-S05-1', 'CLM-SG-B10-S05-2', 'CLM-SG-B10-S18-1', 'CLM-SG-B10-S26-1'],
-    evidenceIds: ['EVD-B10-SG-S01-1', 'EVD-B10-SG-S18-1'],
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A) / MOM EntrePass Application & Renewal Fee Schedule',
+    claimIds: ['CLM-SG-B10-S01-1', 'CLM-SG-B10-S05-1', 'CLM-SG-B10-S05-2', 'CLM-SG-B10-S18-1', 'CLM-SG-B10-S18-2', 'CLM-SG-B10-S18-3', 'CLM-SG-B10-S26-1'],
+    evidenceIds: ['EVD-B10-SG-S01-1', 'EVD-B10-SG-S18-1', 'EVD-B10-SG-S18-2', 'EVD-B10-SG-S18-3'],
     lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
     verificationStatus: 'VERIFIED',
     operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
     publishedClaimsCount: 90,
     quarantinedClaimsCount: 0,
-    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on mom.gov.sg/passes-and-permits/entrepass, /key-facts, /eligibility & /apply-for-a-pass updated 14 Aug 2026): SGD $105 application + $225 issuance (+ $30 MJV), >=30% ACRA Pte Ltd equity (<=12 mos), >=SGD 100,000 VC/angel funding or incubator/IP/research tie-up, 1-yr initial -> 2-yr subsequent renewals, within 6 weeks typical processing. No min salary floor and no levy/DRC quota (NOT_APPLICABLE).',
+    correctiveClassificationNotes: 'Phase 3.9.1 Fee Integrity Audit (verified 2026-11-13 on mom.gov.sg/passes-and-permits/entrepass [14 Aug 2026], /apply-for-a-pass [7 July 2026], /renew-a-pass [1 Jan 2026], /key-facts [19 Nov 2024], & ica.gov.sg/enter-transit-depart/entering-singapore/visa_requirements [28 Oct 2026]): Strictly separated into (1) Initial Application Submission Fee: SGD 105 per pass (paid upfront on initial filing; /renew-a-pass lists no separate SGD 105 submission fee; linked family-pass fees forfeited if main EntrePass rejected, principal refund clause not stated on EntrePass pages); (2) Pass Issuance Fee: SGD 225 per pass upon approval/renewal (plus SGD 65.40 incl. GST card replacement if unneeded); (3) Conditional Multiple Journey Visa (MJV) Fee: SGD 30 per pass ("if applicable") ONLY for visa-requiring passports per ICA (never rolled into a universal mandatory total). >=30% ACRA equity, >=SGD 100k funding/IP/incubator tie-up, no min salary or levy/quota (NOT_APPLICABLE).',
     batchNumber: 10,
     isPilotSample: true
   },
@@ -2475,15 +2475,15 @@ export const PRIORITY2_BATCH10_COMBINATIONS: Priority2PathwayAudit[] = [
     canonicalUrl: '/visa/hong-kong/iang-non-local-graduates',
     issuingAuthority: 'Immigration Department, Government of the Hong Kong Special Administrative Region (ImmD)',
     directSourceUrl: 'https://www.immd.gov.hk/eng/services/visas/IANG.html',
-    legalProvision: 'Immigration Ordinance Cap. 115 / ImmD IANG Policy (Fresh Graduates, Returning Graduates & GBA Campus Arrangement)',
-    claimIds: ['CLM-HK-B10-S01-1', 'CLM-HK-B10-S04-2', 'CLM-HK-B10-S04-3', 'CLM-HK-B10-S18-1', 'CLM-HK-B10-S26-1'],
-    evidenceIds: ['EVD-B10-HK-S01-1', 'EVD-B10-HK-S04-2', 'EVD-B10-HK-S18-1'],
+    legalProvision: 'Immigration Ordinance Cap. 115 / Immigration Regulations Cap. 115A Schedule 2 (Specified Scheme Fees eff. 26 Feb 2025 11:00 a.m.) & ImmD IANG Policy',
+    claimIds: ['CLM-HK-B10-S01-1', 'CLM-HK-B10-S04-2', 'CLM-HK-B10-S04-3', 'CLM-HK-B10-S18-1', 'CLM-HK-B10-S18-2', 'CLM-HK-B10-S18-3', 'CLM-HK-B10-S26-1'],
+    evidenceIds: ['EVD-B10-HK-S01-1', 'EVD-B10-HK-S04-2', 'EVD-B10-HK-S18-1', 'EVD-B10-HK-S18-2', 'EVD-B10-HK-S18-3'],
     lastVerifiedTimestamp: '2026-11-13T00:00:00Z',
     verificationStatus: 'VERIFIED',
     operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
     publishedClaimsCount: 90,
     quarantinedClaimsCount: 0,
-    correctiveClassificationNotes: 'Phase 3.9 Batch 10 Audit (HTTP 200 verbatim verified on immd.gov.hk/eng/services/visas/IANG.html & fee-tables/index.html): Quota-free and non-sector-specific HK & GBA campus graduate scheme; statutory fees HK$1,300 (>180d) / HK$600 (<=180d); 24m initial -> 3+3 or 6-yr top-tier (>=HK$2M income); 2-wk/4-wk SLAs. Explicitly encodes Laos/Nepal/Vietnam UGC group rule & Afghanistan/Cuba/DPRK exclusion.',
+    correctiveClassificationNotes: 'Phase 3.9.1 Fee Integrity Audit (verified 2026-11-13 on immd.gov.hk/eng/services/visas/IANG.html [29 Apr 2026], /eng/specifiedschemes.html [20 Oct 2025], & /eng/services/fee-tables/index.html [8 Apr 2026]; /eng/services/fees/visas.html returned HTTP 404): Statutory fees effective 26 February 2025 11:00 a.m. under Cap. 115A Schedule 2 reg. 11(6) separate (1) Upfront Non-Refundable Application Fee: HKD 600 per principal applicant & each dependant on every initial entry or extension/change-of-stay (non-refundable irrespective of result/refusal/withdrawal; NOT the full cost); (2) Two-Tiered Approval Issuance Fee: HKD 1,300 if relevant period >180 days (or >=6 mos, e.g., 24m initial -> HKD 1,900 combined) OR HKD 600 if <=180 days (HKD 1,200 combined) per person; (3) Extension/change-of-stay e-Visa payment requires physical presence in HK. Preserves Laos/Nepal/Vietnam UGC rule & Afghanistan/Cuba/DPRK exclusion.',
     batchNumber: 10,
     isPilotSample: true
   },
@@ -2737,6 +2737,11 @@ export const PRIORITY2_AUDIT_SUMMARY = {
     sizeBytes: 59730,
     sha256: 'f783ce2e3d82b209c6ddce83f7711d3e7254da6d4695b3487dd602256b3a7cf0'
   },
+  preChangeBackupPhase391: {
+    path: '/app/applet/backup_phase_3_9_1.tar.gz',
+    sizeBytes: 175993,
+    sha256: '7424b6a0b2abf7b39eb9292b7a29efb7dfc2ce2763a9b3b223a7d33f228f4b7b'
+  },
   batch10Metrics: {
     pathwaysCount: 10,
     sectionsCount: 300,
@@ -2760,10 +2765,10 @@ export const PRIORITY2_AUDIT_SUMMARY = {
       NOT_APPLICABLE: 0
     },
     scopeDistribution: {
-      GLOBAL: 688,
+      GLOBAL: 686,
       NATIONALITY_GROUP: 27,
-      NATIONALITY_SPECIFIC: 36,
-      RESIDENCE_SPECIFIC: 104,
+      NATIONALITY_SPECIFIC: 37,
+      RESIDENCE_SPECIFIC: 105,
       CONSULAR_JURISDICTION_SPECIFIC: 35,
       UNKNOWN: 10
     }

@@ -1,0 +1,170 @@
+{
+  "phase": "3.9.1",
+  "title": "Targeted Fee Integrity Cleanup — Post Batch 10 (Singapore EntrePass & Hong Kong IANG)",
+  "executedAtUtc": "2026-11-13T11:45:00Z",
+  "scopeConstraint": "Strictly limited to correcting and separating fee information for p2-sg-entrepass and p2-hk-iang. Zero new pathways implemented. Zero changes to Batches 0-9 or the other 8 Batch 10 pathways. Zero production DB/SQLite/Neon/cron modifications.",
+  "preChangeBackup": {
+    "path": "/app/applet/backup_phase_3_9_1.tar.gz",
+    "sizeBytes": 175993,
+    "sha256": "7424b6a0b2abf7b39eb9292b7a29efb7dfc2ce2763a9b3b223a7d33f228f4b7b"
+  },
+  "preservedPlatformBaselines": {
+    "targetPriority2Pathways": 210,
+    "completedPriority2Pathways": 120,
+    "remainingBacklogPathways": 90,
+    "cumulativeCompletedSections": 3600,
+    "batch10PathwaysCount": 10,
+    "batch10TotalClaimsCount": 900,
+    "batch11Started": false,
+    "cronSchedule": "30 21 * * *"
+  },
+  "beforeAfterMetrics": {
+    "beforePhase39": {
+      "claimsPublishedCount": 846,
+      "claimsQuarantinedCount": 54,
+      "verificationStatusCounts": {
+        "VERIFIED": 740,
+        "PARTIALLY_VERIFIED": 67,
+        "AWAITING_VERIFICATION": 50,
+        "CONFLICTING": 0,
+        "EXPIRED": 4,
+        "NOT_APPLICABLE": 39
+      },
+      "sectionStatusCounts": {
+        "VERIFIED": 231,
+        "PARTIALLY_VERIFIED": 58,
+        "AWAITING_VERIFICATION": 11,
+        "CONFLICTING": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "scopeCounts": {
+        "GLOBAL": 688,
+        "NATIONALITY_GROUP": 27,
+        "NATIONALITY_SPECIFIC": 36,
+        "RESIDENCE_SPECIFIC": 104,
+        "CONSULAR_JURISDICTION_SPECIFIC": 35,
+        "UNKNOWN": 10
+      }
+    },
+    "afterPhase391": {
+      "claimsPublishedCount": 846,
+      "claimsQuarantinedCount": 54,
+      "verificationStatusCounts": {
+        "VERIFIED": 740,
+        "PARTIALLY_VERIFIED": 67,
+        "AWAITING_VERIFICATION": 50,
+        "CONFLICTING": 0,
+        "EXPIRED": 4,
+        "NOT_APPLICABLE": 39
+      },
+      "sectionStatusCounts": {
+        "VERIFIED": 231,
+        "PARTIALLY_VERIFIED": 58,
+        "AWAITING_VERIFICATION": 11,
+        "CONFLICTING": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "scopeCounts": {
+        "GLOBAL": 686,
+        "NATIONALITY_GROUP": 27,
+        "NATIONALITY_SPECIFIC": 37,
+        "RESIDENCE_SPECIFIC": 105,
+        "CONSULAR_JURISDICTION_SPECIFIC": 35,
+        "UNKNOWN": 10
+      }
+    }
+  },
+  "changesByPathway": [
+    {
+      "pathwayId": "p2-sg-entrepass",
+      "workstream": "A",
+      "publishedClaimsBefore": 90,
+      "publishedClaimsAfter": 90,
+      "quarantinedClaimsBefore": 0,
+      "quarantinedClaimsAfter": 0,
+      "modifiedClaims": [
+        {
+          "claimId": "CLM-SG-B10-S18-1",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "GLOBAL",
+          "summary": "Isolated SGD 105 upfront initial application submission fee per pass from issuance/conditional charges, switched primary evidence URL from /key-facts to /apply-for-a-pass (updated 2026-07-07), noted renewal /renew-a-pass omission of SGD 105, and accurately recorded family-pass rejection forfeiture without inventing a principal refund clause."
+        },
+        {
+          "claimId": "CLM-SG-B10-S18-2",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "GLOBAL",
+          "summary": "Reassigned CLM-SG-B10-S18-2 to the mandatory SGD 225 pass issuance/renewal fee upon approval, citing MOM /apply-for-a-pass & /renew-a-pass (updated 2026-01-01) and SGD 65.40 incl. GST unneeded card replacement."
+        },
+        {
+          "claimId": "CLM-SG-B10-S18-3",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "NATIONALITY_SPECIFIC",
+          "summary": "Reclassified conditional SGD 30 Multiple Journey Visa (MJV) fee from GLOBAL to NATIONALITY_SPECIFIC linked to ICA Visa Requirements (updated 2026-10-28); never rolled into a universal mandatory total."
+        }
+      ],
+      "publicDisplayFix": "Updated src/data/singaporeVisas.ts EntrePass entries (in-to-sg-work-009, in-to-sg-biz-004, in-to-sg-leg-002) from truncated 'SGD 105' to separated 'SGD 105 (Application) + SGD 225 (Issuance); + SGD 30 MJV only if visa-requiring passport (Renewal: SGD 225 issuance)' with direct MOM /apply-for-a-pass URL."
+    },
+    {
+      "pathwayId": "p2-hk-iang",
+      "workstream": "B",
+      "publishedClaimsBefore": 90,
+      "publishedClaimsAfter": 90,
+      "quarantinedClaimsBefore": 0,
+      "quarantinedClaimsAfter": 0,
+      "modifiedClaims": [
+        {
+          "claimId": "CLM-HK-B10-S18-1",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "GLOBAL",
+          "summary": "Replaced incorrect '2026 two-tier' phrasing with statutory commencement '26 February 2025 at 11:00 a.m.' under Cap. 115A Schedule 2 reg. 11(6), clarifying mandatory upfront non-refundable HKD 600 application fee per principal and each dependant on every initial entry & extension (not full cost)."
+        },
+        {
+          "claimId": "CLM-HK-B10-S18-2",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "GLOBAL",
+          "afterScope": "RESIDENCE_SPECIFIC",
+          "summary": "Reclassified two-tiered approval issuance fee from GLOBAL to RESIDENCE_SPECIFIC indexed to permitted stay duration band (>180 days / 6+ mos = HKD 1,300; <=180 days = HKD 600) under Cap. 115A Schedule 2 Items 1(a) & 6(a), showing HKD 1,900 vs HKD 1,200 combined examples per person."
+        },
+        {
+          "claimId": "CLM-HK-B10-S18-3",
+          "beforeStatus": "VERIFIED",
+          "afterStatus": "VERIFIED",
+          "beforeScope": "RESIDENCE_SPECIFIC",
+          "afterScope": "RESIDENCE_SPECIFIC",
+          "summary": "Verified extension/change-of-stay fees (HKD 600 non-refundable application + HKD 1,300 >180d or HKD 600 <=180d issuance), GovHK/ImmD App e-Visa payment methods, and mandatory physical presence in Hong Kong at payment & collection per IANG.html (updated 2026-04-29); recorded HTTP 404 on /eng/services/fees/visas.html."
+        }
+      ],
+      "publicDisplayFix": "Updated audit and renderer components to display separated application, approval/issuance (>180d vs <=180d), refundability, effective dates, and Last Verified: 2026-11-13 without exposing internal reviewer notes."
+    }
+  ],
+  "modifiedFiles": [
+    "scripts/executePhase39Batch10Audit.ts",
+    "src/data/priority2AuditData.ts",
+    "src/data/singaporeVisas.ts",
+    "src/components/VisaDetailRenderer.tsx",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx",
+    "phase_3_9_batch10_claim_evidence_audit.json",
+    "phase_3_9_batch10_pathway_registry.csv",
+    "phase_3_9_batch10_section_status.csv",
+    "phase_3_9_batch10_nationality_scope_matrix.csv",
+    "phase_3_9_batch10_numeric_claims.csv",
+    "phase_3_9_batch10_source_registry.csv"
+  ],
+  "deliverablesCreated": [
+    "phase_3_9_1_singapore_entrepass_fee_review.csv",
+    "phase_3_9_1_hongkong_iang_fee_review.csv",
+    "phase_3_9_1_fee_source_registry.csv",
+    "phase_3_9_1_change_manifest.json",
+    "phase_3_9_1_report.md",
+    "backup_phase_3_9_1.tar.gz"
+  ]
+}

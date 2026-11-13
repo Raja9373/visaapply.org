@@ -1,0 +1,261 @@
+{
+  "phase": "3.9.2",
+  "proposedBatchNumber": 11,
+  "slotRange": "p2-queue-backlog-121..130 (Canonical indices 121..130)",
+  "preflightStatus": "BLOCKED",
+  "readyForImplementation": false,
+  "blockingSummary": [
+    "All 10 slots (p2-queue-backlog-121..130) are generated dynamically by remainingTemplates[i % 6] in src/data/priority2AuditData.ts (lines 2580-2610) rather than representing genuine curated immigration pathways.",
+    "Slots p2-queue-backlog-127..130 duplicate canonicalUrls already assigned to slots 121..124 (only 6 unique canonicalUrls exist across all 90 backlog entries).",
+    "All 10 slots contain synthetic (Sub-N) labels, fabricated Regulation 1..10 & Immigration Act Sec 10..19 strings, homepage-only URLs, conflicting batchNumber: 10, and modulo-4 NOT_OFFERED stamps on slots 124 and 128.",
+    "Batches 9 and 10 bypassed these placeholder IDs and manually curated external pathways; Batch 11 cannot start until 10 genuine, distinct, verified target pathways are curated by the user or approved curation phase."
+  ],
+  "candidateSlotsEvaluated": [
+    {
+      "slotNumber": 1,
+      "canonicalQueueIndex": 121,
+      "pathwayId": "p2-queue-backlog-121",
+      "destination": "Qatar",
+      "destCode": "QA",
+      "visaPathwayName": "Special Purpose & Sectoral Work Permit (Sub-1)",
+      "localStatutoryName": "Special Purpose & Sectoral Work Permit Regulation 1",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Special Purpose & Sectoral Work Permit (Sub-1))",
+      "existingSourceReferences": [
+        "https://portal.moi.gov.qa"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "INVALID_REFERENCE",
+      "duplicateOfId": null,
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "Synthetic placeholder stub (SYNTHETIC_TEMPLATE_LOOP, FABRICATED_REGULATION_NUMBER, FABRICATED_IMMIGRATION_ACT_SEC, HOMEPAGE_ONLY_SOURCE_URL, CONFLICTING_BATCH_NUMBER_10); no authentic statutory pathway definition."
+      ]
+    },
+    {
+      "slotNumber": 2,
+      "canonicalQueueIndex": 122,
+      "pathwayId": "p2-queue-backlog-122",
+      "destination": "Turkey",
+      "destCode": "TR",
+      "visaPathwayName": "Exceptional Work Permit & Academic Track (Sub-2)",
+      "localStatutoryName": "Exceptional Work Permit & Academic Track Regulation 2",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Exceptional Work Permit & Academic Track (Sub-2))",
+      "existingSourceReferences": [
+        "https://www.csgb.gov.tr"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "INVALID_REFERENCE",
+      "duplicateOfId": null,
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "Synthetic placeholder stub (SYNTHETIC_TEMPLATE_LOOP, FABRICATED_REGULATION_NUMBER, FABRICATED_IMMIGRATION_ACT_SEC, HOMEPAGE_ONLY_SOURCE_URL, CONFLICTING_BATCH_NUMBER_10); no authentic statutory pathway definition."
+      ]
+    },
+    {
+      "slotNumber": 3,
+      "canonicalQueueIndex": 123,
+      "pathwayId": "p2-queue-backlog-123",
+      "destination": "Vietnam",
+      "destCode": "VN",
+      "visaPathwayName": "Expert & Family Visit Long-Stay Track (Sub-3)",
+      "localStatutoryName": "Expert & Family Visit Long-Stay Track Regulation 3",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Expert & Family Visit Long-Stay Track (Sub-3))",
+      "existingSourceReferences": [
+        "https://xuatnhapcanh.gov.vn/en"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "INVALID_REFERENCE",
+      "duplicateOfId": null,
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "Synthetic placeholder stub (SYNTHETIC_TEMPLATE_LOOP, FABRICATED_REGULATION_NUMBER, FABRICATED_IMMIGRATION_ACT_SEC, HOMEPAGE_ONLY_SOURCE_URL, CONFLICTING_BATCH_NUMBER_10); no authentic statutory pathway definition."
+      ]
+    },
+    {
+      "slotNumber": 4,
+      "canonicalQueueIndex": 124,
+      "pathwayId": "p2-queue-backlog-124",
+      "destination": "Thailand",
+      "destCode": "TH",
+      "visaPathwayName": "Non-Immigrant B & O-A Long-Stay Visa (Sub-4)",
+      "localStatutoryName": "Non-Immigrant B & O-A Long-Stay Visa Regulation 4",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Non-Immigrant B & O-A Long-Stay Visa (Sub-4))",
+      "existingSourceReferences": [
+        "https://www.boi.go.th"
+      ],
+      "existingVerificationStatus": "NOT_OFFERED",
+      "reconciliationClassification": "CONFLICTING_REFERENCE",
+      "duplicateOfId": null,
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "MODULO_4_NOT_OFFERED_STUB",
+        "Synthetic placeholder stub (SYNTHETIC_TEMPLATE_LOOP, FABRICATED_REGULATION_NUMBER, FABRICATED_IMMIGRATION_ACT_SEC, HOMEPAGE_ONLY_SOURCE_URL, CONFLICTING_BATCH_NUMBER_10, MODULO_4_NOT_OFFERED_STUB); no authentic statutory pathway definition."
+      ]
+    },
+    {
+      "slotNumber": 5,
+      "canonicalQueueIndex": 125,
+      "pathwayId": "p2-queue-backlog-125",
+      "destination": "Mexico",
+      "destCode": "MX",
+      "visaPathwayName": "Family Unity & Permanent Resident Track (Sub-5)",
+      "localStatutoryName": "Family Unity & Permanent Resident Track Regulation 5",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Family Unity & Permanent Resident Track (Sub-5))",
+      "existingSourceReferences": [
+        "https://www.gob.mx/inm"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "INVALID_REFERENCE",
+      "duplicateOfId": null,
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "Synthetic placeholder stub (SYNTHETIC_TEMPLATE_LOOP, FABRICATED_REGULATION_NUMBER, FABRICATED_IMMIGRATION_ACT_SEC, HOMEPAGE_ONLY_SOURCE_URL, CONFLICTING_BATCH_NUMBER_10); no authentic statutory pathway definition."
+      ]
+    },
+    {
+      "slotNumber": 6,
+      "canonicalQueueIndex": 126,
+      "pathwayId": "p2-queue-backlog-126",
+      "destination": "South Africa",
+      "destCode": "ZA",
+      "visaPathwayName": "Corporate & Business Visa Section 15 (Sub-1)",
+      "localStatutoryName": "Corporate & Business Visa Section 15 Regulation 6",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Corporate & Business Visa Section 15 (Sub-1))",
+      "existingSourceReferences": [
+        "https://www.dha.gov.za"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "CONFLICTING_REFERENCE",
+      "duplicateOfId": null,
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "Synthetic placeholder stub (SYNTHETIC_TEMPLATE_LOOP, FABRICATED_REGULATION_NUMBER, FABRICATED_IMMIGRATION_ACT_SEC, HOMEPAGE_ONLY_SOURCE_URL, CONFLICTING_BATCH_NUMBER_10); no authentic statutory pathway definition."
+      ]
+    },
+    {
+      "slotNumber": 7,
+      "canonicalQueueIndex": 127,
+      "pathwayId": "p2-queue-backlog-127",
+      "destination": "Qatar",
+      "destCode": "QA",
+      "visaPathwayName": "Special Purpose & Sectoral Work Permit (Sub-2)",
+      "localStatutoryName": "Special Purpose & Sectoral Work Permit Regulation 7",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Special Purpose & Sectoral Work Permit (Sub-2))",
+      "existingSourceReferences": [
+        "https://portal.moi.gov.qa"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "DUPLICATE",
+      "duplicateOfId": "p2-queue-backlog-121",
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "DUPLICATE_CANONICAL_URL",
+        "Duplicate canonicalUrl (/visa/qatar/special-purpose-sectoral-work-permit) of p2-queue-backlog-121 inside synthetic remainingTemplates loop; no curated pathway target."
+      ]
+    },
+    {
+      "slotNumber": 8,
+      "canonicalQueueIndex": 128,
+      "pathwayId": "p2-queue-backlog-128",
+      "destination": "Turkey",
+      "destCode": "TR",
+      "visaPathwayName": "Exceptional Work Permit & Academic Track (Sub-3)",
+      "localStatutoryName": "Exceptional Work Permit & Academic Track Regulation 8",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Exceptional Work Permit & Academic Track (Sub-3))",
+      "existingSourceReferences": [
+        "https://www.csgb.gov.tr"
+      ],
+      "existingVerificationStatus": "NOT_OFFERED",
+      "reconciliationClassification": "DUPLICATE",
+      "duplicateOfId": "p2-queue-backlog-122",
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "MODULO_4_NOT_OFFERED_STUB",
+        "DUPLICATE_CANONICAL_URL",
+        "Duplicate canonicalUrl (/visa/turkey/exceptional-work-permit-academic-track) of p2-queue-backlog-122 inside synthetic remainingTemplates loop; no curated pathway target."
+      ]
+    },
+    {
+      "slotNumber": 9,
+      "canonicalQueueIndex": 129,
+      "pathwayId": "p2-queue-backlog-129",
+      "destination": "Vietnam",
+      "destCode": "VN",
+      "visaPathwayName": "Expert & Family Visit Long-Stay Track (Sub-4)",
+      "localStatutoryName": "Expert & Family Visit Long-Stay Track Regulation 9",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Expert & Family Visit Long-Stay Track (Sub-4))",
+      "existingSourceReferences": [
+        "https://xuatnhapcanh.gov.vn/en"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "DUPLICATE",
+      "duplicateOfId": "p2-queue-backlog-123",
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "DUPLICATE_CANONICAL_URL",
+        "Duplicate canonicalUrl (/visa/vietnam/expert-family-visit-long-stay-track) of p2-queue-backlog-123 inside synthetic remainingTemplates loop; no curated pathway target."
+      ]
+    },
+    {
+      "slotNumber": 10,
+      "canonicalQueueIndex": 130,
+      "pathwayId": "p2-queue-backlog-130",
+      "destination": "Thailand",
+      "destCode": "TH",
+      "visaPathwayName": "Non-Immigrant B & O-A Long-Stay Visa (Sub-5)",
+      "localStatutoryName": "Non-Immigrant B & O-A Long-Stay Visa Regulation 10",
+      "immigrationCategory": "UNRESOLVED_SYNTHETIC_TEMPLATE (Non-Immigrant B & O-A Long-Stay Visa (Sub-5))",
+      "existingSourceReferences": [
+        "https://www.boi.go.th"
+      ],
+      "existingVerificationStatus": "AWAITING_VERIFICATION",
+      "reconciliationClassification": "DUPLICATE",
+      "duplicateOfId": "p2-queue-backlog-124",
+      "knownDataGapsAndConflicts": [
+        "SYNTHETIC_TEMPLATE_LOOP",
+        "FABRICATED_REGULATION_NUMBER",
+        "FABRICATED_IMMIGRATION_ACT_SEC",
+        "HOMEPAGE_ONLY_SOURCE_URL",
+        "CONFLICTING_BATCH_NUMBER_10",
+        "DUPLICATE_CANONICAL_URL",
+        "Duplicate canonicalUrl (/visa/thailand/non-immigrant-b-o-a-long-stay-visa) of p2-queue-backlog-124 inside synthetic remainingTemplates loop; no curated pathway target."
+      ]
+    }
+  ]
+}

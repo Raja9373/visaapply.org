@@ -165,18 +165,18 @@ export const BATCH10_PATHWAYS: Batch10Pathway[] = [
     canonicalUrl: '/visa/singapore/entrepass',
     issuingAuthority: 'Ministry of Manpower (MOM Singapore), Enterprise Singapore & IMDA',
     directSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/entrepass',
-    secondarySourceUrl: 'https://www.mom.gov.sg/passes-and-permits/entrepass/eligibility',
-    httpCheckResult: 'HTTP 200 Verified (mom.gov.sg/passes-and-permits/entrepass, /key-facts, /eligibility, /apply-for-a-pass updated 14 Aug 2026, 2026-11-13)',
+    secondarySourceUrl: 'https://www.mom.gov.sg/passes-and-permits/entrepass/apply-for-a-pass',
+    httpCheckResult: 'HTTP 200 Verified (mom.gov.sg/passes-and-permits/entrepass updated 14 Aug 2026; /apply-for-a-pass updated 7 July 2026; /renew-a-pass updated 1 Jan 2026; /key-facts updated 19 Nov 2024; ica.gov.sg/enter-transit-depart/entering-singapore/visa_requirements updated 28 Oct 2026, checked 2026-11-13)',
     operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
     pathwayVerificationStatus: 'VERIFIED',
-    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A) / MOM EntrePass Key Facts & Innovation Criteria',
-    salaryOrInvestmentThreshold: 'SGD $105 application + SGD $225 issuance (+ SGD $30 MJV if applicable); >= SGD 100,000 VC/angel funding or incubator/IP/research tie-up & >=30% ACRA Pte Ltd equity (no min salary floor)',
+    legalProvision: 'Employment of Foreign Manpower Act (EFMA Cap. 91A) / MOM EntrePass Application & Renewal Fee Schedule',
+    salaryOrInvestmentThreshold: 'Innovation/Equity Threshold: >= SGD 100,000 VC/angel funding or incubator/IP/research tie-up & >=30% ACRA Pte Ltd equity (no stipulated min monthly salary); Separated Govt Fees: SGD 105 application fee + SGD 225 issuance fee (+ SGD 30 MJV only if visa-requiring passport)',
     currency: 'SGD',
     validityPeriod: '1 year (initial & 1st renewal), then 2 years on subsequent renewals (Dependant’s Pass / LTVP tied to Singapore business spending & local PME hiring milestones)',
-    processingSlaDays: 'Within 6 weeks typical MOM/partner agency processing time',
+    processingSlaDays: 'Within 6 weeks typical MOM/partner agency processing time (up to 8 weeks for renewals)',
     settlementEligible: true,
     notes:
-      'Verified verbatim on mom.gov.sg (updated 14 Aug 2026, checked 2026-11-13): Venture-backed founder pass with SGD $105 application and $225 issuance fee (+ $30 Multiple Journey Visa if required). No stipulated minimum monthly salary and no foreign worker levy or DRC quota (NOT_APPLICABLE). ACRA private limited company (incorporated <=12 months prior) with >=30% founder shareholding and qualifying innovation criterion (>=SGD 100,000 recognized VC/angel funding, recognized incubator/accelerator, exit/startup track record, registered IP, or A*STAR/IHL/CREATE research collaboration). Ineligible businesses explicitly excluded (coffee shops/bars/foot reflexology/massage/karaoke/TCM/employment agency/geomancy).'
+      'Phase 3.9.1 Fee Review (verified 2026-11-13 on mom.gov.sg /entrepass, /apply-for-a-pass [updated 7 July 2026], /renew-a-pass [updated 1 Jan 2026], & ica.gov.sg/enter-transit-depart/entering-singapore/visa_requirements [updated 28 Oct 2026]): Separates SGD 105 application submission fee (initial applications), SGD 225 pass issuance fee (initial & renewals), and conditional SGD 30 Multiple Journey Visa (only if travel document requires a Singapore entry visa). No stipulated min salary and no levy/DRC quota (NOT_APPLICABLE).'
   },
   {
     id: 'p2-jp-gijinkoku',
@@ -211,18 +211,18 @@ export const BATCH10_PATHWAYS: Batch10Pathway[] = [
     canonicalUrl: '/visa/hong-kong/iang-non-local-graduates',
     issuingAuthority: 'Immigration Department, Government of the Hong Kong Special Administrative Region (ImmD)',
     directSourceUrl: 'https://www.immd.gov.hk/eng/services/visas/IANG.html',
-    secondarySourceUrl: 'https://www.immd.gov.hk/eng/services/fee-tables/index.html',
-    httpCheckResult: 'HTTP 200 Verified (immd.gov.hk/eng/services/visas/IANG.html & fee-tables/index.html, 2026-11-13)',
+    secondarySourceUrl: 'https://www.immd.gov.hk/eng/specifiedschemes.html',
+    httpCheckResult: 'HTTP 200 Verified (immd.gov.hk/eng/services/visas/IANG.html updated 29 Apr 2026; specifiedschemes.html updated 20 Oct 2025; fee-tables/index.html updated 8 Apr 2026); /eng/services/fees/visas.html HTTP 404 (checked 2026-11-13)',
     operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
     pathwayVerificationStatus: 'VERIFIED',
-    legalProvision: 'Immigration Ordinance Cap. 115 / ImmD IANG Policy (Fresh Graduates, Returning Graduates & GBA Campus Arrangement)',
-    salaryOrInvestmentThreshold: 'Statutory Fees: HK$1,300 (>180 days) / HK$600 (<=180 days) + HK$600 application fee where applicable; fresh graduates exempt from job offer; top-tier extension >= HK$2,000,000 assessable income',
+    legalProvision: 'Immigration Ordinance Cap. 115 / Immigration Regulations Cap. 115A Schedule 2 (Specified Scheme Fees eff. 26 Feb 2025 11:00 a.m.) & ImmD IANG Policy',
+    salaryOrInvestmentThreshold: 'Fresh graduates: no job offer / fixed salary floor; Extension: prevailing market salary (top-tier 6-yr extension >= HKD 2,000,000 assessable income); Separated Statutory Fees (eff. 26 Feb 2025 11:00 a.m.): HKD 600 non-refundable application fee + approval issuance fee HKD 1,300 (>180 days) or HKD 600 (<=180 days)',
     currency: 'HKD',
-    validityPeriod: '24 months initial stay -> 3 + 3 years (or 6-year top-tier extension at >= HK$2M income); 7-year continuous ordinary residence PR track',
-    processingSlaDays: 'Normally 2 weeks (fresh/recent graduates <=6 mos) or 4 weeks (returning graduates >6 mos) upon full document receipt',
+    validityPeriod: '24 months initial stay -> 3 + 3 years (or 6-year top-tier extension at >= HKD 2M income); 7-year continuous ordinary residence PR track',
+    processingSlaDays: 'Normally 2 weeks (fresh/recent graduates <=6 mos) or 4 weeks (returning graduates >6 mos); 2–3 weeks for extensions',
     settlementEligible: true,
     notes:
-      'Verified verbatim on immd.gov.hk (2026-11-13): Quota-free and non-sector-specific post-study employment scheme covering Hong Kong UGC/accredited degree graduates and Greater Bay Area campus graduates. Fresh graduates (<=6 months) apply without an employer offer; returning graduates require remuneration matching prevailing market levels. Explicitly excludes nationals of Afghanistan, Cuba, and Korea (DPRK) (NATIONALITY_SPECIFIC), while restricting Laos, Nepal, and Vietnam nationals to UGC-funded/approved programmes (NATIONALITY_GROUP). Fees verified at HK$1,300 (>180d) / HK$600 (<=180d).'
+      'Phase 3.9.1 Fee Review (verified 2026-11-13 on immd.gov.hk/eng/services/visas/IANG.html [29 Apr 2026], /eng/specifiedschemes.html [20 Oct 2025], & /eng/services/fee-tables/index.html [8 Apr 2026]; /fees/visas.html HTTP 404): Effective 26 Feb 2025 11:00 a.m. under Cap. 115A Schedule 2, every IANG principal applicant and dependant pays a mandatory non-refundable HKD 600 application fee upfront PLUS upon approval a two-tiered visa/permit issuance fee of HKD 1,300 (>180 days or >=6 mos relevant period) or HKD 600 (<=180 days) for both initial entry and extensions/changes of stay. Extension applicants must be physically present in Hong Kong at payment & e-Visa collection.'
   },
   {
     id: 'p2-tr-workpermit',
@@ -591,27 +591,41 @@ function evaluateClaim(p: Batch10Pathway, secId: string, secName: string, cIdx: 
             ? 'Immigration Health Surcharge (IHS): GBP 1,035 per year — GBP 1,552.50 (18 months), GBP 2,070 (2 years), or GBP 3,105 (3 years PhD).'
             : 'No additional CoS fee or Immigration Skills Charge applies (employer-free unsponsored route).';
     } else if (p.id === 'p2-sg-entrepass') {
-      scope = 'GLOBAL';
       verificationStatus = 'VERIFIED';
-      officialSourceUrl = 'https://www.mom.gov.sg/passes-and-permits/entrepass/key-facts';
-      scopeJustification = 'Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).';
-      statement =
-        cIdx === 1
-          ? 'Published MOM Statutory Fees: SGD $105 submission fee (payable per application) + SGD $225 pass issuance fee.'
-          : cIdx === 2
-            ? 'Optional Multiple Journey Visa (MJV) fee SGD $30 if nationality requires an entry visa to Singapore.'
-            : 'Monthly Foreign Worker Levy is SGD $0 (exempt / not applicable for EntrePass holders).';
+      if (cIdx === 1) {
+        scope = 'GLOBAL';
+        officialSourceUrl = 'https://www.mom.gov.sg/passes-and-permits/entrepass/apply-for-a-pass';
+        scopeJustification = 'Upfront EntrePass application submission fee on MOM official portal (updated 7 July 2026; checked 2026-11-13).';
+        statement = 'Application Submission Fee: SGD 105 per pass paid upfront when submitting an initial EntrePass application (Visa, Mastercard, or Amex). Note: MOM /renew-a-pass (updated 1 Jan 2026) lists issuance/MJV fees without a SGD 105 renewal submission fee; linked simultaneous family-pass application fees are forfeited if the main EntrePass is rejected (principal SGD 105 refund clause not separately stated on EntrePass pages). Last verified: 2026-11-13.';
+      } else if (cIdx === 2) {
+        scope = 'GLOBAL';
+        officialSourceUrl = 'https://www.mom.gov.sg/passes-and-permits/entrepass/apply-for-a-pass';
+        scopeJustification = 'Pass issuance fee upon approval / renewal on MOM /apply-for-a-pass (updated 7 July 2026) and /renew-a-pass (updated 1 Jan 2026).';
+        statement = 'Pass Issuance Fee: SGD 225 per pass paid upon approval when getting the EntrePass issued or renewed (GIRO, Visa, Mastercard, Amex, or NETS/CashCard at EPSC for non-Singpass). Excludes conditional MJV fee (SGD 30 if applicable), dependant passes, medical/external costs, and unneeded-card replacement (SGD 65.40 incl. GST). Last verified: 2026-11-13.';
+      } else {
+        scope = 'NATIONALITY_SPECIFIC';
+        officialSourceUrl = 'https://www.ica.gov.sg/enter-transit-depart/entering-singapore/visa_requirements';
+        scopeJustification = 'Multiple Journey Visa (MJV) fee applies solely to holders of travel documents requiring a Singapore entry visa under ICA guidelines (updated 28 Oct 2026).';
+        statement = 'Conditional Multiple Journey Visa (MJV) Fee: SGD 30 per pass ("if applicable"), payable at issuance or renewal ONLY if the applicant’s nationality/travel document requires an entry visa to enter Singapore per ICA Visa Guidelines. Exempt visa-free nationalities pay SGD 0 MJV (never added into a universal mandatory total). Last verified: 2026-11-13.';
+      }
     } else if (p.id === 'p2-hk-iang') {
-      scope = cIdx === 3 ? 'RESIDENCE_SPECIFIC' : 'GLOBAL';
       verificationStatus = 'VERIFIED';
-      officialSourceUrl = 'https://www.immd.gov.hk/eng/services/fee-tables/index.html';
-      scopeJustification = 'Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).';
-      statement =
-        cIdx === 1
-          ? 'Statutory ImmD Visa/Permit Issuance Fee: HK$1,300 (stay >180 days) or HK$600 (stay <=180 days) under 2026 two-tier fee structure.'
-          : cIdx === 2
-            ? 'Standard application handling fee HK$600 where applicable under ImmD specified scheme rules.'
-            : 'Online payment via FPS/credit card/PPS upon approval notice for both HK and GBA campus graduates.';
+      if (cIdx === 1) {
+        scope = 'GLOBAL';
+        officialSourceUrl = 'https://www.immd.gov.hk/eng/specifiedschemes.html';
+        scopeJustification = 'Cap. 115A Schedule 2 Specified Scheme upfront application fee (effective 26 Feb 2025 11:00 a.m.; checked 2026-11-13).';
+        statement = 'Non-Refundable Application Fee: HKD 600 per application (mandatory upfront for principal applicant and each dependant on every initial IANG entry or extension/change-of-stay filing under Cap. 115A Schedule 2 reg. 11(6), effective 26 February 2025 at 11:00 a.m.). Non-refundable in any circumstance irrespective of refusal, cancellation, or withdrawal; not the full cost because an issuance fee is payable separately upon approval. Last verified: 2026-11-13.';
+      } else if (cIdx === 2) {
+        scope = 'RESIDENCE_SPECIFIC';
+        officialSourceUrl = 'https://www.immd.gov.hk/eng/services/fee-tables/index.html';
+        scopeJustification = 'Two-tiered visa/entry permit issuance fee indexed to permitted duration ("relevant period") on approval under Cap. 115A Schedule 2 Items 1(a) & 6(a).';
+        statement = 'Two-Tiered Visa / Entry Permit Issuance Fee (On Approval): HKD 1,300 if permitted stay / "relevant period" is more than 180 days (or 6+ months, e.g., 24-month initial stay = HKD 600 application + HKD 1,300 issuance = HKD 1,900 total), OR HKD 600 if relevant period is not more than 180 days (= HKD 1,200 total). Applies separately per principal applicant and dependant under Table 3 rules effective 26 Feb 2025 11:00 a.m. Last verified: 2026-11-13.';
+      } else {
+        scope = 'RESIDENCE_SPECIFIC';
+        officialSourceUrl = 'https://www.immd.gov.hk/eng/services/visas/IANG.html';
+        scopeJustification = 'Extension / change of condition of stay fee tiers and in-Hong Kong physical presence requirement on payment/e-Visa collection (IANG.html updated 29 Apr 2026).';
+        statement = 'Extension / Change of Condition of Stay Issuance & e-Visa Collection: Renewals (3+3 yrs or 6-yr top-tier >=HKD 2M income) and employer changes incur HKD 600 non-refundable application fee plus HKD 1,300 (>180d) or HKD 600 (<=180d) issuance fee via GovHK/ImmD App (VISA, Mastercard, UnionPay, JCB, PPS, FPS, Alipay, WeChat Pay, UnionPay App). Extension applicants must be physically present in Hong Kong at payment and e-Visa collection. Last verified: 2026-11-13.';
+      }
     } else if (p.id === 'p2-nz-straighttoresidence') {
       scope = cIdx === 3 ? 'NATIONALITY_SPECIFIC' : 'GLOBAL';
       verificationStatus = cIdx === 3 ? 'PARTIALLY_VERIFIED' : 'VERIFIED';

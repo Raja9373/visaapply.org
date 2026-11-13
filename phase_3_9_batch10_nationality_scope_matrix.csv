@@ -410,9 +410,9 @@ claim_id,pathway_id,section_id,claim_scope,scope_justification,verification_stat
 "CLM-SG-B10-S17-1","p2-sg-entrepass","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
 "CLM-SG-B10-S17-2","p2-sg-entrepass","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
 "CLM-SG-B10-S17-3","p2-sg-entrepass","S17","CONSULAR_JURISDICTION_SPECIFIC","Local centre workload / complexity may alter decision timing.","PARTIALLY_VERIFIED",false,true
-"CLM-SG-B10-S18-1","p2-sg-entrepass","S18","GLOBAL","Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).","VERIFIED",false,true
-"CLM-SG-B10-S18-2","p2-sg-entrepass","S18","GLOBAL","Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).","VERIFIED",false,true
-"CLM-SG-B10-S18-3","p2-sg-entrepass","S18","GLOBAL","Published verbatim on MOM EntrePass Key Facts (updated 14 Aug 2026).","VERIFIED",false,true
+"CLM-SG-B10-S18-1","p2-sg-entrepass","S18","GLOBAL","Upfront EntrePass application submission fee on MOM official portal (updated 7 July 2026; checked 2026-11-13).","VERIFIED",false,true
+"CLM-SG-B10-S18-2","p2-sg-entrepass","S18","GLOBAL","Pass issuance fee upon approval / renewal on MOM /apply-for-a-pass (updated 7 July 2026) and /renew-a-pass (updated 1 Jan 2026).","VERIFIED",false,true
+"CLM-SG-B10-S18-3","p2-sg-entrepass","S18","NATIONALITY_SPECIFIC","Multiple Journey Visa (MJV) fee applies solely to holders of travel documents requiring a Singapore entry visa under ICA guidelines (updated 28 Oct 2026).","VERIFIED",false,true
 "CLM-SG-B10-S19-1","p2-sg-entrepass","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
 "CLM-SG-B10-S19-2","p2-sg-entrepass","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
 "CLM-SG-B10-S19-3","p2-sg-entrepass","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
@@ -590,9 +590,9 @@ claim_id,pathway_id,section_id,claim_scope,scope_justification,verification_stat
 "CLM-HK-B10-S17-1","p2-hk-iang","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
 "CLM-HK-B10-S17-2","p2-hk-iang","S17","GLOBAL","Published official authority processing timeline.","PARTIALLY_VERIFIED",false,true
 "CLM-HK-B10-S17-3","p2-hk-iang","S17","CONSULAR_JURISDICTION_SPECIFIC","Local centre workload / complexity may alter decision timing.","PARTIALLY_VERIFIED",false,true
-"CLM-HK-B10-S18-1","p2-hk-iang","S18","GLOBAL","Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).","VERIFIED",false,true
-"CLM-HK-B10-S18-2","p2-hk-iang","S18","GLOBAL","Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).","VERIFIED",false,true
-"CLM-HK-B10-S18-3","p2-hk-iang","S18","RESIDENCE_SPECIFIC","Published verbatim on ImmD Fee Tables & IANG Guidance (HTTP 200).","VERIFIED",false,true
+"CLM-HK-B10-S18-1","p2-hk-iang","S18","GLOBAL","Cap. 115A Schedule 2 Specified Scheme upfront application fee (effective 26 Feb 2025 11:00 a.m.; checked 2026-11-13).","VERIFIED",false,true
+"CLM-HK-B10-S18-2","p2-hk-iang","S18","RESIDENCE_SPECIFIC","Two-tiered visa/entry permit issuance fee indexed to permitted duration (""relevant period"") on approval under Cap. 115A Schedule 2 Items 1(a) & 6(a).","VERIFIED",false,true
+"CLM-HK-B10-S18-3","p2-hk-iang","S18","RESIDENCE_SPECIFIC","Extension / change of condition of stay fee tiers and in-Hong Kong physical presence requirement on payment/e-Visa collection (IANG.html updated 29 Apr 2026).","VERIFIED",false,true
 "CLM-HK-B10-S19-1","p2-hk-iang","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
 "CLM-HK-B10-S19-2","p2-hk-iang","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true
 "CLM-HK-B10-S19-3","p2-hk-iang","S19","GLOBAL","Nationality-neutral statutory legal rule.","VERIFIED",false,true

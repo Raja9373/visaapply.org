@@ -1,0 +1,54 @@
+{
+  "phase": "3.9.3",
+  "title": "Authoritative Backlog Curation — 90 Synthetic Placeholder Slots to Genuine Immigration Pathway Candidates",
+  "executedAtUtc": "2026-11-13T12:35:00Z",
+  "readOnlyAppAndDbState": true,
+  "sourceCodeModified": false,
+  "historicalBatchesModified": false,
+  "productionDbModified": false,
+  "neonDbModified": false,
+  "sqliteModified": false,
+  "cronModified": false,
+  "cronSchedulePreserved": "30 21 * * *",
+  "productionDeploymentPerformed": false,
+  "additionalSpend": "₹0",
+  "batch11Started": false,
+  "batch11PreflightStatus": "READY_FOR_AUTHORIZATION (Pending explicit user approval)",
+  "preservedBaselines": {
+    "priority2TargetCeiling": 210,
+    "priority2CompletedCount": 120,
+    "priority2RemainingDefectiveQueueSlots": 90,
+    "priority1PathwayCount": 142,
+    "supportedCountriesCount": 249,
+    "profileSectionsSchema": 30,
+    "specialTopicsSchema": 22,
+    "supportedLanguages": 15
+  },
+  "curationSummary": {
+    "totalCandidateRegistryRows": 159,
+    "totalCuratedRealPathwayCandidatesEvaluated": 67,
+    "classificationCounts": {
+      "VERIFIED": 43,
+      "PARTIALLY_VERIFIED": 10,
+      "AWAITING_VERIFICATION": 10,
+      "CONFLICTING": 1,
+      "EXPIRED": 3,
+      "REJECTED_DUPLICATE": 2,
+      "REJECTED_FABRICATED_OR_UNSUPPORTED": 90
+    },
+    "proposedBatch11StagedCount": 10,
+    "additionalVerifiedSurplusForFutureBatches": 33,
+    "totalRemainingRealGapTo210TargetAfter43Verified": 47,
+    "officialSourceEvidenceRows": 72,
+    "duplicateAndCoverageReviewRows": 173
+  },
+  "deliverablesCreated": [
+    "phase_3_9_3_curation_report.md",
+    "phase_3_9_3_candidate_registry.csv",
+    "phase_3_9_3_official_source_evidence.csv",
+    "phase_3_9_3_duplicate_and_coverage_review.csv",
+    "phase_3_9_3_proposed_batch11_candidates.json",
+    "phase_3_9_3_change_manifest.json"
+  ],
+  "sourceFilesModified": []
+}

@@ -779,7 +779,7 @@ export function VisaDetailRenderer({
 /**
  * Renders structured content fields for each 30-section key without fabricating missing values.
  */
-function StructuredSectionContent({
+export function StructuredSectionContent({
   sectionKey,
   secObj,
   programId,
@@ -963,24 +963,74 @@ function StructuredSectionContent({
       );
     }
 
-    case 's18_officialFeesAndCostBreakdown':
+    case 's18_officialFeesAndCostBreakdown': {
+      const currency = secObj.primaryFeeCurrency || secObj.currency || 'USD';
+      const primaryDisplay =
+        secObj.applicationFeeText ||
+        (secObj.primaryFeeAmount
+          ? `${currency} ${secObj.primaryFeeAmount}`
+          : secObj.governmentFee != null
+          ? `${currency} ${secObj.governmentFee}`
+          : legacyDetails?.visaOverview?.fee || legacyDetails?.visaOverview?.visaFee || 'See Official Schedule');
+      const issuanceDisplay =
+        secObj.issuanceFeeText ||
+        secObj.issuanceReciprocityFeeNote ||
+        null;
+      const conditionalDisplay =
+        secObj.conditionalFeeText ||
+        (secObj.biometricsFeeAmount ? `${secObj.biometricsFeeCurrency || currency} ${secObj.biometricsFeeAmount}` : null);
+      const refundDisplay =
+        secObj.refundPolicySummary ||
+        (secObj.isRefundableOnRefusal === false
+          ? 'Non-refundable upon refusal or withdrawal'
+          : secObj.isRefundableOnRefusal === true
+          ? 'Refundable under statutory conditions'
+          : null);
+      const secondaryMeta = [
+        secObj.feeEffectiveDate ? `Effective: ${secObj.feeEffectiveDate}` : null,
+        secObj.lastVerifiedDate ? `Last Verified: ${secObj.lastVerifiedDate}` : null,
+        refundDisplay
+      ].filter(Boolean);
+
       return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <InfoCard
-            label="Government Consular Application Fee"
-            value={secObj.primaryFeeAmount ? `${secObj.primaryFeeCurrency || 'USD'} ${secObj.primaryFeeAmount}` : legacyDetails?.visaOverview?.fee || legacyDetails?.visaOverview?.visaFee}
-            highlight
-          />
-          <InfoCard
-            label="Biometrics Fee"
-            value={secObj.biometricsFeeAmount ? `${secObj.biometricsFeeCurrency || 'USD'} ${secObj.biometricsFeeAmount}` : 'Included or Free'}
-          />
-          <InfoCard
-            label="Payment Methods"
-            value={secObj.acceptedPaymentMethods ? secObj.acceptedPaymentMethods.join(', ') : 'Credit Card / Consular Portal'}
-          />
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <InfoCard
+              label={secObj.applicationFeeText ? 'Upfront Application Fee' : 'Government Consular Application Fee'}
+              value={primaryDisplay}
+              highlight
+            />
+            {issuanceDisplay ? (
+              <InfoCard label="Approval / Issuance Fee" value={issuanceDisplay} />
+            ) : (
+              <InfoCard
+                label="Biometrics Fee"
+                value={secObj.biometricsFeeAmount ? `${secObj.biometricsFeeCurrency || 'USD'} ${secObj.biometricsFeeAmount}` : 'Included or Free'}
+              />
+            )}
+            <InfoCard
+              label={conditionalDisplay ? 'Conditional / Nationality-Specific Charges' : 'Payment Methods'}
+              value={
+                conditionalDisplay ||
+                (Array.isArray(secObj.acceptedPaymentMethods)
+                  ? secObj.acceptedPaymentMethods.join(', ')
+                  : 'Credit Card / Consular Portal')
+              }
+            />
+          </div>
+          {(secondaryMeta.length > 0 || (issuanceDisplay && Array.isArray(secObj.acceptedPaymentMethods))) && (
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-700 flex flex-wrap gap-x-4 gap-y-1">
+              {issuanceDisplay && Array.isArray(secObj.acceptedPaymentMethods) && (
+                <span><strong>Payment Methods:</strong> {secObj.acceptedPaymentMethods.join(', ')}</span>
+              )}
+              {secondaryMeta.map((item, idx) => (
+                <span key={idx} className="font-medium">{item}</span>
+              ))}
+            </div>
+          )}
         </div>
       );
+    }
 
     case 's19_processingTimesAndTimelines':
       return (

@@ -119,11 +119,11 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
 
   const batch10TestResults = [
     { id: 'b10-t1', name: 'Batch 10 Verification & Quarantine Audit (900 Claims)', status: 'PASSED', details: '740 VERIFIED, 67 PARTIALLY_VERIFIED, 39 NOT_APPLICABLE (846 published), strictly quarantining 54 claims (50 AWAITING_VERIFICATION due to FR france-visas 403 / JP stamp-fee 404 / TR evaluation-criteria 404 / BR quadro-geral 404 / CL dynamic JS aranceles / DE municipal appointment SLAs, 0 CONFLICTING, 4 EXPIRED superseded rules).' },
-    { id: 'b10-t2', name: 'Applicability Scope Matrix (900 Claims, Unforced UNKNOWN)', status: 'PASSED', details: '688 GLOBAL, 27 NATIONALITY_GROUP (incl. HK IANG Laos/Nepal/Vietnam UGC rule & BR Mercosur), 36 NATIONALITY_SPECIFIC (incl. HK IANG Afghanistan/Cuba/DPRK exclusion), 104 RESIDENCE_SPECIFIC, 35 CONSULAR_JURISDICTION_SPECIFIC, 10 UNKNOWN.' },
-    { id: 'b10-t3', name: 'Duplicate Check & Canonical Identity (120 Completed / 210 Queue)', status: 'PASSED', details: '0 duplicate IDs or canonical URLs across all 142 P1 + 120 completed P2 pathways (Pilot + Batches 1–10) and 90 remaining backlog entries.' },
-    { id: 'b10-t4', name: 'Profile Sections & 22 Special Topics Coverage (300 + 220)', status: 'PASSED', details: '300 section entries (231 VERIFIED, 58 PARTIALLY_VERIFIED, 11 AWAITING_VERIFICATION, 0 CONFLICTING, 0 NOT_APPLICABLE) and all 22 special topics mapped per pathway (220 total).' },
-    { id: 'b10-t5', name: 'Direct Official Source URL Check (Zero Google Redirects)', status: 'PASSED', details: 'Zero vertexaisearch redirect URLs; live HTTP 200 verified across gesetze-im-internet.de, service-public.fr, gov.uk, immigration.govt.nz, mom.gov.sg, moj.go.jp, immd.gov.hk, calismaizni.csgb.gov.tr, gov.br/mre, serviciomigraciones.cl; blocked subpages strictly quarantined.' },
-    { id: 'b10-t6', name: 'Phase 3.9 Batch 10 Recovery Backup (/app/applet/backup_phase_3_9_batch10.tar.gz)', status: 'PASSED', details: 'Archive size: 59,730 bytes (~58.3 KB). SHA-256: f783ce2e3d82b209c6ddce83f7711d3e7254da6d4695b3487dd602256b3a7cf0.' }
+    { id: 'b10-t2', name: 'Applicability Scope Matrix (900 Claims, Unforced UNKNOWN)', status: 'PASSED', details: '686 GLOBAL, 27 NATIONALITY_GROUP (incl. HK IANG Laos/Nepal/Vietnam UGC rule & BR Mercosur), 37 NATIONALITY_SPECIFIC (incl. SG EntrePass conditional MJV SGD 30 & HK IANG Afghanistan/Cuba/DPRK exclusion), 105 RESIDENCE_SPECIFIC (incl. HK IANG duration-band issuance fees), 35 CONSULAR_JURISDICTION_SPECIFIC, 10 UNKNOWN.' },
+    { id: 'b10-t3', name: 'Duplicate Check & Canonical Identity (120 Completed / 210 Queue)', status: 'PASSED', details: '0 duplicate IDs or canonical URLs across all 142 P1 + 120 completed P2 pathways (Pilot + Batches 1–10) and 90 remaining backlog entries. Phase 3.9.1 preserved all 120/210 counts.' },
+    { id: 'b10-t4', name: 'Phase 3.9.1 SG EntrePass & HK IANG Fee Separation Audit', status: 'PASSED', details: 'Separated SG EntrePass SGD 105 initial submission vs SGD 225 issuance (renewal SGD 225 issuance) vs conditional SGD 30 MJV (ICA visa-requiring only); separated HK IANG HKD 600 non-refundable upfront application vs HKD 1,300 (>180d) / HKD 600 (<=180d) approval issuance eff. 26 Feb 2025 11:00 a.m. (/fees/visas.html 404 replaced with specifiedschemes.html & fee-tables/index.html).' },
+    { id: 'b10-t5', name: 'Direct Official Source URL Check (Zero Google Redirects)', status: 'PASSED', details: 'Zero vertexaisearch redirect URLs; live HTTP 200 verified across gesetze-im-internet.de, service-public.fr, gov.uk, immigration.govt.nz, mom.gov.sg, ica.gov.sg, moj.go.jp, immd.gov.hk, calismaizni.csgb.gov.tr, gov.br/mre, serviciomigraciones.cl; blocked subpages strictly quarantined.' },
+    { id: 'b10-t6', name: 'Phase 3.9.1 Recovery Backup (/app/applet/backup_phase_3_9_1.tar.gz)', status: 'PASSED', details: 'Archive size: 175,993 bytes (~171.9 KB). SHA-256: 7424b6a0b2abf7b39eb9292b7a29efb7dfc2ce2763a9b3b223a7d33f228f4b7b.' }
   ];
 
   const batch9TestResults = [
@@ -382,6 +382,58 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
                   {selectedBatch10Pathway.correctiveClassificationNotes}
                 </p>
               </div>
+
+              {selectedBatch10Pathway.id === 'p2-sg-entrepass' && (
+                <div className="bg-slate-950 border border-emerald-500/30 p-4 rounded-xl space-y-2">
+                  <div className="flex flex-wrap justify-between items-center gap-2">
+                    <span className="text-emerald-300 font-bold text-xs">Separated Statutory Fee Schedule (MOM &amp; ICA — Verified 2026-11-13)</span>
+                    <span className="text-[11px] text-slate-400">Updated: 7 Jul 2026 (Apply) / 1 Jan 2026 (Renew) / 28 Oct 2026 (ICA)</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                      <span className="text-slate-400 block">Initial Application Fee</span>
+                      <span className="text-white font-bold">SGD 105 per pass</span>
+                      <span className="text-slate-400 block mt-1">Upfront on initial application (no SGD 105 renewal submission fee listed on /renew-a-pass).</span>
+                    </div>
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                      <span className="text-slate-400 block">Pass Issuance / Renewal Fee</span>
+                      <span className="text-white font-bold">SGD 225 per pass</span>
+                      <span className="text-slate-400 block mt-1">Payable upon approval/renewal (SGD 65.40 incl. GST unneeded card replacement).</span>
+                    </div>
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-amber-500/30">
+                      <span className="text-amber-300 block">Conditional MJV Fee (Nationality-Specific)</span>
+                      <span className="text-white font-bold">SGD 30 (if applicable)</span>
+                      <span className="text-slate-400 block mt-1">Only if passport requires Singapore entry visa per ICA; SGD 0 for visa-free passports.</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {selectedBatch10Pathway.id === 'p2-hk-iang' && (
+                <div className="bg-slate-950 border border-emerald-500/30 p-4 rounded-xl space-y-2">
+                  <div className="flex flex-wrap justify-between items-center gap-2">
+                    <span className="text-emerald-300 font-bold text-xs">Separated Statutory Fee Schedule (Cap. 115A Sch. 2 — Effective 26 Feb 2025 11:00 a.m.)</span>
+                    <span className="text-[11px] text-slate-400">Last Verified: 2026-11-13 (IANG / Specified Schemes / Fee Tables)</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                      <span className="text-slate-400 block">Upfront Application Fee (Mandatory)</span>
+                      <span className="text-white font-bold">HKD 600 per person</span>
+                      <span className="text-slate-400 block mt-1">Non-refundable irrespective of result/withdrawal; applies to principal &amp; dependant on entry &amp; extension.</span>
+                    </div>
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                      <span className="text-slate-400 block">Issuance Fee (&gt;180 Days / 6+ Mos)</span>
+                      <span className="text-white font-bold">HKD 1,300 per person</span>
+                      <span className="text-slate-400 block mt-1">Payable on approval (e.g., 24m initial = HKD 600 + HKD 1,300 = HKD 1,900 combined).</span>
+                    </div>
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                      <span className="text-slate-400 block">Issuance Fee (&le;180 Days) &amp; e-Visa Rule</span>
+                      <span className="text-white font-bold">HKD 600 per person</span>
+                      <span className="text-slate-400 block mt-1">HKD 1,200 combined if &le;180 days; extension applicants must be physically in HK at payment/collection.</span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
