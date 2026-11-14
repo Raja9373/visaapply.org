@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 
 const DB_PATH = path.join(process.cwd(), 'data_db', 'immigration_hub.db');
-const db = new Database(DB_PATH);
+const db = new Database(DB_PATH, { readonly: true, fileMustExist: true });
 
 async function runInventory() {
   const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all() as any[];

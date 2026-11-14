@@ -38,12 +38,22 @@ import dotenv from 'dotenv';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-4-hydrogen';
 const ADMIN_ALERT_EMAIL = (process.env.ADMIN_ALERT_EMAIL || '').trim();
 import {
+  db,
+  auditSqliteDatabaseIntegrity,
+  SQLITE_MIGRATIONS,
   saveBatchStateToDb,
   getBatchStateFromDb,
   saveChangelogEntryToDb,
   getChangelogFromDb,
   logCronExecutionToDb,
   getCronExecutionLogsFromDb,
+  acquireJobLock,
+  releaseJobLock,
+  saveAutomationCheckpoint,
+  getAutomationCheckpoint,
+  recordDeadLetterItem,
+  getDeadLetterItems,
+  getOperationalEvents,
   getVisaDetails,
   getAllVisaDetails,
   getPaginatedVisaDetails,
@@ -68,6 +78,16 @@ import {
   evaluateClaimIntegrity,
   sanitizeVisaDetailsForPublic
 } from './src/db/immigrationDatabase';
+import {
+  classifyAutomationError,
+  evaluateSourceExtractionCandidate,
+  executeWithBoundedRetry
+} from './src/utils/automationPipeline';
+import {
+  computeOperationalHealthSummary,
+  recordOperationalEvent,
+  redactSensitiveData
+} from './src/utils/operationalObservability';
 import { executeImmigrationBatch } from './src/services/immigrationBatchProcessor';
 
 dotenv.config();
@@ -534,27 +554,47 @@ app.delete('/api/admin/drafts/:slug', requireAdminAuth, (req, res) => {
 
 // Cron Route for Vercel Cron & Manual Trigger (Protected by requireCronOrAdminAuth)
 app.post('/api/cron', requireCronOrAdminAuth, async (req, res) => {
+  const runId = `cron-drafts-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+  const lock = acquireJobLock('cron:draft-articles', runId, 5 * 60 * 1000, { route: '/api/cron' });
+  if (!lock.acquired) {
+    return res.status(409).json({
+      success: false,
+      runId,
+      status: 'DUPLICATE_IN_PROGRESS',
+      error: `Cron draft job already in progress (owner=${lock.existingOwner}).`
+    });
+  }
+
   try {
     // Pick 1 country in rotation based on day of year
     const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
     const targetCountry = COUNTRIES[dayOfYear % COUNTRIES.length];
-    // Pick a source country (e.g. India or USA as default sender, or rotate)
     const sourceCountry = COUNTRIES[(dayOfYear + 5) % COUNTRIES.length];
 
     if (targetCountry.code === sourceCountry.code) {
-      return res.json({ success: true, message: 'Skipped self-destination' });
+      return res.json({ success: true, runId, message: 'Skipped self-destination' });
     }
 
-    const generatedSlugs = [];
+    const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+    if (!apiKey || apiKey === 'dummy_key') {
+      return res.status(503).json({
+        success: false,
+        runId,
+        failureClass: 'MISSING_CREDENTIALS',
+        error: 'GEMINI_API_KEY is not configured (fail-closed).'
+      });
+    }
 
-    // Generate articles for 5 visa types using Gemini API
+    const generatedSlugs: string[] = [];
+    const failedSlugs: Array<{ slug: string; failureClass: string; error: string }> = [];
+
     for (const vType of VISA_TYPES) {
       const slug = `${sourceCountry.code.toLowerCase()}-to-${targetCountry.code.toLowerCase()}-${vType.id}`;
       const draftPath = path.join(DRAFTS_DIR, `${slug}.md`);
       const contentPath = path.join(CONTENT_DIR, `${slug}.md`);
 
       if (fs.existsSync(draftPath) || fs.existsSync(contentPath)) {
-        continue; // Already exists
+        continue; // Idempotent: already staged or published
       }
 
       const prompt = `Write a comprehensive, professional 900-word SEO visa guide article for citizens of ${sourceCountry.name} applying for a ${vType.name} visa to ${targetCountry.name}. 
@@ -568,50 +608,29 @@ Include clear sections:
 Language: Simple, official English. 
 Format: Markdown with clean headings.`;
 
-      const apiKey = (process.env.GEMINI_API_KEY || '').trim();
-      if (!apiKey || apiKey === 'dummy_key') {
-        continue;
-      }
-
-      let articleText = '';
-      const maxRetries = 4;
-      const timeoutMs = 30000;
-      const maxDelayMs = 12000;
-      for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        let timeoutHandle: any;
-        try {
-          const timeoutPromise = new Promise<never>((_, reject) => {
-            timeoutHandle = setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
-          });
-          const apiPromise = ai.models.generateContent({
-            model: GEMINI_MODEL,
-            contents: prompt,
-            config: {
-              thinkingConfig: {
-                thinkingLevel: ThinkingLevel.LOW
+      try {
+        const { result: articleText } = await executeWithBoundedRetry(
+          async (signal) => {
+            if (signal.aborted) throw new Error('Operation aborted');
+            const response: any = await ai.models.generateContent({
+              model: GEMINI_MODEL,
+              contents: prompt,
+              config: {
+                thinkingConfig: {
+                  thinkingLevel: ThinkingLevel.LOW
+                }
               }
+            });
+            const text = String(response?.text || '').trim();
+            if (text.length <= 100) {
+              throw new Error('VALIDATION_ERROR: Gemini returned insufficient draft length');
             }
-          });
-          const response: any = await Promise.race([apiPromise, timeoutPromise]);
-          clearTimeout(timeoutHandle);
-          if (response?.text && String(response.text).trim().length > 100) {
-            articleText = String(response.text).trim();
-            break;
-          }
-        } catch {
-          clearTimeout(timeoutHandle);
-          if (attempt < maxRetries) {
-            const delay = Math.min(maxDelayMs, Math.round(1000 * Math.pow(2, attempt - 1) + Math.random() * 350));
-            await new Promise(r => setTimeout(r, delay));
-          }
-        }
-      }
+            return text;
+          },
+          { maxAttempts: 3, timeoutMs: 25000, baseDelayMs: 500, component: 'api-cron-drafts' }
+        );
 
-      if (!articleText) {
-        continue;
-      }
-
-      const frontmatter = `---
+        const frontmatter = `---
 title: "${sourceCountry.name} to ${targetCountry.name} ${vType.name} Visa Guide"
 from: "${sourceCountry.code}"
 to: "${targetCountry.code}"
@@ -624,18 +643,44 @@ docs: "Passport, Financial Proofs, Application Forms"
 
 `;
 
-      fs.writeFileSync(draftPath, frontmatter + articleText);
-      generatedSlugs.push(slug);
+        fs.writeFileSync(draftPath, frontmatter + articleText);
+        generatedSlugs.push(slug);
+      } catch (itemErr: any) {
+        const classified = classifyAutomationError(itemErr, itemErr?.httpStatus);
+        recordDeadLetterItem({
+          jobName: 'api-cron-drafts',
+          runId,
+          targetKey: slug,
+          failureClass: classified.failureClass,
+          errorMessage: classified.message,
+          retryCount: Number(itemErr?.attempts || 1)
+        });
+        failedSlugs.push({
+          slug,
+          failureClass: classified.failureClass,
+          error: redactSensitiveData(classified.message)
+        });
+      }
     }
 
     res.json({
-      success: true,
-      message: `Cron executed successfully for target country ${targetCountry.name}. Generated ${generatedSlugs.length} drafts.`,
-      generatedSlugs
+      success: failedSlugs.length === 0 || generatedSlugs.length > 0,
+      runId,
+      message: `Cron executed for target country ${targetCountry.name}. Generated ${generatedSlugs.length} drafts.`,
+      generatedSlugs,
+      failedSlugs
     });
   } catch (err: any) {
-    console.error('Cron error:', err);
-    res.status(500).json({ error: err.message });
+    const classified = classifyAutomationError(err);
+    console.error('Cron error:', classified.message);
+    res.status(classified.httpStatus || 500).json({
+      success: false,
+      runId,
+      failureClass: classified.failureClass,
+      error: classified.message
+    });
+  } finally {
+    releaseJobLock('cron:draft-articles', runId);
   }
 });
 
@@ -843,27 +888,83 @@ function requireCronOrAdminAuth(req: any, res: any, next: any) {
 }
 
 const handleImmigrationSyncCron = async (req: any, res: any) => {
+  const runId = `sync-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
   if (isSyncCronRunning) {
     return res.status(429).json({
       success: false,
+      runId,
+      status: 'DUPLICATE_IN_PROGRESS',
       message: 'Immigration sync execution already in progress. Skipped duplicate overlapping execution.'
     });
   }
+
+  const dbLock = acquireJobLock('cron:immigration-sync', runId, 5 * 60 * 1000, {
+    method: req.method || 'GET'
+  });
+  if (!dbLock.acquired) {
+    return res.status(429).json({
+      success: false,
+      runId,
+      status: 'DUPLICATE_IN_PROGRESS',
+      message: `Immigration sync DB lock active (${dbLock.existingOwner}). Skipped overlapping run.`
+    });
+  }
+
   isSyncCronRunning = true;
   const startTime = Date.now();
+  const todayStr = new Date().toISOString().split('T')[0];
+
   try {
-    const adminEmail = ADMIN_ALERT_EMAIL || 'configured-admin-channel';
+    const adminEmail = ADMIN_ALERT_EMAIL ? '[configured-admin-channel]' : 'configured-admin-channel';
     const dayIdx = new Date().getDate() % COUNTRIES.length;
     const targetCountry = COUNTRIES[dayIdx] || { code: 'US', name: 'United States' };
     const codeUpper = (targetCountry.code || 'US').toUpperCase();
     const codeLower = codeUpper.toLowerCase();
+    const checkpointId = `immigration-sync:${todayStr}`;
+
+    // Daily idempotency check: prevent duplicate re-runs for same country/day
+    const existingCp = getAutomationCheckpoint(checkpointId);
+    if (existingCp && existingCp.completedKeys.includes(codeUpper) && existingCp.status === 'COMPLETED') {
+      const durationMs = Date.now() - startTime;
+      logCronExecutionToDb({
+        id: runId,
+        cronName: 'immigration-sync',
+        httpMethod: req.method || 'GET',
+        targetCountries: [codeUpper],
+        status: 'SKIPPED_IDEMPOTENT',
+        checkedCount: 0,
+        updatesFound: 0,
+        logMessage: `Idempotent skip for ${targetCountry.name} (${codeUpper}) on ${todayStr}: already verified in checkpoint.`,
+        executionDurationMs: durationMs
+      });
+      return res.json({
+        success: true,
+        runId,
+        status: 'SKIPPED_IDEMPOTENT',
+        countryCode: codeUpper,
+        countryName: targetCountry.name,
+        autoPublished: false,
+        executionDurationMs: durationMs
+      });
+    }
 
     const registryEntry = OFFICIAL_SOURCE_REGISTRY_249[codeUpper];
     const sourceUrl = registryEntry?.primaryGovUrl || registryEntry?.consularPortalUrl || '';
 
     if (!sourceUrl || !sourceUrl.startsWith('https://')) {
       const durationMs = Date.now() - startTime;
+      saveAutomationCheckpoint({
+        checkpointId,
+        jobName: 'immigration-sync',
+        runId,
+        status: 'COMPLETED',
+        cursorIndex: 1,
+        totalItems: 1,
+        completedKeys: [codeUpper],
+        failedKeys: []
+      });
       logCronExecutionToDb({
+        id: runId,
         cronName: 'immigration-sync',
         httpMethod: req.method || 'GET',
         targetCountries: [codeUpper],
@@ -875,6 +976,7 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
       });
       return res.json({
         success: false,
+        runId,
         status: 'SKIPPED_NO_OFFICIAL_SOURCE',
         countryCode: codeUpper,
         countryName: targetCountry.name,
@@ -889,58 +991,90 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
     let sourceTitle = `${targetCountry.name} Official Portal`;
     let sourceFetched = false;
     let fetchFailureReason = '';
+    let fetchFailureClass = '';
 
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 6000);
-      const htmlRes = await fetch(sourceUrl, {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+      const { result: fetched } = await executeWithBoundedRetry(
+        async (signal) => {
+          const htmlRes = await fetch(sourceUrl, {
+            headers: {
+              'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+            },
+            signal
+          });
+          if (!htmlRes.ok) {
+            const err: any = new Error(`HTTP ${htmlRes.status} from ${sourceUrl}`);
+            err.status = htmlRes.status;
+            throw err;
+          }
+          const rawHtml = await htmlRes.text();
+          const titleMatch = rawHtml.match(/<title[^>]*>([^<]+)<\/title>/i);
+          const title = titleMatch?.[1] ? titleMatch[1].trim().slice(0, 180) : sourceTitle;
+          const text = rawHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 2500);
+          if (text.length <= 50) {
+            throw new Error('VALIDATION_ERROR: Fetched page had insufficient textual content.');
+          }
+          return { title, text };
         },
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-      if (htmlRes.ok) {
-        const rawHtml = await htmlRes.text();
-        const titleMatch = rawHtml.match(/<title[^>]*>([^<]+)<\/title>/i);
-        if (titleMatch?.[1]) {
-          sourceTitle = titleMatch[1].trim().slice(0, 180);
-        }
-        snippetHtml = rawHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 2500);
-        sourceFetched = snippetHtml.length > 50;
-        if (!sourceFetched) {
-          fetchFailureReason = 'Fetched page had insufficient textual content.';
-        }
-      } else {
-        fetchFailureReason = `HTTP ${htmlRes.status} from ${sourceUrl}`;
-      }
+        { maxAttempts: 3, timeoutMs: 8000, baseDelayMs: 400, component: 'immigration-sync-fetch' }
+      );
+      sourceTitle = fetched.title;
+      snippetHtml = fetched.text;
+      sourceFetched = true;
     } catch (fetchErr: any) {
-      fetchFailureReason = fetchErr?.message || 'Network/timeout error while fetching official source.';
+      const classified = classifyAutomationError(fetchErr, fetchErr?.httpStatus);
+      fetchFailureReason = classified.message;
+      fetchFailureClass = classified.failureClass;
+      recordDeadLetterItem({
+        jobName: 'immigration-sync',
+        runId,
+        targetKey: codeUpper,
+        failureClass: classified.failureClass,
+        errorMessage: classified.message,
+        payload: { sourceUrl },
+        retryCount: Number(fetchErr?.attempts || 1)
+      });
     }
 
     if (!sourceFetched) {
       const durationMs = Date.now() - startTime;
+      saveAutomationCheckpoint({
+        checkpointId,
+        jobName: 'immigration-sync',
+        runId,
+        status: 'PARTIAL_FAILED',
+        cursorIndex: 0,
+        totalItems: 1,
+        completedKeys: [],
+        failedKeys: [codeUpper],
+        state: { failureClass: fetchFailureClass }
+      });
       logCronExecutionToDb({
+        id: runId,
         cronName: 'immigration-sync',
         httpMethod: req.method || 'GET',
         targetCountries: [codeUpper],
         status: 'QUARANTINED_FETCH_FAILED',
         checkedCount: 1,
         updatesFound: 0,
-        logMessage: `Quarantined sync for ${targetCountry.name} (${sourceUrl}): ${fetchFailureReason}. Existing public data preserved.`,
+        logMessage: redactSensitiveData(
+          `Quarantined sync for ${targetCountry.name} (${sourceUrl}) [${fetchFailureClass}]: ${fetchFailureReason}. Existing public data preserved.`
+        ),
         executionDurationMs: durationMs
       });
       return res.status(502).json({
         success: false,
+        runId,
         status: 'QUARANTINED_FETCH_FAILED',
+        failureClass: fetchFailureClass || 'SOURCE_UNAVAILABLE',
         countryCode: codeUpper,
         countryName: targetCountry.name,
         sourceUrl,
         sourceFetched: false,
         updatesFound: 0,
         autoPublished: false,
-        reason: fetchFailureReason,
+        reason: redactSensitiveData(fetchFailureReason),
         executionDurationMs: durationMs
       });
     }
@@ -949,6 +1083,7 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
     if (!apiKey || apiKey === 'dummy_key') {
       const durationMs = Date.now() - startTime;
       logCronExecutionToDb({
+        id: runId,
         cronName: 'immigration-sync',
         httpMethod: req.method || 'GET',
         targetCountries: [codeUpper],
@@ -960,7 +1095,9 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
       });
       return res.status(503).json({
         success: false,
+        runId,
         status: 'SKIPPED_NO_AI_KEY',
+        failureClass: 'MISSING_CREDENTIALS',
         sourceUrl,
         sourceFetched: true,
         updatesFound: 0,
@@ -971,9 +1108,12 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
 
     let parsedUpdate: any = null;
     try {
-      const aiResp = await ai.models.generateContent({
-        model: GEMINI_MODEL,
-        contents: `Analyze this official sovereign immigration source excerpt for ${targetCountry.name} (${sourceUrl}): "${snippetHtml.slice(0, 1400)}".
+      const { result: parsed } = await executeWithBoundedRetry(
+        async (signal) => {
+          if (signal.aborted) throw new Error('Operation aborted');
+          const aiResp = await ai.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: `Analyze this official sovereign immigration source excerpt for ${targetCountry.name} (${sourceUrl}): "${snippetHtml.slice(0, 1400)}".
 If there is a concrete, verifiable policy/fee/processing change stated directly in the excerpt, return JSON with:
 - hasConcreteChange: boolean (false if excerpt is just navigation/boilerplate without a clear policy fact)
 - changeType: one of "NEW_VISA", "FEE_UPDATE", "PROCESSING_UPDATE", "DOCS_UPDATE", "VISA_FREE_UPDATE"
@@ -982,47 +1122,81 @@ If there is a concrete, verifiable policy/fee/processing change stated directly 
 - newValue: observed rule/fee directly quoted or summarized from excerpt
 - legalProvision: statute/regulation/program name if stated
 - applicabilityScope: who it applies to`,
-        config: {
-          responseMimeType: 'application/json',
-          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+            config: {
+              responseMimeType: 'application/json',
+              thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+            }
+          });
+          if (!aiResp?.text) throw new Error('VALIDATION_ERROR: Empty Gemini response');
+          return JSON.parse(aiResp.text);
         },
+        { maxAttempts: 2, timeoutMs: 20000, baseDelayMs: 500, component: 'immigration-sync-ai' }
+      );
+      parsedUpdate = parsed;
+    } catch (aiErr: any) {
+      const classified = classifyAutomationError(aiErr, aiErr?.httpStatus);
+      recordDeadLetterItem({
+        jobName: 'immigration-sync',
+        runId,
+        targetKey: codeUpper,
+        failureClass: classified.failureClass,
+        errorMessage: classified.message,
+        payload: { sourceUrl, stage: 'gemini-extraction' }
       });
-      if (aiResp?.text) {
-        parsedUpdate = JSON.parse(aiResp.text);
-      }
-    } catch {
       parsedUpdate = null;
     }
 
-    if (!parsedUpdate || !parsedUpdate.hasConcreteChange || !parsedUpdate.newValue) {
+    const gateDecision = evaluateSourceExtractionCandidate({
+      sourceUrl,
+      excerpt: snippetHtml,
+      hasConcreteChange: Boolean(parsedUpdate?.hasConcreteChange),
+      newValue: parsedUpdate?.newValue ? String(parsedUpdate.newValue) : '',
+      oldValue: parsedUpdate?.oldValue ? String(parsedUpdate.oldValue) : '',
+      legalProvision: parsedUpdate?.legalProvision ? String(parsedUpdate.legalProvision) : ''
+    });
+
+    if (!gateDecision.acceptedForStaging) {
       const durationMs = Date.now() - startTime;
+      saveAutomationCheckpoint({
+        checkpointId,
+        jobName: 'immigration-sync',
+        runId,
+        status: 'COMPLETED',
+        cursorIndex: 1,
+        totalItems: 1,
+        completedKeys: [codeUpper],
+        failedKeys: [],
+        state: { gateStatus: gateDecision.gateStatus }
+      });
       logCronExecutionToDb({
+        id: runId,
         cronName: 'immigration-sync',
         httpMethod: req.method || 'GET',
         targetCountries: [codeUpper],
-        status: 'NO_VERIFIED_CHANGE',
+        status: gateDecision.gateStatus,
         checkedCount: 1,
         updatesFound: 0,
-        logMessage: `Fetched ${sourceUrl}; no concrete verified policy change detected. Existing records preserved.`,
+        logMessage: `Fetched ${sourceUrl}; gate=${gateDecision.gateStatus} (${gateDecision.reasons.join(' ')}). Existing records preserved.`,
         executionDurationMs: durationMs
       });
       return res.json({
         success: true,
-        status: 'NO_VERIFIED_CHANGE',
+        runId,
+        status: gateDecision.gateStatus,
         countryCode: codeUpper,
         countryName: targetCountry.name,
         sourceUrl,
         sourceFetched: true,
         updatesFound: 0,
         autoPublished: false,
+        reasons: gateDecision.reasons,
         executionDurationMs: durationMs
       });
     }
 
-    const todayStr = new Date().toISOString().split('T')[0];
     const autoBlogSlug = `candidate-${codeLower}-visa-sync-${todayStr}`;
     const candidateEntry = {
-      id: `sync-${Date.now()}`,
+      id: `sync-${codeLower}-${todayStr}`,
       date: todayStr,
       countryCode: codeLower,
       countryName: targetCountry.name,
@@ -1038,14 +1212,27 @@ If there is a concrete, verifiable policy/fee/processing change stated directly 
       applicabilityScope: String(parsedUpdate.applicabilityScope || 'Verify applicability before publishing'),
       autoBlogSlug,
       emailNotified: adminEmail,
-      verificationStatus: 'AWAITING_VERIFICATION',
-      verifiedBy: 'Automated Official Source Check (Staged for Human Review)',
+      verificationStatus: gateDecision.verificationStatus,
+      verifiedBy: 'Automated Official Source Check (Staged for Human Review)'
     };
 
     stageBreakingBlogDraft(candidateEntry, DRAFTS_DIR);
 
+    saveAutomationCheckpoint({
+      checkpointId,
+      jobName: 'immigration-sync',
+      runId,
+      status: 'COMPLETED',
+      cursorIndex: 1,
+      totalItems: 1,
+      completedKeys: [codeUpper],
+      failedKeys: [],
+      idempotencyKeys: [`${todayStr}:${codeUpper}`]
+    });
+
     const durationMs = Date.now() - startTime;
     logCronExecutionToDb({
+      id: runId,
       cronName: 'immigration-sync',
       httpMethod: req.method || 'GET',
       targetCountries: [codeUpper],
@@ -1059,6 +1246,7 @@ If there is a concrete, verifiable policy/fee/processing change stated directly 
 
     res.json({
       success: true,
+      runId,
       status: 'STAGED_PENDING_REVIEW',
       cronMethod: req.method || 'GET',
       checkedCount: 1,
@@ -1067,23 +1255,31 @@ If there is a concrete, verifiable policy/fee/processing change stated directly 
       stagedDraftSlug: autoBlogSlug,
       candidateEntry,
       executionDurationMs: durationMs,
-      adminEmailNotified: adminEmail,
+      adminEmailNotified: adminEmail
     });
   } catch (err: any) {
     const durationMs = Date.now() - startTime;
+    const classified = classifyAutomationError(err);
     logCronExecutionToDb({
+      id: runId,
       cronName: 'immigration-sync',
       httpMethod: req.method || 'GET',
       targetCountries: [],
       status: 'ERROR',
       checkedCount: 0,
       updatesFound: 0,
-      logMessage: err.message || 'Unknown error',
+      logMessage: classified.message || 'Unknown error',
       executionDurationMs: durationMs
     });
-    res.status(500).json({ success: false, error: err.message });
+    res.status(classified.httpStatus || 500).json({
+      success: false,
+      runId,
+      failureClass: classified.failureClass,
+      error: classified.message
+    });
   } finally {
     isSyncCronRunning = false;
+    releaseJobLock('cron:immigration-sync', runId);
   }
 };
 
@@ -1114,7 +1310,52 @@ app.get('/api/admin/cron-logs', requireAdminAuth, (req, res) => {
     const logs = getCronExecutionLogsFromDb(50);
     res.json({ success: true, count: logs.length, logs });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: redactSensitiveData(err.message) });
+  }
+});
+
+// Admin: Operational Health & Database Integrity Summary (Strictly Admin-Only, Never Exposed Publicly)
+app.get('/api/admin/operational-health', requireAdminAuth, (req, res) => {
+  try {
+    const integrity = auditSqliteDatabaseIntegrity(db);
+    const deadLetters = getDeadLetterItems('QUARANTINED');
+    const dbEvents = getOperationalEvents(50);
+    const cronLogs = getCronExecutionLogsFromDb(5);
+    const hasNeonConfigured = Boolean(
+      (process.env.NEON_TEST_DATABASE_URL || '').trim() &&
+        !String(process.env.NEON_TEST_DATABASE_URL).includes('ep-example.us-east-2.aws.neon.tech')
+    );
+
+    const summary = computeOperationalHealthSummary({
+      sqliteIntegrityOk: integrity.ok,
+      sqliteForeignKeyViolations: integrity.foreignKeyViolations,
+      sqliteMigrationsApplied: integrity.migrationsApplied.length,
+      sqliteMigrationsExpected: SQLITE_MIGRATIONS.length,
+      postgresStatus: hasNeonConfigured ? 'WARNING' : 'NOT_VERIFIED',
+      postgresSummary: hasNeonConfigured
+        ? 'NEON_TEST_DATABASE_URL present; live connection tested on demand only.'
+        : 'NEON_TEST_DATABASE_URL not configured; remote Neon live check is NOT_VERIFIED.',
+      lastCronStatus: cronLogs[0]?.status || null,
+      deadLetterCount: deadLetters.length,
+      recentEvents: dbEvents.length > 0 ? dbEvents : undefined,
+      cronScheduleConfigured: '30 21 * * *'
+    });
+
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      success: true,
+      summary,
+      databaseIntegrity: integrity,
+      deadLetterQueue: deadLetters
+    });
+  } catch (err: any) {
+    recordOperationalEvent({
+      category: 'DB_CONNECTION_ERROR',
+      severity: 'ERROR',
+      component: 'admin-operational-health',
+      message: redactSensitiveData(err?.message || 'Health check failure')
+    });
+    res.status(500).json({ success: false, error: redactSensitiveData(err?.message || 'Health check failure') });
   }
 });
 

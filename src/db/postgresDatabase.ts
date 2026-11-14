@@ -1,6 +1,8 @@
+import crypto from 'node:crypto';
 import pg from 'pg';
 import { Pool as NeonPool, neonConfig } from '@neondatabase/serverless';
 import { PGlite } from '@electric-sql/pglite';
+import { recordOperationalEvent, redactSensitiveData } from '../utils/operationalObservability';
 import {
   REQUIREMENT_CLASSIFICATIONS,
   EVIDENCE_STATUSES,
@@ -242,6 +244,99 @@ CREATE INDEX IF NOT EXISTS idx_pg_claims_classification ON visa_detail_claims(pr
 CREATE INDEX IF NOT EXISTS idx_pg_claims_nationality ON visa_detail_claims(program_id, applicable_nationality);
 `;
 
+export const POSTGRES_PHASE_4_4_MIGRATION_DDL = `
+CREATE TABLE IF NOT EXISTS automation_job_locks (
+  lock_key TEXT PRIMARY KEY,
+  owner_id TEXT NOT NULL,
+  acquired_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  metadata_json TEXT NOT NULL DEFAULT '{}'
+);
+
+CREATE TABLE IF NOT EXISTS automation_checkpoints (
+  checkpoint_id TEXT PRIMARY KEY,
+  job_name TEXT NOT NULL,
+  run_id TEXT NOT NULL,
+  status TEXT NOT NULL,
+  cursor_index INTEGER NOT NULL DEFAULT 0,
+  total_items INTEGER NOT NULL DEFAULT 0,
+  completed_keys_json TEXT NOT NULL DEFAULT '[]',
+  failed_keys_json TEXT NOT NULL DEFAULT '[]',
+  idempotency_keys_json TEXT NOT NULL DEFAULT '[]',
+  state_json TEXT NOT NULL DEFAULT '{}',
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS automation_dead_letter (
+  id TEXT PRIMARY KEY,
+  job_name TEXT NOT NULL,
+  run_id TEXT NOT NULL,
+  target_key TEXT NOT NULL,
+  failure_class TEXT NOT NULL,
+  error_message TEXT NOT NULL,
+  payload_json TEXT NOT NULL DEFAULT '{}',
+  retry_count INTEGER NOT NULL DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'QUARANTINED',
+  created_at TEXT NOT NULL,
+  resolved_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS operational_events (
+  id TEXT PRIMARY KEY,
+  timestamp TEXT NOT NULL,
+  category TEXT NOT NULL,
+  severity TEXT NOT NULL,
+  component TEXT NOT NULL,
+  message TEXT NOT NULL,
+  details_json TEXT NOT NULL DEFAULT '{}'
+);
+
+CREATE INDEX IF NOT EXISTS idx_pg_claims_status ON visa_detail_claims(program_id, status);
+CREATE INDEX IF NOT EXISTS idx_pg_evidence_status ON visa_detail_evidence(claim_id, status);
+CREATE INDEX IF NOT EXISTS idx_pg_cron_status_time ON cron_execution_logs(cron_name, status, timestamp);
+CREATE INDEX IF NOT EXISTS idx_pg_dlq_status ON automation_dead_letter(status, job_name, created_at);
+CREATE INDEX IF NOT EXISTS idx_pg_op_events_cat_time ON operational_events(category, timestamp);
+`;
+
+export interface PgMigrationDefinition {
+  version: string;
+  name: string;
+  ddl: string;
+  rollbackNotes: string;
+}
+
+export const POSTGRES_MIGRATIONS: PgMigrationDefinition[] = [
+  {
+    version: '001_baseline_enrichment_tables',
+    name: 'Baseline 8 enrichment tables and primary indexes',
+    ddl: POSTGRES_ENRICHMENT_SCHEMA_DDL,
+    rollbackNotes: 'Non-destructive CREATE IF NOT EXISTS; rollback via verified pre-migration backup.'
+  },
+  {
+    version: '002_phase31_comprehensive_and_classification',
+    name: 'Phase 3.1/3.2 evidence metadata, 30-section JSON, and 5-tier claim classification',
+    ddl: POSTGRES_PHASE_3_1_MIGRATION_DDL,
+    rollbackNotes: 'Additive columns; preserve via verified pre-migration backup.'
+  },
+  {
+    version: '003_phase44_operational_reliability_and_constraints',
+    name: 'Phase 4.4 job locks, checkpoints, dead-letter quarantine, operational telemetry, and indexes',
+    ddl: POSTGRES_PHASE_4_4_MIGRATION_DDL,
+    rollbackNotes: 'DROP TABLE IF EXISTS automation_job_locks, automation_checkpoints, automation_dead_letter, operational_events.'
+  }
+];
+
+function computePgMigrationChecksum(version: string, ddl: string): string {
+  return crypto.createHash('sha256').update(`${version}:${ddl}`, 'utf8').digest('hex');
+}
+
+function splitSqlStatements(sql: string): string[] {
+  return sql
+    .split(/;\s*(?=\n|$)/g)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
 /**
  * Create a PostgreSQL executor using either NEON_TEST_DATABASE_URL (pg.Pool)
  * or an isolated in-process PGlite PostgreSQL engine for offline verification.
@@ -262,11 +357,32 @@ export async function createPostgresExecutor(
       ssl: { rejectUnauthorized: false }
     });
 
+    pool.on('error', (err) => {
+      const safeMsg = redactSensitiveData(err?.message || 'Unexpected idle PostgreSQL client error');
+      recordOperationalEvent({
+        category: 'DB_CONNECTION_ERROR',
+        severity: 'ERROR',
+        component: 'postgres-pool',
+        message: safeMsg
+      });
+    });
+
     const executor: PgExecutor = {
       isNeonRemote: true,
       async query<T = any>(sql: string, params: any[] = []) {
-        const res = await pool.query(sql, params);
-        return { rows: res.rows as T[], rowCount: res.rowCount ?? res.rows.length };
+        try {
+          const res = await pool.query(sql, params);
+          return { rows: res.rows as T[], rowCount: res.rowCount ?? res.rows.length };
+        } catch (err: any) {
+          const safeMsg = redactSensitiveData(err?.message || 'PostgreSQL query error');
+          recordOperationalEvent({
+            category: 'DB_CONNECTION_ERROR',
+            severity: 'ERROR',
+            component: 'postgres-query',
+            message: safeMsg
+          });
+          throw new Error(safeMsg);
+        }
       },
       async transaction<T>(fn: (tx: PgExecutor) => Promise<T>): Promise<T> {
         const client = await pool.connect();
@@ -355,22 +471,84 @@ export class PostgresImmigrationRepository {
   constructor(public readonly pg: PgExecutor) {}
 
   async applyPhase31Migrations(): Promise<void> {
-    const statements = POSTGRES_PHASE_3_1_MIGRATION_DDL.split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
+    const statements = splitSqlStatements(POSTGRES_PHASE_3_1_MIGRATION_DDL);
     for (const stmt of statements) {
       await this.pg.query(stmt);
     }
   }
 
-  async initSchema(): Promise<void> {
-    const statements = POSTGRES_ENRICHMENT_SCHEMA_DDL.split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
-    for (const stmt of statements) {
-      await this.pg.query(stmt);
+  async runTrackedMigrations(
+    migrations: PgMigrationDefinition[] = POSTGRES_MIGRATIONS
+  ): Promise<{ newlyApplied: string[]; alreadyApplied: string[] }> {
+    await this.pg.query(`
+      CREATE TABLE IF NOT EXISTS schema_migrations (
+        version TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        checksum TEXT NOT NULL,
+        applied_at TEXT NOT NULL,
+        rollback_notes TEXT NOT NULL
+      )
+    `);
+
+    const newlyApplied: string[] = [];
+    const alreadyApplied: string[] = [];
+
+    for (const mig of migrations) {
+      const expectedChecksum = computePgMigrationChecksum(mig.version, mig.ddl);
+      const existing = await this.pg.query<{ version: string; checksum: string }>(
+        'SELECT version, checksum FROM schema_migrations WHERE version = $1',
+        [mig.version]
+      );
+
+      if (existing.rows.length > 0) {
+        const recorded = existing.rows[0].checksum;
+        if (recorded !== expectedChecksum) {
+          throw new Error(
+            `MIGRATION_CHECKSUM_MISMATCH for ${mig.version}: expected ${expectedChecksum}, recorded ${recorded}`
+          );
+        }
+        alreadyApplied.push(mig.version);
+        continue;
+      }
+
+      await this.pg.transaction(async (tx) => {
+        for (const stmt of splitSqlStatements(mig.ddl)) {
+          await tx.query(stmt);
+        }
+        await tx.query(
+          `INSERT INTO schema_migrations (version, name, checksum, applied_at, rollback_notes) VALUES ($1, $2, $3, $4, $5)`,
+          [mig.version, mig.name, expectedChecksum, new Date().toISOString(), mig.rollbackNotes]
+        );
+      });
+      newlyApplied.push(mig.version);
+      recordOperationalEvent({
+        category: 'MIGRATION_EVENT',
+        severity: 'INFO',
+        component: 'postgres-migrator',
+        message: `Applied PostgreSQL migration ${mig.version}: ${mig.name}`
+      });
     }
-    await this.applyPhase31Migrations();
+
+    return { newlyApplied, alreadyApplied };
+  }
+
+  async getAppliedMigrations(): Promise<
+    Array<{ version: string; name: string; checksum: string; appliedAt: string; rollbackNotes: string }>
+  > {
+    const { rows } = await this.pg.query(
+      'SELECT version, name, checksum, applied_at, rollback_notes FROM schema_migrations ORDER BY version ASC'
+    );
+    return rows.map((r: any) => ({
+      version: r.version,
+      name: r.name,
+      checksum: r.checksum,
+      appliedAt: r.applied_at,
+      rollbackNotes: r.rollback_notes
+    }));
+  }
+
+  async initSchema(): Promise<void> {
+    await this.runTrackedMigrations();
   }
 
   async getBatchStateFromDb(): Promise<any | null> {
@@ -912,93 +1090,107 @@ export class PostgresImmigrationRepository {
     );
   }
 
-  async deleteVisaClaim(claimId: string, exec: PgExecutor = this.pg): Promise<void> {
-    await exec.query('DELETE FROM visa_detail_evidence WHERE claim_id = $1', [claimId]);
-    await exec.query('DELETE FROM visa_detail_claims WHERE id = $1', [claimId]);
+  async deleteVisaClaim(claimId: string, exec?: PgExecutor): Promise<void> {
+    const runDelete = async (targetExec: PgExecutor) => {
+      await targetExec.query('DELETE FROM visa_detail_evidence WHERE claim_id = $1', [claimId]);
+      await targetExec.query('DELETE FROM visa_detail_claims WHERE id = $1', [claimId]);
+    };
+    if (exec) return runDelete(exec);
+    return this.pg.transaction(runDelete);
   }
 
   async saveVisaEvidence(
     evidence: any,
-    exec: PgExecutor = this.pg,
+    exec?: PgExecutor,
     options?: { skipReconcile?: boolean }
   ): Promise<{ downgradedClaim?: boolean; newClaimStatus?: string; versionId?: string }> {
-    const normalizedStatus = normalizeEvidenceStatus(evidence.status);
-    const claimId = evidence.claimId || evidence.claim_id;
-    await exec.query(
-      `
-      INSERT INTO visa_detail_evidence (
-        id, claim_id, source_url, legal_instrument, effective_date, last_checked_date,
-        source_title, issuing_authority, publication_date, access_date, reviewer_notes, excerpt, status
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-      ON CONFLICT(id) DO UPDATE SET
-        source_url = EXCLUDED.source_url,
-        legal_instrument = EXCLUDED.legal_instrument,
-        effective_date = EXCLUDED.effective_date,
-        last_checked_date = EXCLUDED.last_checked_date,
-        source_title = EXCLUDED.source_title,
-        issuing_authority = EXCLUDED.issuing_authority,
-        publication_date = EXCLUDED.publication_date,
-        access_date = EXCLUDED.access_date,
-        reviewer_notes = EXCLUDED.reviewer_notes,
-        excerpt = EXCLUDED.excerpt,
-        status = EXCLUDED.status
-      `,
-      [
-        evidence.id,
-        claimId,
-        evidence.sourceUrl || evidence.source_url || '',
-        evidence.legalInstrument || evidence.legal_instrument || '',
-        evidence.effectiveDate || evidence.effective_date || '',
-        evidence.lastCheckedDate || evidence.last_checked_date || new Date().toISOString().split('T')[0],
-        evidence.sourceTitle || evidence.source_title || '',
-        evidence.issuingAuthority || evidence.issuing_authority || '',
-        evidence.publicationDate || evidence.publication_date || '',
-        evidence.accessDate || evidence.access_date || new Date().toISOString().split('T')[0],
-        evidence.reviewerNotes || evidence.reviewer_notes || '',
-        evidence.excerpt || '',
-        normalizedStatus
-      ]
-    );
-
-    if (!options?.skipReconcile && claimId) {
-      const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
-        claimId,
-        `Evidence ${evidence.id} status set to ${normalizedStatus}`,
-        exec
+    const runSave = async (targetExec: PgExecutor) => {
+      const normalizedStatus = normalizeEvidenceStatus(evidence.status);
+      const claimId = evidence.claimId || evidence.claim_id;
+      await targetExec.query(
+        `
+        INSERT INTO visa_detail_evidence (
+          id, claim_id, source_url, legal_instrument, effective_date, last_checked_date,
+          source_title, issuing_authority, publication_date, access_date, reviewer_notes, excerpt, status
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        ON CONFLICT(id) DO UPDATE SET
+          source_url = EXCLUDED.source_url,
+          legal_instrument = EXCLUDED.legal_instrument,
+          effective_date = EXCLUDED.effective_date,
+          last_checked_date = EXCLUDED.last_checked_date,
+          source_title = EXCLUDED.source_title,
+          issuing_authority = EXCLUDED.issuing_authority,
+          publication_date = EXCLUDED.publication_date,
+          access_date = EXCLUDED.access_date,
+          reviewer_notes = EXCLUDED.reviewer_notes,
+          excerpt = EXCLUDED.excerpt,
+          status = EXCLUDED.status
+        `,
+        [
+          evidence.id,
+          claimId,
+          evidence.sourceUrl || evidence.source_url || '',
+          evidence.legalInstrument || evidence.legal_instrument || '',
+          evidence.effectiveDate || evidence.effective_date || '',
+          evidence.lastCheckedDate || evidence.last_checked_date || new Date().toISOString().split('T')[0],
+          evidence.sourceTitle || evidence.source_title || '',
+          evidence.issuingAuthority || evidence.issuing_authority || '',
+          evidence.publicationDate || evidence.publication_date || '',
+          evidence.accessDate || evidence.access_date || new Date().toISOString().split('T')[0],
+          evidence.reviewerNotes || evidence.reviewer_notes || '',
+          evidence.excerpt || '',
+          normalizedStatus
+        ]
       );
-      return {
-        downgradedClaim: rec.downgraded,
-        newClaimStatus: rec.newStatus,
-        versionId: rec.versionId
-      };
-    }
-    return {};
+
+      if (!options?.skipReconcile && claimId) {
+        const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
+          claimId,
+          `Evidence ${evidence.id} status set to ${normalizedStatus}`,
+          targetExec
+        );
+        return {
+          downgradedClaim: rec.downgraded,
+          newClaimStatus: rec.newStatus,
+          versionId: rec.versionId
+        };
+      }
+      return {};
+    };
+
+    if (exec) return runSave(exec);
+    return this.pg.transaction(runSave);
   }
 
   async deleteVisaEvidence(
     evidenceId: string,
-    exec: PgExecutor = this.pg
+    exec?: PgExecutor
   ): Promise<{ downgradedClaim?: boolean; newClaimStatus?: string; claimId?: string; versionId?: string }> {
-    const evRes = await exec.query('SELECT claim_id FROM visa_detail_evidence WHERE id = $1', [
-      evidenceId
-    ]);
-    const claimId = evRes.rows[0]?.claim_id;
-    await exec.query('DELETE FROM visa_detail_evidence WHERE id = $1', [evidenceId]);
-    if (claimId) {
-      const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
-        claimId,
-        `Evidence ${evidenceId} deleted`,
-        exec
-      );
-      return {
-        downgradedClaim: rec.downgraded,
-        newClaimStatus: rec.newStatus,
-        claimId,
-        versionId: rec.versionId
-      };
-    }
-    return {};
+    const runDelete = async (targetExec: PgExecutor) => {
+      const evRes = await targetExec.query('SELECT claim_id FROM visa_detail_evidence WHERE id = $1', [
+        evidenceId
+      ]);
+      const claimId = evRes.rows[0]?.claim_id;
+      await targetExec.query('DELETE FROM visa_detail_evidence WHERE id = $1', [evidenceId]);
+      if (claimId) {
+        const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
+          claimId,
+          `Evidence ${evidenceId} deleted`,
+          targetExec
+        );
+        return {
+          downgradedClaim: rec.downgraded,
+          newClaimStatus: rec.newStatus,
+          claimId,
+          versionId: rec.versionId
+        };
+      }
+      return {};
+    };
+
+    if (exec) return runDelete(exec);
+    return this.pg.transaction(runDelete);
   }
 
   async getVisaVersions(programId: string, exec: PgExecutor = this.pg): Promise<any[]> {
@@ -1117,5 +1309,235 @@ export class PostgresImmigrationRepository {
       ...(statsRes.rows[0] || {}),
       ...(claimsRes.rows[0] || {})
     };
+  }
+
+  async logCronExecutionToDb(log: {
+    id?: string;
+    cronName: string;
+    httpMethod: string;
+    targetCountries: string[];
+    status: string;
+    checkedCount: number;
+    updatesFound: number;
+    logMessage: string;
+    executionDurationMs: number;
+    missedRunResumed?: boolean;
+  }): Promise<string> {
+    const id = log.id || `cron-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+    const nowStr = new Date().toISOString();
+    const safeMsg = redactSensitiveData(String(log.logMessage || ''));
+    await this.pg.query(
+      `INSERT INTO cron_execution_logs (
+        id, timestamp, cron_name, http_method, target_countries, status,
+        checked_count, updates_found, log_message, execution_duration_ms, missed_run_resumed, created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+      [
+        id,
+        nowStr,
+        log.cronName,
+        log.httpMethod,
+        JSON.stringify(log.targetCountries || []),
+        log.status,
+        log.checkedCount,
+        log.updatesFound,
+        safeMsg,
+        log.executionDurationMs,
+        log.missedRunResumed ? 1 : 0,
+        nowStr
+      ]
+    );
+    return id;
+  }
+
+  async getCronExecutionLogsFromDb(limit: number = 20): Promise<any[]> {
+    const { rows } = await this.pg.query('SELECT * FROM cron_execution_logs ORDER BY timestamp DESC LIMIT $1', [
+      limit
+    ]);
+    return rows.map((r: any) => ({
+      id: r.id,
+      timestamp: r.timestamp,
+      cronName: r.cron_name,
+      httpMethod: r.http_method,
+      targetCountries: JSON.parse(r.target_countries || '[]'),
+      status: r.status,
+      checkedCount: r.checked_count,
+      updatesFound: r.updates_found,
+      logMessage: redactSensitiveData(String(r.log_message || '')),
+      executionDurationMs: r.execution_duration_ms,
+      missedRunResumed: Boolean(r.missed_run_resumed)
+    }));
+  }
+
+  async acquireJobLock(
+    lockKey: string,
+    ownerId: string,
+    ttlMs: number = 5 * 60 * 1000,
+    metadata: Record<string, unknown> = {}
+  ): Promise<{ acquired: boolean; existingOwner?: string; expiresAt?: string }> {
+    return this.pg.transaction(async (tx) => {
+      const now = Date.now();
+      const nowIso = new Date(now).toISOString();
+      const expiresIso = new Date(now + Math.max(1000, ttlMs)).toISOString();
+
+      await tx.query('DELETE FROM automation_job_locks WHERE lock_key = $1 AND expires_at <= $2', [
+        lockKey,
+        nowIso
+      ]);
+
+      const existingRes = await tx.query<{ owner_id: string; expires_at: string }>(
+        'SELECT owner_id, expires_at FROM automation_job_locks WHERE lock_key = $1',
+        [lockKey]
+      );
+      const existing = existingRes.rows[0];
+      if (existing && existing.owner_id !== ownerId) {
+        return {
+          acquired: false,
+          existingOwner: existing.owner_id,
+          expiresAt: existing.expires_at
+        };
+      }
+
+      await tx.query(
+        `INSERT INTO automation_job_locks (lock_key, owner_id, acquired_at, expires_at, metadata_json)
+         VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT(lock_key) DO UPDATE SET
+           owner_id = EXCLUDED.owner_id,
+           acquired_at = EXCLUDED.acquired_at,
+           expires_at = EXCLUDED.expires_at,
+           metadata_json = EXCLUDED.metadata_json`,
+        [lockKey, ownerId, nowIso, expiresIso, JSON.stringify(redactSensitiveData(metadata))]
+      );
+
+      return { acquired: true, expiresAt: expiresIso };
+    });
+  }
+
+  async releaseJobLock(lockKey: string, ownerId: string): Promise<boolean> {
+    const res = await this.pg.query('DELETE FROM automation_job_locks WHERE lock_key = $1 AND owner_id = $2', [
+      lockKey,
+      ownerId
+    ]);
+    return res.rowCount > 0;
+  }
+
+  async saveAutomationCheckpoint(cp: {
+    checkpointId: string;
+    jobName: string;
+    runId: string;
+    status: string;
+    cursorIndex: number;
+    totalItems: number;
+    completedKeys: string[];
+    failedKeys: string[];
+    idempotencyKeys?: string[];
+    state?: Record<string, unknown>;
+  }): Promise<void> {
+    await this.pg.query(
+      `INSERT INTO automation_checkpoints (
+         checkpoint_id, job_name, run_id, status, cursor_index, total_items,
+         completed_keys_json, failed_keys_json, idempotency_keys_json, state_json, updated_at
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       ON CONFLICT(checkpoint_id) DO UPDATE SET
+         run_id = EXCLUDED.run_id,
+         status = EXCLUDED.status,
+         cursor_index = EXCLUDED.cursor_index,
+         total_items = EXCLUDED.total_items,
+         completed_keys_json = EXCLUDED.completed_keys_json,
+         failed_keys_json = EXCLUDED.failed_keys_json,
+         idempotency_keys_json = EXCLUDED.idempotency_keys_json,
+         state_json = EXCLUDED.state_json,
+         updated_at = EXCLUDED.updated_at`,
+      [
+        cp.checkpointId,
+        cp.jobName,
+        cp.runId,
+        cp.status,
+        cp.cursorIndex,
+        cp.totalItems,
+        JSON.stringify(cp.completedKeys || []),
+        JSON.stringify(cp.failedKeys || []),
+        JSON.stringify(cp.idempotencyKeys || []),
+        JSON.stringify(redactSensitiveData(cp.state || {})),
+        new Date().toISOString()
+      ]
+    );
+  }
+
+  async getAutomationCheckpoint(checkpointId: string): Promise<any | null> {
+    const { rows } = await this.pg.query('SELECT * FROM automation_checkpoints WHERE checkpoint_id = $1', [
+      checkpointId
+    ]);
+    const r = rows[0];
+    if (!r) return null;
+    return {
+      checkpointId: r.checkpoint_id,
+      jobName: r.job_name,
+      runId: r.run_id,
+      status: r.status,
+      cursorIndex: r.cursor_index,
+      totalItems: r.total_items,
+      completedKeys: JSON.parse(r.completed_keys_json || '[]'),
+      failedKeys: JSON.parse(r.failed_keys_json || '[]'),
+      idempotencyKeys: JSON.parse(r.idempotency_keys_json || '[]'),
+      state: JSON.parse(r.state_json || '{}'),
+      updatedAt: r.updated_at
+    };
+  }
+
+  async recordDeadLetterItem(item: {
+    id?: string;
+    jobName: string;
+    runId: string;
+    targetKey: string;
+    failureClass: string;
+    errorMessage: string;
+    payload?: Record<string, unknown>;
+    retryCount?: number;
+    status?: string;
+  }): Promise<string> {
+    const id = item.id || `dlq-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+    const safeError = redactSensitiveData(String(item.errorMessage || 'Unknown failure'));
+    await this.pg.query(
+      `INSERT INTO automation_dead_letter (
+         id, job_name, run_id, target_key, failure_class, error_message, payload_json, retry_count, status, created_at
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       ON CONFLICT(id) DO UPDATE SET
+         failure_class = EXCLUDED.failure_class,
+         error_message = EXCLUDED.error_message,
+         retry_count = EXCLUDED.retry_count,
+         status = EXCLUDED.status`,
+      [
+        id,
+        item.jobName,
+        item.runId,
+        item.targetKey,
+        item.failureClass,
+        safeError,
+        JSON.stringify(redactSensitiveData(item.payload || {})),
+        item.retryCount ?? 0,
+        item.status || 'QUARANTINED',
+        new Date().toISOString()
+      ]
+    );
+    return id;
+  }
+
+  async getDeadLetterItems(status?: string): Promise<any[]> {
+    const { rows } = status
+      ? await this.pg.query('SELECT * FROM automation_dead_letter WHERE status = $1 ORDER BY created_at DESC', [status])
+      : await this.pg.query('SELECT * FROM automation_dead_letter ORDER BY created_at DESC');
+    return rows.map((r: any) => ({
+      id: r.id,
+      jobName: r.job_name,
+      runId: r.run_id,
+      targetKey: r.target_key,
+      failureClass: r.failure_class,
+      errorMessage: r.error_message,
+      payload: JSON.parse(r.payload_json || '{}'),
+      retryCount: r.retry_count,
+      status: r.status,
+      createdAt: r.created_at,
+      resolvedAt: r.resolved_at
+    }));
   }
 }
