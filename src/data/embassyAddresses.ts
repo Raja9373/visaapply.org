@@ -405,7 +405,7 @@ REMAINING_CODES.forEach(code => {
 
 import { UNIVERSAL_EMBASSY_DB } from './universalEmbassyDatabase';
 import { getCountryMeta } from './countryMetaData';
-import { NAME_MAP_249 } from './fullVisaDatabase';
+import { NAME_MAP_249 } from './countryLightRegistry';
 
 const GLOBAL_COUNTRY_NAMES: Record<string, string> = {
   "us":"United States", "ca":"Canada", "gb":"United Kingdom", "uk":"United Kingdom", "au":"Australia", "ae":"United Arab Emirates", "de":"Germany", "sg":"Singapore", "th":"Thailand", "eu":"Schengen Area", "sc":"Schengen Area", "sch":"Schengen Area", "schengen":"Schengen Area", "jp":"Japan", "in":"India", "fr":"France", "it":"Italy", "es":"Spain", "nl":"Netherlands", "ch":"Switzerland", "nz":"New Zealand", "br":"Brazil", "mx":"Mexico", "kr":"South Korea", "cn":"China", "vn":"Vietnam", "my":"Malaysia", "id":"Indonesia", "ph":"Philippines", "za":"South Africa", "tr":"Turkey", "sa":"Saudi Arabia", "qa":"Qatar", "ie":"Ireland", "se":"Sweden", "no":"Norway", "pt":"Portugal", "dk":"Denmark", "fi":"Finland", "be":"Belgium", "at":"Austria", "pl":"Poland",

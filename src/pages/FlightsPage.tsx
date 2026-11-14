@@ -4,7 +4,7 @@ import {
   AIRPORT_IATA_MAP,
   getFlightLinkForCountry,
 } from '../data/travelpayoutsConfig';
-import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import { getCountryMeta, getCapitalSlug } from '../data/countryMetaData';
 import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';

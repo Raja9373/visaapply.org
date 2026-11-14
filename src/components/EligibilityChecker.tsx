@@ -12,7 +12,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { getCountryMeta, getCapitalSlug } from '../data/countryMetaData';
-import { getLiveVisaCount, NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { getLiveVisaCount, NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { SupportedLangCode } from '../i18n/config';
 import { getUIString, getLocalizedCountryName } from '../utils/autoLanguage';

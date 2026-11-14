@@ -16,7 +16,7 @@ import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from '../components/BottomFreeToolsSection';
-import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 
 interface EmbassySlotAlertPageProps {
   onNavigate?: (path: string) => void;

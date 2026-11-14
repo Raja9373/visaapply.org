@@ -2,7 +2,7 @@ import { ALL_249_ISO_FORCED } from '../data/all249Countries';
 import { getOfficialSourceForCountry, OFFICIAL_SOURCE_REGISTRY_249, OfficialSourceEntry } from '../data/officialSourceRegistry';
 import { getImmigrationProfileForCountry, getImmigrationDatabaseAuditMetrics, ImmigrationProgram, PathwayVerificationStatus, ImmigrationCategoryKey } from '../data/globalImmigrationHubData';
 import initialChangelog from '../data/immigrationChangelog.json';
-import { NAME_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249 } from '../data/countryLightRegistry';
 
 export type ImmigrationChangeType =
   | 'NEW_VISA'

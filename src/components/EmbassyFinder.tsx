@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { getCountryMeta } from '../data/countryMetaData';
-import { NAME_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249 } from '../data/countryLightRegistry';
 
 interface EmbassyFinderProps {
   countryCode: string;

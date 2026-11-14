@@ -630,14 +630,14 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
       </div>
 
       {/* Static Breadcrumbs Path */}
-      <nav className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap no-print">
-        <span onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600">Home</span>
-        <span>&gt;</span>
-        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-600">{fromCountry.name} to {toCountry.name}</span>
-        <span>&gt;</span>
-        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${categoryCode}`)} className="cursor-pointer hover:text-blue-600 capitalize">{categoryCode} Visa</span>
-        <span>&gt;</span>
-        <span className="text-slate-900 font-bold truncate max-w-xs">{title}</span>
+      <nav aria-label="Breadcrumb" className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap no-print">
+        <button type="button" onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600 focus-visible:underline">Home</button>
+        <span aria-hidden="true">&gt;</span>
+        <button type="button" onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-600 focus-visible:underline">{fromCountry.name} to {toCountry.name}</button>
+        <span aria-hidden="true">&gt;</span>
+        <button type="button" onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${categoryCode}`)} className="cursor-pointer hover:text-blue-600 capitalize focus-visible:underline">{categoryCode} Visa</button>
+        <span aria-hidden="true">&gt;</span>
+        <span className="text-slate-900 font-bold truncate max-w-xs" aria-current="page">{title}</span>
       </nav>
 
       {/* Main Guide Card */}

@@ -7,7 +7,7 @@ import {
   ImmigrationChangelogItem,
   ImmigrationChangeType,
 } from '../services/immigrationAutoSync';
-import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 
 interface ImmigrationUpdatesPageProps {
   onNavigate: (path: string) => void;

@@ -1,4 +1,4 @@
-import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from './fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from './countryLightRegistry';
 import { getCountryMeta, getCapitalSlug } from './countryMetaData';
 import { getContinentForCountry, CONTINENT_MAP_249 } from './continentMap';
 import { getEmbassyInfo } from './embassyAddresses';

@@ -6,7 +6,7 @@ import {
   buildBlogForCountryAndTemplate,
   BLOG_TEMPLATES
 } from '../data/blogGenerator';
-import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import { CONTINENT_MAP_249 } from '../data/continentMap';
 import { getCountryMeta, getCapitalSlug } from '../data/countryMetaData';
 import { generateChecklistPDF } from '../utils/countryLiveUtils';

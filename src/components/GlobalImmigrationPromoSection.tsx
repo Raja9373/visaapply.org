@@ -93,14 +93,15 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
         {/* 6 Clickable Category Cards with Unique Destinations */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {categories.map((cat) => (
-            <div
+            <button
               key={cat.id}
+              type="button"
               onClick={() => onNavigate(`/immigration?category=${cat.urlParam}`)}
-              className="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-emerald-400/50 rounded-2xl p-5 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
+              className="w-full text-left bg-white/10 hover:bg-white/15 border border-white/15 hover:border-emerald-400/50 rounded-2xl p-5 transition-all duration-200 cursor-pointer group flex flex-col justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
             >
-              <div className="space-y-3">
+              <div className="space-y-3 w-full">
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl p-2 bg-white/10 rounded-xl">{cat.icon}</span>
+                  <span className="text-3xl p-2 bg-white/10 rounded-xl" aria-hidden="true">{cat.icon}</span>
                   <span className="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">
                     {cat.badge}
                   </span>
@@ -115,11 +116,11 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-emerald-300 group-hover:text-emerald-200">
+              <div className="mt-5 pt-3 border-t border-white/10 w-full flex items-center justify-between text-xs font-bold text-emerald-300 group-hover:text-emerald-200">
                 <span>{cat.cta}</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </div>
-            </div>
+            </button>
           ))}
         </div>
 

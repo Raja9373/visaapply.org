@@ -7,14 +7,17 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  if (command === 'build') {
+    process.env.NODE_ENV = 'production';
+  }
   return {
     plugins: [
       react(),
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.svg', 'ads.txt', 'robots.txt', 'sitemap.xml', 'sitemap-index.xml'],
+        includeAssets: ['favicon.svg', 'ads.txt', 'robots.txt'],
         manifest: {
           id: '/',
           name: 'VisaApply.org - Global Visa & Travel Portal',
@@ -35,8 +38,9 @@ export default defineConfig(() => {
           ],
         },
         workbox: {
-          maximumFileSizeToCacheInBytes: 12 * 1024 * 1024, // 12 MiB
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,xml}'],
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MiB max per cached asset
+          globPatterns: ['**/*.{js,css,html,ico,png,svg}', 'manifest.webmanifest'],
+          globIgnores: ['**/assets/aistudio/**', '**/sitemap*.xml', '**/*.map'],
           runtimeCaching: [
             {
               urlPattern: /\/sitemap.*\.xml$/i,
@@ -86,8 +90,23 @@ export default defineConfig(() => {
       },
     ],
     build: {
-      sourcemap: true,
+      sourcemap: false,
       target: 'es2022',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom')) return 'react-vendor';
+              if (id.includes('lucide-react')) return 'ui-icons';
+              if (id.includes('jspdf') || id.includes('html2canvas')) return 'pdf-tools';
+              if (id.includes('d3-geo') || id.includes('topojson') || id.includes('world-atlas') || id.includes('react-simple-maps')) {
+                return 'geo-map';
+              }
+            }
+            return undefined;
+          },
+        },
+      },
     },
     resolve: {
       alias: {

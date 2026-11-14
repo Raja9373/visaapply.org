@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   getImmigrationDatabaseAuditMetrics, 
   getImmigrationProfileForCountry, 
@@ -42,6 +42,26 @@ export function ImmigrationVerificationDashboard() {
   const [isExecutingBatch, setIsExecutingBatch] = useState(false);
   const [batchState, setBatchState] = useState<ResumableBatchState>(getStoredBatchState());
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const modalCloseRef = useRef<HTMLButtonElement>(null);
+  const lastFocusedBeforeModalRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (inspectProgram) {
+      lastFocusedBeforeModalRef.current = document.activeElement as HTMLElement | null;
+      setTimeout(() => modalCloseRef.current?.focus(), 20);
+      const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          setInspectProgram(null);
+        }
+      };
+      window.addEventListener('keydown', onKeyDown);
+      return () => window.removeEventListener('keydown', onKeyDown);
+    } else if (lastFocusedBeforeModalRef.current) {
+      lastFocusedBeforeModalRef.current.focus();
+      lastFocusedBeforeModalRef.current = null;
+    }
+  }, [inspectProgram]);
 
   const metrics = getImmigrationDatabaseAuditMetrics();
 
@@ -541,19 +561,30 @@ export function ImmigrationVerificationDashboard() {
 
       {/* Program Evidence Inspector Modal */}
       {inspectProgram && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 text-xs text-slate-200 shadow-2xl">
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) setInspectProgram(null); }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="inspect-program-modal-title"
+            className="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 text-xs text-slate-200 shadow-2xl"
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
                 <div className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-wider">
                   Program Pathway Audit File
                 </div>
-                <h3 className="text-lg font-extrabold text-white">{inspectProgram.officialName}</h3>
+                <h3 id="inspect-program-modal-title" className="text-lg font-extrabold text-white">{inspectProgram.officialName}</h3>
                 <div className="text-[11px] text-slate-400 font-mono">{inspectProgram.id} • {inspectProgram.countryCode}</div>
               </div>
               <button
+                ref={modalCloseRef}
+                type="button"
+                aria-label="Close program audit modal"
                 onClick={() => setInspectProgram(null)}
-                className="text-slate-400 hover:text-white font-black text-lg p-1 cursor-pointer"
+                className="text-slate-400 hover:text-white font-black text-lg p-1.5 rounded cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-400"
               >
                 ✕
               </button>

@@ -1,5 +1,5 @@
 import { getContinentForCountry } from './continentMap';
-import { NAME_MAP_249 } from './fullVisaDatabase';
+import { NAME_MAP_249 } from './countryLightRegistry';
 
 export interface CountryMeta {
   capital: string;

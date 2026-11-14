@@ -400,17 +400,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Batch &amp; Destination</th>
-                    <th className="p-3">Pathway ID &amp; Instrument</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Batch &amp; Destination</th>
+                    <th scope="col" className="p-3">Pathway ID &amp; Instrument</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredMaster40.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="flex items-center gap-1.5">
                           <span className="px-2 py-0.5 rounded bg-slate-900 text-white text-[10px] font-black">B{p.batchNumber}</span>
@@ -520,17 +520,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID &amp; Instrument</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID &amp; Instrument</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch14.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -654,17 +654,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID &amp; Instrument</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID &amp; Instrument</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch13.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -788,17 +788,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID &amp; Instrument</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID &amp; Instrument</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch12.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -922,17 +922,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID &amp; Instrument</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID &amp; Instrument</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch11.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1056,17 +1056,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch10.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1230,17 +1230,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch9.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1352,17 +1352,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Published / Quarantined</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Published / Quarantined</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch8.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1476,17 +1476,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch7.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1575,17 +1575,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch6.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1674,17 +1674,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch5.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1773,17 +1773,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch4.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1872,17 +1872,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch3.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -1971,17 +1971,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch2.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
@@ -2065,13 +2065,13 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                     <tr>
-                      <th className="p-3">Canonical Pathway ID</th>
-                      <th className="p-3">Destination</th>
-                      <th className="p-3">Pathway Name &amp; Slug</th>
-                      <th className="p-3 text-center">In 3.6.3.2.1?</th>
-                      <th className="p-3 text-center">In 3.6.3.2.2?</th>
-                      <th className="p-3">Action</th>
-                      <th className="p-3 text-right">Status</th>
+                      <th scope="col" className="p-3">Canonical Pathway ID</th>
+                      <th scope="col" className="p-3">Destination</th>
+                      <th scope="col" className="p-3">Pathway Name &amp; Slug</th>
+                      <th scope="col" className="p-3 text-center">In 3.6.3.2.1?</th>
+                      <th scope="col" className="p-3 text-center">In 3.6.3.2.2?</th>
+                      <th scope="col" className="p-3">Action</th>
+                      <th scope="col" className="p-3 text-right">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
@@ -2191,17 +2191,17 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
                   <tr>
-                    <th className="p-3">Destination &amp; Category</th>
-                    <th className="p-3">Pathway ID</th>
-                    <th className="p-3">Action</th>
-                    <th className="p-3">Statutory Local Name &amp; Provision</th>
-                    <th className="p-3">Direct Official Sovereign URL</th>
-                    <th className="p-3 text-right">Status</th>
+                    <th scope="col" className="p-3">Destination &amp; Category</th>
+                    <th scope="col" className="p-3">Pathway ID</th>
+                    <th scope="col" className="p-3">Action</th>
+                    <th scope="col" className="p-3">Statutory Local Name &amp; Provision</th>
+                    <th scope="col" className="p-3">Direct Official Sovereign URL</th>
+                    <th scope="col" className="p-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {filteredBatch1.map(p => (
-                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                    <tr key={p.id} tabIndex={0} role="button" aria-pressed={selectedPathwayId === p.id} onClick={() => setSelectedPathwayId(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedPathwayId(p.id); } }} className={`hover:bg-slate-50 cursor-pointer focus-visible:bg-blue-50 ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
                       <td className="p-3 space-y-0.5">
                         <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
                         <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>

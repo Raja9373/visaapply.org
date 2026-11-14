@@ -18,8 +18,8 @@ import {
   ExternalLink,
   Filter
 } from 'lucide-react';
-import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
-import { calculateVisaCount } from '../data/anyToAnyMatrix';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
+import { calculateVisaCount } from '../data/anyToAnyLight';
 import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 

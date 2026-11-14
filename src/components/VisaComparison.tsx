@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getCountryMeta, getCapitalSlug } from '../data/countryMetaData';
-import { getLiveVisaCount, NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { getLiveVisaCount, NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import {
   getLiveLocalTime,
   getCurrencyRate,

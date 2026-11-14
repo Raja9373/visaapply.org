@@ -1,5 +1,5 @@
 import { COUNTRY_META_249, getCountryMeta } from './countryMetaData';
-import { NAME_MAP_249 } from './fullVisaDatabase';
+import { NAME_MAP_249 } from './countryLightRegistry';
 
 export const TRAVELPAYOUTS_CONFIG = {
   id: '801550',

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FULL_VISA_DB, verifyNoVisaMissed, CountryVisas, getLiveVisaCount, BASE_COUNTRY_VISAS, VisaItem, getVisasFixed, getVisasByCategoryFixed, initializeFullVisaDatabase, NAME_MAP_249, FLAG_MAP_249 } from './data/fullVisaDatabase';
+import type { CountryVisas, VisaItem } from './data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from './data/countryLightRegistry';
+import { getCachedHeavyVisaBundle, useHeavyVisaBundle } from './utils/heavyVisaLoader';
 import { CONTINENT_MAP_249, getContinentForCountry, isCountryInContinent } from './data/continentMap';
 import { COUNTRY_META_249, getCountryMeta, getCapitalSlug } from './data/countryMetaData';
 import { getLiveLocalTime, getLiveWeather, getCurrencyRate, generateChecklistPDF, parseHotelPriceUSD, parseProcessingDays, parseSuccessRateNum } from './utils/countryLiveUtils';
@@ -7,18 +9,19 @@ import { REGIONAL_MIGRATION_INFO } from './data/regionalMigration';
 import { getEmbassyInfo } from './data/embassyAddresses';
 import { TRANSLATIONS, LANGUAGE_MAP, getTranslation } from './data/translations';
 import { getLanguageForCountry, LANGUAGE_NAMES } from './data/languageMap';
-import { VerificationView } from './components/VerificationView';
 import { AdSenseBanner } from './components/AdSenseBanner';
-import { BlogArticleView } from './components/BlogArticleView';
-import { EligibilityChecker } from './components/EligibilityChecker';
-import { VisaComparison } from './components/VisaComparison';
-import { EmbassyFinder } from './components/EmbassyFinder';
-import { BlogsPage, FeaturedBlogsCarousel } from './components/AutoBlogger';
 import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogGenerator';
-import { VisaChatbot } from './components/VisaChatbot';
-import { InterviewPrepFull, get20InterviewQuestions } from './components/InterviewPrepFull';
 import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
 import { sanitizeHtml } from './utils/htmlSanitizer';
+const VerificationView = React.lazy(() => import('./components/VerificationView').then(m => ({ default: m.VerificationView })));
+const BlogArticleView = React.lazy(() => import('./components/BlogArticleView').then(m => ({ default: m.BlogArticleView })));
+const EligibilityChecker = React.lazy(() => import('./components/EligibilityChecker').then(m => ({ default: m.EligibilityChecker })));
+const VisaComparison = React.lazy(() => import('./components/VisaComparison').then(m => ({ default: m.VisaComparison })));
+const EmbassyFinder = React.lazy(() => import('./components/EmbassyFinder').then(m => ({ default: m.EmbassyFinder })));
+const BlogsPage = React.lazy(() => import('./components/AutoBlogger').then(m => ({ default: m.BlogsPage })));
+const FeaturedBlogsCarousel = React.lazy(() => import('./components/AutoBlogger').then(m => ({ default: m.FeaturedBlogsCarousel })));
+const VisaChatbot = React.lazy(() => import('./components/VisaChatbot').then(m => ({ default: m.VisaChatbot })));
+const InterviewPrepFull = React.lazy(() => import('./components/InterviewPrepFull').then(m => ({ default: m.InterviewPrepFull })));
 const VisaManagementAdminPage = React.lazy(() => import('./pages/VisaManagementAdminPage').then(m => ({ default: m.VisaManagementAdminPage })));
 const VisaDetailEditorPage = React.lazy(() => import('./pages/VisaDetailEditorPage').then(m => ({ default: m.VisaDetailEditorPage })));
 const AuditPage = React.lazy(() => import('./pages/AuditPage').then(m => ({ default: m.AuditPage })));
@@ -78,7 +81,7 @@ import { GlobalImmigrationPromoSection } from './components/GlobalImmigrationPro
 import { CountryPAAFaqSection } from './components/CountryPAAFaqSection';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
-import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
+import { getVisaCount, calculateVisaCount, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyLight';
 import { SUPPORTED_LANGUAGES_15, SupportedLangCode, COUNTRY_TO_LANG_15 } from './i18n/config';
 import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectLocaleHreflangTags, applyDocumentLangAttributes, getCanonicalBaseOrigin } from './utils/autoLanguage';
 import {
@@ -98,23 +101,6 @@ import {
   auditAllStaticRoutesSeo,
   validateCurrentDomMetadata
 } from './utils/seoMetadataManager';
-import { CA_REGIONAL_WARNING_TEXT, CA_IRCC_REFERENCE_LINKS } from './data/canadaVisas';
-import {
-  UK_REGIONAL_WARNING_TEXT,
-  UK_EUSS_WARNING_TEXT,
-  UK_BNO_WARNING_TEXT,
-  UK_UKRAINE_WARNING_TEXT,
-  UK_NATIONALITY_WARNING_TEXT,
-  UK_ENTRY_WARNING_TEXT,
-  UK_LEGACY_WARNING_TEXT,
-  REGIONAL_SPONSOR_DIRECTORY,
-  REGIONAL_SALARY_RULES,
-  IMMIGRATION_SALARY_LIST_SUMMARY,
-  REGIONAL_DIRECTORY_SECTIONS
-} from './data/ukRegionalJobs';
-
-import { JP_TO_IN_VISA } from './data/jpToInDetailed';
-import { marked } from 'marked';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
@@ -222,7 +208,7 @@ export function renderCountryPageFixed(countryCode: string) {
   const fromFlag = getCountryFlag("in");
   const liveCount = (typeof (window as any).getLiveVisaCount === "function")
     ? (window as any).getLiveVisaCount(code)
-    : (BASE_COUNTRY_VISAS[code] ? (BASE_COUNTRY_VISAS[code] as any).length : 0);
+    : getLiveVisaCount(code);
   
   // Synchronize title & OG/Twitter tags via centralized SEO metadata manager
   const pageTitle = `VisaApply.org - ${fromName} to ${toName} - ${liveCount} Visas`;
@@ -252,10 +238,11 @@ export function renderCountryPageFixed(countryCode: string) {
   ];
   
   html += `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:24px;">`;
+  const winBase = typeof window !== 'undefined' ? ((window as any).BASE_COUNTRY_VISAS || {}) : {};
   categories.forEach(cat=>{
     const visas = (typeof (window as any).getVisasByCategoryFixed === "function")
       ? (window as any).getVisasByCategoryFixed(code, cat.key)
-      : ((BASE_COUNTRY_VISAS as any)[code]||[]).filter((v: any)=>v.category===cat.key);
+      : (winBase[code]||[]).filter((v: any)=>v.category===cat.key);
     const count = visas.length;
     if(count===0) return;
     html += `<div onclick="if(typeof (window as any).renderVisaList==='function') (window as any).renderVisaList('${code}','${cat.key}'); else window.location.href='/in-to-${code}-${cat.key}'" style="background:white; border:1px solid #e2e8f0; border-radius:16px; padding:20px; cursor:pointer; transition:all 0.2s;"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="font-size:32px;">${cat.icon}</div><div style="background:#dbeafe; color:#2563eb; font-size:11px; padding:4px 8px; border-radius:9999px; font-weight:600;">${count} Visa Types</div></div><h3 style="font-weight:700; font-size:16px; margin-top:12px;">${cat.labelHi} (${cat.label})</h3><p style="font-size:12px; color:#64748b; margin-top:6px;">${cat.desc}</p><div style="margin-top:12px; color:#2563eb; font-size:12px; font-weight:600;">Explore Category →</div></div>`;
@@ -424,7 +411,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     (!articleMatch && path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-([a-z0-9-]+)$/i));
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
-  const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
+  const totalCountryCount = Math.max(countries?.length || 0, 249);
   let title = "VisaApply.org — Global Visa & Immigration Portal • 249 Countries, 61,752 Routes, 15 Languages";
   let description = "Independent global visa intelligence portal covering official pathways, document checklists, fees, and bilateral visa routes across 249 countries and territories in 15 UI languages.";
   let ogImageUrl = resolveValidOgImageUrl('default');
@@ -557,7 +544,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const subCode = (level3DetailMatch[4] || level3DetailMatch[3] || '').toLowerCase();
     const fromDisplay = getCountryDisplayName(fromCode);
     const toDisplay = getCountryDisplayName(toCode);
-    const catVisas = getVisasForAnyRoute(fromCode, toCode, catCode);
+    const catVisas = getCachedHeavyVisaBundle()?.matrix.getVisasForAnyRoute(fromCode, toCode, catCode) || [];
     const matchedVisa =
       catVisas.find((v: any) => {
         const vid = String(v.id || '').toLowerCase();
@@ -757,7 +744,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const toDisplay = getCountryDisplayName(toCode);
     targetCodeForSchema = toCode.toLowerCase();
 
-    const catVisas = getVisasForAnyRoute(fromCode, toCode, catCode);
+    const catVisas = getCachedHeavyVisaBundle()?.matrix.getVisasForAnyRoute(fromCode, toCode, catCode) || [];
     const matchedVisa =
       catVisas.find((v: any) => {
         const vid = String(v.id || '').toLowerCase();
@@ -1192,7 +1179,9 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
     </div>
 
     {/* Phase 3 Tool 3: Embassy Finder + Consular Interview Prep (Any-to-Any Origin Aware) */}
-    <EmbassyFinder countryCode={toCode} countryName={toName} fromCode={fromCode} onNavigate={navigate} />
+    <React.Suspense fallback={null}>
+      <EmbassyFinder countryCode={toCode} countryName={toName} fromCode={fromCode} onNavigate={navigate} />
+    </React.Suspense>
     </>
   );
 }
@@ -1226,12 +1215,19 @@ function VisaCategorySelectionView({ match, countries, navigate, uiLang, onChang
     console.log(`✅ FIXED HEADER: Travel from ${headerInfo.fromName} to ${headerInfo.toName} - Flag ${headerInfo.toFlag} - ${liveCount} types - Was showing KH now showing ${headerInfo.toName}`);
   }, [fromCode, toCode, localizedFromName, localizedToName, headerInfo.fromName, headerInfo.toName, headerInfo.toFlag, liveCount, countries]);
 
+  const heavy = useHeavyVisaBundle(true);
+
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
   const getCatVisasCount = (catId: string) => {
-    if (isJpToIn) return (JP_TO_IN_VISA["IN"] as any)?.[catId]?.length || 2;
-    const list = getVisasForAnyRoute(fromCode, toCode, catId);
+    if (!heavy) return 0;
+    if (isJpToIn) return (heavy.jpToIn.JP_TO_IN_VISA["IN"] as any)?.[catId]?.length || 2;
+    const list = heavy.matrix.getVisasForAnyRoute(fromCode, toCode, catId);
     return list.length;
   };
+
+  if (!heavy) {
+    return <PageLoadingFallback />;
+  }
 
   const CATEGORIES = [
     { id: 'tourist', name: t.touristVisa, icon: '🏖️', desc: isJa ? '観光、親族訪問、短期滞在、ヨガ・瞑想' : 'Vacations, sightseeing, visiting friends & short term stay', count: getCatVisasCount('tourist') },
@@ -1295,10 +1291,10 @@ function VisaCategorySelectionView({ match, countries, navigate, uiLang, onChang
       </div>
 
       {/* Breadcrumbs */}
-      <nav className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap">
-        <span onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600">Home</span>
-        <span>&gt;</span>
-        <span className="text-slate-900 font-bold">{headerInfo.breadcrumb}</span>
+      <nav aria-label="Breadcrumb" className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap">
+        <button type="button" onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600 focus-visible:underline">Home</button>
+        <span aria-hidden="true">&gt;</span>
+        <span className="text-slate-900 font-bold" aria-current="page">{headerInfo.breadcrumb}</span>
       </nav>
 
       {/* Phase 1.5 & 2 & 3: Full Country Hero + Eligibility + Embassy */}
@@ -1394,10 +1390,13 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
   const fromCountry = { name: fromName, flag: fromFlag, code: fromCode };
   const toCountry = { name: toName, flag: toFlag, code: toCode };
 
+  const heavy = useHeavyVisaBundle(true);
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
-  const categoryVisas = isJpToIn 
-    ? ((JP_TO_IN_VISA["IN"] as any)?.[category] || []) 
-    : getVisasForAnyRoute(fromCode, toCode, category);
+  const categoryVisas = !heavy
+    ? []
+    : isJpToIn
+      ? ((heavy.jpToIn.JP_TO_IN_VISA["IN"] as any)?.[category] || [])
+      : heavy.matrix.getVisasForAnyRoute(fromCode, toCode, category);
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'legacy'>('all');
   const [regionalFilter, setRegionalFilter] = useState<'all' | 'regional' | 'dama' | '491-sn-fs' | '494-es-la' | '191-pathways' | '417-462-ext'>('all');
@@ -1499,6 +1498,10 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
     return true;
   });
 
+  if (!heavy) {
+    return <PageLoadingFallback />;
+  }
+
   const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
 
   return (
@@ -1548,12 +1551,12 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
       </div>
 
       {/* Breadcrumbs */}
-      <nav className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap">
-        <span onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600">Home</span>
-        <span>&gt;</span>
-        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-600">{fromCountry.name} to {toCountry.name}</span>
-        <span>&gt;</span>
-        <span className="text-slate-900 font-bold capitalize">{categoryTitle} Visas ({categoryVisas.length} types)</span>
+      <nav aria-label="Breadcrumb" className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap">
+        <button type="button" onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600 focus-visible:underline">Home</button>
+        <span aria-hidden="true">&gt;</span>
+        <button type="button" onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-600 focus-visible:underline">{fromCountry.name} to {toCountry.name}</button>
+        <span aria-hidden="true">&gt;</span>
+        <span className="text-slate-900 font-bold capitalize" aria-current="page">{categoryTitle} Visas ({categoryVisas.length} types)</span>
       </nav>
 
       {/* Phase 1.5: 8 Live Features + Booking.com Hotel Hero */}
@@ -1878,7 +1881,7 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
                     Canada 199 Complete Architecture — 2 Directories, Regional Communities & IRCC Forms
                   </h3>
                   <p className="text-[11px] text-red-900 leading-relaxed">
-                    {CA_REGIONAL_WARNING_TEXT}
+                    {heavy.canada.CA_REGIONAL_WARNING_TEXT}
                   </p>
                 </div>
               </div>
@@ -1939,7 +1942,7 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
               </h3>
             </div>
             <p className="text-[11px] text-indigo-900 leading-relaxed">
-              {UK_REGIONAL_WARNING_TEXT}
+              {heavy.ukRegional.UK_REGIONAL_WARNING_TEXT}
             </p>
           </div>
         )}
@@ -1954,17 +1957,16 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
             ? `/${String(v.id).replace(/^in-to-/i, `${fromCode.toLowerCase()}-to-`)}`
             : `/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${category}-${shortId}`;
           return (
-          <div
+          <article
             key={v.id}
-            onClick={() => navigate(targetRoute)}
-            className={`p-6 rounded-2xl border transition-all duration-200 cursor-pointer bg-white flex flex-col justify-between group shadow-sm hover:shadow-md ${
+            className={`p-6 rounded-2xl border transition-all duration-200 bg-white flex flex-col justify-between group shadow-sm hover:shadow-md ${
               v.highlight ? 'border-[#0B3D91] ring-1 ring-[#0B3D91]' : 'border-slate-200 hover:border-[#0B3D91]'
             }`}
           >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-3xl">{v.icon || '📄'}</span>
+                  <span className="text-3xl" aria-hidden="true">{v.icon || '📄'}</span>
                   {v.officialCode && (
                     <span className="bg-blue-100 text-[#0B3D91] font-mono text-xs font-black px-2 py-0.5 rounded shadow-xs">
                       {toCode === 'AU' ? `Subclass ${v.officialCode}` : v.officialCode}
@@ -2004,9 +2006,15 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
                   )}
                 </div>
               </div>
-              <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">
-                {(isJa && v.name_ja) ? v.name_ja : dedupeVisaNameSingleCountry(v.name, toCountry.name, toCode)}
-              </h3>
+              <button
+                type="button"
+                onClick={() => navigate(targetRoute)}
+                className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded-lg"
+              >
+                <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#0B3D91] transition-colors line-clamp-1">
+                  {(isJa && v.name_ja) ? v.name_ja : dedupeVisaNameSingleCountry(v.name, toCountry.name, toCode)}
+                </h3>
+              </button>
 
               {/* Apply From Badge (Offshore / Onshore / Both) & Special Category Tag */}
               <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
@@ -2053,12 +2061,12 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
 
               <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span className="text-slate-400 block font-medium">{t.fee}</span>
+                  <span className="text-slate-500 block font-medium">{t.fee}</span>
                   <span className="font-bold text-slate-800">{v.fee}</span>
                 </div>
                 {v.validity && (
                   <div>
-                    <span className="text-slate-400 block font-medium">{t.validity}</span>
+                    <span className="text-slate-500 block font-medium">{t.validity}</span>
                     <span className="font-bold text-slate-800">{v.validity}</span>
                   </div>
                 )}
@@ -2066,14 +2074,17 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
             </div>
 
             <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2 text-xs font-bold text-[#0B3D91]">
-              <span className="flex items-center gap-1">
-                {isJa ? '必要書類と詳細を見る' : 'View Requirements & Docs'}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
+                onClick={() => navigate(targetRoute)}
+                className="inline-flex items-center gap-1 cursor-pointer hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded px-1 py-0.5"
+              >
+                <span>{isJa ? '必要書類と詳細を見る' : 'View Requirements & Docs'}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
                   const rawDocs = Array.isArray(v.docs)
                     ? v.docs
                     : typeof v.docs === 'string'
@@ -2090,13 +2101,14 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
                     docs: rawDocs
                   });
                 }}
-                className="bg-[#0f172a] hover:bg-slate-800 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold cursor-pointer shrink-0 transition-colors"
+                aria-label={`Download ${dedupeVisaNameSingleCountry(v.name, toCountry.name, toCode)} Checklist PDF`}
+                className="bg-[#0f172a] hover:bg-slate-800 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold cursor-pointer shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
                 title="Download Checklist PDF"
               >
                 📄 PDF
               </button>
             </div>
-          </div>
+          </article>
           );
         })}
       </div>
@@ -2137,29 +2149,22 @@ const countryIndexCache = new Map<string, any[]>();
 
 const getAllCountriesFromDB = () => {
   try {
-    const base = (typeof window !== 'undefined' ? (window as any).BASE_COUNTRY_VISAS : null) || (typeof BASE_COUNTRY_VISAS !== 'undefined' ? BASE_COUNTRY_VISAS : {});
-    const codes = Object.keys(base);
-    if (codes.length === 0) return [];
-    
-    const cacheKey = 'all_countries_' + codes.length;
+    const cacheKey = 'all_countries_light_249';
     if (countryIndexCache.has(cacheKey)) {
       return countryIndexCache.get(cacheKey)!;
     }
 
     const flagMap = FLAG_MAP_249;
     const nameMap = NAME_MAP_249;
-    
-    const all = codes.map(code => {
-      const c = code.toLowerCase();
-      const visas = base[c];
-      let live = 0;
-      if (Array.isArray(visas)) {
-        live = visas.filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
-      } else if (visas && typeof visas === 'object') {
-        live = Object.values(visas).flat().filter((v: any) => v && v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA").length;
-      }
-      return { code: c.toUpperCase(), name: nameMap[c] || COUNTRY_NAME_MAP[c] || COUNTRY_NAMES[c] || c.toUpperCase(), flag: flagMap[c] || FLAG_MAP[c] || COUNTRY_FLAGS[c] || "🏳️", count: live };
-    }).filter(x => x.count > 0).sort((a, b) => b.count - a.count);
+    const all = ALL_249_ISO_FORCED.map(item => {
+      const c = item.code.toLowerCase();
+      return {
+        code: item.code.toUpperCase(),
+        name: nameMap[c] || item.name || COUNTRY_NAME_MAP[c] || COUNTRY_NAMES[c] || c.toUpperCase(),
+        flag: flagMap[c] || item.flag || FLAG_MAP[c] || COUNTRY_FLAGS[c] || "🏳️",
+        count: getLiveVisaCount(c)
+      };
+    }).sort((a, b) => b.count - a.count);
 
     countryIndexCache.set(cacheKey, all);
     return all;
@@ -2324,22 +2329,25 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(true);
+  const [isHydrated] = useState(true);
+  const mobileMenuBtnRef = React.useRef<HTMLButtonElement>(null);
+  const prevMobileMenuOpenRef = React.useRef(false);
 
   useEffect(() => {
-    let isMounted = true;
-    Promise.resolve()
-      .then(() => initializeFullVisaDatabase())
-      .then(() => {
-        if (isMounted) setIsHydrated(true);
-      })
-      .catch(() => {
-        if (isMounted) setIsHydrated(true);
-      });
-    return () => {
-      isMounted = false;
+    if (!mobileMenuOpen && prevMobileMenuOpenRef.current) {
+      mobileMenuBtnRef.current?.focus();
+    }
+    prevMobileMenuOpenRef.current = mobileMenuOpen;
+    if (!mobileMenuOpen && !servicesDropdownOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (servicesDropdownOpen) setServicesDropdownOpen(false);
+        if (mobileMenuOpen) setMobileMenuOpen(false);
+      }
     };
-  }, []);
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [mobileMenuOpen, servicesDropdownOpen]);
 
   // Quiz state for /[from]-to-[to]
   const [quizStep, setQuizStep] = useState<1 | 2>(1);
@@ -2632,6 +2640,7 @@ export default function App() {
         setDrafts(currentDrafts);
         localStorage.setItem('pendingDrafts', JSON.stringify(currentDrafts));
 
+        const { marked } = await import('marked');
         const newArticle: Article = {
           slug: approved.route || approved.slug || `guide-${Date.now()}`,
           title: approved.title,
@@ -2783,25 +2792,30 @@ export default function App() {
       <header className="sticky top-0 z-50 bg-[#0B3D91] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Zone */}
-          <div 
-            onClick={() => navigate('/')} 
-            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer min-w-0 shrink-0"
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/');
+            }}
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer min-w-0 shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/10 flex items-center justify-center border border-white/20 shrink-0">
-              <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-blue-200" />
+              <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-blue-200" aria-hidden="true" />
             </div>
             <div className="min-w-0">
               <span className="text-lg sm:text-xl font-bold tracking-tight text-white block truncate">VisaApply.org</span>
               <span className="text-[11px] sm:text-xs text-blue-200 tracking-wide font-medium block truncate">61,752 Routes • 249 Countries</span>
             </div>
-          </div>
+          </a>
 
           {/* Nav Links */}
-          <nav className="hidden lg:flex items-center gap-4 text-xs xl:text-sm font-medium text-blue-100">
-            <button onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
-            <button onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
-            <button onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
+          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-4 text-xs xl:text-sm font-medium text-blue-100">
+            <button type="button" onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
+            <button type="button" onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
+            <button type="button" onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
             <button
+              type="button"
               onClick={() => navigate('/immigration')}
               className={`flex items-center gap-1.5 transition-colors cursor-pointer px-2.5 py-1 rounded-full ${
                 isImmigrationHub || immigrationDetailMatch
@@ -2809,7 +2823,7 @@ export default function App() {
                   : 'bg-emerald-600/15 text-emerald-200 hover:text-white font-semibold hover:bg-emerald-600/30 border border-emerald-500/20'
               }`}
             >
-              <Globe className="w-4 h-4 text-emerald-400 shrink-0" />
+              <Globe className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
               <span>Global Immigration</span>
               <span className="bg-emerald-500 text-white text-[10px] font-black uppercase px-1.5 py-0.5 rounded tracking-wide shadow-sm">
                 NEW
@@ -2821,7 +2835,7 @@ export default function App() {
               className="golden-visa-premium-btn px-3 py-1.5 text-xs xl:text-xs"
               title="Sovereign Residency by Investment Directory"
             >
-              <span>✨</span>
+              <span aria-hidden="true">✨</span>
               <span>Golden Visa</span>
             </button>
 
@@ -2833,6 +2847,9 @@ export default function App() {
             >
               <button 
                 type="button"
+                aria-expanded={servicesDropdownOpen}
+                aria-haspopup="true"
+                aria-controls="desktop-services-menu"
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
                 className={`flex items-center gap-1 transition-colors cursor-pointer py-1.5 ${
                   isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer || isRejectionAppeal || isSopGenerator || isVisaTracking || isVisaMap || isMultiCountryPlanner || isBankStatementGuide || isTravelInsuranceCompare || isEsim249 || isForexCardCompare || isSponsorshipFinder || isWorkPermitGuide || isStudentVisaUniversity || isPassportSevaGuide || isOciPioGuide || isScholarshipFinder
@@ -2841,11 +2858,11 @@ export default function App() {
                 }`}
               >
                 <span>Services</span>
-                <ChevronDown className="w-3.5 h-3.5" />
+                <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
 
               {servicesDropdownOpen && (
-                <div className="absolute top-full left-0 w-72 max-h-[80vh] overflow-y-auto bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
+                <div id="desktop-services-menu" className="absolute top-full left-0 w-72 max-h-[80vh] overflow-y-auto bg-[#0B2A5B] border border-blue-800 rounded-xl shadow-2xl py-2 z-50">
                   <button
                     type="button"
                     onClick={() => { navigate('/immigration'); setServicesDropdownOpen(false); }}
@@ -3089,7 +3106,7 @@ export default function App() {
                 aria-label={getUIString(uiLang).selectLanguageLabel}
                 value={uiLang}
                 onChange={(e) => handleLanguageChange(e.target.value as SupportedLangCode)}
-                className="bg-transparent text-white font-bold text-xs focus:outline-none cursor-pointer max-w-[92px] sm:max-w-none truncate"
+                className="bg-transparent text-white font-bold text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded cursor-pointer max-w-[92px] sm:max-w-none truncate"
               >
                 {SUPPORTED_LANGUAGES_15.map((l) => (
                   <option key={l.code} value={l.code} className="text-slate-900 font-semibold">
@@ -3108,13 +3125,16 @@ export default function App() {
             )}
             {/* Animated Hamburger Button */}
             <button 
+              ref={mobileMenuBtnRef}
               type="button"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-drawer"
               title={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-white hover:bg-white/10 active:bg-white/20 rounded-xl transition-all relative flex items-center justify-center w-10 h-10 focus:outline-none cursor-pointer"
+              className="lg:hidden p-2 text-white hover:bg-white/10 active:bg-white/20 rounded-xl transition-all relative flex items-center justify-center w-10 h-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
             >
-              <div className="w-5 h-4 flex flex-col justify-between items-center relative">
+              <div className="w-5 h-4 flex flex-col justify-between items-center relative" aria-hidden="true">
                 <span 
                   className={`h-0.5 w-5 bg-white rounded-full transition-all duration-300 ease-in-out transform origin-center ${
                     mobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''
@@ -3136,7 +3156,10 @@ export default function App() {
         </div>
 
         {/* Animated Mobile Menu Drawer */}
-        <div 
+        <div
+          id="mobile-nav-drawer"
+          aria-hidden={!mobileMenuOpen}
+          inert={!mobileMenuOpen}
           className={`lg:hidden mobile-nav-drawer bg-[#09327a] border-t border-blue-900/50 shadow-2xl ${
             mobileMenuOpen ? 'open' : ''
           }`}
@@ -3257,7 +3280,7 @@ export default function App() {
       )}
 
       {/* Main Content Router */}
-      <main id="main-content" className="flex-1">
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
         <React.Suspense fallback={<PageLoadingFallback />}>
           {isAnyAdminRoute ? (
           isAdminLogin || !isAdminAuthenticated ? (
@@ -3469,7 +3492,9 @@ export default function App() {
       </main>
 
       {/* Phase 4 Tool 2: Floating 249-Country Visa Assistant Chatbot */}
-      <VisaChatbot onNavigate={navigate} />
+      <React.Suspense fallback={null}>
+        <VisaChatbot onNavigate={navigate} />
+      </React.Suspense>
 
       {/* Google AdSense Banner */}
       <AdSenseBanner />
@@ -3692,18 +3717,7 @@ const PRIORITY_COUNTRY_ORDER = [
 
 export function deduplicateCountries(countryList: Country[]): Country[] {
   const countryMap = new Map<string, Country>();
-  const dbCodes = Object.keys(BASE_COUNTRY_VISAS || {});
-  const baseFromDb: Country[] = dbCodes.map(code => {
-    const norm = code.trim().toUpperCase();
-    const finalNorm = (norm === "EU" || norm === "SCH" || norm === "SCHENGEN") ? "SC" : (norm === "UK" ? "GB" : norm);
-    return {
-      code: finalNorm,
-      name: getCountryFullName(finalNorm),
-      flag: getCountryFlag(finalNorm)
-    };
-  });
-
-  const combined = [...FALLBACK_COUNTRIES, ...baseFromDb, ...(countryList || [])];
+  const combined = [...FALLBACK_COUNTRIES, ...(countryList || [])];
   for (const country of combined) {
     if (!country || !country.code) continue;
     const rawCode = country.code.trim().toUpperCase();
@@ -3955,7 +3969,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   const found = uniqueCountries.find((c: Country) => c.code === e.target.value);
                   if (found) setSelectedOrigin(found);
                 }}
-                className="w-full bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
+                className="w-full bg-transparent font-bold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded cursor-pointer truncate"
               >
                 {uniqueCountries.map((c: Country) => (
                   <option key={c.code} value={c.code}>
@@ -3994,7 +4008,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                 aria-label="Destination Country"
                 value={heroDestCode}
                 onChange={(e) => setHeroDestCode(e.target.value)}
-                className="w-full bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
+                className="w-full bg-transparent font-bold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded cursor-pointer truncate"
               >
                 {uniqueCountries.map((c: Country) => {
                   const cnt = getVisaCount(selectedOrigin?.code || 'IN', c.code);
@@ -4032,19 +4046,21 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         <GlobalImmigrationPromoSection onNavigate={navigate} className="mb-10" />
 
         {/* 3. Check Your Visa Eligibility - 30 Sec (Move BELOW FREE Tools) */}
-        <EligibilityChecker
-          showDestinationPicker={true}
-          defaultFromCode={selectedOrigin?.code || 'IN'}
-          onNavigate={navigate}
-          uiLang={uiLang}
-        />
+        <React.Suspense fallback={<div className="h-44 rounded-2xl bg-slate-100 animate-pulse my-4" />}>
+          <EligibilityChecker
+            showDestinationPicker={true}
+            defaultFromCode={selectedOrigin?.code || 'IN'}
+            onNavigate={navigate}
+            uiLang={uiLang}
+          />
+        </React.Suspense>
 
 
 
         {/* 5. Golden Visa Banner (MOVE HERE - Below Popular Routes, NOT at top) */}
         <div className="my-6 bg-gradient-to-r from-slate-900 via-[#0B2A5B] to-slate-900 border border-amber-400/40 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-left shadow-xl">
           <div className="flex items-center gap-3.5">
-            <span className="text-3xl sm:text-4xl p-2.5 bg-yellow-400/20 rounded-2xl border border-yellow-300/30 shrink-0">👑</span>
+            <span className="text-3xl sm:text-4xl p-2.5 bg-yellow-400/20 rounded-2xl border border-yellow-300/30 shrink-0" aria-hidden="true">👑</span>
             <div>
               <div className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center gap-2">
                 <span>2026 Sovereign Residency by Investment</span>
@@ -4061,7 +4077,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             className="golden-visa-premium-btn px-5 py-2.5 text-xs sm:text-sm shrink-0 cursor-pointer"
             title="Explore 18+ Sovereign Golden Visa Programs"
           >
-            <span>✨</span>
+            <span aria-hidden="true">✨</span>
             <span>Golden Visa</span>
           </button>
         </div>
@@ -4069,14 +4085,16 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         {/* Phase 3 Tool 2: Side-by-Side Visa Comparison View */}
         {showComparison && compareCodes.length > 0 && (
           <div id="visa-comparison-section" className="scroll-mt-24">
-            <VisaComparison
-              selectedCodes={compareCodes}
-              onRemoveCountry={(code) => toggleCompareCountry(code)}
-              onAddCountry={(code) => toggleCompareCountry(code)}
-              onClose={() => setShowComparison(false)}
-              onNavigate={navigate}
-              fromCode={selectedOrigin?.code || 'IN'}
-            />
+            <React.Suspense fallback={<div className="h-40 rounded-2xl bg-slate-100 animate-pulse my-4" />}>
+              <VisaComparison
+                selectedCodes={compareCodes}
+                onRemoveCountry={(code) => toggleCompareCountry(code)}
+                onAddCountry={(code) => toggleCompareCountry(code)}
+                onClose={() => setShowComparison(false)}
+                onNavigate={navigate}
+                fromCode={selectedOrigin?.code || 'IN'}
+              />
+            </React.Suspense>
           </div>
         )}
 
@@ -4096,12 +4114,24 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           <div className="w-full flex items-center bg-white border-2 border-[#e2e8f0] focus-within:border-[#3b82f6] rounded-2xl px-3.5 py-2.5 md:px-5 md:py-3 shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-colors">
             <span className="text-lg md:text-xl mr-2.5 md:mr-3 shrink-0 pointer-events-none">🔍</span>
             <div className="relative flex-1 min-w-0 flex items-center">
+              <label htmlFor="country-search" className="sr-only">
+                Search destination countries, visa types, processing times, or capitals
+              </label>
               <input
                 id="country-search"
                 type="text"
+                role="combobox"
+                aria-expanded={showSuggestions && targetSearch.trim().length > 0 && searchSuggestions.length > 0}
+                aria-controls="search-suggestions"
+                aria-autocomplete="list"
                 value={targetSearch}
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 180)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setShowSuggestions(false);
+                  }
+                }}
                 onChange={(e) => {
                   const val = e.target.value;
                   setTargetSearch(val);
@@ -4138,6 +4168,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
           {/* Search Suggestions Dropdown */}
           <div
             id="search-suggestions"
+            role="listbox"
+            aria-label="Destination suggestions"
             className={`absolute top-full left-1 right-1 md:left-0 md:right-0 bg-white rounded-xl border border-[#e2e8f0] shadow-[0_12px_24px_rgba(0,0,0,0.1)] mt-2 max-h-[55vh] md:max-h-[300px] overflow-y-auto z-30 md:z-20 ${
               showSuggestions && targetSearch.trim().length > 0 && searchSuggestions.length > 0 ? 'block' : 'hidden'
             }`}
@@ -4149,11 +4181,13 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                 <button
                   key={country.code}
                   type="button"
+                  role="option"
+                  aria-selected={false}
                   onMouseDown={() => navigate(`/${originCode}-to-${destCode}`)}
                   className="w-full px-3.5 md:px-4 py-2.5 text-left hover:bg-blue-50/70 flex items-center justify-between gap-2 border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2.5 md:gap-3 min-w-0">
-                    <span className="text-xl md:text-2xl shrink-0">{getCountryFlag(country.code)}</span>
+                    <span className="text-xl md:text-2xl shrink-0" aria-hidden="true">{getCountryFlag(country.code)}</span>
                     <div className="min-w-0">
                       <div className="font-bold text-sm text-slate-900 truncate">
                         {getCountryFullName(country.code)}
@@ -4168,6 +4202,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               );
             })}
           </div>
+          <p className="sr-only" aria-live="polite">
+            Showing {filteredCountries.length} of {uniqueCountries.length} destinations
+          </p>
         </div>
 
         {/* Phase 2 Step 2: Smart Filters & Sort Bar */}
@@ -4177,7 +4214,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             aria-label="Filter by visa type"
             value={visaTypeFilter}
             onChange={(e) => setVisaTypeFilter(e.target.value)}
-            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <option>All Visa Types</option>
             <option>e-Visa Only</option>
@@ -4191,7 +4228,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             aria-label="Filter by processing time"
             value={processingFilter}
             onChange={(e) => setProcessingFilter(e.target.value)}
-            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <option>Any Processing Time</option>
             <option>1-3 Days</option>
@@ -4205,7 +4242,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             aria-label="Filter by hotel price"
             value={hotelFilter}
             onChange={(e) => setHotelFilter(e.target.value)}
-            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-[10px] border border-[#e2e8f0] bg-white text-xs font-semibold text-slate-700 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <option>Any Hotel Price</option>
             <option>Under $50/night</option>
@@ -4219,7 +4256,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             aria-label="Sort destinations"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-2 rounded-[10px] border border-[#1d4ed8] text-xs font-bold bg-[#eff6ff] text-[#1d4ed8] cursor-pointer focus:outline-none"
+            className="px-3 py-2 rounded-[10px] border border-[#1d4ed8] text-xs font-bold bg-[#eff6ff] text-[#1d4ed8] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <option>Sort by Visa Count (High to Low)</option>
             <option>Sort by Hotel Price (Low to High)</option>
@@ -4275,18 +4312,23 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             const liveLocal = getLiveLocalTime(meta.timeZone);
 
             return (
-              <button
+              <article
                 key={country.code}
-                disabled={isSelf}
-                onClick={() => navigate(`/${originCode}-to-${destCode}`)}
                 className={`group bg-white border rounded-[20px] p-4 text-left w-full flex flex-col gap-3 transition-all duration-300 ${
                   isSelf
-                    ? 'border-slate-200 opacity-60 cursor-not-allowed bg-slate-50 shadow-none'
-                    : 'border-[#e8edf3] cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] hover:border-[#d0d7e3]'
+                    ? 'border-slate-200 opacity-60 bg-slate-50 shadow-none'
+                    : 'border-[#e8edf3] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] hover:border-[#d0d7e3]'
                 }`}
               >
-                {/* Top Row - Flag + Name + Arrow */}
-                <div className="flex items-center justify-between gap-2 w-full">
+                {/* Top Row - Flag + Name + Arrow (Primary Interactive Navigation) */}
+                <button
+                  type="button"
+                  disabled={isSelf}
+                  onClick={() => navigate(`/${originCode}-to-${destCode}`)}
+                  className={`flex items-center justify-between gap-2 w-full text-left rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] ${
+                    isSelf ? 'cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <div className="w-[52px] h-[52px] min-w-[52px] rounded-[14px] bg-gradient-to-br from-[#f0f7ff] to-[#e0eaff] flex items-center justify-center text-[28px] shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)] shrink-0">
                       <img
@@ -4325,22 +4367,22 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                             <span className="text-[11px] font-bold text-[#1d4ed8] bg-blue-50 px-1.5 py-0.5 rounded-md">
                               {originCode.toUpperCase()} → {destCode.toUpperCase()}
                             </span>
-                            <span className="text-[#64748b]">•</span>
+                            <span className="text-[#64748b]" aria-hidden="true">•</span>
                             <span className="truncate">{ui.fromCountryPrefix} {originName}</span>
                           </>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="w-7 h-7 rounded-full bg-[#f8fafc] group-hover:bg-blue-50 flex items-center justify-center text-[#64748b] group-hover:text-[#0B3D91] text-base font-bold shrink-0 transition-colors">
+                  <div aria-hidden="true" className="w-7 h-7 rounded-full bg-[#f8fafc] group-hover:bg-blue-50 flex items-center justify-center text-[#64748b] group-hover:text-[#0B3D91] text-base font-bold shrink-0 transition-colors">
                     ›
                   </div>
-                </div>
+                </button>
 
                 {/* Middle Row - 2 Pill Badges (LIVE TIME + PROCESSING) */}
                 <div className="flex gap-2 w-full">
                   <div className="flex-1 min-w-0 bg-[#f0fdf4] border border-[#dcfce7] rounded-xl px-2.5 py-2 flex items-center gap-1.5">
-                    <span className="text-sm shrink-0">🕐</span>
+                    <span className="text-sm shrink-0" aria-hidden="true">🕐</span>
                     <div className="min-w-0">
                       <div className="text-[10px] text-[#15803d] font-bold leading-none tracking-tight uppercase">
                         {ui.liveTime}
@@ -4351,7 +4393,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     </div>
                   </div>
                   <div className="flex-1 min-w-0 bg-[#fef3c7] border border-[#fde68a] rounded-xl px-2.5 py-2 flex items-center gap-1.5">
-                    <span className="text-sm shrink-0">⏱</span>
+                    <span className="text-sm shrink-0" aria-hidden="true">⏱</span>
                     <div className="min-w-0">
                       <div className="text-[10px] text-[#92400e] font-bold leading-none tracking-tight uppercase">
                         {ui.processing}
@@ -4363,10 +4405,10 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   </div>
                 </div>
 
-                {/* Bottom Row - Hotel Price with Booking.com Blue + Compare Button */}
+                {/* Bottom Row - Hotel Price with Booking.com Blue + Compare & View Buttons (Non-Nested!) */}
                 <div className="w-full bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] border border-[#bfdbfe] rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-8 h-8 shrink-0 bg-[#003580] rounded-lg flex items-center justify-center text-white text-sm font-extrabold">
+                    <div className="w-8 h-8 shrink-0 bg-[#003580] rounded-lg flex items-center justify-center text-white text-sm font-extrabold" aria-hidden="true">
                       B
                     </div>
                     <div className="min-w-0">
@@ -4380,19 +4422,11 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     {!isSelf && (
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleCompareCountry(destCode);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.stopPropagation();
-                            toggleCompareCountry(destCode);
-                          }
-                        }}
+                      <button
+                        type="button"
+                        aria-pressed={compareCodes.includes(destCode)}
+                        aria-label={`Compare ${fullName}`}
+                        onClick={() => toggleCompareCountry(destCode)}
                         className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-colors cursor-pointer ${
                           compareCodes.includes(destCode)
                             ? 'bg-emerald-700 text-white border-emerald-700'
@@ -4400,14 +4434,19 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                         }`}
                       >
                         {compareCodes.includes(destCode) ? `✓ ${ui.added}` : `➕ ${ui.compare}`}
-                      </span>
+                      </button>
                     )}
-                    <div className="bg-[#003580] group-hover:bg-[#002860] text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shrink-0 transition-colors">
+                    <button
+                      type="button"
+                      disabled={isSelf}
+                      onClick={() => navigate(`/${originCode}-to-${destCode}`)}
+                      className="bg-[#003580] hover:bg-[#002860] text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shrink-0 transition-colors cursor-pointer disabled:opacity-50"
+                    >
                       {ui.viewRequirements} →
-                    </div>
+                    </button>
                   </div>
                 </div>
-              </button>
+              </article>
             );
           })}
         </div>
@@ -4500,12 +4539,12 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr className="bg-slate-900 text-white font-bold">
-                  <th className="p-3 rounded-tl-xl">Destination Country</th>
-                  <th className="p-3">Official Visas</th>
-                  <th className="p-3">Processing Time</th>
-                  <th className="p-3">Approval Rate</th>
-                  <th className="p-3">Capital & Hotel/Night</th>
-                  <th className="p-3 rounded-tr-xl text-right">Action</th>
+                  <th scope="col" className="p-3 rounded-tl-xl">Destination Country</th>
+                  <th scope="col" className="p-3">Official Visas</th>
+                  <th scope="col" className="p-3">Processing Time</th>
+                  <th scope="col" className="p-3">Approval Rate</th>
+                  <th scope="col" className="p-3">Capital &amp; Hotel/Night</th>
+                  <th scope="col" className="p-3 rounded-tr-xl text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -4517,11 +4556,10 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                   return (
                     <tr
                       key={code}
-                      onClick={() => navigate(`/in-to-${code}`)}
-                      className="hover:bg-blue-50/60 cursor-pointer transition-colors"
+                      className="hover:bg-blue-50/60 transition-colors"
                     >
                       <td className="p-3 font-bold text-slate-900 flex items-center gap-2">
-                        <span className="text-lg">{flag}</span>
+                        <span className="text-lg" aria-hidden="true">{flag}</span>
                         <span>{name}</span>
                       </td>
                       <td className="p-3 font-extrabold text-[#0B3D91]">{count} Subclasses</td>
@@ -4533,9 +4571,13 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                       </td>
                       <td className="p-3 text-slate-600">{meta.capital} ({meta.hotelPrice})</td>
                       <td className="p-3 text-right">
-                        <span className="text-[#0B3D91] font-extrabold hover:underline">
-                          Checklist & Apply →
-                        </span>
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/in-to-${code}`)}
+                          className="text-[#0B3D91] font-extrabold hover:underline cursor-pointer"
+                        >
+                          Checklist &amp; Apply →
+                        </button>
                       </td>
                     </tr>
                   );
@@ -4550,7 +4592,9 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
       <BottomFreeToolsSection onNavigate={navigate} />
 
       {/* Phase 4 Tool 1: Featured 249-Country SEO Blogs Carousel */}
-      <FeaturedBlogsCarousel navigate={navigate} />
+      <React.Suspense fallback={null}>
+        <FeaturedBlogsCarousel navigate={navigate} />
+      </React.Suspense>
 
       {/* Recent Published Visa Guides Section */}
       <section className="bg-slate-100 py-16 border-t border-slate-200">
@@ -4586,12 +4630,13 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                 const targetSlug = normalizeBlogSlug(art.slug || (art as any).route || art.title);
                 const preservedDate = (art as any).publishedDate || getPreservedPublishedDate(targetSlug, idx);
                 return (
-                <div 
+                <button
                   key={targetSlug || idx}
+                  type="button"
                   onClick={() => navigate(`/${targetSlug}`)}
-                  className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group"
+                  className="text-left w-full bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-3 w-full">
                     <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
                       <span className="uppercase bg-blue-50 text-[#0B3D91] px-2.5 py-1 rounded-md font-semibold">{art.type} visa</span>
                       <span>{preservedDate}</span>
@@ -4603,11 +4648,11 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                       {art.excerpt}
                     </p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500">
-                    <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5 text-emerald-600" /> {art.fees}</span>
-                    <span className="text-[#0B3D91] flex items-center gap-1 group-hover:underline">Read Guide <ArrowRight className="w-3.5 h-3.5" /></span>
+                  <div className="mt-6 pt-4 border-t border-slate-100 w-full flex items-center justify-between text-xs font-medium text-slate-500">
+                    <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" /> {art.fees}</span>
+                    <span className="text-[#0B3D91] flex items-center gap-1 group-hover:underline">Read Guide <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" /></span>
                   </div>
-                </div>
+                </button>
                 );
               })}
             </div>
@@ -4684,9 +4729,10 @@ function SitemapView({ countries, navigate }: any) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCountries.map((c: any) => {
           const isExpanded = expandedCountry === c.code || search.length > 0;
-          const countryVisas = (FULL_VISA_DB['IN'] && FULL_VISA_DB['IN'][c.code.toUpperCase()]) 
-                               ? FULL_VISA_DB['IN'][c.code.toUpperCase()] 
-                               : (FULL_VISA_DB['US'] && FULL_VISA_DB['US']['US'] ? FULL_VISA_DB['US']['US'] : { tourist: [], work: [], student: [], family: [], business: [], pr: [] });
+          const cachedFullDb = getCachedHeavyVisaBundle()?.fullDb.FULL_VISA_DB;
+          const countryVisas = (cachedFullDb?.['IN'] && cachedFullDb['IN'][c.code.toUpperCase()])
+                               ? cachedFullDb['IN'][c.code.toUpperCase()]
+                               : (cachedFullDb?.['US']?.['US'] ? cachedFullDb['US']['US'] : { tourist: [], work: [], student: [], family: [], business: [], pr: [] });
           
           let totalCountryCount = 0;
           if (countryVisas) {
@@ -5083,6 +5129,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
   const t = getTranslation(currentLang);
   const isJa = currentLang === 'ja';
+  const heavy = useHeavyVisaBundle(true);
 
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
@@ -5117,6 +5164,9 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
   // ===== CRITICAL FIX: Use robust retrieval to prevent blog fallback =====
   const getVisasFixed = (from: string, to: string, category: string): VisaItem[] => {
+    if (!heavy) return [];
+    const FULL_VISA_DB: any = heavy.fullDb.FULL_VISA_DB;
+    const BASE_COUNTRY_VISAS: any = heavy.fullDb.BASE_COUNTRY_VISAS;
     const fromU = (from || '').toUpperCase();
     const fromL = (from || '').toLowerCase();
     const toU = (to || '').toUpperCase();
@@ -5143,7 +5193,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
     for (const t of [toU, toL]) {
       const baseVisas = BASE_COUNTRY_VISAS[t];
       if (baseVisas && baseVisas[cat] && baseVisas[cat].length > 0) {
-        return baseVisas[cat].filter(v => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
+        return baseVisas[cat].filter((v: any) => v.record_type !== "SUPPORTING_CLASSIFICATION" && v.record_type !== "LEGACY_VISA");
       }
     }
 
@@ -5175,9 +5225,14 @@ function ArticleView({ match, articles = [], navigate }: any) {
 
   const categoryVisas = getVisasFixed(fromCode, toCode, categoryCode);
   const isJpToIn = fromCode === 'JP' && toCode === 'IN';
-  const countryData = isJpToIn
-    ? JP_TO_IN_VISA["IN"]
-    : (FULL_VISA_DB[fromCode]?.[toCode] || FULL_VISA_DB[toCode] || BASE_COUNTRY_VISAS[toCode] || FULL_VISA_DB["US"]);
+  const countryData = heavy
+    ? (isJpToIn
+        ? heavy.jpToIn.JP_TO_IN_VISA["IN"]
+        : (heavy.fullDb.FULL_VISA_DB[fromCode]?.[toCode] ||
+           heavy.fullDb.FULL_VISA_DB[toCode] ||
+           heavy.fullDb.BASE_COUNTRY_VISAS[toCode] ||
+           heavy.fullDb.FULL_VISA_DB["US"]))
+    : null;
   
   // Find matching subtype visa in database (supports both short IDs like ukv-std and full IDs like in-to-gb-tourist-ukv-std, plus custom prefix routes like in-to-gb-reg-ukw-isl)
   const expectedFullId = `in-to-${toCode.toLowerCase()}-${categoryCode}-${subtypeCode}`;
@@ -5329,7 +5384,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
     });
   }, [fromCode, toCode, categoryCode, subtypeCode, guideTitle, resolvedCategoryCode, dbVisaItem?.fee]);
 
-  if (loading) {
+  if (loading || !heavy) {
     return <ArticleSkeleton />;
   }
 
@@ -5490,14 +5545,14 @@ function ArticleView({ match, articles = [], navigate }: any) {
       </div>
 
       {/* Breadcrumbs */}
-      <nav className="text-xs sm:text-sm text-slate-500 mb-6 font-medium flex items-center gap-1.5 flex-wrap no-print">
-        <span onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-600">Home</span>
-        <span>&gt;</span>
-        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-600">{fromCountry.name} to {toCountry.name}</span>
-        <span>&gt;</span>
-        <span onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${resolvedCategoryCode}`)} className="cursor-pointer hover:text-blue-600 capitalize">{resolvedCategoryCode}</span>
-        <span>&gt;</span>
-        <span className="text-slate-900 font-bold">{visaSubtypeWithoutCountry}</span>
+      <nav aria-label="Breadcrumb" className="text-xs sm:text-sm text-slate-600 mb-6 font-medium flex items-center gap-1.5 flex-wrap no-print">
+        <button type="button" onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded px-0.5">Home</button>
+        <span aria-hidden="true">&gt;</span>
+        <button type="button" onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}`)} className="cursor-pointer hover:text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded px-0.5">{fromCountry.name} to {toCountry.name}</button>
+        <span aria-hidden="true">&gt;</span>
+        <button type="button" onClick={() => navigate(`/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${resolvedCategoryCode}`)} className="cursor-pointer hover:text-blue-700 hover:underline capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] rounded px-0.5">{resolvedCategoryCode}</button>
+        <span aria-hidden="true">&gt;</span>
+        <span aria-current="page" className="text-slate-900 font-bold">{visaSubtypeWithoutCountry}</span>
       </nav>
 
       {/* Phase 1.5: 8 Live Features + Booking.com Hotel Hero */}
@@ -5788,15 +5843,15 @@ function ArticleView({ match, articles = [], navigate }: any) {
             {/* Canada Regional Clarification Warning Box */}
             <div className="p-3 bg-white/95 rounded-xl border border-red-200 text-[11px] text-slate-800 leading-relaxed space-y-1">
               <strong className="text-red-900 block">Canada Regional Clarification:</strong>
-              {CA_REGIONAL_WARNING_TEXT}
+              {heavy.canada.CA_REGIONAL_WARNING_TEXT}
             </div>
 
             {/* Official IRCC Reference Links */}
-            {CA_IRCC_REFERENCE_LINKS && CA_IRCC_REFERENCE_LINKS.length > 0 && (
+            {heavy.canada.CA_IRCC_REFERENCE_LINKS && heavy.canada.CA_IRCC_REFERENCE_LINKS.length > 0 && (
               <div className="pt-2 border-t border-red-200">
                 <strong className="text-[11px] text-red-950 block mb-1">Official IRCC & Government Reference Portals (Top 10):</strong>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
-                  {CA_IRCC_REFERENCE_LINKS.map(link => (
+                  {heavy.canada.CA_IRCC_REFERENCE_LINKS.map(link => (
                     <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline flex items-center gap-1 truncate bg-white/80 p-1.5 rounded border border-red-200">
                       <span>• {link.title}</span>
                       <ExternalLink className="w-2.5 h-2.5 shrink-0" />
@@ -5880,31 +5935,31 @@ function ArticleView({ match, articles = [], navigate }: any) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1">
               <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
                 <strong className="text-indigo-950 block mb-0.5">1. Regional Work & Salary Rules Warning:</strong>
-                {UK_REGIONAL_WARNING_TEXT}
+                {heavy.ukRegional.UK_REGIONAL_WARNING_TEXT}
               </div>
               <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
                 <strong className="text-indigo-950 block mb-0.5">2. EU Settlement Scheme (EUSS) Warning:</strong>
-                {UK_EUSS_WARNING_TEXT}
+                {heavy.ukRegional.UK_EUSS_WARNING_TEXT}
               </div>
               <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
                 <strong className="text-indigo-950 block mb-0.5">3. Hong Kong BN(O) Route Structure Warning:</strong>
-                {UK_BNO_WARNING_TEXT}
+                {heavy.ukRegional.UK_BNO_WARNING_TEXT}
               </div>
               <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
                 <strong className="text-indigo-950 block mb-0.5">4. Ukraine Schemes & UPE Warning:</strong>
-                {UK_UKRAINE_WARNING_TEXT}
+                {heavy.ukRegional.UK_UKRAINE_WARNING_TEXT}
               </div>
               <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
                 <strong className="text-indigo-950 block mb-0.5">5. British Nationality & Registration Warning:</strong>
-                {UK_NATIONALITY_WARNING_TEXT}
+                {heavy.ukRegional.UK_NATIONALITY_WARNING_TEXT}
               </div>
               <div className="p-2.5 bg-white/90 rounded-xl border border-indigo-200 text-[11px] leading-relaxed">
                 <strong className="text-indigo-950 block mb-0.5">6. Permission to Enter & ETA Warning:</strong>
-                {UK_ENTRY_WARNING_TEXT}
+                {heavy.ukRegional.UK_ENTRY_WARNING_TEXT}
               </div>
               <div className="p-2.5 bg-amber-50/90 rounded-xl border border-amber-300 text-[11px] leading-relaxed md:col-span-2">
                 <strong className="text-amber-950 block mb-0.5">7. Legacy & Closed UK Routes Warning:</strong>
-                {UK_LEGACY_WARNING_TEXT}
+                {heavy.ukRegional.UK_LEGACY_WARNING_TEXT}
               </div>
             </div>
 
@@ -5931,7 +5986,7 @@ function ArticleView({ match, articles = [], navigate }: any) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
-                {REGIONAL_DIRECTORY_SECTIONS.map((sec, idx) => (
+                {heavy.ukRegional.REGIONAL_DIRECTORY_SECTIONS.map((sec, idx) => (
                   <a
                     key={idx}
                     href={sec.govUkUrl}
@@ -6707,13 +6762,14 @@ function ContactView({ navigate }: any) {
         {/* Contact Form */}
         <div className="max-w-xl mx-auto">
           {formSubmitted ? (
-            <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
-              <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+            <div role="status" className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
+              <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" aria-hidden="true" />
               <h3 className="font-bold text-slate-900 text-lg">Thank you for reaching out!</h3>
               <p className="text-xs text-slate-600">Your email client has been opened to send your message to contact@visaapply.org. We reply within 24 hours.</p>
               <button 
+                type="button"
                 onClick={() => setFormSubmitted(false)}
-                className="mt-4 px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl text-xs hover:bg-emerald-700 transition-colors"
+                className="mt-4 px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl text-xs hover:bg-emerald-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
               >
                 Send Another Message
               </button>
@@ -6721,46 +6777,49 @@ function ContactView({ navigate }: any) {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Your Name</label>
+                <label htmlFor="contact-name" className="block text-xs font-semibold text-slate-700 mb-1">Your Name</label>
                 <input 
+                  id="contact-name"
                   type="text" 
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. John Doe"
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                <label htmlFor="contact-email" className="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
                 <input 
+                  id="contact-email"
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Message</label>
+                <label htmlFor="contact-message" className="block text-xs font-semibold text-slate-700 mb-1">Message</label>
                 <textarea 
+                  id="contact-message"
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Type your visa question or inquiry here..."
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
                 />
               </div>
 
               <button 
                 type="submit"
-                className="w-full py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                className="w-full py-3 bg-[#0B3D91] text-white font-semibold rounded-xl text-sm hover:bg-[#09327a] transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4" aria-hidden="true" />
                 <span>Send Message to contact@visaapply.org</span>
               </button>
             </form>
@@ -6874,13 +6933,14 @@ function AboutView({ navigate }: any) {
           {/* Left: Selector & Code */}
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-blue-200 mb-2">
+              <label htmlFor="about-country-select" className="block text-xs font-bold uppercase tracking-wider text-blue-200 mb-2">
                 1. Choose Destination Country (249 Countries)
               </label>
               <select
+                id="about-country-select"
                 value={selectedCode}
                 onChange={(e) => setSelectedCode(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm font-bold focus:outline-none focus:border-blue-400 cursor-pointer"
+                className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 cursor-pointer"
               >
                 {Object.keys(NAME_MAP_249).map((code) => (
                   <option key={code} value={code}>
@@ -6892,22 +6952,23 @@ function AboutView({ navigate }: any) {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-blue-200">
+                <label htmlFor="about-embed-code" className="text-xs font-bold uppercase tracking-wider text-blue-200">
                   2. Copy HTML Embed Code
                 </label>
                 <button
                   type="button"
                   onClick={handleCopyWidget}
-                  className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold rounded-lg text-xs cursor-pointer transition-colors"
+                  className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold rounded-lg text-xs cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
                   {copiedWidget ? '✓ Copied HTML Code!' : '📋 Copy Embed Code'}
                 </button>
               </div>
               <textarea
+                id="about-embed-code"
                 readOnly
                 rows={7}
                 value={embedCode}
-                className="w-full p-3 rounded-xl bg-slate-950/90 border border-slate-700 text-emerald-300 font-mono text-xs focus:outline-none"
+                className="w-full p-3 rounded-xl bg-slate-950/90 border border-slate-700 text-emerald-300 font-mono text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               />
             </div>
           </div>
@@ -7123,27 +7184,30 @@ function AdminLoginView({
             <Shield className="w-6 h-6" />
           </div>
           <h1 className="text-xl font-extrabold text-slate-900">Admin Login</h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Restricted access • Authenticate with ADMIN_PASSWORD to unlock /admin pages
+          <p className="text-xs text-slate-600 mt-1">
+            Restricted access • Authenticate with your administrator passphrase to unlock /admin pages
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Admin Password</label>
+            <label htmlFor="admin-password-input" className="block text-xs font-semibold text-slate-700 mb-1">Admin Password</label>
             <input
+              id="admin-password-input"
               type="password"
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
               placeholder="Enter administrator password"
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+              aria-invalid={Boolean(authError)}
+              aria-describedby={authError ? 'admin-auth-error' : undefined}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91]"
               required
               autoFocus
             />
           </div>
 
           {authError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium text-center">
+            <div id="admin-auth-error" role="alert" className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium text-center">
               {authError}
             </div>
           )}

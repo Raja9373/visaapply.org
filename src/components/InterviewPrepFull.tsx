@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from '../data/countryLightRegistry';
 import { getCountryMeta } from '../data/countryMetaData';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { generateChecklistPDF, parseHotelPriceUSD } from '../utils/countryLiveUtils';

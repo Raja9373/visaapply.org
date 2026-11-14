@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { NAME_MAP_249, FLAG_MAP_249 } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import {
   getAnyToAnyRouteInfo,
   TOP_20_FROM_COUNTRIES,
-} from '../data/anyToAnyMatrix';
+} from '../data/anyToAnyLight';
 import { AIRPORT_IATA_MAP } from '../data/travelpayoutsConfig';
 
 interface RoutesPageProps {

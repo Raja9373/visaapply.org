@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NAME_MAP_249, FLAG_MAP_249, FULL_VISA_DB, getLiveVisaCount } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from '../data/countryLightRegistry';
 import { getCountryMeta } from '../data/countryMetaData';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { getContinentForCountry, CONTINENT_MAP_249 } from '../data/continentMap';
@@ -83,7 +83,23 @@ function findMentionedCountries(query: string): string[] {
   return matches;
 }
 
-export function generateChatbotReply(rawQuery: string): ChatbotStructuredReply {
+export async function generateChatbotReplyAsync(rawQuery: string): Promise<ChatbotStructuredReply> {
+  return generateChatbotReply(rawQuery, await loadFullVisaDbOptional());
+}
+
+let cachedFullVisaDb: any = null;
+async function loadFullVisaDbOptional() {
+  if (cachedFullVisaDb) return cachedFullVisaDb;
+  try {
+    const mod = await import('../data/fullVisaDatabase');
+    cachedFullVisaDb = mod.FULL_VISA_DB;
+  } catch {
+    cachedFullVisaDb = null;
+  }
+  return cachedFullVisaDb;
+}
+
+export function generateChatbotReply(rawQuery: string, fullVisaDb: any = cachedFullVisaDb): ChatbotStructuredReply {
   const q = rawQuery.trim().toLowerCase();
   const mentioned = findMentionedCountries(q);
 
@@ -182,7 +198,7 @@ export function generateChatbotReply(rawQuery: string): ChatbotStructuredReply {
     const contKey = getContinentForCountry(code);
     const continent = CONTINENT_MAP_249[contKey]?.label || 'Global';
     const hotelNum = parseHotelPriceUSD(meta.hotelPrice);
-    const dbItem = FULL_VISA_DB['IN']?.[code.toUpperCase()]?.tourist?.[0] || FULL_VISA_DB[code.toUpperCase()]?.tourist?.[0];
+    const dbItem = fullVisaDb?.['IN']?.[code.toUpperCase()]?.tourist?.[0] || fullVisaDb?.[code.toUpperCase()]?.tourist?.[0];
     const verifiedFeeText = dbItem?.fee || 'Verify fee on official embassy portal';
 
     if (q.includes('embassy') || q.includes('vfs') || q.includes('address') || q.includes('delhi') || q.includes('mumbai')) {
@@ -291,14 +307,35 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
     },
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const triggerBtnRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      if (!wasOpenRef.current) {
+        setTimeout(() => inputRef.current?.focus(), 20);
+      }
+    } else if (wasOpenRef.current) {
+      triggerBtnRef.current?.focus();
     }
+    wasOpenRef.current = isOpen;
   }, [messages, isOpen]);
 
-  const sendQuery = (text: string) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen]);
+
+  const sendQuery = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
 
@@ -309,7 +346,7 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    const reply = generateChatbotReply(trimmed);
+    const reply = await generateChatbotReplyAsync(trimmed);
     const botMsg: ChatMessage = {
       id: `bot-${Date.now() + 1}`,
       sender: 'bot',
@@ -345,19 +382,24 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
   return (
     <>
       <button
+        ref={triggerBtnRef}
         type="button"
         id="visa-chatbot-btn"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-3xl cursor-pointer shadow-lg z-[9999] transition-transform hover:scale-105"
+        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-3xl cursor-pointer shadow-lg z-[9999] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-400"
         title="Ask 249-Country Visa Assistant"
         aria-label="Toggle 249-Country Visa Assistant"
+        aria-expanded={isOpen}
+        aria-controls="visa-chatbot-window"
       >
-        {isOpen ? '✕' : '💬'}
+        <span aria-hidden="true">{isOpen ? '✕' : '💬'}</span>
       </button>
 
       {isOpen && (
         <div
           id="visa-chatbot-window"
+          role="dialog"
+          aria-label="249-Country Visa Assistant"
           className="fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100vh-140px)] bg-white rounded-2xl shadow-2xl flex flex-col z-[9999] overflow-hidden border border-slate-200"
         >
           <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 flex justify-between items-center">
@@ -368,7 +410,7 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="cursor-pointer text-xl px-2 py-1 text-slate-300 hover:text-white"
+              className="cursor-pointer text-xl px-2 py-1 text-slate-300 hover:text-white rounded focus-visible:ring-2 focus-visible:ring-white"
               aria-label="Close assistant"
             >
               ✕
@@ -377,6 +419,7 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
 
           <div
             id="chatbot-messages"
+            aria-live="polite"
             className="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-white"
           >
             {messages.map((msg) => (
@@ -467,12 +510,16 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
             }}
             className="p-3 border-t border-slate-200 flex gap-2 bg-white"
           >
+            <label htmlFor="chatbot-input" className="sr-only">
+              Ask a visa or embassy question
+            </label>
             <input
+              ref={inputRef}
               id="chatbot-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask e.g. USA visa fees, Germany processing..."
-              className="flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-[13px] outline-none focus:border-blue-500"
+              className="flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-[13px] focus:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             />
             <button
               type="submit"

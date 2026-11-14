@@ -2,6 +2,8 @@ import {
   NAME_MAP_249,
   FLAG_MAP_249,
   getLiveVisaCount,
+} from './countryLightRegistry';
+import {
   getVisasFixed,
   getVisasByCategoryFixed,
 } from './fullVisaDatabase';
