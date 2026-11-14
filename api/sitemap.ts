@@ -50,11 +50,6 @@ export default function handler(req: any, res: any) {
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
-  <url>
-    <loc>${baseUrl}/audit</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
 </urlset>`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     return res.status(200).send(fallbackXml);

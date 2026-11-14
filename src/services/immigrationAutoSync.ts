@@ -28,13 +28,13 @@ export interface ImmigrationChangelogItem {
 
 export const OFFICIAL_IMMIGRATION_SOURCES_249: Record<string, string[]> = (() => {
   const map: Record<string, string[]> = {};
-  for (const [code, name] of Object.entries(NAME_MAP_249)) {
-    const lower = code.toLowerCase();
-    const source = OFFICIAL_SOURCE_REGISTRY_249[code.toUpperCase()];
+  for (const country of ALL_249_ISO_FORCED) {
+    const lower = country.code.toLowerCase();
+    const source = OFFICIAL_SOURCE_REGISTRY_249[country.code.toUpperCase()];
     if (source) {
-      map[lower] = [source.primaryGovUrl, source.consularPortalUrl];
+      map[lower] = [source.primaryGovUrl, source.consularPortalUrl].filter((u) => Boolean(u && u.startsWith('https://')));
     } else {
-      map[lower] = [`https://www.gov.${lower}/immigration`];
+      map[lower] = [];
     }
   }
   return map;
@@ -263,8 +263,7 @@ export async function checkImmigrationUpdates(
         ...(token ? { Authorization: `Bearer ${token}`, 'X-Admin-Token': token } : {})
       },
       body: JSON.stringify({
-        countries: targetCountries || ['US', 'CA', 'GB', 'AU', 'DE', 'AE', 'SG', 'FR', 'JP', 'PT'],
-        adminEmail: 'maddydelhi57@gmail.com'
+        countries: targetCountries || ['US', 'CA', 'GB', 'AU', 'DE', 'AE', 'SG', 'FR', 'JP', 'PT']
       })
     });
 
@@ -285,6 +284,6 @@ export async function checkImmigrationUpdates(
     latestEntry: changelog[0],
     changelog,
     batchProgress: result.newState,
-    adminEmailNotified: 'maddydelhi57@gmail.com'
+    adminEmailNotified: 'admin-alert-channel'
   };
 }

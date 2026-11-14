@@ -9,7 +9,8 @@ import {
 import { FULL_VISA_DB, CountryVisas } from '../data/fullVisaDatabase';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { fetchWithRetry } from '../utils/fetchWithRetry';
-import { applySeoMetadataToDom } from '../utils/seoMetadataManager';
+import { applySeoMetadataToDom, resolveValidOgImageUrl } from '../utils/seoMetadataManager';
+import { sanitizeHtml, sanitizeUrl } from '../utils/htmlSanitizer';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   findDefaultGuideMatch,
@@ -234,7 +235,7 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
   const dateStr = activeArticle?.date || new Date().toISOString().split('T')[0];
   const feesStr = (activeArticle?.fees && activeArticle.fees !== 'Standard Govt Fees')
     ? activeArticle.fees
-    : (dbVisaItem?.fee || (categoryCode === 'work' ? '$155-250 Govt Fee' : categoryCode === 'student' ? '$185-350 Govt Fee' : '$90-185 Govt Fee'));
+    : (dbVisaItem?.fee || 'Verify on official embassy portal');
   const validityStr = dbVisaItem?.validity || (categoryCode === 'work' ? '1 to 2 Years' : categoryCode === 'student' ? 'Course Duration + 60 Days' : 'Up to 10 Years');
   const stayStr = dbVisaItem?.stay || (categoryCode === 'work' ? 'Authorized Employment' : categoryCode === 'student' ? 'Full-Time Academic Term' : '90-180 Days/Visit');
 
@@ -378,7 +379,7 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
         title: fullTitle,
         description: fullDesc,
         ogType: 'article',
-        ogImage: `https://www.visaapply.org/og/${toCodeLower}.jpg`,
+        ogImage: resolveValidOgImageUrl(toCodeLower),
         ogImageAlt: fullTitle,
       },
       typeof window !== 'undefined' ? window.location.pathname : `/${slug}`
@@ -394,15 +395,15 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
           },
           {
             q: `How much bank balance is required to be shown for ${toCountry.name}?`,
-            a: `Applicants should maintain liquid funds of minimum ₹3-5 Lakhs (tourist) or ₹20-35 Lakhs (student/work) in seasoned savings accounts for at least 3 to 6 months. Sudden unverified deposits made days before application risk refusal.`
+            a: `Required proof of funds varies by destination law, stay duration, and visa subclass: short-term visitors generally demonstrate sufficient liquid funds for return travel, accommodation, and daily living expenses (and student/sponsored routes must meet the specific statutory maintenance or blocked-account thresholds published by ${toCountry.name}'s immigration authority). Sudden unverified deposits made shortly before filing may trigger additional scrutiny.`
           },
           {
             q: `Are Income Tax Returns (ITR) mandatory for ${fromCountry.name} applicants?`,
-            a: `Yes, submitting ITR-V acknowledgment copies for the last 2 to 3 financial years along with Computation of Income is highly recommended. The income reported must reconcile with bank statement salary credits.`
+            a: `For employed or self-employed applicants in ${fromCountry.name}, submitting Income Tax Returns (such as ITR-V acknowledgments for the last 2 to 3 financial years) or official tax assessments is commonly recommended where required by ${toCountry.name}'s mission so reported income aligns with bank statements.`
           },
           {
             q: `Can I work on a visitor/tourist visa in ${toCountry.name}?`,
-            a: `No. Working in ${toCountry.name} on a visitor visa is strictly prohibited under immigration law and leads to immediate deportation, detention, and a multi-year entry ban.`
+            a: `No. Engaging in unauthorized employment in ${toCountry.name} on a visitor or tourist visa is prohibited under immigration law and may lead to refusal, removal, and re-entry bans.`
           }
         ];
     setFaqs(initialFaqs);
@@ -506,35 +507,39 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
     return q.includes(query) || a.includes(query);
   });
 
-  // Render markdown content with cache-first activeArticle and synthesized fallback guarantee
+  // Render markdown content with cache-first activeArticle and strict allowlist HTML sanitization
   const parsedMarkdownContent = (() => {
+    let rawHtml = '';
     if (activeArticle?.contentHtml && isRichContent(activeArticle.contentHtml)) {
-      return activeArticle.contentHtml;
+      rawHtml = activeArticle.contentHtml;
+    } else {
+      const rawMd = activeArticle?.content || activeArticle?.rawContent;
+      if (rawMd && isRichContent(rawMd)) {
+        rawHtml = String(marked.parse(rawMd));
+      } else {
+        const defaultGuide = findDefaultGuideMatch(slug, fromCode, toCode, categoryCode);
+        if (defaultGuide?.contentHtml) {
+          rawHtml = defaultGuide.contentHtml;
+        } else if (defaultGuide?.content) {
+          rawHtml = String(marked.parse(defaultGuide.content));
+        } else {
+          rawHtml = String(
+            marked.parse(
+              buildFallbackMarkdownForArticle({
+                slug,
+                title,
+                from: fromCode,
+                to: toCode,
+                type: categoryCode,
+                fees: feesStr,
+                docs: docsList.join(', ')
+              })
+            )
+          );
+        }
+      }
     }
-    const rawMd = activeArticle?.content || activeArticle?.rawContent;
-    if (rawMd && isRichContent(rawMd)) {
-      return String(marked.parse(rawMd));
-    }
-    const defaultGuide = findDefaultGuideMatch(slug, fromCode, toCode, categoryCode);
-    if (defaultGuide?.contentHtml) {
-      return defaultGuide.contentHtml;
-    }
-    if (defaultGuide?.content) {
-      return String(marked.parse(defaultGuide.content));
-    }
-    return String(
-      marked.parse(
-        buildFallbackMarkdownForArticle({
-          slug,
-          title,
-          from: fromCode,
-          to: toCode,
-          type: categoryCode,
-          fees: feesStr,
-          docs: docsList.join(', ')
-        })
-      )
-    );
+    return sanitizeHtml(rawHtml);
   })();
 
   const embassyData = getEmbassyInfo(toCode, fromCode);
@@ -1006,37 +1011,46 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
             )}
           </div>
 
-          {embassyData.officialWebsite && (
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="font-semibold text-slate-700 flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-[#0B3D91]" />
-                Official Government Portal:
-              </span>
-              <a 
-                href={embassyData.officialWebsite.startsWith('http') ? embassyData.officialWebsite : `https://${embassyData.officialWebsite}`} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="font-bold text-[#0B3D91] hover:underline flex items-center gap-1 break-all"
-              >
-                <span>{embassyData.officialWebsite}</span>
-                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-              </a>
-            </div>
-          )}
+          {(() => {
+            const rawSite = embassyData.officialWebsite
+              ? (embassyData.officialWebsite.startsWith('http') ? embassyData.officialWebsite : `https://${embassyData.officialWebsite}`)
+              : '';
+            const safeWebsiteUrl = sanitizeUrl(rawSite, { allowRelative: false });
+            if (!safeWebsiteUrl) return null;
+            return (
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-[#0B3D91]" />
+                  Official Government Portal:
+                </span>
+                <a
+                  href={safeWebsiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-[#0B3D91] hover:underline flex items-center gap-1 break-all"
+                >
+                  <span>{embassyData.officialWebsite}</span>
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                </a>
+              </div>
+            );
+          })()}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {embassyData.inIndia.map((item, idx) => (
+            {embassyData.inIndia.map((item, idx) => {
+              const safeMapUrl = item.map ? sanitizeUrl(item.map, { allowRelative: false }) : '';
+              return (
               <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-shadow shadow-xs space-y-2 text-xs text-slate-700">
                 <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
                   <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                     <Building2 className="w-4 h-4 text-[#0B3D91] shrink-0" />
                     <span>{item.city}</span>
                   </h3>
-                  {item.map && (
-                    <a 
-                      href={item.map} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                  {safeMapUrl && (
+                    <a
+                      href={safeMapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-[#0B3D91] hover:underline flex items-center gap-1 font-semibold text-[11px] shrink-0"
                     >
                       <MapPin className="w-3.5 h-3.5" />
@@ -1068,7 +1082,8 @@ export function BlogArticleView({ article, pathSlug, articles = [], countries = 
                   )}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

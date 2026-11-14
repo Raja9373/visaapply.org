@@ -1,0 +1,142 @@
+{
+  "phase": "3.10.6 (Integrated into Phase 4.0 Master Gate)",
+  "batchAudited": "Priority 2 — Batch 14 (Canonical Rows 151–160)",
+  "executedAtUtc": "2026-11-14T03:55:00Z",
+  "decision": "APPROVED WITH GAPS",
+  "baselineVerified": {
+    "priority1Count": 142,
+    "priority2AfterBatch14": 160,
+    "batch14PathwaysCount": 10,
+    "profileSectionsEvaluated": 300,
+    "specialTopicsEvaluated": 220,
+    "claimsAudited": 900,
+    "publicEligibleClaims": 851,
+    "quarantinedClaims": 49,
+    "representativePointerOverlaps": 0,
+    "publicSanitization": "PASS",
+    "historicalRegression": "PASS",
+    "backupIntegrity": "PASS"
+  },
+  "auditedPathways": [
+    {
+      "canonicalRow": 151,
+      "id": "p2-cand-no-family",
+      "destination": "Norway",
+      "destCode": "NO",
+      "legalInstrumentType": "Family Reunification Residence Permit (Familieinnvandring — Utlendingsloven §§ 40–51)",
+      "verificationStatus": "PARTIALLY_VERIFIED",
+      "publishedClaimsCount": 85,
+      "quarantinedClaimsCount": 5,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 152,
+      "id": "p2-cand-dk-family",
+      "destination": "Denmark",
+      "destCode": "DK",
+      "legalInstrumentType": "Family Reunification Residence Permit (Ægtefællesammenføring — Udlændingeloven § 9)",
+      "verificationStatus": "PARTIALLY_VERIFIED",
+      "publishedClaimsCount": 85,
+      "quarantinedClaimsCount": 5,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 153,
+      "id": "p2-cand-ch-fam",
+      "destination": "Switzerland",
+      "destCode": "CH",
+      "legalInstrumentType": "Family Reunification Residence Permit (Aufenthaltsbewilligung B / L — AIG Art. 42–47)",
+      "verificationStatus": "PARTIALLY_VERIFIED",
+      "publishedClaimsCount": 84,
+      "quarantinedClaimsCount": 6,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 154,
+      "id": "p2-cand-nz-rse",
+      "destination": "New Zealand",
+      "destCode": "NZ",
+      "legalInstrumentType": "Seasonal Work Limited Visa (Recognised Seasonal Employer — INZ WH1)",
+      "verificationStatus": "VERIFIED",
+      "publishedClaimsCount": 87,
+      "quarantinedClaimsCount": 3,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 155,
+      "id": "p2-cand-gb-expansion",
+      "destination": "United Kingdom",
+      "destCode": "GB",
+      "legalInstrumentType": "Sponsored Temporary Corporate Expansion Work Visa (GBM — UK Expansion Worker)",
+      "verificationStatus": "VERIFIED",
+      "publishedClaimsCount": 88,
+      "quarantinedClaimsCount": 2,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 156,
+      "id": "p2-cand-gb-minister",
+      "destination": "United Kingdom",
+      "destCode": "GB",
+      "legalInstrumentType": "Sponsored Faith-Community Work Visa (T2 Minister of Religion)",
+      "verificationStatus": "VERIFIED",
+      "publishedClaimsCount": 88,
+      "quarantinedClaimsCount": 2,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 157,
+      "id": "p2-cand-gb-ymv",
+      "destination": "United Kingdom",
+      "destCode": "GB",
+      "legalInstrumentType": "Unsponsored Reciprocal Youth Cultural Exchange & Work Visa (Youth Mobility Scheme)",
+      "verificationStatus": "VERIFIED",
+      "publishedClaimsCount": 87,
+      "quarantinedClaimsCount": 3,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 158,
+      "id": "p2-cand-us-eb1",
+      "destination": "United States",
+      "destCode": "US",
+      "legalInstrumentType": "Employment-Based First-Preference Immigrant Classification / Permanent Residence (EB-1 — Form I-140)",
+      "verificationStatus": "PARTIALLY_VERIFIED",
+      "publishedClaimsCount": 83,
+      "quarantinedClaimsCount": 7,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 159,
+      "id": "p2-cand-us-i130",
+      "destination": "United States",
+      "destCode": "US",
+      "legalInstrumentType": "Family-Sponsored Immigrant Petition & Lawful Permanent Residence Track (Form I-130 / Form I-485 / DS-260)",
+      "verificationStatus": "PARTIALLY_VERIFIED",
+      "publishedClaimsCount": 82,
+      "quarantinedClaimsCount": 8,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    },
+    {
+      "canonicalRow": 160,
+      "id": "p2-cand-us-eb5",
+      "destination": "United States",
+      "destCode": "US",
+      "legalInstrumentType": "Conditional & Permanent Immigrant Investor Classification (EB-5 — INA § 203(b)(5))",
+      "verificationStatus": "PARTIALLY_VERIFIED",
+      "publishedClaimsCount": 82,
+      "quarantinedClaimsCount": 8,
+      "representativeClaimIdsCount": 7,
+      "publicSanitizationPass": true
+    }
+  ]
+}

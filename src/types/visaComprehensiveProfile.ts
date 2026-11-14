@@ -2539,11 +2539,53 @@ export function evaluateClaimIntegrity(
   };
 }
 
+const INTERNAL_PUBLIC_STRIP_KEYS = new Set([
+  'reviewerNotes',
+  'internalReviewNotes',
+  'correctiveClassificationNotes',
+  'reviewer',
+  'editorId',
+  'changeReason',
+  'isQuarantined',
+  'publicEligible',
+  'isPilotSample',
+  'syntheticReason',
+  'quarantinedSynthetic',
+  'rawInternalMetadata'
+]);
+
+function stripInternalKeysDeep<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => stripInternalKeysDeep(item)) as unknown as T;
+  }
+  if (value && typeof value === 'object') {
+    const out: Record<string, any> = {};
+    for (const [k, v] of Object.entries(value as Record<string, any>)) {
+      if (INTERNAL_PUBLIC_STRIP_KEYS.has(k)) continue;
+      out[k] = stripInternalKeysDeep(v);
+    }
+    return out as T;
+  }
+  return value;
+}
+
+const EXCLUDED_PUBLIC_CLAIM_STATUSES = new Set([
+  'REJECTED',
+  'QUARANTINED',
+  'AWAITING_VERIFICATION',
+  'CONFLICTING',
+  'CONFLICTING_EVIDENCE',
+  'NEEDS_EVIDENCE',
+  'EXPIRED',
+  'NOT_OFFERED'
+]);
+
 /**
  * Sanitizes visa details and claims for public consumption:
- * 1. Strips reviewer notes, reviewer IDs, editor IDs, internal change reasons, and operational metadata.
- * 2. Filters claims and evidence by applicant nationality and verified eligibility.
- * 3. Never presents unverified, rejected, or stale claims as VERIFIED public guidance.
+ * 1. Strips reviewer notes, reviewer IDs, editor IDs, internal change reasons, and operational metadata across all nested objects.
+ * 2. Normalizes claim identity (claimId || id) consistently without dropping valid claims or exposing nameless claims.
+ * 3. Strictly excludes REJECTED, QUARANTINED, AWAITING_VERIFICATION, CONFLICTING, NEEDS_EVIDENCE, EXPIRED, and publicEligible===false claims.
+ * 4. Applies strict top-level allowlist projection (never spreading unverified raw top-level properties).
  */
 export function sanitizeVisaDetailsForPublic(
   rawDetails: any,
@@ -2561,27 +2603,41 @@ export function sanitizeVisaDetailsForPublic(
     ? rawDetails.claims
     : [];
 
-  const sanitizedClaims = rawClaims
-    .filter(c => {
-      // Do not expose REJECTED, QUARANTINED, or explicitly quarantined claims to public guidance
-      if (c?.isQuarantined === true) return false;
-      const st = String(c?.status || c?.verificationStatus || '').toUpperCase();
-      if (['REJECTED', 'QUARANTINED'].includes(st)) return false;
-      // Filter by nationality: include universal ('ALL') and matching target nationality
+  let quarantinedOrSuppressedCount = 0;
+  let awaitingVerificationCount = 0;
+
+  const evaluatedClaims = rawClaims
+    .map((c) => {
+      if (!c || typeof c !== 'object') return null;
+      const normalizedClaimId = String(c.claimId || c.id || '').trim();
+      if (!normalizedClaimId) {
+        quarantinedOrSuppressedCount++;
+        return null;
+      }
+
+      const rawSt = String(c?.status || c?.verificationStatus || 'AWAITING_VERIFICATION').toUpperCase();
+      if (c?.isQuarantined === true || c?.publicEligible === false || EXCLUDED_PUBLIC_CLAIM_STATUSES.has(rawSt)) {
+        if (rawSt === 'AWAITING_VERIFICATION' || rawSt === 'NEEDS_EVIDENCE') {
+          awaitingVerificationCount++;
+        } else {
+          quarantinedOrSuppressedCount++;
+        }
+        return null;
+      }
+
       if (targetNat && targetNat !== 'ALL') {
         const claimNat = String(c.applicableNationality || c.applicable_nationality || 'ALL').toUpperCase();
-        if (claimNat !== 'ALL' && claimNat !== targetNat) return false;
+        if (claimNat !== 'ALL' && claimNat !== targetNat) return null;
       }
-      return true;
-    })
-    .map(c => {
+
       const evidenceList: any[] = Array.isArray(c.evidence) ? c.evidence : [];
       const sanitizedEvidence = evidenceList
-        .filter(ev => {
+        .filter((ev) => {
+          if (!ev || ev.isQuarantined === true) return false;
           const normSt = normalizeEvidenceStatus(ev?.status);
-          return normSt !== 'REJECTED';
+          return !['REJECTED', 'QUARANTINED', 'EXPIRED', 'CONFLICTING'].includes(normSt);
         })
-        .map(ev => ({
+        .map((ev) => ({
           id: ev.id,
           sourceTitle: ev.sourceTitle || ev.source_title || 'Official Source',
           sourceUrl: ev.sourceUrl || ev.source_url || '',
@@ -2595,15 +2651,13 @@ export function sanitizeVisaDetailsForPublic(
         }));
 
       const integrity = evaluateClaimIntegrity(
-        { ...c, evidence: sanitizedEvidence },
+        { ...c, id: normalizedClaimId, claimId: normalizedClaimId, evidence: sanitizedEvidence },
         {
           expectedCountryIso: (rawDetails.programId || '').split('-')[0] || '',
           targetNationality: targetNat
         }
       );
 
-      const rawSt = String(c.status || c.verificationStatus || 'AWAITING_VERIFICATION').toUpperCase();
-      // Public presentation status: never display as VERIFIED if integrity check fails; preserve honest EXPIRED / CONFLICTING / NOT_APPLICABLE / PARTIALLY_VERIFIED states
       const publicStatus =
         rawSt === 'VERIFIED' && integrity.canPresentAsVerified
           ? 'VERIFIED'
@@ -2613,10 +2667,17 @@ export function sanitizeVisaDetailsForPublic(
           ? 'AWAITING_VERIFICATION'
           : rawSt;
 
+      if (EXCLUDED_PUBLIC_CLAIM_STATUSES.has(publicStatus)) {
+        if (publicStatus === 'AWAITING_VERIFICATION') awaitingVerificationCount++;
+        else quarantinedOrSuppressedCount++;
+        return null;
+      }
+
       const canPresent = publicStatus === 'VERIFIED' && integrity.canPresentAsVerified;
 
       return {
-        id: c.id,
+        id: normalizedClaimId,
+        claimId: normalizedClaimId,
         programId: c.programId || c.program_id,
         section: c.section,
         description: c.description,
@@ -2634,60 +2695,64 @@ export function sanitizeVisaDetailsForPublic(
         warnings: integrity.warnings,
         evidence: sanitizedEvidence
       };
-    });
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
 
   // Deep clone and sanitize comprehensive sections (strip reviewer notes and internal operational fields)
   const comp = rawDetails.comprehensiveSections
-    ? JSON.parse(JSON.stringify(rawDetails.comprehensiveSections))
-    : normalizeVisaDetailTo30Sections(rawDetails);
+    ? stripInternalKeysDeep(JSON.parse(JSON.stringify(rawDetails.comprehensiveSections)))
+    : stripInternalKeysDeep(normalizeVisaDetailTo30Sections(rawDetails));
 
   if (comp?.sections) {
     for (const sKey of Object.keys(comp.sections)) {
       const sec = comp.sections[sKey];
-      if (sec?.meta) {
-        delete sec.meta.reviewerNotes;
-        delete sec.meta.internalReviewNotes;
-        delete sec.meta.correctiveClassificationNotes;
-        delete sec.meta.reviewer;
-        delete sec.meta.editorId;
+      const secStatus = String(sec?.status || sec?.meta?.status || '').toUpperCase();
+      if (EXCLUDED_PUBLIC_CLAIM_STATUSES.has(secStatus)) {
+        sec.status = 'AWAITING_VERIFICATION';
+        if (sec.meta) sec.meta.status = 'AWAITING_VERIFICATION';
       }
     }
   }
 
-  if (comp?.applicantSpecialTopics) {
-    for (const tKey of Object.keys(comp.applicantSpecialTopics)) {
-      const top = comp.applicantSpecialTopics[tKey];
-      if (top) {
-        delete top.reviewerNotes;
-        delete top.internalReviewNotes;
-        delete top.correctiveClassificationNotes;
-        delete top.reviewer;
-        delete top.editorId;
-      }
-    }
-  }
+  const programVerificationStatus = String(rawDetails.verificationStatus || 'AWAITING_VERIFICATION').toUpperCase();
+  const isProgramPubliclyVerified = ['VERIFIED', 'PARTIALLY_VERIFIED'].includes(programVerificationStatus) &&
+    rawDetails.isQuarantined !== true &&
+    rawDetails.publicEligible !== false;
+
+  const safeLegalEvidence = Array.isArray(rawDetails.legalEvidence)
+    ? stripInternalKeysDeep(
+        rawDetails.legalEvidence.filter((ev: any) => {
+          const st = String(ev?.status || '').toUpperCase();
+          return !['REJECTED', 'QUARANTINED', 'EXPIRED', 'CONFLICTING'].includes(st);
+        })
+      )
+    : [];
 
   return {
     id: rawDetails.id,
     programId: rawDetails.programId,
-    verificationStatus: rawDetails.verificationStatus,
+    verificationStatus: isProgramPubliclyVerified ? programVerificationStatus : 'AWAITING_VERIFICATION',
     lastUpdated: rawDetails.lastUpdated,
-    countryOverview: rawDetails.countryOverview || {},
-    visaOverview: rawDetails.visaOverview || {},
-    eligibility: rawDetails.eligibility || {},
-    financial: rawDetails.financial || {},
-    documentChecklist: rawDetails.documentChecklist || [],
-    applicationFields: rawDetails.applicationFields || [],
-    applicationSteps: rawDetails.applicationSteps || [],
-    interviewPrep: rawDetails.interviewPrep || {},
-    embassyDirectory: rawDetails.embassyDirectory || [],
-    refusalAppeal: rawDetails.refusalAppeal || {},
-    afterApproval: rawDetails.afterApproval || {},
-    costCalculator: rawDetails.costCalculator || {},
-    faq: rawDetails.faq || [],
-    legalEvidence: rawDetails.legalEvidence || [],
+    countryOverview: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.countryOverview || {}) : {},
+    visaOverview: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.visaOverview || {}) : {},
+    eligibility: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.eligibility || {}) : {},
+    financial: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.financial || {}) : {},
+    documentChecklist: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.documentChecklist || []) : [],
+    applicationFields: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.applicationFields || []) : [],
+    applicationSteps: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.applicationSteps || []) : [],
+    interviewPrep: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.interviewPrep || {}) : {},
+    embassyDirectory: stripInternalKeysDeep(rawDetails.embassyDirectory || []),
+    refusalAppeal: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.refusalAppeal || {}) : {},
+    afterApproval: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.afterApproval || {}) : {},
+    costCalculator: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.costCalculator || {}) : {},
+    faq: isProgramPubliclyVerified ? stripInternalKeysDeep(rawDetails.faq || []) : [],
+    legalEvidence: safeLegalEvidence,
     comprehensiveSections: comp,
-    claims: sanitizedClaims,
+    claims: evaluatedClaims,
+    suppressedClaimsSummary: {
+      quarantinedOrExcludedCount: quarantinedOrSuppressedCount,
+      awaitingVerificationCount
+    },
     selectedNationality: targetNat
   };
 }

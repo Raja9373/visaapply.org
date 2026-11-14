@@ -18,6 +18,7 @@ import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogG
 import { VisaChatbot } from './components/VisaChatbot';
 import { InterviewPrepFull, get20InterviewQuestions } from './components/InterviewPrepFull';
 import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
+import { sanitizeHtml } from './utils/htmlSanitizer';
 const VisaManagementAdminPage = React.lazy(() => import('./pages/VisaManagementAdminPage').then(m => ({ default: m.VisaManagementAdminPage })));
 const VisaDetailEditorPage = React.lazy(() => import('./pages/VisaDetailEditorPage').then(m => ({ default: m.VisaDetailEditorPage })));
 const AuditPage = React.lazy(() => import('./pages/AuditPage').then(m => ({ default: m.AuditPage })));
@@ -78,8 +79,8 @@ import { CountryPAAFaqSection } from './components/CountryPAAFaqSection';
 import { TopFreeToolsStrip } from './components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from './components/BottomFreeToolsSection';
 import { getVisaCount, calculateVisaCount, getVisasForAnyRoute, getBilateralProcessingTime, isVisaFree } from './data/anyToAnyMatrix';
-import { SUPPORTED_LANGUAGES_10, SupportedLangCode, COUNTRY_TO_LANG_10 } from './i18n/config';
-import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectTenLanguageHreflangTags, getCanonicalBaseOrigin } from './utils/autoLanguage';
+import { SUPPORTED_LANGUAGES_15, SupportedLangCode, COUNTRY_TO_LANG_15 } from './i18n/config';
+import { detectUserCountryAndLanguage, getLangFromUrlPath, buildLocalizedUrl, getSavedLanguage, setSavedLanguage, getUIString, getLocalizedCountryName, getLanguageOption, injectLocaleHreflangTags, applyDocumentLangAttributes, getCanonicalBaseOrigin } from './utils/autoLanguage';
 import {
   DEFAULT_PUBLISHED_GUIDES,
   mergeArticleCollections,
@@ -93,6 +94,7 @@ import {
   applySeoMetadataToDom,
   resolveStaticRouteSeoMetadata,
   normalizeCanonicalUrl,
+  resolveValidOgImageUrl,
   auditAllStaticRoutesSeo,
   validateCurrentDomMetadata
 } from './utils/seoMetadataManager';
@@ -228,7 +230,7 @@ export function renderCountryPageFixed(countryCode: string) {
     {
       title: pageTitle,
       description: `${toName} visa requirements for ${fromName} citizens: ${liveCount} official visa subclasses, 2026 fees, processing times, and document checklists.`,
-      ogImage: `https://www.visaapply.org/og/${code}.jpg`,
+      ogImage: resolveValidOgImageUrl(code),
       ogImageAlt: pageTitle
     },
     `/in-to-${code}`
@@ -327,7 +329,7 @@ function getCountryAliasesForDedupe(toCountryName: string, toCode?: string): str
 /**
  * Strips all occurrences of destination country name and trailing '- {Country}' from a visa name
  * so that when combined as `{From} to {To} {subtype} (2026 Guide)`, the destination country name
- * appears ONLY ONCE across all 11,563 visa detail pages.
+ * appears ONLY ONCE across visa detail pages.
  */
 function getVisaSubtypeWithoutCountry(rawVisaName: string, toCountryName: string, toCode?: string): string {
   if (!rawVisaName) return 'Visa';
@@ -367,7 +369,7 @@ function dedupeVisaNameSingleCountry(rawVisaName: string, toCountryName: string,
 
 function generateMetadata(rawPath: string, countries: Country[], article?: Article | null) {
   const { strippedPath: path } = getLangFromUrlPath(rawPath);
-  injectTenLanguageHreflangTags(rawPath);
+  injectLocaleHreflangTags(rawPath);
 
   const isAdmin = path === '/admin';
   const isAdminLogin = path === '/admin/login' || path === '/admin/login/';
@@ -423,9 +425,9 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   const quizMatch = path.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})$/) || path.match(/^\/()([a-z]{2,3})-visa$/i);
 
   const totalCountryCount = Math.max(countries?.length || 0, Object.keys(BASE_COUNTRY_VISAS || {}).length, 249);
-  let title = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
-  let description = "249 countries, 11,563+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
-  let ogImageUrl = 'https://www.visaapply.org/og-image.jpg';
+  let title = "VisaApply.org — Global Visa & Immigration Portal • 249 Countries, 61,752 Routes, 15 Languages";
+  let description = "Independent global visa intelligence portal covering official pathways, document checklists, fees, and bilateral visa routes across 249 countries and territories in 15 UI languages.";
+  let ogImageUrl = resolveValidOgImageUrl('default');
   let ogImageAlt = 'VisaApply.org - 249 Countries, 61,752 Routes';
 
   const isFlights = path === '/flights' || path === '/flights/' || path.startsWith('/flights?');
@@ -452,11 +454,11 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     description = 'Restricted administrator portal for VisaApply.org.';
   } else if (isAtlysVsVisaApply) {
     title = 'Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup';
-    description = 'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and 11,563+ official visa types.';
+    description = 'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and all 6 official visa categories.';
   } else if (isGoldenVisa) {
     title = 'Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org';
     description = 'Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.';
-    ogImageUrl = 'https://www.visaapply.org/og/golden-visa.jpg';
+    ogImageUrl = resolveValidOgImageUrl('golden-visa');
     ogImageAlt = 'Golden Visa & Residency by Investment 2026 - VisaApply.org';
   } else if (isDummyTicket) {
     title = 'Dummy Ticket - Flight + Hotel Reservation for Visa – VisaApply.org';
@@ -527,14 +529,14 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     ogImageUrl = 'https://www.visaapply.org/og/flights.jpg';
     ogImageAlt = 'Cheap Flights from India - 249 Countries - VisaApply.org';
   } else if (isBlogs) {
-    title = '2026 Global Visa Blogs & Travel Guides (2,490+ Official Articles) – VisaApply.org';
-    description = 'Explore 2,490+ SEO visa blogs across 249 countries: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
+    title = '2026 Global Visa Blogs & Travel Guides (249 Countries) – VisaApply.org';
+    description = 'Explore SEO visa blogs across 249 countries: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.';
   } else if (interviewMatch) {
     const code = interviewMatch[1].toLowerCase();
     const cName = getCountryDisplayName(code);
     title = `${cName} Visa Interview Questions & Winning Answers [2026 Updated] – VisaApply.org`;
     description = `Master the top 20 ${cName} consular interview questions and ideal answers, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
-    ogImageUrl = `https://www.visaapply.org/og/${code}.jpg`;
+    ogImageUrl = resolveValidOgImageUrl(code);
     ogImageAlt = `${cName} Visa Interview Prep - VisaApply.org`;
   } else if (isContact) {
     title = 'Contact Us & Consular Support Desk – VisaApply.org';
@@ -546,8 +548,8 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     title = 'Terms of Service & Editorial Disclaimer – VisaApply.org';
     description = 'Terms of Service and non-governmental consular disclaimer for VisaApply.org.';
   } else if (isSitemap) {
-    title = 'All 11,563+ Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org';
-    description = `Explore complete visa requirements, official fees, and document checklists across all ${totalCountryCount} global destination countries and 6 visa categories.`;
+    title = 'Global Visa Pathways & 61,752 Bilateral Routes Directory [2026] | VisaApply.org';
+    description = `Explore complete visa requirements, official portal references, and document checklists across all ${totalCountryCount} global destination countries and 6 visa categories.`;
   } else if (level3DetailMatch) {
     const fromCode = level3DetailMatch[1].toUpperCase();
     const toCode = level3DetailMatch[2].toUpperCase();
@@ -570,7 +572,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
       title = `${fromDisplay} to ${toDisplay} ${subClean} (2026 Guide)`;
     }
     description = `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${title}.`;
-    ogImageUrl = `https://www.visaapply.org/og/${toCode.toLowerCase()}.jpg`;
+    ogImageUrl = resolveValidOgImageUrl(toCode);
     ogImageAlt = title;
   } else if (article && article.title) {
     title = article.title.endsWith('(2026 Guide)')
@@ -587,14 +589,14 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const meta = getCountryMeta(to);
     const vCount = calculateVisaCount(from, to);
     const proc = getBilateralProcessingTime(from, to);
-    ogImageUrl = `https://www.visaapply.org/og/${toLower}.jpg`;
+    ogImageUrl = resolveValidOgImageUrl(toLower);
     ogImageAlt = `${toName} Visa for ${fromName} - ${vCount} Visa Types - VisaApply.org`;
     if (article && article.title) {
       title = `${article.title} [2026 Updated] | VisaApply.org`;
       description = `Official 2026 guide for ${fromName} applying for a ${type} visa to ${toName}. Fees: ${article.fees}. Processing: ${proc}. Download free PDF document checklist.`;
     } else {
       title = `${toName} ${type.charAt(0).toUpperCase() + type.slice(1)} Visa for ${fromName} 2026 - ${vCount} Visa Types - VisaApply.org`;
-      description = `${toName} ${type} visa for ${fromName} - ${vCount} types, processing ${proc}, success ${meta.successRate}, hotel from ${meta.hotelPrice} Booking.com, flights from ${meta.flightPrice}`;
+      description = `${toName} ${type} visa for ${fromName} - ${vCount} types, processing ${proc}, hotel from ${meta.hotelPrice} Booking.com, flights from ${meta.flightPrice}`;
     }
   } else if (quizMatch) {
     const from = (quizMatch[1] || 'IN').toUpperCase();
@@ -605,7 +607,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     const meta = getCountryMeta(to);
     const vCount = calculateVisaCount(from, to);
     const proc = getBilateralProcessingTime(from, to);
-    ogImageUrl = `https://www.visaapply.org/og/${toLower}.jpg`;
+    ogImageUrl = resolveValidOgImageUrl(toLower);
     ogImageAlt = `${toName} Visa for ${fromLabel} 2026 - ${vCount} Visa Types`;
 
     if (from === 'IN' && to === 'US') {
@@ -738,14 +740,14 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
   } else if (isTerms) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Terms of Service", "item": `${baseUrl}/terms` });
   } else if (isSitemap) {
-    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "All 11,563+ Visa Guides Directory", "item": `${baseUrl}/sitemap` });
+    breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Global Visa Pathways Directory", "item": `${baseUrl}/sitemap` });
   } else if (isAudit) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Live Database Audit", "item": `${baseUrl}/audit` });
   } else if (isVerification) {
     breadcrumbItems.push({ "@type": "ListItem", "position": 2, "name": "Consular Data Verification", "item": `${baseUrl}/verification` });
   } else if (level3DetailMatch) {
     // -------------------------------------------------------------------------------------------------
-    // Visa Detail Page (11,563+ pages): Dynamic 4-Level Hierarchy -> Home > From-To > Category > Visa Detail
+    // Visa Detail Page: Dynamic 4-Level Hierarchy -> Home > From-To > Category > Visa Detail
     // -------------------------------------------------------------------------------------------------
     const fromCode = level3DetailMatch[1].toUpperCase();
     const toCode = level3DetailMatch[2].toUpperCase();
@@ -853,82 +855,6 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     });
   }
 
-  const schemaCountryName = getCountryDisplayName(targetCodeForSchema);
-  const schemaMeta = getCountryMeta(targetCodeForSchema);
-  const schemaCount = getLiveVisaCount(targetCodeForSchema);
-
-  const faqEntities = interviewMatch
-    ? get20InterviewQuestions(targetCodeForSchema, schemaCountryName).slice(0, 6).map((q) => ({
-        "@type": "Question",
-        "name": q.question,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": q.idealAnswer
-        }
-      }))
-    : [
-        {
-          "@type": "Question",
-          "name": `How many visa categories are available for ${schemaCountryName} in 2026?`,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": `${schemaCountryName} offers ${schemaCount} official visa types across Tourist, Business, Work, Student, Family, and Permanent Residency categories on VisaApply.org.`
-          }
-        },
-        {
-          "@type": "Question",
-          "name": `What is the ${schemaCountryName} visa processing time and approval rate for Indians?`,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": `Standard processing time for ${schemaCountryName} is ${schemaMeta.processing} with a ${schemaMeta.successRate} approval rate for Indian passport holders who submit verified bank statements, ITR, and accommodation proof.`
-          }
-        },
-        {
-          "@type": "Question",
-          "name": `What is the best time to visit ${schemaCountryName} and average hotel cost in ${schemaMeta.capital}?`,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": `The best season to visit ${schemaCountryName} is ${schemaMeta.bestTime}. Refundable visa-compliant hotels in ${schemaMeta.capital} start from ${schemaMeta.hotelPrice} on Booking.com.`
-          }
-        },
-        {
-          "@type": "Question",
-          "name": `Which countries offer easy e-Visa or Visa on Arrival for Indian passport holders in 2026?`,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": `Top fast-track destinations for Indian citizens in 2026 include Thailand (Visa Free / e-Visa), UAE Dubai (3-4 Days e-Visa), Singapore (3-5 Days e-Visa), Vietnam (3 Days e-Visa), Malaysia (Visa Free / MDAC), Indonesia Bali (e-VOA), Maldives (Free VOA), and Mauritius (Visa Free).`
-          }
-        }
-      ];
-
-  const howToSchema = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": `How to Apply for a ${schemaCountryName} Visa from India in 2026`,
-    "description": `Step-by-step official procedure to apply for a ${schemaCountryName} visa from India (${schemaMeta.processing} processing time).`,
-    "totalTime": "PT30M",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "position": 1,
-        "name": "Select Visa Subclass & Verify Eligibility",
-        "text": `Choose the right subclass among ${schemaCount} official ${schemaCountryName} visa categories using our 30-second Eligibility Checker.`
-      },
-      {
-        "@type": "HowToStep",
-        "position": 2,
-        "name": "Gather Mandatory Financial & Travel Documents",
-        "text": `Prepare a valid passport (6+ months), 6 months bank statements, 3 years ITR, employer NOC, and verifiable hotel booking in ${schemaMeta.capital}.`
-      },
-      {
-        "@type": "HowToStep",
-        "position": 3,
-        "name": "Submit Online Application & Book VFS/Embassy Slot",
-        "text": `Complete the online application form, pay the consular fee, and attend biometrics/interview in New Delhi, Mumbai, Bengaluru, Chennai, Hyderabad, or Kolkata.`
-      }
-    ]
-  };
-
   const schemas = [
     {
       "@context": "https://schema.org",
@@ -936,7 +862,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
       "name": "VisaApply.org",
       "url": "https://www.visaapply.org",
       "email": "contact@visaapply.org",
-      "description": "Global Visa Intelligence & Consular Guide Portal covering 11,563+ live visa pathways across 249 countries and territories.",
+      "description": "Independent global visa intelligence and immigration pathway reference portal covering 249 countries and territories. Not affiliated with any government agency, embassy, or VFS Global.",
       "sameAs": [
         "https://www.visaapply.org/about",
         "https://www.visaapply.org/sitemap"
@@ -970,13 +896,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": breadcrumbItems
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    },
-    howToSchema
+    }
   ];
   ldScript.textContent = JSON.stringify(schemas);
 }
@@ -1341,11 +1261,11 @@ function VisaCategorySelectionView({ match, countries, navigate, uiLang, onChang
         </button>
       </div>
 
-      {/* 10-Language Bar */}
+      {/* 15-Language Bar */}
       <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
         <div className="flex items-center gap-2 font-bold text-slate-800">
           <Globe className="w-4 h-4 text-[#0B3D91]" />
-          <span>Language (10 Auto-Detected):</span>
+          <span>Language (15 Supported):</span>
           {isJpToIn && (
             <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
               🇯🇵 日本人向け特別ガイド
@@ -1353,11 +1273,12 @@ function VisaCategorySelectionView({ match, countries, navigate, uiLang, onChang
           )}
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
-          {SUPPORTED_LANGUAGES_10.map((l) => (
+          {SUPPORTED_LANGUAGES_15.map((l) => (
             <button
               key={l.code}
               onClick={() => {
                 setCurrentLang(l.code);
+                applyDocumentLangAttributes(l.code);
                 if (onChangeLang) onChangeLang(l.code);
                 else setSavedLanguage(l.code);
               }}
@@ -1593,11 +1514,11 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
         </button>
       </div>
 
-      {/* 10-Language Bar */}
+      {/* 15-Language Bar */}
       <div className="bg-slate-100 p-3 rounded-2xl mb-6 border border-slate-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
         <div className="flex items-center gap-2 font-bold text-slate-800">
           <Globe className="w-4 h-4 text-[#0B3D91]" />
-          <span>Language (10 Auto-Detected):</span>
+          <span>Language (15 Supported):</span>
           {isJpToIn && (
             <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold ml-1">
               🇯🇵 日本人向け特別ガイド
@@ -1605,11 +1526,12 @@ function VisaCategoryListView({ match, countries, navigate, uiLang, onChangeLang
           )}
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
-          {SUPPORTED_LANGUAGES_10.map((l) => (
+          {SUPPORTED_LANGUAGES_15.map((l) => (
             <button
               key={l.code}
               onClick={() => {
                 setCurrentLang(l.code);
+                applyDocumentLangAttributes(l.code);
                 if (onChangeLang) onChangeLang(l.code);
                 else setSavedLanguage(l.code);
               }}
@@ -2364,7 +2286,7 @@ export default function App() {
 
   const handleSimulateVpnCountry = (isoCode: string) => {
     const normCode = isoCode.toUpperCase();
-    const mappedLang: SupportedLangCode = COUNTRY_TO_LANG_10[normCode] || 'en';
+    const mappedLang: SupportedLangCode = COUNTRY_TO_LANG_15[normCode] || 'en';
     const cObj: Country = {
       code: normCode,
       name: getCountryFullName(normCode),
@@ -2439,11 +2361,18 @@ export default function App() {
   const [adminSessionChecked, setAdminSessionChecked] = useState<boolean>(false);
 
   useEffect(() => {
+    applyDocumentLangAttributes(uiLang);
+  }, [uiLang]);
+
+  useEffect(() => {
     const handlePopState = () => {
       const p = window.location.pathname;
-      setCurrentPath(p);
+      const fullPath = `${p}${window.location.search || ''}`;
+      setCurrentPath(fullPath);
       const urlLang = getLangFromUrlPath(p).lang;
-      if (urlLang) setUiLang(urlLang);
+      const nextLang = urlLang || 'en';
+      setUiLang(nextLang);
+      applyDocumentLangAttributes(nextLang);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -2455,7 +2384,8 @@ export default function App() {
 
   useEffect(() => {
     const { strippedPath } = getLangFromUrlPath(currentPath);
-    const slug = normalizeBlogSlug(strippedPath);
+    const cleanSlugPath = strippedPath.split('?')[0].split('#')[0];
+    const slug = normalizeBlogSlug(cleanSlugPath);
     const blogMatch = slug
       ? (findGeneratedBlogBySlug(slug) as unknown as Article | undefined) ||
         articles.find((a: Article) => normalizeBlogSlug(a.slug) === slug || normalizeBlogSlug((a as any).route) === slug) ||
@@ -2463,13 +2393,16 @@ export default function App() {
       : undefined;
     generateMetadata(currentPath, countries, blogMatch || null);
     validateCurrentDomMetadata(true);
-  }, [currentPath, countries, articles]);
+  }, [currentPath, countries, articles, uiLang]);
 
   const navigate = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
     const urlLang = getLangFromUrlPath(path).lang;
-    if (urlLang) setUiLang(urlLang);
+    if (urlLang) {
+      setUiLang(urlLang);
+      applyDocumentLangAttributes(urlLang);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -2552,7 +2485,15 @@ export default function App() {
   const handleLanguageChange = (nextLang: SupportedLangCode) => {
     setUiLang(nextLang);
     setSavedLanguage(nextLang);
-    const newPath = buildLocalizedUrl(currentPath, nextLang);
+    applyDocumentLangAttributes(nextLang);
+    const searchAndHash =
+      typeof window !== 'undefined'
+        ? `${window.location.search || ''}${window.location.hash || ''}`
+        : '';
+    const fullCurrent = currentPath.includes('?') || currentPath.includes('#')
+      ? currentPath
+      : `${currentPath}${searchAndHash}`;
+    const newPath = buildLocalizedUrl(fullCurrent, nextLang);
     window.history.pushState({}, '', newPath);
     setCurrentPath(newPath);
   };
@@ -2701,7 +2642,7 @@ export default function App() {
           fees: approved.fees || 'Standard Govt Fees',
           docs: approved.docs || 'Passport, Financial Proofs',
           excerpt: (approved.content || '').substring(0, 160).replace(/[#*`]/g, '') + '...',
-          contentHtml: String(marked.parse(approved.content || '')),
+          contentHtml: sanitizeHtml(String(marked.parse(approved.content || ''))),
           rawContent: approved.content
         };
 
@@ -2831,7 +2772,13 @@ export default function App() {
     );
 
   return (
-    <div className="min-h-screen flex flex-col text-slate-900 font-sans">
+    <div dir={uiLang === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen flex flex-col text-slate-900 font-sans">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:text-[#0B3D91] focus:px-4 focus:py-2 focus:rounded-lg focus:font-bold focus:shadow-lg"
+      >
+        {getUIString(uiLang).skipToContent}
+      </a>
       {/* Official VFS-Style Top Header */}
       <header className="sticky top-0 z-50 bg-[#0B3D91] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
@@ -3139,12 +3086,12 @@ export default function App() {
             <div className="flex items-center gap-1 bg-white/10 hover:bg-white/15 px-2 sm:px-2.5 py-1.5 rounded-xl border border-white/20 text-xs">
               <span>🌐</span>
               <select
-                aria-label="Select Language"
+                aria-label={getUIString(uiLang).selectLanguageLabel}
                 value={uiLang}
                 onChange={(e) => handleLanguageChange(e.target.value as SupportedLangCode)}
                 className="bg-transparent text-white font-bold text-xs focus:outline-none cursor-pointer max-w-[92px] sm:max-w-none truncate"
               >
-                {SUPPORTED_LANGUAGES_10.map((l) => (
+                {SUPPORTED_LANGUAGES_15.map((l) => (
                   <option key={l.code} value={l.code} className="text-slate-900 font-semibold">
                     {l.flag} {l.nativeName} ({l.name})
                   </option>
@@ -3295,8 +3242,22 @@ export default function App() {
         </div>
       </header>
 
+      {/* Independent Non-Government Notice & Bilingual Fallback Disclosure */}
+      {!isAnyAdminRoute && (
+        <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 text-[11px] sm:text-xs text-slate-700 no-print">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+            <span className="font-medium">{getUIString(uiLang).nonGovDisclaimer}</span>
+            {uiLang !== 'en' && (
+              <span className="text-amber-800 font-semibold">
+                {getUIString(uiLang).englishFallbackNotice.replace('{lang}', getLanguageOption(uiLang).nativeName)}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Main Content Router */}
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <React.Suspense fallback={<PageLoadingFallback />}>
           {isAnyAdminRoute ? (
           isAdminLogin || !isAdminAuthenticated ? (
@@ -3329,6 +3290,16 @@ export default function App() {
               adminToken={adminToken}
               onLogout={handleAdminLogout}
             />
+          ) : isGlobalDataCoverage ? (
+            <GlobalDataCoveragePage onNavigate={navigate} adminToken={adminToken} />
+          ) : isGlobalVerificationPilot ? (
+            <GlobalVerificationPilotPage onNavigate={navigate} adminToken={adminToken} />
+          ) : isEvidenceTraceability ? (
+            <EvidenceTraceabilityAuditPage onNavigate={navigate} adminToken={adminToken} />
+          ) : isOfficialSourceMonitoring ? (
+            <OfficialSourceMonitoringPage onNavigate={navigate} adminToken={adminToken} />
+          ) : isGlobalVisaCoverageAudit ? (
+            <GlobalVisaCoverageAuditPage onNavigate={navigate} adminToken={adminToken} />
           ) : (
             <AdminPortal 
               drafts={drafts} 
@@ -3406,7 +3377,22 @@ export default function App() {
         ) : interviewMatch ? (
           <InterviewPrepFull countryCode={interviewMatch[1]} onNavigate={navigate} />
         ) : isAudit ? (
-          <AuditPage navigate={navigate} />
+          isAdminAuthenticated ? (
+            <AuditPage navigate={navigate} />
+          ) : (
+            <AdminLoginView
+              isAuthenticated={isAdminAuthenticated}
+              adminSessionChecked={adminSessionChecked}
+              intendedPath="/audit"
+              onLoginSuccess={(token, targetPath) => {
+                setAdminToken(token);
+                setIsAdminAuthenticated(true);
+                setAdminSessionChecked(true);
+                navigate(targetPath || '/audit');
+              }}
+              navigate={navigate}
+            />
+          )
         ) : isVerification ? (
           <VerificationView navigate={navigate} />
         ) : isCostCalculator ? (
@@ -3431,16 +3417,6 @@ export default function App() {
           <SourceVerifierPage onNavigate={navigate} />
         ) : isIntelligenceHub ? (
           <IntelligenceHubPage onNavigate={navigate} />
-        ) : isGlobalDataCoverage ? (
-          <GlobalDataCoveragePage onNavigate={navigate} adminToken={adminToken} />
-        ) : isGlobalVerificationPilot ? (
-          <GlobalVerificationPilotPage onNavigate={navigate} adminToken={adminToken} />
-        ) : isEvidenceTraceability ? (
-          <EvidenceTraceabilityAuditPage onNavigate={navigate} adminToken={adminToken} />
-        ) : isOfficialSourceMonitoring ? (
-          <OfficialSourceMonitoringPage onNavigate={navigate} adminToken={adminToken} />
-        ) : isGlobalVisaCoverageAudit ? (
-          <GlobalVisaCoverageAuditPage onNavigate={navigate} adminToken={adminToken} />
         ) : isContact ? (
           <ContactView navigate={navigate} />
         ) : isPrivacy ? (
@@ -3507,7 +3483,7 @@ export default function App() {
               <span className="font-bold text-lg">VisaApply.org</span>
             </div>
             <p className="text-sm text-slate-300 max-w-md leading-relaxed">
-              VisaApply.org is an independent global visa information portal providing accurate requirements, documentation checklists, and step-by-step application guidance across 249 countries and 11,563+ visa subclasses worldwide.
+              VisaApply.org is an independent global visa information portal providing verified requirements, documentation checklists, and step-by-step application guidance across 249 countries and territories worldwide.
             </p>
             <p className="text-xs text-slate-300">
               Disclaimer: We are not affiliated with VFS Global, IRCC, USCIS, UKVI, or any government embassy. Official applications must be submitted through official government portals.
@@ -3515,7 +3491,7 @@ export default function App() {
             <div className="pt-2 text-xs text-slate-200 font-medium flex items-center gap-2">
               <Mail className="w-4 h-4 text-blue-300" />
               <span>Contact Us: </span>
-              <a href="mailto:contact@visaapply.org" className="text-blue-300 font-bold underline underline-offset-2 hover:text-white">contact@visaapply.org</a>
+              <a dir="ltr" href="mailto:contact@visaapply.org" className="text-blue-300 font-bold underline underline-offset-2 hover:text-white">contact@visaapply.org</a>
             </div>
           </div>
           <div>
@@ -3526,12 +3502,12 @@ export default function App() {
               <li><button onClick={() => navigate('/about')} className="text-emerald-300 hover:text-emerald-200 font-semibold transition-colors cursor-pointer">🔗 Free Visa Widget (Backlink)</button></li>
               <li><button onClick={() => navigate('/golden-visa')} className="text-yellow-300 hover:text-yellow-200 font-semibold transition-colors cursor-pointer">👑 Golden Visa (2026 Guide)</button></li>
               <li><button onClick={() => navigate('/flights')} className="hover:text-white transition-colors cursor-pointer">✈ Cheap Flights (249 Countries)</button></li>
-              <li><button onClick={() => navigate('/blogs')} className="hover:text-white transition-colors cursor-pointer">Visa Blogs (2,490+ Guides)</button></li>
+              <li><button onClick={() => navigate('/blogs')} className="hover:text-white transition-colors cursor-pointer">Visa Blogs & Consular Guides</button></li>
               <li><button onClick={() => navigate('/interview-prep/us')} className="hover:text-white transition-colors cursor-pointer">Consular Interview Prep</button></li>
               <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
               <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors cursor-pointer">Privacy Policy & AdSense</button></li>
               <li><button onClick={() => navigate('/terms')} className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</button></li>
-              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-200 font-semibold text-blue-300 transition-colors cursor-pointer">Sitemap (11,563+ Pages)</button></li>
+              <li><button onClick={() => navigate('/sitemap')} className="hover:text-blue-200 font-semibold text-blue-300 transition-colors cursor-pointer">HTML Sitemap Directory</button></li>
             </ul>
           </div>
           <div>
@@ -3665,14 +3641,14 @@ export default function App() {
           <div>
             <h4 className="text-white font-semibold mb-3 text-sm tracking-wide">Official Contact & Info</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="mailto:contact@visaapply.org" className="text-blue-300 font-semibold underline underline-offset-2 hover:text-white">contact@visaapply.org</a></li>
-              <li className="text-xs text-slate-300">11,563+ Visa & Programme Guides across 249 Destination Countries</li>
+              <li><a dir="ltr" href="mailto:contact@visaapply.org" className="text-blue-300 font-semibold underline underline-offset-2 hover:text-white">contact@visaapply.org</a></li>
+              <li className="text-xs text-slate-300">Official Pathway &amp; Visa Reference Guides across 249 Destination Countries</li>
               <li className="text-xs text-slate-300">AdSense Publisher: pub-9048615701580913</li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-xs text-slate-300 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400">© {new Date().getFullYear()} VisaApply.org. All rights reserved. 11,563+ Visa & Programme Guides across 249 Destination Countries.</p>
+          <p className="text-slate-400">© {new Date().getFullYear()} VisaApply.org. All rights reserved. Official Pathway &amp; Visa Reference Guides across 249 Destination Countries.</p>
           <div className="flex items-center gap-2 flex-wrap" style={{ fontSize: '11px', color: '#9ca3af' }}>
             <span>© {new Date().getFullYear()} VisaApply.org</span>
             <span>•</span>
@@ -3818,7 +3794,8 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
     const isSchengen = CONTINENT_MAP_249.europe?.subregions?.schengen?.includes(c.code.toLowerCase());
 
     if (fullName.toLowerCase().includes(q) || c.code.toLowerCase() === q) {
-      return { matched: true, reason: `${meta.capital} • ${getVisaCount(activeOriginCode, c.code)} Visas` };
+      const cnt = getVisaCount(activeOriginCode, c.code);
+      return { matched: true, reason: cnt > 0 ? `${meta.capital} • ${cnt} Visas` : `${meta.capital} • Verification Pending` };
     }
     if (meta.capital.toLowerCase().includes(q)) {
       return { matched: true, reason: `Capital: ${meta.capital}` };
@@ -3950,7 +3927,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
         <div className="max-w-5xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-3 py-1.5 rounded-full text-xs text-blue-200">
             <Globe className="w-3.5 h-3.5" />
-            <span>Global Visa Intelligence • 61,752 Any-to-Any Routes • 10 Languages</span>
+            <span>Global Visa Intelligence • 61,752 Any-to-Any Routes • 15 UI Languages</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white balance">
             {getUIString(uiLang).heroTitle}
@@ -4019,11 +3996,14 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                 onChange={(e) => setHeroDestCode(e.target.value)}
                 className="w-full bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
               >
-                {uniqueCountries.map((c: Country) => (
-                  <option key={c.code} value={c.code}>
-                    {getCountryFlag(c.code)} {getLocalizedCountryName(c.code, uiLang, getCountryFullName(c.code))} ({getVisaCount(selectedOrigin?.code || 'IN', c.code)} {ui.visas})
-                  </option>
-                ))}
+                {uniqueCountries.map((c: Country) => {
+                  const cnt = getVisaCount(selectedOrigin?.code || 'IN', c.code);
+                  return (
+                    <option key={c.code} value={c.code}>
+                      {getCountryFlag(c.code)} {getLocalizedCountryName(c.code, uiLang, getCountryFullName(c.code))} ({cnt > 0 ? `${cnt} ${ui.visas}` : 'Pending Verification'})
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -4037,7 +4017,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
               }}
               className="w-full md:w-auto px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white font-black text-sm rounded-xl shadow-md cursor-pointer transition-colors shrink-0"
             >
-              {ui.viewRequirements} ({getVisaCount(selectedOrigin?.code || 'IN', heroDestCode)})
+              {ui.viewRequirements} ({(() => { const cnt = getVisaCount(selectedOrigin?.code || 'IN', heroDestCode); return cnt > 0 ? cnt : 'Guide'; })()})
             </button>
           </div>
 
@@ -4182,7 +4162,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                     </div>
                   </div>
                   <span className="text-[11px] md:text-xs font-bold text-[#1d4ed8] bg-blue-50 px-2 md:px-2.5 py-1 rounded-lg shrink-0">
-                    {getVisaCount(originCode, destCode)} Visas ({originCode.toUpperCase()} → {destCode.toUpperCase()})
+                    {(() => { const cnt = getVisaCount(originCode, destCode); return cnt > 0 ? `${cnt} Visas` : 'Pending Verification'; })()} ({originCode.toUpperCase()} → {destCode.toUpperCase()})
                   </span>
                 </button>
               );
@@ -4340,7 +4320,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                         ) : (
                           <>
                             <span className="bg-[#f1f5f9] px-2 py-0.5 rounded-[10px] font-bold text-[#334155]">
-                              {liveCount} {ui.visas}
+                              {liveCount > 0 ? `${liveCount} ${ui.visas}` : 'Pending Verification'}
                             </span>
                             <span className="text-[11px] font-bold text-[#1d4ed8] bg-blue-50 px-1.5 py-0.5 rounded-md">
                               {originCode.toUpperCase()} → {destCode.toUpperCase()}
@@ -6842,7 +6822,7 @@ function AboutView({ navigate }: any) {
           About VisaApply.org & Our Editorial Standards
         </h1>
         <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-          <strong>VisaApply.org</strong> is a comprehensive, independent global visa intelligence platform engineered to simplify cross-border travel, work permits, study visas, and permanent residency pathways across all <strong>249 ISO-recognized countries and territories</strong> (covering <strong>11,563+ live visa and statutory classifications</strong>).
+          <strong>VisaApply.org</strong> is a comprehensive, independent global visa intelligence platform engineered to simplify cross-border travel, work permits, study visas, and permanent residency pathways across all <strong>249 ISO-recognized countries and territories</strong> across 6 statutory visa categories.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
@@ -6852,9 +6832,9 @@ function AboutView({ navigate }: any) {
             <p className="text-xs text-slate-500 mt-1">Every sovereign state and dependent territory mapped across 7 continents.</p>
           </div>
           <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
-            <div className="text-2xl font-extrabold text-emerald-700">11,563+ Visas</div>
-            <div className="text-xs font-bold text-slate-700 mt-1">Primary Statutory Subclasses</div>
-            <p className="text-xs text-slate-500 mt-1">Includes US INA 278 routes, UK 222 Immigration Rules, Canada IRPR 151, Germany AufenthG 138 & Australia 135 subclasses.</p>
+            <div className="text-2xl font-extrabold text-emerald-700">6 Categories</div>
+            <div className="text-xs font-bold text-slate-700 mt-1">Statutory Visa Classifications</div>
+            <p className="text-xs text-slate-500 mt-1">Covers Tourist, Business, Work, Student, Family, and Permanent Residency statutory subclasses.</p>
           </div>
           <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
             <div className="text-2xl font-extrabold text-amber-700">Daily Audit</div>
@@ -7006,7 +6986,7 @@ function PrivacyView({ navigate }: any) {
 
           <h2 className="text-lg font-bold text-slate-900">3. Affiliate & Travel Partner Disclosure</h2>
           <p>
-            To keep our 11,563+ visa guides and downloadable PDF checklists 100% free for travelers, VisaApply.org participates in verified travel affiliate programs including <strong>Booking.com (AID 8119919)</strong> and <strong>Travelpayouts / Aviasales (Marker 801550)</strong>. When you book refundable visa-compliant hotels or flights through our partner links, we may earn a small commission at zero extra cost to you.
+            To keep our global visa guides and downloadable PDF checklists 100% free for travelers, VisaApply.org participates in verified travel affiliate programs including <strong>Booking.com (AID 8119919)</strong> and <strong>Travelpayouts / Aviasales (Marker 801550)</strong>. When you book refundable visa-compliant hotels or flights through our partner links, we may earn a small commission at zero extra cost to you.
           </p>
 
           <h2 className="text-lg font-bold text-slate-900">4. Third-Party Links & Non-Governmental Disclaimer</h2>
@@ -7404,7 +7384,7 @@ function AdminPortal({
             <div>
               <div className="text-2xl mb-2">🗺️</div>
               <h3 className="font-extrabold text-base text-blue-200">Sitemap (61,752+ Routes) – Public + Admin</h3>
-              <p className="text-xs text-slate-200 mt-1">Indexed links for all 11,563+ visa guides & 61,752 bilateral routes across 249 countries.</p>
+              <p className="text-xs text-slate-200 mt-1">Indexed links for verified visa guides & 61,752 bilateral routes across 249 countries.</p>
             </div>
             <span className="text-xs font-bold text-blue-200 mt-4 inline-flex items-center gap-1">Open Public Sitemap →</span>
           </div>

@@ -454,7 +454,7 @@ export const TRANSLATIONS: Record<string, TranslationDictionary> = {
     tips: "Uzman Başvuru İpuçları",
     faqs: "Sıkça Sorulan Sorular",
     eligibility: "Uygunluk Kriterleri",
-    disclaimer: "Yasal Uyarı: VisaApply.org bağımsız bir vize bilgi портаlıdır.",
+    disclaimer: "Yasal Uyarı: VisaApply.org bağımsız bir vize bilgi portalıdır.",
     downloadChecklist: "Belge Listesini Yazdır / Kaydet",
     checkedCount: "belge doğrulandı",
     selectPurpose: "Seyahat Amacını Seçin",

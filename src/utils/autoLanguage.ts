@@ -1,11 +1,12 @@
 import {
-  SUPPORTED_LANGUAGES_10,
-  COUNTRY_TO_LANG_10,
-  UI_TRANSLATIONS_10,
+  SUPPORTED_LANGUAGES_15,
+  COUNTRY_TO_LANG_15,
+  UI_TRANSLATIONS_15,
   SupportedLangCode,
   I18nStrings,
   LanguageOption,
 } from '../i18n/config';
+import { getHreflangAlternatesForRoute } from './seoMetadataManager';
 
 const MANUAL_LANG_KEY = 'visaapply_manual_lang_v2';
 const MANUAL_LANG_FOR_COUNTRY_KEY = 'visaapply_manual_lang_country_v2';
@@ -16,7 +17,7 @@ const LANG_REGEX = /^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/.*|$)/i;
 
 export function isSupportedLang(code: string): code is SupportedLangCode {
   if (!code) return false;
-  return SUPPORTED_LANGUAGES_10.some((l) => l.code === code.toLowerCase());
+  return SUPPORTED_LANGUAGES_15.some((l) => l.code === code.toLowerCase());
 }
 
 export function getLangFromUrlPath(pathname: string): {
@@ -34,17 +35,27 @@ export function getLangFromUrlPath(pathname: string): {
 }
 
 export function buildLocalizedUrl(path: string, lang: SupportedLangCode): string {
-  const { strippedPath } = getLangFromUrlPath(path);
+  const raw = String(path || '/');
+  const qIdx = raw.indexOf('?');
+  const hIdx = raw.indexOf('#');
+  const splitAt = qIdx >= 0 && hIdx >= 0 ? Math.min(qIdx, hIdx) : Math.max(qIdx, hIdx);
+  const pathnamePart = splitAt >= 0 ? raw.slice(0, splitAt) : raw;
+  const suffixPart = splitAt >= 0 ? raw.slice(splitAt) : '';
+
+  const { strippedPath } = getLangFromUrlPath(pathnamePart);
   const normalized = strippedPath.startsWith('/') ? strippedPath : `/${strippedPath}`;
-  if (lang === 'en') {
-    return normalized;
-  }
-  return normalized === '/' ? `/${lang}` : `/${lang}${normalized}`;
+  const localizedPath =
+    lang === 'en'
+      ? normalized
+      : normalized === '/'
+        ? `/${lang}`
+        : `/${lang}${normalized}`;
+  return `${localizedPath}${suffixPart}`;
 }
 
 export function applyDocumentLangAttributes(lang: SupportedLangCode) {
   if (typeof document === 'undefined') return;
-  const opt = SUPPORTED_LANGUAGES_10.find((l) => l.code === lang);
+  const opt = SUPPORTED_LANGUAGES_15.find((l) => l.code === lang);
   document.documentElement.lang = lang;
   document.documentElement.dir = opt?.dir || 'ltr';
 }
@@ -202,7 +213,7 @@ export async function detectUserCountryAndLanguage(): Promise<{
   }
 
   // Map country code -> native language (PL -> pl, DE -> de, ES -> es, FR -> fr, AE -> ar, etc.)
-  let mappedLang: SupportedLangCode = COUNTRY_TO_LANG_10[detectedCountryCode] || 'en';
+  let mappedLang: SupportedLangCode = COUNTRY_TO_LANG_15[detectedCountryCode] || 'en';
   if (detectedCountryCode === 'IN' && typeof navigator !== 'undefined') {
     const bLang = (navigator.language || '').toLowerCase();
     if (bLang.startsWith('hi')) mappedLang = 'hi';
@@ -251,11 +262,11 @@ export async function detectUserCountryAndLanguage(): Promise<{
 }
 
 export function getUIString(lang: SupportedLangCode): I18nStrings {
-  return UI_TRANSLATIONS_10[lang] || UI_TRANSLATIONS_10.en;
+  return UI_TRANSLATIONS_15[lang] || UI_TRANSLATIONS_15.en;
 }
 
 export function getLanguageOption(lang: SupportedLangCode): LanguageOption {
-  return SUPPORTED_LANGUAGES_10.find((l) => l.code === lang) || SUPPORTED_LANGUAGES_10[0];
+  return SUPPORTED_LANGUAGES_15.find((l) => l.code === lang) || SUPPORTED_LANGUAGES_15[0];
 }
 
 // Localize any of the 249 country names into the active language (e.g. DE -> Deutschland, PL -> Polska, ES -> España)
@@ -308,35 +319,25 @@ export function getCanonicalBaseOrigin(): string {
   return 'https://www.visaapply.org';
 }
 
-// Inject SEO hreflang tags for all supported languages on every route change
-export function injectTenLanguageHreflangTags(rawPathname: string) {
+// Inject SEO hreflang tags strictly for real language versions on indexable routes
+export function injectLocaleHreflangTags(rawPathname: string) {
   if (typeof document === 'undefined') return;
-  const { strippedPath } = getLangFromUrlPath(rawPathname);
-  const cleanPath = strippedPath === '/' ? '' : strippedPath.replace(/\/+$/, '');
   const baseUrl = getCanonicalBaseOrigin();
 
   document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
 
-  for (const langOpt of SUPPORTED_LANGUAGES_10) {
+  const alternates = getHreflangAlternatesForRoute(rawPathname, baseUrl);
+  for (const alt of alternates) {
     const link = document.createElement('link');
     link.setAttribute('rel', 'alternate');
-    link.setAttribute('hreflang', langOpt.code);
+    link.setAttribute('hreflang', alt.hreflang);
     link.setAttribute('data-dynamic-hreflang', 'true');
-    const href =
-      langOpt.code === 'en'
-        ? `${baseUrl}${cleanPath || '/'}`
-        : `${baseUrl}/${langOpt.code}${cleanPath}`;
-    link.setAttribute('href', href);
+    link.setAttribute('href', alt.href);
     document.head.appendChild(link);
   }
-
-  const xDefault = document.createElement('link');
-  xDefault.setAttribute('rel', 'alternate');
-  xDefault.setAttribute('hreflang', 'x-default');
-  xDefault.setAttribute('data-dynamic-hreflang', 'true');
-  xDefault.setAttribute('href', `${baseUrl}${cleanPath || '/'}`);
-  document.head.appendChild(xDefault);
 }
+
+export const injectTenLanguageHreflangTags = injectLocaleHreflangTags;
 
 // Dynamic Translation with localStorage cache
 export async function translateDynamicText(

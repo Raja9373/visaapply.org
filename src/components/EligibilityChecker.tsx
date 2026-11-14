@@ -191,7 +191,7 @@ function buildClientRuleFallback(params: {
       code: 'ae',
       flag: '🇦🇪',
       chance: '95% Approval',
-      reason: 'Fast 3–4 day online e-Visa with simple documentation and high approval rate.'
+      reason: 'Online e-Visa application with published 3–4 working day processing and standard supporting documents.'
     }
   ];
 

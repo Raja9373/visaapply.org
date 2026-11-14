@@ -42,17 +42,17 @@ export function getTop20CountryFAQs(
     },
     {
       q: `How much bank balance is required for ${cName} visa?`,
-      a: `Most consulates recommend holding liquid bank savings of ₹3 Lakhs to ₹5 Lakhs (or equivalent in local currency) per applicant to prove sufficient funds for stay, accommodation, and return travel. Ensure your account statements are seasoned for at least 3 months without sudden unverified deposits.`,
+      a: `Required financial funds depend on the visa category, statutory maintenance thresholds, and stay duration set by ${cName} authorities. Maintain seasoned bank statements from the last 3 to 6 months and verify exact statutory thresholds on the official embassy portal.`,
       linkText: `View Official Bank Balance & Fund Rules Guide`,
       linkUrl: `/bank-statement-guide`
     },
     {
-      q: `How long does ${cName} visa take?`,
-      a: `Standard processing time for a ${cName} visa ranges from 5 to 15 working days for e-Visas/tourist visas, and up to 3 to 6 weeks for long-term work, study, or family settlement permits. Apply at least 3 to 4 weeks prior to your intended departure date.`
+      q: `What is the ${cName} visa fee for ${fromName} passport holders?`,
+      a: `Official ${cName} visa fees vary by visa subclass, age bracket, bilateral reciprocity, and optional VFS/biometric service charges. Always confirm exact payable government fees on the official consular fee schedule before submitting payment.`
     },
     {
-      q: `What is the ${cName} visa fee for ${fromName} passport holders?`,
-      a: `Visa fees for ${cName} vary by category, typically ranging from $25 to $185 USD for short-stay tourist visas/e-Visas, and $200 to $450+ USD for long-term work, study, or permanent settlement permits. Consular fees are paid online or at VFS application centers.`
+      q: `How long does ${cName} visa take?`,
+      a: `Processing timelines for ${cName} depend on visa category, seasonal volume, and administrative review at the destination embassy or immigration office. Consult the official portal prior to booking non-refundable travel.`
     },
     {
       q: `Can I apply for ${cName} visa without flight ticket?`,

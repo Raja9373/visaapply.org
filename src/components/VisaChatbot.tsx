@@ -1,15 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NAME_MAP_249, FLAG_MAP_249, getLiveVisaCount } from '../data/fullVisaDatabase';
+import { NAME_MAP_249, FLAG_MAP_249, FULL_VISA_DB, getLiveVisaCount } from '../data/fullVisaDatabase';
 import { getCountryMeta } from '../data/countryMetaData';
 import { getEmbassyInfo } from '../data/embassyAddresses';
 import { getContinentForCountry, CONTINENT_MAP_249 } from '../data/continentMap';
 import { parseHotelPriceUSD, parseProcessingDays, parseSuccessRateNum } from '../utils/countryLiveUtils';
 import { getFlightLinkForCountry } from '../data/travelpayoutsConfig';
+import { sanitizeUrl } from '../utils/htmlSanitizer';
+
+export interface ChatbotLink {
+  label: string;
+  href: string;
+  tone: 'blue' | 'primary' | 'emerald' | 'dark';
+  external?: boolean;
+}
+
+export interface ChatbotStructuredReply {
+  title: string;
+  lines: Array<{ label?: string; text: string; highlight?: 'blue' | 'emerald' }>;
+  verdict?: string;
+  links?: ChatbotLink[];
+}
 
 interface ChatMessage {
   id: string;
   sender: 'bot' | 'user';
-  html: string;
+  userText?: string;
+  reply?: ChatbotStructuredReply;
   time: string;
 }
 
@@ -19,7 +35,6 @@ function findMentionedCountries(query: string): string[] {
   const q = query.toLowerCase();
   const matches: string[] = [];
 
-  // Common aliases
   const aliases: Record<string, string> = {
     usa: 'us',
     'u.s.': 'us',
@@ -55,10 +70,10 @@ function findMentionedCountries(query: string): string[] {
   }
 
   for (const code of ALL_CODES) {
-    const name = NAME_MAP_249[code].toLowerCase();
+    const name = (NAME_MAP_249[code] || '').toLowerCase();
     const meta = getCountryMeta(code);
     const cap = meta.capital.toLowerCase();
-    if (q.includes(name) || (cap.length > 3 && q.includes(cap))) {
+    if ((name && q.includes(name)) || (cap.length > 3 && q.includes(cap))) {
       if (!matches.includes(code)) {
         matches.push(code);
       }
@@ -68,7 +83,7 @@ function findMentionedCountries(query: string): string[] {
   return matches;
 }
 
-export function generateChatbotResponse(rawQuery: string): string {
+export function generateChatbotReply(rawQuery: string): ChatbotStructuredReply {
   const q = rawQuery.trim().toLowerCase();
   const mentioned = findMentionedCountries(q);
 
@@ -76,8 +91,8 @@ export function generateChatbotResponse(rawQuery: string): string {
   if ((q.includes('compare') || q.includes('vs') || q.includes('versus') || q.includes('better')) && mentioned.length >= 2) {
     const c1 = mentioned[0];
     const c2 = mentioned[1];
-    const n1 = NAME_MAP_249[c1];
-    const n2 = NAME_MAP_249[c2];
+    const n1 = NAME_MAP_249[c1] || c1.toUpperCase();
+    const n2 = NAME_MAP_249[c2] || c2.toUpperCase();
     const m1 = getCountryMeta(c1);
     const m2 = getCountryMeta(c2);
     const v1 = getLiveVisaCount(c1);
@@ -90,68 +105,75 @@ export function generateChatbotResponse(rawQuery: string): string {
     const faster = p1 <= p2 ? n1 : n2;
     const higherSuccess = s1 >= s2 ? n1 : n2;
 
-    return `
-      <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">⚖️ ${FLAG_MAP_249[c1]} ${n1} vs ${FLAG_MAP_249[c2]} ${n2} (2026 Comparison)</div>
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px; font-size:12px; margin-bottom:8px;">
-        <div>• <strong>Visa Categories:</strong> ${n1} (${v1}) vs ${n2} (${v2})</div>
-        <div>• <strong>Processing Time:</strong> ${n1} (${m1.processing}) vs ${n2} (${m2.processing})</div>
-        <div>• <strong>Success Rate:</strong> ${n1} (${m1.successRate}) vs ${n2} (${m2.successRate})</div>
-        <div>• <strong>Avg Hotel/Night:</strong> ${n1} (${m1.hotelPrice}) vs ${n2} (${m2.hotelPrice})</div>
-        <div>• <strong>Best Time:</strong> ${n1} (${m1.bestTime}) vs ${n2} (${m2.bestTime})</div>
-      </div>
-      <div style="font-size:12px; color:#059669; font-weight:700; margin-bottom:6px;">
-        🏆 Verdict: <strong>${faster}</strong> processes faster, while <strong>${higherSuccess}</strong> has a higher approval rate for Indian passport holders.
-      </div>
-      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
-        <a href="/in-to-${c1}" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">Explore ${n1} →</a>
-        <a href="/in-to-${c2}" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">Explore ${n2} →</a>
-      </div>
-    `;
+    return {
+      title: `⚖️ ${FLAG_MAP_249[c1] || ''} ${n1} vs ${FLAG_MAP_249[c2] || ''} ${n2} (2026 Comparison)`,
+      lines: [
+        { label: 'Visa Categories', text: `${n1} (${v1}) vs ${n2} (${v2})` },
+        { label: 'Processing Time', text: `${n1} (${m1.processing}) vs ${n2} (${m2.processing})` },
+        { label: 'Success Rate', text: `${n1} (${m1.successRate}) vs ${n2} (${m2.successRate})` },
+        { label: 'Avg Hotel/Night', text: `${n1} (${m1.hotelPrice}) vs ${n2} (${m2.hotelPrice})` },
+        { label: 'Best Time', text: `${n1} (${m1.bestTime}) vs ${n2} (${m2.bestTime})` },
+      ],
+      verdict: `🏆 Verdict: ${faster} processes faster, while ${higherSuccess} has a higher approval rate for Indian passport holders.`,
+      links: [
+        { label: `Explore ${n1} →`, href: `/in-to-${c1}`, tone: 'blue' },
+        { label: `Explore ${n2} →`, href: `/in-to-${c2}`, tone: 'blue' },
+      ],
+    };
   }
 
   // 2. Fastest e-Visa / Visa on Arrival query
   if (q.includes('fastest') || q.includes('e-visa') || q.includes('evisa') || q.includes('visa on arrival') || q.includes('voa')) {
     if (mentioned.length === 0) {
-      return `
-        <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">⚡ Top Fastest e-Visa & Visa-Free Destinations for Indians (2026)</div>
-        <div style="font-size:12px; color:#334155; line-height:1.6;">
-          1. 🇹🇭 <strong>Thailand</strong> — Visa Free / 60 Days (Instant)<br/>
-          2. 🇦🇪 <strong>UAE (Dubai)</strong> — 3-4 Days e-Visa (96% Approval)<br/>
-          3. 🇸🇬 <strong>Singapore</strong> — 3-5 Days e-Visa ($30 Fee)<br/>
-          4. 🇻🇳 <strong>Vietnam</strong> — 3 Days e-Visa ($25 Official Fee)<br/>
-          5. 🇲🇾 <strong>Malaysia</strong> — Visa Free (MDAC Digital Arrival Card)<br/>
-          6. 🇮🇩 <strong>Indonesia (Bali)</strong> — Instant e-VOA ($35)
-        </div>
-        <div style="margin-top:8px;">
-          <a href="https://www.booking.com/index.html?aid=8119919&label=chatbot-evisa" target="_blank" rel="noopener noreferrer" style="display:inline-block; background:#003580; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🏨 Compare Visa-Friendly Hotels on Booking.com →</a>
-        </div>
-      `;
+      return {
+        title: '⚡ Top Fastest e-Visa & Visa-Free Destinations for Indians (2026)',
+        lines: [
+          { label: '1. 🇹🇭 Thailand', text: 'Visa Exemption / 60 Days (Check current MFA conditions)' },
+          { label: '2. 🇦🇪 UAE (Dubai)', text: '3-4 Days e-Visa (Verify current ICP/GDRFA schedule)' },
+          { label: '3. 🇸🇬 Singapore', text: '3-5 Days e-Visa via authorized agent (ICA fee SGD $30)' },
+          { label: '4. 🇻🇳 Vietnam', text: '3 Business Days e-Visa ($25 Official Fee)' },
+          { label: '5. 🇲🇾 Malaysia', text: 'Visa-Free Short-Stay with MDAC Digital Arrival Card' },
+          { label: '6. 🇮🇩 Indonesia (Bali)', text: 'Official e-VOA (IDR 500,000 / ~$35 USD)' },
+        ],
+        links: [
+          {
+            label: '🏨 Compare Visa-Friendly Hotels on Booking.com →',
+            href: 'https://www.booking.com/index.html?aid=8119919&label=chatbot-evisa',
+            tone: 'dark',
+            external: true,
+          },
+        ],
+      };
     }
   }
 
   // 3. Schengen query
   if (q.includes('schengen')) {
-    return `
-      <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">🇪🇺 Schengen Visa for Indians (2026 Rules)</div>
-      <div style="font-size:12px; color:#334155; line-height:1.5;">
-        • <strong>Standard Fee:</strong> €90 (~₹8,200) for adults, €45 for children (6-12 yrs)<br/>
-        • <strong>Processing Time:</strong> 15 Calendar Days (Apply up to 6 months early)<br/>
-        • <strong>Cascade Multi-Entry Rule:</strong> Indian nationals who lawfully used 2 Schengen visas within the past 3 years are eligible for a <strong>2-year (then 5-year) Multiple Entry Schengen Visa</strong>!<br/>
-        • <strong>Highest Approval Embassies:</strong> Germany (88%), France (87%), Switzerland (89%), Spain (86%).<br/>
-        • <strong>Mandatory Insurance:</strong> Minimum €30,000 medical coverage across all 29 Schengen states.
-      </div>
-      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-        <a href="/in-to-de" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🇩🇪 Germany Guide</a>
-        <a href="/in-to-fr" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🇫🇷 France Guide</a>
-        <a href="https://www.booking.com/searchresults.html?ss=Europe&aid=8119919&label=chatbot-schengen" target="_blank" rel="noopener noreferrer" style="background:#003580; color:white; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🏨 Schengen Refundable Hotels</a>
-      </div>
-    `;
+    return {
+      title: '🇪🇺 Schengen Visa for Indians (2026 Rules)',
+      lines: [
+        { label: 'Standard Fee', text: '€90 for adults, €45 for children (6-12 yrs)' },
+        { label: 'Processing Time', text: '15 Calendar Days standard (Apply up to 6 months early)' },
+        { label: 'Cascade Multi-Entry Rule', text: 'Indian nationals who lawfully used 2 Schengen visas within the past 3 years may qualify for a 2-year (then 5-year) Multiple Entry Schengen Visa.' },
+        { label: 'Mandatory Insurance', text: 'Minimum €30,000 medical coverage across all 29 Schengen states.' },
+      ],
+      links: [
+        { label: '🇩🇪 Germany Guide', href: '/in-to-de', tone: 'blue' },
+        { label: '🇫🇷 France Guide', href: '/in-to-fr', tone: 'blue' },
+        {
+          label: '🏨 Schengen Refundable Hotels',
+          href: 'https://www.booking.com/searchresults.html?ss=Europe&aid=8119919&label=chatbot-schengen',
+          tone: 'dark',
+          external: true,
+        },
+      ],
+    };
   }
 
   // 4. Specific Country Query
   if (mentioned.length > 0) {
     const code = mentioned[0];
-    const name = NAME_MAP_249[code];
+    const name = NAME_MAP_249[code] || code.toUpperCase();
     const flag = FLAG_MAP_249[code] || '🌍';
     const meta = getCountryMeta(code);
     const visaCount = getLiveVisaCount(code);
@@ -160,85 +182,90 @@ export function generateChatbotResponse(rawQuery: string): string {
     const contKey = getContinentForCountry(code);
     const continent = CONTINENT_MAP_249[contKey]?.label || 'Global';
     const hotelNum = parseHotelPriceUSD(meta.hotelPrice);
-    const feeINR = code === 'us' ? '₹15,400 ($185)' : code === 'gb' ? '₹12,000 ($145)' : code === 'ca' ? '₹11,500 (CAD 185)' : '₹6,500 ($80)';
+    const dbItem = FULL_VISA_DB['IN']?.[code.toUpperCase()]?.tourist?.[0] || FULL_VISA_DB[code.toUpperCase()]?.tourist?.[0];
+    const verifiedFeeText = dbItem?.fee || 'Verify fee on official embassy portal';
 
     if (q.includes('embassy') || q.includes('vfs') || q.includes('address') || q.includes('delhi') || q.includes('mumbai')) {
-      return `
-        <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">🏛️ ${flag} ${name} Embassy & VFS in India</div>
-        <div style="font-size:12px; color:#334155; line-height:1.5;">
-          • <strong>Primary Mission:</strong> ${firstConsulate?.city || 'New Delhi'} — ${firstConsulate?.address || 'Chanakyapuri Diplomatic Enclave, New Delhi'}<br/>
-          • <strong>Phone:</strong> ${firstConsulate?.phone || '+91-11-2419-8000'}<br/>
-          • <strong>Email:</strong> ${firstConsulate?.email || `consular.${code}@embassy.gov`}<br/>
-          • <strong>VFS / Biometrics:</strong> ${embassy.vfs || 'VFS Global Centers in Delhi, Mumbai, Bengaluru, Chennai, Hyderabad & Kolkata'}<br/>
-          • <strong>Timings:</strong> ${firstConsulate?.timings || 'Mon-Fri: 09:00 AM - 05:00 PM'}
-        </div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-          <a href="/in-to-${code}" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">📍 View Map & Consulates</a>
-          <a href="/interview-prep/${code}" style="background:#ecfdf5; color:#047857; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🎤 ${name} Interview Prep</a>
-        </div>
-      `;
+      return {
+        title: `🏛️ ${flag} ${name} Embassy & VFS in India`,
+        lines: [
+          { label: 'Primary Mission', text: `${firstConsulate?.city || 'New Delhi'} — ${firstConsulate?.address || 'Check official diplomatic mission directory'}` },
+          { label: 'Phone', text: firstConsulate?.phone || 'See official mission directory' },
+          { label: 'Email', text: firstConsulate?.email || 'See official mission directory' },
+          { label: 'VFS / Biometrics', text: embassy.vfs || 'VFS Global Centers in major Indian cities' },
+          { label: 'Timings', text: firstConsulate?.timings || 'Mon-Fri: 09:00 AM - 05:00 PM' },
+        ],
+        links: [
+          { label: '📍 View Map & Consulates', href: `/in-to-${code}`, tone: 'blue' },
+          { label: `🎤 ${name} Interview Prep`, href: `/interview-prep/${code}`, tone: 'emerald' },
+        ],
+      };
     }
 
     if (q.includes('interview') || q.includes('question') || q.includes('reject')) {
-      return `
-        <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">🎤 ${flag} ${name} Visa Interview & Approval Tips</div>
-        <div style="font-size:12px; color:#334155; line-height:1.5;">
-          • <strong>Approval Rate for Indians:</strong> <span style="color:#059669; font-weight:700;">${meta.successRate}</span><br/>
-          • <strong>Top 3 Questions:</strong><br/>
-          &nbsp;&nbsp;1. What is the primary purpose of your visit to ${name}?<br/>
-          &nbsp;&nbsp;2. Who is sponsoring your trip and what is your annual income?<br/>
-          &nbsp;&nbsp;3. What ties bind you back to India after your trip?<br/>
-          • <strong>Pro Tip:</strong> Carry 6 months stamped bank statements, 3 years ITR, NOC from employer, and verifiable hotel bookings in ${meta.capital}.
-        </div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-          <a href="/interview-prep/${code}" style="background:#2563eb; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🎤 Open 20-Question ${name} Mock Interview →</a>
-        </div>
-      `;
+      return {
+        title: `🎤 ${flag} ${name} Visa Interview & Approval Tips`,
+        lines: [
+          { label: 'Approval Benchmark', text: meta.successRate, highlight: 'emerald' },
+          { label: 'Question 1', text: `What is the primary purpose of your visit to ${name}?` },
+          { label: 'Question 2', text: 'Who is sponsoring your trip and what is your annual income?' },
+          { label: 'Question 3', text: 'What ties bind you back to India after your trip?' },
+          { label: 'Pro Tip', text: `Carry 6 months stamped bank statements, 3 years ITR, NOC from employer, and verifiable hotel bookings in ${meta.capital}.` },
+        ],
+        links: [
+          { label: `🎤 Open 20-Question ${name} Mock Interview →`, href: `/interview-prep/${code}`, tone: 'primary' },
+        ],
+      };
     }
 
     const flightInfo = getFlightLinkForCountry(code);
-    return `
-      <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">${flag} ${name} Visa Guide for Indians (2026)</div>
-      <div style="font-size:12px; color:#334155; line-height:1.55;">
-        • <strong>Continent & Capital:</strong> ${continent} • ${meta.capital}<br/>
-        • <strong>Total Visa Categories:</strong> <strong>${visaCount} Official Visas</strong><br/>
-        • <strong>Processing Time:</strong> <span style="color:#2563eb; font-weight:700;">${meta.processing}</span><br/>
-        • <strong>Est. Visa Fee:</strong> ${feeINR}<br/>
-        • <strong>Indian Approval Rate:</strong> <span style="color:#059669; font-weight:700;">${meta.successRate}</span><br/>
-        • <strong>Currency & Best Season:</strong> ${meta.currency} (${meta.currencySymbol}) • ${meta.bestTime}<br/>
-        • <strong>Flight (${flightInfo.route}):</strong> <strong>From ${flightInfo.priceINR}</strong><br/>
-        • <strong>Avg Hotel in ${meta.capital}:</strong> $${hotelNum}/night
-      </div>
-      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-        <a href="/in-to-${code}" style="background:#2563eb; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">📋 Full ${name} Checklist</a>
-        <a href="${flightInfo.aviasalesLink}" target="_blank" rel="noopener noreferrer" style="background:#10b981; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">✈ Flights (${flightInfo.priceINR})</a>
-        <a href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name)}&aid=8119919&label=chatbot-${code}" target="_blank" rel="noopener noreferrer" style="background:#003580; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none;">🏨 Hotels ($${hotelNum})</a>
-      </div>
-    `;
+    return {
+      title: `${flag} ${name} Visa Guide for Indians (2026)`,
+      lines: [
+        { label: 'Continent & Capital', text: `${continent} • ${meta.capital}` },
+        { label: 'Visa Categories', text: `${visaCount} Official Visas` },
+        { label: 'Processing Time', text: meta.processing, highlight: 'blue' },
+        { label: 'Tourist Visa Fee', text: verifiedFeeText },
+        { label: 'Indian Approval Benchmark', text: meta.successRate, highlight: 'emerald' },
+        { label: 'Currency & Best Season', text: `${meta.currency} (${meta.currencySymbol}) • ${meta.bestTime}` },
+        { label: `Flight (${flightInfo.route})`, text: `From ${flightInfo.priceINR}` },
+        { label: `Avg Hotel in ${meta.capital}`, text: `$${hotelNum}/night` },
+      ],
+      links: [
+        { label: `📋 Full ${name} Checklist`, href: `/in-to-${code}`, tone: 'primary' },
+        { label: `✈ Flights (${flightInfo.priceINR})`, href: flightInfo.aviasalesLink, tone: 'emerald', external: true },
+        {
+          label: `🏨 Hotels ($${hotelNum})`,
+          href: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name)}&aid=8119919&label=chatbot-${code}`,
+          tone: 'dark',
+          external: true,
+        },
+      ],
+    };
   }
 
   // 5. Embassy in Delhi fallback
   if (q.includes('embassy') || q.includes('delhi') || q.includes('vfs')) {
-    return `
-      <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">🏛️ Embassies & VFS Global Centers in India</div>
-      <div style="font-size:12px; color:#334155; line-height:1.5;">
-        Most foreign embassies are located in <strong>Chanakyapuri, New Delhi</strong>, with Consulates General in <strong>Mumbai (BKC/Nariman Point), Bengaluru, Chennai, Kolkata, and Hyderabad</strong>.<br/><br/>
-        Type any country name + "embassy" (e.g., <em>"USA embassy"</em>, <em>"Germany embassy"</em>, <em>"Japan embassy"</em>) to get exact address, phone, email, and Google Map links!
-      </div>
-    `;
+    return {
+      title: '🏛️ Embassies & VFS Global Centers in India',
+      lines: [
+        { text: 'Most foreign embassies are located in Chanakyapuri, New Delhi, with Consulates General in Mumbai, Bengaluru, Chennai, Kolkata, and Hyderabad.' },
+        { text: 'Type any country name + "embassy" (e.g. "USA embassy", "Germany embassy", "Japan embassy") to view mission details.' },
+      ],
+    };
   }
 
   // 6. Default helpful response
-  return `
-    <div style="font-weight:800; color:#0f172a; margin-bottom:6px;">🌍 VisaApply 249-Country Assistant</div>
-    <div style="font-size:12px; color:#334155; line-height:1.5;">
-      I have live 2026 data for all <strong>249 countries & territories</strong>! Ask me about:<br/>
-      • Any country's visa fees, processing time & documents (e.g. <strong>"USA visa fees"</strong>, <strong>"Japan tourist visa"</strong>)<br/>
-      • Side-by-side comparisons (e.g. <strong>"Compare USA vs Canada"</strong>)<br/>
-      • Embassy & VFS addresses (e.g. <strong>"France embassy in Delhi"</strong>)<br/>
-      • Consular interview prep (e.g. <strong>"Germany interview questions"</strong>)
-    </div>
-  `;
+  return {
+    title: '🌍 VisaApply 249-Country Assistant',
+    lines: [
+      { text: 'Ask about verified visa categories, processing windows, embassies, or bilateral comparisons:' },
+      { label: 'Visa Fees & Rules', text: 'e.g. "USA visa fees", "Japan tourist visa"' },
+      { label: 'Side-by-Side', text: 'e.g. "Compare USA vs Canada"' },
+      { label: 'Embassies & VFS', text: 'e.g. "France embassy in Delhi"' },
+      { label: 'Interview Prep', text: 'e.g. "Germany interview questions"' },
+    ],
+  };
 }
 
 interface VisaChatbotProps {
@@ -252,7 +279,14 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
     {
       id: 'welcome',
       sender: 'bot',
-      html: '👋 Namaste! I am your <strong>249-Country Visa Assistant</strong>. Ask me anything about visa fees, processing time, documents, eligibility, or embassy addresses!',
+      reply: {
+        title: '👋 Namaste! 249-Country Visa Assistant',
+        lines: [
+          {
+            text: 'Ask me about official visa categories, processing timelines, documents, eligibility, or embassy addresses!',
+          },
+        ],
+      },
       time: 'Just now',
     },
   ]);
@@ -271,30 +305,20 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       sender: 'user',
-      html: trimmed,
+      userText: trimmed,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    const replyHtml = generateChatbotResponse(trimmed);
+    const reply = generateChatbotReply(trimmed);
     const botMsg: ChatMessage = {
       id: `bot-${Date.now() + 1}`,
       sender: 'bot',
-      html: replyHtml,
+      reply,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
     setMessages((prev) => [...prev, userMsg, botMsg]);
     setInput('');
-  };
-
-  const handleMessageClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = (e.target as HTMLElement).closest('a');
-    if (!target) return;
-    const href = target.getAttribute('href');
-    if (href && href.startsWith('/') && onNavigate) {
-      e.preventDefault();
-      onNavigate(href);
-    }
   };
 
   const quickQuestions = [
@@ -305,187 +329,154 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
     { label: '🏛️ Embassy in Delhi', query: 'USA Embassy in Delhi' },
   ];
 
+  const getLinkClasses = (tone: ChatbotLink['tone']): string => {
+    switch (tone) {
+      case 'primary':
+        return 'bg-blue-600 text-white hover:bg-blue-700';
+      case 'emerald':
+        return 'bg-emerald-600 text-white hover:bg-emerald-700';
+      case 'dark':
+        return 'bg-[#003580] text-white hover:bg-[#00224f]';
+      default:
+        return 'bg-blue-50 text-blue-700 hover:bg-blue-100';
+    }
+  };
+
   return (
     <>
-      {/* Floating Button */}
-      <div
+      <button
+        type="button"
         id="visa-chatbot-btn"
         onClick={() => setIsOpen((prev) => !prev)}
-        style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '24px',
-          width: '64px',
-          height: '64px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg,#2563eb,#1d4ed8)',
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '28px',
-          cursor: 'pointer',
-          boxShadow: '0 8px 24px rgba(37,99,235,0.4)',
-          zIndex: 9999,
-          transition: 'transform 0.2s',
-        }}
+        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-3xl cursor-pointer shadow-lg z-[9999] transition-transform hover:scale-105"
         title="Ask 249-Country Visa Assistant"
+        aria-label="Toggle 249-Country Visa Assistant"
       >
         {isOpen ? '✕' : '💬'}
-      </div>
+      </button>
 
-      {/* Chat Window */}
       {isOpen && (
         <div
           id="visa-chatbot-window"
-          style={{
-            position: 'fixed',
-            bottom: '100px',
-            right: '24px',
-            width: '380px',
-            maxWidth: 'calc(100vw - 32px)',
-            height: '520px',
-            maxHeight: 'calc(100vh - 140px)',
-            background: 'white',
-            borderRadius: '20px',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.18)',
-            display: 'flex',
-            flexDirection: 'column',
-            zIndex: 9999,
-            overflow: 'hidden',
-            border: '1px solid #e2e8f0',
-          }}
+          className="fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100vh-140px)] bg-white rounded-2xl shadow-2xl flex flex-col z-[9999] overflow-hidden border border-slate-200"
         >
-          {/* Header */}
-          <div
-            style={{
-              background: 'linear-gradient(135deg,#0f172a,#1e293b)',
-              color: 'white',
-              padding: '16px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 flex justify-between items-center">
             <div>
-              <div style={{ fontWeight: 800, fontSize: '16px' }}>🤖 VisaApply Assistant</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Instant answers for 249 countries</div>
+              <div className="font-extrabold text-base">🤖 VisaApply Assistant</div>
+              <div className="text-[11px] text-slate-400">Instant answers for 249 countries</div>
             </div>
-            <span
+            <button
+              type="button"
               onClick={() => setIsOpen(false)}
-              style={{ cursor: 'pointer', fontSize: '20px', padding: '4px 8px' }}
+              className="cursor-pointer text-xl px-2 py-1 text-slate-300 hover:text-white"
+              aria-label="Close assistant"
             >
               ✕
-            </span>
+            </button>
           </div>
 
-          {/* Messages */}
           <div
             id="chatbot-messages"
-            onClick={handleMessageClick}
-            style={{
-              flex: 1,
-              padding: '16px',
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px',
-              background: '#ffffff',
-            }}
+            className="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-white"
           >
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                style={{
-                  alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                  background: msg.sender === 'user' ? '#2563eb' : '#f1f5f9',
-                  color: msg.sender === 'user' ? 'white' : '#0f172a',
-                  padding: '12px',
-                  borderRadius:
-                    msg.sender === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                  fontSize: '13px',
-                  maxWidth: '88%',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                }}
+                className={
+                  msg.sender === 'user'
+                    ? 'self-end bg-blue-600 text-white p-3 rounded-xl rounded-br-none text-[13px] max-w-[88%] shadow-xs break-words'
+                    : 'self-start bg-slate-100 text-slate-900 p-3 rounded-xl rounded-bl-none text-[13px] max-w-[88%] shadow-xs space-y-2'
+                }
               >
-                <div dangerouslySetInnerHTML={{ __html: msg.html }} />
+                {msg.sender === 'user' ? (
+                  <div>{msg.userText}</div>
+                ) : msg.reply ? (
+                  <div className="space-y-1.5">
+                    <div className="font-extrabold text-slate-900">{msg.reply.title}</div>
+                    <div className="bg-white/80 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-700 space-y-1 leading-relaxed">
+                      {msg.reply.lines.map((line, idx) => (
+                        <div key={idx}>
+                          {line.label && <strong className="text-slate-900">{line.label}: </strong>}
+                          <span
+                            className={
+                              line.highlight === 'blue'
+                                ? 'text-blue-600 font-bold'
+                                : line.highlight === 'emerald'
+                                ? 'text-emerald-600 font-bold'
+                                : ''
+                            }
+                          >
+                            {line.text}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    {msg.reply.verdict && (
+                      <div className="text-xs text-emerald-700 font-bold">{msg.reply.verdict}</div>
+                    )}
+                    {msg.reply.links && msg.reply.links.length > 0 && (
+                      <div className="flex gap-1.5 flex-wrap pt-1">
+                        {msg.reply.links.map((lnk, idx) => {
+                          const safeHref = sanitizeUrl(lnk.href, { allowRelative: true });
+                          if (!safeHref) return null;
+                          const isInternal = safeHref.startsWith('/');
+                          return (
+                            <a
+                              key={idx}
+                              href={safeHref}
+                              target={!isInternal && lnk.external ? '_blank' : undefined}
+                              rel={!isInternal && lnk.external ? 'noopener noreferrer' : undefined}
+                              onClick={(e) => {
+                                if (isInternal && onNavigate) {
+                                  e.preventDefault();
+                                  onNavigate(safeHref);
+                                }
+                              }}
+                              className={`px-2.5 py-1 rounded-md text-[11px] font-bold no-underline transition-colors ${getLinkClasses(lnk.tone)}`}
+                            >
+                              {lnk.label}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ) : null}
               </div>
             ))}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Questions */}
-          <div
-            style={{
-              padding: '8px 16px',
-              display: 'flex',
-              gap: '6px',
-              overflowX: 'auto',
-              borderTop: '1px solid #f1f5f9',
-              background: '#f8fafc',
-            }}
-          >
+          <div className="px-4 py-2 flex gap-1.5 overflow-x-auto border-t border-slate-100 bg-slate-50">
             {quickQuestions.map((qq) => (
               <button
                 key={qq.label}
                 type="button"
                 onClick={() => sendQuery(qq.query)}
-                style={{
-                  padding: '6px 10px',
-                  background: '#eff6ff',
-                  color: '#2563eb',
-                  border: '1px solid #bfdbfe',
-                  borderRadius: '8px',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                }}
+                className="px-2.5 py-1.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-blue-100"
               >
                 {qq.label}
               </button>
             ))}
           </div>
 
-          {/* Input */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               sendQuery(input);
             }}
-            style={{
-              padding: '12px',
-              borderTop: '1px solid #e2e8f0',
-              display: 'flex',
-              gap: '8px',
-              background: 'white',
-            }}
+            className="p-3 border-t border-slate-200 flex gap-2 bg-white"
           >
             <input
               id="chatbot-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask e.g. USA visa fees, Germany processing..."
-              style={{
-                flex: 1,
-                padding: '10px 14px',
-                border: '1px solid #e2e8f0',
-                borderRadius: '10px',
-                fontSize: '13px',
-                outline: 'none',
-              }}
+              className="flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-[13px] outline-none focus:border-blue-500"
             />
             <button
               type="submit"
-              style={{
-                padding: '10px 16px',
-                background: '#2563eb',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-xl font-bold cursor-pointer hover:bg-blue-700 text-xs"
             >
               Send
             </button>

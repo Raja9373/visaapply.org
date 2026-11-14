@@ -109,7 +109,7 @@ export function VerificationView({ navigate }: Props) {
             <Award className="w-6 h-6 text-purple-600" />
             <div>
               <span className="text-slate-500 block">Multilingual Support</span>
-              <span className="text-slate-900 font-bold text-sm">10 Languages with Auto-Detection</span>
+              <span className="text-slate-900 font-bold text-sm">15 UI Languages with Auto-Detection</span>
             </div>
           </div>
         </div>

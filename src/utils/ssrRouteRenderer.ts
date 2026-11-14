@@ -1,4 +1,10 @@
-import { resolveStaticRouteSeoMetadata, normalizeCanonicalUrl, inspectRouteIndexingDirective } from './seoMetadataManager';
+import {
+  resolveStaticRouteSeoMetadata,
+  normalizeCanonicalUrl,
+  inspectRouteIndexingDirective,
+  resolveValidOgImageUrl,
+  getHreflangAlternatesForRoute,
+} from './seoMetadataManager';
 
 export interface SsrRouteRenderResult {
   statusCode: number;
@@ -181,40 +187,40 @@ function humanizeSlug(slug: string, destCode?: string): string {
 }
 
 function getDeterministicCorridorMetrics(fromCode: string, toCode: string) {
-  const hash = (fromCode.charCodeAt(0) * 31 + fromCode.charCodeAt(1) * 17 + toCode.charCodeAt(0) * 13 + toCode.charCodeAt(1) * 7) % 100;
   const schengenSet = new Set(['at', 'be', 'bg', 'ch', 'cz', 'de', 'dk', 'ee', 'es', 'fi', 'fr', 'gr', 'hr', 'hu', 'is', 'it', 'li', 'lt', 'lu', 'lv', 'mt', 'nl', 'no', 'pl', 'pt', 'ro', 'se', 'si', 'sk']);
   const gccSet = new Set(['ae', 'bh', 'kw', 'om', 'qa', 'sa']);
   const aseanSet = new Set(['bn', 'id', 'kh', 'la', 'mm', 'my', 'ph', 'sg', 'th', 'tl', 'vn']);
 
-  let entryRegime = 'Embassy / Consular Visa or Official e-Visa Required';
-  let processingWindow = '5 to 15 Business Days';
-  let standardFeeUsd = `$${45 + (hash % 115)} USD (Consular Base Fee)`;
-  let stayDuration = 'Up to 30–90 Days per Entry (Short-Stay) / 1–5 Years (Work & Study)';
+  let entryRegime = 'Official Consular / e-Visa Verification Required (Bilateral Rules Vary by Passport & Purpose)';
+  let processingWindow = 'Subject to Official Embassy / Consular Schedule (Verify Prior to Booking)';
+  let standardFeeUsd = 'Verify on Official Destination Government / Embassy Portal';
+  let stayDuration = 'Depends on Authorized Visa Subclass & Consular Grant';
+  let isVerifiedCorridor = false;
 
   if (schengenSet.has(fromCode) && schengenSet.has(toCode)) {
-    entryRegime = 'Visa-Free Freedom of Movement (EU / EEA / Schengen Area)';
-    processingWindow = 'Immediate Entry (Valid National ID or Passport)';
-    standardFeeUsd = '€0 EUR (Freedom of Movement)';
-    stayDuration = 'Unlimited Right of Residence & Work (EU/EEA Citizens)';
+    entryRegime = 'Visa-Free Freedom of Movement (EU / EEA / Schengen Citizens Only — Ordinary Passports)';
+    processingWindow = 'Immediate Entry for Citizens (Third-Country Residents Must Check National / Schengen Rules)';
+    standardFeeUsd = '€0 EUR (EU / EEA / Schengen Citizen Freedom of Movement)';
+    stayDuration = 'Freedom of Movement & Residence (EU/EEA/Swiss Citizens)';
+    isVerifiedCorridor = true;
   } else if (gccSet.has(fromCode) && gccSet.has(toCode)) {
-    entryRegime = 'Visa-Free GCC Citizen Mobility';
-    processingWindow = 'Immediate Entry at Port of Entry';
-    standardFeeUsd = '$0 USD (GCC Mobility Protocol)';
-    stayDuration = 'Unrestricted GCC Freedom of Movement';
+    entryRegime = 'Visa-Free GCC Citizen Mobility (GCC Nationals Only — Excludes Expatriate Residents)';
+    processingWindow = 'Immediate Entry at Port of Entry for GCC Citizens';
+    standardFeeUsd = '$0 USD (GCC Citizen Mobility Protocol)';
+    stayDuration = 'GCC Citizen Freedom of Movement';
+    isVerifiedCorridor = true;
   } else if (aseanSet.has(fromCode) && aseanSet.has(toCode)) {
-    entryRegime = 'Visa-Free ASEAN Bilateral Exemption (Short-Stay)';
-    processingWindow = 'Immediate Arrival Stamp (Work/Study Requires Permit)';
-    standardFeeUsd = '$0 USD for Tourist Stay up to 14–30 Days';
-    stayDuration = '14 to 30 Days Visa-Free (Tourist)';
+    entryRegime = 'ASEAN Bilateral Visa Exemption (Short-Stay Tourism Only — Ordinary Passports; Work/Study Requires Permit)';
+    processingWindow = 'Arrival Entry Stamp for Short-Stay Tourism (Work/Study Permits Vary by Country)';
+    standardFeeUsd = '$0 USD for Eligible Short-Stay Tourism (Verify Bilateral Day Limits)';
+    stayDuration = '14 to 30 Days Short-Stay Tourism (Varies by Bilateral Agreement)';
+    isVerifiedCorridor = true;
   } else if (schengenSet.has(toCode)) {
-    entryRegime = 'Schengen Short-Stay Visa (Type C) / National D Visa';
-    processingWindow = '15 Calendar Days (Standard Schengen Code)';
-    standardFeeUsd = '€90 EUR (Adult Schengen Fee) / €45 EUR (Children 6–12)';
-    stayDuration = 'Up to 90 Days in any 180-Day Period (Type C)';
-  } else if (['ae', 'sg', 'my', 'th', 'vn', 'id', 'lk', 'ke', 'tz', 'eg', 'tr', 'az', 'ge', 'am', 'uz', 'kr', 'jp', 'au', 'nz'].includes(toCode)) {
-    entryRegime = 'Official e-Visa / Electronic Travel Authorization (eTA) or Consular Visa';
-    processingWindow = '3 to 7 Business Days (e-Visa Portal)';
-    standardFeeUsd = `$${35 + (hash % 85)} USD Equivalent`;
+    entryRegime = 'Schengen Short-Stay Visa (Type C) / National Long-Stay Visa (Type D)';
+    processingWindow = '15 Calendar Days Standard Under Schengen Visa Code (May Extend for Review)';
+    standardFeeUsd = '€90 EUR Standard Adult Schengen Type C Base Fee (€45 Ages 6–12; Bilateral Waivers & National D Fees Vary)';
+    stayDuration = 'Up to 90 Days in any 180-Day Period (Type C) / National Permit Duration (Type D)';
+    isVerifiedCorridor = true;
   }
 
   return {
@@ -222,7 +228,8 @@ function getDeterministicCorridorMetrics(fromCode: string, toCode: string) {
     processingWindow,
     standardFeeUsd,
     stayDuration,
-    passportValidity: 'Minimum 6 months beyond intended departure date with 2 blank visa pages',
+    isVerifiedCorridor,
+    passportValidity: 'Minimum 6 months beyond intended departure date with blank visa pages (check embassy specifics)',
   };
 }
 
@@ -244,7 +251,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       cleanPath: directive.canonicalRedirectPath,
       title: 'Redirecting – VisaApply.org',
       description: `Redirecting to canonical URL ${targetCanonical}`,
-      ogImage: 'https://www.visaapply.org/og/default.jpg',
+      ogImage: 'https://www.visaapply.org/og-image.jpg',
       ogType: 'website',
       robots: 'noindex, follow',
       jsonLdGraph: {},
@@ -273,7 +280,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       const catShort = restSlug === 'pr' ? 'Permanent Residency (PR)' : `${restSlug.charAt(0).toUpperCase() + restSlug.slice(1)} Visa`;
       const title = `${toName} ${catShort} for ${fromName} Citizens (2026 Rules & Fees) – VisaApply.org`;
       const description = `Official 2026 ${toName} ${catLabel.toLowerCase()} requirements for ${fromName} passport holders. Check eligibility criteria, consular fees (${metrics.standardFeeUsd}), processing time (${metrics.processingWindow}), and mandatory document checklist.`;
-      const ogImage = `https://www.visaapply.org/og/in-to-${toCode}-${restSlug}.jpg`;
+      const ogImage = resolveValidOgImageUrl(toCode);
 
       const jsonLdGraph = buildBilateralJsonLd({
         canonicalUrl,
@@ -286,6 +293,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
         categorySlug: restSlug,
         categoryLabel: catLabel,
         metrics,
+        includeFaqSchema: true,
       });
 
       const ssrBodyHtml = buildBilateralSsrHtml({
@@ -325,7 +333,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
 
     const title = `${toName} ${visaTitleReadable} Visa for ${fromName} Citizens (2026) – VisaApply.org`;
     const description = `Complete 2026 ${toName} ${visaTitleReadable} (${detectedCategoryLabel}) guide for ${fromName} citizens. Verify official eligibility rules, ${toName} government fees (${metrics.standardFeeUsd}), processing time (${metrics.processingWindow}), and required documents.`;
-    const ogImage = `https://www.visaapply.org/og/in-to-${toCode}.jpg`;
+    const ogImage = resolveValidOgImageUrl(toCode);
 
     const parentCategory = ['tourist', 'work', 'student', 'family', 'business', 'pr'].includes(firstToken)
       ? firstToken
@@ -353,6 +361,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       categoryLabel: `${visaTitleReadable} (${detectedCategoryLabel})`,
       visaSubtypeName: visaTitleReadable,
       metrics,
+      includeFaqSchema: true,
     });
 
     const ssrBodyHtml = buildBilateralSsrHtml({
@@ -394,7 +403,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
 
     const title = `${toName} Visa for ${fromName} Citizens – 2026 Requirements, Fees & E-Visa Guide | VisaApply.org`;
     const description = `Do ${fromName} citizens need a visa for ${toName} in 2026? View verified ${toName} entry rules (${metrics.entryRegime}), visa fees (${metrics.standardFeeUsd}), processing time (${metrics.processingWindow}), and tourist, work, student & PR pathways.`;
-    const ogImage = `https://www.visaapply.org/og/in-to-${toCode}.jpg`;
+    const ogImage = resolveValidOgImageUrl(toCode);
 
     const jsonLdGraph = buildBilateralJsonLd({
       canonicalUrl,
@@ -405,6 +414,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       toCode,
       toName,
       metrics,
+      includeFaqSchema: true,
     });
 
     const ssrBodyHtml = buildBilateralSsrHtml({
@@ -440,7 +450,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
     const countryName = ISO2_COUNTRY_NAMES[code] || code.toUpperCase();
     const title = `${countryName} Immigration & Visa Pathways (2026 Official Portal Guide) – VisaApply.org`;
     const description = `Explore all official 2026 ${countryName} visa categories, work permits, permanent residency pathways, citizenship rules, consular fees, and government immigration links on VisaApply.org.`;
-    const ogImage = `https://www.visaapply.org/og/in-to-${code}.jpg`;
+    const ogImage = resolveValidOgImageUrl(code);
     const metrics = getDeterministicCorridorMetrics('in', code);
 
     const jsonLdGraph = buildBilateralJsonLd({
@@ -452,6 +462,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       toCode: code,
       toName: countryName,
       metrics,
+      includeFaqSchema: false,
     });
 
     const ssrBodyHtml = buildCountryHubSsrHtml({
@@ -482,7 +493,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
   const description =
     staticEntry?.description ||
     'Check bilateral visa requirements for any passport to 249 countries and territories. Compare tourist, work, student, business, family, and PR visa fees, processing times, and official government links.';
-  const ogImage = staticEntry?.ogImage || 'https://www.visaapply.org/og/default.jpg';
+  const ogImage = resolveValidOgImageUrl(staticEntry?.ogImage);
   const ogType = staticEntry?.ogType || 'website';
 
   const jsonLdGraph = {
@@ -494,6 +505,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
         name: 'VisaApply.org',
         url: 'https://www.visaapply.org/',
         logo: 'https://www.visaapply.org/favicon.svg',
+        description: 'Independent global visa and immigration information portal — not affiliated with any government, embassy, or VFS Global.',
       },
       {
         '@type': 'WebPage',
@@ -540,6 +552,7 @@ function buildBilateralJsonLd(params: {
   categoryLabel?: string;
   visaSubtypeName?: string;
   metrics: ReturnType<typeof getDeterministicCorridorMetrics>;
+  includeFaqSchema?: boolean;
 }): Record<string, unknown> {
   const {
     canonicalUrl,
@@ -553,6 +566,7 @@ function buildBilateralJsonLd(params: {
     categoryLabel,
     visaSubtypeName,
     metrics,
+    includeFaqSchema = false,
   } = params;
 
   const breadcrumbs: Array<Record<string, unknown>> = [
@@ -583,72 +597,80 @@ function buildBilateralJsonLd(params: {
     });
   }
 
+  const graph: Array<Record<string, unknown>> = [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.visaapply.org/#organization',
+      name: 'VisaApply.org',
+      url: 'https://www.visaapply.org/',
+      description: 'Independent global visa and immigration information portal — not affiliated with any government, embassy, or VFS Global.',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonicalUrl}#webpage`,
+      url: canonicalUrl,
+      name: title,
+      description,
+      inLanguage: 'en',
+      dateModified: '2026-11-14',
+      isPartOf: { '@id': 'https://www.visaapply.org/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${canonicalUrl}#breadcrumb`,
+      itemListElement: breadcrumbs,
+    },
+    {
+      '@type': 'Article',
+      headline: visaSubtypeName
+        ? `${toName} ${visaSubtypeName} Guide for ${fromName} Citizens`
+        : categoryLabel
+          ? `${toName} ${categoryLabel} Guide for ${fromName} Citizens`
+          : `${toName} Visa Information Guide for ${fromName} Citizens`,
+      description,
+      mainEntityOfPage: canonicalUrl,
+      publisher: { '@id': 'https://www.visaapply.org/#organization' },
+      author: { '@type': 'Organization', name: 'VisaApply.org Editorial Research' },
+      dateModified: '2026-11-14',
+    },
+  ];
+
+  if (includeFaqSchema) {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${canonicalUrl}#faq`,
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: `Do ${fromName} citizens need a visa for ${toName} in 2026?`,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: `For ${fromName} (${fromCode.toUpperCase()}) passport holders traveling to ${toName} (${toCode.toUpperCase()}), the current entry regime is: ${metrics.entryRegime}. Standard processing takes ${metrics.processingWindow}.`,
+          },
+        },
+        {
+          '@type': 'Question',
+          name: `How long does ${toName} visa processing take from ${fromName}?`,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: `Standard processing time is ${metrics.processingWindow} from biometric completion or online submission. Official fee guidance: ${metrics.standardFeeUsd}.`,
+          },
+        },
+        {
+          '@type': 'Question',
+          name: `Can ${fromName} citizens apply for work or permanent residency in ${toName}?`,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: `Work permits, skilled migration, student visas, family sponsorship, and permanent residency pathways are subject to ${toName} statutory eligibility criteria and official consular approval.`,
+          },
+        },
+      ],
+    });
+  }
+
   return {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': 'https://www.visaapply.org/#organization',
-        name: 'VisaApply.org',
-        url: 'https://www.visaapply.org/',
-      },
-      {
-        '@type': 'WebPage',
-        '@id': `${canonicalUrl}#webpage`,
-        url: canonicalUrl,
-        name: title,
-        description,
-        inLanguage: 'en',
-        dateModified: '2026-11-14',
-      },
-      {
-        '@type': 'BreadcrumbList',
-        '@id': `${canonicalUrl}#breadcrumb`,
-        itemListElement: breadcrumbs,
-      },
-      {
-        '@type': 'GovernmentService',
-        name: visaSubtypeName
-          ? `${toName} ${visaSubtypeName} for ${fromName} Citizens`
-          : categoryLabel
-            ? `${toName} ${categoryLabel} for ${fromName} Citizens`
-            : `${toName} Visa & Entry Authorization for ${fromName} Citizens`,
-        serviceType: categoryLabel || 'Visa & Immigration Authorization',
-        areaServed: { '@type': 'Country', name: toName },
-        audience: { '@type': 'Audience', audienceType: `${fromName} Passport Holders` },
-        url: canonicalUrl,
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${canonicalUrl}#faq`,
-        mainEntity: [
-          {
-            '@type': 'Question',
-            name: `Do ${fromName} citizens need a visa to travel to ${toName} in 2026?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: `For ${fromName} (${fromCode.toUpperCase()}) passport holders traveling to ${toName} (${toCode.toUpperCase()}), the current 2026 entry requirement is: ${metrics.entryRegime}. Standard processing takes ${metrics.processingWindow} and passports must have ${metrics.passportValidity.toLowerCase()}.`,
-            },
-          },
-          {
-            '@type': 'Question',
-            name: `How much is the ${toName} ${visaSubtypeName || categoryLabel || 'visa'} fee for ${fromName} citizens?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: `The standard consular base fee for ${fromName} applicants to ${toName} is ${metrics.standardFeeUsd}, depending on visa subclass, biometric enrollment, and single vs. multiple entry validity.`,
-            },
-          },
-          {
-            '@type': 'Question',
-            name: `What is the processing time for a ${toName} visa from ${fromName}?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: `Standard processing time for ${fromName} citizens applying for a ${toName} visa is ${metrics.processingWindow}. Applicants are advised to apply at least 4 to 8 weeks prior to planned travel.`,
-            },
-          },
-        ],
-      },
-    ],
+    '@graph': graph,
   };
 }
 
@@ -715,10 +737,11 @@ function buildBilateralSsrHtml(params: {
 
   <header style="border-bottom:1px solid #e2e8f0;padding-bottom:20px;margin-bottom:24px;">
     <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#2563eb;margin:0 0 8px 0;">
-      2026 Official Bilateral Immigration &amp; Consular Verification • Corridor ${escapeHtml(fromCode.toUpperCase())} &rarr; ${escapeHtml(toCode.toUpperCase())}
+      2026 Independent Visa Information Guide • Corridor ${escapeHtml(fromCode.toUpperCase())} &rarr; ${escapeHtml(toCode.toUpperCase())}
     </p>
     <h1 style="font-size:28px;font-weight:800;margin:0 0 12px 0;color:#0f172a;">${escapeHtml(heading)}</h1>
-    <p style="font-size:16px;color:#334155;margin:0;">${escapeHtml(subheading)}</p>
+    <p style="font-size:16px;color:#334155;margin:0 0 8px 0;">${escapeHtml(subheading)}</p>
+    <p style="font-size:12px;color:#475569;margin:0;">Disclaimer: VisaApply.org is an independent informational portal and is not affiliated with any government, embassy, or VFS Global.</p>
   </header>
 
   <section aria-label="Key Visa Specifications" style="margin-bottom:28px;">
@@ -743,7 +766,7 @@ function buildBilateralSsrHtml(params: {
           <td style="padding:10px 12px;">${escapeHtml(metrics.processingWindow)}</td>
         </tr>
         <tr style="border-bottom:1px solid #e2e8f0;">
-          <th style="text-align:left;padding:10px 12px;background:#f8fafc;">Consular Base Fee Estimate</th>
+          <th style="text-align:left;padding:10px 12px;background:#f8fafc;">Consular Base Fee Guidance</th>
           <td style="padding:10px 12px;">${escapeHtml(metrics.standardFeeUsd)}</td>
         </tr>
         <tr style="border-bottom:1px solid #e2e8f0;">
@@ -777,8 +800,8 @@ function buildBilateralSsrHtml(params: {
       <li><strong>Select Correct ${escapeHtml(toName)} Visa Subclass:</strong> Confirm whether your trip requires a Tourist, Business, Work, Student, Family, or Permanent Residency pathway.</li>
       <li><strong>Prepare &amp; Legalize Documents:</strong> Gather all statutory documents required for ${escapeHtml(fromName)} nationals and arrange certified translations or Apostille/consular legalization where applicable.</li>
       <li><strong>Complete Official Portal Filing:</strong> Submit the application via the official ${escapeHtml(toName)} immigration portal, e-Visa platform, or designated embassy/VAC in ${escapeHtml(fromName)}.</li>
-      <li><strong>Pay Government Visa Fee &amp; Book Biometrics:</strong> Remit the statutory fee (${escapeHtml(metrics.standardFeeUsd)}) and attend your biometric fingerprint and photo appointment if required.</li>
-      <li><strong>Track Decision &amp; Verify Visa Grant:</strong> Standard turnaround is ${escapeHtml(metrics.processingWindow)}. Verify validity dates and entry conditions immediately upon grant.</li>
+      <li><strong>Verify &amp; Pay Official Government Visa Fee:</strong> Confirm exact statutory fee (${escapeHtml(metrics.standardFeeUsd)}) and attend your biometric fingerprint and photo appointment if required.</li>
+      <li><strong>Track Decision &amp; Verify Visa Grant:</strong> Processing status: ${escapeHtml(metrics.processingWindow)}. Verify validity dates and entry conditions immediately upon grant.</li>
     </ol>
   </section>
 
@@ -856,9 +879,10 @@ function buildCountryHubSsrHtml(params: {
     <a href="/">Home</a> &rsaquo; <a href="/routes">All Bilateral Routes</a> &rsaquo; <span>${escapeHtml(countryName)} Immigration Hub</span>
   </nav>
   <h1 style="font-size:28px;font-weight:800;margin:0 0 12px 0;">${escapeHtml(countryName)} Immigration, Visa Categories &amp; Bilateral Travel Corridors (2026)</h1>
-  <p style="font-size:16px;color:#334155;margin:0 0 20px 0;">
-    Official 2026 immigration overview for ${escapeHtml(countryName)} (${escapeHtml(code.toUpperCase())}). Standard processing window: ${escapeHtml(metrics.processingWindow)}. Base consular fee benchmark: ${escapeHtml(metrics.standardFeeUsd)}.
+  <p style="font-size:16px;color:#334155;margin:0 0 12px 0;">
+    2026 immigration pathway overview for ${escapeHtml(countryName)} (${escapeHtml(code.toUpperCase())}). Standard processing window: ${escapeHtml(metrics.processingWindow)}. Base consular fee benchmark: ${escapeHtml(metrics.standardFeeUsd)}.
   </p>
+  <p style="font-size:12px;color:#475569;margin:0 0 20px 0;">Independent Information Portal: VisaApply.org is not affiliated with any government, embassy, or VFS Global.</p>
   <h2 style="font-size:20px;font-weight:700;margin:0 0 10px 0;">Inbound Visa Guides to ${escapeHtml(countryName)} by Nationality</h2>
   <ul style="padding-left:20px;margin:0 0 24px 0;">${originLinks}</ul>
   <h2 style="font-size:20px;font-weight:700;margin:0 0 10px 0;">Outbound Visa Requirements for ${escapeHtml(countryName)} Citizens</h2>
@@ -908,8 +932,14 @@ export function injectSsrPayloadIntoHtml(rawHtmlTemplate: string, payload: SsrRo
   const safeTitle = escapeHtml(payload.title);
   const safeDesc = escapeHtml(payload.description);
   const safeCanonical = escapeHtml(payload.canonicalUrl);
-  const safeOgImage = escapeHtml(payload.ogImage);
+  const safeOgImage = escapeHtml(resolveValidOgImageUrl(payload.ogImage));
   const safeRobots = escapeHtml(payload.robots);
+  const alternates = payload.robots.includes('noindex')
+    ? []
+    : getHreflangAlternatesForRoute(payload.cleanPath, 'https://www.visaapply.org');
+  const hreflangBlock = alternates
+    .map((alt) => `    <link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />`)
+    .join('\n');
 
   let html = rawHtmlTemplate
     .replace(/<title>[\s\S]*?<\/title>/i, `<title>${safeTitle}</title>`)
@@ -919,17 +949,10 @@ export function injectSsrPayloadIntoHtml(rawHtmlTemplate: string, payload: SsrRo
     .replace(/<meta\s+name="googlebot"\s+content="[^"]*"\s*\/?>/i, `<meta name="googlebot" content="${safeRobots}" />`)
     .replace(/<meta\s+name="bingbot"\s+content="[^"]*"\s*\/?>/i, `<meta name="bingbot" content="${safeRobots}" />`)
     .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${safeCanonical}" />`)
+    .replace(/\s*<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*\/?>/gi, '')
     .replace(
-      /<link\s+rel="alternate"\s+hreflang="en"\s+href="[^"]*"\s*\/?>/i,
-      `<link rel="alternate" hreflang="en" href="${safeCanonical}" />`
-    )
-    .replace(
-      /<link\s+rel="alternate"\s+hreflang="en-IN"\s+href="[^"]*"\s*\/?>/i,
-      `<link rel="alternate" hreflang="en-IN" href="${safeCanonical}" />`
-    )
-    .replace(
-      /<link\s+rel="alternate"\s+hreflang="x-default"\s+href="[^"]*"\s*\/?>/i,
-      `<link rel="alternate" hreflang="x-default" href="${safeCanonical}" />`
+      /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
+      `<link rel="canonical" href="${safeCanonical}" />${hreflangBlock ? `\n${hreflangBlock}` : ''}`
     )
     .replace(/<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:type" content="${escapeHtml(payload.ogType)}" />`)
     .replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${safeCanonical}" />`)

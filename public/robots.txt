@@ -3,6 +3,8 @@ Allow: /
 Allow: /ads.txt
 Allow: /llms.txt
 Disallow: /admin
+Disallow: /audit
+Disallow: /api/
 
 User-agent: Mediapartners-Google
 Allow: /

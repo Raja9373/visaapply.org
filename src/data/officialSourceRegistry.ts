@@ -260,8 +260,8 @@ export const OFFICIAL_SOURCE_REGISTRY_249: Record<string, OfficialSourceEntry> =
         countryCode: code,
         countryName: country.name,
         authorityName: existing.authorityName || `Official Government Immigration Department of ${country.name}`,
-        primaryGovUrl: existing.primaryGovUrl || `https://www.gov.${code.toLowerCase()}/`,
-        consularPortalUrl: existing.consularPortalUrl || `https://www.gov.${code.toLowerCase()}/visas`,
+        primaryGovUrl: existing.primaryGovUrl || '',
+        consularPortalUrl: existing.consularPortalUrl || '',
         gazetteOrLegislationUrl: existing.gazetteOrLegislationUrl,
         verificationTier: existing.verificationTier || 'Tier-1 Sovereign Government Portal',
         categorySources: existing.categorySources || {},
@@ -272,29 +272,19 @@ export const OFFICIAL_SOURCE_REGISTRY_249: Record<string, OfficialSourceEntry> =
         sourceAccessStatus: 'HTTP 200 OK - Consular Redirect Verified'
       };
     } else {
-      const lowerCode = code.toLowerCase();
-      const wikiSlug = encodeURIComponent(`Visa_policy_of_${country.name.replace(/\s+/g, '_')}`);
       map[code] = {
         countryCode: code,
         countryName: country.name,
         authorityName: `Consular Affairs & Immigration Authority of ${country.name}`,
-        primaryGovUrl: `https://www.gov.${lowerCode}/immigration`,
-        consularPortalUrl: `https://en.wikipedia.org/wiki/${wikiSlug}`,
-        gazetteOrLegislationUrl: `https://en.wikipedia.org/wiki/Legal_system_of_${encodeURIComponent(country.name.replace(/\s+/g, '_'))}`,
+        primaryGovUrl: '',
+        consularPortalUrl: '',
         verificationTier: 'Tier-2 Consular / Foreign Affairs',
-        categorySources: {
-          pr: `https://en.wikipedia.org/wiki/${wikiSlug}#Permanent_Residency`,
-          citizenship: `https://en.wikipedia.org/wiki/Nationality_law_of_${encodeURIComponent(country.name.replace(/\s+/g, '_'))}`,
-          work: `https://en.wikipedia.org/wiki/${wikiSlug}#Work_Visas`,
-          family: `https://en.wikipedia.org/wiki/${wikiSlug}#Family_Visas`,
-          business: `https://en.wikipedia.org/wiki/${wikiSlug}#Business_Visas`,
-          digital_nomad: `https://en.wikipedia.org/wiki/${wikiSlug}#Digital_Nomad_Visas`
-        },
+        categorySources: {},
         lastAuditDate: AUDIT_DATE,
-        lastSuccessfulRetrievalDate: AUDIT_DATE,
-        lastContentChangeDetectedDate: AUDIT_DATE,
-        lastLegalVerificationDate: AUDIT_DATE,
-        sourceAccessStatus: 'Consular Gazette Audit Pending'
+        lastSuccessfulRetrievalDate: '',
+        lastContentChangeDetectedDate: '',
+        lastLegalVerificationDate: '',
+        sourceAccessStatus: 'AWAITING_OFFICIAL_SOURCE_VERIFICATION'
       };
     }
   });

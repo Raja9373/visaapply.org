@@ -103,8 +103,8 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({
         OFFICIAL_IMMIGRATION_SOURCES_249[manualCountry]?.[0] ||
         'https://www.iatatravelcentre.com/',
       autoBlogSlug: slug,
-      emailNotified: 'maddydelhi57@gmail.com',
-      verifiedBy: 'Admin Manual Override + Auto-Blog Published',
+      emailNotified: 'configured-admin-channel',
+      verifiedBy: 'Admin Manual Override + Pending Review',
     };
 
     const updated = saveImmigrationChangelogEntry(newEntry);
@@ -132,7 +132,7 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({
     setManualSource('');
     setShowManualForm(false);
     setSyncMessage(
-      `✅ Manual update saved for ${cName}! Database updated, email sent to maddydelhi57@gmail.com, and breaking blog published.`
+      `✅ Manual update saved for ${cName}! Database updated and alert dispatched to configured admin channel.`
     );
   };
 
@@ -182,7 +182,7 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({
               Last 30 Days Immigration Changes — Auto Synced
             </h1>
             <p className="text-xs sm:text-sm text-blue-100 mt-1">
-              Monitors 249 official government visa portals + Wikipedia Visa Policy + IATA Timatic + Henley Passport Index. Auto-updates FULL_VISA_DB, emails <b>maddydelhi57@gmail.com</b>, and publishes breaking blogs.
+              Monitors 249 official sovereign government visa portals &amp; consular gazettes. Stages candidate updates in review queue for admin approval prior to public publishing.
             </p>
           </div>
           {isAdminAuthenticated && (

@@ -17,13 +17,26 @@ import {
 import {
   resolveStaticRouteSeoMetadata,
   normalizeCanonicalUrl,
-  validateAndSanitizeSeoMetadata
+  validateAndSanitizeSeoMetadata,
+  resolveValidOgImageUrl
 } from './src/utils/seoMetadataManager';
 import {
   renderRouteSsrPayload,
   injectSsrPayloadIntoHtml
 } from './src/utils/ssrRouteRenderer';
+import { sanitizeHtml } from './src/utils/htmlSanitizer';
+import {
+  deriveAdminToken,
+  extractAdminTokenFromRequest,
+  verifyAdminPassword,
+  verifyAdminToken,
+  verifyCronAuth
+} from './src/utils/authSecurity';
+import { OFFICIAL_SOURCE_REGISTRY_249 } from './src/data/officialSourceRegistry';
 import dotenv from 'dotenv';
+
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-4-hydrogen';
+const ADMIN_ALERT_EMAIL = (process.env.ADMIN_ALERT_EMAIL || '').trim();
 import {
   saveBatchStateToDb,
   getBatchStateFromDb,
@@ -239,7 +252,7 @@ app.get('/api/articles', (req, res) => {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const parsed = matter(raw);
       const slug = file.replace('.md', '');
-      const htmlContent = String(marked.parse(parsed.content || ''));
+      const htmlContent = sanitizeHtml(String(marked.parse(parsed.content || '')));
       return {
         slug,
         ...parsed.data,
@@ -265,7 +278,7 @@ app.get('/api/articles/:slug', (req, res) => {
     if (fs.existsSync(filePath)) {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const parsed = matter(raw);
-      const htmlContent = String(marked.parse(parsed.content || ''));
+      const htmlContent = sanitizeHtml(String(marked.parse(parsed.content || '')));
       const hydrated = hydrateArticleWithCacheAndFallback({
         slug: cleanSlug,
         ...parsed.data,
@@ -301,34 +314,14 @@ function getAdminPassword(): string {
 }
 
 function getExpectedAdminToken(): string {
-  const pass = getAdminPassword();
-  if (!pass) return '';
-  return crypto.createHmac('sha256', pass).update('visaapply-admin-v1').digest('hex');
-}
-
-function parseAdminCookie(req: any): string {
-  const cookieHeader = String(req.headers?.cookie || '');
-  const match = cookieHeader.match(/(?:^|;\s*)visaapply_admin_session=([^;]+)/);
-  return match ? decodeURIComponent(match[1].trim()) : '';
-}
-
-function extractAdminToken(req: any): string {
-  const authHeader = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '').trim();
-  const customHeader = String(req.headers?.['x-admin-token'] || '').trim();
-  const cookieToken = parseAdminCookie(req);
-  return authHeader || customHeader || cookieToken;
+  return deriveAdminToken(getAdminPassword());
 }
 
 function isAdminAuthenticatedReq(req: any): boolean {
-  const expected = getExpectedAdminToken();
-  if (!expected) return false;
-  const provided = extractAdminToken(req);
-  if (!provided || provided.length !== expected.length) return false;
-  try {
-    return crypto.timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
-  } catch {
-    return false;
-  }
+  const adminPass = getAdminPassword();
+  if (!adminPass) return false;
+  const provided = extractAdminTokenFromRequest(req);
+  return verifyAdminToken(provided, adminPass);
 }
 
 function requireAdminAuth(req: any, res: any, next: any) {
@@ -352,7 +345,7 @@ const handleAdminLogin = (req: any, res: any) => {
       message: 'ADMIN_PASSWORD environment variable is not configured on the server.'
     });
   }
-  if (typeof password === 'string' && password.length > 0 && password === adminPass) {
+  if (verifyAdminPassword(password, adminPass)) {
     const token = getExpectedAdminToken();
     const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
     const cookieFlags = isSecure
@@ -409,7 +402,7 @@ app.get('/api/ask-faq', async (req, res) => {
 Provide a concise, highly accurate, and helpful official consular answer addressing this specific question. Keep it professional, structured, and practical.`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: GEMINI_MODEL,
       contents: prompt,
       config: {
         thinkingLevel: ThinkingLevel.LOW
@@ -435,7 +428,7 @@ app.get('/api/guides', (req, res) => {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const parsed = matter(raw);
       const slug = file.replace('.md', '');
-      const htmlContent = String(marked.parse(parsed.content || ''));
+      const htmlContent = sanitizeHtml(String(marked.parse(parsed.content || '')));
       return {
         slug,
         ...parsed.data,
@@ -575,8 +568,12 @@ Include clear sections:
 Language: Simple, official English. 
 Format: Markdown with clean headings.`;
 
-      let articleText = `# ${sourceCountry.name} to ${targetCountry.name} ${vType.name} Guide\n\n## 1. Overview\nComprehensive guide for ${sourceCountry.name} citizens.\n\n## 2. Fees\nStandard government processing fees apply.\n\n## 3. Documents\nPassport, bank statements, photos.`;
-      
+      const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+      if (!apiKey || apiKey === 'dummy_key') {
+        continue;
+      }
+
+      let articleText = '';
       const maxRetries = 4;
       const timeoutMs = 30000;
       const maxDelayMs = 12000;
@@ -587,7 +584,7 @@ Format: Markdown with clean headings.`;
             timeoutHandle = setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
           });
           const apiPromise = ai.models.generateContent({
-            model: 'gemini-3.8-flash',
+            model: GEMINI_MODEL,
             contents: prompt,
             config: {
               thinkingConfig: {
@@ -597,8 +594,8 @@ Format: Markdown with clean headings.`;
           });
           const response: any = await Promise.race([apiPromise, timeoutPromise]);
           clearTimeout(timeoutHandle);
-          if (response?.text) {
-            articleText = response.text;
+          if (response?.text && String(response.text).trim().length > 100) {
+            articleText = String(response.text).trim();
             break;
           }
         } catch {
@@ -610,13 +607,18 @@ Format: Markdown with clean headings.`;
         }
       }
 
+      if (!articleText) {
+        continue;
+      }
+
       const frontmatter = `---
 title: "${sourceCountry.name} to ${targetCountry.name} ${vType.name} Visa Guide"
 from: "${sourceCountry.code}"
 to: "${targetCountry.code}"
 type: "${vType.id}"
 date: "${new Date().toISOString().split('T')[0]}"
-fees: "Standard Official Fees"
+status: "PENDING_HUMAN_REVIEW"
+fees: "Verify on official embassy portal before publication"
 docs: "Passport, Financial Proofs, Application Forms"
 ---
 
@@ -748,35 +750,34 @@ app.post('/api/immigration/batch-execute', requireCronOrAdminAuth, async (req, r
   }
 });
 
-function publishBreakingBlogToContent(entry: any) {
+function stageBreakingBlogDraft(entry: any, targetDir: string = DRAFTS_DIR) {
   try {
-    const slug = entry.autoBlogSlug || `breaking-${entry.countryCode}-visa-update-${Date.now()}`;
-    const filePath = path.join(CONTENT_DIR, `${slug}.md`);
+    const slug = (entry.autoBlogSlug || `candidate-${entry.countryCode}-visa-update-${Date.now()}`).replace(/[^a-zA-Z0-9-_]/g, '-');
+    const filePath = path.join(targetDir, `${slug}.md`);
     const markdown = `---
-title: "${entry.title.replace(/"/g, "'")}"
+title: "${String(entry.title || '').replace(/"/g, "'")}"
 from: "IN"
 to: "${(entry.countryCode || 'US').toUpperCase()}"
 type: "tourist"
 date: "${entry.date}"
-fees: "${entry.newValue.replace(/"/g, "'")}"
+status: "PENDING_HUMAN_REVIEW"
+verificationStatus: "AWAITING_VERIFICATION"
+fees: "${String(entry.newValue || '').replace(/"/g, "'")}"
 docs: "Valid Passport (6+ Months), Verified Bank Statements, Official Consular Confirmation"
 ---
 
 # ${entry.title}
 
-** Official Immigration Auto-Sync Alert (${entry.date})** — Verified via [${entry.sourceUrl}](${entry.sourceUrl})
+**Candidate Immigration Policy Change (${entry.date})** — Source checked: ${entry.sourceUrl}
 
-## 1. Summary of Official Consular Change
+## 1. Summary of Observed Change (Pending Human Review)
 * **Country:** ${entry.countryName} (${(entry.countryCode || '').toUpperCase()})
 * **Update Category:** \`${entry.changeType}\`
 * **Previous Rule / Fee:** ${entry.oldValue}
-* **New 2026 Rule / Fee:** **${entry.newValue}**
+* **Observed Update:** ${entry.newValue}
 * **Official Source Portal:** ${entry.sourceUrl}
-
-## 2. What Indian & Global Applicants Need to Do Now
-1. Check your eligibility on our [30-Second Visa Eligibility Checker](/in-to-${(entry.countryCode || 'us').toLowerCase()}).
-2. Download the updated 2026 PDF Document Checklist for ${entry.countryName}.
-3. Book refundable visa-compliant hotels and flights before submitting your consular application.
+* **Legal Provision:** ${entry.legalProvision || 'Pending human legal review'}
+* **Applicability Scope:** ${entry.applicabilityScope || 'Pending human applicability check'}
 `;
     fs.writeFileSync(filePath, markdown, 'utf-8');
   } catch (e) {}
@@ -793,9 +794,9 @@ app.post('/api/admin/manual-update', requireAdminAuth, (req, res) => {
     const current = readChangelogFromDisk();
     const updated = [entry, ...current.filter((x: any) => x.id !== entry.id)];
     writeChangelogToDisk(updated);
-    publishBreakingBlogToContent(entry);
-    console.log(`📧 [Admin Alert -> maddydelhi57@gmail.com]: Immigration Update for ${entry.countryName}: ${entry.oldValue} -> ${entry.newValue}`);
-    res.json({ success: true, changelog: updated, dbPersisted: true });
+    stageBreakingBlogDraft(entry, DRAFTS_DIR);
+    console.log(`📧 [Admin Alert -> ${ADMIN_ALERT_EMAIL || 'admin-channel'}]: Immigration Update for ${entry.countryName}: ${entry.oldValue} -> ${entry.newValue}`);
+    res.json({ success: true, changelog: updated, dbPersisted: true, stagedForReview: true });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -803,36 +804,15 @@ app.post('/api/admin/manual-update', requireAdminAuth, (req, res) => {
 
 let isSyncCronRunning = false;
 
-function validateCronAuthTimingSafe(req: any): { status: 'AUTHORIZED' | 'UNAUTHORIZED' | 'CONFIG_ERROR' } {
-  const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
-  const cronSecret = (process.env.CRON_SECRET || '').trim();
-
-  // Fail-closed in production if CRON_SECRET is not configured
-  if (isProduction && !cronSecret) {
-    return { status: 'CONFIG_ERROR' };
-  }
-
-  const authHeader = String(req.headers['authorization'] || '').replace(/^Bearer\s+/i, '').trim();
-
-  if (cronSecret && authHeader) {
-    if (authHeader.length === cronSecret.length) {
-      try {
-        const isMatch = crypto.timingSafeEqual(Buffer.from(authHeader), Buffer.from(cronSecret));
-        if (isMatch) return { status: 'AUTHORIZED' };
-      } catch {}
-    }
-  }
-
-  // Admin session authentication for manual admin dispatch
-  if (isAdminAuthenticatedReq(req)) {
-    return { status: 'AUTHORIZED' };
-  }
-
-  return { status: 'UNAUTHORIZED' };
-}
-
 function requireCronOrAdminAuth(req: any, res: any, next: any) {
-  const authResult = validateCronAuthTimingSafe(req);
+  const authResult = verifyCronAuth(req, {
+    allowAdminSession: true,
+    allowedMethods: ['GET', 'POST']
+  });
+
+  if (authResult.status === 'METHOD_NOT_ALLOWED') {
+    return res.status(405).json({ success: false, error: authResult.message });
+  }
 
   if (authResult.status === 'CONFIG_ERROR') {
     logCronExecutionToDb({
@@ -842,16 +822,16 @@ function requireCronOrAdminAuth(req: any, res: any, next: any) {
       status: 'CONFIG_ERROR',
       checkedCount: 0,
       updatesFound: 0,
-      logMessage: 'Production Cron configuration error: CRON_SECRET environment variable is missing (Fail-Closed).',
+      logMessage: 'Cron configuration error: CRON_SECRET environment variable is missing (Fail-Closed).',
       executionDurationMs: 0
     });
     return res.status(503).json({
       success: false,
-      error: 'CRON_SECRET environment variable is not configured in production (Fail-Closed).'
+      error: 'CRON_SECRET environment variable is not configured (Fail-Closed).'
     });
   }
 
-  if (authResult.status !== 'AUTHORIZED') {
+  if (!authResult.authorized) {
     return res.status(401).json({
       success: false,
       authenticated: false,
@@ -872,31 +852,47 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
   isSyncCronRunning = true;
   const startTime = Date.now();
   try {
-    const adminEmail = req.body?.adminEmail || req.query?.adminEmail || 'maddydelhi57@gmail.com';
+    const adminEmail = ADMIN_ALERT_EMAIL || 'configured-admin-channel';
     const dayIdx = new Date().getDate() % COUNTRIES.length;
     const targetCountry = COUNTRIES[dayIdx] || { code: 'US', name: 'United States' };
-    const codeLower = (targetCountry.code || 'us').toLowerCase();
+    const codeUpper = (targetCountry.code || 'US').toUpperCase();
+    const codeLower = codeUpper.toLowerCase();
 
-    const govSources: Record<string, string> = {
-      us: 'https://travel.state.gov/content/travel/en/us-visas.html',
-      gb: 'https://www.gov.uk/browse/visas-immigration',
-      ae: 'https://u.ae/en/information-and-services/visa-and-emirates-id',
-      sg: 'https://www.ica.gov.sg/',
-      ca: 'https://www.canada.ca/en/immigration-refugees-citizenship.html',
-      au: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing',
-      de: 'https://www.make-it-in-germany.com/',
-      es: 'https://www.exteriores.gob.es/',
-      pt: 'https://vistos.mne.gov.pt/'
-    };
-    const sourceUrl =
-      govSources[codeLower] ||
-      `https://en.wikipedia.org/wiki/Visa_policy_of_${encodeURIComponent(targetCountry.name.replace(/\s+/g, '_'))}`;
+    const registryEntry = OFFICIAL_SOURCE_REGISTRY_249[codeUpper];
+    const sourceUrl = registryEntry?.primaryGovUrl || registryEntry?.consularPortalUrl || '';
+
+    if (!sourceUrl || !sourceUrl.startsWith('https://')) {
+      const durationMs = Date.now() - startTime;
+      logCronExecutionToDb({
+        cronName: 'immigration-sync',
+        httpMethod: req.method || 'GET',
+        targetCountries: [codeUpper],
+        status: 'SKIPPED_NO_OFFICIAL_SOURCE',
+        checkedCount: 1,
+        updatesFound: 0,
+        logMessage: `Skipped ${targetCountry.name} (${codeUpper}): no verified sovereign portal URL in OFFICIAL_SOURCE_REGISTRY_249. Existing records preserved.`,
+        executionDurationMs: durationMs
+      });
+      return res.json({
+        success: false,
+        status: 'SKIPPED_NO_OFFICIAL_SOURCE',
+        countryCode: codeUpper,
+        countryName: targetCountry.name,
+        sourceFetched: false,
+        updatesFound: 0,
+        autoPublished: false,
+        executionDurationMs: durationMs
+      });
+    }
 
     let snippetHtml = '';
+    let sourceTitle = `${targetCountry.name} Official Portal`;
     let sourceFetched = false;
+    let fetchFailureReason = '';
+
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 4000);
+      const timeout = setTimeout(() => controller.abort(), 6000);
       const htmlRes = await fetch(sourceUrl, {
         headers: {
           'User-Agent':
@@ -906,93 +902,170 @@ const handleImmigrationSyncCron = async (req: any, res: any) => {
       });
       clearTimeout(timeout);
       if (htmlRes.ok) {
-        const rawText = await htmlRes.text();
-        snippetHtml = rawText.replace(/<[^>]+>/g, ' ').slice(0, 2500);
-        sourceFetched = true;
+        const rawHtml = await htmlRes.text();
+        const titleMatch = rawHtml.match(/<title[^>]*>([^<]+)<\/title>/i);
+        if (titleMatch?.[1]) {
+          sourceTitle = titleMatch[1].trim().slice(0, 180);
+        }
+        snippetHtml = rawHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 2500);
+        sourceFetched = snippetHtml.length > 50;
+        if (!sourceFetched) {
+          fetchFailureReason = 'Fetched page had insufficient textual content.';
+        }
+      } else {
+        fetchFailureReason = `HTTP ${htmlRes.status} from ${sourceUrl}`;
       }
-    } catch {
-      snippetHtml = `Official 2026 consular visa policy and fee schedule check for ${targetCountry.name}.`;
+    } catch (fetchErr: any) {
+      fetchFailureReason = fetchErr?.message || 'Network/timeout error while fetching official source.';
     }
 
-    let extractedTitle = `Breaking: ${targetCountry.name} 2026 Consular Fee & Processing Schedule Verified`;
-    let extractedOld = 'Standard 2025/2026 Consular Processing Window';
-    let extractedNew = 'Updated 2026 Fast-Track Digital Verification & Biometric Rules';
-    let extractedType = 'PROCESSING_UPDATE';
+    if (!sourceFetched) {
+      const durationMs = Date.now() - startTime;
+      logCronExecutionToDb({
+        cronName: 'immigration-sync',
+        httpMethod: req.method || 'GET',
+        targetCountries: [codeUpper],
+        status: 'QUARANTINED_FETCH_FAILED',
+        checkedCount: 1,
+        updatesFound: 0,
+        logMessage: `Quarantined sync for ${targetCountry.name} (${sourceUrl}): ${fetchFailureReason}. Existing public data preserved.`,
+        executionDurationMs: durationMs
+      });
+      return res.status(502).json({
+        success: false,
+        status: 'QUARANTINED_FETCH_FAILED',
+        countryCode: codeUpper,
+        countryName: targetCountry.name,
+        sourceUrl,
+        sourceFetched: false,
+        updatesFound: 0,
+        autoPublished: false,
+        reason: fetchFailureReason,
+        executionDurationMs: durationMs
+      });
+    }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (apiKey && apiKey !== 'dummy_key') {
-      try {
-        const aiResp = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: `Analyze this immigration source excerpt for ${targetCountry.name} (${sourceUrl}): "${snippetHtml.slice(0, 1200)}".
-Return a concise JSON object with keys:
+    const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+    if (!apiKey || apiKey === 'dummy_key') {
+      const durationMs = Date.now() - startTime;
+      logCronExecutionToDb({
+        cronName: 'immigration-sync',
+        httpMethod: req.method || 'GET',
+        targetCountries: [codeUpper],
+        status: 'SKIPPED_NO_AI_KEY',
+        checkedCount: 1,
+        updatesFound: 0,
+        logMessage: `Fetched ${sourceUrl} (${snippetHtml.length} chars) but GEMINI_API_KEY is absent; staged nothing and preserved existing records.`,
+        executionDurationMs: durationMs
+      });
+      return res.status(503).json({
+        success: false,
+        status: 'SKIPPED_NO_AI_KEY',
+        sourceUrl,
+        sourceFetched: true,
+        updatesFound: 0,
+        autoPublished: false,
+        executionDurationMs: durationMs
+      });
+    }
+
+    let parsedUpdate: any = null;
+    try {
+      const aiResp = await ai.models.generateContent({
+        model: GEMINI_MODEL,
+        contents: `Analyze this official sovereign immigration source excerpt for ${targetCountry.name} (${sourceUrl}): "${snippetHtml.slice(0, 1400)}".
+If there is a concrete, verifiable policy/fee/processing change stated directly in the excerpt, return JSON with:
+- hasConcreteChange: boolean (false if excerpt is just navigation/boilerplate without a clear policy fact)
 - changeType: one of "NEW_VISA", "FEE_UPDATE", "PROCESSING_UPDATE", "DOCS_UPDATE", "VISA_FREE_UPDATE"
-- title: breaking news headline for 2026 visa applicants (e.g. "Breaking: ${targetCountry.name} Visa Update for 2026")
-- oldValue: previous fee or processing rule
-- newValue: current 2026 fee or processing rule`,
-          config: {
-            responseMimeType: 'application/json',
-            thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
-          },
-        });
-        if (aiResp?.text) {
-          const parsed = JSON.parse(aiResp.text);
-          if (parsed.title) extractedTitle = parsed.title;
-          if (parsed.oldValue) extractedOld = parsed.oldValue;
-          if (parsed.newValue) extractedNew = parsed.newValue;
-          if (parsed.changeType) extractedType = parsed.changeType;
-        }
-      } catch {}
+- title: concise neutral headline describing the verified change
+- oldValue: previous rule/fee if explicitly stated, else "Unchanged / Not specified in excerpt"
+- newValue: observed rule/fee directly quoted or summarized from excerpt
+- legalProvision: statute/regulation/program name if stated
+- applicabilityScope: who it applies to`,
+        config: {
+          responseMimeType: 'application/json',
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+        },
+      });
+      if (aiResp?.text) {
+        parsedUpdate = JSON.parse(aiResp.text);
+      }
+    } catch {
+      parsedUpdate = null;
+    }
+
+    if (!parsedUpdate || !parsedUpdate.hasConcreteChange || !parsedUpdate.newValue) {
+      const durationMs = Date.now() - startTime;
+      logCronExecutionToDb({
+        cronName: 'immigration-sync',
+        httpMethod: req.method || 'GET',
+        targetCountries: [codeUpper],
+        status: 'NO_VERIFIED_CHANGE',
+        checkedCount: 1,
+        updatesFound: 0,
+        logMessage: `Fetched ${sourceUrl}; no concrete verified policy change detected. Existing records preserved.`,
+        executionDurationMs: durationMs
+      });
+      return res.json({
+        success: true,
+        status: 'NO_VERIFIED_CHANGE',
+        countryCode: codeUpper,
+        countryName: targetCountry.name,
+        sourceUrl,
+        sourceFetched: true,
+        updatesFound: 0,
+        autoPublished: false,
+        executionDurationMs: durationMs
+      });
     }
 
     const todayStr = new Date().toISOString().split('T')[0];
-    const autoBlogSlug = `breaking-${codeLower}-visa-auto-sync-${todayStr}`;
-    const newEntry = {
+    const autoBlogSlug = `candidate-${codeLower}-visa-sync-${todayStr}`;
+    const candidateEntry = {
       id: `sync-${Date.now()}`,
       date: todayStr,
       countryCode: codeLower,
       countryName: targetCountry.name,
-      changeType: extractedType,
-      title: extractedTitle,
-      oldValue: extractedOld,
-      newValue: extractedNew,
+      changeType: parsedUpdate.changeType || 'DOCS_UPDATE',
+      title: String(parsedUpdate.title || `${targetCountry.name} Source Change Candidate`),
+      oldValue: String(parsedUpdate.oldValue || 'Not specified in excerpt'),
+      newValue: String(parsedUpdate.newValue),
       sourceUrl,
+      sourceTitle,
+      dateChecked: new Date().toISOString(),
+      excerpt: snippetHtml.slice(0, 350),
+      legalProvision: String(parsedUpdate.legalProvision || ''),
+      applicabilityScope: String(parsedUpdate.applicabilityScope || 'Verify applicability before publishing'),
       autoBlogSlug,
       emailNotified: adminEmail,
-      verifiedBy: 'Gemini AI Auto-Sync (3:00 AM IST Cron)',
+      verificationStatus: 'AWAITING_VERIFICATION',
+      verifiedBy: 'Automated Official Source Check (Staged for Human Review)',
     };
 
-    saveChangelogEntryToDb(newEntry);
-    const current = readChangelogFromDisk();
-    const updated = [newEntry, ...current.filter((x: any) => x.id !== newEntry.id)];
-    writeChangelogToDisk(updated);
-    publishBreakingBlogToContent(newEntry);
+    stageBreakingBlogDraft(candidateEntry, DRAFTS_DIR);
 
     const durationMs = Date.now() - startTime;
     logCronExecutionToDb({
       cronName: 'immigration-sync',
       httpMethod: req.method || 'GET',
-      targetCountries: [targetCountry.code],
-      status: 'SUCCESS',
-      checkedCount: 249,
+      targetCountries: [codeUpper],
+      status: 'STAGED_PENDING_REVIEW',
+      checkedCount: 1,
       updatesFound: 1,
-      logMessage: `Completed 249-country daily sync. Verified ${targetCountry.name} via ${sourceUrl} (${sourceFetched ? 'Direct Fetch' : 'Fallback Policy'}).`,
+      logMessage: `Fetched ${sourceUrl} and staged candidate draft ${autoBlogSlug} in content/drafts for human review (auto-publish disabled).`,
       executionDurationMs: durationMs,
       missedRunResumed: false
     });
 
-    console.log(
-      `📧 [Auto-Sync Email -> ${adminEmail}]: Immigration Update: ${targetCountry.name} (${extractedType}) ${extractedOld} -> ${extractedNew} - Saved to SQLite DB & visaapply.org`
-    );
-
     res.json({
       success: true,
+      status: 'STAGED_PENDING_REVIEW',
       cronMethod: req.method || 'GET',
-      checkedCount: 249,
+      checkedCount: 1,
       updatesFound: 1,
-      latestEntry: newEntry,
-      changelog: updated,
-      dbPersisted: true,
+      autoPublished: false,
+      stagedDraftSlug: autoBlogSlug,
+      candidateEntry,
       executionDurationMs: durationMs,
       adminEmailNotified: adminEmail,
     });
@@ -1008,7 +1081,7 @@ Return a concise JSON object with keys:
       logMessage: err.message || 'Unknown error',
       executionDurationMs: durationMs
     });
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   } finally {
     isSyncCronRunning = false;
   }
@@ -1612,71 +1685,16 @@ const handleSlotCheckCron = async (req: any, res: any) => {
   try {
     const data = getSlotStatusData();
     data.lastCheckTime = new Date().toISOString();
-    const subs = getSlotSubscribers();
-    let emailsSentCount = 0;
     const results: any[] = [];
-    const adminEmail = 'maddydelhi57@gmail.com';
-
-    // Find active target countries/destinations that have subscribers waiting
-    const activeDestinations = new Set(subs.map((s: any) => (s.toCountry || 'US').toUpperCase()));
 
     for (const [embassyName, info] of Object.entries(data.embassies) as [string, any][]) {
-      // Check only if subscribers exist for this embassy/destination (to save cost)
-      const hasActiveSubscribers = subs.some((s: any) => {
-        const dest = (s.toCountry || '').toUpperCase();
-        return embassyName.toUpperCase().includes(dest) || (dest === 'US' && embassyName.includes('USA'));
+      // Preserve last verified status without fabricating random openings
+      results.push({
+        embassy: embassyName,
+        status: info.status,
+        slotDate: info.lastSlotDate,
+        verificationStatus: 'AWAITING_LIVE_FEED'
       });
-
-      if (!hasActiveSubscribers && subs.length > 0) {
-        results.push({ embassy: embassyName, status: info.status, skipped: 'No active subscribers for this destination' });
-        continue;
-      }
-
-      let currentStatus = info.status;
-      let slotDate = info.lastSlotDate;
-
-      try {
-        const rand = Math.random();
-        if (currentStatus === 'Closed' && rand < 0.20) {
-          currentStatus = 'Open';
-          const futureDate = new Date();
-          futureDate.setDate(futureDate.getDate() + Math.floor(Math.random() * 14) + 3);
-          slotDate = futureDate.toISOString().split('T')[0];
-        } else if (currentStatus === 'Open' && rand < 0.30) {
-          currentStatus = 'Closed';
-        }
-      } catch (fetchErr) {
-        console.warn(`Warning: Could not fetch live feed for ${embassyName}, keeping previous status.`);
-      }
-
-      const statusChanged = currentStatus === 'Open' && info.status !== 'Open';
-      const now = Date.now();
-      const lastAlertTime = info.lastAlertTime || 0;
-      const hoursSinceLastAlert = (now - lastAlertTime) / (1000 * 60 * 60);
-
-      if (statusChanged && hoursSinceLastAlert >= 2) {
-        const embassySubs = subs.filter((s: any) => {
-          const dest = (s.toCountry || '').toUpperCase();
-          return embassyName.toUpperCase().includes(dest) || (dest === 'US' && embassyName.includes('USA'));
-        });
-        const bookingLink = 'https://usvisascheduling.com' + (embassyName.includes('USA') ? '' : '/vfsglobal');
-
-        for (const sub of embassySubs) {
-          const localized = getLocalizedEmailContent(sub.fromCountry, embassyName, slotDate, bookingLink);
-          await sendEmailViaResend(sub.email, localized.subject, localized.html);
-          emailsSentCount++;
-        }
-
-        const adminSubject = `Auto Slot Detected - ${embassyName} OPEN (${slotDate})`;
-        const adminHtml = `<p>System detected ${embassyName} slot open for ${slotDate}. Sent alerts to ${embassySubs.length} subscribers.</p>`;
-        await sendEmailViaResend(adminEmail, adminSubject, adminHtml);
-
-        info.lastAlertTime = now;
-      }
-
-      info.status = currentStatus;
-      info.lastSlotDate = slotDate;
-      results.push({ embassy: embassyName, status: currentStatus, slotDate });
     }
 
     saveSlotStatusData(data);
@@ -1684,7 +1702,8 @@ const handleSlotCheckCron = async (req: any, res: any) => {
     res.json({
       success: true,
       checkedAt: data.lastCheckTime,
-      emailsSent: emailsSentCount,
+      emailsSent: 0,
+      status: 'CHECKPOINT_RECORDED_NO_RANDOM_SIMULATION',
       results
     });
   } catch (err: any) {
@@ -1692,8 +1711,7 @@ const handleSlotCheckCron = async (req: any, res: any) => {
   }
 };
 
-app.get('/api/cron/slot-check', handleSlotCheckCron);
-app.post('/api/cron/slot-check', handleSlotCheckCron);
+app.all('/api/cron/slot-check', requireCronOrAdminAuth, handleSlotCheckCron);
 
 app.post('/api/slot-alert/subscribe', (req, res) => {
   try {
@@ -1871,7 +1889,7 @@ app.get('/robots.txt', (req, res) => {
   if (fs.existsSync(robotsPath)) {
     return res.status(200).send(fs.readFileSync(robotsPath, 'utf-8'));
   }
-  res.status(200).send(`User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: https://www.visaapply.org/sitemap-index.xml\n`);
+  res.status(200).send(`User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /audit\nDisallow: /api/\n\nSitemap: https://www.visaapply.org/sitemap-index.xml\n`);
 });
 
 // Serve Open Graph 1200x630 images for homepage (/og-image.jpg), /og/flights.jpg, and all 249 countries (/og/:slug.jpg)
@@ -1901,8 +1919,8 @@ function getServerSideOgMeta(pathname: string) {
   const clean = (pathname || '/').split('?')[0].replace(/\/+$/, '') || '/';
   const langStripped = clean.replace(/^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/|$)/i, '/') || '/';
 
-  let ogTitle = "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
-  let ogDesc = "249 countries, 11,563+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights";
+  let ogTitle = "VisaApply.org – Global Visa Guides, Immigration Pathways & Official Links (249 Countries)";
+  let ogDesc = "Independent global visa and immigration guide across 249 ISO countries & territories, 61,752 bilateral routes, and 15 interface languages.";
   let ogImage = "https://www.visaapply.org/og-image.jpg";
   const ogUrl = normalizeCanonicalUrl(clean, 'https://www.visaapply.org');
 
@@ -1912,14 +1930,14 @@ function getServerSideOgMeta(pathname: string) {
   if (staticEntry) {
     ogTitle = staticEntry.title;
     ogDesc = staticEntry.description;
-    if (staticEntry.ogImage) ogImage = staticEntry.ogImage;
+    ogImage = resolveValidOgImageUrl(staticEntry.ogImage);
   } else if (interviewMatch) {
     const code = interviewMatch[1].toLowerCase();
     const countryObj = COUNTRIES.find((c) => c.code.toLowerCase() === code);
     const cName = countryObj?.name || code.toUpperCase();
-    ogTitle = `${cName} Visa Interview Questions & Winning Answers [2026 Updated] – VisaApply.org`;
-    ogDesc = `Master the top 20 ${cName} consular interview questions and ideal answers, plus our interactive Mock Interview simulator, dress code, and document folder order.`;
-    ogImage = `https://www.visaapply.org/og/${code}.jpg`;
+    ogTitle = `${cName} Visa Interview Questions & Preparation Guide [2026] – VisaApply.org`;
+    ogDesc = `Review common ${cName} consular interview questions, preparation guidance, dress code, and document folder order.`;
+    ogImage = resolveValidOgImageUrl(code);
   } else {
     const level3Match = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})-(tourist|work|student|family|business|pr)-([a-z0-9-]+)$/i);
     const routeMatch = langStripped.match(/^\/([a-z]{2,3})-to-([a-z]{2,3})(?:-([a-z]+))?$/i);
@@ -1936,8 +1954,8 @@ function getServerSideOgMeta(pathname: string) {
       const numMatch = sub.match(/(\d+)$/);
       const numSuffix = numMatch ? ` ${parseInt(numMatch[1], 10)}` : '';
       ogTitle = `${fromName} to ${toName} ${catLabel} Visa${numSuffix} (2026 Guide)`;
-      ogDesc = `Official 2026 application guide, fee breakdown, document checklist, and step-by-step instructions for ${ogTitle}.`;
-      ogImage = `https://www.visaapply.org/og/${toCode}.jpg`;
+      ogDesc = `Independent 2026 guide, official fee links, and document checklist for ${ogTitle}.`;
+      ogImage = resolveValidOgImageUrl(toCode);
     } else if (routeMatch) {
       const fromCode = routeMatch[1].toLowerCase();
       const toCode = routeMatch[2].toLowerCase();
@@ -1945,16 +1963,10 @@ function getServerSideOgMeta(pathname: string) {
       const toCountryObj = COUNTRIES.find((c) => c.code.toLowerCase() === toCode);
       const fromLabel = fromCode === 'in' ? 'Indians' : (fromCountryObj?.name || fromCode.toUpperCase());
       const toName = toCode === 'us' ? 'USA' : toCode === 'gb' || toCode === 'uk' ? 'UK' : toCode === 'ae' ? 'UAE' : (toCountryObj?.name || toCode.toUpperCase());
-      const count = fromCode === 'in' ? (TOP_VISA_COUNTS_SSR[toCode] || 68) : (fromCode === 'ae' && toCode === 'us' ? 45 : 55);
 
-      if (fromCode === 'in' && toCode === 'us') {
-        ogTitle = "USA Visa for Indians 2026 - 278 Visa Types, $185, 15-20 Days - VisaApply.org";
-        ogDesc = "USA visa for Indians - 278 types, fees $185, processing 15-20 days, success 92%, hotel from $120/night Booking.com, flights from ₹45,200";
-      } else {
-        ogTitle = `${toName} Visa for ${fromLabel} 2026 - ${count} Visa Types - VisaApply.org`;
-        ogDesc = `${toName} visa for ${fromLabel} - ${count} types, official 2026 fees, fast processing, high approval rate, hotel deals on Booking.com & cheap flights via Travelpayouts`;
-      }
-      ogImage = `https://www.visaapply.org/og/${toCode}.jpg`;
+      ogTitle = `${toName} Visa Requirements for ${fromLabel} 2026 – VisaApply.org`;
+      ogDesc = `${toName} visa guide for ${fromLabel}: official categories, consular fee schedules, processing times, and document checklists with government links.`;
+      ogImage = resolveValidOgImageUrl(toCode);
     }
   }
 
@@ -2004,9 +2016,11 @@ app.use(async (req, res, next) => {
     const cleanReqPath = (req.path || '/').replace(/^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/|$)/i, '/') || '/';
     const isAdminPageReq = cleanReqPath === '/admin' || cleanReqPath.startsWith('/admin/');
     const isAdminLoginReq = cleanReqPath === '/admin/login' || cleanReqPath === '/admin/login/';
+    const isAuditPageReq = cleanReqPath === '/audit' || cleanReqPath === '/audit/';
+    const isProtectedAdminOrAudit = (isAdminPageReq && !isAdminLoginReq) || isAuditPageReq;
 
-    // Server-side protection: if requesting any /admin/* page (except /admin/login) without valid session cookie, redirect to /admin/login
-    if (isAdminPageReq && !isAdminLoginReq && !isAdminAuthenticatedReq(req)) {
+    // Server-side protection: redirect unauthenticated /admin/* (except /admin/login) and /audit requests to /admin/login
+    if (isProtectedAdminOrAudit && !isAdminAuthenticatedReq(req)) {
       res.setHeader('X-Robots-Tag', 'noindex, nofollow');
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
       return res.redirect(302, `/admin/login?redirect=${encodeURIComponent(cleanReqPath)}`);
@@ -2033,12 +2047,12 @@ app.use(async (req, res, next) => {
       description: og.ogDesc && !og.ogDesc.startsWith('Check bilateral visa requirements for any passport') ? og.ogDesc : ssrPayload.description,
       canonicalUrl: ssrPayload.canonicalUrl,
       ogImage: og.ogImage || ssrPayload.ogImage,
-      robots: isAdminPageReq ? 'noindex, nofollow' : ssrPayload.robots,
+      robots: (isAdminPageReq || isAuditPageReq) ? 'noindex, nofollow' : ssrPayload.robots,
     };
 
     transformed = injectSsrPayloadIntoHtml(transformed, mergedPayload);
 
-    if (isAdminPageReq) {
+    if (isAdminPageReq || isAuditPageReq) {
       res.setHeader('X-Robots-Tag', 'noindex, nofollow');
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     } else {

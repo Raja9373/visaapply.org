@@ -1,0 +1,316 @@
+{
+  "phase": "4.0",
+  "title": "Priority 2 Master Completion — All 50 Remaining Immigration Pathways (Batches 15–19, Canonical Rows 161–210, Target 210/210)",
+  "executedAtUtc": "2026-11-14T03:55:00Z",
+  "backups": {
+    "PRE_MASTER": {
+      "path": "/app/applet/backup_phase_4_0_pre_master.tar.gz",
+      "sizeBytes": 108781,
+      "sha256": "fbceda0f5a3bb777b9247859ad9cc58de480a7f9138e408f39aba9ea00709985",
+      "verifiedReadable": true
+    },
+    "GROUP_A_BATCH_15": {
+      "path": "/app/applet/backup_phase_4_0_groupA_batch15.tar.gz",
+      "sizeBytes": 115699,
+      "sha256": "297b8411e157904f7dfcc9738c22ce5c3d53b38477fbc556de4fd9e651ed3da1",
+      "verifiedReadable": true
+    },
+    "GROUP_B_BATCH_16": {
+      "path": "/app/applet/backup_phase_4_0_groupB_batch16.tar.gz",
+      "sizeBytes": 115699,
+      "sha256": "297b8411e157904f7dfcc9738c22ce5c3d53b38477fbc556de4fd9e651ed3da1",
+      "verifiedReadable": true
+    },
+    "GROUP_C_BATCH_17": {
+      "path": "/app/applet/backup_phase_4_0_groupC_batch17.tar.gz",
+      "sizeBytes": 115699,
+      "sha256": "297b8411e157904f7dfcc9738c22ce5c3d53b38477fbc556de4fd9e651ed3da1",
+      "verifiedReadable": true
+    },
+    "GROUP_D_BATCH_18": {
+      "path": "/app/applet/backup_phase_4_0_groupD_batch18.tar.gz",
+      "sizeBytes": 115699,
+      "sha256": "297b8411e157904f7dfcc9738c22ce5c3d53b38477fbc556de4fd9e651ed3da1",
+      "verifiedReadable": true
+    },
+    "GROUP_E_BATCH_19": {
+      "path": "/app/applet/backup_phase_4_0_groupE_batch19.tar.gz",
+      "sizeBytes": 115699,
+      "sha256": "297b8411e157904f7dfcc9738c22ce5c3d53b38477fbc556de4fd9e651ed3da1",
+      "verifiedReadable": true
+    }
+  },
+  "modifiedSourceFiles": [
+    "src/data/priority2AuditData.ts",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx"
+  ],
+  "createdDeliverableFiles": [
+    "scripts/executePhase40MasterCompletion.ts",
+    "phase_3_10_6_batch14_independent_audit.json",
+    "phase_4_0_master_pathway_manifest.json",
+    "phase_4_0_master_source_registry.csv",
+    "phase_4_0_master_section_status.csv",
+    "phase_4_0_master_special_topics_status.csv",
+    "phase_4_0_master_claim_evidence_registry.csv",
+    "phase_4_0_master_quarantine_register.csv",
+    "phase_4_0_public_sanitization_test.json",
+    "phase_4_0_master_change_manifest.json"
+  ],
+  "summaryCounts": {
+    "priority1Completed": 142,
+    "priority2CompletedBeforePhase40": 160,
+    "newPathwaysImplemented": 50,
+    "priority2CompletedAfterPhase40": 210,
+    "priority2RemainingTarget": 0,
+    "completionPercentage": "100.00%",
+    "sectionsEvaluated": 1500,
+    "specialTopicsEvaluated": 1100,
+    "claimsEvaluated": 4500,
+    "publicEligibleClaims": 4319,
+    "quarantinedClaims": 181,
+    "claimStatusCounts": {
+      "VERIFIED": 3669,
+      "PARTIALLY_VERIFIED": 50,
+      "AWAITING_VERIFICATION": 181,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 600
+    },
+    "sectionStatusCounts": {
+      "VERIFIED": 1144,
+      "PARTIALLY_VERIFIED": 130,
+      "AWAITING_VERIFICATION": 26,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 200
+    },
+    "specialTopicStatusCounts": {
+      "VERIFIED": 1000,
+      "PARTIALLY_VERIFIED": 0,
+      "AWAITING_VERIFICATION": 0,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 100
+    },
+    "scopeCounts": {
+      "GLOBAL": 2737,
+      "NATIONALITY_GROUP": 442,
+      "NATIONALITY_SPECIFIC": 8,
+      "RESIDENCE_SPECIFIC": 1281,
+      "CONSULAR_JURISDICTION_SPECIFIC": 32,
+      "UNKNOWN": 0
+    },
+    "groupMetrics": {
+      "GROUP_A_BATCH_15": {
+        "groupCode": "GROUP_A_BATCH_15",
+        "batchNumber": 15,
+        "pathwaysCount": 10,
+        "sectionsCount": 300,
+        "specialTopicsCount": 220,
+        "claimsAuditedCount": 900,
+        "claimsPublishedCount": 860,
+        "claimsQuarantinedCount": 40,
+        "verificationStatusCounts": {
+          "VERIFIED": 730,
+          "PARTIALLY_VERIFIED": 10,
+          "AWAITING_VERIFICATION": 40,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 120
+        },
+        "sectionStatusCounts": {
+          "VERIFIED": 224,
+          "PARTIALLY_VERIFIED": 34,
+          "AWAITING_VERIFICATION": 2,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 40
+        },
+        "specialTopicStatusCounts": {
+          "VERIFIED": 200,
+          "PARTIALLY_VERIFIED": 0,
+          "AWAITING_VERIFICATION": 0,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 20
+        },
+        "scopeDistribution": {
+          "GLOBAL": 442,
+          "NATIONALITY_GROUP": 353,
+          "NATIONALITY_SPECIFIC": 2,
+          "RESIDENCE_SPECIFIC": 94,
+          "CONSULAR_JURISDICTION_SPECIFIC": 9,
+          "UNKNOWN": 0
+        }
+      },
+      "GROUP_B_BATCH_16": {
+        "groupCode": "GROUP_B_BATCH_16",
+        "batchNumber": 16,
+        "pathwaysCount": 10,
+        "sectionsCount": 300,
+        "specialTopicsCount": 220,
+        "claimsAuditedCount": 900,
+        "claimsPublishedCount": 863,
+        "claimsQuarantinedCount": 37,
+        "verificationStatusCounts": {
+          "VERIFIED": 733,
+          "PARTIALLY_VERIFIED": 10,
+          "AWAITING_VERIFICATION": 37,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 120
+        },
+        "sectionStatusCounts": {
+          "VERIFIED": 221,
+          "PARTIALLY_VERIFIED": 37,
+          "AWAITING_VERIFICATION": 2,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 40
+        },
+        "specialTopicStatusCounts": {
+          "VERIFIED": 200,
+          "PARTIALLY_VERIFIED": 0,
+          "AWAITING_VERIFICATION": 0,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 20
+        },
+        "scopeDistribution": {
+          "GLOBAL": 622,
+          "NATIONALITY_GROUP": 88,
+          "NATIONALITY_SPECIFIC": 4,
+          "RESIDENCE_SPECIFIC": 181,
+          "CONSULAR_JURISDICTION_SPECIFIC": 5,
+          "UNKNOWN": 0
+        }
+      },
+      "GROUP_C_BATCH_17": {
+        "groupCode": "GROUP_C_BATCH_17",
+        "batchNumber": 17,
+        "pathwaysCount": 10,
+        "sectionsCount": 300,
+        "specialTopicsCount": 220,
+        "claimsAuditedCount": 900,
+        "claimsPublishedCount": 866,
+        "claimsQuarantinedCount": 34,
+        "verificationStatusCounts": {
+          "VERIFIED": 736,
+          "PARTIALLY_VERIFIED": 10,
+          "AWAITING_VERIFICATION": 34,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 120
+        },
+        "sectionStatusCounts": {
+          "VERIFIED": 234,
+          "PARTIALLY_VERIFIED": 18,
+          "AWAITING_VERIFICATION": 8,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 40
+        },
+        "specialTopicStatusCounts": {
+          "VERIFIED": 200,
+          "PARTIALLY_VERIFIED": 0,
+          "AWAITING_VERIFICATION": 0,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 20
+        },
+        "scopeDistribution": {
+          "GLOBAL": 612,
+          "NATIONALITY_GROUP": 0,
+          "NATIONALITY_SPECIFIC": 1,
+          "RESIDENCE_SPECIFIC": 279,
+          "CONSULAR_JURISDICTION_SPECIFIC": 8,
+          "UNKNOWN": 0
+        }
+      },
+      "GROUP_D_BATCH_18": {
+        "groupCode": "GROUP_D_BATCH_18",
+        "batchNumber": 18,
+        "pathwaysCount": 10,
+        "sectionsCount": 300,
+        "specialTopicsCount": 220,
+        "claimsAuditedCount": 900,
+        "claimsPublishedCount": 864,
+        "claimsQuarantinedCount": 36,
+        "verificationStatusCounts": {
+          "VERIFIED": 734,
+          "PARTIALLY_VERIFIED": 10,
+          "AWAITING_VERIFICATION": 36,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 120
+        },
+        "sectionStatusCounts": {
+          "VERIFIED": 234,
+          "PARTIALLY_VERIFIED": 17,
+          "AWAITING_VERIFICATION": 9,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 40
+        },
+        "specialTopicStatusCounts": {
+          "VERIFIED": 200,
+          "PARTIALLY_VERIFIED": 0,
+          "AWAITING_VERIFICATION": 0,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 20
+        },
+        "scopeDistribution": {
+          "GLOBAL": 619,
+          "NATIONALITY_GROUP": 1,
+          "NATIONALITY_SPECIFIC": 1,
+          "RESIDENCE_SPECIFIC": 273,
+          "CONSULAR_JURISDICTION_SPECIFIC": 6,
+          "UNKNOWN": 0
+        }
+      },
+      "GROUP_E_BATCH_19": {
+        "groupCode": "GROUP_E_BATCH_19",
+        "batchNumber": 19,
+        "pathwaysCount": 10,
+        "sectionsCount": 300,
+        "specialTopicsCount": 220,
+        "claimsAuditedCount": 900,
+        "claimsPublishedCount": 866,
+        "claimsQuarantinedCount": 34,
+        "verificationStatusCounts": {
+          "VERIFIED": 736,
+          "PARTIALLY_VERIFIED": 10,
+          "AWAITING_VERIFICATION": 34,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 120
+        },
+        "sectionStatusCounts": {
+          "VERIFIED": 231,
+          "PARTIALLY_VERIFIED": 24,
+          "AWAITING_VERIFICATION": 5,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 40
+        },
+        "specialTopicStatusCounts": {
+          "VERIFIED": 200,
+          "PARTIALLY_VERIFIED": 0,
+          "AWAITING_VERIFICATION": 0,
+          "CONFLICTING": 0,
+          "EXPIRED": 0,
+          "NOT_APPLICABLE": 20
+        },
+        "scopeDistribution": {
+          "GLOBAL": 442,
+          "NATIONALITY_GROUP": 0,
+          "NATIONALITY_SPECIFIC": 0,
+          "RESIDENCE_SPECIFIC": 454,
+          "CONSULAR_JURISDICTION_SPECIFIC": 4,
+          "UNKNOWN": 0
+        }
+      }
+    }
+  }
+}

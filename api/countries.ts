@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { applyRestrictedCorsHeaders } from '../src/utils/authSecurity';
 
 const COUNTRIES = [
   { code: "US", name: "United States", flag: "🇺🇸" },
@@ -90,7 +91,11 @@ const COUNTRIES = [
 ];
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  applyRestrictedCorsHeaders(req, res, 'GET, OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method && req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
   res.setHeader('Content-Type', 'application/json');
   return res.status(200).json(COUNTRIES);
 }

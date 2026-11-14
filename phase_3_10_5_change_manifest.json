@@ -1,0 +1,70 @@
+{
+  "phase": "3.10.5",
+  "title": "Priority 2 — Batch 14 Full Implementation (10 Pathways, Canonical Rows 151–160)",
+  "executedAtUtc": "2026-11-14T02:50:00Z",
+  "preImplementationBackup": {
+    "path": "/app/applet/backup_phase_3_10_5_batch14.tar.gz",
+    "sizeBytes": 89646,
+    "sha256": "744d9c5f4c6347b2cb9321094ba0844920cf4d8f56be25195014bdf2bc4a06bd",
+    "verifiedReadable": true
+  },
+  "modifiedSourceFiles": [
+    "src/data/priority2AuditData.ts",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx"
+  ],
+  "createdDeliverableFiles": [
+    "scripts/executePhase3105Batch14Audit.ts",
+    "phase_3_10_5_batch14_pathway_manifest.json",
+    "phase_3_10_5_batch14_source_registry.csv",
+    "phase_3_10_5_batch14_section_status.csv",
+    "phase_3_10_5_batch14_special_topics_status.csv",
+    "phase_3_10_5_batch14_claim_evidence_registry.csv",
+    "phase_3_10_5_batch14_quarantine_register.csv",
+    "phase_3_10_5_public_sanitization_test.json",
+    "phase_3_10_5_change_manifest.json"
+  ],
+  "summaryCounts": {
+    "priority1Completed": 142,
+    "priority2CompletedBeforeBatch14": 150,
+    "batch14Implemented": 10,
+    "priority2CompletedAfterBatch14": 160,
+    "priority2RemainingTarget": 50,
+    "sectionsEvaluated": 300,
+    "specialTopicsEvaluated": 220,
+    "claimsEvaluated": 900,
+    "publicEligibleClaims": 851,
+    "quarantinedClaims": 49,
+    "claimStatusCounts": {
+      "VERIFIED": 721,
+      "PARTIALLY_VERIFIED": 10,
+      "AWAITING_VERIFICATION": 48,
+      "CONFLICTING": 0,
+      "EXPIRED": 1,
+      "NOT_APPLICABLE": 120
+    },
+    "sectionStatusCounts": {
+      "VERIFIED": 222,
+      "PARTIALLY_VERIFIED": 32,
+      "AWAITING_VERIFICATION": 6,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 40
+    },
+    "specialTopicStatusCounts": {
+      "VERIFIED": 204,
+      "PARTIALLY_VERIFIED": 0,
+      "AWAITING_VERIFICATION": 0,
+      "CONFLICTING": 0,
+      "EXPIRED": 0,
+      "NOT_APPLICABLE": 16
+    },
+    "scopeCounts": {
+      "GLOBAL": 667,
+      "NATIONALITY_GROUP": 191,
+      "NATIONALITY_SPECIFIC": 9,
+      "RESIDENCE_SPECIFIC": 24,
+      "CONSULAR_JURISDICTION_SPECIFIC": 9,
+      "UNKNOWN": 0
+    }
+  }
+}

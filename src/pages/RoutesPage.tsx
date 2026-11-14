@@ -42,7 +42,7 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
       <div className="bg-gradient-to-r from-slate-900 via-[#0B3D91] to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 px-3.5 py-1.5 rounded-full text-xs font-extrabold text-emerald-300">
-            <span>🌍 249 × 248 = 61,752 LIVE ANY-TO-ANY BILATERAL VISA ROUTES • 11,563 OFFICIAL VISAS</span>
+            <span>🌍 249 × 248 = 61,752 ANY-TO-ANY BILATERAL VISA ROUTES • OFFICIAL PATHWAYS</span>
           </div>
           <div className="space-y-2">
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
@@ -55,18 +55,18 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
             </div>
           </div>
           <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto">
-            Explore all 11,563 official government visa subclasses across 249 countries — check bilateral visa counts, Visa-Free eligibility, local embassy locations, and flights from ANY passport/residence country to ANY destination worldwide.
+            Explore official government visa subclasses and verified immigration pathways across 249 countries and territories — check bilateral visa categories, Visa-Free eligibility, local embassy locations, and flights from ANY passport/residence country to ANY destination worldwide.
           </p>
 
           {/* Quick Popular Corridors */}
           <div className="flex flex-wrap justify-center gap-2 pt-2">
             {[
-              { from: 'ae', to: 'us', label: '🇦🇪 UAE → 🇺🇸 USA (45 Visas)' },
-              { from: 'us', to: 'in', label: '🇺🇸 USA → 🇮🇳 India (65 Visas)' },
-              { from: 'us', to: 'ae', label: '🇺🇸 USA → 🇦🇪 UAE (30 Visas)' },
-              { from: 'gb', to: 'au', label: '🇬🇧 UK → 🇦🇺 Australia (55 Visas)' },
+              { from: 'ae', to: 'us', label: '🇦🇪 UAE → 🇺🇸 USA (Curated Guide)' },
+              { from: 'us', to: 'in', label: '🇺🇸 USA → 🇮🇳 India (Curated Guide)' },
+              { from: 'us', to: 'ae', label: '🇺🇸 USA → 🇦🇪 UAE (Curated Guide)' },
+              { from: 'gb', to: 'au', label: '🇬🇧 UK → 🇦🇺 Australia (Verify Corridor)' },
               { from: 'in', to: 'us', label: '🇮🇳 India → 🇺🇸 USA (278 Visas)' },
-              { from: 'ae', to: 'gb', label: '🇦🇪 UAE → 🇬🇧 UK (38 Visas)' },
+              { from: 'ae', to: 'gb', label: '🇦🇪 UAE → 🇬🇧 UK (Verify Corridor)' },
             ].map((corridor) => (
               <a
                 key={`${corridor.from}-${corridor.to}`}
@@ -196,14 +196,18 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
                       </a>
                     </div>
                     <span className="bg-blue-50 text-[#0B3D91] text-xs font-black px-2.5 py-1 rounded-full shrink-0">
-                      {route.totalVisas} Visas
+                      {route.totalVisas > 0 ? `${route.totalVisas} Visas` : 'Pending Verification'}
                     </span>
                   </div>
 
                   <div className="flex flex-wrap gap-1.5 mb-3">
-                    {route.visaFree ? (
+                    {route.eligibilityStatus === 'AWAITING_VERIFICATION' || route.eligibilityStatus === 'UNKNOWN' ? (
+                      <span className="bg-slate-100 text-slate-700 text-[11px] font-bold px-2 py-0.5 rounded-md">
+                        ⏳ Bilateral Verification Pending
+                      </span>
+                    ) : route.visaFree ? (
                       <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2 py-0.5 rounded-md">
-                        ✅ Visa-Free / ETA
+                        ✅ Visa-Free / Treaty Scope
                       </span>
                     ) : route.eVisaEligible ? (
                       <span className="bg-blue-100 text-blue-800 text-[11px] font-bold px-2 py-0.5 rounded-md">
@@ -281,7 +285,7 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
                     }}
                     className="text-xs font-extrabold text-[#0B3D91] hover:underline"
                   >
-                    View {route.totalVisas} Visas →
+                    {route.totalVisas > 0 ? `View ${route.totalVisas} Visas →` : 'Check Guidance →'}
                   </a>
                 </div>
               </article>

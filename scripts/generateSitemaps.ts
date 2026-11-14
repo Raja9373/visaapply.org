@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { ALL_249_ISO_FORCED } from '../src/data/all249Countries';
 import { BASE_COUNTRY_VISAS, NAME_MAP_249, VisaItem } from '../src/data/fullVisaDatabase';
 import { BLOG_TEMPLATES } from '../src/data/blogGenerator';
+import { UNINHABITED_TERRITORY_CODES } from '../src/utils/ssrRouteRenderer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.resolve(__dirname, '../public');
@@ -12,10 +13,24 @@ const LASTMOD = '2026-11-14';
 
 const CATEGORIES = ['tourist', 'work', 'student', 'family', 'business', 'pr'] as const;
 
-// Ensure exact 249 unique country codes from NAME_MAP_249
-const CODES_249: string[] = Array.from(
-  new Set(Object.keys(NAME_MAP_249).map((c) => c.trim().toLowerCase()))
-).slice(0, 249);
+// Canonical 249 ISO 3166-1 alpha-2 registry, filtered to exclude uninhabited territories from public sitemaps
+const ALL_249_CODES: string[] = Array.from(
+  new Set(ALL_249_ISO_FORCED.map((c) => c.code.trim().toLowerCase()))
+);
+
+const INDEXABLE_COUNTRY_CODES: string[] = ALL_249_CODES.filter(
+  (code) => !UNINHABITED_TERRITORY_CODES.has(code)
+);
+
+function isPubliclyIndexableVisaItem(v: VisaItem | any): boolean {
+  if (!v || typeof v !== 'object') return false;
+  if (v.isQuarantined === true || v.quarantinedSynthetic === true || v.publicEligible === false) {
+    return false;
+  }
+  const idStr = String(v.id || '').trim().toLowerCase();
+  if (idStr.startsWith('p1-audit-')) return false;
+  return true;
+}
 
 function buildVisaDetailSlug(fromCode: string, toCode: string, cat: string, v: VisaItem, idx: number): string {
   const to = toCode.toLowerCase();
@@ -34,20 +49,20 @@ function buildVisaDetailSlug(fromCode: string, toCode: string, cat: string, v: V
 
 function generateCountriesSitemap(): { filename: string; count: number } {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-  for (const code of CODES_249) {
+  for (const code of INDEXABLE_COUNTRY_CODES) {
     const locUrl = code === 'in' ? `${BASE_URL}/immigration/in` : `${BASE_URL}/in-to-${code}`;
     xml += `  <url><loc>${locUrl}</loc><lastmod>${LASTMOD}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
   }
   xml += `</urlset>\n`;
   const filename = 'sitemap-countries.xml';
   fs.writeFileSync(path.join(PUBLIC_DIR, filename), xml, 'utf-8');
-  return { filename, count: CODES_249.length };
+  return { filename, count: INDEXABLE_COUNTRY_CODES.length };
 }
 
 function generateCategoriesSitemap(): { filename: string; count: number } {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   let count = 0;
-  for (const code of CODES_249) {
+  for (const code of INDEXABLE_COUNTRY_CODES) {
     const originPrefix = code === 'in' ? 'us' : 'in';
     for (const cat of CATEGORIES) {
       xml += `  <url><loc>${BASE_URL}/${originPrefix}-to-${code}-${cat}</loc><lastmod>${LASTMOD}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
@@ -61,61 +76,40 @@ function generateCategoriesSitemap(): { filename: string; count: number } {
 }
 
 function generateVisasSitemaps(): { filenames: string[]; count: number } {
-  const TARGET_VISA_COUNT = 14084;
   const urls: string[] = [];
   const seen = new Set<string>();
 
-  // 1. Collect all primary visa detail URLs across all 249 countries from BASE_COUNTRY_VISAS
-  const origins = ['in', 'us', 'gb', 'ca', 'au', 'ae', 'sg'];
-  for (const origin of origins) {
-    if (urls.length >= TARGET_VISA_COUNT) break;
-    for (const code of CODES_249) {
-      if (urls.length >= TARGET_VISA_COUNT) break;
-      const effectiveOrigin = origin === code ? (code === 'in' ? 'us' : 'in') : origin;
-      const cData: any = BASE_COUNTRY_VISAS[code] || BASE_COUNTRY_VISAS[code.toUpperCase()] || {};
-      for (const cat of CATEGORIES) {
-        const list: VisaItem[] = Array.isArray(cData[cat]) ? cData[cat] : [];
-        list.forEach((v, idx) => {
-          if (urls.length >= TARGET_VISA_COUNT) return;
-          const slug = buildVisaDetailSlug(effectiveOrigin, code, cat, v, idx);
-          const fullUrl = `${BASE_URL}/${slug}`;
-          if (!seen.has(fullUrl)) {
-            seen.add(fullUrl);
-            urls.push(fullUrl);
-          }
-        });
-      }
+  // Collect genuine, non-quarantined visa detail URLs directly from BASE_COUNTRY_VISAS (no synthetic URL padding)
+  const origin = 'in';
+  for (const code of INDEXABLE_COUNTRY_CODES) {
+    const effectiveOrigin = origin === code ? 'us' : origin;
+    const cData: any = BASE_COUNTRY_VISAS[code] || BASE_COUNTRY_VISAS[code.toUpperCase()] || {};
+    for (const cat of CATEGORIES) {
+      const list: VisaItem[] = Array.isArray(cData[cat]) ? cData[cat] : [];
+      list.forEach((v, idx) => {
+        if (!isPubliclyIndexableVisaItem(v)) return;
+        const slug = buildVisaDetailSlug(effectiveOrigin, code, cat, v, idx);
+        const fullUrl = `${BASE_URL}/${slug}`;
+        if (!seen.has(fullUrl)) {
+          seen.add(fullUrl);
+          urls.push(fullUrl);
+        }
+      });
     }
   }
 
-  // 2. If needed to reach exact 14,084 visa detail pages, trim or pad deterministically without self-routes
-  if (urls.length > TARGET_VISA_COUNT) {
-    urls.length = TARGET_VISA_COUNT;
-  } else {
-    let extraIdx = 1;
-    while (urls.length < TARGET_VISA_COUNT) {
-      const code = CODES_249[extraIdx % CODES_249.length];
-      const origin = code === 'in' ? 'us' : 'in';
-      const cat = CATEGORIES[extraIdx % CATEGORIES.length];
-      const fullUrl = `${BASE_URL}/${origin}-to-${code}-${cat}-pathway-${extraIdx}`;
-      if (!seen.has(fullUrl)) {
-        seen.add(fullUrl);
-        urls.push(fullUrl);
-      }
-      extraIdx++;
+  // Clean up any stale prior sitemap-visas-*.xml files before writing accurate chunks
+  for (const file of fs.readdirSync(PUBLIC_DIR)) {
+    if (/^sitemap-visas(?:-\d+)?\.xml$/i.test(file)) {
+      fs.unlinkSync(path.join(PUBLIC_DIR, file));
     }
-  }
-
-  const legacyPath = path.join(PUBLIC_DIR, 'sitemap-visas.xml');
-  if (fs.existsSync(legacyPath)) {
-    fs.unlinkSync(legacyPath);
   }
 
   const CHUNK_SIZE = 1000;
-  const TOTAL_VISA_FILES = 15;
+  const totalFiles = Math.max(1, Math.ceil(urls.length / CHUNK_SIZE));
   const filenames: string[] = [];
 
-  for (let i = 1; i <= TOTAL_VISA_FILES; i++) {
+  for (let i = 1; i <= totalFiles; i++) {
     const startIdx = (i - 1) * CHUNK_SIZE;
     const slice = urls.slice(startIdx, startIdx + CHUNK_SIZE);
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
@@ -133,17 +127,17 @@ function generateVisasSitemaps(): { filenames: string[]; count: number } {
 
 function generateRoutesSitemaps(): { filenames: string[]; totalRoutes: number } {
   const allRoutes: string[] = [];
-  for (const fromCode of CODES_249) {
-    for (const toCode of CODES_249) {
+  for (const fromCode of INDEXABLE_COUNTRY_CODES) {
+    for (const toCode of INDEXABLE_COUNTRY_CODES) {
       if (fromCode === toCode) continue;
       allRoutes.push(`${BASE_URL}/${fromCode}-to-${toCode}`);
     }
   }
 
   const TOTAL_FILES = 70;
-  const totalRoutes = allRoutes.length; // 249 * 248 = 61,752
-  const baseChunkSize = Math.floor(totalRoutes / TOTAL_FILES); // 882
-  const remainder = totalRoutes % TOTAL_FILES; // 12
+  const totalRoutes = allRoutes.length;
+  const baseChunkSize = Math.floor(totalRoutes / TOTAL_FILES);
+  const remainder = totalRoutes % TOTAL_FILES;
 
   const filenames: string[] = [];
   let offset = 0;
@@ -164,7 +158,6 @@ function generateRoutesSitemaps(): { filenames: string[]; totalRoutes: number } 
     filenames.push(fname);
   }
 
-  // Also create sitemap-routes.xml index referencing the 70 route sitemap files
   let routesIndexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   for (const fname of filenames) {
     routesIndexXml += `  <sitemap>\n    <loc>${BASE_URL}/${fname}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n  </sitemap>\n`;
@@ -181,7 +174,9 @@ function generateBlogsSitemap(): { filename: string; count: number } {
     `${BASE_URL}/blogs`,
     `${BASE_URL}/routes`,
     `${BASE_URL}/flights`,
+    `${BASE_URL}/immigration`,
     `${BASE_URL}/sitemap`,
+    `${BASE_URL}/verification`,
     `${BASE_URL}/about`,
     `${BASE_URL}/contact`,
     `${BASE_URL}/privacy`,
@@ -189,8 +184,7 @@ function generateBlogsSitemap(): { filename: string; count: number } {
   ];
   const seen = new Set<string>(blogUrls);
 
-  // All 249 countries x 10 SEO Blog Templates = 2,490 blog URLs + 249 interview prep URLs
-  for (const code of CODES_249) {
+  for (const code of INDEXABLE_COUNTRY_CODES) {
     const countryName = NAME_MAP_249[code] || code.toUpperCase();
     const countrySlug = countryName
       .toLowerCase()
@@ -244,7 +238,6 @@ function buildMasterSitemapIndex(
   }
   xml += `</sitemapindex>\n`;
 
-  // Write to sitemap-index.xml, sitemap_index.xml, and sitemap.xml so any entry point works seamlessly
   fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap-index.xml'), xml, 'utf-8');
   fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap_index.xml'), xml, 'utf-8');
   fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), xml, 'utf-8');
@@ -271,10 +264,11 @@ function main() {
 
   const grandTotal = cRes.count + catRes.count + vRes.count + rRes.totalRoutes + bRes.count;
   console.log('====================================================');
-  console.log('✅ SITEMAP REBUILD COMPLETE (NO GSC API)');
+  console.log('✅ CLEAN SITEMAP REBUILD COMPLETE (NO SYNTHETIC PADDING)');
+  console.log(`- Indexable countries (excluding uninhabited territories): ${INDEXABLE_COUNTRY_CODES.length}`);
   console.log(`- ${cRes.filename}: ${cRes.count} URLs`);
   console.log(`- ${catRes.filename}: ${catRes.count} URLs`);
-  console.log(`- sitemap-visas-1..15.xml (15 files): ${vRes.count} URLs`);
+  console.log(`- ${vRes.filenames.length} visa sitemap file(s): ${vRes.count} genuine URLs`);
   console.log(`- sitemap-routes-1..70.xml (70 files): ${rRes.totalRoutes} URLs`);
   console.log(`- ${bRes.filename}: ${bRes.count} URLs`);
   console.log(`- Total Indexed Pages in sitemap-index.xml: ${grandTotal.toLocaleString()} URLs`);

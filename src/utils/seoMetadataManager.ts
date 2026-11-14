@@ -1,3 +1,4 @@
+import { CANONICAL_15_LANG_CODES } from '../i18n/config';
 import { getCanonicalBaseOrigin, getLangFromUrlPath } from './autoLanguage';
 
 export interface SeoMetadataPayload {
@@ -246,12 +247,40 @@ export interface SeoValidationReport {
   checkedAt: string;
 }
 
+export const VALID_OG_ASSET_PATHS: ReadonlySet<string> = new Set([
+  '/og-image.jpg',
+  '/og/us.jpg',
+  '/og/flights.jpg',
+]);
+
+export function resolveValidOgImageUrl(keyOrUrl?: string): string {
+  const base = 'https://www.visaapply.org';
+  if (!keyOrUrl || typeof keyOrUrl !== 'string') {
+    return `${base}/og-image.jpg`;
+  }
+  const trimmed = keyOrUrl.trim();
+  const normalizedKey = trimmed
+    .replace(/^https?:\/\/(?:www\.)?visaapply\.org/i, '')
+    .toLowerCase();
+
+  if (VALID_OG_ASSET_PATHS.has(normalizedKey)) {
+    return `${base}${normalizedKey}`;
+  }
+  if (normalizedKey === 'us' || normalizedKey === 'usa' || normalizedKey.includes('/og/us.jpg')) {
+    return `${base}/og/us.jpg`;
+  }
+  if (normalizedKey === 'flights' || normalizedKey.includes('/og/flights.jpg')) {
+    return `${base}/og/flights.jpg`;
+  }
+  return `${base}/og-image.jpg`;
+}
+
 const DEFAULT_TITLE =
-  "VisaApply.org - World's Largest Visa Portal - 249 Countries, 61,752 Routes, 10 Languages";
+  'VisaApply.org – Global Visa Guides, Immigration Pathways & Official Links (249 Countries)';
 const DEFAULT_DESCRIPTION =
-  '249 countries, 11,563+ live visas, 61,752 ANY-TO-ANY routes, 10 languages auto, daily 3AM auto-sync from 249 gov sites, live time/weather/currency, Booking.com + Travelpayouts flights';
+  'Independent global visa and immigration guide across 249 ISO countries & territories, 61,752 bilateral routes, and 15 interface languages with official government links.';
 const DEFAULT_OG_IMAGE = 'https://www.visaapply.org/og-image.jpg';
-const DEFAULT_OG_IMAGE_ALT = 'VisaApply.org - 249 Countries, 61,752 Routes';
+const DEFAULT_OG_IMAGE_ALT = 'VisaApply.org - 249 Countries, 61,752 Bilateral Routes';
 
 export interface StaticRouteSeoEntry {
   title: string;
@@ -277,7 +306,7 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
   '/routes': {
     title: '61,752 Global Visa Routes (249 × 248 Any-to-Any Country Matrix) – VisaApply.org',
     description:
-      'Search all 61,752 bilateral visa routes between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.',
+      'Search all 61,752 bilateral visa corridors between 249 countries and territories. Check Visa-Free, e-Visa, Visa on Arrival (VOA), and Embassy Visa requirements for any passport.',
     breadcrumbName: '61,752 Visa Routes',
   },
   '/flights': {
@@ -289,23 +318,23 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
     breadcrumbName: 'Cheap Flights (249 Countries)',
   },
   '/blogs': {
-    title: '2026 Global Visa Blogs & Travel Guides (2,490+ Official Articles) – VisaApply.org',
+    title: '2026 Global Visa Blogs & Travel Guides (249 Countries) – VisaApply.org',
     description:
-      'Explore 2,490+ SEO visa blogs across 249 countries: fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.',
+      'Explore visa guides across 249 countries: official fees, e-Visa vs VOA comparisons, work permits, student scholarships, and consular interview guides.',
     breadcrumbName: 'Visa Blogs',
   },
   '/golden-visa': {
     title: 'Golden Visa & Residency by Investment (2026 Sovereign Directory) – VisaApply.org',
     description:
-      'Official 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.',
-    ogImage: 'https://www.visaapply.org/og/golden-visa.jpg',
+      'Independent 2026 guide to sovereign Golden Visas & Residency by Investment: UAE, Portugal, Greece, Italy, Malta, Cyprus, US EB-5, Caribbean CBI. Requirements, minimum capital, and statutory rules.',
+    ogImage: 'https://www.visaapply.org/og-image.jpg',
     ogImageAlt: 'Golden Visa & Residency by Investment 2026 - VisaApply.org',
     breadcrumbName: 'Golden Visa',
   },
   '/atlys-vs-visaapply': {
     title: 'Atlys vs VisaApply.org (2026 Breakdown) – Free Official Guides vs Agency Markup',
     description:
-      'Independent comparison between Atlys and VisaApply.org. Compare 249 countries vs ~80, $0 service fees vs agency markup, zero-document storage privacy, and 11,563+ official visa types.',
+      'Independent comparison between Atlys and VisaApply.org. Compare 249 countries coverage, $0 service fees vs agency markup, zero-document storage privacy, and official government links.',
     breadcrumbName: 'Atlys vs VisaApply',
   },
   '/dummy-ticket': {
@@ -459,15 +488,15 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
     breadcrumbName: 'Terms of Service',
   },
   '/sitemap': {
-    title: 'All 11,563+ Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org',
+    title: 'Global Visa Guides & 61,752 Routes Directory [2026] | VisaApply.org',
     description:
       'Explore complete visa requirements, official fees, and document checklists across all 249 global destination countries, 61,752 bilateral routes, and 6 visa categories.',
-    breadcrumbName: 'All 11,563+ Visa Guides Directory',
+    breadcrumbName: 'Visa Guides & Routes Directory',
   },
   '/audit': {
     title: 'Live Database Audit & 249-Country Verification Report – VisaApply.org',
     description:
-      'Real-time database integrity audit verifying all 249 ISO countries, 11,563+ official visa subclasses, and 61,752 bilateral routes on VisaApply.org.',
+      'Internal database integrity audit verifying 249 ISO countries, verified statutory visa subclasses, and 61,752 bilateral routes on VisaApply.org.',
     noindex: true,
     breadcrumbName: 'Live Database Audit',
   },
@@ -485,7 +514,7 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
   },
   '/admin/login': {
     title: 'Admin Login – VisaApply.org',
-    description: 'Restricted administrator login for VisaApply.org.',
+    description: 'Restricted administrator authentication portal for VisaApply.org editors.',
     noindex: true,
     breadcrumbName: 'Admin Login',
   },
@@ -532,6 +561,66 @@ const KNOWN_DYNAMIC_ROUTE_PATTERNS: ReadonlyArray<{ name: string; regex: RegExp 
 ];
 
 /**
+ * Routes whose interface & structured labels actually translate across all 15 supported UI languages.
+ * English-only routes (tools, blogs, legal notices, immigration detail records) do not emit fake 15-language alternates.
+ */
+export function isMultiLanguageLocalizedRoute(rawPath: string): boolean {
+  const { strippedPath } = getLangFromUrlPath(rawPath || '/');
+  const clean = (strippedPath.split('?')[0].split('#')[0].replace(/\/+$/, '').toLowerCase()) || '/';
+  if (clean === '/' || clean === '/routes') return true;
+  if (/^\/([a-z]{2})-to-([a-z]{2})$/.test(clean) && !/^\/([a-z]{2})-to-\1$/.test(clean)) return true;
+  if (/^\/([a-z]{2})-visa$/.test(clean)) return true;
+  if (/^\/([a-z]{2})-to-([a-z]{2})-(tourist|work|student|family|business|pr)$/.test(clean) && !/^\/([a-z]{2})-to-\1-/.test(clean)) {
+    return true;
+  }
+  return false;
+}
+
+export interface HreflangAlternate {
+  hreflang: string;
+  href: string;
+}
+
+/**
+ * Generates accurate <link rel="alternate" hreflang="..."> targets:
+ * - Empty array for noindex routes (/admin*, /audit, self-routes).
+ * - Only real translated alternates for 15-language UI routes.
+ * - Strictly `en` + `x-default` for English-only pages (tools, articles, legal, immigration records).
+ */
+export function getHreflangAlternatesForRoute(rawPath: string, baseOrigin?: string): HreflangAlternate[] {
+  const base = (baseOrigin || 'https://www.visaapply.org').replace(/\/+$/, '');
+  const directive = inspectRouteIndexingDirective(rawPath || '/');
+  const cleanStripped = directive.normalizedLowerPath || '/';
+
+  if (
+    directive.isSelfRoute ||
+    cleanStripped === '/admin' ||
+    cleanStripped.startsWith('/admin/') ||
+    cleanStripped === '/audit'
+  ) {
+    return [];
+  }
+
+  const englishPath = cleanStripped === '/' ? '/' : cleanStripped;
+  const englishHref = `${base}${englishPath}`;
+
+  if (!isMultiLanguageLocalizedRoute(cleanStripped)) {
+    return [
+      { hreflang: 'en', href: englishHref },
+      { hreflang: 'x-default', href: englishHref },
+    ];
+  }
+
+  const suffix = englishPath === '/' ? '' : englishPath;
+  const list: HreflangAlternate[] = CANONICAL_15_LANG_CODES.map((code) => ({
+    hreflang: code,
+    href: code === 'en' ? `${base}${englishPath}` : `${base}/${code}${suffix}`,
+  }));
+  list.push({ hreflang: 'x-default', href: englishHref });
+  return list;
+}
+
+/**
  * Normalizes any pathname into a clean canonical URL on https://www.visaapply.org
  */
 export function normalizeCanonicalUrl(rawPath: string, baseOrigin?: string): string {
@@ -555,9 +644,14 @@ export function normalizeCanonicalUrl(rawPath: string, baseOrigin?: string): str
     cleanedPath = '/';
   } else if (cleanedPath.startsWith('/en/')) {
     cleanedPath = cleanedPath.replace(/^\/en\//, '/');
+  } else {
+    const langInfo = getLangFromUrlPath(cleanedPath);
+    if (langInfo.lang && !isMultiLanguageLocalizedRoute(langInfo.strippedPath)) {
+      cleanedPath = langInfo.strippedPath || '/';
+    }
   }
 
-  // Self-origin to same-destination routes (e.g., /in-to-in, /in-to-in-student, /in-to-in-business-in-bus-009)
+  // Self-origin to same-destination routes (e.g., /in-to-in, /in-to-in-student)
   // are invalid bilateral travel corridors and canonicalize to the country's official immigration hub.
   const selfRouteMatch = cleanedPath.match(/^\/([a-z]{2})-to-\1(?:-|$)/);
   if (selfRouteMatch) {
@@ -821,10 +915,10 @@ export function validateAndSanitizeSeoMetadata(
     fixedFields.push('description:min_length');
   }
 
-  let ogImage = sanitizeMetaText(partial.ogImage, DEFAULT_OG_IMAGE);
-  if (!/^https?:\/\//i.test(ogImage)) {
-    ogImage = `https://www.visaapply.org${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
-    fixedFields.push('ogImage:absolute_url');
+  const rawOgImage = sanitizeMetaText(partial.ogImage, DEFAULT_OG_IMAGE);
+  const ogImage = resolveValidOgImageUrl(rawOgImage);
+  if (ogImage !== rawOgImage) {
+    fixedFields.push('ogImage:valid_disk_asset');
   }
 
   const ogImageAlt = sanitizeMetaText(partial.ogImageAlt, title || DEFAULT_OG_IMAGE_ALT);

@@ -1,0 +1,1058 @@
+# VISAAPPLY.ORG — PHASE 4.1
+# GLOBAL PLATFORM FINAL CERTIFICATION & PRODUCTION READINESS AUDIT
+
+## MASTER AUDIT — COMPLETE PLATFORM
+
+### ROLE
+
+Act as an independent global immigration platform auditor, senior software architect, immigration legal-data verification specialist, cybersecurity auditor, SEO engineer, performance engineer, accessibility reviewer, and production-readiness assessor.
+
+Your mission is to conduct a comprehensive, evidence-based final audit of VisaApply.org.
+
+The objective is to determine whether the entire platform is genuinely complete, technically reliable, legally responsible, secure, search-engine ready, and safe for production deployment.
+
+This is an audit and certification phase, NOT an implementation or deployment phase.
+
+Do not assume that previous AI Studio reports are correct. Inspect the actual code, canonical datasets, schemas, test results, generated public output, configuration, and available evidence.
+
+Do not manufacture successful audit results.
+
+---
+
+# 1. CURRENT PROJECT BASELINE
+
+Use the actual project files and reconcile these reported figures.
+
+### Immigration pathway coverage
+
+- Priority 1: 142 / 142
+- Priority 2: 210 / 210
+- Total reported pathways: 352
+- Priority 2 final expansion: 50 / 50 new pathways
+- Priority 2 remaining target slots: 0
+
+### Priority 2 structural coverage
+
+- Profile sections: 1,500 / 1,500
+- Special topics: 1,100 / 1,100
+- Claims created and audited: 4,500 / 4,500
+- Public-eligible claims: 4,319
+- Quarantined claims: 181
+- Pointer overlaps: 0
+
+### Global platform scope
+
+- Countries: 249
+- Any-to-any visa routes: 61,752
+- Supported languages: 15
+- Official immigration and consular authorities: approximately 195, subject to actual registry verification
+
+### Existing architecture
+
+Reported stack:
+
+- React 19
+- Vite
+- TypeScript
+- Tailwind CSS v4
+- Existing canonical country and immigration datasets
+- Existing route matrix
+- Existing evidence registry
+- Existing public sanitization architecture
+- Existing automatic update and verification pipeline
+
+### Reported technical results
+
+- Public sanitization: PASS
+- Historical regression: PASS
+- TypeScript build: PASS
+- Test suite: PASS
+- Backups verified: PASS
+- Production database: UNCHANGED
+- Cron: UNCHANGED
+- Deployment: NOT TRIGGERED
+- Additional cost: ₹0
+
+Treat every value as a claim to be verified against actual project artifacts.
+
+---
+
+# 2. AUDIT EXECUTION RULES
+
+Follow these rules throughout the audit:
+
+1. Inspect actual source files and generated outputs.
+2. Reuse previous verified audit reports where appropriate.
+3. Do not repeat unnecessary historical research.
+4. Do not change source code or datasets.
+5. Do not rewrite existing records.
+6. Do not create new pathways.
+7. Do not generate placeholder data.
+8. Do not weaken legal verification requirements.
+9. Do not modify production infrastructure.
+10. Do not trigger deployment.
+11. Do not spend money.
+12. Clearly distinguish verified results from unverified claims.
+
+Use focused inspections and existing automated tests.
+
+Avoid repetitive full-project scans that waste AI Studio quota.
+
+If a specific audit cannot be performed because a source, credential, runtime, or external service is unavailable, mark it NOT_VERIFIED and explain why.
+
+Do not claim an external website, cron job, database, or live deployment was tested unless it was actually tested.
+
+---
+
+# 3. PRIORITY 1 AND PRIORITY 2 FINAL REGISTRY CERTIFICATION
+
+Independently inspect the canonical immigration registries.
+
+Verify:
+
+- Priority 1 contains exactly 142 genuine records.
+- Priority 2 contains exactly 210 genuine records.
+- No duplicate pathway IDs.
+- No semantic duplicate pathways.
+- No duplicate legal programs under different names.
+- No invalid country or jurisdiction associations.
+- No missing canonical IDs.
+- No overwritten historical records.
+- No broken references.
+- No synthetic placeholders.
+- No misleading expired programs presented as active.
+
+Verify all completed Priority 2 execution groups and preserve historical audit records.
+
+### Required reconciliation
+
+Produce:
+
+- Total Priority 1 pathways.
+- Total Priority 2 pathways.
+- Total combined pathways.
+- Number of unique canonical IDs.
+- Number of exact duplicates.
+- Number of semantic duplicates.
+- Number of invalid records.
+- Number of expired pathways.
+- Number of records awaiting evidence.
+- Number of records with disclosed gaps.
+
+Do not treat 352 records as 352 legally verified pathways unless evidence supports that conclusion.
+
+---
+
+# 4. IMMIGRATION LEGAL AND EVIDENCE QUALITY AUDIT
+
+This is one of the most important parts of the project.
+
+Inspect the existing evidence registries and public claims.
+
+### Verify evidence quality
+
+For sampled and high-risk records, inspect:
+
+- Official government source.
+- Source URL.
+- Source title.
+- Relevant legal provision.
+- Supporting excerpt.
+- Publication or update date.
+- Date last checked.
+- Jurisdiction.
+- Nationality applicability.
+- Residence applicability.
+- Consular applicability.
+- Current program status.
+- Evidence limitations.
+
+Where existing tools and source access permit, verify official source availability.
+
+An HTTP 200 response is not proof that a legal statement is correct.
+
+### Legal classification checks
+
+Look for:
+
+- Temporary residence incorrectly described as permanent residence.
+- Permanent residence incorrectly described as citizenship.
+- Work authorization confused with residence authorization.
+- Nationality-specific rules incorrectly described as global.
+- Residence-specific rules incorrectly generalized.
+- Consular jurisdiction restrictions omitted.
+- Expired programs shown as active.
+- Incorrect family-member rights.
+- Incorrect renewal conditions.
+- Incorrect financial thresholds.
+- Unsupported processing times.
+- Unsupported fees.
+- Missing statutory exceptions.
+- Conflicting official government sources.
+
+### Evidence status taxonomy
+
+Preserve the existing taxonomy:
+
+- VERIFIED
+- PARTIALLY_VERIFIED
+- AWAITING_VERIFICATION
+- CONFLICTING
+- EXPIRED
+- NOT_APPLICABLE
+
+### Applicability scope taxonomy
+
+Preserve:
+
+- GLOBAL
+- NATIONALITY_SPECIFIC
+- NATIONALITY_GROUP
+- RESIDENCE_SPECIFIC
+- CONSULAR_JURISDICTION_SPECIFIC
+- UNKNOWN
+
+Do not change a status during this audit.
+
+Create a remediation register for questionable records.
+
+---
+
+# 5. ALL 4,500 PRIORITY 2 CLAIMS — FINAL RECONCILIATION
+
+Inspect the actual claim registry.
+
+Verify the reported total of 4,500 claims.
+
+Reconcile the exact status counts:
+
+- VERIFIED
+- PARTIALLY_VERIFIED
+- AWAITING_VERIFICATION
+- CONFLICTING
+- EXPIRED
+- NOT_APPLICABLE
+
+Verify that the total equals exactly 4,500.
+
+Inspect:
+
+- Claim IDs.
+- Pathway associations.
+- Evidence IDs.
+- Source references.
+- Status values.
+- Applicability scope.
+- Duplicate detection.
+- Missing references.
+- Unsupported claims.
+- Pointer overlaps.
+
+Reported pointer overlaps: 0.
+
+Independently confirm this result using the actual canonical records.
+
+### Public eligibility reconciliation
+
+Reported:
+
+- Public-eligible: 4,319
+- Quarantined: 181
+
+Verify both totals.
+
+Do not assume every VERIFIED claim is automatically public-safe without checking the existing disclosure and sanitization rules.
+
+---
+
+# 6. PUBLIC CONTENT SANITIZATION AND LEAK TEST
+
+Inspect the actual public rendering and sanitization pipeline.
+
+Test public output for:
+
+- Country pages.
+- Immigration hub pages.
+- Pathway detail pages.
+- Search results.
+- Related pathways.
+- Profile summaries.
+- SEO metadata.
+- Structured data.
+- Internal navigation.
+- Public notices.
+- Language-specific content.
+
+Verify:
+
+- VERIFIED claims are displayed only when supported.
+- PARTIALLY_VERIFIED claims follow disclosure rules.
+- AWAITING_VERIFICATION claims remain quarantined.
+- CONFLICTING claims remain quarantined.
+- EXPIRED claims are not presented as currently available.
+- Internal reviewer notes never appear publicly.
+- Internal evidence metadata does not leak.
+- Private audit information is excluded.
+- Unsupported claim text does not appear in fallback fields.
+- Quarantined text does not leak through summaries or search indexes.
+
+Inspect actual generated public output, not only helper functions.
+
+Report exact examples of any leakage.
+
+Do not modify sanitization functions.
+
+---
+
+# 7. GLOBAL COUNTRY COVERAGE — 249 COUNTRIES
+
+Inspect the canonical country registry.
+
+Verify:
+
+- Exactly 249 intended country records.
+- ISO country-code correctness.
+- Unique country identifiers.
+- No missing country names.
+- No accidental duplicate countries.
+- Correct country-to-region association.
+- Correct route references.
+- Correct country landing-page references.
+- Correct immigration hub associations.
+- Language and localization behavior.
+- No broken country pages.
+
+Check whether every country has the required Immigration Hub landing page.
+
+Inspect the six mandatory immigration modules:
+
+1. Permanent Residence
+2. Citizenship and Naturalization
+3. Work Immigration
+4. Family Immigration
+5. Business and Investor Immigration
+6. Digital Nomad and Retirement Residency
+
+Important:
+
+Do not interpret 249 × 6 coverage slots as 1,494 verified programs.
+
+Distinguish:
+
+- Verified programs
+- Partially verified programs
+- Awaiting verification
+- Not applicable
+- Expired programs
+- Missing modules
+
+An honest "not verified" or "not applicable" status is preferable to fabricated immigration information.
+
+Produce a country-level coverage summary.
+
+---
+
+# 8. ANY-TO-ANY VISA ROUTE MATRIX — 61,752 ROUTES
+
+Inspect the route-generation logic and canonical route data.
+
+Reported target:
+
+61,752 any-to-any routes.
+
+Verify:
+
+- Actual route count.
+- Unique origin and destination combinations.
+- No origin equals destination unless explicitly supported.
+- No duplicate route IDs.
+- Correct origin country.
+- Correct destination country.
+- Correct country-code mapping.
+- Correct route generation.
+- No missing combinations within the intended scope.
+- No accidental extra combinations.
+- No broken route-to-country references.
+- No route displaying unsupported visa eligibility claims.
+
+Test representative routes across:
+
+- Major destination countries.
+- Major origin countries.
+- Different regions.
+- Different nationalities.
+- Different residence situations.
+- Multiple language settings.
+
+Inspect edge cases involving territories, special administrative regions, and jurisdictions where ISO coverage and immigration authority do not align simply.
+
+Do not assume all 61,752 routes contain independently verified visa rules.
+
+Clearly distinguish route existence from verified visa eligibility.
+
+---
+
+# 9. FIFTEEN-LANGUAGE LOCALIZATION AUDIT
+
+Verify the actual supported language configuration.
+
+Reported language codes:
+
+- en
+- hi
+- de
+- es
+- pl
+- fr
+- ar
+- ru
+- zh
+- ja
+- pt
+- it
+- nl
+- tr
+- ko
+
+Verify:
+
+- All 15 language codes are configured.
+- Language switching works.
+- Correct locale selection.
+- No broken language routes.
+- No missing translation keys.
+- No accidental English fallback presented as completed translation.
+- No corrupted Unicode.
+- Correct RTL layout for Arabic.
+- Correct date, number, and currency formatting.
+- SEO hreflang configuration.
+- Canonical URL behavior.
+- Language-specific metadata.
+- No duplicated or contradictory legal content across languages.
+
+### Critical legal translation rule
+
+Immigration law must not be altered by translation.
+
+Check whether legal terms, eligibility conditions, exceptions, and disclaimers preserve their original meaning.
+
+Where a translation has not been verified, disclose that limitation.
+
+Produce a language coverage report.
+
+---
+
+# 10. SEO AND SEARCH ENGINE READINESS
+
+Conduct a complete technical SEO audit.
+
+Inspect:
+
+### Technical SEO
+
+- robots.txt
+- XML sitemap
+- Sitemap index
+- Canonical tags
+- Meta titles
+- Meta descriptions
+- Hreflang
+- Index/noindex rules
+- HTTP status handling
+- Redirects
+- Broken links
+- Duplicate URLs
+- Trailing slash consistency
+- Pagination
+- Crawlability
+- Internal links
+
+### Structured data
+
+Inspect actual JSON-LD and schema markup.
+
+Check appropriate use of:
+
+- Organization
+- WebSite
+- WebPage
+- BreadcrumbList
+- Article, where genuinely applicable
+- FAQPage, only where actual qualifying FAQ content exists
+- Other relevant supported schemas
+
+Do not insert misleading ratings, fake reviews, invented authors, or false government affiliations.
+
+### SEO content quality
+
+Check:
+
+- Thin pages.
+- Duplicate content.
+- Program descriptions copied without source attribution.
+- Empty country pages.
+- Misleading titles.
+- Keyword stuffing.
+- Unsupported eligibility statements.
+- Expired pathway pages.
+- Inaccurate language-specific metadata.
+
+### Important branding and trust requirement
+
+VisaApply.org is an independent immigration information platform.
+
+It must not imply that it is:
+
+- A government department.
+- An embassy.
+- A consulate.
+- An official visa-issuing authority.
+
+Verify appropriate public disclaimers and source attribution.
+
+Do not claim Google indexing or ranking success unless verified using an actual available source.
+
+---
+
+# 11. AUTOMATIC UPDATE AND VERIFICATION PIPELINE
+
+Inspect the existing automated update architecture.
+
+Reported daily schedule:
+
+- 03:00 AM Asia/Kolkata
+- Cron expression: `30 21 * * *` UTC
+
+Verify configuration and code without changing anything.
+
+Inspect:
+
+- Scheduler configuration.
+- Cron expression.
+- Timezone conversion.
+- Source registry.
+- Official-source update detection.
+- Evidence freshness tracking.
+- Verification status transitions.
+- Retry logic.
+- Error handling.
+- Logging.
+- Failure recovery.
+- Idempotency.
+- Duplicate prevention.
+- Partial execution handling.
+- Resumable batch behavior.
+- Alerting or failure reporting, if implemented.
+- Protection against accidental publication of unverified changes.
+
+### Critical safety checks
+
+The pipeline must not:
+
+- Automatically mark claims VERIFIED without adequate evidence.
+- Publish conflicting claims.
+- Publish expired pathways as active.
+- Overwrite human-reviewed legal classifications without review.
+- Delete historical evidence.
+- Introduce synthetic updates.
+- Publish unsupported AI-generated legal content.
+
+Determine whether the pipeline is actually executable or merely configured in source code.
+
+Do not trigger a production run or change the schedule.
+
+---
+
+# 12. DATABASE AND STORAGE ARCHITECTURE AUDIT
+
+Inspect the existing storage architecture.
+
+Reported production SQLite location:
+
+`/data_db/immigration_hub.db`
+
+Reported Neon database is for testing.
+
+Verify:
+
+- Database configuration.
+- Read/write boundaries.
+- Production versus test separation.
+- Schema consistency.
+- Migration history.
+- Backup and restore process.
+- Data integrity.
+- Connection handling.
+- Error handling.
+- Persistence behavior.
+- Sensitive information exposure.
+- Database access control.
+
+Do not connect to or write to production merely to prove it exists.
+
+Do not perform migrations.
+
+Do not modify the Neon database.
+
+Do not alter any database file.
+
+Clearly report what could and could not be verified.
+
+---
+
+# 13. SECURITY AUDIT
+
+Perform a read-only security review of the application.
+
+Inspect:
+
+### Application security
+
+- Authentication and authorization, where implemented.
+- Admin-only functions.
+- Public versus private endpoints.
+- Input validation.
+- Output encoding.
+- XSS risks.
+- CSRF protections, where relevant.
+- SQL injection risks.
+- Path traversal.
+- Open redirects.
+- Unsafe URL handling.
+- File upload restrictions, if applicable.
+- Error message leakage.
+- Debug endpoints.
+- Exposed internal metadata.
+
+### Configuration security
+
+- Environment variable handling.
+- Secrets accidentally committed.
+- API keys in frontend bundles.
+- Database credentials.
+- Third-party service configuration.
+- CORS policy.
+- Security headers.
+- Dependency vulnerabilities using existing available tools.
+
+Never print actual secret values in the audit report.
+
+If a secret is found, report its file and variable name in a redacted way.
+
+Do not run destructive security tests or exploit production systems.
+
+Do not expose credentials.
+
+---
+
+# 14. PERFORMANCE AND SCALABILITY AUDIT
+
+Inspect:
+
+- Initial bundle size.
+- Lazy loading.
+- Route-based code splitting.
+- Image optimization.
+- Static asset handling.
+- Caching configuration.
+- Large JSON datasets.
+- Country registry loading.
+- Route matrix loading.
+- Search performance.
+- Filtering performance.
+- Rendering bottlenecks.
+- Memory consumption.
+- Mobile performance.
+- Accessibility of loading and error states.
+
+If browser performance testing is available in the existing environment, use it.
+
+Otherwise, report source-level performance risks and mark runtime metrics NOT_VERIFIED.
+
+Do not invent Lighthouse scores, Core Web Vitals, or server response times.
+
+Do not introduce paid monitoring services.
+
+---
+
+# 15. ACCESSIBILITY AND USER EXPERIENCE
+
+Inspect:
+
+- Keyboard navigation.
+- Focus indicators.
+- Semantic HTML.
+- Heading hierarchy.
+- Screen-reader labels.
+- Form labels.
+- Color contrast.
+- Responsive layouts.
+- Mobile navigation.
+- Error messages.
+- Loading states.
+- Empty states.
+- Language switching.
+- RTL usability.
+- Long legal text readability.
+
+Verify that users can distinguish:
+
+- Official government source.
+- Independent explanatory content.
+- Verified legal claim.
+- Partially verified information.
+- Unverified information.
+- Expired pathway.
+
+Do not make unverified information visually appear as confirmed.
+
+---
+
+# 16. LEGAL DISCLAIMER, TRUST AND TRANSPARENCY
+
+Verify that the public site clearly communicates:
+
+- VisaApply.org is independent.
+- It is not a government website.
+- It does not issue visas.
+- Final decisions are made by the relevant government authorities.
+- Immigration rules can change.
+- Official government sources should be consulted before applying.
+- Information may have different applicability based on nationality and residence.
+- Unverified or partially verified information is disclosed.
+
+Inspect privacy policy, terms of use, contact information, source attribution, and editorial transparency where implemented.
+
+Do not invent company registration, legal certifications, or professional credentials.
+
+---
+
+# 17. PET TRAVEL AND PET-RELATED VISA REQUIREMENTS
+
+Audit the previously requested pet travel feature if it exists.
+
+Check whether it is implemented and evidence-backed.
+
+Inspect:
+
+- Pet import rules.
+- Export requirements.
+- Vaccination requirements.
+- Microchip requirements.
+- Rabies-related requirements.
+- Health certificates.
+- Quarantine requirements.
+- Breed restrictions.
+- Airline-specific versus government rules.
+- Country and transit requirements.
+
+Keep immigration rules distinct from animal-health import rules and airline policies.
+
+Do not fabricate missing pet requirements.
+
+If the feature does not exist, report it as a product-scope gap rather than pretending it is implemented.
+
+---
+
+# 18. BACKUP, RECOVERY AND CHANGE CONTROL
+
+Inspect existing backups and their recorded hashes.
+
+Verify:
+
+- Backup files exist.
+- Backup files are readable.
+- SHA-256 checksums match available manifests.
+- Historical backups remain preserved.
+- Recovery instructions exist.
+- Backup scope is understood.
+- No backup contains corrupted archives.
+
+Do not modify backups.
+
+Do not overwrite existing backups.
+
+Do not claim a restore test passed unless a real safe restore test was executed in an isolated environment.
+
+---
+
+# 19. MONETIZATION AND ADSENSE READINESS
+
+Conduct a policy-readiness review, not an approval prediction.
+
+Inspect:
+
+- Original content quality.
+- Source attribution.
+- Editorial transparency.
+- About page.
+- Contact page.
+- Privacy policy.
+- Terms and disclaimers.
+- Navigation.
+- Thin content.
+- Duplicate content.
+- Misleading government affiliation.
+- Excessive or disruptive ad placement.
+- Public accessibility of useful information.
+
+Identify content-quality risks that could affect advertising policy compliance.
+
+Do not claim Google AdSense approval or guarantee acceptance.
+
+Do not add advertising code or modify monetization settings.
+
+---
+
+# 20. FINAL PRODUCTION READINESS DECISION
+
+Classify every major area:
+
+- PASS
+- PASS_WITH_GAPS
+- FAIL
+- NOT_VERIFIED
+- NOT_APPLICABLE
+
+Give an overall platform decision:
+
+1. PRODUCTION_READY
+2. PRODUCTION_READY_WITH_DISCLOSED_GAPS
+3. NOT_READY — REMEDIATION_REQUIRED
+4. AUDIT_INCOMPLETE
+
+A successful TypeScript build alone is not proof of production readiness.
+
+A complete dataset count alone is not proof of legal accuracy.
+
+A successful test suite alone is not proof of public safety.
+
+Use actual evidence.
+
+---
+
+# 21. REMEDIATION REGISTER
+
+For every identified issue, provide:
+
+- Issue ID
+- Severity: CRITICAL / HIGH / MEDIUM / LOW
+- Audit category
+- Exact file or module
+- Exact record or pathway ID, where relevant
+- Exact claim ID, where relevant
+- Description
+- Evidence supporting the finding
+- User impact
+- Recommended correction
+- Dependencies
+- Whether it blocks production deployment
+
+Group issues into:
+
+- Critical blockers
+- High-priority fixes
+- Medium-priority improvements
+- Low-priority improvements
+- Optional future enhancements
+
+Do not implement the fixes during this audit.
+
+---
+
+# 22. STRICT READ-ONLY AND ZERO-COST RULES
+
+This is a certification audit only.
+
+ABSOLUTELY PROHIBITED:
+
+- No source-code edits.
+- No data edits.
+- No pathway additions.
+- No pathway deletions.
+- No claim-status modifications.
+- No evidence-registry modifications.
+- No production SQLite writes.
+- No database migrations.
+- No Neon modifications.
+- No cron modifications.
+- No deployment.
+- No environment variable changes.
+- No paid APIs.
+- No paid dependencies.
+- No paid services.
+- No new infrastructure.
+- No destructive security tests.
+- No production load tests.
+
+Preserve the existing daily automation schedule.
+
+Production database must remain unchanged.
+
+Cron must remain unchanged.
+
+Deployment must not be triggered.
+
+Additional cost must remain ₹0.
+
+---
+
+# 23. QUOTA CONSERVATION
+
+Use existing project files, previous audit reports, schemas, registries, and tests.
+
+Do not repeat unnecessary research.
+
+Do not regenerate the 352 pathways.
+
+Do not rebuild existing datasets.
+
+Do not rerun expensive full scans when a focused validation can prove the result.
+
+Perform one consolidated audit and one final report.
+
+If the execution environment cannot complete the entire audit, preserve findings and report exactly which sections remain incomplete.
+
+---
+
+# 24. REQUIRED FINAL DELIVERABLES
+
+Produce one consolidated certification report.
+
+### A. Executive summary
+
+- Overall platform status.
+- Verified pathway count.
+- Major technical findings.
+- Major legal/evidence findings.
+- Production readiness decision.
+
+### B. Dataset certification
+
+- Priority 1.
+- Priority 2.
+- Total pathways.
+- Country coverage.
+- Route count.
+- Language count.
+- Profile sections.
+- Special topics.
+- Claims.
+- Public-eligible claims.
+- Quarantined claims.
+
+### C. Legal and evidence certification
+
+- Evidence records inspected.
+- Legal claims inspected.
+- Unsupported claims.
+- Conflicting claims.
+- Expired records.
+- Awaiting-verification records.
+- Source freshness issues.
+- Applicability issues.
+
+### D. Country and route coverage
+
+- 249-country registry result.
+- Six-module immigration hub coverage.
+- 61,752-route matrix result.
+- Duplicate and invalid route findings.
+
+### E. Localization certification
+
+- All 15 languages.
+- Translation coverage.
+- RTL behavior.
+- Hreflang.
+- Language-specific SEO.
+
+### F. Technical certification
+
+- Architecture.
+- Database.
+- Automation.
+- Security.
+- Performance.
+- Accessibility.
+- Build.
+- Test suite.
+- Backups.
+
+### G. SEO and monetization readiness
+
+- Technical SEO.
+- Structured data.
+- Content quality.
+- Legal transparency.
+- AdSense policy-readiness risks.
+
+### H. Remediation roadmap
+
+Prioritize all findings by severity and deployment impact.
+
+### I. Final production decision
+
+State whether the platform is ready for deployment, ready with disclosed gaps, or requires remediation.
+
+---
+
+# 25. MANDATORY FINAL STATUS
+
+End your report with this exact structure, filling in actual results:
+
+- Phase 4.1: COMPLETE / INCOMPLETE
+- Overall platform certification: [actual decision]
+- Priority 1: [actual count] / 142
+- Priority 2: [actual count] / 210
+- Total unique pathways: [actual count]
+- Country registry: [actual count] / 249
+- Visa route matrix: [actual count] / 61,752
+- Supported languages: [actual count] / 15
+- Immigration Hub modules: [actual result]
+- Profile sections: [actual count]
+- Special topics: [actual count]
+- Claims audited: [actual count] / 4,500
+- Public-eligible claims: [actual count]
+- Quarantined claims: [actual count]
+- Pointer overlaps: [actual count]
+- Legal/evidence audit: [actual result]
+- Public sanitization: [actual result]
+- Country coverage audit: [actual result]
+- Route matrix audit: [actual result]
+- Localization audit: [actual result]
+- SEO audit: [actual result]
+- Automation audit: [actual result]
+- Database audit: [actual result]
+- Security audit: [actual result]
+- Performance audit: [actual result]
+- Accessibility audit: [actual result]
+- Pet travel feature: [actual result]
+- Monetization readiness: [actual result]
+- TypeScript build: [actual result]
+- Test suite: [actual result]
+- Backup integrity: [actual result]
+- Critical blockers: [actual count]
+- High-priority issues: [actual count]
+- Medium-priority issues: [actual count]
+- Low-priority issues: [actual count]
+- Production DB: UNCHANGED
+- Cron: UNCHANGED
+- Deployment: NOT TRIGGERED
+- Additional cost: ₹0 ($0.00)
+
+### NEXT PHASE
+
+If production-ready:
+
+**PHASE 4.2 — TARGETED FINAL REMEDIATION (ONLY IF REQUIRED), DEPLOYMENT PLANNING AND RELEASE READINESS.**
+
+If remediation is required:
+
+**PHASE 4.1.1 — PRIORITIZED PLATFORM REMEDIATION PLAN.**
+
+Do not start implementation or deployment automatically.
+
+STOP after producing the consolidated audit report.
+
+The final report must clearly distinguish actual verified findings from reported baseline values and unverified assumptions.

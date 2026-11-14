@@ -1,37 +1,35 @@
 import fs from 'fs';
 import path from 'path';
 import { renderRouteSsrPayload, injectSsrPayloadIntoHtml } from '../src/utils/ssrRouteRenderer';
+import { extractAdminTokenFromRequest, verifyAdminToken } from '../src/utils/authSecurity';
 
 const FALLBACK_HTML_TEMPLATE = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VisaApply.org – Global Visa Requirements, PR Pathways &amp; Official Links (249 Countries)</title>
-    <meta name="title" content="VisaApply.org – Global Visa Requirements, PR Pathways &amp; Official Links (249 Countries)" />
-    <meta name="description" content="Check bilateral visa requirements for any passport to 249 countries and territories." />
+    <title>VisaApply.org – Global Visa Guides, Immigration Pathways &amp; Official Links (249 Countries)</title>
+    <meta name="title" content="VisaApply.org – Global Visa Guides, Immigration Pathways &amp; Official Links (249 Countries)" />
+    <meta name="description" content="Independent global visa and immigration guide across 249 ISO countries and territories, 61,752 bilateral corridors, and 15 interface languages." />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
     <link rel="canonical" href="https://www.visaapply.org/" />
-    <link rel="alternate" hreflang="en" href="https://www.visaapply.org/" />
-    <link rel="alternate" hreflang="en-IN" href="https://www.visaapply.org/" />
-    <link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="VisaApply.org" />
     <meta property="og:locale" content="en_IN" />
     <meta property="og:url" content="https://www.visaapply.org/" />
     <meta property="og:title" content="VisaApply.org" />
-    <meta property="og:description" content="Check bilateral visa requirements for any passport to 249 countries and territories." />
-    <meta property="og:image" content="https://www.visaapply.org/og/default.jpg" />
-    <meta property="og:image:secure_url" content="https://www.visaapply.org/og/default.jpg" />
+    <meta property="og:description" content="Independent global visa and immigration guide across 249 ISO countries and territories." />
+    <meta property="og:image" content="https://www.visaapply.org/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://www.visaapply.org/og-image.jpg" />
     <meta property="og:image:alt" content="VisaApply.org" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@VisaApplyOrg" />
     <meta name="twitter:url" content="https://www.visaapply.org/" />
     <meta name="twitter:title" content="VisaApply.org" />
-    <meta name="twitter:description" content="Check bilateral visa requirements for any passport to 249 countries and territories." />
-    <meta name="twitter:image" content="https://www.visaapply.org/og/default.jpg" />
+    <meta name="twitter:description" content="Independent global visa and immigration guide across 249 ISO countries and territories." />
+    <meta name="twitter:image" content="https://www.visaapply.org/og-image.jpg" />
     <meta name="twitter:image:alt" content="VisaApply.org" />
   </head>
   <body>
@@ -65,6 +63,22 @@ export default function handler(req: any, res: any) {
         : `/${queryPath}`
       : String(req.url || '/').split('?')[0] || '/';
 
+    const cleanReqPath = (rawUrl || '/').replace(/^\/(en|hi|ar|fr|de|es|pl|ru|zh|ja|pt|it|nl|tr|ko)(\/|$)/i, '/') || '/';
+    const isAdminPageReq = cleanReqPath === '/admin' || cleanReqPath.startsWith('/admin/');
+    const isAdminLoginReq = cleanReqPath === '/admin/login' || cleanReqPath === '/admin/login/';
+    const isAuditPageReq = cleanReqPath === '/audit' || cleanReqPath === '/audit/';
+    const isProtectedAdminOrAudit = (isAdminPageReq && !isAdminLoginReq) || isAuditPageReq;
+
+    if (isProtectedAdminOrAudit) {
+      const token = extractAdminTokenFromRequest(req);
+      if (!verifyAdminToken(token)) {
+        res.setHeader('Location', `/admin/login?redirect=${encodeURIComponent(cleanReqPath)}`);
+        res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+        return res.status(302).send('');
+      }
+    }
+
     const payload = renderRouteSsrPayload(rawUrl);
 
     if (payload.statusCode === 301 && payload.redirectLocation) {
@@ -74,13 +88,21 @@ export default function handler(req: any, res: any) {
       return res.status(301).send(payload.ssrBodyHtml);
     }
 
+    const effectivePayload = (isAdminPageReq || isAuditPageReq)
+      ? { ...payload, robots: 'noindex, nofollow' }
+      : payload;
+
     const baseHtml = loadBaseHtmlTemplate();
-    const fullHtml = injectSsrPayloadIntoHtml(baseHtml, payload);
+    const fullHtml = injectSsrPayloadIntoHtml(baseHtml, effectivePayload);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('X-Robots-Tag', payload.robots);
-    res.setHeader('Link', `<${payload.canonicalUrl}>; rel="canonical"`);
-    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
+    res.setHeader('X-Robots-Tag', effectivePayload.robots);
+    if (isAdminPageReq || isAuditPageReq) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    } else {
+      res.setHeader('Link', `<${effectivePayload.canonicalUrl}>; rel="canonical"`);
+      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
+    }
     return res.status(200).send(fullHtml);
   } catch (err: any) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

@@ -5,11 +5,27 @@ export type ClaimType =
   | 'OFFICIAL_ESTIMATE'
   | 'PRACTICAL_RECOMMENDATION';
 
+export type SectionAuditStatus =
+  | 'VERIFIED'
+  | 'PARTIALLY_VERIFIED'
+  | 'AWAITING_VERIFICATION'
+  | 'NOT_APPLICABLE'
+  | 'CONFLICTING_EVIDENCE'
+  | 'EXPIRED'
+  | 'QUARANTINED';
+
+export type Priority1VerificationStatus =
+  | 'VERIFIED'
+  | 'PARTIALLY_VERIFIED'
+  | 'AWAITING_VERIFICATION'
+  | 'CONFLICTING_EVIDENCE'
+  | 'QUARANTINED';
+
 export interface SectionAuditEntry {
   sectionNum: number;
   sectionName: string;
   storedValue: string;
-  status: 'VERIFIED' | 'PARTIALLY_VERIFIED' | 'AWAITING_VERIFICATION' | 'NOT_APPLICABLE' | 'CONFLICTING_EVIDENCE' | 'EXPIRED';
+  status: SectionAuditStatus;
   evidenceId: string;
   sourceUrl: string;
   claimType: ClaimType;
@@ -32,7 +48,11 @@ export interface Priority1PathwayAudit {
   claimIds: string[];
   evidenceIds: string[];
   lastVerifiedTimestamp: string;
-  verificationStatus: 'VERIFIED' | 'PARTIALLY_VERIFIED' | 'AWAITING_VERIFICATION' | 'CONFLICTING_EVIDENCE';
+  verificationStatus: Priority1VerificationStatus;
+  isQuarantined?: boolean;
+  publicEligible?: boolean;
+  quarantinedSynthetic?: boolean;
+  syntheticReason?: string;
   sections: SectionAuditEntry[];
 }
 
@@ -105,8 +125,22 @@ const generate30Sections = (
   });
 };
 
-// 142 Priority 1 Audit Pathways Data Structure
-export const PRIORITY1_AUDIT_PATHWAYS: Priority1PathwayAudit[] = [
+const generateQuarantined30Sections = (
+  baseEvidenceId: string,
+  sourceUrl: string,
+  statutoryRef: string
+): SectionAuditEntry[] => {
+  return generate30Sections(baseEvidenceId, sourceUrl, statutoryRef).map((entry) => ({
+    ...entry,
+    status: 'QUARANTINED' as const,
+    storedValue: `QUARANTINED SYNTHETIC PLACEHOLDER — Awaiting independent pathway authoring and sovereign source verification (${statutoryRef}).`,
+    supportingExcerpt: 'Loop-generated placeholder entry quarantined during Phase 4.2 remediation; excluded from public output.',
+    legalApplicability: 'Quarantined synthetic template — do not publish.'
+  }));
+};
+
+// 10 Genuine Hand-Authored Priority 1 Pathways + 132 Quarantined Legacy Placeholders = 142 Canonical Slots
+export const PRIORITY1_GENUINE_PATHWAYS: Priority1PathwayAudit[] = [
   // 1. JAPAN DIGITAL NOMAD VISA
   {
     id: 'p1-jp-nomad',
@@ -323,14 +357,24 @@ export const PRIORITY1_AUDIT_PATHWAYS: Priority1PathwayAudit[] = [
     evidenceIds: ['EVD-IRCC-CA-PGWP', 'EVD-IRPR-205C'],
     lastVerifiedTimestamp: '2026-11-11T00:00:00Z',
     verificationStatus: 'VERIFIED',
+    isQuarantined: false,
+    publicEligible: true,
+    quarantinedSynthetic: false,
     sections: generate30Sections('EVD-CA-PGWP', 'https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/about-post-graduation-work-permit.html', 'IRPR Section 205(c)', {
       2: { status: 'VERIFIED', claimType: 'STATUTORY_LEGAL_REQUIREMENT', storedValue: 'Open work permit validity ranges from 8 months up to 3 years based on length of Canadian study program.' },
       24: { status: 'VERIFIED', claimType: 'STATUTORY_LEGAL_REQUIREMENT', storedValue: 'Canadian work experience gained on PGWP qualifies for Express Entry Canadian Experience Class (CEC).' }
     })
   }
-];
+].map((pathway): Priority1PathwayAudit => ({
+  ...pathway,
+  action: pathway.action as 'NEW' | 'ENRICHED' | 'RE-VERIFIED',
+  verificationStatus: pathway.verificationStatus as Priority1PathwayAudit['verificationStatus'],
+  isQuarantined: false,
+  publicEligible: true,
+  quarantinedSynthetic: false,
+}));
 
-// Additional Priority 1 items with refined direct page URLs
+// Additional Priority 1 items (legacy Phase 3.6 loop-generated placeholders — quarantined in Phase 4.2)
 const additionalPriority1List = [
   { id: 'p1-es-dnv', dest: 'Spain', code: 'ES', cat: 'Digital Nomad Visa', name: 'Visado para Teletrabajadores de Carácter Internacional', auth: 'Ministry of Inclusion, Social Security and Migration Spain', url: 'https://www.exteriores.gob.es/Consulados/londres/en/ServiciosConsulares/Paginas/Consular/Visado-para-teletrabajador-de-caracter-internacional.aspx' },
   { id: 'p1-gr-golden', dest: 'Greece', code: 'GR', cat: 'Golden Visa', name: 'Permanent Residence Permit for Investors (Law 4251/2014)', auth: 'Ministry of Migration and Asylum Greece', url: 'https://migration.gov.gr/en/golden-visa/' },
@@ -341,13 +385,15 @@ const additionalPriority1List = [
   { id: 'p1-ie-stamp4', dest: 'Ireland', code: 'IE', cat: 'Critical Skills Employment Permit', name: 'Critical Skills Employment Permit (Stamp 4 Pathway)', auth: 'Department of Enterprise, Trade and Employment Ireland', url: 'https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/critical-skills-employment-permit/' }
 ];
 
-// Fill up array to reach 142 distinct items
+export const PRIORITY1_QUARANTINED_PATHWAYS: Priority1PathwayAudit[] = [];
+
+// Populate 132 quarantined synthetic placeholders preserving canonical audit slots without claiming verification
 for (let i = 0; i < 132; i++) {
   const tpl = additionalPriority1List[i % additionalPriority1List.length];
   const uniqueId = `p1-audit-${i + 11}`;
   const actionType: 'NEW' | 'ENRICHED' | 'RE-VERIFIED' = (i % 3 === 0) ? 'ENRICHED' : (i % 3 === 1) ? 'NEW' : 'RE-VERIFIED';
 
-  PRIORITY1_AUDIT_PATHWAYS.push({
+  PRIORITY1_QUARANTINED_PATHWAYS.push({
     id: uniqueId,
     destination: tpl.dest,
     destCode: tpl.code,
@@ -361,22 +407,76 @@ for (let i = 0; i < 132; i++) {
     claimIds: [`CLM-${tpl.code}-${i + 10}-A`, `CLM-${tpl.code}-${i + 10}-B`],
     evidenceIds: [`EVD-${tpl.code}-${i + 10}-P1`],
     lastVerifiedTimestamp: '2026-11-11T00:00:00Z',
-    verificationStatus: 'VERIFIED',
-    sections: generate30Sections(`EVD-${tpl.code}-${i + 10}`, tpl.url, `Regulation ${2024 + (i % 3)}`)
+    verificationStatus: 'QUARANTINED',
+    isQuarantined: true,
+    publicEligible: false,
+    quarantinedSynthetic: true,
+    syntheticReason: 'Phase 3.6 loop-generated placeholder template; quarantined in Phase 4.2 pending independent statutory verification.',
+    sections: generateQuarantined30Sections(`EVD-${tpl.code}-${i + 10}`, tpl.url, `Regulation ${2024 + (i % 3)}`)
   });
 }
 
-// Summary Metrics for Phase 3.6.2.3 Audit Export
+export const PRIORITY1_AUDIT_PATHWAYS: Priority1PathwayAudit[] = [
+  ...PRIORITY1_GENUINE_PATHWAYS,
+  ...PRIORITY1_QUARANTINED_PATHWAYS,
+];
+
+export function getPublicPriority1Pathways(): Priority1PathwayAudit[] {
+  return PRIORITY1_AUDIT_PATHWAYS.filter(
+    (p) =>
+      !p.isQuarantined &&
+      !p.quarantinedSynthetic &&
+      p.publicEligible !== false &&
+      p.verificationStatus === 'VERIFIED'
+  );
+}
+
+// Explicit P1 <-> P2 category collision reconciliation preserving historical canonical IDs
+export const P1_P2_COLLISION_RECONCILIATION = [
+  {
+    collisionId: 'COLLISION-GB-SCALEUP',
+    priority1Id: 'p1-gb-scaleup',
+    priority2Id: 'p2-uk-scaleup',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    sharedSourceUrl: 'https://www.gov.uk/scale-up-worker-visa',
+    resolutionStatus: 'CROSS_LINKED_CANONICAL_DUPLICATE',
+    canonicalPrimaryId: 'p1-gb-scaleup',
+    notes: 'Historical P1 and P2 records refer to the same UK Scale-up Worker Visa program; cross-linked without deleting historical IDs.',
+  },
+  {
+    collisionId: 'COLLISION-SG-ONEPASS',
+    priority1Id: 'p1-sg-onepass',
+    priority2Id: 'p2-sg-onepass',
+    destination: 'Singapore',
+    destCode: 'SG',
+    sharedSourceUrl: 'https://www.mom.gov.sg/passes-and-permits/overseas-networks-and-expertise-pass',
+    resolutionStatus: 'CROSS_LINKED_CANONICAL_DUPLICATE',
+    canonicalPrimaryId: 'p1-sg-onepass',
+    notes: 'Historical P1 and P2 records refer to the same Singapore ONE Pass program; cross-linked without deleting historical IDs.',
+  },
+] as const;
+
+// Honest Summary Metrics for Phase 4.2 Remediation
 export const PRIORITY1_AUDIT_SUMMARY = {
-  totalPathwaysInspected: PRIORITY1_AUDIT_PATHWAYS.length, // 142
+  totalPathwaysInspected: PRIORITY1_AUDIT_PATHWAYS.length, // 142 canonical audit records
+  genuineHandAuthoredPathways: PRIORITY1_GENUINE_PATHWAYS.length, // 10
+  quarantinedSyntheticPathways: PRIORITY1_QUARANTINED_PATHWAYS.length, // 132
+  publicEligiblePathways: getPublicPriority1Pathways().length, // 10
   totalSectionsInspected: PRIORITY1_AUDIT_PATHWAYS.length * 30, // 4,260
-  fullyEvidenceBackedPathways: 142,
+  fullyEvidenceBackedPathways: PRIORITY1_GENUINE_PATHWAYS.length, // 10 genuine only
   partiallyEvidenceBackedPathways: 0,
   awaitingVerificationPathways: 0,
   conflictingEvidencePathways: 0,
+  quarantinedPathways: PRIORITY1_QUARANTINED_PATHWAYS.length, // 132
   expiredSources: 0,
-  genericSourceReferencesRemaining: 0, // 100% Direct Page URLs
-  verifiedSectionCompleteness: 4260,
+  genericSourceReferencesRemaining: 0,
+  verifiedSectionCompleteness: PRIORITY1_GENUINE_PATHWAYS.reduce(
+    (sum, p) => sum + p.sections.filter((s) => s.status === 'VERIFIED').length,
+    0
+  ),
+  quarantinedSections: PRIORITY1_QUARANTINED_PATHWAYS.length * 30, // 3,960
+  p1P2CategoryCollisions: P1_P2_COLLISION_RECONCILIATION.length, // 2
   preChangeBackup: {
     path: '/app/applet/backup_phase_3_6_2_3.tar.gz',
     sizeBytes: 1971180,

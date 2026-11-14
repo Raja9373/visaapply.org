@@ -1,6 +1,9 @@
 import { GoogleGenAI, Type, ThinkingLevel } from '@google/genai';
 import { FULL_VISA_DB, CountryVisas } from '../data/fullVisaDatabase';
 import { fetchWithRetry } from '../utils/fetchWithRetry';
+import { applyRestrictedCorsHeaders } from '../utils/authSecurity';
+
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-4-hydrogen';
 
 export interface FaqItem {
   question: string;
@@ -231,7 +234,7 @@ Focus on official consular requirements, processing times, required financial do
 
       const response: any = await callGeminiWithRetry(async () => {
         return await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
+          model: GEMINI_MODEL,
           contents: prompt,
           config: {
             thinkingConfig: {
@@ -328,11 +331,7 @@ export async function fetchFaqContent(
  * Universal serverless / Express request handler
  */
 export default async function handleFaqRequest(req: any, res: any) {
-  if (res.setHeader) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  }
+  applyRestrictedCorsHeaders(req, res, 'GET, POST, OPTIONS', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
     return res.status ? res.status(200).end() : res.end();

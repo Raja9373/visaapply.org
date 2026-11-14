@@ -356,7 +356,7 @@ Instructions:
 6. Provide 5 tailored "documentsNeeded" specific to their ${body.jobType} status and ${body.visaType} visa.`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-4-hydrogen',
       contents: prompt,
       config: {
         systemInstruction:

@@ -1,0 +1,888 @@
+# VISAAPPLY.ORG — PHASE 4.2
+# CRITICAL SAFETY AND DATA-INTEGRITY REMEDIATION
+
+## ROLE
+
+Act as a principal application security engineer, immigration data architect, legal-data integrity specialist, senior TypeScript engineer, and production reliability specialist.
+
+Your mission is to remediate the confirmed critical security and data-integrity issues identified in Phase 4.1 and reconciled in Phase 4.1.1.
+
+This is an implementation phase.
+
+You must inspect the actual source code, implement targeted corrections, run relevant tests, preserve historical data, and produce a complete implementation report.
+
+The goal is to make the platform safe against public exposure of fabricated immigration information, unsafe automated publishing, and critical application security vulnerabilities.
+
+Do not add new immigration pathways or product features during this phase.
+
+---
+
+# 1. VERIFIED BASELINE — PRESERVE
+
+Use the actual project files and Phase 4.1.1 report.
+
+Reported baseline:
+
+### Priority 1
+- 142 nominal records.
+- 10 genuine hand-authored records.
+- 132 loop-generated synthetic placeholders.
+- 2 reported Priority 1 / Priority 2 category collisions.
+
+### Priority 2
+- 210 genuine pathways reported.
+- Preserve all historical Batch 0–14 records.
+- Do not rewrite or regenerate the Priority 2 registry.
+
+### Global registry
+- 246 / 249 country records reported.
+- Missing: BI, SV, GP.
+- Non-ISO `eu` key incorrectly present in `NAME_MAP_249`.
+
+### Route matrix
+- 61,752 generated route URLs.
+- ASCII-hash visa counts and fees.
+- Erroneous `isVisaFree()` logic.
+- Synthetic visa padding.
+
+### Public sanitization
+- `sanitizeVisaDetailsForPublic` has raw top-level fallback exposure.
+- `claimId` versus `id` mismatch.
+- Non-VERIFIED claims retained in public `claims[]`.
+
+### Automation
+- Wikipedia and synthetic fallback auto-publishing.
+- Unauthenticated `api/cron.ts`.
+- Invalid model identifier `gemini-3.8-flash`.
+
+### Security
+- Unauthenticated cron endpoint.
+- DOM XSS in VisaChatbot.
+- DOM XSS in BlogArticleView.
+- Unreachable `/admin/global-*` routes.
+- Inconsistent password comparison; existing timing-safe logic is reportedly present in some locations but not all.
+
+### Production safety
+- Production DB: UNCHANGED.
+- Cron: UNCHANGED.
+- Deployment: NOT TRIGGERED.
+- Additional cost: ₹0.
+
+Treat these as findings to verify against actual source code before modifying anything.
+
+---
+
+# 2. EXECUTION RULES
+
+Before implementing:
+
+1. Inspect the exact affected source files.
+2. Confirm each reported vulnerability or data-integrity defect.
+3. Identify dependencies and callers.
+4. Identify existing helper functions and established project conventions.
+5. Create a recoverable backup of all files that will be modified.
+6. Prepare a focused implementation plan.
+7. Implement only confirmed fixes.
+
+Do not replace complete modules when a small targeted correction is sufficient.
+
+Do not introduce a parallel security architecture.
+
+Do not change unrelated functionality.
+
+Do not claim that a vulnerability is fixed unless the corrected behavior is tested.
+
+---
+
+# 3. WORKSTREAM A — SECURITY REMEDIATION
+
+## A1. Secure `api/cron.ts`
+
+Inspect the current cron endpoint and all invocation paths.
+
+Implement secure request authentication using the existing project configuration and secret-management conventions.
+
+Requirements:
+
+- Reject unauthenticated requests.
+- Reject missing credentials.
+- Reject invalid credentials.
+- Use a constant-time comparison for secret verification where appropriate.
+- Validate the expected request method.
+- Avoid exposing secrets in logs or error messages.
+- Return appropriate HTTP status codes.
+- Preserve legitimate scheduled execution.
+- Do not expose internal job details to unauthorized callers.
+
+Use the existing deployment platform's supported cron authentication conventions.
+
+Do not hardcode secrets.
+
+Do not create or reveal a production secret.
+
+If the required secret configuration is absent, fail closed and document the required environment variable. Do not invent a secret.
+
+Do not change the existing production cron schedule.
+
+## A2. Fix DOM XSS in VisaChatbot
+
+Inspect the actual VisaChatbot rendering code.
+
+Identify unsafe handling of:
+
+- User input.
+- AI-generated text.
+- HTML strings.
+- Markdown.
+- URLs.
+- Dynamic attributes.
+- External links.
+
+Implement safe rendering using the existing React architecture.
+
+Requirements:
+
+- Never inject untrusted HTML directly.
+- Avoid unsafe `dangerouslySetInnerHTML`.
+- If rich text is necessary, use the existing safe rendering approach.
+- Validate URL protocols.
+- Reject dangerous URL schemes.
+- Preserve normal chatbot functionality.
+- Ensure user-generated and model-generated content cannot execute scripts.
+
+Add targeted security regression tests.
+
+## A3. Fix DOM XSS in BlogArticleView
+
+Inspect the actual article renderer.
+
+Secure:
+
+- Article HTML.
+- Markdown conversion.
+- Dynamic links.
+- Images.
+- Embedded content.
+- User-generated content.
+- AI-generated content.
+
+Prefer safe React rendering.
+
+If sanitization is required, use an existing trusted sanitizer if available.
+
+Do not add a new dependency without first checking existing project dependencies.
+
+Reject unsafe URL protocols and dangerous embedded content.
+
+Preserve legitimate article formatting.
+
+## A4. Repair admin route access
+
+Inspect:
+
+- `/admin/global-*` route definitions.
+- Router configuration.
+- Navigation links.
+- Authentication guards.
+- Authorization logic.
+- Route loading and redirects.
+
+Determine why the routes are unreachable.
+
+Implement correct route registration and secure access control.
+
+Requirements:
+
+- Admin routes must not become publicly accessible.
+- Authentication and authorization must be checked.
+- Unauthorized users must be denied access.
+- Direct URL access must be protected.
+- Client-side route guards must not be treated as the only security boundary.
+- Relevant server-side endpoints must independently enforce authorization.
+
+Do not expose administrative functions while fixing routing.
+
+## A5. Standardize password comparison
+
+Inspect all password and secret comparison code.
+
+The audit reported partial timing-safe comparison in `server.ts` at locations including lines 328 and 820, while login and `api/admin.ts` remain unresolved.
+
+Verify actual current code because line numbers may have changed.
+
+Use a shared, correct constant-time comparison helper where appropriate.
+
+Requirements:
+
+- Validate input types and lengths.
+- Avoid unsafe buffer-length assumptions.
+- Handle unequal-length secrets safely.
+- Avoid leaking credential values.
+- Preserve existing authentication behavior.
+- Ensure all relevant login and admin authentication paths use the corrected implementation.
+
+Do not introduce plaintext password storage.
+
+Do not print secrets.
+
+---
+
+# 4. WORKSTREAM B — PRIORITY 1 SYNTHETIC DATA CONTAINMENT
+
+This is a critical public-trust issue.
+
+Reported:
+
+- 10 genuine hand-authored Priority 1 records.
+- 132 loop-generated placeholders.
+- Placeholder IDs reportedly include `p1-audit-11` through `p1-audit-142`.
+
+Inspect the actual records and generation logic.
+
+## B1. Identify synthetic records
+
+Determine:
+
+- Exact 132 record IDs.
+- Generation function or loop.
+- Whether they contain fabricated legal claims.
+- Whether they contain generated fees or processing times.
+- Whether they contain fake official URLs.
+- Whether they appear in public search.
+- Whether they appear in public sitemap.
+- Whether they are included in route recommendations.
+- Whether they are indexed or indexable.
+
+Do not assume all IDs in the reported range are synthetic without inspecting them.
+
+## B2. Quarantine unsafe records
+
+Implement a reversible quarantine strategy.
+
+Requirements:
+
+- Preserve original records.
+- Preserve record IDs and historical references.
+- Do not delete records.
+- Do not mark synthetic records VERIFIED.
+- Do not publish fabricated legal content.
+- Prevent unsafe records from appearing in public profile rendering.
+- Prevent unsafe records from appearing in public search and sitemap.
+- Preserve internal audit traceability.
+- Clearly identify records as SYNTHETIC or QUARANTINED using the existing schema where possible.
+
+If the existing schema lacks a suitable quarantine mechanism, propose the smallest compatible extension and document its impact before applying it.
+
+Do not silently change Priority 1 completion counts.
+
+The 10 genuine records must remain intact, subject to evidence verification.
+
+## B3. Resolve Priority 1 / Priority 2 collisions
+
+Inspect the 2 reported category collisions.
+
+Determine whether they are:
+
+- Exact duplicates.
+- Same legal pathway under different categories.
+- Legitimately distinct pathways sharing a category.
+- Incorrect registry references.
+
+Do not delete or merge records without clear evidence.
+
+Produce a collision resolution record.
+
+## B4. Stop synthetic generation
+
+Find the loop or fallback responsible for generating synthetic Priority 1 entries.
+
+Remove or disable the unsafe generation pathway.
+
+Requirements:
+
+- No synthetic legal pathway generation.
+- No automatic placeholder promotion.
+- No fake government source URLs.
+- No synthetic claims.
+- No generated eligibility rules.
+- No generated fees.
+- No generated processing times.
+
+If a real record cannot be verified, keep it quarantined.
+
+---
+
+# 5. WORKSTREAM C — VISA ROUTE AND ELIGIBILITY DATA INTEGRITY
+
+This workstream must stop fabricated visa facts from reaching public pages.
+
+Reported defects:
+
+- ASCII-hash-generated visa counts.
+- Fabricated fees.
+- Incorrect `isVisaFree()` behavior.
+- Synthetic visa padding.
+- 61,752 generated sitemap URLs.
+
+## C1. Inspect route-generation architecture
+
+Identify:
+
+- Route matrix generator.
+- Origin and destination handling.
+- Hash-based count generation.
+- Fee generation.
+- `isVisaFree()` implementation.
+- Synthetic visa padding.
+- Route-level public renderer.
+- Sitemap generation.
+- Search and recommendation integrations.
+
+Trace all public consumers of these fields.
+
+## C2. Remove fabricated facts from public output
+
+Do not replace fabricated values with different fabricated values.
+
+Remove or quarantine unsupported:
+
+- Visa-free counts.
+- Visa fees.
+- Visa requirement summaries.
+- Eligibility conclusions.
+- Synthetic visa types.
+- Invented processing times.
+- Artificially generated visa records.
+
+Unknown information must be represented honestly.
+
+Use the existing status taxonomy where compatible.
+
+Where the route schema requires a distinction, use explicit states such as:
+
+- VERIFIED
+- PARTIALLY_VERIFIED
+- AWAITING_VERIFICATION
+- NOT_AVAILABLE
+- NOT_APPLICABLE
+- UNKNOWN
+
+Do not create an unsupported status if the current schema already has an equivalent.
+
+## C3. Correct visa-free logic
+
+A route between two countries must not automatically imply visa-free entry.
+
+A valid eligibility result may depend on:
+
+- Passport nationality.
+- Passport type.
+- Residence permit.
+- Destination.
+- Purpose of travel.
+- Length of stay.
+- Transit versus entry.
+- Effective date.
+- Special exemptions.
+- Bilateral arrangements.
+
+The corrected system must not return visa-free eligibility from a hash, country index, route position, or arbitrary fallback.
+
+A visa-free claim must be supported by authoritative evidence and a clearly defined applicability scope.
+
+If the current data cannot establish eligibility, return an honest unknown or awaiting-verification result.
+
+## C4. Preserve route architecture
+
+Do not delete all 61,752 route URLs automatically.
+
+Inspect:
+
+- Existing URL usage.
+- Sitemap behavior.
+- Search-engine exposure.
+- Route page usefulness.
+- Canonical and redirect behavior.
+
+Preserve the route structure where it remains useful, but prevent fabricated legal facts from appearing.
+
+Do not invent new route eligibility data.
+
+Do not create fabricated fees or counts to fill empty fields.
+
+## C5. Route regression tests
+
+Add tests confirming:
+
+- Hash-based eligibility is impossible.
+- No arbitrary visa-free fallback exists.
+- Unknown nationality is not treated as visa-free.
+- Residence-specific rules are not generalized.
+- Transit rules are not confused with entry rules.
+- Unsupported fees are not displayed.
+- Unsupported route summaries are not published.
+- Genuine evidence-backed route data continues to render.
+
+---
+
+# 6. WORKSTREAM D — PUBLIC SANITIZATION REPAIR
+
+Inspect the actual implementation of:
+
+`sanitizeVisaDetailsForPublic`
+
+Reported defects:
+
+1. Raw top-level fallback fields bypass sanitization.
+2. `claimId` versus `id` mismatch.
+3. Non-VERIFIED claims remain in public `claims[]`.
+
+## D1. Implement allowlist-based public serialization
+
+Public output must be constructed from explicitly permitted fields.
+
+Do not copy the complete internal object and remove a few known private fields.
+
+Requirements:
+
+- Explicit public field allowlist.
+- Explicit claim-level eligibility rules.
+- Nested object sanitization.
+- Safe fallback handling.
+- No raw top-level fallback bypass.
+- Consistent claim ID mapping.
+- No internal reviewer notes.
+- No private evidence metadata.
+- No unsupported legal text.
+- No hidden fields leaking through object spreading.
+
+## D2. Claim identity consistency
+
+Inspect every caller using:
+
+- `claimId`
+- `id`
+
+Implement one consistent mapping strategy.
+
+Requirements:
+
+- Preserve historical IDs.
+- Avoid duplicate claim identities.
+- Ensure correct pathway association.
+- Prevent valid claims from being accidentally dropped due to field mismatch.
+- Prevent invalid claims from being exposed because the identifier is missing.
+
+## D3. Public claim filtering
+
+Apply existing disclosure rules.
+
+- VERIFIED claims: public only when evidence requirements are met.
+- PARTIALLY_VERIFIED claims: follow approved partial-disclosure behavior.
+- AWAITING_VERIFICATION: quarantine.
+- CONFLICTING: quarantine.
+- EXPIRED: never present as currently available.
+- NOT_APPLICABLE: follow existing rendering rules.
+
+A claim must not become public merely because it is present in an array.
+
+## D4. Test every public output path
+
+Inspect:
+
+- Profile pages.
+- Country pages.
+- Immigration Hub pages.
+- Search.
+- Summaries.
+- Related pathways.
+- SEO metadata.
+- JSON-LD.
+- API responses.
+- Fallback rendering.
+
+Add tests confirming no raw internal field can bypass the sanitizer.
+
+---
+
+# 7. WORKSTREAM E — COUNTRY REGISTRY CORRECTION
+
+Reported country registry defects:
+
+- BI missing.
+- SV missing.
+- GP missing.
+- `eu` incorrectly included as a country key.
+
+Inspect all relevant canonical registries and their consumers.
+
+Correct the authoritative country registry.
+
+Requirements:
+
+- Restore missing codes where appropriate.
+- Use correct ISO 3166-1 alpha-2 codes.
+- Keep regional groupings separate from country entries.
+- Preserve EU as a regional grouping, not an ISO country.
+- Prevent duplicate aliases.
+- Preserve existing valid country references.
+- Update all dependent lookup maps consistently.
+- Check route generation and sitemap consumers.
+
+Important:
+
+The project's 249-country scope may include territories and special jurisdictions. Do not replace it with an arbitrary list of 195 sovereign states.
+
+Document the exact distinction between:
+
+- ISO-listed countries and territories.
+- Sovereign states.
+- Dependent territories.
+- Regional organizations.
+- Special immigration jurisdictions.
+
+Do not silently remove legitimate territories.
+
+---
+
+# 8. WORKSTREAM F — AUTOMATION SAFETY CONTAINMENT
+
+Inspect the automatic update and verification pipeline.
+
+Reported defects:
+
+- Wikipedia fallback auto-publishing.
+- Synthetic fallback auto-publishing.
+- Invalid model identifier `gemini-3.8-flash`.
+- Unauthenticated cron endpoint.
+
+## F1. Disable unsafe auto-publishing
+
+Remove the ability of Wikipedia or synthetic fallback content to become publicly verified immigration information automatically.
+
+Requirements:
+
+- Wikipedia may only be secondary research material, never sole legal evidence.
+- Synthetic fallback data must never be published as legal facts.
+- AI-generated claims must remain unverified until evidence checks are satisfied.
+- Conflicting changes must be quarantined.
+- Expired claims must not be automatically revived.
+- Human review must be required for uncertain legal changes.
+
+## F2. Official-source evidence requirements
+
+Legal updates should rely on official government sources.
+
+Track:
+
+- Source identity.
+- Source title.
+- URL.
+- Date checked.
+- Supporting excerpt.
+- Legal provision where applicable.
+- Applicability scope.
+- Verification status.
+
+An HTTP 200 response alone must not promote a claim to VERIFIED.
+
+## F3. Correct model configuration
+
+Inspect the invalid model identifier.
+
+Do not guess a replacement.
+
+Check the existing provider configuration, supported model identifiers, and installed SDK documentation.
+
+Use only an actually supported model already accessible through the existing free configuration.
+
+If no valid model is available, disable the AI-dependent step safely and document the configuration requirement.
+
+Do not add paid APIs or paid model dependencies.
+
+## F4. Safe failure behavior
+
+If source verification or AI generation fails:
+
+- Do not publish.
+- Preserve the previous valid record.
+- Record the failure.
+- Quarantine uncertain updates.
+- Permit safe retries.
+- Avoid duplicate updates.
+
+Do not trigger the production cron.
+
+Do not change the schedule.
+
+---
+
+# 9. IMPLEMENTATION ORDER
+
+Implement the confirmed workstreams in this dependency-aware order:
+
+### Stage A — Immediate safety
+1. Secure `api/cron.ts`.
+2. Fix XSS in VisaChatbot.
+3. Fix XSS in BlogArticleView.
+4. Secure admin routing and authentication.
+5. Standardize timing-safe password comparisons.
+
+### Stage B — Public data containment
+6. Repair `sanitizeVisaDetailsForPublic`.
+7. Quarantine the 132 synthetic Priority 1 records.
+8. Stop synthetic Priority 1 generation.
+9. Disable unsafe Wikipedia and synthetic auto-publishing.
+10. Remove fabricated route eligibility, fee, and count output.
+
+### Stage C — Canonical data integrity
+11. Correct country registry.
+12. Reconcile Priority 1 / Priority 2 category collisions.
+13. Correct route eligibility logic.
+14. Validate route and sitemap output.
+
+The exact order may be adjusted where technical dependencies require it. Explain any deviation.
+
+Complete all feasible critical workstreams within this phase.
+
+Do not stop after only the first security fix if the remaining work can safely be completed.
+
+If an issue requires a separate architectural decision or missing evidence, stop only that specific subtask and report the blocker.
+
+---
+
+# 10. TESTING AND ACCEPTANCE CRITERIA
+
+Run actual focused tests.
+
+## Security
+- Unauthorized cron request rejected.
+- Invalid cron secret rejected.
+- Valid authorized request accepted in a safe test environment.
+- XSS payloads rendered as harmless text.
+- Unsafe URL schemes rejected.
+- Unauthorized admin access denied.
+- Password comparisons use the shared safe helper.
+
+## Priority 1
+- Exactly 10 reported genuine records preserved, subject to actual verification.
+- All 132 synthetic records identified and quarantined if confirmed.
+- No synthetic record published.
+- No fake legal facts published.
+- Generation loop no longer creates synthetic legal records.
+- Historical references preserved.
+
+## Route matrix
+- Hash-based values no longer determine eligibility, fees, or counts.
+- `isVisaFree()` requires valid evidence and applicability.
+- Unknown information remains unknown.
+- Unsupported route facts are not publicly displayed.
+- No fabricated synthetic visa padding is published.
+
+## Public sanitization
+- No raw fallback bypass.
+- Correct claim ID mapping.
+- Non-public claims remain excluded.
+- Internal notes and metadata never leak.
+- Actual public serialization tests pass.
+
+## Country registry
+- Missing codes addressed.
+- `eu` is not treated as a country.
+- All canonical maps are consistent.
+- Legitimate territories and special jurisdictions remain supported.
+
+## Automation
+- Wikipedia and synthetic fallback cannot auto-publish legal claims.
+- Invalid model configuration cannot trigger fake success.
+- Failed evidence checks prevent publication.
+- Cron endpoint is protected.
+
+Do not claim a test passed unless it was executed and its output inspected.
+
+---
+
+# 11. BACKUP AND RECOVERY
+
+Before modifying files:
+
+- Create a recoverable backup.
+- Record modified file list.
+- Record archive size.
+- Record SHA-256 hash.
+- Verify archive readability.
+
+After modifications:
+
+- Create a new backup.
+- Verify its integrity.
+- Preserve all previous backups.
+- Do not overwrite existing historical archives.
+- Do not claim live restore success without an actual isolated restore test.
+
+Do not delete synthetic records. Quarantine must be reversible.
+
+---
+
+# 12. STRICT PRODUCTION SAFETY
+
+This phase must operate only in the development workspace or safe local test environment.
+
+Absolutely prohibited:
+
+- Production SQLite writes.
+- Production database migrations.
+- Changes to `/data_db/immigration_hub.db`.
+- Neon database modifications.
+- Production cron changes.
+- Production deployment.
+- Production environment variable modifications.
+- Deletion of historical records.
+- Destructive route removal.
+- Paid services or APIs.
+- New paid dependencies.
+- New paid infrastructure.
+
+Preserve the existing production cron schedule:
+
+`30 21 * * *` UTC = 03:00 Asia/Kolkata.
+
+Production DB must remain unchanged.
+
+Cron must remain unchanged.
+
+Deployment must not be triggered.
+
+Additional cost must remain ₹0.
+
+---
+
+# 13. QUOTA CONSERVATION
+
+- Reuse the Phase 4.1 and 4.1.1 audit findings.
+- Inspect only affected files.
+- Avoid repeating the entire platform audit.
+- Do not regenerate Priority 1 or Priority 2 datasets.
+- Do not repeat the 210-pathway research.
+- Reuse existing dependencies and tests.
+- Prefer targeted fixes over architectural rewrites.
+- Run one consolidated validation pass after implementation.
+
+Do not invent execution results.
+
+---
+
+# 14. REQUIRED FINAL REPORT
+
+Produce a detailed implementation report containing:
+
+### A. Security remediation
+- Cron authentication.
+- VisaChatbot XSS.
+- BlogArticleView XSS.
+- Admin route protection.
+- Password comparison standardization.
+
+### B. Priority 1 data remediation
+- Genuine records preserved.
+- Synthetic records identified.
+- Synthetic records quarantined.
+- Generation mechanism disabled.
+- Collision findings.
+
+### C. Route integrity remediation
+- Hash-based generation removed or disabled.
+- Visa-free logic corrected.
+- Fabricated fees/counts contained.
+- Route output behavior.
+- Sitemap implications.
+
+### D. Public sanitization
+- Allowlist implementation.
+- Claim ID mapping.
+- Claim status filtering.
+- Public output tests.
+- Leak test results.
+
+### E. Country registry
+- Country and territory reconciliation.
+- BI, SV, GP status.
+- EU grouping treatment.
+- Dependent map validation.
+
+### F. Automation
+- Unsafe fallback publishing disabled.
+- Official-source requirements.
+- Model configuration status.
+- Failure behavior.
+
+### G. Files changed
+List exact files and summarize each change.
+
+### H. Tests
+List tests executed and their actual outcomes.
+
+### I. Outstanding issues
+For each unresolved item provide:
+- Severity.
+- Exact file or component.
+- Reason unresolved.
+- Required next action.
+- Whether it blocks production.
+
+### J. Backup and change control
+Report:
+- Backup size.
+- SHA-256.
+- Archive readability.
+- Historical records preserved.
+
+---
+
+# 15. MANDATORY FINAL STATUS
+
+End your report with this exact structure, filling in actual results:
+
+- Phase 4.2: COMPLETE / PARTIALLY_COMPLETE / BLOCKED
+- Security workstream: PASS / PASS_WITH_GAPS / FAIL
+- Cron authentication: [actual result]
+- VisaChatbot XSS: [actual result]
+- BlogArticleView XSS: [actual result]
+- Admin route protection: [actual result]
+- Timing-safe password comparison: [actual result]
+- Priority 1 genuine records preserved: [actual count]
+- Priority 1 synthetic records identified: [actual count]
+- Priority 1 synthetic records quarantined: [actual count]
+- Synthetic generation disabled: [actual result]
+- Priority 1 / Priority 2 collision resolution: [actual result]
+- Route matrix remediation: [actual result]
+- Fabricated visa counts and fees contained: [actual result]
+- Visa-free eligibility logic: [actual result]
+- Public sanitization: [actual result]
+- Claim ID consistency: [actual result]
+- Country registry: [actual result]
+- Automation safety: [actual result]
+- Wikipedia/synthetic auto-publishing: [actual result]
+- Model configuration: [actual result]
+- Focused regression tests: [actual result]
+- TypeScript build: [actual result]
+- Production build: [actual result]
+- Backup integrity: [actual result]
+- Production DB: UNCHANGED
+- Cron schedule: UNCHANGED
+- Deployment: NOT TRIGGERED
+- Additional cost: ₹0 ($0.00)
+
+### NEXT PHASE
+
+If all critical safety and data-integrity blockers are resolved:
+
+**PHASE 4.3 — SEO, LOCALIZATION AND PUBLIC CONTENT INTEGRITY REMEDIATION.**
+
+If critical issues remain:
+
+**PHASE 4.2.1 — TARGETED CRITICAL REMEDIATION COMPLETION.**
+
+Do not begin Phase 4.3 automatically.
+
+STOP after completing the implementation and consolidated validation report.

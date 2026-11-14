@@ -94,7 +94,10 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
             {profile.countryName} Immigration &amp; Residency Hub
           </h1>
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal">
-            Official verified immigration requirements, permanent residency, work permits, citizenship, and digital nomad options for {profile.countryName}.
+            Independent statutory guide to permanent residency, work permits, citizenship, and digital nomad pathways in {profile.countryName}, cross-referenced against official government portals.
+          </p>
+          <p className="text-amber-200/95 text-xs max-w-2xl mx-auto font-semibold">
+            Informational Guide Only: VisaApply.org is not affiliated with the government of {profile.countryName} or any embassy. Legal and statutory clauses are displayed in English; always confirm final eligibility on the official government portal below.
           </p>
 
           <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl max-w-xl mx-auto text-xs text-left space-y-1">
