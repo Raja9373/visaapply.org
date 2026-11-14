@@ -540,7 +540,8 @@ export function normalizeCanonicalUrl(rawPath: string, baseOrigin?: string): str
 
   let cleanedPath = withoutQueryOrHash
     .replace(/\/oci-%20pio-guide/gi, '/oci-pio-guide')
-    .replace(/\/oci-\s+pio-guide/gi, '/oci-pio-guide');
+    .replace(/\/oci-\s+pio-guide/gi, '/oci-pio-guide')
+    .toLowerCase();
 
   if (!cleanedPath.startsWith('/')) {
     cleanedPath = `/${cleanedPath}`;
@@ -556,7 +557,48 @@ export function normalizeCanonicalUrl(rawPath: string, baseOrigin?: string): str
     cleanedPath = cleanedPath.replace(/^\/en\//, '/');
   }
 
+  // Self-origin to same-destination routes (e.g., /in-to-in, /in-to-in-student, /in-to-in-business-in-bus-009)
+  // are invalid bilateral travel corridors and canonicalize to the country's official immigration hub.
+  const selfRouteMatch = cleanedPath.match(/^\/([a-z]{2})-to-\1(?:-|$)/);
+  if (selfRouteMatch) {
+    cleanedPath = `/immigration/${selfRouteMatch[1]}`;
+  }
+
   return `${base}${cleanedPath === '/' ? '/' : cleanedPath}`;
+}
+
+/**
+ * Checks whether a path is a self-origin-to-same-destination bilateral route (e.g. /in-to-in-student)
+ * or contains uppercase characters that require canonical lowercase normalization.
+ */
+export function inspectRouteIndexingDirective(rawPath: string): {
+  rawCleanPath: string;
+  normalizedLowerPath: string;
+  isSelfRoute: boolean;
+  hasUppercaseSlug: boolean;
+  canonicalRedirectPath: string | null;
+} {
+  const { strippedPath } = getLangFromUrlPath(rawPath || '/');
+  const rawCleanPath = (strippedPath.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/').trim();
+  const normalizedLowerPath = rawCleanPath.toLowerCase();
+  const selfMatch = normalizedLowerPath.match(/^\/([a-z]{2})-to-\1(?:-|$)/);
+  const isSelfRoute = Boolean(selfMatch);
+  const hasUppercaseSlug = rawCleanPath !== normalizedLowerPath;
+
+  let canonicalRedirectPath: string | null = null;
+  if (isSelfRoute && selfMatch) {
+    canonicalRedirectPath = `/immigration/${selfMatch[1]}`;
+  } else if (hasUppercaseSlug) {
+    canonicalRedirectPath = normalizedLowerPath;
+  }
+
+  return {
+    rawCleanPath,
+    normalizedLowerPath,
+    isSelfRoute,
+    hasUppercaseSlug,
+    canonicalRedirectPath,
+  };
 }
 
 /**
@@ -570,7 +612,8 @@ export function resolveStaticRouteSeoMetadata(rawPath: string): StaticRouteSeoEn
       .split('#')[0]
       .replace(/\/oci-%20pio-guide/gi, '/oci-pio-guide')
       .replace(/\/oci-\s+pio-guide/gi, '/oci-pio-guide')
-      .replace(/\/+$/, '') || '/';
+      .replace(/\/+$/, '')
+      .toLowerCase() || '/';
 
   if (STATIC_ROUTE_SEO_REGISTRY[clean]) {
     return STATIC_ROUTE_SEO_REGISTRY[clean];
@@ -599,7 +642,7 @@ export function isRouteRegisteredInSeoManager(rawPath: string): {
   }
 
   const { strippedPath } = getLangFromUrlPath(rawPath || '/');
-  const clean = strippedPath.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+  const clean = strippedPath.split('?')[0].split('#')[0].replace(/\/+$/, '').toLowerCase() || '/';
 
   for (const pattern of KNOWN_DYNAMIC_ROUTE_PATTERNS) {
     if (pattern.regex.test(clean)) {
@@ -741,14 +784,20 @@ export function validateAndSanitizeSeoMetadata(
   const errors: string[] = [];
 
   const { strippedPath } = getLangFromUrlPath(rawPath || '/');
+  const routeDirective = inspectRouteIndexingDirective(rawPath);
   const isAdminOrAudit =
     Boolean(partial.noindex) ||
+    routeDirective.isSelfRoute ||
     strippedPath === '/admin' ||
     strippedPath.startsWith('/admin/') ||
     strippedPath === '/audit';
 
   const canonical = normalizeCanonicalUrl(
-    partial.canonical ? new URL(partial.canonical, 'https://www.visaapply.org').pathname : rawPath
+    routeDirective.isSelfRoute
+      ? rawPath
+      : partial.canonical
+        ? new URL(partial.canonical, 'https://www.visaapply.org').pathname
+        : rawPath
   );
   if (!partial.canonical || partial.canonical !== canonical) {
     fixedFields.push('canonical');

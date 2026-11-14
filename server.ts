@@ -19,6 +19,10 @@ import {
   normalizeCanonicalUrl,
   validateAndSanitizeSeoMetadata
 } from './src/utils/seoMetadataManager';
+import {
+  renderRouteSsrPayload,
+  injectSsrPayloadIntoHtml
+} from './src/utils/ssrRouteRenderer';
 import dotenv from 'dotenv';
 import {
   saveBatchStateToDb,
@@ -2008,6 +2012,12 @@ app.use(async (req, res, next) => {
       return res.redirect(302, `/admin/login?redirect=${encodeURIComponent(cleanReqPath)}`);
     }
 
+    const ssrPayload = renderRouteSsrPayload(req.path || '/');
+    if (ssrPayload.statusCode === 301 && ssrPayload.cleanPath) {
+      res.setHeader('X-Robots-Tag', 'noindex, follow');
+      return res.redirect(301, ssrPayload.cleanPath);
+    }
+
     const indexPath = path.join(__dirname, 'index.html');
     const rawHtml = fs.readFileSync(indexPath, 'utf-8');
     let transformed = await vite.transformIndexHtml(req.originalUrl, rawHtml);
@@ -2016,29 +2026,25 @@ app.use(async (req, res, next) => {
     transformed = transformed.replace(/<meta\s+name=['"]impact-site-verification['"][^>]*>\s*/gi, '');
     transformed = transformed.replace(/<head>/i, `<head>\n    ${impactTag}`);
 
+    const og = getServerSideOgMeta(req.path);
+    const mergedPayload = {
+      ...ssrPayload,
+      title: og.ogTitle && !og.ogTitle.startsWith('VisaApply.org – Global Visa') ? og.ogTitle : ssrPayload.title,
+      description: og.ogDesc && !og.ogDesc.startsWith('Check bilateral visa requirements for any passport') ? og.ogDesc : ssrPayload.description,
+      canonicalUrl: ssrPayload.canonicalUrl,
+      ogImage: og.ogImage || ssrPayload.ogImage,
+      robots: isAdminPageReq ? 'noindex, nofollow' : ssrPayload.robots,
+    };
+
+    transformed = injectSsrPayloadIntoHtml(transformed, mergedPayload);
+
     if (isAdminPageReq) {
       res.setHeader('X-Robots-Tag', 'noindex, nofollow');
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-      transformed = transformed.replace(/<meta\s+name=['"]robots['"][^>]*>\s*/gi, '');
-      transformed = transformed.replace(/<head>/i, `<head>\n    <meta name="robots" content="noindex, nofollow" />\n    <meta name="googlebot" content="noindex, nofollow" />`);
+    } else {
+      res.setHeader('X-Robots-Tag', mergedPayload.robots);
+      res.setHeader('Link', `<${mergedPayload.canonicalUrl}>; rel="canonical"`);
     }
-
-    const og = getServerSideOgMeta(req.path);
-    const esc = (s: string) => s.replace(/"/g, '&quot;');
-    transformed = transformed
-      .replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(og.ogTitle)}</title>`)
-      .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${esc(og.ogUrl)}" />`)
-      .replace(/<link\s+rel="alternate"\s+hreflang="en"[^>]*\/?>/i, `<link rel="alternate" hreflang="en" data-dynamic-hreflang="true" href="${esc(og.ogUrl)}" />`)
-      .replace(/<link\s+rel="alternate"\s+hreflang="x-default"[^>]*\/?>/i, `<link rel="alternate" hreflang="x-default" data-dynamic-hreflang="true" href="${esc(og.ogUrl)}" />`)
-      .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${esc(og.ogDesc)}" />`)
-      .replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${esc(og.ogTitle)}" />`)
-      .replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${esc(og.ogDesc)}" />`)
-      .replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${esc(og.ogUrl)}" />`)
-      .replace(/<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image" content="${esc(og.ogImage)}" />`)
-      .replace(/<meta\s+property="og:image:secure_url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:secure_url" content="${esc(og.ogImage)}" />`)
-      .replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${esc(og.twitterTitle)}" />`)
-      .replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${esc(og.twitterDesc)}" />`)
-      .replace(/<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${esc(og.ogImage)}" />`);
 
     res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(transformed);
   } catch (err) {

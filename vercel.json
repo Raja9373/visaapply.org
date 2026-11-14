@@ -5,6 +5,11 @@
       "schedule": "30 21 * * *"
     }
   ],
+  "functions": {
+    "api/render.ts": {
+      "includeFiles": "dist/index.html"
+    }
+  },
   "redirects": [
     {
       "source": "/:path*",
@@ -15,6 +20,16 @@
         }
       ],
       "destination": "https://www.visaapply.org/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/in-to-in",
+      "destination": "https://www.visaapply.org/immigration/in",
+      "permanent": true
+    },
+    {
+      "source": "/in-to-in-:rest*",
+      "destination": "https://www.visaapply.org/immigration/in",
       "permanent": true
     }
   ],
@@ -95,10 +110,15 @@
     { "source": "/sitemap-:sub.xml", "destination": "/sitemap-:sub.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/llms.txt", "destination": "/llms.txt" },
+    { "source": "/ads.txt", "destination": "/ads.txt" },
+    { "source": "/favicon.svg", "destination": "/favicon.svg" },
+    { "source": "/manifest.json", "destination": "/manifest.json" },
     { "source": "/ai-catalog.json", "destination": "/ai-catalog.json" },
     { "source": "/.well-known/ai-catalog.json", "destination": "/.well-known/ai-catalog.json" },
+    { "source": "/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/og/:path*", "destination": "/og/:path*" },
     { "source": "/api/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/|assets/|og/|.*\\..*).*)", "destination": "/api/render?path=/$1" }
   ]
 }

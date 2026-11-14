@@ -68,14 +68,17 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
               { from: 'in', to: 'us', label: '🇮🇳 India → 🇺🇸 USA (278 Visas)' },
               { from: 'ae', to: 'gb', label: '🇦🇪 UAE → 🇬🇧 UK (38 Visas)' },
             ].map((corridor) => (
-              <button
+              <a
                 key={`${corridor.from}-${corridor.to}`}
-                type="button"
-                onClick={() => onNavigate(`/${corridor.from}-to-${corridor.to}`)}
+                href={`/${corridor.from}-to-${corridor.to}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate(`/${corridor.from}-to-${corridor.to}`);
+                }}
                 className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white cursor-pointer transition-colors"
               >
                 {corridor.label} →
-              </button>
+              </a>
             ))}
           </div>
         </div>
@@ -166,11 +169,12 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
             const toLower = route.toCountry.toLowerCase();
             const fromIata = AIRPORT_IATA_MAP[fromLower] || route.fromCountry;
             const toIata = AIRPORT_IATA_MAP[toLower] || route.toCountry;
+            const routeHref = `/${fromLower}-to-${toLower}`;
 
             return (
-              <div
+              <article
                 key={`${fromLower}-${toLower}`}
-                onClick={() => onNavigate(`/${fromLower}-to-${toLower}`)}
+                onClick={() => onNavigate(routeHref)}
                 className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-lg hover:border-blue-400 transition-all cursor-pointer flex flex-col justify-between group"
               >
                 <div>
@@ -179,9 +183,17 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
                       <span>{route.fromFlag}</span>
                       <span className="text-xs text-slate-400">→</span>
                       <span>{route.toFlag}</span>
-                      <span className="text-sm group-hover:text-[#0B3D91] transition-colors">
-                        {route.fromName} to {route.toName}
-                      </span>
+                      <a
+                        href={routeHref}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onNavigate(routeHref);
+                        }}
+                        className="text-sm group-hover:text-[#0B3D91] transition-colors hover:underline"
+                      >
+                        {route.fromName} to {route.toName} Visa
+                      </a>
                     </div>
                     <span className="bg-blue-50 text-[#0B3D91] text-xs font-black px-2.5 py-1 rounded-full shrink-0">
                       {route.totalVisas} Visas
@@ -217,6 +229,24 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
                       🛤 <strong>Best Track:</strong> {route.bestRoute}
                     </div>
                   </div>
+
+                  {/* Direct Category Sub-Links for Crawler Discovery */}
+                  <div className="mt-3 pt-2 border-t border-slate-100 flex flex-wrap gap-1.5">
+                    {(['tourist', 'work', 'student', 'family', 'business', 'pr'] as const).map((cat) => (
+                      <a
+                        key={cat}
+                        href={`/${fromLower}-to-${toLower}-${cat}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onNavigate(`/${fromLower}-to-${toLower}-${cat}`);
+                        }}
+                        className="text-[10px] font-semibold text-slate-600 hover:text-[#0B3D91] bg-slate-50 hover:bg-blue-50 border border-slate-200 px-2 py-0.5 rounded"
+                      >
+                        {cat === 'pr' ? 'PR' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                      </a>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
@@ -231,25 +261,130 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
                   >
                     ⇄ Swap ({route.toCountry}→{route.fromCountry})
                   </button>
-                  <button
-                    type="button"
+                  <a
+                    href={`/flights?from=${fromIata}&to=${toIata}`}
                     onClick={(e) => {
+                      e.preventDefault();
                       e.stopPropagation();
                       onNavigate(`/flights?from=${fromIata}&to=${toIata}`);
                     }}
                     className="text-[11px] font-bold text-emerald-700 hover:underline cursor-pointer"
                   >
                     ✈ {fromIata}→{toIata} Flights
-                  </button>
-                  <span className="text-xs font-extrabold text-[#0B3D91]">
+                  </a>
+                  <a
+                    href={routeHref}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onNavigate(routeHref);
+                    }}
+                    className="text-xs font-extrabold text-[#0B3D91] hover:underline"
+                  >
                     View {route.totalVisas} Visas →
-                  </span>
+                  </a>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
+
+        {/* Crawlable Global Origin-to-Destination Hub Matrix for Search Engine Indexing */}
+        <nav
+          aria-label="Global Bilateral Visa Routes Directory"
+          className="mt-12 bg-white rounded-2xl border border-slate-200 p-6 space-y-6"
+        >
+          <div>
+            <h2 className="text-lg font-black text-slate-900">
+              Complete Global Bilateral Visa Corridors &amp; Country Immigration Hubs (2026 Index)
+            </h2>
+            <p className="text-xs text-slate-600 mt-1">
+              Direct crawlable index of bilateral visa requirements, category pathways, and official immigration hubs across all sovereign jurisdictions.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2.5">
+              1. Global Destination Visa Guides for Indian Citizens (IN → All Destinations)
+            </h3>
+            <div className="flex flex-wrap gap-1.5">
+              {allIsoCodes
+                .filter((code) => code !== 'in')
+                .map((code) => (
+                  <a
+                    key={`in-to-${code}`}
+                    href={`/in-to-${code}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate(`/in-to-${code}`);
+                    }}
+                    className="text-[11px] font-medium text-slate-700 hover:text-[#0B3D91] hover:underline bg-slate-50 border border-slate-200 px-2 py-0.5 rounded"
+                  >
+                    {FLAG_MAP_249[code]} {NAME_MAP_249[code]} Visa
+                  </a>
+                ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2.5">
+              2. Global Country Immigration Hubs &amp; Inbound Corridors
+            </h3>
+            <div className="flex flex-wrap gap-1.5">
+              {allIsoCodes.map((code) => (
+                <a
+                  key={`imm-${code}`}
+                  href={`/immigration/${code}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate(`/immigration/${code}`);
+                  }}
+                  className="text-[11px] font-medium text-slate-700 hover:text-[#0B3D91] hover:underline bg-slate-50 border border-slate-200 px-2 py-0.5 rounded"
+                >
+                  {NAME_MAP_249[code]} Immigration ({code.toUpperCase()})
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2.5">
+              3. High-Volume International Bilateral Corridors (Any-to-Any Passport Matrix)
+            </h3>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                ['am', 'ba'], ['au', 'my'], ['br', 'de'], ['us', 'be'], ['zw', 'gb'],
+                ['us', 'gb'], ['us', 'ca'], ['us', 'au'], ['us', 'de'], ['us', 'fr'], ['us', 'jp'], ['us', 'ae'], ['us', 'sg'],
+                ['gb', 'us'], ['gb', 'ca'], ['gb', 'au'], ['gb', 'ae'], ['gb', 'sg'], ['gb', 'de'], ['gb', 'fr'], ['gb', 'es'],
+                ['ca', 'us'], ['ca', 'gb'], ['ca', 'au'], ['ca', 'de'], ['ca', 'fr'], ['ca', 'jp'], ['ca', 'ae'], ['ca', 'in'],
+                ['au', 'us'], ['au', 'gb'], ['au', 'ca'], ['au', 'nz'], ['au', 'sg'], ['au', 'jp'], ['au', 'id'], ['au', 'th'],
+                ['ae', 'us'], ['ae', 'gb'], ['ae', 'ca'], ['ae', 'de'], ['ae', 'fr'], ['ae', 'ch'], ['ae', 'sg'], ['ae', 'au'],
+                ['sg', 'us'], ['sg', 'gb'], ['sg', 'au'], ['sg', 'jp'], ['sg', 'cn'], ['sg', 'de'], ['sg', 'fr'], ['sg', 'my'],
+                ['de', 'us'], ['de', 'ca'], ['de', 'au'], ['de', 'jp'], ['de', 'sg'], ['de', 'ae'], ['de', 'th'], ['de', 'br'],
+                ['fr', 'us'], ['fr', 'ca'], ['fr', 'au'], ['fr', 'jp'], ['fr', 'sg'], ['fr', 'ae'], ['fr', 'ma'], ['fr', 'sn'],
+                ['za', 'gb'], ['za', 'au'], ['za', 'nz'], ['za', 'us'], ['za', 'ca'], ['za', 'ae'], ['za', 'de'], ['za', 'ie'],
+                ['ng', 'gb'], ['ng', 'us'], ['ng', 'ca'], ['ng', 'ae'], ['ng', 'de'], ['ng', 'za'], ['ph', 'us'], ['ph', 'ca'],
+                ['ph', 'au'], ['ph', 'jp'], ['ph', 'ae'], ['ph', 'sg'], ['pk', 'gb'], ['pk', 'us'], ['pk', 'ca'], ['pk', 'ae'],
+                ['pk', 'sa'], ['bd', 'us'], ['bd', 'gb'], ['bd', 'ca'], ['bd', 'ae'], ['bd', 'my'], ['br', 'us'], ['br', 'pt'],
+                ['mx', 'us'], ['mx', 'ca'], ['mx', 'es'], ['kr', 'us'], ['kr', 'jp'], ['kr', 'au'], ['jp', 'us'], ['jp', 'gb'],
+              ].map(([o, d]) => (
+                <a
+                  key={`matrix-${o}-to-${d}`}
+                  href={`/${o}-to-${d}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate(`/${o}-to-${d}`);
+                  }}
+                  className="text-[11px] font-medium text-blue-800 hover:underline bg-blue-50/60 border border-blue-200 px-2 py-0.5 rounded"
+                >
+                  {NAME_MAP_249[o] || o.toUpperCase()} → {NAME_MAP_249[d] || d.toUpperCase()} ({o.toUpperCase()}-to-{d.toUpperCase()})
+                </a>
+              ))}
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
   );
 };
+

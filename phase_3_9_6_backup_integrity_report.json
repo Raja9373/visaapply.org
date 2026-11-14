@@ -1,0 +1,28 @@
+{
+  "phase": "3.9.6",
+  "auditTimestamp": "2026-11-13T13:50:00Z",
+  "archivePath": "/app/applet/backup_phase_3_9_5_batch11.tar.gz",
+  "exists": true,
+  "expectedSizeBytes": 113055,
+  "actualSizeBytes": 113055,
+  "sizeMatchesExpected": true,
+  "expectedSha256": "62d7aef0c86aaa918914847d09b647af6d994f4286fbc24330193e352dc776f4",
+  "actualSha256": "62d7aef0c86aaa918914847d09b647af6d994f4286fbc24330193e352dc776f4",
+  "sha256MatchesExpected": true,
+  "readableViaTarTzf": true,
+  "archivedFileCount": 9,
+  "archivedFiles": [
+    "src/data/priority2AuditData.ts",
+    "src/pages/GlobalVisaCoverageAuditPage.tsx",
+    "src/data/globalImmigrationHubData.ts",
+    "phase_3_9_3_proposed_batch11_candidates.json",
+    "phase_3_9_4_candidate_approval_matrix.csv",
+    "phase_3_9_4_profile_schema_readiness.csv",
+    "phase_3_9_4_official_source_recheck.csv",
+    "phase_3_9_4_change_manifest.json",
+    "phase_3_9_4_batch11_approval_report.md"
+  ],
+  "preCorrectionBackupRequired": false,
+  "preCorrectionBackupNote": "Zero source-code defects discovered during Phase 3.9.6 audit; no application source files required modification.",
+  "verificationResult": "PASS"
+}

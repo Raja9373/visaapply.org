@@ -57,12 +57,17 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
   ];
 
   const buildVisaUrl = (fromCode: string, toCode: string, cat: string, v: VisaItem) => {
-    if (/^in-to-/i.test(v.id)) {
-      return `/${v.id.replace(/^in-to-/i, `${fromCode.toLowerCase()}-to-`)}`;
+    const f = fromCode.toLowerCase();
+    const t = toCode.toLowerCase();
+    if (f === t) {
+      return `/immigration/${t}`;
     }
-    const prefixRegex = new RegExp(`^[a-z]{2,3}-to-${toCode.toLowerCase()}-${cat}-`, 'i');
+    if (/^in-to-/i.test(v.id)) {
+      return `/${v.id.replace(/^in-to-/i, `${f}-to-`)}`.toLowerCase();
+    }
+    const prefixRegex = new RegExp(`^[a-z]{2,3}-to-${t}-${cat}-`, 'i');
     const shortId = v.id.replace(prefixRegex, '');
-    return `/${fromCode.toLowerCase()}-to-${toCode.toLowerCase()}-${cat}-${shortId}`;
+    return `/${f}-to-${t}-${cat}-${shortId}`.toLowerCase();
   };
 
   return (
@@ -345,21 +350,48 @@ export function SitemapPage({ navigate }: { navigate?: (path: string) => void })
               
               {/* Standard Country Matrix (Showing Primary Origin IN + Dual Access) */}
               {['IN', 'US', 'GB', 'CA', 'AU'].map(fromCode => {
-                if (fromCode === toCode) return null;
-                const countryData: CountryVisas = FULL_VISA_DB[fromCode]?.[toCode] || BASE_COUNTRY_VISAS[toCode];
+                if (fromCode.toLowerCase() === toCode.toLowerCase()) return null;
+                const fLower = fromCode.toLowerCase();
+                const tLower = toCode.toLowerCase();
+                const countryData: CountryVisas =
+                  FULL_VISA_DB[fromCode]?.[toCode] ||
+                  BASE_COUNTRY_VISAS[tLower] ||
+                  BASE_COUNTRY_VISAS[toCode];
                 if (!countryData) return null;
 
                 return (
-                  <div key={`${fromCode}-to-${toCode}`} className="space-y-2">
-                    <h3 className="text-sm font-semibold text-slate-700">From {COUNTRY_INFO[fromCode]?.name || fromCode} to {cName}:</h3>
+                  <div key={`${fLower}-to-${tLower}`} className="space-y-2">
+                    <h3 className="text-sm font-semibold text-slate-700 flex items-center justify-between flex-wrap gap-2">
+                      <a
+                        href={`/${fLower}-to-${tLower}`}
+                        onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/${fLower}-to-${tLower}`); } }}
+                        className="text-[#0B3D91] hover:underline font-bold"
+                      >
+                        From {COUNTRY_INFO[fromCode]?.name || fromCode} to {cName} ({fromCode.toUpperCase()} → {toCode.toUpperCase()}):
+                      </a>
+                      <a
+                        href={`/immigration/${tLower}`}
+                        onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/immigration/${tLower}`); } }}
+                        className="text-xs text-slate-500 hover:text-blue-700 hover:underline"
+                      >
+                        {cName} Immigration Hub →
+                      </a>
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {categoriesList.map(cat => {
                         const visas = countryData[cat] || [];
                         if (visas.length === 0) return null;
+                        const catHref = `/${fLower}-to-${tLower}-${cat}`;
                         return (
                           <div key={cat} className="bg-slate-50 p-3 rounded-lg border border-slate-100">
                             <h4 className="text-xs font-bold uppercase text-slate-500 mb-2 flex justify-between">
-                              <span>{cat}</span>
+                              <a
+                                href={catHref}
+                                onClick={(e) => { if (navigate) { e.preventDefault(); navigate(catHref); } }}
+                                className="hover:text-[#0B3D91] hover:underline"
+                              >
+                                {cat} Visas
+                              </a>
                               <span>({visas.length})</span>
                             </h4>
                             <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">

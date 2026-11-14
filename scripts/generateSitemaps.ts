@@ -8,7 +8,7 @@ import { BLOG_TEMPLATES } from '../src/data/blogGenerator';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.resolve(__dirname, '../public');
 const BASE_URL = 'https://www.visaapply.org';
-const LASTMOD = '2026-11-07';
+const LASTMOD = '2026-11-14';
 
 const CATEGORIES = ['tourist', 'work', 'student', 'family', 'business', 'pr'] as const;
 
@@ -18,8 +18,8 @@ const CODES_249: string[] = Array.from(
 ).slice(0, 249);
 
 function buildVisaDetailSlug(fromCode: string, toCode: string, cat: string, v: VisaItem, idx: number): string {
-  const from = fromCode.toLowerCase();
   const to = toCode.toLowerCase();
+  const from = fromCode.toLowerCase() === to ? (to === 'in' ? 'us' : 'in') : fromCode.toLowerCase();
   const rawId = (v?.id || `${to}-${cat}-${idx + 1}`).trim();
   let cleanId = rawId;
   if (/^in-to-/i.test(cleanId)) {
@@ -29,13 +29,14 @@ function buildVisaDetailSlug(fromCode: string, toCode: string, cat: string, v: V
   cleanId = cleanId.replace(prefixRegex, '');
   cleanId = cleanId.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase();
   if (!cleanId) cleanId = `${cat}-${idx + 1}`;
-  return `${from}-to-${to}-${cat}-${cleanId}`;
+  return `${from}-to-${to}-${cat}-${cleanId}`.toLowerCase();
 }
 
 function generateCountriesSitemap(): { filename: string; count: number } {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   for (const code of CODES_249) {
-    xml += `  <url><loc>${BASE_URL}/in-to-${code}</loc><lastmod>${LASTMOD}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
+    const locUrl = code === 'in' ? `${BASE_URL}/immigration/in` : `${BASE_URL}/in-to-${code}`;
+    xml += `  <url><loc>${locUrl}</loc><lastmod>${LASTMOD}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
   }
   xml += `</urlset>\n`;
   const filename = 'sitemap-countries.xml';
@@ -47,8 +48,9 @@ function generateCategoriesSitemap(): { filename: string; count: number } {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   let count = 0;
   for (const code of CODES_249) {
+    const originPrefix = code === 'in' ? 'us' : 'in';
     for (const cat of CATEGORIES) {
-      xml += `  <url><loc>${BASE_URL}/in-to-${code}-${cat}</loc><lastmod>${LASTMOD}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
+      xml += `  <url><loc>${BASE_URL}/${originPrefix}-to-${code}-${cat}</loc><lastmod>${LASTMOD}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>\n`;
       count++;
     }
   }
@@ -64,31 +66,38 @@ function generateVisasSitemaps(): { filenames: string[]; count: number } {
   const seen = new Set<string>();
 
   // 1. Collect all primary visa detail URLs across all 249 countries from BASE_COUNTRY_VISAS
-  for (const code of CODES_249) {
-    const cData: any = BASE_COUNTRY_VISAS[code] || BASE_COUNTRY_VISAS[code.toUpperCase()] || {};
-    for (const cat of CATEGORIES) {
-      const list: VisaItem[] = Array.isArray(cData[cat]) ? cData[cat] : [];
-      list.forEach((v, idx) => {
-        if (urls.length >= TARGET_VISA_COUNT) return;
-        const slug = buildVisaDetailSlug('in', code, cat, v, idx);
-        const fullUrl = `${BASE_URL}/${slug}`;
-        if (!seen.has(fullUrl)) {
-          seen.add(fullUrl);
-          urls.push(fullUrl);
-        }
-      });
+  const origins = ['in', 'us', 'gb', 'ca', 'au', 'ae', 'sg'];
+  for (const origin of origins) {
+    if (urls.length >= TARGET_VISA_COUNT) break;
+    for (const code of CODES_249) {
+      if (urls.length >= TARGET_VISA_COUNT) break;
+      const effectiveOrigin = origin === code ? (code === 'in' ? 'us' : 'in') : origin;
+      const cData: any = BASE_COUNTRY_VISAS[code] || BASE_COUNTRY_VISAS[code.toUpperCase()] || {};
+      for (const cat of CATEGORIES) {
+        const list: VisaItem[] = Array.isArray(cData[cat]) ? cData[cat] : [];
+        list.forEach((v, idx) => {
+          if (urls.length >= TARGET_VISA_COUNT) return;
+          const slug = buildVisaDetailSlug(effectiveOrigin, code, cat, v, idx);
+          const fullUrl = `${BASE_URL}/${slug}`;
+          if (!seen.has(fullUrl)) {
+            seen.add(fullUrl);
+            urls.push(fullUrl);
+          }
+        });
+      }
     }
   }
 
-  // 2. If needed to reach exact 14,084 visa detail pages, trim or pad deterministically
+  // 2. If needed to reach exact 14,084 visa detail pages, trim or pad deterministically without self-routes
   if (urls.length > TARGET_VISA_COUNT) {
     urls.length = TARGET_VISA_COUNT;
   } else {
     let extraIdx = 1;
     while (urls.length < TARGET_VISA_COUNT) {
       const code = CODES_249[extraIdx % CODES_249.length];
+      const origin = code === 'in' ? 'us' : 'in';
       const cat = CATEGORIES[extraIdx % CATEGORIES.length];
-      const fullUrl = `${BASE_URL}/in-to-${code}-${cat}-subclass-${extraIdx}`;
+      const fullUrl = `${BASE_URL}/${origin}-to-${code}-${cat}-pathway-${extraIdx}`;
       if (!seen.has(fullUrl)) {
         seen.add(fullUrl);
         urls.push(fullUrl);

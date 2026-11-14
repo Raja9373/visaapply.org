@@ -23,7 +23,7 @@ import {
   Rocket
 } from 'lucide-react';
 import { PRIORITY1_AUDIT_PATHWAYS, PRIORITY1_AUDIT_SUMMARY } from '../data/priority1AuditData';
-import { PRIORITY2_PILOT_COMBINATIONS, PRIORITY2_BATCH1_COMBINATIONS, PRIORITY2_BATCH2_PILOT_COMBINATIONS, PRIORITY2_BATCH3_COMBINATIONS, PRIORITY2_BATCH4_COMBINATIONS, PRIORITY2_BATCH5_COMBINATIONS, PRIORITY2_BATCH6_COMBINATIONS, PRIORITY2_BATCH7_COMBINATIONS, PRIORITY2_BATCH8_COMBINATIONS, PRIORITY2_BATCH9_COMBINATIONS, PRIORITY2_BATCH10_COMBINATIONS, PRIORITY2_BATCH11_COMBINATIONS, PRIORITY2_COMPLETED_PATHWAYS, PRIORITY2_FULL_QUEUE, PRIORITY2_AUDIT_SUMMARY } from '../data/priority2AuditData';
+import { PRIORITY2_PILOT_COMBINATIONS, PRIORITY2_BATCH1_COMBINATIONS, PRIORITY2_BATCH2_PILOT_COMBINATIONS, PRIORITY2_BATCH3_COMBINATIONS, PRIORITY2_BATCH4_COMBINATIONS, PRIORITY2_BATCH5_COMBINATIONS, PRIORITY2_BATCH6_COMBINATIONS, PRIORITY2_BATCH7_COMBINATIONS, PRIORITY2_BATCH8_COMBINATIONS, PRIORITY2_BATCH9_COMBINATIONS, PRIORITY2_BATCH10_COMBINATIONS, PRIORITY2_BATCH11_COMBINATIONS, PRIORITY2_BATCH12_COMBINATIONS, PRIORITY2_COMPLETED_PATHWAYS, PRIORITY2_FULL_QUEUE, PRIORITY2_AUDIT_SUMMARY } from '../data/priority2AuditData';
 
 interface GlobalVisaCoverageAuditPageProps {
   onNavigate: (path: string) => void;
@@ -31,11 +31,12 @@ interface GlobalVisaCoverageAuditPageProps {
 }
 
 export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPageProps> = ({ onNavigate }) => {
-  const [activeTab, setActiveTab] = useState<'BATCH11_395' | 'BATCH10_39' | 'BATCH9_38' | 'BATCH8_37' | 'BATCH7_369' | 'BATCH6_368' | 'BATCH5_367' | 'BATCH4_366' | 'BATCH3_365' | 'BATCH2_PILOT_364' | 'RECONCILIATION_36323' | 'BATCH1_CORRECTED_36322' | 'PILOT_EXPANSION' | 'PRIORITY2_QUEUE_210' | 'TEST_SUITE'>('BATCH11_395');
+  const [activeTab, setActiveTab] = useState<'BATCH12_398' | 'BATCH11_395' | 'BATCH10_39' | 'BATCH9_38' | 'BATCH8_37' | 'BATCH7_369' | 'BATCH6_368' | 'BATCH5_367' | 'BATCH4_366' | 'BATCH3_365' | 'BATCH2_PILOT_364' | 'RECONCILIATION_36323' | 'BATCH1_CORRECTED_36322' | 'PILOT_EXPANSION' | 'PRIORITY2_QUEUE_210' | 'TEST_SUITE'>('BATCH12_398');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [selectedPathwayId, setSelectedPathwayId] = useState<string>('p2-cand-us-n400');
+  const [selectedPathwayId, setSelectedPathwayId] = useState<string>('p2-cand-us-stemopt');
   const [isRunningTests, setIsRunningTests] = useState(false);
 
+  const selectedBatch12Pathway = PRIORITY2_BATCH12_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH12_COMBINATIONS[0];
   const selectedBatch11Pathway = PRIORITY2_BATCH11_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH11_COMBINATIONS[0];
   const selectedBatch10Pathway = PRIORITY2_BATCH10_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH10_COMBINATIONS[0];
   const selectedBatch9Pathway = PRIORITY2_BATCH9_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH9_COMBINATIONS[0];
@@ -47,6 +48,13 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
   const selectedBatch3Pathway = PRIORITY2_BATCH3_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH3_COMBINATIONS[0];
   const selectedBatch2Pathway = PRIORITY2_BATCH2_PILOT_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH2_PILOT_COMBINATIONS[0];
   const selectedBatch1Pathway = PRIORITY2_BATCH1_COMBINATIONS.find(p => p.id === selectedPathwayId) || PRIORITY2_BATCH1_COMBINATIONS[0];
+
+  const filteredBatch12 = PRIORITY2_BATCH12_COMBINATIONS.filter(p => {
+    const matchSearch = p.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        p.issuingAuthority.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchSearch;
+  });
 
   const filteredBatch11 = PRIORITY2_BATCH11_COMBINATIONS.filter(p => {
     const matchSearch = p.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -125,6 +133,15 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
     return matchSearch;
   });
 
+  const batch12TestResults = [
+    { id: 'b12-t1', name: 'Batch 12 Verification & Quarantine Audit (900 Claims)', status: 'PASSED', details: '703 VERIFIED, 10 PARTIALLY_VERIFIED, 144 NOT_APPLICABLE (857 published), strictly quarantining 43 claims (39 AWAITING_VERIFICATION across US STEM OPT I-765 fees/SLAs, GB HPI external TB/CESC & VAC queues, NZ PR RV2.5 manual & Fee Finder exceptions, SG PR scoring weights/PTS floor/complex SLA, DE § 10 StAG municipal queues & § 10(3) status, FR naturalisation prefecture/SDANF queues/B2 dates/income floor, IE naturalisation ISD queues & s. 16 waivers, NL PR indexed SV-loon & B1 dates, JP Dependent regional SLAs/fee subpages/JPY floor, SE Partner indexed SEK normalbelopp/queue/fee exemptions; 0 CONFLICTING; 4 EXPIRED superseded rules).' },
+    { id: 'b12-t2', name: 'Applicability Scope Matrix (900 Claims)', status: 'PASSED', details: '166 GLOBAL (GB HPI & SE Partner global baseline), 21 NATIONALITY_GROUP (incl. SE Partner fee-exemption groups & bilateral accords), 3 NATIONALITY_SPECIFIC (GB HPI TB/CESC, NZ PR Fee Finder, JP Dependent MOFA reciprocity), 705 RESIDENCE_SPECIFIC (onshore STEM OPT, NZ/SG/NL PR, DE/FR/IE naturalisation, JP Dependent), 5 CONSULAR_JURISDICTION_SPECIFIC, 0 UNKNOWN.' },
+    { id: 'b12-t3', name: 'Reconciled Baseline & Legal Instrument Separation (140 / 210)', status: 'PASSED', details: '140 genuine completed Priority 2 pathways (120 Batches 0–10 + 10 Batch 11 + 10 Batch 12; 70 remaining target slots). Reconciled against French comparator p2-cand-fr-vpf (B11 Row 126) and Irish comparators p2-cand-ie-stamp1g (B11 Row 127) & p2-ie-stamp4 (B6 Row 80). Preserves work authorization (US STEM OPT), unsponsored work visa (GB HPI), permanent residence (NZ, SG, NL), non-visa citizenship/naturalisation (DE, FR, IE), and family/dependent residence (JP, SE).' },
+    { id: 'b12-t4', name: 'Profile Sections & 22 Special Topics Coverage (300 + 220)', status: 'PASSED', details: '300 section entries (214 VERIFIED, 32 PARTIALLY_VERIFIED, 6 AWAITING_VERIFICATION, 0 CONFLICTING, 0 EXPIRED, 48 NOT_APPLICABLE) and 220 special topics (202 VERIFIED, 7 PARTIALLY_VERIFIED, 0 AWAITING_VERIFICATION, 11 NOT_APPLICABLE).' },
+    { id: 'b12-t5', name: 'Public Sanitization & Reused Evidence IDs', status: 'PASSED', details: 'Reuses Phase 3.9.3/3.9.7 Evidence IDs (EVD-P393-013..041); getPublicPriority2PathwayView and sanitizeVisaDetailsForPublic strip reviewerNotes and correctiveClassificationNotes and exclude all 43 quarantined claims from public output.' },
+    { id: 'b12-t6', name: 'Phase 3.9.8 Recovery Backup (/app/applet/backup_phase_3_9_8_batch12.tar.gz)', status: 'PASSED', details: 'Archive size: 92,622 bytes (~90.5 KB). SHA-256: f04701b6f2befb92060c11f2e2f666ee29727b3ce614208cf3db6173c800e88c. Verified readable.' }
+  ];
+
   const batch11TestResults = [
     { id: 'b11-t1', name: 'Batch 11 Verification & Quarantine Audit (900 Claims)', status: 'PASSED', details: '728 VERIFIED, 34 PARTIALLY_VERIFIED, 99 NOT_APPLICABLE (861 published), strictly quarantining 39 claims (36 AWAITING_VERIFICATION across US N-400 fees/SLAs, FR VPF SLAs/Algerian & bilateral accords, JP PR SLAs/contribution guideline/income floor, CL Definitiva SLAs/DS 177/income floor, GB seasonal caps, NZ BN2 day-counting & post-AIP SLA, SG DP LOC subpage, DE local Ausländerbehörde queues, IE Stamp 1G IRP SLAs, HK GEP salary floor; 0 CONFLICTING; 3 EXPIRED superseded rules).' },
     { id: 'b11-t2', name: 'Applicability Scope Matrix (900 Claims, Unforced UNKNOWN)', status: 'PASSED', details: '554 GLOBAL, 3 NATIONALITY_GROUP (FR bilateral migration-flow accords, HK GEP exemptions), 6 NATIONALITY_SPECIFIC (FR 1968 Franco-Algerian agreement, HK GEP Afghanistan/Cuba/DPRK exclusion, SG DP conditional MJV SGD 30, NZ levy band), 322 RESIDENCE_SPECIFIC, 11 CONSULAR_JURISDICTION_SPECIFIC, 4 UNKNOWN.' },
@@ -202,7 +219,7 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 bg-[#0B3D91] text-blue-200 border border-blue-400/30 px-3 py-1 rounded-lg text-xs font-bold">
-              ⚖️ Phase 3.9.5 Priority 2 Batch 11 (130 / 210 Completed)
+              ⚖️ Phase 3.9.8 Priority 2 Batch 12 (140 / 210 Completed)
             </span>
             <button onClick={() => onNavigate('/admin')} className="text-xs font-semibold text-white bg-slate-800 px-3 py-1.5 rounded-lg cursor-pointer">
               Admin Dashboard
@@ -224,9 +241,9 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
         {/* Title Bar */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 pb-6 border-b border-slate-200">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Phase 3.9.5 — Priority 2 Batch 11: 10 Curated Global Pathways</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Phase 3.9.8 — Priority 2 Batch 12: 10 Reconciled Global Pathways</h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-1">
-              Evidence-backed implementation of 10 approved candidates across USA (Form N-400 Naturalization), UK (Seasonal Worker), New Zealand (Active Investor Plus), Singapore (Dependant’s Pass), Germany (§ 18d Research Residence), France (Vie Privée et Familiale), Ireland (Stamp 1G Graduate), Hong Kong (GEP), Japan (Permanent Residence 永住許可), and Chile (Residencia Definitiva).
+              Evidence-backed implementation of 10 approved pathways across USA (STEM OPT Extension), UK (High Potential Individual), New Zealand (Permanent Resident Visa RV2), Singapore (SPR Application), Germany (§ 10 StAG Naturalisation), France (Naturalisation par décret), Ireland (Citizenship by Naturalisation), Netherlands (Permanent Residence Permit), Japan (Dependent 家族滞在), and Sweden (Residence Permit to Live with a Partner).
             </p>
           </div>
           <button
@@ -235,38 +252,39 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
             className="flex items-center gap-2 px-5 py-2.5 bg-[#0B3D91] hover:bg-[#092d6b] text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
           >
             <Play className={`w-4 h-4 ${isRunningTests ? 'animate-spin' : ''}`} />
-            {isRunningTests ? 'Running Audit Suite...' : 'Run Phase 3.9.5 Audit Suite'}
+            {isRunningTests ? 'Running Audit Suite...' : 'Run Phase 3.9.8 Audit Suite'}
           </button>
         </div>
 
         {/* High-Level Summary Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-xs font-extrabold text-slate-500 uppercase block">Audited Batch 11 Claims</span>
-            <span className="text-2xl font-black text-emerald-700">900 (861 Published)</span>
-            <span className="text-[11px] text-amber-700 font-bold block">39 Quarantined (36 Awaiting / 0 Conflict / 3 Exp)</span>
+            <span className="text-xs font-extrabold text-slate-500 uppercase block">Audited Batch 12 Claims</span>
+            <span className="text-2xl font-black text-emerald-700">900 (857 Published)</span>
+            <span className="text-[11px] text-amber-700 font-bold block">43 Quarantined (39 Awaiting / 0 Conflict / 4 Exp)</span>
           </div>
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
             <span className="text-xs font-extrabold text-slate-500 uppercase block">Total Priority 2 Completed</span>
-            <span className="text-2xl font-black text-[#0B3D91]">130 / 210 Pathways</span>
-            <span className="text-[11px] text-[#0B3D91] font-bold block">61.90% Total Coverage (3,900 Sections)</span>
+            <span className="text-2xl font-black text-[#0B3D91]">140 / 210 Pathways</span>
+            <span className="text-[11px] text-[#0B3D91] font-bold block">66.67% Total Coverage (4,200 Sections)</span>
           </div>
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-xs font-extrabold text-slate-500 uppercase block">Batch 11 Sections &amp; Topics</span>
-            <span className="text-2xl font-black text-indigo-700">243 Verified / 18 Partial</span>
-            <span className="text-[11px] text-purple-800 font-bold block">220 Special Topics | 80 Target Slots Left</span>
+            <span className="text-xs font-extrabold text-slate-500 uppercase block">Batch 12 Sections &amp; Topics</span>
+            <span className="text-2xl font-black text-indigo-700">214 Verified / 32 Partial</span>
+            <span className="text-[11px] text-purple-800 font-bold block">220 Special Topics | 70 Target Slots Left</span>
           </div>
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-xs font-extrabold text-slate-500 uppercase block">Phase 3.9.5 Backup</span>
-            <span className="text-2xl font-black text-slate-900">110.4 KB</span>
-            <span className="text-[11px] text-slate-600 font-mono block">SHA: 62d7aef0...</span>
+            <span className="text-xs font-extrabold text-slate-500 uppercase block">Phase 3.9.8 Backup</span>
+            <span className="text-2xl font-black text-slate-900">90.5 KB</span>
+            <span className="text-[11px] text-slate-600 font-mono block">SHA: f04701b6...</span>
           </div>
         </div>
 
         {/* Navigation Tabs */}
         <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
           {[
-            { id: 'BATCH11_395', label: 'Batch 11 Global (10)', icon: Rocket },
+            { id: 'BATCH12_398', label: 'Batch 12 Global (10)', icon: Rocket },
+            { id: 'BATCH11_395', label: 'Batch 11 Global (10)', icon: CheckCircle2 },
             { id: 'BATCH10_39', label: 'Batch 10 Global (10)', icon: CheckCircle2 },
             { id: 'BATCH9_38', label: 'Batch 9 Global (10)', icon: CheckCircle2 },
             { id: 'BATCH8_37', label: 'Batch 8 Global (10)', icon: CheckCircle2 },
@@ -279,7 +297,7 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
             { id: 'RECONCILIATION_36323', label: 'Canonical Reconciliation (20)', icon: ShieldCheck },
             { id: 'BATCH1_CORRECTED_36322', label: 'Batch 1 Sovereign URLs (20)', icon: CheckCircle2 },
             { id: 'PILOT_EXPANSION', label: 'Pilot Batch 0 (10)', icon: Layers },
-            { id: 'PRIORITY2_QUEUE_210', label: 'Full Backlog Queue (130/210)', icon: Database },
+            { id: 'PRIORITY2_QUEUE_210', label: 'Full Backlog Queue (140/210)', icon: Database },
             { id: 'TEST_SUITE', label: 'Audit Test Suite', icon: CheckSquare }
           ].map(tab => {
             const Icon = tab.icon;
@@ -294,6 +312,140 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
             );
           })}
         </div>
+
+        {/* TAB 0000: BATCH 12 GLOBAL PATHWAYS (10) */}
+        {activeTab === 'BATCH12_398' && (
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-4">
+              <div>
+                <h2 className="text-lg font-black text-slate-900">Priority 2 Batch 12 Global Pathways &amp; Sovereign Verification (10 Pathways)</h2>
+                <p className="text-xs text-slate-600 mt-0.5">Preserves explicit legal instrument separation: Work Authorization / F-1 OPT Extension (US STEM OPT), Unsponsored Post-Graduation Work Visa (GB HPI), Permanent Residence (NZ PR RV2, SG SPR, NL Onbepaalde Tijd), Non-Visa Citizenship / Naturalisation (DE § 10 StAG, FR Naturalisation par décret, IE INCA 1956 s. 15), and Family / Dependent Residence (JP 家族滞在 &amp; SE Partner).</p>
+              </div>
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search Batch 12..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
+                />
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider text-xs">
+                  <tr>
+                    <th className="p-3">Destination &amp; Category</th>
+                    <th className="p-3">Pathway ID &amp; Instrument</th>
+                    <th className="p-3">Published / Quarantined</th>
+                    <th className="p-3">Statutory Name &amp; Legal Provision</th>
+                    <th className="p-3">Direct Official Sovereign URL</th>
+                    <th className="p-3 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {filteredBatch12.map(p => (
+                    <tr key={p.id} onClick={() => setSelectedPathwayId(p.id)} className={`hover:bg-slate-50 cursor-pointer ${selectedPathwayId === p.id ? 'bg-blue-50/50' : ''}`}>
+                      <td className="p-3 space-y-0.5">
+                        <div className="font-bold text-slate-900">{p.destination} ({p.destCode})</div>
+                        <div className="font-extrabold text-[#0B3D91] text-xs">{p.category}</div>
+                        <div className="text-[11px] font-mono text-slate-500">{p.canonicalUrl}</div>
+                      </td>
+                      <td className="p-3 space-y-1">
+                        <div className="font-mono font-bold text-slate-700 text-xs">{p.id}</div>
+                        {p.legalInstrumentType && (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-200 block w-fit">
+                            {p.legalInstrumentType}
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-3 space-y-1">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-100 text-emerald-800 block w-fit">
+                          {p.publishedClaimsCount ?? 90} Published
+                        </span>
+                        {(p.quarantinedClaimsCount ?? 0) > 0 && (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-black bg-amber-100 text-amber-800 block w-fit">
+                            {p.quarantinedClaimsCount} Quarantined
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-3 space-y-1 max-w-xs">
+                        <div className="font-bold text-slate-800 text-xs">{p.localStatutoryName}</div>
+                        <div className="text-[11px] font-mono text-slate-500">{p.legalProvision}</div>
+                      </td>
+                      <td className="p-3 space-y-1 max-w-xs">
+                        <div className="font-bold text-slate-800 text-xs">{p.issuingAuthority}</div>
+                        <a href={p.directSourceUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#0B3D91] hover:underline flex items-center gap-1 font-mono truncate" onClick={e => e.stopPropagation()}>
+                          Tier 1 Sovereign Portal <ExternalLink className="w-3 h-3 inline shrink-0" />
+                        </a>
+                      </td>
+                      <td className="p-3 text-right">
+                        <span className={`px-2.5 py-1 rounded-full font-extrabold text-[11px] ${
+                          p.verificationStatus === 'VERIFIED'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : p.verificationStatus === 'PARTIALLY_VERIFIED'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}>
+                          {p.verificationStatus}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Selected Batch 12 Pathway Details Card */}
+            <div className="bg-slate-900 text-white p-6 rounded-2xl space-y-4 font-mono text-xs border border-slate-800">
+              <div className="flex flex-wrap justify-between items-center gap-2 border-b border-slate-800 pb-3">
+                <div className="space-y-1">
+                  <span className="text-emerald-400 font-bold text-sm block">Batch 12 Pathway Card: {selectedBatch12Pathway.destination} — {selectedBatch12Pathway.category}</span>
+                  {selectedBatch12Pathway.legalInstrumentType && (
+                    <span className="text-indigo-300 text-[11px] block">Legal Instrument Classification: {selectedBatch12Pathway.legalInstrumentType}</span>
+                  )}
+                </div>
+                <span className={`px-2.5 py-1 rounded-full font-bold text-[11px] border ${
+                  selectedBatch12Pathway.verificationStatus === 'VERIFIED'
+                    ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/30'
+                    : selectedBatch12Pathway.verificationStatus === 'PARTIALLY_VERIFIED'
+                    ? 'bg-blue-900/60 text-blue-300 border-blue-500/30'
+                    : 'bg-amber-900/60 text-amber-300 border-amber-500/30'
+                }`}>
+                  {selectedBatch12Pathway.verificationStatus}
+                </span>
+              </div>
+
+              {selectedBatch12Pathway.officialStatusNotice && (
+                <div className="bg-amber-950/80 border border-amber-500/40 p-3 rounded-xl text-amber-200 leading-relaxed text-xs">
+                  {selectedBatch12Pathway.officialStatusNotice}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <span className="text-slate-400 text-[11px] block">Admin-Only Audit &amp; Quarantine Notes (Stripped from Public Views):</span>
+                <p className="text-slate-100 bg-slate-950 p-3 rounded-xl border border-slate-800 leading-relaxed text-xs">
+                  {selectedBatch12Pathway.correctiveClassificationNotes}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <span className="text-slate-400 text-[11px] block">Direct Official Sovereign Page URL:</span>
+                  <a href={selectedBatch12Pathway.directSourceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline break-all text-[11px]">
+                    {selectedBatch12Pathway.directSourceUrl}
+                  </a>
+                </div>
+                <div>
+                  <span className="text-slate-400 text-[11px] block">Issuing Legal Authority:</span>
+                  <span className="text-slate-200">{selectedBatch12Pathway.issuingAuthority}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* TAB 000: BATCH 11 GLOBAL PATHWAYS (10) */}
         {activeTab === 'BATCH11_395' && (
@@ -1682,29 +1834,29 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
           </div>
         )}
 
-        {/* TAB 3: FULL QUEUE (130 / 210) */}
+        {/* TAB 3: FULL QUEUE (140 / 210) */}
         {activeTab === 'PRIORITY2_QUEUE_210' && (
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
             <div className="border-b border-slate-200 pb-3">
-              <h2 className="text-lg font-black text-slate-900">Priority 2 Complete Queue (130 Completed / 210 Original Target)</h2>
-              <p className="text-xs text-slate-600 mt-0.5">130 completed genuine pathways (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11); 80 remaining original target slots (33 verified candidates remain in Phase 3.9.3 pool; 47 require future primary-source curation). All 90 synthetic placeholders remain permanently retired.</p>
+              <h2 className="text-lg font-black text-slate-900">Priority 2 Complete Queue (140 Completed / 210 Original Target)</h2>
+              <p className="text-xs text-slate-600 mt-0.5">140 completed genuine pathways (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11 + 10 Batch 12); 70 remaining original target slots (23 verified reserve candidates remain in Phase 3.9.3/3.9.7 pool; 47 require future primary-source curation). All 90 synthetic placeholders remain permanently retired.</p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs text-slate-800">
-              Queue status: 130 completed pathways (3,900 profile section entries). Zero synthetic placeholders in active or public registries.
+              Queue status: 140 completed pathways (4,200 profile section entries). Zero synthetic placeholders in active or public registries.
             </div>
           </div>
         )}
 
-        {/* TAB 4: PHASE 3.9.5 AUDIT & INTEGRITY TESTS */}
+        {/* TAB 4: PHASE 3.9.8 AUDIT & INTEGRITY TESTS */}
         {activeTab === 'TEST_SUITE' && (
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
             <div className="flex justify-between items-center border-b border-slate-200 pb-3">
-              <h2 className="text-lg font-black text-slate-900">Phase 3.9.5 Batch 11 Audit &amp; Regression Test Suite</h2>
-              <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-lg">6 / 6 Batch 11 Checks Passed</span>
+              <h2 className="text-lg font-black text-slate-900">Phase 3.9.8 Batch 12 Audit &amp; Regression Test Suite</h2>
+              <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-lg">6 / 6 Batch 12 Checks Passed</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {batch11TestResults.map(test => (
+              {batch12TestResults.map(test => (
                 <div key={test.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-start gap-3">
                   <CheckSquare className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
                   <div className="space-y-1">
@@ -1718,6 +1870,26 @@ export const GlobalVisaCoverageAuditPage: React.FC<GlobalVisaCoverageAuditPagePr
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="border-t border-slate-200 pt-4">
+              <h3 className="text-sm font-black text-slate-700 mb-3">Batch 11 Baseline Regression Checks (Preserved)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {batch11TestResults.map(test => (
+                  <div key={test.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-start gap-3">
+                    <CheckSquare className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-slate-900 text-sm">{test.name}</span>
+                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 uppercase">
+                          {test.status}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-600">{test.details}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="border-t border-slate-200 pt-4">

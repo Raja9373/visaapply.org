@@ -125,8 +125,36 @@
     <meta name="twitter:title" content="VisaApply.org - World's Largest Visa Portal - 249 Countries" />
     <meta name="twitter:description" content="249 countries, 11,563+ visas, 61,752 routes, 10 languages, auto-update daily" />
     <meta name="twitter:image" content="https://www.visaapply.org/og-image.jpg" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
     <meta name="contact" content="contact@visaapply.org" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <script id="instant-canonical-sync">
+      (function () {
+        try {
+          var rawPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+          var lowerPath = rawPath.toLowerCase().replace(/^\/en(\/|$)/, '/') || '/';
+          var selfMatch = lowerPath.match(/^\/([a-z]{2})-to-\1(?:-|$)/);
+          if (selfMatch) {
+            var targetHub = '/immigration/' + selfMatch[1];
+            window.history.replaceState(null, '', targetHub);
+            lowerPath = targetHub;
+          } else if (rawPath !== lowerPath && !/^\/admin(\/|$)/i.test(rawPath)) {
+            window.history.replaceState(null, '', lowerPath + window.location.search + window.location.hash);
+          }
+          var canonicalHref = 'https://www.visaapply.org' + (lowerPath === '/' ? '/' : lowerPath);
+          var canLink = document.querySelector('link[rel="canonical"]');
+          if (canLink) canLink.setAttribute('href', canonicalHref);
+          var ogUrlMeta = document.querySelector('meta[property="og:url"]');
+          if (ogUrlMeta) ogUrlMeta.setAttribute('content', canonicalHref);
+          var hreflangs = document.querySelectorAll('link[rel="alternate"][data-dynamic-hreflang="true"]');
+          for (var i = 0; i < hreflangs.length; i++) {
+            hreflangs[i].setAttribute('href', canonicalHref);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script>
       (function () {
         var loaded = false;

@@ -1,0 +1,25 @@
+{
+  "phase": "3.9.7",
+  "title": "Priority 2 — Batch 12 Authoritative Candidate Curation Change Manifest",
+  "timestampUtc": "2026-11-13T14:11:46.213Z",
+  "budgetSpentInr": 0,
+  "strictPreservationVerified": {
+    "batches0To11Untouched": true,
+    "priority2CompletedCountUnchanged": 130,
+    "priority1CompletedCountUnchanged": 142,
+    "productionSqliteModified": false,
+    "neonTestDbModified": false,
+    "databaseSchemaModified": false,
+    "vercelCronPreserved": "30 21 * * * UTC",
+    "productionDeploymentTriggered": false,
+    "publicDatasetModified": false
+  },
+  "filesCreated": [
+    "phase_3_9_7_proposed_batch12_candidates.json",
+    "phase_3_9_7_batch12_candidate_matrix.csv",
+    "phase_3_9_7_duplicate_and_evidence_check.csv",
+    "phase_3_9_7_change_manifest.json",
+    "phase_3_9_7_batch12_curation_report.md"
+  ],
+  "filesModified": []
+}

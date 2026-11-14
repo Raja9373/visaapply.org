@@ -1,0 +1,81 @@
+{
+  "phase": "3.9.8",
+  "title": "Priority 2 — Batch 12 Full Implementation Change Manifest",
+  "created_at_utc": "2026-11-13T23:40:00Z",
+  "authoritative_baseline": {
+    "priority1_completed": "142 / 142",
+    "priority2_before_batch12": "130 / 210",
+    "priority2_after_batch12": "140 / 210",
+    "remaining_target_slots": 70,
+    "batch11_reconciled_rows": "121–130",
+    "batch12_implemented_rows": "131–140"
+  },
+  "pre_change_backup": {
+    "archive_path": "/app/applet/backup_phase_3_9_8_batch12.tar.gz",
+    "byte_size": 92622,
+    "sha256": "f04701b6f2befb92060c11f2e2f666ee29727b3ce614208cf3db6173c800e88c",
+    "readable_verified": true
+  },
+  "preserved_unchanged": {
+    "production_sqlite_untouched": true,
+    "neon_test_db_untouched": true,
+    "database_schema_untouched": true,
+    "cron_schedule_preserved": "30 21 * * * UTC",
+    "historical_batches_0_to_11_untouched": true,
+    "priority1_142_pathways_untouched": true,
+    "paid_apis_used": 0,
+    "additional_budget_spent_inr": 0
+  },
+  "files_created_or_updated": [
+    {
+      "file_path": "/backup_phase_3_9_8_batch12.tar.gz",
+      "byte_size": 92622,
+      "sha256": "f04701b6f2befb92060c11f2e2f666ee29727b3ce614208cf3db6173c800e88c"
+    },
+    {
+      "file_path": "/src/data/priority2AuditData.ts",
+      "byte_size": 247147,
+      "sha256": "1613c057673cf638b723bd108d26fd8b0271ada7b7a2e366a27b7d5eee2b9ef8"
+    },
+    {
+      "file_path": "/src/pages/GlobalVisaCoverageAuditPage.tsx",
+      "byte_size": 137869,
+      "sha256": "850e789e0427b5623823eb30d7b9a50d39c2b9506ca5ea8330cd29ff8e235839"
+    },
+    {
+      "file_path": "/phase_3_9_8_batch12_pathway_manifest.json",
+      "byte_size": 194684,
+      "sha256": "4c35529c29181961c92bf8269465a95fd0760a7cc09c6d76496b45ca7dc6f20d"
+    },
+    {
+      "file_path": "/phase_3_9_8_batch12_claim_evidence_registry.csv",
+      "byte_size": 904286,
+      "sha256": "bf4cdba2a7559afe1648cbe444c9dfa9d5ccf2b6d30910ce9955413b8ba67fbb"
+    },
+    {
+      "file_path": "/phase_3_9_8_batch12_section_status.csv",
+      "byte_size": 57314,
+      "sha256": "dd127d10a3090b1830b9b6f0a5b455ad1b663be6905b8e5d86ab5006676b9587"
+    },
+    {
+      "file_path": "/phase_3_9_8_batch12_special_topics_status.csv",
+      "byte_size": 119187,
+      "sha256": "70a94b30b7dfa52bbc1813a215f1da5ded96260e5ab1ce7ab9df105d39189ad3"
+    },
+    {
+      "file_path": "/phase_3_9_8_batch12_quarantine_register.csv",
+      "byte_size": 20275,
+      "sha256": "67f35d4dd21cbdfffbbe8f79dc6abad9005eca0b0454ad6e2040642ab7fa9c78"
+    },
+    {
+      "file_path": "/phase_3_9_8_batch12_source_registry.csv",
+      "byte_size": 3662,
+      "sha256": "4dc39f28e2fc146aeabe7857e6bd39d0614085dcc3a4bc842324e6cbcf4d87b8"
+    },
+    {
+      "file_path": "/phase_3_9_8_public_sanitization_test.json",
+      "byte_size": 8353,
+      "sha256": "2be6d1bf0fc8a6d04bc20e1c6dc99331f8aefd0822d58cf52022d130f371a763"
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+record_type,pathway_id,iso_code,item_code,item_title,verification_status,published_claims_or_status,quarantined_claims_count,not_applicable_justification_verified,official_source_url,audit_result
+PROFILE_SECTION,p2-cand-us-n400,US,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S08,Language Proficiency Requirements,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S18,Government Application & Visa Fees,AWAITING_VERIFICATION,0,3,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S29,Overstay Penalties & Exit Controls,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-us-n400,US,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T09,T09. Transit visa and airport transit rules,NOT_APPLICABLE,PUBLISHED,0,VERIFIED_GENUINELY_INAPPLICABLE_TO_US_N400_CITIZENSHIP,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T10,T10. Border entry refusal vs visa approval,NOT_APPLICABLE,PUBLISHED,0,VERIFIED_GENUINELY_INAPPLICABLE_TO_US_N400_CITIZENSHIP,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T16,T16. Travel outside the country while an application is pending,PARTIALLY_VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T19,"T19. Overstay consequences, fines, detention and re-entry bans",NOT_APPLICABLE,PUBLISHED,0,VERIFIED_GENUINELY_INAPPLICABLE_TO_US_N400_CITIZENSHIP,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T20,T20. Immigration law changes during processing,PARTIALLY_VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+SPECIAL_TOPIC,p2-cand-us-n400,US,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.uscis.gov/citizenship/apply-for-naturalization,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S02,Sovereign Authority & Statutory Basis,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S12,Extension & Renewal Procedures,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S14,Path to Citizenship & Naturalization,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S15,Family & Dependant Sponsorship,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S17,Processing Times & Standard SLA,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S21,In-Country Status Switching,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S25,Employer / Sponsor Obligations,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S26,"Quotas, Annual Caps & Limits",AWAITING_VERIFICATION,0,3,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-gb-seasonal,GB,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T13,"T13. Social security, healthcare access and public funds restrictions",PARTIALLY_VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+SPECIAL_TOPIC,p2-cand-gb-seasonal,GB,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gov.uk/seasonal-worker-visa,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S22,"Appeals, Administrative Review & Remedies",PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-nz-aip,NZ,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T16,T16. Travel outside the country while an application is pending,PARTIALLY_VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+SPECIAL_TOPIC,p2-cand-nz-aip,NZ,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immigration.govt.nz/visas/active-investor-plus-visa/,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S09,Permitted Activities & Employment Rights,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S14,Path to Citizenship & Naturalization,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S17,Processing Times & Standard SLA,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S25,Employer / Sponsor Obligations,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S26,"Quotas, Annual Caps & Limits",VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-sg-dp,SG,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+SPECIAL_TOPIC,p2-cand-sg-dp,SG,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.mom.gov.sg/passes-and-permits/dependants-pass,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S25,Employer / Sponsor Obligations,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-de-18d-research,DE,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+SPECIAL_TOPIC,p2-cand-de-18d-research,DE,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.gesetze-im-internet.de/aufenthg_2004/__18d.html,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S03,Primary Eligibility Criteria,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S04,Nationality & Passport Restrictions,PARTIALLY_VERIFIED,1,2,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S08,Language Proficiency Requirements,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S09,Permitted Activities & Employment Rights,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-fr-vpf,FR,S30,Bilateral Treaties & Special Accords,PARTIALLY_VERIFIED,1,2,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T08,T08. Applying from a third country (residence vs citizenship),PARTIALLY_VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+SPECIAL_TOPIC,p2-cand-fr-vpf,FR,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.service-public.gouv.fr/particuliers/vosdroits/F2209,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S15,Family & Dependant Sponsorship,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-ie-stamp1g,IE,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+SPECIAL_TOPIC,p2-cand-ie-stamp1g,IE,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S03,Primary Eligibility Criteria,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S17,Processing Times & Standard SLA,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S25,Employer / Sponsor Obligations,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S26,"Quotas, Annual Caps & Limits",VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-hk-gep,HK,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+SPECIAL_TOPIC,p2-cand-hk-gep,HK,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.immd.gov.hk/eng/services/visas/GEP.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S03,Primary Eligibility Criteria,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,1,2,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-jp-pr,JP,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T20,T20. Immigration law changes during processing,PARTIALLY_VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+SPECIAL_TOPIC,p2-cand-jp-pr,JP,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://www.moj.go.jp/isa/applications/procedures/16-4.html,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S01,Basic Identity & Classification,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S02,Sovereign Authority & Statutory Basis,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S03,Primary Eligibility Criteria,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S04,Nationality & Passport Restrictions,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S06,Health Insurance & Medical Examination,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S07,Police Clearance & Security Screening,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S12,Extension & Renewal Procedures,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S15,Family & Dependant Sponsorship,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S16,Application Channels & Portals,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S18,Government Application & Visa Fees,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S19,Biometrics & Identity Verification,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S20,Document Legalization & Translations,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S21,In-Country Status Switching,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,VERIFIED_GENUINELY_INAPPLICABLE_BY_INSTRUMENT_TYPE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+PROFILE_SECTION,p2-cand-cl-definitiva,CL,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T01,T01. Passport validity and blank pages,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T02,"T02. Prior visa refusals, deportations and immigration violations",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T03,T03. Criminal record and police clearance certificates,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T04,"T04. Medical conditions, vaccinations and health insurance",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T05,"T05. Minors, parental consent and custody rules",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T06,T06. Elderly applicants and accessibility accommodations,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T07,T07. Dual nationality and stateless/refugee travel documents,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T08,T08. Applying from a third country (residence vs citizenship),VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T09,T09. Transit visa and airport transit rules,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T10,T10. Border entry refusal vs visa approval,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T11,"T11. Customs, cash declaration and prohibited items",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T12,T12. Tax residency implications of long stays,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T13,"T13. Social security, healthcare access and public funds restrictions",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T14,"T14. Address change, employer change and status change reporting",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T15,T15. Rights while an application or renewal is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T16,T16. Travel outside the country while an application is pending,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T17,"T17. Lost or stolen passport, visa foil or residence card",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T18,"T18. Visa cancellation, curtailment and revocation",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T19,"T19. Overstay consequences, fines, detention and re-entry bans",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T20,T20. Immigration law changes during processing,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T21,"T21. Humanitarian, asylum, refugee and special protection disclaimers",VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
+SPECIAL_TOPIC,p2-cand-cl-definitiva,CL,T22,T22. When to consult a licensed immigration lawyer or regulated advisor,VERIFIED,PUBLISHED,0,APPLICABLE,https://serviciomigraciones.cl/residencia-definitiva/,PASS
