@@ -3067,7 +3067,270 @@ export const PRIORITY2_BATCH12_COMBINATIONS: Priority2PathwayAudit[] = [
   }
 ];
 
-// All Completed Priority 2 Pathways (140 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11 + 10 Batch 12)
+// ============================================================================
+// PHASE 3.10.2 — PRIORITY 2 BATCH 13 (10 GLOBAL PATHWAYS, CANONICAL ROWS 141–150)
+// ============================================================================
+// Selected in Phase 3.10.0 and preflighted in Phase 3.10.1 from the verified reserve pool.
+// Reuses Phase 3.9.3 / 3.9.7 / 3.10.0 Evidence IDs (EVD-P393-007..040 / EVD-B13-001..010).
+// Preserves strict legal instrument classification:
+// - Permanent Residence / Settlement: UK ILR (Row 141), Norway PR (Row 148), Denmark PR (Row 149)
+// - Non-Visa Citizenship / Naturalisation: UK Naturalisation (Row 142), Singapore Citizenship (Row 143)
+// - Family Reunification Residence / Visa: NZ Partner (Row 144), NL Partner (Row 145), DE § 28 Spouse (Row 146), AT §§ 46–47 Family (Row 147)
+// - Treaty Nonimmigrant Professional Classification: US TN USMCA (Row 150)
+export const PRIORITY2_BATCH13_COMBINATIONS: Priority2PathwayAudit[] = [
+  // 1. UNITED KINGDOM — INDEFINITE LEAVE TO REMAIN (ILR — SKILLED WORKER / T2 5-YEAR ROUTE) [ROW 141]
+  {
+    id: 'p2-cand-gb-ilr',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'PR / Settlement (Indefinite Leave to Remain — Skilled Worker / T2 5-Year Route)',
+    localStatutoryName: 'Indefinite Leave to Remain (ILR — UK Immigration Rules Appendix Skilled Worker SW 19.1 to SW 24.3 & Appendix Continuous Residence)',
+    legalInstrumentType: 'Permanent Residence / Settlement (Indefinite Leave to Remain — ILR)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/indefinite-leave-to-remain-ilr',
+    issuingAuthority: 'UK Visas and Immigration (UKVI — Home Office)',
+    directSourceUrl: 'https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa',
+    legalProvision: 'Immigration Act 1971; UK Immigration Rules Appendix Skilled Worker (SW 19.1–SW 24.3) & Appendix Continuous Residence',
+    claimIds: ['CLM-GB-ILR-B13-S01-1', 'CLM-GB-ILR-B13-S03-1', 'CLM-GB-ILR-B13-S04-1', 'CLM-GB-ILR-B13-S07-1', 'CLM-GB-ILR-B13-S09-1', 'CLM-GB-ILR-B13-S11-1', 'CLM-GB-ILR-B13-S16-1'],
+    evidenceIds: ['EVD-P393-009', 'EVD-B13-001', 'EVD-B13-GB-ILR-S03-1', 'EVD-B13-GB-ILR-S09-1', 'EVD-B13-GB-ILR-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 88,
+    quarantinedClaimsCount: 2,
+    officialStatusNotice: 'VERIFIED (Permanent Residence / Settlement — ILR): Verifies 5 years continuous lawful UK residence on Skilled Worker / Tier 2 (General) (or qualifying combination of routes), absence limit of max 180 days in any 12-month period, sponsor confirmation of continuing employment meeting GBP 38,700 general threshold (or GBP 30,960 / going rate ifapplicable), Life in the UK Test + B1 English (18–64), GBP 2,885 application fee (GBP 0 IHS), 6-month standard processing, unrestricted work/study/public-funds rights, and 2-year continuous absence lapse rule. 2 claims covering SOC 2020 occupation-code going-rate tables (S05-3) and live UKVCAS Priority/Super Priority slot availability (S17-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 141, HTTP 200 verified on gov.uk indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa, Reused Evidence ID EVD-P393-009 / EVD-B13-001): Indefinite settlement grant under Immigration Act 1971, strictly distinct from temporary UK work visas (Batches 1, 3, 6, 7, 9, 10, 11, 12) and British Citizenship by Naturalisation (`p2-cand-gb-citizenship`, Row 142). Sections S13, S24, S26, S29 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 2. UNITED KINGDOM — BRITISH CITIZENSHIP BY NATURALISATION (BNA 1981 S. 6) [ROW 142]
+  {
+    id: 'p2-cand-gb-citizenship',
+    destination: 'United Kingdom',
+    destCode: 'GB',
+    category: 'Citizenship / Naturalisation (British Citizenship by Naturalisation — BNA 1981 s. 6)',
+    localStatutoryName: 'British Citizenship by Naturalisation (Form AN — British Nationality Act 1981 Section 6(1) & Section 6(2))',
+    legalInstrumentType: 'Non-Visa Citizenship / Naturalisation (BNA 1981 s. 6)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-kingdom/british-citizenship-naturalisation',
+    issuingAuthority: 'UK Visas and Immigration (UKVI — Home Office Nationality Directorate)',
+    directSourceUrl: 'https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain',
+    legalProvision: 'British Nationality Act 1981 Section 6(1), Section 6(2) & Schedule 1; Immigration and Nationality (Fees) Regulations',
+    claimIds: ['CLM-GB-CIT-B13-S01-1', 'CLM-GB-CIT-B13-S03-1', 'CLM-GB-CIT-B13-S04-1', 'CLM-GB-CIT-B13-S07-1', 'CLM-GB-CIT-B13-S09-1', 'CLM-GB-CIT-B13-S11-1', 'CLM-GB-CIT-B13-S16-1'],
+    evidenceIds: ['EVD-P393-010', 'EVD-B13-002', 'EVD-B13-GB-CIT-S03-1', 'EVD-B13-GB-CIT-S08-1', 'EVD-B13-GB-CIT-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'VERIFIED (Non-Visa Citizenship / Naturalisation): Verifies BNA 1981 s. 6(1) standard 5-year residence track (holding ILR/settled status for >=12 months, <=450 days absence in 5 years, <=90 days in final 12 months) and s. 6(2) spouse/civil-partner of British citizen 3-year track (immediate eligibility upon holding ILR/settled status, <=270 days absence in 3 years, <=90 days in final 12 months), physical presence in the UK on the exact date 5/3 years prior to application receipt, Life in the UK Test, B1 English, two referees, GBP 1,630 Form AN fee (incl. GBP 130 ceremony fee), and right of abode upon citizenship ceremony. 3 claims covering complex-case adjudication >6m (S17-2), local council ceremony queues (S17-3), and private ceremony fees (S18-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 142, HTTP 200 verified on gov.uk apply-citizenship-indefinite-leave-to-remain, Reused Evidence ID EVD-P393-010 / EVD-B13-002): Sovereign nationality acquisition under BNA 1981 s. 6, NOT a visa or settlement permit. Strictly distinct from UK ILR (`p2-cand-gb-ilr`, Row 141). Visa/permit-only sections (S05, S06, S12, S13, S21, S24, S25, S26, S29) marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 3. SINGAPORE — SINGAPORE CITIZENSHIP APPLICATION (CONSTITUTION ART. 122–123) [ROW 143]
+  {
+    id: 'p2-cand-sg-citizenship',
+    destination: 'Singapore',
+    destCode: 'SG',
+    category: 'Citizenship / Naturalisation (Singapore Citizenship by Registration — Constitution Art. 122–123)',
+    localStatutoryName: 'Singapore Citizenship Application (Constitution of the Republic of Singapore Articles 122–123, Third Schedule & National Registration Act)',
+    legalInstrumentType: 'Non-Visa Citizenship / Naturalisation (Singapore Constitution Art. 122–123)',
+    action: 'NEW',
+    canonicalUrl: '/visa/singapore/singapore-citizenship-application',
+    issuingAuthority: 'Immigration & Checkpoints Authority (ICA Singapore — Ministry of Home Affairs)',
+    directSourceUrl: 'https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application',
+    legalProvision: 'Constitution of the Republic of Singapore Part X (Articles 122–135 & Third Schedule); Enlistment Act 1970 (National Service)',
+    claimIds: ['CLM-SG-CIT-B13-S01-1', 'CLM-SG-CIT-B13-S03-1', 'CLM-SG-CIT-B13-S04-1', 'CLM-SG-CIT-B13-S07-1', 'CLM-SG-CIT-B13-S09-1', 'CLM-SG-CIT-B13-S11-1', 'CLM-SG-CIT-B13-S16-1'],
+    evidenceIds: ['EVD-P393-022', 'EVD-B13-003', 'EVD-B13-SG-CIT-S03-1', 'EVD-B13-SG-CIT-S04-1', 'EVD-B13-SG-CIT-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'VERIFIED (Non-Visa Citizenship by Registration): Verifies adult Singapore PR track (>=21 years old and >=2 years SPR), spouse of Singapore Citizen track (>=2 years SPR and >=2 years marriage), child/aged parent tracks, mandatory Singapore Citizenship Journey (SCJ), strict prohibition on adult dual nationality (mandatory renunciation of foreign nationality and Oath of Renunciation, Allegiance and Loyalty at age 21+), SGD 100 application fee + SGD 70 certificate + SGD 10 Pink NRIC fee, 6–12 month general processing window, and Enlistment Act National Service obligations. 3 claims covering confidential ICA scoring weights (S03-3), uncodified SGD income floors (S05-3), and complex-case >12m queues (S17-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 143, HTTP 200 verified on ica.gov.sg singapore-citizenship-application, Reused Evidence ID EVD-P393-022 / EVD-B13-003): Sovereign nationality registration under Constitution Art. 122–123, strictly distinct from Singapore Permanent Residence (`p2-cand-sg-pr`, Batch 12 Row 134 — citizenship is never automatic after PR). Sections S06, S12, S13, S21, S24, S25, S26, S29 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 4. NEW ZEALAND — PARTNER OF A NEW ZEALANDER RESIDENT VISA (INZ F2) [ROW 144]
+  {
+    id: 'p2-cand-nz-partner',
+    destination: 'New Zealand',
+    destCode: 'NZ',
+    category: 'Family Reunification (Partner of a New Zealander Resident Visa — INZ F2)',
+    localStatutoryName: 'Partner of a New Zealander Resident Visa (Immigration Act 2009 & INZ Operational Manual F2 Partnership Category)',
+    legalInstrumentType: 'Family Reunification Resident Visa (Partnership Category — INZ F2)',
+    action: 'NEW',
+    canonicalUrl: '/visa/new-zealand/partner-of-a-new-zealander-resident-visa',
+    issuingAuthority: 'Immigration New Zealand (INZ — Ministry of Business, Innovation and Employment)',
+    directSourceUrl: 'https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/',
+    legalProvision: 'Immigration Act 2009 Sections 49–55, 72–73; INZ Operational Manual F2 (Partnership Category — F2.1 to F2.40)',
+    claimIds: ['CLM-NZ-PAR-B13-S01-1', 'CLM-NZ-PAR-B13-S03-1', 'CLM-NZ-PAR-B13-S04-1', 'CLM-NZ-PAR-B13-S07-1', 'CLM-NZ-PAR-B13-S09-1', 'CLM-NZ-PAR-B13-S11-1', 'CLM-NZ-PAR-B13-S16-1'],
+    evidenceIds: ['EVD-P393-020', 'EVD-B13-004', 'EVD-B13-NZ-PAR-S03-1', 'EVD-B13-NZ-PAR-S13-1', 'EVD-B13-NZ-PAR-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 85,
+    quarantinedClaimsCount: 5,
+    officialStatusNotice: 'VERIFIED (Family Reunification Resident Visa — INZ F2): Verifies genuine and stable partnership living together for >=12 months with an eligible NZ citizen or residence-class partner (Form INZ 1178 sponsor limits: max 2 lifetime partner sponsorships and >=5 years since last partner sponsorship, plus character/domestic-violence clearance), direct Permanent Resident Visa grant where an overseas NZ citizen partner and applicant lived together outside NZ for >=5 years, 24-month travel conditions otherwise, NZD 5,360 standard fee (effective 1 Oct 2024), ~8-month median processing, and full work/study/healthcare rights. 5 claims covering granular F2.30 sub-clauses (S03-3), 90% queue percentile (S17-2), VAC slot queues (S17-3), Fee Finder bilateral exemptions (S18-3), and superseded paper INZ 1000 filing (S16-3 EXPIRED) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 144, HTTP 200 verified on immigration.govt.nz partner-of-a-new-zealander-resident-visa/, Reused Evidence ID EVD-P393-020 / EVD-B13-004): First family/partnership residence pathway for New Zealand in Priority 2, distinct from NZ Permanent Resident Visa RV2 (`p2-cand-nz-pr`, Batch 12 Row 133). Sections S08, S24, S26 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 5. NETHERLANDS — RESIDENCE PERMIT FOR PARTNER (VW 2000 ART. 14–16) [ROW 145]
+  {
+    id: 'p2-cand-nl-partner',
+    destination: 'Netherlands',
+    destCode: 'NL',
+    category: 'Family Reunification (Residence Permit for Partner — Vw 2000 Art. 14–16)',
+    localStatutoryName: 'Verblijfsvergunning regulier voor bepaalde tijd — verblijf bij partner (Vw 2000 art. 14–16 & Vb 2000 art. 3.13–3.22)',
+    legalInstrumentType: 'Temporary Family Reunification Residence Permit (VVR regulier bepaalde tijd — verblijf bij partner)',
+    action: 'NEW',
+    canonicalUrl: '/visa/netherlands/residence-permit-for-partner',
+    issuingAuthority: 'Immigratie- en Naturalisatiedienst (IND — Ministry of Justice and Security)',
+    directSourceUrl: 'https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner',
+    legalProvision: 'Vreemdelingenwet 2000 (Vw 2000) Art. 14–16; Vreemdelingenbesluit 2000 (Vb 2000) Art. 3.13–3.22; Wet inburgering buitenland',
+    claimIds: ['CLM-NL-PAR-B13-S01-1', 'CLM-NL-PAR-B13-S03-1', 'CLM-NL-PAR-B13-S04-1', 'CLM-NL-PAR-B13-S07-1', 'CLM-NL-PAR-B13-S09-1', 'CLM-NL-PAR-B13-S11-1', 'CLM-NL-PAR-B13-S16-1'],
+    evidenceIds: ['EVD-P393-031', 'EVD-B13-005', 'EVD-B13-NL-PAR-S03-1', 'EVD-B13-NL-PAR-S08-1', 'EVD-B13-NL-PAR-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 87,
+    quarantinedClaimsCount: 3,
+    officialStatusNotice: 'VERIFIED (Temporary Family Reunification Residence Permit): Verifies marriage/registered partnership or exclusive unmarried relationship with shared BRP cohabitation, 21+ age requirement (18+ for Turkish Association Agreement), independent sustainable durable income at 100% statutory minimum wage (SV-loon), pre-entry Basic Civic Integration Exam Abroad (A1 Dutch + KNS for MVV-requiring nationalities unless exempt), TEV combined MVV + VVR procedure, EUR 243 application fee, 90-day statutory IND decision period, up to 5-year initial validity, and equal labor market access with sponsor. 3 claims covering semi-annually indexed euro normbedragen (S05-3), embassy MVV/DUO exam wait times (S17-3), and fee-exemption subpage tables (S18-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 145, HTTP 200 verified on ind.nl residence-permit-for-partner, Reused Evidence ID EVD-P393-031 / EVD-B13-005): Temporary partner residence permit (`bepaalde tijd`), strictly distinguished from Dutch Permanent Residence (`p2-cand-nl-pr`, Batch 12 Row 138, `onbepaalde tijd` after 5 years). Section S26 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 6. GERMANY — FAMILY REUNIFICATION FOR SPOUSES OF GERMAN CITIZENS (§ 28 AUFENTHG) [ROW 146]
+  {
+    id: 'p2-cand-de-family-spouse',
+    destination: 'Germany',
+    destCode: 'DE',
+    category: 'Family Reunification (Spouse / Family Reunification with German Citizens — § 28 AufenthG)',
+    localStatutoryName: 'Familiennachzug zu Deutschen — Aufenthaltserlaubnis (§ 28 Aufenthaltsgesetz — AufenthG & § 30 Abs. 1 Satz 1 Nr. 2 AufenthG)',
+    legalInstrumentType: 'Family Reunification Residence Permit (Aufenthaltserlaubnis — § 28 AufenthG)',
+    action: 'NEW',
+    canonicalUrl: '/visa/germany/family-reunification-spouse-german-citizen',
+    issuingAuthority: 'Local Foreigners\' Authorities (Ausländerbehörden) & German Diplomatic Missions Abroad (Auswärtiges Amt)',
+    directSourceUrl: 'https://www.gesetze-im-internet.de/aufenthg_2004/__28.html',
+    legalProvision: 'Aufenthaltsgesetz (AufenthG) § 28, § 27, § 30 Abs. 1 Satz 1 Nr. 2, § 5 Abs. 1 Nr. 1; Aufenthaltsverordnung (AufenthV) § 45, § 47, § 52',
+    claimIds: ['CLM-DE-FAM-B13-S01-1', 'CLM-DE-FAM-B13-S03-1', 'CLM-DE-FAM-B13-S04-1', 'CLM-DE-FAM-B13-S07-1', 'CLM-DE-FAM-B13-S09-1', 'CLM-DE-FAM-B13-S11-1', 'CLM-DE-FAM-B13-S16-1'],
+    evidenceIds: ['EVD-P393-026', 'EVD-B13-006', 'EVD-B13-DE-FAM-S03-1', 'EVD-B13-DE-FAM-S08-1', 'EVD-B13-DE-FAM-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 85,
+    quarantinedClaimsCount: 5,
+    officialStatusNotice: 'PARTIALLY_VERIFIED (Family Reunification Residence Permit — § 28 AufenthG): Verifies statutory entitlement for foreign spouses/registered life partners of German citizens habitually resident in Germany, 18+ age requirement for both spouses, CEFR A1 basic German proficiency (Goethe/telc/ÖSD/TestDaF, subject to university degree or § 41 AufenthV nationality exemptions), statutory waiver of § 5(1) No. 1 subsistence rule as a general rule (`in der Regel`) for spouses of German citizens, unrestricted work authorization (`Erwerbstätigkeit gestattet`, § 27(5) AufenthG), statutory fee waiver under § 52(1) AufenthV, 3-year accelerated settlement permit track (§ 28(2) AufenthG), and 3-year naturalisation track (§ 9 StAG). 5 claims covering atypical subsistence checks (S05-3), hardship A1 waivers (S08-3), and decentralized embassy/Ausländerbehörde/eAT queues (S17-1..3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 146, HTTP 200 verified on gesetze-im-internet.de/aufenthg_2004/__28.html, Reused Evidence ID EVD-P393-026 / EVD-B13-006): First family reunification pathway for Germany in Priority 2, distinct from DE employment/research routes and DE § 10 StAG naturalisation (`p2-cand-de-citizenship`, Batch 12 Row 135). Section S26 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 7. AUSTRIA — FAMILY REUNIFICATION RESIDENCE PERMIT (ROT-WEISS-ROT – KARTE PLUS, §§ 46–47 NAG) [ROW 147]
+  {
+    id: 'p2-cand-at-family',
+    destination: 'Austria',
+    destCode: 'AT',
+    category: 'Family Reunification (Family Residence Permit — Rot-Weiß-Rot – Karte plus, §§ 46–47 NAG)',
+    localStatutoryName: 'Familienzusammenführung — Aufenthaltstitel „Rot-Weiß-Rot – Karte plus“ & „Familienangehöriger“ (Niederlassungs- und Aufenthaltsgesetz — NAG §§ 46–47)',
+    legalInstrumentType: 'Family Reunification Residence Permit (Rot-Weiß-Rot – Karte plus — §§ 46–47 NAG)',
+    action: 'NEW',
+    canonicalUrl: '/visa/austria/family-reunification-residence-permit',
+    issuingAuthority: 'Federal Ministry of the Interior (BMI) & Provincial Settlement Authorities (Landeshauptmann / BH / Magistrat MA 35)',
+    directSourceUrl: 'https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/',
+    legalProvision: 'Niederlassungs- und Aufenthaltsgesetz (NAG, BGBl. I Nr. 100/2005) §§ 11, 21a, 46, 47; Gebührengesetz 1957',
+    claimIds: ['CLM-AT-FAM-B13-S01-1', 'CLM-AT-FAM-B13-S03-1', 'CLM-AT-FAM-B13-S04-1', 'CLM-AT-FAM-B13-S07-1', 'CLM-AT-FAM-B13-S09-1', 'CLM-AT-FAM-B13-S11-1', 'CLM-AT-FAM-B13-S16-1'],
+    evidenceIds: ['EVD-P393-040', 'EVD-B13-007', 'EVD-B13-AT-FAM-S03-1', 'EVD-B13-AT-FAM-S08-1', 'EVD-B13-AT-FAM-S18-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 84,
+    quarantinedClaimsCount: 6,
+    officialStatusNotice: 'PARTIALLY_VERIFIED (Family Reunification Residence Permit — §§ 46–47 NAG): Explicitly distinguishes `Rot-Weiß-Rot – Karte plus` under § 46 NAG (for family members of RWR Card, EU Blue Card, Researcher, or Long-Term Resident sponsors; quota-free for skilled workers/researchers, quota-bound for Long-Term Resident sponsors) from `Aufenthaltstitel Familienangehöriger` under § 47 NAG (for nuclear family of Austrian citizens). Verifies 21+ spouse age requirement, CEFR A1 German before entry (§ 21a NAG, with exemptions for spouses of RWR Very Highly Qualified, EU Blue Card, and Researcher holders), ASVG § 293 subsistence structure, EUR 160 adult / EUR 125 minor statutory fee, 6-month statutory decision ceiling (§ 73 AVG), and unrestricted labor market access. 6 claims covering annual ASVG euro tables (S05-2..3), provincial MA 35/BH & quota queues (S17-1..3), and annual provincial quota counts (S26-3) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 147, HTTP 200 verified on migration.gv.at family-reunification/, Reused Evidence ID EVD-P393-040 / EVD-B13-007): First Austrian family reunification pathway in Priority 2, distinct from Austrian principal employment permits (`p2-at-rwr`, Batch 0; `p2-at-eubluecard`, Batch 5). Zero NOT_APPLICABLE sections (all 30 sections apply, including S26 Quotas).',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 8. NORWAY — PERMANENT RESIDENCE PERMIT (PERMANENT OPPHOLDSTILLATELSE — UTLENDINGSLOVEN § 62) [ROW 148]
+  {
+    id: 'p2-cand-no-pr',
+    destination: 'Norway',
+    destCode: 'NO',
+    category: 'PR / Settlement (Permanent Residence Permit — Permanent oppholdstillatelse, Utlendingsloven § 62)',
+    localStatutoryName: 'Permanent oppholdstillatelse (Norwegian Immigration Act / Utlendingsloven § 62 & Utlendingsforskriften §§ 11-1 to 11-9)',
+    legalInstrumentType: 'Permanent Residence Permit (Permanent oppholdstillatelse — Utlendingsloven § 62)',
+    action: 'NEW',
+    canonicalUrl: '/visa/norway/permanent-residence-permit',
+    issuingAuthority: 'Norwegian Directorate of Immigration (Utlendingsdirektoratet — UDI) & Norwegian Police',
+    directSourceUrl: 'https://www.udi.no/en/want-to-apply/permanent-residence/',
+    legalProvision: 'Lov om utlendingers adgang til riket og deres opphold her (Utlendingsloven) § 62; Utlendingsforskriften §§ 11-1 to 11-9; Integreringsloven',
+    claimIds: ['CLM-NO-PR-B13-S01-1', 'CLM-NO-PR-B13-S03-1', 'CLM-NO-PR-B13-S04-1', 'CLM-NO-PR-B13-S07-1', 'CLM-NO-PR-B13-S09-1', 'CLM-NO-PR-B13-S11-1', 'CLM-NO-PR-B13-S16-1'],
+    evidenceIds: ['EVD-P393-036', 'EVD-B13-008', 'EVD-B13-NO-PR-S03-1', 'EVD-B13-NO-PR-S08-1', 'EVD-B13-NO-PR-S09-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 85,
+    quarantinedClaimsCount: 5,
+    officialStatusNotice: 'PARTIALLY_VERIFIED (Permanent Residence Permit — Utlendingsloven § 62): Verifies 3-year continuous residence requirement on a qualifying permit (skilled worker or family immigration; 5-year rule for protection/humanitarian routes), max 7 months total absence in 3 years (10 months in 5 years), self-sufficiency for the preceding 12 months (`selvforsørgelse` >= 2.5G without social assistance), mandatory Norwegian language (min A2 oral) & social studies test completion (ages 16–64), criminal-record waiting-period extensions, unrestricted work/study rights, and 2-year continuous absence lapse rule. 5 claims covering annually indexed NOK 2.5G figure (S05-2), UDI/police/UNE processing queues (S17-1..3), and exact NOK adult fee on separate UDI fee table (S18-2) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 148, HTTP 200 verified on udi.no permanent-residence/, Reused Evidence ID EVD-P393-036 / EVD-B13-008): First permanent settlement pathway for Norway in Priority 2, distinct from temporary Norwegian skilled work permits (`p2-no-skilled`, Batch 0; `p2-no-skilledresidence`, Batch 7). Sections S13, S24, S26, S29 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 9. DENMARK — PERMANENT RESIDENCE PERMIT (PERMANENT OPHOLDSTILLADELSE — UDLÆNDINGELOVEN § 11) [ROW 149]
+  {
+    id: 'p2-cand-dk-pr',
+    destination: 'Denmark',
+    destCode: 'DK',
+    category: 'PR / Settlement (Permanent Residence Permit — Permanent opholdstilladelse, Udlændingeloven § 11)',
+    localStatutoryName: 'Permanent opholdstilladelse (Danish Aliens Act / Udlændingeloven § 11)',
+    legalInstrumentType: 'Permanent Residence Permit (Permanent opholdstilladelse — Udlændingeloven § 11)',
+    action: 'NEW',
+    canonicalUrl: '/visa/denmark/permanent-residence-permit',
+    issuingAuthority: 'Danish Immigration Service (Udlændingestyrelsen) & SIRI (New to Denmark Portal)',
+    directSourceUrl: 'https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit',
+    legalProvision: 'Bekendtgørelse af udlændingeloven (Danish Aliens Act) § 11, stk. 3–16',
+    claimIds: ['CLM-DK-PR-B13-S01-1', 'CLM-DK-PR-B13-S03-1', 'CLM-DK-PR-B13-S04-1', 'CLM-DK-PR-B13-S07-1', 'CLM-DK-PR-B13-S09-1', 'CLM-DK-PR-B13-S11-1', 'CLM-DK-PR-B13-S16-1'],
+    evidenceIds: ['EVD-P393-038', 'EVD-B13-009', 'EVD-B13-DK-PR-S03-1', 'EVD-B13-DK-PR-S08-1', 'EVD-B13-DK-PR-S17-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 86,
+    quarantinedClaimsCount: 4,
+    officialStatusNotice: 'PARTIALLY_VERIFIED (Permanent Residence Permit — Udlændingeloven § 11): Verifies 8-year lawful residence rule (4-year accelerated rule if all 4 supplemental conditions are met), 18+ age requirement, basic conditions (no overdue public debt, no social benefits in last 4 years, Prøve i Dansk 2, >=3 years 6 months ordinary full-time employment in last 4 years, currently employed, signed Residence and Self-Support Declaration), 2-of-4 supplemental conditions (Active Citizen Exam/citizenship engagement, >=4 years full-time employment in last 4.5 years, supplemental annual income threshold, Prøve i Dansk 3), 10-month US service goal, and 12-month overseas lapse rule. 4 claims covering annually indexed DKK supplemental income figure (S05-2), pension exemptions (S05-3), appeal queue (S17-3), and annually indexed DKK TU1-4 fee (S18-2) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 149, HTTP 200 verified on nyidanmark.dk Permanent-residence-permit, Reused Evidence ID EVD-P393-038 / EVD-B13-009): First permanent settlement pathway for Denmark in Priority 2, distinct from temporary Danish work permits (`p2-dk-fasttrack`, Batch 2; `p2-dk-positivelist`, Batch 3; `p2-dk-paylimit`, Batch 5). Sections S13, S24, S26, S29 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  },
+  // 10. UNITED STATES — TN USMCA PROFESSIONALS NONIMMIGRANT CLASSIFICATION (USMCA CH. 16 / 8 CFR § 214.6) [ROW 150]
+  {
+    id: 'p2-cand-us-tn',
+    destination: 'United States',
+    destCode: 'US',
+    category: 'Work / Treaty Professional (TN USMCA Nonimmigrant Classification — USMCA Ch. 16 / 8 CFR § 214.6)',
+    localStatutoryName: 'TN USMCA Professionals Nonimmigrant Classification (TN-1 Canadian & TN-2 Mexican Citizens — INA § 214(e) & 8 CFR § 214.6)',
+    legalInstrumentType: 'Treaty Nonimmigrant Professional Classification (USMCA Chapter 16 — TN-1 / TN-2)',
+    action: 'NEW',
+    canonicalUrl: '/visa/united-states/tn-usmca-professional-classification',
+    issuingAuthority: 'U.S. Citizenship and Immigration Services (USCIS), U.S. Customs and Border Protection (CBP) & U.S. Department of State (DOS)',
+    directSourceUrl: 'https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals',
+    legalProvision: 'United States-Mexico-Canada Agreement (USMCA) Chapter 16 Appendix 2; INA § 214(e) (8 U.S.C. § 1184(e)); 8 CFR § 214.6',
+    claimIds: ['CLM-US-TN-B13-S01-1', 'CLM-US-TN-B13-S03-1', 'CLM-US-TN-B13-S04-1', 'CLM-US-TN-B13-S07-1', 'CLM-US-TN-B13-S09-1', 'CLM-US-TN-B13-S11-1', 'CLM-US-TN-B13-S16-1'],
+    evidenceIds: ['EVD-P393-007', 'EVD-B13-010', 'EVD-B13-US-TN-S03-1', 'EVD-B13-US-TN-S04-1', 'EVD-B13-US-TN-S11-1'],
+    lastVerifiedTimestamp: '2026-11-14T02:10:00Z',
+    verificationStatus: 'PARTIALLY_VERIFIED',
+    operationalStatus: 'OPEN_FOR_NEW_APPLICATIONS',
+    publishedClaimsCount: 82,
+    quarantinedClaimsCount: 8,
+    officialStatusNotice: 'PARTIALLY_VERIFIED (Treaty Nonimmigrant Professional Classification — USMCA Ch. 16): Strictly restricted to citizens of Canada (TN-1) and Mexico (TN-2) (permanent residents of Canada/Mexico do NOT qualify). Verifies pre-arranged professional employment in a USMCA Chapter 16 Appendix 2 profession, baccalaureate/licenciatura degree requirement (or Management Consultant / Scientific Technician exceptions), procedural separation between Canadian citizens (visa-exempt direct CBP Class A Port of Entry / Preclearance inspection or USCIS Form I-129) and Mexican citizens (mandatory DS-160 consular TN-2 visa before CBP entry, or onshore Form I-129 extension), up to 3-year period of stay with indefinite 3-year extensions, TD dependent status (study permitted, work prohibited), and strict nonimmigrant intent. 8 claims covering USCIS/consular/premium processing queues (S17-1..3), CBP/USCIS/DOS fee schedules (S18-1..3), and superseded NAFTA/1-year rules (S02-3, S11-3 EXPIRED) are quarantined.',
+    correctiveClassificationNotes: 'Phase 3.10.2 Batch 13 Implementation (Canonical Row 150, HTTP 200 verified on uscis.gov tn-usmca-professionals, Reused Evidence ID EVD-P393-007 / EVD-B13-010): NATIONALITY_GROUP treaty classification strictly limited to Canadian (CA) and Mexican (MX) citizens, distinct from H-1B (`p2-us-h1b`), L-1 (`p2-us-l1`), O-1 (`p2-us-o1`), E-2 (`p2-us-e2`), STEM OPT (`p2-cand-us-stemopt`), and N-400 (`p2-cand-us-n400`). Sections S06, S08, S13, S14, S24, S26 marked NOT_APPLICABLE.',
+    batchNumber: 13,
+    isPilotSample: true
+  }
+];
+
+// All Completed Priority 2 Pathways (150 Pathways Total: 10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11 + 10 Batch 12 + 10 Batch 13)
 export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_PILOT_COMBINATIONS,
   ...PRIORITY2_BATCH1_COMBINATIONS,
@@ -3081,10 +3344,11 @@ export const PRIORITY2_COMPLETED_PATHWAYS: Priority2PathwayAudit[] = [
   ...PRIORITY2_BATCH9_COMBINATIONS,
   ...PRIORITY2_BATCH10_COMBINATIONS,
   ...PRIORITY2_BATCH11_COMBINATIONS,
-  ...PRIORITY2_BATCH12_COMBINATIONS
+  ...PRIORITY2_BATCH12_COMBINATIONS,
+  ...PRIORITY2_BATCH13_COMBINATIONS
 ];
 
-// Full Priority 2 Queue (140 completed genuine pathways; the 90 synthetic placeholders p2-queue-backlog-121..210 retired in Phase 3.9.2/3.9.3 are NOT restored as valid pathways)
+// Full Priority 2 Queue (150 completed genuine pathways; the 90 synthetic placeholders p2-queue-backlog-121..210 retired in Phase 3.9.2/3.9.3 are NOT restored as valid pathways)
 export const PRIORITY2_FULL_QUEUE: Priority2PathwayAudit[] = [...PRIORITY2_COMPLETED_PATHWAYS];
 
 /**
@@ -3101,10 +3365,10 @@ export function getPublicPriority2PathwayView(pathwayId: string): Omit<Priority2
   return publicSafeRecord;
 }
 
-// Summary Metrics for Phase 3.9.8 Priority 2 Batch 12 Implementation
+// Summary Metrics for Phase 3.10.2 Priority 2 Batch 13 Implementation
 export const PRIORITY2_AUDIT_SUMMARY = {
-  totalPriority2Queue: 210, // Original Priority 2 target capacity (140 completed + 70 remaining slots subject to genuine pathway curation)
-  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 140 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11 + 10 Batch 12)
+  totalPriority2Queue: 210, // Original Priority 2 target capacity (150 completed + 60 remaining slots subject to genuine pathway curation)
+  totalCompletedPathways: PRIORITY2_COMPLETED_PATHWAYS.length, // 150 (10 Pilot + 20 Batch 1 + 10 Batch 2 + 10 Batch 3 + 10 Batch 4 + 10 Batch 5 + 10 Batch 6 + 10 Batch 7 + 10 Batch 8 + 10 Batch 9 + 10 Batch 10 + 10 Batch 11 + 10 Batch 12 + 10 Batch 13)
   pilotPathwaysCount: PRIORITY2_PILOT_COMBINATIONS.length, // 10
   batch1PathwaysCount: PRIORITY2_BATCH1_COMBINATIONS.length, // 20
   batch2PilotPathwaysCount: PRIORITY2_BATCH2_PILOT_COMBINATIONS.length, // 10
@@ -3118,6 +3382,7 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch10PathwaysCount: PRIORITY2_BATCH10_COMBINATIONS.length, // 10 NEW in Batch 10
   batch11PathwaysCount: PRIORITY2_BATCH11_COMBINATIONS.length, // 10 NEW in Batch 11
   batch12PathwaysCount: PRIORITY2_BATCH12_COMBINATIONS.length, // 10 NEW in Batch 12
+  batch13PathwaysCount: PRIORITY2_BATCH13_COMBINATIONS.length, // 10 NEW in Batch 13
   batch1ReconciledNewCount: 12,
   batch1ReconciledEnrichedCount: 8,
   batch2PilotNewCount: 10,
@@ -3131,9 +3396,10 @@ export const PRIORITY2_AUDIT_SUMMARY = {
   batch10NewCount: 10,
   batch11NewCount: 10,
   batch12NewCount: 10,
-  remainingBacklogCount: 70, // 210 - 140 (23 verified reserve candidates remain in Phase 3.9.3/3.9.7 pool; 47 require future curation; 90 synthetic placeholders retired)
-  totalCompletedSectionEntries: 4200, // 140 × 30
-  cumulativePriority2CoveragePercentage: '66.67%', // 140 / 210
+  batch13NewCount: 10,
+  remainingBacklogCount: 60, // 210 - 150 (13 verified reserve candidates remain in Phase 3.9.3/3.9.7/3.10.0 pool; 47 require future curation; 90 synthetic placeholders retired)
+  totalCompletedSectionEntries: 4500, // 150 × 30
+  cumulativePriority2CoveragePercentage: '71.43%', // 150 / 210
   preChangeBackupPhase37: {
     path: '/app/applet/backup_phase_3_7.tar.gz',
     sizeBytes: 64138,
@@ -3360,5 +3626,52 @@ export const PRIORITY2_AUDIT_SUMMARY = {
       CONSULAR_JURISDICTION_SPECIFIC: 5,
       UNKNOWN: 0
     }
+  },
+  preChangeBackupPhase3102: {
+    path: '/app/applet/backup_phase_3_10_2_batch13.tar.gz',
+    sizeBytes: 138655,
+    sha256: '15f78f13ef03d57a7e34a3caee14b1042c3b7a1fd088c12d8ddd423c0087b642'
+  },
+  batch13Metrics: {
+    pathwaysCount: 10,
+    sectionsCount: 300,
+    specialTopicsPerPathway: 22,
+    specialTopicsEvaluatedCount: 220,
+    claimsAuditedCount: 900,
+    claimsPublishedCount: 856,
+    claimsQuarantinedCount: 44,
+    verificationStatusCounts: {
+      VERIFIED: 726,
+      PARTIALLY_VERIFIED: 10,
+      AWAITING_VERIFICATION: 41,
+      CONFLICTING: 0,
+      EXPIRED: 3,
+      NOT_APPLICABLE: 120
+    },
+    sectionStatusCounts: {
+      VERIFIED: 226,
+      PARTIALLY_VERIFIED: 29,
+      AWAITING_VERIFICATION: 5,
+      CONFLICTING: 0,
+      EXPIRED: 0,
+      NOT_APPLICABLE: 40
+    },
+    specialTopicStatusCounts: {
+      VERIFIED: 200,
+      PARTIALLY_VERIFIED: 0,
+      AWAITING_VERIFICATION: 0,
+      CONFLICTING: 0,
+      EXPIRED: 0,
+      NOT_APPLICABLE: 20
+    },
+    scopeDistribution: {
+      GLOBAL: 345,
+      NATIONALITY_GROUP: 82,
+      NATIONALITY_SPECIFIC: 6,
+      RESIDENCE_SPECIFIC: 462,
+      CONSULAR_JURISDICTION_SPECIFIC: 5,
+      UNKNOWN: 0
+    }
   }
 };
+

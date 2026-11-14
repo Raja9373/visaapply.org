@@ -1,0 +1,301 @@
+pathway_id,destination,iso_code,section_id,section_name,verification_status,published_claims_count,quarantined_claims_count,is_section_quarantined,primary_official_source_url,last_verified_date
+p2-cand-gb-ilr,United Kingdom,GB,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,2,1,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S18,Government Application & Visa Fees,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S29,Overstay Penalties & Exit Controls,NOT_APPLICABLE,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-ilr,United Kingdom,GB,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.gov.uk/indefinite-leave-to-remain-tier-2-t2-skilled-worker-visa,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S05,Financial Requirements & Minimum Funds,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S06,Health Insurance & Medical Examination,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S12,Extension & Renewal Procedures,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,1,2,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S21,In-Country Status Switching,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S29,Overstay Penalties & Exit Controls,NOT_APPLICABLE,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-gb-citizenship,United Kingdom,GB,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S03,Primary Eligibility Criteria,PARTIALLY_VERIFIED,2,1,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S06,Health Insurance & Medical Examination,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S12,Extension & Renewal Procedures,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,2,1,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S18,Government Application & Visa Fees,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S21,In-Country Status Switching,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S25,Employer / Sponsor Obligations,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S29,Overstay Penalties & Exit Controls,NOT_APPLICABLE,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-sg-citizenship,Singapore,SG,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.ica.gov.sg/information-and-e-services/citizenship-and-permanent-residence/citizenship/singapore-citizenship-application,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S03,Primary Eligibility Criteria,PARTIALLY_VERIFIED,2,1,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S16,Application Channels & Portals,PARTIALLY_VERIFIED,2,1,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,1,2,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nz-partner,New Zealand,NZ,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.immigration.govt.nz/visas/partner-of-a-new-zealander-resident-visa/,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S16,Application Channels & Portals,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,2,1,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S21,In-Country Status Switching,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-nl-partner,Netherlands,NL,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://ind.nl/en/residence-permits/family-and-partner/residence-permit-for-partner,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S08,Language Proficiency Requirements,PARTIALLY_VERIFIED,2,1,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,true,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-de-family-spouse,Germany,DE,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.gesetze-im-internet.de/aufenthg_2004/__28.html,2026-11-14
+p2-cand-at-family,Austria,AT,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,1,2,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S13,Path to Permanent Residency / Settlement,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,true,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S24,Mandatory Post-Arrival Registration,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S26,"Quotas, Annual Caps & Limits",PARTIALLY_VERIFIED,2,1,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-at-family,Austria,AT,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/family-reunification/,2026-11-14
+p2-cand-no-pr,Norway,NO,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,2,1,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,true,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S29,Overstay Penalties & Exit Controls,NOT_APPLICABLE,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-no-pr,Norway,NO,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.udi.no/en/want-to-apply/permanent-residence/,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S02,Sovereign Authority & Statutory Basis,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S04,Nationality & Passport Restrictions,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S05,Financial Requirements & Minimum Funds,PARTIALLY_VERIFIED,1,2,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S06,Health Insurance & Medical Examination,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S08,Language Proficiency Requirements,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S11,Maximum Duration of Stay & Validity,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S14,Path to Citizenship & Naturalization,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S17,Processing Times & Standard SLA,PARTIALLY_VERIFIED,2,1,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S18,Government Application & Visa Fees,PARTIALLY_VERIFIED,2,1,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S29,Overstay Penalties & Exit Controls,NOT_APPLICABLE,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-dk-pr,Denmark,DK,S30,Bilateral Treaties & Special Accords,VERIFIED,3,0,false,https://www.nyidanmark.dk/en-GB/You-want-to-apply/Permanent-residence-permit,2026-11-14
+p2-cand-us-tn,United States,US,S01,Basic Identity & Classification,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S02,Sovereign Authority & Statutory Basis,PARTIALLY_VERIFIED,2,1,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S03,Primary Eligibility Criteria,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S04,Nationality & Passport Restrictions,PARTIALLY_VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S05,Financial Requirements & Minimum Funds,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S06,Health Insurance & Medical Examination,NOT_APPLICABLE,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S07,Police Clearance & Security Screening,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S08,Language Proficiency Requirements,NOT_APPLICABLE,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S09,Permitted Activities & Employment Rights,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S10,Prohibited Activities & Restrictions,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S11,Maximum Duration of Stay & Validity,PARTIALLY_VERIFIED,2,1,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S12,Extension & Renewal Procedures,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S13,Path to Permanent Residency / Settlement,NOT_APPLICABLE,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S14,Path to Citizenship & Naturalization,NOT_APPLICABLE,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S15,Family & Dependant Sponsorship,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S16,Application Channels & Portals,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S17,Processing Times & Standard SLA,AWAITING_VERIFICATION,0,3,true,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S18,Government Application & Visa Fees,AWAITING_VERIFICATION,0,3,true,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S19,Biometrics & Identity Verification,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S20,Document Legalization & Translations,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S21,In-Country Status Switching,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S22,"Appeals, Administrative Review & Remedies",VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S23,Tax Residency & Fiscal Obligations,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S24,Mandatory Post-Arrival Registration,NOT_APPLICABLE,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S25,Employer / Sponsor Obligations,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S26,"Quotas, Annual Caps & Limits",NOT_APPLICABLE,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S27,In-Country Physical Presence Requirements,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S28,Grounds for Revocation & Cancellation,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S29,Overstay Penalties & Exit Controls,VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
+p2-cand-us-tn,United States,US,S30,Bilateral Treaties & Special Accords,PARTIALLY_VERIFIED,3,0,false,https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-usmca-professionals,2026-11-14
