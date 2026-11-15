@@ -150,7 +150,7 @@ export const EmbassyFinder: React.FC<EmbassyFinderProps> = ({
             <button
               type="button"
               onClick={() => setShowFullQA((prev) => !prev)}
-              className="bg-[#f59e0b] hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold border-none cursor-pointer transition-colors"
+              className="bg-[#b45309] hover:bg-amber-800 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold border-none cursor-pointer transition-colors"
             >
               {showFullQA ? 'Hide Quick Q&A ▲' : 'Get Full Q&A →'}
             </button>

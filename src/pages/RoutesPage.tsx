@@ -89,10 +89,12 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div>
-              <label className="block text-xs font-extrabold uppercase text-slate-500 mb-1.5">
+              <label htmlFor="routes-origin-select" className="block text-xs font-extrabold uppercase text-slate-600 mb-1.5">
                 1. Select Origin Passport / Residence (249 Countries)
               </label>
               <select
+                id="routes-origin-select"
+                aria-label="Select Origin Passport or Residence Country"
                 value={fromCode}
                 onChange={(e) => setFromCode(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-slate-50 font-bold text-slate-900 text-sm focus:outline-none focus:border-[#0B3D91] cursor-pointer"
@@ -106,10 +108,11 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-extrabold uppercase text-slate-500 mb-1.5">
+              <label htmlFor="routes-dest-search" className="block text-xs font-extrabold uppercase text-slate-600 mb-1.5">
                 2. Search Destination Country (248 Routes for {NAME_MAP_249[fromCode]})
               </label>
               <input
+                id="routes-dest-search"
                 type="text"
                 value={toFilter}
                 onChange={(e) => setToFilter(e.target.value)}
@@ -260,7 +263,7 @@ export const RoutesPage: React.FC<RoutesPageProps> = ({ onNavigate }) => {
                       e.stopPropagation();
                       setFromCode(toLower);
                     }}
-                    className="text-[11px] font-bold text-slate-500 hover:text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg cursor-pointer"
+                    className="text-[11px] font-bold text-slate-700 hover:text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg cursor-pointer"
                     title="Swap Origin and Destination"
                   >
                     ⇄ Swap ({route.toCountry}→{route.fromCountry})

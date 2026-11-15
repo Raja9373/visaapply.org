@@ -181,10 +181,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
 
               {/* Destination */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label htmlFor="calc-destination" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                   Destination Country
                 </label>
                 <select
+                  id="calc-destination"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"
@@ -199,10 +200,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
 
               {/* Visa Category */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label htmlFor="calc-visa-category" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                   Visa Program / Category
                 </label>
                 <input
+                  id="calc-visa-category"
                   type="text"
                   value={visaCategory}
                   onChange={(e) => setVisaCategory(e.target.value)}
@@ -214,10 +216,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
               {/* Applicants Count */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label htmlFor="calc-adults" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                     Adult Applicants (18+)
                   </label>
                   <input
+                    id="calc-adults"
                     type="number"
                     min="1"
                     max="10"
@@ -227,10 +230,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label htmlFor="calc-minors" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                     Minor Applicants (&lt;18)
                   </label>
                   <input
+                    id="calc-minors"
                     type="number"
                     min="0"
                     max="10"
@@ -248,10 +252,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
                 </span>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                    <label htmlFor="calc-courier-fee" className="block text-[11px] font-semibold text-slate-600 mb-1">
                       Passport Courier ($)
                     </label>
                     <input
+                      id="calc-courier-fee"
                       type="number"
                       min="0"
                       value={courierFee}
@@ -260,10 +265,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                    <label htmlFor="calc-translation-fee" className="block text-[11px] font-semibold text-slate-600 mb-1">
                       Certified Translation ($)
                     </label>
                     <input
+                      id="calc-translation-fee"
                       type="number"
                       min="0"
                       value={translationFee}
@@ -276,10 +282,11 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ onNaviga
 
               {/* Display Currency */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label htmlFor="calc-target-currency" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                   Display Converted Currency
                 </label>
                 <select
+                  id="calc-target-currency"
                   value={targetCurrency}
                   onChange={(e) => setTargetCurrency(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0B3D91]"

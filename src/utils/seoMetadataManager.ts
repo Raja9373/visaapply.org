@@ -555,6 +555,14 @@ const KNOWN_DYNAMIC_ROUTE_PATTERNS: ReadonlyArray<{ name: string; regex: RegExp 
     regex: /^\/immigration\/([a-z]{2,3})$/i,
   },
   {
+    name: 'Canonical Sovereign Pathway (/visa/:country/:slug)',
+    regex: /^\/visa\/([a-z0-9-]+)\/([a-z0-9-]+)$/i,
+  },
+  {
+    name: 'Interactive Visa Tool (/tools/:tool)',
+    regex: /^\/tools\/([a-z0-9-]+)$/i,
+  },
+  {
     name: 'Blog / Guide Article Slug',
     regex: /^\/(?:blog\/|blogs\/)?([a-z0-9-]+(?:guide|blog|visa)[a-z0-9-]*)$/i,
   },

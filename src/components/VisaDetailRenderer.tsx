@@ -247,10 +247,11 @@ export function VisaDetailRenderer({
           {!hideNationalitySelector && (
             <div className="w-full lg:w-auto bg-slate-50 border border-slate-200 p-3.5 rounded-xl shrink-0">
               <label className="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <Globe size={13} className="text-blue-700" />
-                Applicant Passport Nationality:
+                <Globe size={13} className="text-blue-700" aria-hidden="true" />
+                <span>Applicant Passport Nationality:</span>
               </label>
               <select
+                aria-label="Applicant Passport Nationality"
                 value={activeNationality}
                 onChange={e => handleNationalitySelect(e.target.value)}
                 className="w-full lg:w-64 p-2 text-xs font-bold bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -354,7 +355,9 @@ export function VisaDetailRenderer({
                     : 'bg-white text-slate-800 border-slate-200 hover:border-blue-300'
                 }`}
               >
-                <div className="text-[10px] font-black uppercase tracking-wider text-blue-200">
+                <div className={`text-[10px] font-black uppercase tracking-wider ${
+                  activeStage === stage.stageNumber ? 'text-blue-100' : 'text-blue-800'
+                }`}>
                   Stage {stage.stageNumber}
                 </div>
                 <div className="text-xs font-bold leading-tight mt-0.5">{stage.title}</div>
@@ -1111,7 +1114,7 @@ function InfoCard({
         {value !== null && value !== undefined && String(value).trim() !== '' ? (
           value
         ) : (
-          <span className="text-slate-400 font-normal italic">Awaiting Verification</span>
+          <span className="text-slate-600 font-normal italic">Awaiting Verification</span>
         )}
       </span>
     </div>

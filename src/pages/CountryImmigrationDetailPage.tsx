@@ -142,17 +142,19 @@ export function CountryImmigrationDetailPage({ countryCode, navigate }: CountryI
                 </div>
                 <div className="mt-3">
                   <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full inline-block ${
-                    status === 'AVAILABLE_VERIFIED'
-                      ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                    isActive
+                      ? 'bg-emerald-950 text-emerald-100 border border-emerald-400/50'
+                      : status === 'AVAILABLE_VERIFIED'
+                      ? 'bg-emerald-100 text-emerald-900 border border-emerald-300'
                       : status === 'NOT_AVAILABLE_CONFIRMED'
-                      ? 'bg-slate-100 text-slate-600 border border-slate-300'
+                      ? 'bg-slate-100 text-slate-700 border border-slate-300'
                       : status === 'EXPIRED'
-                      ? 'bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/30'
+                      ? 'bg-rose-100 text-rose-900 border border-rose-300'
                       : status === 'NEEDS_REVIEW'
-                      ? 'bg-orange-500/20 text-orange-800 dark:text-orange-300 border border-orange-500/30'
+                      ? 'bg-orange-100 text-orange-900 border border-orange-300'
                       : status === 'TEMPORARILY_CLOSED'
-                      ? 'bg-purple-500/20 text-purple-800 dark:text-purple-300 border border-purple-500/30'
-                      : 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30'
+                      ? 'bg-purple-100 text-purple-900 border border-purple-300'
+                      : 'bg-amber-100 text-amber-900 border border-amber-300'
                   }`}>
                     {status === 'AVAILABLE_VERIFIED'
                       ? 'Verified'

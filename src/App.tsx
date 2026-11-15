@@ -68,6 +68,7 @@ const GlobalVerificationPilotPage = React.lazy(() => import('./pages/GlobalVerif
 const EvidenceTraceabilityAuditPage = React.lazy(() => import('./pages/EvidenceTraceabilityAuditPage').then(m => ({ default: m.EvidenceTraceabilityAuditPage })));
 const OfficialSourceMonitoringPage = React.lazy(() => import('./pages/OfficialSourceMonitoringPage').then(m => ({ default: m.OfficialSourceMonitoringPage })));
 const GlobalVisaCoverageAuditPage = React.lazy(() => import('./pages/GlobalVisaCoverageAuditPage').then(m => ({ default: m.GlobalVisaCoverageAuditPage })));
+const CanonicalPathwayPage = React.lazy(() => import('./pages/CanonicalPathwayPage').then(m => ({ default: m.CanonicalPathwayPage })));
 
 function PageLoadingFallback() {
   return (
@@ -99,8 +100,10 @@ import {
   normalizeCanonicalUrl,
   resolveValidOgImageUrl,
   auditAllStaticRoutesSeo,
-  validateCurrentDomMetadata
+  validateCurrentDomMetadata,
+  isRouteRegisteredInSeoManager
 } from './utils/seoMetadataManager';
+import { resolvePublicCanonicalPathwayByUrl } from './pages/CanonicalPathwayPage';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
@@ -611,8 +614,35 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     description = `Official 2026 comprehensive visa requirements, fee schedule, embassy appointment process, and downloadable PDF checklist for ${formatted}.`;
   }
 
+  const canonicalPathwayMatch = /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(path)
+    ? resolvePublicCanonicalPathwayByUrl(path)
+    : null;
+  const isQuarantinedOrMissingPathway =
+    /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(path) && !canonicalPathwayMatch;
+  const isUnregisteredUnknownRoute =
+    path !== '/' &&
+    !article &&
+    !canonicalPathwayMatch &&
+    !isRouteRegisteredInSeoManager(rawPath).registered;
+
+  if (canonicalPathwayMatch) {
+    const { pathway, priorityTier } = canonicalPathwayMatch;
+    const tierLabel =
+      priorityTier === 'PRIORITY_1'
+        ? 'Priority 1 Statutory Pathway'
+        : 'Priority 2 Statutory Pathway';
+    title = `${pathway.destination} – ${pathway.category} (${tierLabel}) | VisaApply.org`;
+    description = `Verified statutory reference for ${pathway.localStatutoryName} in ${pathway.destination}, issued by ${pathway.issuingAuthority} under ${pathway.legalProvision}.`;
+  } else if (isQuarantinedOrMissingPathway || isUnregisteredUnknownRoute) {
+    title = '404 – Page or Immigration Pathway Not Found | VisaApply.org';
+    description =
+      'The requested immigration pathway or page is either not found or quarantined pending statutory source verification on VisaApply.org.';
+  }
+
   const canonicalHref = normalizeCanonicalUrl(rawPath);
-  const isArticleView = Boolean(level3DetailMatch || articleMatch || (article && article.title));
+  const isArticleView = Boolean(
+    canonicalPathwayMatch || level3DetailMatch || articleMatch || (article && article.title)
+  );
 
   applySeoMetadataToDom(
     {
@@ -622,7 +652,7 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
       ogType: isArticleView ? 'article' : 'website',
       ogImage: ogImageUrl,
       ogImageAlt,
-      noindex: isAdminRoute || isAudit
+      noindex: isAdminRoute || isAudit || isQuarantinedOrMissingPathway || isUnregisteredUnknownRoute
     },
     rawPath
   );
@@ -995,14 +1025,14 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
               <span className="font-bold text-sm text-slate-900 mt-0.5 block">
                 {meta.currency} ({meta.currencySymbol})
               </span>
-              <span id={`live-currency-${codeLower}`} className="text-[11px] text-[#059669] font-semibold block truncate">
+              <span id={`live-currency-${codeLower}`} className="text-[11px] text-[#047857] font-semibold block truncate">
                 {currencyStr}
               </span>
             </div>
             <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#dcfce7]">
               <span className="text-[11px] text-[#15803d] font-bold block">🕐 LIVE TIME</span>
               <span className="font-bold text-sm text-slate-900 mt-0.5 block">{liveTime.time}</span>
-              <span className="text-[11px] text-[#16a34a] font-semibold block">{liveTime.diffFromIST}</span>
+              <span className="text-[11px] text-[#15803d] font-semibold block">{liveTime.diffFromIST}</span>
             </div>
             <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#fef3c7]">
               <span className="text-[11px] text-[#92400e] font-bold block">🌤 WEATHER</span>
@@ -1020,7 +1050,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
             </div>
             <div className="bg-white px-3.5 py-2.5 rounded-xl border border-[#bbf7d0]">
               <span className="text-[11px] text-[#15803d] font-bold block">💰 SUCCESS RATE</span>
-              <span className="font-extrabold text-sm text-[#16a34a] mt-0.5 block">{meta.successRate}</span>
+              <span className="font-extrabold text-sm text-[#15803d] mt-0.5 block">{meta.successRate}</span>
             </div>
           </div>
         </div>
@@ -1079,7 +1109,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    background: '#10b981',
+                    background: '#047857',
                     color: 'white',
                     padding: '8px 12px',
                     borderRadius: '10px',
@@ -1170,7 +1200,7 @@ function CountryLiveHero({ fromCode, toCode, toName, toFlag, count, navigate }: 
           <button
             type="button"
             onClick={() => setShowCalcDetails((prev) => !prev)}
-            className="w-full mt-2.5 bg-[#16a34a] hover:bg-[#15803d] text-white py-2 px-3 rounded-lg font-bold text-xs cursor-pointer transition-colors"
+            className="w-full mt-2.5 bg-[#15803d] hover:bg-[#166534] text-white py-2 px-3 rounded-lg font-bold text-xs cursor-pointer transition-colors"
           >
             {showCalcDetails ? `Adjust Nights (${tripNights} Nights) • ~$${minTotalUSD}` : 'Calculate My Trip →'}
           </button>
@@ -2773,10 +2803,12 @@ export default function App() {
     return undefined;
   })();
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring && !isGlobalVisaCoverageAudit &&
+  const isCanonicalPathway = /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(routePath);
+
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isCanonicalPathway && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring && !isGlobalVisaCoverageAudit &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
       Boolean(matchedBlogArticle) || (
-        cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa')
+        !cleanPathSlug.includes('/') && (cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa'))
       )
     );
 
@@ -2825,7 +2857,7 @@ export default function App() {
             >
               <Globe className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
               <span>Global Immigration</span>
-              <span className="bg-emerald-500 text-white text-[10px] font-black uppercase px-1.5 py-0.5 rounded tracking-wide shadow-sm">
+              <span className="bg-emerald-800 text-white text-[10px] font-black uppercase px-1.5 py-0.5 rounded tracking-wide shadow-sm">
                 NEW
               </span>
             </button>
@@ -3117,7 +3149,7 @@ export default function App() {
             </div>
 
             {(selectedOrigin || detectedCountry) && (
-              <div className="hidden sm:flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full text-xs text-blue-100 border border-white/15">
+              <div className="hidden sm:flex items-center gap-1.5 bg-[#072963] px-3 py-1.5 rounded-full text-xs text-white border border-white/20">
                 <span>{(selectedOrigin || detectedCountry)!.flag}</span>
                 <span className="font-bold">{(selectedOrigin || detectedCountry)!.code}</span>
                 <span className="truncate max-w-[110px]">{getLocalizedCountryName((selectedOrigin || detectedCountry)!.code, uiLang, (selectedOrigin || detectedCountry)!.name)}</span>
@@ -3177,7 +3209,7 @@ export default function App() {
                   <Globe className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>Global Immigration Hub (249 Countries)</span>
                 </span>
-                <span className="bg-emerald-500 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wide shrink-0">
+                <span className="bg-emerald-800 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wide shrink-0">
                   NEW
                 </span>
               </button>
@@ -3466,6 +3498,8 @@ export default function App() {
           />
         ) : isLevel3Match ? (
           <ArticleView match={isLevel3Match} articles={articles} navigate={navigate} />
+        ) : isCanonicalPathway ? (
+          <CanonicalPathwayPage pathwayUrl={routePath} navigate={navigate} />
         ) : isBlogMatch ? (
           <BlogArticleView 
             article={matchedBlogArticle} 
@@ -3474,7 +3508,7 @@ export default function App() {
             countries={countries} 
             navigate={navigate} 
           />
-        ) : (
+        ) : isHome ? (
           <HomeView 
             countries={deduplicateCountries(countries)} 
             detectedCountry={detectedCountry}
@@ -3487,6 +3521,8 @@ export default function App() {
             forceUpdate={forceUpdate}
             uiLang={uiLang}
           />
+        ) : (
+          <CanonicalPathwayPage pathwayUrl={routePath} navigate={navigate} />
         )}
         </React.Suspense>
       </main>
@@ -4425,7 +4461,7 @@ function HomeView({ countries, detectedCountry, selectedOrigin, setSelectedOrigi
                       <button
                         type="button"
                         aria-pressed={compareCodes.includes(destCode)}
-                        aria-label={`Compare ${fullName}`}
+                        aria-label={`${compareCodes.includes(destCode) ? ui.added : ui.compare} ${fullName}`}
                         onClick={() => toggleCompareCountry(destCode)}
                         className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-colors cursor-pointer ${
                           compareCodes.includes(destCode)

@@ -225,7 +225,7 @@ export function getFlightWidgetWithTP(code: string, metaArg?: { flightPrice?: st
         <div style="font-size:10px; color:#64748b; margin-top:2px;">Via Travelpayouts</div>
       </div>
       <div style="display:flex; flex-direction:column; gap:6px;">
-        <a href="${flight.tpLink}" target="_blank" rel="noopener noreferrer" style="background:#10b981; color:white; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; text-decoration:none; text-align:center;">Search Flights →</a>
+        <a href="${flight.tpLink}" target="_blank" rel="noopener noreferrer" style="background:#047857; color:white; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; text-decoration:none; text-align:center;">Search Flights →</a>
       </div>
     </div>
   </div>`;

@@ -40,6 +40,10 @@ import {
 } from '../src/data/anyToAnyMatrix';
 
 import { loadHeavyVisaBundle, getCachedHeavyVisaBundle } from '../src/utils/heavyVisaLoader';
+import { resolvePublicCanonicalPathwayByUrl } from '../src/pages/CanonicalPathwayPage';
+import { getPublicPriority1Pathways, PRIORITY1_QUARANTINED_PATHWAYS } from '../src/data/priority1AuditData';
+import { PRIORITY2_COMPLETED_PATHWAYS } from '../src/data/priority2AuditData';
+import { isRouteRegisteredInSeoManager } from '../src/utils/seoMetadataManager';
 
 const ROOT_DIR = process.cwd();
 
@@ -214,3 +218,45 @@ test('All 15 i18n locale dictionaries maintain 100% key parity', () => {
     assert.deepEqual(Object.keys(dict).sort(), enKeys, `Locale key parity mismatch in ${lang}/common.json`);
   }
 });
+
+test('Canonical pathway resolver serves all 10 genuine Priority 1 and 210 Priority 2 pathways while blocking quarantined records and unknown routes', () => {
+  const genuineP1 = getPublicPriority1Pathways();
+  assert.equal(genuineP1.length, 10, 'Must expose exactly 10 genuine Priority 1 pathways');
+
+  for (const p1 of genuineP1) {
+    const resolved = resolvePublicCanonicalPathwayByUrl(p1.canonicalUrl);
+    assert.ok(resolved, `Genuine P1 pathway ${p1.canonicalUrl} must resolve`);
+    assert.equal(resolved.pathway.id, p1.id);
+    assert.equal(isRouteRegisteredInSeoManager(p1.canonicalUrl).registered, true, `SEO manager must register ${p1.canonicalUrl}`);
+  }
+
+  assert.equal(PRIORITY2_COMPLETED_PATHWAYS.length, 210, 'Must contain 210 completed Priority 2 pathways');
+  const p2Sample = resolvePublicCanonicalPathwayByUrl('/visa/norway/self-employed-visa');
+  assert.ok(p2Sample, 'Priority 2 sample /visa/norway/self-employed-visa must resolve');
+  assert.equal(p2Sample.priorityTier, 'PRIORITY_2');
+  assert.equal(p2Sample.pathway.id, 'p2-no-selfemp');
+  assert.ok(!('correctiveClassificationNotes' in p2Sample.pathway), 'Public P2 view must strip internal classification notes');
+
+  assert.equal(PRIORITY1_QUARANTINED_PATHWAYS.length, 132, '132 synthetic P1 pathways must remain quarantined');
+  const p2CanonicalSet = new Set(
+    PRIORITY2_COMPLETED_PATHWAYS.map((p) => p.canonicalUrl.replace(/\/+$/, '').toLowerCase())
+  );
+  for (const q of PRIORITY1_QUARANTINED_PATHWAYS) {
+    const res = resolvePublicCanonicalPathwayByUrl(q.canonicalUrl);
+    if (p2CanonicalSet.has(q.canonicalUrl.replace(/\/+$/, '').toLowerCase())) {
+      assert.equal(res?.priorityTier, 'PRIORITY_2', `Superseded URL ${q.canonicalUrl} must resolve to genuine PRIORITY_2, never quarantined P1`);
+      assert.notEqual(res?.pathway.id, q.id, 'Must never expose quarantined P1 ID');
+    } else {
+      assert.equal(res, null, `Quarantined P1 pathway ${q.canonicalUrl} without P2 replacement must return null (404)`);
+    }
+  }
+
+  assert.equal(resolvePublicCanonicalPathwayByUrl('/404-nonexistent-route'), null, 'Unknown route must return null (404)');
+});
+
+test('React 19 boolean attribute integrity: zero empty-string boolean JSX attributes across codebase', () => {
+  const appTsx = readWorkspaceFile('src/App.tsx');
+  assert.ok(appTsx.includes('inert={!mobileMenuOpen}'), 'src/App.tsx must use boolean inert={!mobileMenuOpen}');
+  assert.ok(!appTsx.includes("inert: ''"), 'src/App.tsx must not use empty string for boolean inert attribute');
+});
+

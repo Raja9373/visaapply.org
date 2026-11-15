@@ -191,7 +191,7 @@ export const CountryPAAFaqSection: React.FC<CountryPAAFaqSectionProps> = ({
             Top 20 official questions, document rules, bank balance requirements, and consular guidance for travel to {countryName}.
           </p>
         </div>
-        <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start sm:self-auto shrink-0 border border-slate-200">
+        <span className="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-xl self-start sm:self-auto shrink-0 border border-slate-200">
           20 Answered Questions
         </span>
       </div>
