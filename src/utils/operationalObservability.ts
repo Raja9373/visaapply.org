@@ -44,7 +44,12 @@ export function redactSensitiveData<T = unknown>(input: T, seen = new WeakSet<ob
     process.env.GEMINI_API_KEY,
     process.env.RESEND_API_KEY,
     process.env.NEON_TEST_DATABASE_URL,
-    process.env.DATABASE_URL
+    process.env.NEON_APP_DATABASE_URL,
+    process.env.NEON_READONLY_DATABASE_URL,
+    process.env.NEON_MIGRATION_DATABASE_URL,
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
+    process.env.DIRECT_URL
   ]
     .map((v) => (v || '').trim())
     .filter((v) => v.length >= 6 && v !== 'dummy_key' && !v.includes('ep-example.us-east-2.aws.neon.tech'));
@@ -66,7 +71,7 @@ export function redactSensitiveData<T = unknown>(input: T, seen = new WeakSet<ob
     out = out.replace(/\bre_[0-9A-Za-z_]{12,}\b/g, 're_[REDACTED]');
     // Redact inline key=value or "secret":"..." pairs
     out = out.replace(
-      /\b(CRON_SECRET|ADMIN_PASSWORD|GEMINI_API_KEY|RESEND_API_KEY|DATABASE_URL|NEON_TEST_DATABASE_URL|x-cron-secret|x-admin-token)\s*[:=]\s*["']?[^"'\s,;}{]+["']?/gi,
+      /\b(CRON_SECRET|ADMIN_PASSWORD|GEMINI_API_KEY|RESEND_API_KEY|DATABASE_URL|POSTGRES_URL|DIRECT_URL|NEON_TEST_DATABASE_URL|NEON_APP_DATABASE_URL|NEON_READONLY_DATABASE_URL|NEON_MIGRATION_DATABASE_URL|x-cron-secret|x-admin-token)\s*[:=]\s*["']?[^"'\s,;}{]+["']?/gi,
       '$1=[REDACTED]'
     );
     return out;

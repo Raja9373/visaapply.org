@@ -403,12 +403,128 @@ export const CSP_EXTERNAL_SCRIPT_ALLOWLIST = [
   'https://tp.media'
 ] as const;
 
-export function buildContentSecurityPolicy(): string {
+export const CSP_EXTERNAL_CONNECT_ALLOWLIST = [
+  'https://api.country.is',
+  'https://ipwho.is',
+  'https://freeipapi.com',
+  'https://api.exchangerate-api.com',
+  'https://open.er-api.com',
+  'https://api.open-meteo.com'
+] as const;
+
+const AISTUDIO_FRAME_ANCESTORS =
+  "'self' https://*.google.com https://localhost.corp.google.com:26001";
+
+function sanitizePreviewFrameAncestors(): string {
+  const raw = (process.env.CSP_HEADER_VALUE || '').trim();
+  const match = raw.match(/frame-ancestors\s+([^;]+)/i);
+  if (match && match[1]) {
+    const tokens = match[1]
+      .trim()
+      .split(/\s+/)
+      .filter((t) =>
+        t === "'self'" ||
+        t.startsWith('https://*.google.com') ||
+        t.startsWith('https://localhost.corp.google.com')
+      );
+    if (tokens.length > 0) {
+      if (!tokens.includes("'self'")) tokens.unshift("'self'");
+      return tokens.join(' ');
+    }
+  }
+  return AISTUDIO_FRAME_ANCESTORS;
+}
+
+/**
+ * Returns true ONLY when the incoming request is served in the local/Cloud Run AI Studio preview iframe
+ * (never on Vercel production and never on visaapply.org hosts).
+ */
+export function isAiStudioPreviewRequest(req?: {
+  headers?: Record<string, any>;
+  hostname?: string;
+}): boolean {
+  if (
+    process.env.VERCEL === '1' ||
+    process.env.VERCEL === 'true' ||
+    Boolean((process.env.VERCEL_ENV || '').trim())
+  ) {
+    return false;
+  }
+
+  const headers = req?.headers || {};
+  const forwardedHost = String(headers['x-forwarded-host'] || '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase()
+    .split(':')[0];
+  const host = String(headers.host || req?.hostname || '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase()
+    .split(':')[0];
+  const effectiveHost = forwardedHost || host;
+
+  // Production domains NEVER allow third-party iframe embedding
+  if (effectiveHost === 'visaapply.org' || effectiveHost.endsWith('.visaapply.org')) {
+    return false;
+  }
+
+  if (process.env.ALLOW_AISTUDIO_PREVIEW === 'true') {
+    return true;
+  }
+
+  let appUrlHost = '';
+  if (process.env.APP_URL) {
+    try {
+      appUrlHost = new URL(process.env.APP_URL).hostname.toLowerCase();
+    } catch {
+      appUrlHost = '';
+    }
+  }
+
+  const isCloudRunPreviewHost =
+    /^ais-(?:dev|pre)-[a-z0-9-]+\.[a-z0-9-]+\.run\.app$/i.test(effectiveHost) ||
+    effectiveHost.endsWith('.a.run.app') ||
+    (Boolean(appUrlHost) && effectiveHost === appUrlHost && appUrlHost.endsWith('.run.app'));
+
+  if (isCloudRunPreviewHost) {
+    return true;
+  }
+
+  const referer = String(headers.referer || '').toLowerCase();
+  const isIframeSecDest = String(headers['sec-fetch-dest'] || '').toLowerCase() === 'iframe';
+  if (
+    Boolean((process.env.APPLET_ID || '').trim()) &&
+    isIframeSecDest &&
+    referer.startsWith('https://aistudio.google.com/')
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+export function buildContentSecurityPolicy(options?: { allowPreviewFraming?: boolean }): string {
   const scriptSources = [
     "'self'",
     "'unsafe-inline'",
     ...CSP_EXTERNAL_SCRIPT_ALLOWLIST
   ].join(' ');
+
+  const connectSources = [
+    "'self'",
+    'https://pagead2.googlesyndication.com',
+    'https://googleads.g.doubleclick.net',
+    'https://ep1.adtrafficquality.google',
+    'https://ep2.adtrafficquality.google',
+    'https://emrldco.com',
+    'https://tp.media',
+    ...CSP_EXTERNAL_CONNECT_ALLOWLIST
+  ].join(' ');
+
+  const frameAncestors = options?.allowPreviewFraming
+    ? sanitizePreviewFrameAncestors()
+    : "'self'";
 
   return [
     "default-src 'self'",
@@ -416,30 +532,42 @@ export function buildContentSecurityPolicy(): string {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https://flagcdn.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://emrldco.com https://tp.media",
-    "connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://emrldco.com https://tp.media https://api.exchangerate-api.com https://open.er-api.com https://api.open-meteo.com",
+    `connect-src ${connectSources}`,
     "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep2.adtrafficquality.google https://www.google.com https://tp.media https://c121.travelpayouts.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'self'"
+    `frame-ancestors ${frameAncestors}`
   ].join('; ');
 }
 
-export function getSecurityHeaders(options?: { isApi?: boolean }): Record<string, string> {
-  return {
+export function getSecurityHeaders(options?: {
+  isApi?: boolean;
+  allowPreviewFraming?: boolean;
+}): Record<string, string> {
+  const allowPreview = Boolean(!options?.isApi && options?.allowPreviewFraming);
+  const headers: Record<string, string> = {
     'Content-Security-Policy': options?.isApi
       ? "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
-      : buildContentSecurityPolicy(),
+      : buildContentSecurityPolicy({ allowPreviewFraming: allowPreview }),
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': options?.isApi ? 'DENY' : 'SAMEORIGIN',
     'Referrer-Policy': 'strict-origin-when-cross-origin'
   };
+
+  if (options?.isApi) {
+    headers['X-Frame-Options'] = 'DENY';
+  } else if (!allowPreview) {
+    // Omit X-Frame-Options in scoped AI Studio preview iframe so CSP frame-ancestors controls embedding cleanly
+    headers['X-Frame-Options'] = 'SAMEORIGIN';
+  }
+
+  return headers;
 }
 
 export function applySecurityHeaders(
   res: { setHeader?: (k: string, v: string) => any },
-  options?: { isApi?: boolean }
+  options?: { isApi?: boolean; allowPreviewFraming?: boolean }
 ): void {
   if (!res?.setHeader) return;
   const headers = getSecurityHeaders(options);
@@ -450,7 +578,8 @@ export function applySecurityHeaders(
 
 export function securityHeadersMiddleware(req: any, res: any, next: any): void {
   const isApi = String(req?.path || req?.url || '').startsWith('/api');
-  applySecurityHeaders(res, { isApi });
+  const allowPreviewFraming = !isApi && isAiStudioPreviewRequest(req);
+  applySecurityHeaders(res, { isApi, allowPreviewFraming });
   next();
 }
 

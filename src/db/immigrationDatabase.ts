@@ -92,6 +92,15 @@ export type {
 const DB_DIR = path.join(process.cwd(), 'data_db');
 const DEFAULT_DB_PATH = path.join(DB_DIR, 'immigration_hub.db');
 
+function isProductionOrVercelRuntime(env: NodeJS.ProcessEnv = process.env): boolean {
+  return (
+    env.NODE_ENV === 'production' ||
+    env.VERCEL === '1' ||
+    env.VERCEL === 'true' ||
+    Boolean((env.VERCEL_ENV || '').trim())
+  );
+}
+
 function resolveConfiguredDbPath(): string {
   const override = (process.env.VISAAPPLY_SQLITE_PATH || '').trim();
   if (override) {
@@ -103,48 +112,130 @@ function resolveConfiguredDbPath(): string {
   return DEFAULT_DB_PATH;
 }
 
-const DB_PATH = resolveConfiguredDbPath();
+let lazyDb: Database.Database | null = null;
+let lazyRepo: ReturnType<typeof createSqliteRepository> | null = null;
 
-export const db: Database.Database = openSqliteDatabase(DB_PATH);
+/**
+ * Lazily opens the local-development SQLite database on first use.
+ * Fails closed in production / Vercel unless an explicit isolated test path is provided.
+ */
+export function getLazySqliteDb(): Database.Database {
+  if (lazyDb) {
+    return lazyDb;
+  }
+  if (isProductionOrVercelRuntime() && process.env.ALLOW_SQLITE_IN_PROD !== 'true') {
+    throw new Error(
+      'SQLITE_FORBIDDEN_IN_PRODUCTION: SQLite is disabled in production and Vercel environments. Configure NEON_READONLY_DATABASE_URL and NEON_APP_DATABASE_URL instead.'
+    );
+  }
+  const dbPath = resolveConfiguredDbPath();
+  lazyDb = openSqliteDatabase(dbPath);
+  return lazyDb;
+}
 
-export function applyPhase31SqliteMigrations(targetDb: Database.Database = db) {
+export function isSqliteDbInitialized(): boolean {
+  return lazyDb !== null;
+}
+
+function getDefaultRepo(): ReturnType<typeof createSqliteRepository> {
+  if (!lazyRepo) {
+    lazyRepo = createSqliteRepository(getLazySqliteDb());
+  }
+  return lazyRepo;
+}
+
+export function closeDefaultSqliteDb(): void {
+  if (lazyDb) {
+    closeSqliteDatabase(lazyDb);
+    lazyDb = null;
+    lazyRepo = null;
+  }
+}
+
+/**
+ * Lazy proxy preserving backward compatibility for legacy local callers (`db.prepare(...)`)
+ * without opening data_db/immigration_hub.db during module import.
+ */
+export const db: Database.Database = new Proxy({} as Database.Database, {
+  get(_target, prop, receiver) {
+    const instance = getLazySqliteDb();
+    const value = Reflect.get(instance as unknown as object, prop, receiver);
+    return typeof value === 'function' ? value.bind(instance) : value;
+  },
+  set(_target, prop, value, receiver) {
+    const instance = getLazySqliteDb();
+    return Reflect.set(instance as unknown as object, prop, value, receiver);
+  }
+});
+
+export function applyPhase31SqliteMigrations(targetDb: Database.Database = getLazySqliteDb()) {
   return runTrackedSqliteMigrations(targetDb);
 }
 
-export function initDatabaseSchema(targetDb: Database.Database = db) {
+export function initDatabaseSchema(targetDb: Database.Database = getLazySqliteDb()) {
   return runTrackedSqliteMigrations(targetDb);
 }
 
-const defaultRepo = createSqliteRepository(db);
+export const getBatchStateFromDb: ReturnType<typeof createSqliteRepository>['getBatchStateFromDb'] = (...args) =>
+  getDefaultRepo().getBatchStateFromDb(...args);
+export const saveBatchStateToDb: ReturnType<typeof createSqliteRepository>['saveBatchStateToDb'] = (...args) =>
+  getDefaultRepo().saveBatchStateToDb(...args);
+export const saveChangelogEntryToDb: ReturnType<typeof createSqliteRepository>['saveChangelogEntryToDb'] = (...args) =>
+  getDefaultRepo().saveChangelogEntryToDb(...args);
+export const getChangelogFromDb: ReturnType<typeof createSqliteRepository>['getChangelogFromDb'] = (...args) =>
+  getDefaultRepo().getChangelogFromDb(...args);
+export const logCronExecutionToDb: ReturnType<typeof createSqliteRepository>['logCronExecutionToDb'] = (...args) =>
+  getDefaultRepo().logCronExecutionToDb(...args);
+export const getCronExecutionLogsFromDb: ReturnType<typeof createSqliteRepository>['getCronExecutionLogsFromDb'] = (...args) =>
+  getDefaultRepo().getCronExecutionLogsFromDb(...args);
+export const getVisaDetails: ReturnType<typeof createSqliteRepository>['getVisaDetails'] = (...args) =>
+  getDefaultRepo().getVisaDetails(...args);
+export const getAllVisaDetails: ReturnType<typeof createSqliteRepository>['getAllVisaDetails'] = (...args) =>
+  getDefaultRepo().getAllVisaDetails(...args);
+export const getPaginatedVisaDetails: ReturnType<typeof createSqliteRepository>['getPaginatedVisaDetails'] = (...args) =>
+  getDefaultRepo().getPaginatedVisaDetails(...args);
+export const saveVisaDetails: ReturnType<typeof createSqliteRepository>['saveVisaDetails'] = (...args) =>
+  getDefaultRepo().saveVisaDetails(...args);
+export const getDashboardStats: ReturnType<typeof createSqliteRepository>['getDashboardStats'] = (...args) =>
+  getDefaultRepo().getDashboardStats(...args);
+export const updateVisaStatus: ReturnType<typeof createSqliteRepository>['updateVisaStatus'] = (...args) =>
+  getDefaultRepo().updateVisaStatus(...args);
+export const restoreVersion: ReturnType<typeof createSqliteRepository>['restoreVersion'] = (...args) =>
+  getDefaultRepo().restoreVersion(...args);
+export const getVisaClaims: ReturnType<typeof createSqliteRepository>['getVisaClaims'] = (...args) =>
+  getDefaultRepo().getVisaClaims(...args);
+export const getVisaClaimsWithEvidence: ReturnType<typeof createSqliteRepository>['getVisaClaimsWithEvidence'] = (...args) =>
+  getDefaultRepo().getVisaClaimsWithEvidence(...args);
+export const getVisaClaimById: ReturnType<typeof createSqliteRepository>['getVisaClaimById'] = (...args) =>
+  getDefaultRepo().getVisaClaimById(...args);
+export const reconcileClaimVerificationAfterEvidenceChange: ReturnType<typeof createSqliteRepository>['reconcileClaimVerificationAfterEvidenceChange'] = (...args) =>
+  getDefaultRepo().reconcileClaimVerificationAfterEvidenceChange(...args);
+export const saveVisaClaim: ReturnType<typeof createSqliteRepository>['saveVisaClaim'] = (...args) =>
+  getDefaultRepo().saveVisaClaim(...args);
+export const deleteVisaClaim: ReturnType<typeof createSqliteRepository>['deleteVisaClaim'] = (...args) =>
+  getDefaultRepo().deleteVisaClaim(...args);
+export const getVisaEvidence: ReturnType<typeof createSqliteRepository>['getVisaEvidence'] = (...args) =>
+  getDefaultRepo().getVisaEvidence(...args);
+export const saveVisaEvidence: ReturnType<typeof createSqliteRepository>['saveVisaEvidence'] = (...args) =>
+  getDefaultRepo().saveVisaEvidence(...args);
+export const deleteVisaEvidence: ReturnType<typeof createSqliteRepository>['deleteVisaEvidence'] = (...args) =>
+  getDefaultRepo().deleteVisaEvidence(...args);
+export const getVisaVersions: ReturnType<typeof createSqliteRepository>['getVisaVersions'] = (...args) =>
+  getDefaultRepo().getVisaVersions(...args);
+export const saveVisaVersion: ReturnType<typeof createSqliteRepository>['saveVisaVersion'] = (...args) =>
+  getDefaultRepo().saveVisaVersion(...args);
+export const acquireJobLock: ReturnType<typeof createSqliteRepository>['acquireJobLock'] = (...args) =>
+  getDefaultRepo().acquireJobLock(...args);
+export const releaseJobLock: ReturnType<typeof createSqliteRepository>['releaseJobLock'] = (...args) =>
+  getDefaultRepo().releaseJobLock(...args);
+export const saveAutomationCheckpoint: ReturnType<typeof createSqliteRepository>['saveAutomationCheckpoint'] = (...args) =>
+  getDefaultRepo().saveAutomationCheckpoint(...args);
+export const getAutomationCheckpoint: ReturnType<typeof createSqliteRepository>['getAutomationCheckpoint'] = (...args) =>
+  getDefaultRepo().getAutomationCheckpoint(...args);
+export const recordDeadLetterItem: ReturnType<typeof createSqliteRepository>['recordDeadLetterItem'] = (...args) =>
+  getDefaultRepo().recordDeadLetterItem(...args);
+export const getDeadLetterItems: ReturnType<typeof createSqliteRepository>['getDeadLetterItems'] = (...args) =>
+  getDefaultRepo().getDeadLetterItems(...args);
+export const getOperationalEvents: ReturnType<typeof createSqliteRepository>['getOperationalEvents'] = (...args) =>
+  getDefaultRepo().getOperationalEvents(...args);
 
-export const getBatchStateFromDb = defaultRepo.getBatchStateFromDb;
-export const saveBatchStateToDb = defaultRepo.saveBatchStateToDb;
-export const saveChangelogEntryToDb = defaultRepo.saveChangelogEntryToDb;
-export const getChangelogFromDb = defaultRepo.getChangelogFromDb;
-export const logCronExecutionToDb = defaultRepo.logCronExecutionToDb;
-export const getCronExecutionLogsFromDb = defaultRepo.getCronExecutionLogsFromDb;
-export const getVisaDetails = defaultRepo.getVisaDetails;
-export const getAllVisaDetails = defaultRepo.getAllVisaDetails;
-export const getPaginatedVisaDetails = defaultRepo.getPaginatedVisaDetails;
-export const saveVisaDetails = defaultRepo.saveVisaDetails;
-export const getDashboardStats = defaultRepo.getDashboardStats;
-export const updateVisaStatus = defaultRepo.updateVisaStatus;
-export const restoreVersion = defaultRepo.restoreVersion;
-export const getVisaClaims = defaultRepo.getVisaClaims;
-export const getVisaClaimsWithEvidence = defaultRepo.getVisaClaimsWithEvidence;
-export const getVisaClaimById = defaultRepo.getVisaClaimById;
-export const reconcileClaimVerificationAfterEvidenceChange = defaultRepo.reconcileClaimVerificationAfterEvidenceChange;
-export const saveVisaClaim = defaultRepo.saveVisaClaim;
-export const deleteVisaClaim = defaultRepo.deleteVisaClaim;
-export const getVisaEvidence = defaultRepo.getVisaEvidence;
-export const saveVisaEvidence = defaultRepo.saveVisaEvidence;
-export const deleteVisaEvidence = defaultRepo.deleteVisaEvidence;
-export const getVisaVersions = defaultRepo.getVisaVersions;
-export const saveVisaVersion = defaultRepo.saveVisaVersion;
-export const acquireJobLock = defaultRepo.acquireJobLock;
-export const releaseJobLock = defaultRepo.releaseJobLock;
-export const saveAutomationCheckpoint = defaultRepo.saveAutomationCheckpoint;
-export const getAutomationCheckpoint = defaultRepo.getAutomationCheckpoint;
-export const recordDeadLetterItem = defaultRepo.recordDeadLetterItem;
-export const getDeadLetterItems = defaultRepo.getDeadLetterItems;
-export const getOperationalEvents = defaultRepo.getOperationalEvents;

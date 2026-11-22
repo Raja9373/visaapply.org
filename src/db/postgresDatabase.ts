@@ -41,13 +41,132 @@ export type {
   VisaApplicantSpecialTopics
 };
 
+import type {
+  AppliedMigrationInfo,
+  AutomationCheckpointInput,
+  CronExecutionLogInput,
+  DatabaseBackendKind,
+  DatabaseIntegritySummary,
+  DeadLetterItemInput,
+  EditorialArticleRecord,
+  EditorialArticleStatus,
+  MigrationCapableRepository,
+  RepositoryAccessMode,
+  SlotEmailLogRecord,
+  SlotEmbassyStatusRecord,
+  SlotSubscriberRecord
+} from './repository';
+import type { OperationalEvent } from '../utils/operationalObservability';
+
 const { Pool: PgPool } = pg;
+
+export type PostgresConnectionPurpose = 'readonly' | 'app_rw' | 'migration' | 'test';
+
+export interface PostgresTimeoutConfig {
+  connectionTimeoutMillis: number;
+  idleTimeoutMillis: number;
+  queryTimeoutMs: number;
+  statementTimeoutMs: number;
+  lockTimeoutMs: number;
+  idleInTransactionSessionTimeoutMs: number;
+}
+
+export const DEFAULT_POSTGRES_TIMEOUTS: Readonly<PostgresTimeoutConfig> = Object.freeze({
+  connectionTimeoutMillis: 8000,
+  idleTimeoutMillis: 10000,
+  queryTimeoutMs: 10000,
+  statementTimeoutMs: 10000,
+  lockTimeoutMs: 5000,
+  idleInTransactionSessionTimeoutMs: 15000
+});
+
+export type DatabaseConfigurationErrorCode =
+  | 'POSTGRES_CREDENTIALS_MISSING'
+  | 'POSTGRES_INVALID_URI'
+  | 'POSTGRES_INVALID_PROTOCOL'
+  | 'POSTGRES_PLACEHOLDER_URL'
+  | 'POSTGRES_LOCALHOST_FORBIDDEN_ON_VERCEL'
+  | 'POSTGRES_INSECURE_TLS_FORBIDDEN'
+  | 'POSTGRES_INVALID_SSLMODE'
+  | 'OWNER_ROLE_FORBIDDEN_IN_RUNTIME'
+  | 'PRODUCTION_PGLITE_FORBIDDEN'
+  | 'REMOTE_NEON_REQUIRED'
+  | 'SQLITE_FORBIDDEN_IN_PRODUCTION'
+  | 'SQLITE_PATH_REQUIRED'
+  | 'MOCK_EXECUTOR_FORBIDDEN_IN_PRODUCTION';
+
+/**
+ * Fail-safe structured error thrown when database configuration or credentials
+ * are missing, placeholder, insecure, or forbidden in production/Vercel.
+ * Always provides a safe publicMessage and HTTP 503 status without exposing secrets.
+ */
+export class DatabaseConfigurationError extends Error {
+  readonly code: DatabaseConfigurationErrorCode;
+  readonly httpStatus: number = 503;
+  readonly publicMessage: string = 'Database service is temporarily unavailable.';
+  readonly envVarName?: string;
+  readonly purpose?: PostgresConnectionPurpose;
+
+  constructor(
+    code: DatabaseConfigurationErrorCode,
+    detail: string,
+    meta?: { envVarName?: string; purpose?: PostgresConnectionPurpose }
+  ) {
+    const safeDetail = redactSensitiveData(detail);
+    super(`${code}: ${safeDetail}`);
+    this.name = 'DatabaseConfigurationError';
+    this.code = code;
+    this.envVarName = meta?.envVarName;
+    this.purpose = meta?.purpose;
+  }
+}
+
+export function isDatabaseConfigurationError(err: unknown): err is DatabaseConfigurationError {
+  return err instanceof DatabaseConfigurationError;
+}
+
+export interface CreatePostgresExecutorOptions {
+  /** Role purpose determining which environment variable and access mode is used. */
+  purpose?: PostgresConnectionPurpose;
+  /** Explicit access mode override (defaults from purpose: readonly -> readonly, app_rw/test -> readwrite, migration -> migration). */
+  accessMode?: RepositoryAccessMode;
+  /** Legacy flag: false permits explicit PGlite fallback ONLY outside production/Vercel. */
+  requireNeonRemote?: boolean;
+  /** Explicit opt-in for isolated in-process PGlite outside production/Vercel. */
+  allowPglite?: boolean;
+  /** Prefer @neondatabase/serverless Pool on serverless/Vercel runtimes. */
+  useServerlessDriver?: boolean;
+  /** Reject owner/superuser role names (e.g., neondb_owner, postgres) for runtime purposes. Default: true for readonly/app_rw. */
+  rejectOwnerRole?: boolean;
+  /** Bounded timeout overrides. */
+  timeouts?: Partial<PostgresTimeoutConfig>;
+  /** Maximum pool size override. */
+  maxPoolSize?: number;
+  /** Environment object override (for deterministic unit testing). */
+  env?: NodeJS.ProcessEnv;
+}
+
+export interface ValidatedPostgresUrl {
+  url: string;
+  host: string;
+  port: number;
+  database: string;
+  username: string;
+  isNeonHost: boolean;
+  isPooledHost: boolean;
+  isLocalhost: boolean;
+  sslMode: string;
+  requiresTls: boolean;
+}
 
 export interface PgExecutor {
   query<T = any>(sql: string, params?: any[]): Promise<{ rows: T[]; rowCount: number }>;
   transaction<T>(fn: (tx: PgExecutor) => Promise<T>): Promise<T>;
   close(): Promise<void>;
   isNeonRemote: boolean;
+  accessMode: RepositoryAccessMode;
+  backend: DatabaseBackendKind;
+  purpose: PostgresConnectionPurpose;
 }
 
 /**
@@ -298,12 +417,80 @@ CREATE INDEX IF NOT EXISTS idx_pg_dlq_status ON automation_dead_letter(status, j
 CREATE INDEX IF NOT EXISTS idx_pg_op_events_cat_time ON operational_events(category, timestamp);
 `;
 
+export const POSTGRES_PHASE_B_MIGRATION_004_DDL = `
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pg_visa_details_program_unique ON visa_details(program_id);
+
+CREATE TABLE IF NOT EXISTS slot_subscribers (
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  country TEXT NOT NULL,
+  city TEXT NOT NULL,
+  visa_type TEXT NOT NULL,
+  language TEXT NOT NULL DEFAULT 'en',
+  subscribed_at TEXT NOT NULL,
+  last_notified_at TEXT,
+  is_active INTEGER NOT NULL DEFAULT 1
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pg_slot_subscribers_unique ON slot_subscribers (LOWER(email), country, city, visa_type);
+CREATE INDEX IF NOT EXISTS idx_pg_slot_subscribers_active ON slot_subscribers (is_active, country, city);
+
+CREATE TABLE IF NOT EXISTS slot_embassy_status (
+  embassy_key TEXT PRIMARY KEY,
+  country TEXT NOT NULL,
+  city TEXT NOT NULL DEFAULT '',
+  status TEXT NOT NULL,
+  earliest_date TEXT,
+  booking_link TEXT,
+  last_checked_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_pg_slot_embassy_country ON slot_embassy_status (country, status);
+
+CREATE TABLE IF NOT EXISTS slot_email_logs (
+  id TEXT PRIMARY KEY,
+  embassy_key TEXT NOT NULL,
+  recipient_hash TEXT NOT NULL,
+  status TEXT NOT NULL,
+  provider_message_id TEXT,
+  sent_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_pg_slot_email_logs_sent ON slot_email_logs (embassy_key, sent_at);
+
+CREATE TABLE IF NOT EXISTS editorial_articles (
+  slug TEXT PRIMARY KEY,
+  status TEXT NOT NULL CHECK (status IN ('published', 'draft', 'archived')),
+  title TEXT NOT NULL,
+  frontmatter_json TEXT NOT NULL DEFAULT '{}',
+  markdown_body TEXT NOT NULL,
+  source_origin TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  published_at TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_pg_editorial_status_updated ON editorial_articles (status, updated_at);
+
+CREATE TABLE IF NOT EXISTS admin_revoked_sessions (
+  jti TEXT PRIMARY KEY,
+  revoked_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_pg_admin_revoked_expires ON admin_revoked_sessions (expires_at);
+`;
+
 export interface PgMigrationDefinition {
   version: string;
   name: string;
   ddl: string;
   rollbackNotes: string;
 }
+
+export const POSTGRES_MIGRATION_004: PgMigrationDefinition = {
+  version: '004_phaseB_serverless_unification',
+  name: 'Phase B unique visa_details(program_id) constraint and serverless unified tables (slot alerts, editorial articles, revoked admin sessions)',
+  ddl: POSTGRES_PHASE_B_MIGRATION_004_DDL,
+  rollbackNotes:
+    'DROP INDEX IF EXISTS idx_pg_visa_details_program_unique; DROP TABLE IF EXISTS admin_revoked_sessions, editorial_articles, slot_email_logs, slot_embassy_status, slot_subscribers.'
+};
 
 export const POSTGRES_MIGRATIONS: PgMigrationDefinition[] = [
   {
@@ -323,7 +510,8 @@ export const POSTGRES_MIGRATIONS: PgMigrationDefinition[] = [
     name: 'Phase 4.4 job locks, checkpoints, dead-letter quarantine, operational telemetry, and indexes',
     ddl: POSTGRES_PHASE_4_4_MIGRATION_DDL,
     rollbackNotes: 'DROP TABLE IF EXISTS automation_job_locks, automation_checkpoints, automation_dead_letter, operational_events.'
-  }
+  },
+  POSTGRES_MIGRATION_004
 ];
 
 function computePgMigrationChecksum(version: string, ddl: string): string {
@@ -337,59 +525,436 @@ function splitSqlStatements(sql: string): string[] {
     .filter((s) => s.length > 0);
 }
 
+const PLACEHOLDER_NEON_HOSTS = [
+  'ep-example.us-east-2.aws.neon.tech',
+  'example.com',
+  'your-neon-host',
+  'placeholder.neon.tech'
+];
+const PLACEHOLDER_URI_PATTERNS = [
+  /<replace_with[^>]*>/i,
+  /<target_db_name>/i,
+  /<password>/i,
+  /<host>/i,
+  /replace_with_min_32_char_password/i,
+  /your_password_here/i
+];
+const INSECURE_SSL_MODES = new Set(['disable', 'allow', 'prefer', 'no-verify']);
+const LOCAL_LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1', '[::1]']);
+
+export function isPlaceholderConnectionString(rawUrl: string): boolean {
+  const trimmed = (rawUrl || '').trim();
+  if (!trimmed) return true;
+  const lower = trimmed.toLowerCase();
+  if (PLACEHOLDER_NEON_HOSTS.some((ph) => lower.includes(ph))) {
+    return true;
+  }
+  return PLACEHOLDER_URI_PATTERNS.some((re) => re.test(trimmed));
+}
+
+export function isProductionEnvironment(env: NodeJS.ProcessEnv = process.env): boolean {
+  return (
+    env.NODE_ENV === 'production' ||
+    env.VERCEL === '1' ||
+    env.VERCEL === 'true' ||
+    Boolean((env.VERCEL_ENV || '').trim())
+  );
+}
+
+export function isVercelRuntime(env: NodeJS.ProcessEnv = process.env): boolean {
+  return env.VERCEL === '1' || env.VERCEL === 'true' || Boolean((env.VERCEL_ENV || '').trim());
+}
+
+export function getEnvVarNameForPurpose(purpose: PostgresConnectionPurpose): string {
+  switch (purpose) {
+    case 'readonly':
+      return 'NEON_READONLY_DATABASE_URL';
+    case 'app_rw':
+      return 'NEON_APP_DATABASE_URL';
+    case 'migration':
+      return 'NEON_MIGRATION_DATABASE_URL';
+    case 'test':
+    default:
+      return 'NEON_TEST_DATABASE_URL';
+  }
+}
+
+export function isOwnerOrPrivilegedRoleName(username: string): boolean {
+  const normalized = (username || '').trim().toLowerCase();
+  if (!normalized) return false;
+  return (
+    normalized === 'neondb_owner' ||
+    normalized === 'postgres' ||
+    normalized === 'superuser' ||
+    normalized.endsWith('_owner') ||
+    normalized.endsWith('_admin')
+  );
+}
+
 /**
- * Create a PostgreSQL executor using either NEON_TEST_DATABASE_URL (pg.Pool)
- * or an isolated in-process PGlite PostgreSQL engine for offline verification.
+ * Strictly validates a PostgreSQL connection URI without ever echoing credentials or host secrets in errors.
+ */
+export function validatePostgresConnectionUrl(
+  rawUrl: string,
+  options: {
+    purpose: PostgresConnectionPurpose;
+    env?: NodeJS.ProcessEnv;
+    rejectOwnerRole?: boolean;
+  }
+): ValidatedPostgresUrl {
+  const env = options.env ?? process.env;
+  const prod = isProductionEnvironment(env);
+  const vercel = isVercelRuntime(env);
+  const trimmed = (rawUrl || '').trim();
+  const envVarName = getEnvVarNameForPurpose(options.purpose);
+  const meta = { envVarName, purpose: options.purpose };
+
+  if (!trimmed) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_CREDENTIALS_MISSING',
+      `${envVarName} is not configured for "${options.purpose}" database access.`,
+      meta
+    );
+  }
+
+  if (PLACEHOLDER_URI_PATTERNS.some((re) => re.test(trimmed))) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_PLACEHOLDER_URL',
+      `${envVarName} contains an unreplaced template placeholder value.`,
+      meta
+    );
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_INVALID_URI',
+      `${envVarName} is not a valid PostgreSQL connection URI.`,
+      meta
+    );
+  }
+
+  if (parsed.protocol !== 'postgres:' && parsed.protocol !== 'postgresql:') {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_INVALID_PROTOCOL',
+      `${envVarName} must use postgres:// or postgresql://.`,
+      meta
+    );
+  }
+
+  const host = parsed.hostname.toLowerCase();
+  if (!host || PLACEHOLDER_NEON_HOSTS.some((ph) => host === ph || host.includes(ph))) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_PLACEHOLDER_URL',
+      `${envVarName} points to a placeholder or empty host.`,
+      meta
+    );
+  }
+
+  const isLocalhost = LOCAL_LOOPBACK_HOSTS.has(host);
+  if (vercel && isLocalhost) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_LOCALHOST_FORBIDDEN_ON_VERCEL',
+      `${envVarName} cannot target localhost in Vercel runtime.`,
+      meta
+    );
+  }
+
+  const isNeonHost = host.endsWith('.neon.tech');
+  const isPooledHost = host.includes('-pooler.');
+  const sslMode = (parsed.searchParams.get('sslmode') || '').trim().toLowerCase();
+  const requiresTls = !isLocalhost || prod || isNeonHost;
+
+  if (requiresTls && sslMode && INSECURE_SSL_MODES.has(sslMode)) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_INSECURE_TLS_FORBIDDEN',
+      `${envVarName} specifies insecure sslmode="${sslMode}". Strict TLS verification (sslmode=verify-full or require with rejectUnauthorized=true) is mandatory.`,
+      meta
+    );
+  }
+
+  if ((prod || isNeonHost) && sslMode && sslMode !== 'require' && sslMode !== 'verify-ca' && sslMode !== 'verify-full') {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_INVALID_SSLMODE',
+      `${envVarName} must use sslmode=verify-full, verify-ca, or require for Neon/production connections.`,
+      meta
+    );
+  }
+
+  const username = decodeURIComponent(parsed.username || '').trim();
+  const shouldRejectOwner =
+    options.rejectOwnerRole !== undefined
+      ? options.rejectOwnerRole
+      : options.purpose === 'readonly' || options.purpose === 'app_rw';
+
+  if (shouldRejectOwner && isOwnerOrPrivilegedRoleName(username)) {
+    throw new DatabaseConfigurationError(
+      'OWNER_ROLE_FORBIDDEN_IN_RUNTIME',
+      `${envVarName} must use a least-privilege role (visaapply_audit_ro or visaapply_app_rw), never an owner/superuser role.`,
+      meta
+    );
+  }
+
+  const database = parsed.pathname.replace(/^\/+/, '');
+  const port = parsed.port ? Number(parsed.port) : 5432;
+
+  return {
+    url: trimmed,
+    host,
+    port: Number.isFinite(port) && port > 0 ? port : 5432,
+    database,
+    username,
+    isNeonHost,
+    isPooledHost,
+    isLocalhost,
+    sslMode: sslMode || (requiresTls ? 'require' : 'prefer'),
+    requiresTls
+  };
+}
+
+function clampTimeout(value: number | undefined, fallback: number, min: number, max: number): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return fallback;
+  return Math.max(min, Math.min(max, Math.floor(value)));
+}
+
+export function resolvePostgresTimeouts(overrides?: Partial<PostgresTimeoutConfig>): PostgresTimeoutConfig {
+  return {
+    connectionTimeoutMillis: clampTimeout(
+      overrides?.connectionTimeoutMillis,
+      DEFAULT_POSTGRES_TIMEOUTS.connectionTimeoutMillis,
+      1000,
+      30000
+    ),
+    idleTimeoutMillis: clampTimeout(
+      overrides?.idleTimeoutMillis,
+      DEFAULT_POSTGRES_TIMEOUTS.idleTimeoutMillis,
+      1000,
+      60000
+    ),
+    queryTimeoutMs: clampTimeout(
+      overrides?.queryTimeoutMs,
+      DEFAULT_POSTGRES_TIMEOUTS.queryTimeoutMs,
+      1000,
+      60000
+    ),
+    statementTimeoutMs: clampTimeout(
+      overrides?.statementTimeoutMs,
+      DEFAULT_POSTGRES_TIMEOUTS.statementTimeoutMs,
+      1000,
+      60000
+    ),
+    lockTimeoutMs: clampTimeout(
+      overrides?.lockTimeoutMs,
+      DEFAULT_POSTGRES_TIMEOUTS.lockTimeoutMs,
+      500,
+      30000
+    ),
+    idleInTransactionSessionTimeoutMs: clampTimeout(
+      overrides?.idleInTransactionSessionTimeoutMs,
+      DEFAULT_POSTGRES_TIMEOUTS.idleInTransactionSessionTimeoutMs,
+      1000,
+      60000
+    )
+  };
+}
+
+/**
+ * Builds a strict TLS-verified, timeout-bounded PostgreSQL pool configuration.
+ * Always enforces full TLS certificate verification (rejectUnauthorized: true).
+ */
+export function buildPgPoolConfig(
+  rawUrl: string,
+  options: {
+    purpose: PostgresConnectionPurpose;
+    env?: NodeJS.ProcessEnv;
+    timeouts?: Partial<PostgresTimeoutConfig>;
+    maxPoolSize?: number;
+    rejectOwnerRole?: boolean;
+  }
+): {
+  validated: ValidatedPostgresUrl;
+  timeouts: PostgresTimeoutConfig;
+  poolConfig: pg.PoolConfig;
+} {
+  const env = options.env ?? process.env;
+  const validated = validatePostgresConnectionUrl(rawUrl, {
+    purpose: options.purpose,
+    env,
+    rejectOwnerRole: options.rejectOwnerRole
+  });
+  const timeouts = resolvePostgresTimeouts(options.timeouts);
+  const vercel = isVercelRuntime(env);
+
+  const defaultMax =
+    options.purpose === 'migration' ? 1 : vercel ? 3 : 5;
+  const max = clampTimeout(options.maxPoolSize, defaultMax, 1, 20);
+
+  const poolConfig: pg.PoolConfig = {
+    connectionString: validated.url,
+    max,
+    idleTimeoutMillis: timeouts.idleTimeoutMillis,
+    connectionTimeoutMillis: timeouts.connectionTimeoutMillis,
+    query_timeout: timeouts.queryTimeoutMs,
+    allowExitOnIdle: true,
+    application_name: `visaapply_${options.purpose}`,
+    ssl: validated.requiresTls ? { rejectUnauthorized: true } : undefined
+  };
+
+  return { validated, timeouts, poolConfig };
+}
+
+export function buildSessionInitSql(accessMode: RepositoryAccessMode, timeouts: PostgresTimeoutConfig): string[] {
+  const statements = [
+    `SET statement_timeout = '${timeouts.statementTimeoutMs}ms'`,
+    `SET lock_timeout = '${timeouts.lockTimeoutMs}ms'`,
+    `SET idle_in_transaction_session_timeout = '${timeouts.idleInTransactionSessionTimeoutMs}ms'`
+  ];
+  if (accessMode === 'readonly') {
+    statements.push('SET default_transaction_read_only = on');
+  }
+  return statements;
+}
+
+/**
+ * Creates a hardened PostgreSQL executor using separated role credentials:
+ *   - readonly  -> NEON_READONLY_DATABASE_URL
+ *   - app_rw    -> NEON_APP_DATABASE_URL
+ *   - migration -> NEON_MIGRATION_DATABASE_URL
+ *   - test      -> NEON_TEST_DATABASE_URL
+ *
+ * Security invariants:
+ *   - Strict TLS verification (rejectUnauthorized: true) enforced on all remote/Neon connections.
+ *   - Production / Vercel environments ALWAYS fail closed if credentials are missing and NEVER fall back to PGlite.
+ *   - Isolated PGlite is allowed ONLY outside production/Vercel when explicitly requested.
+ *   - Owner role names are rejected for normal runtime purposes (readonly / app_rw).
  */
 export async function createPostgresExecutor(
   connectionString?: string,
-  options: { requireNeonRemote?: boolean } = {}
+  options: CreatePostgresExecutorOptions = {}
 ): Promise<PgExecutor> {
-  const connUrl = (connectionString || process.env.NEON_TEST_DATABASE_URL || '').trim();
-  const isValidUrl = connUrl.startsWith('postgres://') || connUrl.startsWith('postgresql://');
+  const env = options.env ?? process.env;
+  const prod = isProductionEnvironment(env);
+  const vercel = isVercelRuntime(env);
+  const purpose: PostgresConnectionPurpose = options.purpose ?? 'test';
+  const accessMode: RepositoryAccessMode =
+    options.accessMode ??
+    (purpose === 'readonly' ? 'readonly' : purpose === 'migration' ? 'migration' : 'readwrite');
 
-  if (isValidUrl && !connUrl.includes('ep-example.us-east-2.aws.neon.tech')) {
-    const pool = new PgPool({
-      connectionString: connUrl,
-      max: 10,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 10000,
-      ssl: { rejectUnauthorized: false }
+  const envVarName = getEnvVarNameForPurpose(purpose);
+  const rawConn = (connectionString ?? env[envVarName] ?? '').trim();
+
+  // Explicit PGlite opt-in check (strictly forbidden in production / Vercel!)
+  const explicitPgliteRequested =
+    options.allowPglite === true ||
+    options.requireNeonRemote === false ||
+    env.ALLOW_PGLITE_FALLBACK === 'true';
+
+  if (prod && !rawConn) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_CREDENTIALS_MISSING',
+      `${envVarName} is required in production/Vercel for "${purpose}" access. Refusing silent fallback to PGlite or SQLite.`,
+      { envVarName, purpose }
+    );
+  }
+
+  if (prod && options.allowPglite === true) {
+    throw new DatabaseConfigurationError(
+      'PRODUCTION_PGLITE_FORBIDDEN',
+      'In-memory PGlite is strictly disabled in production and Vercel environments.',
+      { envVarName, purpose }
+    );
+  }
+
+  const looksLikePlaceholder = isPlaceholderConnectionString(rawConn);
+
+  if (prod && looksLikePlaceholder) {
+    throw new DatabaseConfigurationError(
+      'POSTGRES_PLACEHOLDER_URL',
+      `${envVarName} contains a placeholder value in production/Vercel. Configure a real least-privilege Neon connection URI.`,
+      { envVarName, purpose }
+    );
+  }
+
+  if (!looksLikePlaceholder) {
+    const { validated, timeouts, poolConfig } = buildPgPoolConfig(rawConn, {
+      purpose,
+      env,
+      timeouts: options.timeouts,
+      maxPoolSize: options.maxPoolSize,
+      rejectOwnerRole: options.rejectOwnerRole
     });
 
-    pool.on('error', (err) => {
+    const useServerless =
+      options.useServerlessDriver !== undefined
+        ? options.useServerlessDriver
+        : vercel && validated.isNeonHost && purpose !== 'migration';
+
+    const pool: any = useServerless
+      ? (() => {
+          neonConfig.pipelineConnect = false;
+          return new NeonPool({
+            connectionString: poolConfig.connectionString,
+            max: poolConfig.max,
+            idleTimeoutMillis: poolConfig.idleTimeoutMillis,
+            connectionTimeoutMillis: poolConfig.connectionTimeoutMillis
+          });
+        })()
+      : new PgPool(poolConfig);
+
+    const sessionInitStatements = buildSessionInitSql(accessMode, timeouts);
+
+    pool.on('error', (err: any) => {
       const safeMsg = redactSensitiveData(err?.message || 'Unexpected idle PostgreSQL client error');
       recordOperationalEvent({
         category: 'DB_CONNECTION_ERROR',
         severity: 'ERROR',
-        component: 'postgres-pool',
+        component: `postgres-pool:${purpose}`,
         message: safeMsg
       });
     });
 
+    const applySessionGuards = async (client: any) => {
+      for (const stmt of sessionInitStatements) {
+        await client.query(stmt);
+      }
+    };
+
     const executor: PgExecutor = {
       isNeonRemote: true,
+      accessMode,
+      backend: 'neon-postgres',
+      purpose,
       async query<T = any>(sql: string, params: any[] = []) {
+        const client = await pool.connect();
         try {
-          const res = await pool.query(sql, params);
+          await applySessionGuards(client);
+          const res = await client.query(sql, params);
           return { rows: res.rows as T[], rowCount: res.rowCount ?? res.rows.length };
         } catch (err: any) {
           const safeMsg = redactSensitiveData(err?.message || 'PostgreSQL query error');
           recordOperationalEvent({
             category: 'DB_CONNECTION_ERROR',
             severity: 'ERROR',
-            component: 'postgres-query',
+            component: `postgres-query:${purpose}`,
             message: safeMsg
           });
           throw new Error(safeMsg);
+        } finally {
+          client.release();
         }
       },
       async transaction<T>(fn: (tx: PgExecutor) => Promise<T>): Promise<T> {
         const client = await pool.connect();
         try {
-          await client.query('BEGIN');
+          await applySessionGuards(client);
+          await client.query(accessMode === 'readonly' ? 'BEGIN READ ONLY' : 'BEGIN');
           const txExec: PgExecutor = {
             isNeonRemote: true,
+            accessMode,
+            backend: 'neon-postgres',
+            purpose,
             async query<R = any>(sql: string, params: any[] = []) {
               const r = await client.query(sql, params);
               return { rows: r.rows as R[], rowCount: r.rowCount ?? r.rows.length };
@@ -400,9 +965,14 @@ export async function createPostgresExecutor(
           const out = await fn(txExec);
           await client.query('COMMIT');
           return out;
-        } catch (err) {
-          await client.query('ROLLBACK');
-          throw err;
+        } catch (err: any) {
+          try {
+            await client.query('ROLLBACK');
+          } catch {
+            // Ignore secondary rollback failure on broken socket
+          }
+          const safeMsg = redactSensitiveData(err?.message || 'PostgreSQL transaction error');
+          throw new Error(safeMsg);
         } finally {
           client.release();
         }
@@ -414,30 +984,49 @@ export async function createPostgresExecutor(
     return executor;
   }
 
-  if (options.requireNeonRemote) {
-    throw new Error(
-      'REMOTE_NEON_REQUIRED: NEON_TEST_DATABASE_URL is not present or empty in process.env. Refusing to fall back to PGlite or SQLite.'
+  // If credentials are missing or placeholder:
+  if (prod || !explicitPgliteRequested) {
+    throw new DatabaseConfigurationError(
+      'REMOTE_NEON_REQUIRED',
+      `${envVarName} is not present or empty for "${purpose}" access. Refusing silent fallback to PGlite or SQLite.`,
+      { envVarName, purpose }
     );
   }
 
-  // Fallback isolated PostgreSQL engine (PGlite) when NEON_TEST_DATABASE_URL is not yet configured
+  // Explicit isolated in-process PGlite PostgreSQL engine (test / non-production dev ONLY)
   const pglite = new PGlite();
   await pglite.waitReady;
+
+  const timeouts = resolvePostgresTimeouts(options.timeouts);
+  const sessionInitStatements = buildSessionInitSql(accessMode, timeouts);
+  for (const stmt of sessionInitStatements) {
+    try {
+      await pglite.query(stmt);
+    } catch {
+      // Some session GUCs (e.g. lock_timeout) may vary in WASM PGlite; enforce read-only explicitly below
+    }
+  }
 
   let txLock: Promise<any> = Promise.resolve();
 
   const executor: PgExecutor = {
     isNeonRemote: false,
+    accessMode,
+    backend: 'pglite-test',
+    purpose,
     async query<T = any>(sql: string, params: any[] = []) {
       const res = await pglite.query<T>(sql, params);
       return { rows: res.rows, rowCount: res.affectedRows ?? res.rows.length };
     },
     async transaction<T>(fn: (tx: PgExecutor) => Promise<T>): Promise<T> {
       const runTx = async () => {
-        await pglite.query('BEGIN');
+        await pglite.query(accessMode === 'readonly' ? 'BEGIN READ ONLY' : 'BEGIN');
         try {
           const txExec: PgExecutor = {
             isNeonRemote: false,
+            accessMode,
+            backend: 'pglite-test',
+            purpose,
             async query<R = any>(sql: string, params: any[] = []) {
               const r = await pglite.query<R>(sql, params);
               return { rows: r.rows, rowCount: r.affectedRows ?? r.rows.length };
@@ -465,12 +1054,45 @@ export async function createPostgresExecutor(
 }
 
 /**
- * PostgreSQL Repository implementing the exact VisaApply.org enrichment data contracts
+ * PostgreSQL Repository implementing the unified VisaApply.org async data contracts
+ * with strict access-mode enforcement (readonly / readwrite / migration).
  */
-export class PostgresImmigrationRepository {
-  constructor(public readonly pg: PgExecutor) {}
+export class PostgresImmigrationRepository implements MigrationCapableRepository {
+  public readonly backend: DatabaseBackendKind;
+  public readonly accessMode: RepositoryAccessMode;
+
+  constructor(public readonly pg: PgExecutor) {
+    this.backend = pg.backend;
+    this.accessMode = pg.accessMode;
+  }
+
+  private assertWritable(operation: string): void {
+    if (this.pg.accessMode === 'readonly') {
+      throw new Error(
+        `READONLY_REPOSITORY_WRITE_DENIED: Cannot execute "${operation}" on a read-only PostgreSQL repository.`
+      );
+    }
+  }
+
+  private assertMigrationAllowed(operation: string): void {
+    if (this.pg.accessMode === 'readonly') {
+      throw new Error(
+        `READONLY_REPOSITORY_DDL_DENIED: Cannot execute "${operation}" on a read-only PostgreSQL repository.`
+      );
+    }
+    if (this.pg.isNeonRemote && this.pg.accessMode !== 'migration') {
+      throw new Error(
+        `RUNTIME_DDL_FORBIDDEN: Cannot execute "${operation}" using runtime role "${this.pg.purpose}". Use NEON_MIGRATION_DATABASE_URL via an authorized migration runner.`
+      );
+    }
+  }
+
+  async close(): Promise<void> {
+    await this.pg.close();
+  }
 
   async applyPhase31Migrations(): Promise<void> {
+    this.assertMigrationAllowed('applyPhase31Migrations');
     const statements = splitSqlStatements(POSTGRES_PHASE_3_1_MIGRATION_DDL);
     for (const stmt of statements) {
       await this.pg.query(stmt);
@@ -480,6 +1102,7 @@ export class PostgresImmigrationRepository {
   async runTrackedMigrations(
     migrations: PgMigrationDefinition[] = POSTGRES_MIGRATIONS
   ): Promise<{ newlyApplied: string[]; alreadyApplied: string[] }> {
+    this.assertMigrationAllowed('runTrackedMigrations');
     await this.pg.query(`
       CREATE TABLE IF NOT EXISTS schema_migrations (
         version TEXT PRIMARY KEY,
@@ -590,7 +1213,13 @@ export class PostgresImmigrationRepository {
   }
 
   async saveBatchStateToDb(state: any): Promise<void> {
+    this.assertWritable('saveBatchStateToDb');
     const nowStr = new Date().toISOString();
+    const safeLastError = state.retryAndMissedRunHandling?.lastError
+      ? redactSensitiveData(String(state.retryAndMissedRunHandling.lastError))
+      : null;
+    const safeAuditLogsJson = JSON.stringify(redactSensitiveData(state.auditLogs || []));
+
     await this.pg.query(
       `
       INSERT INTO batch_state (
@@ -664,14 +1293,25 @@ export class PostgresImmigrationRepository {
         state.retryAndMissedRunHandling?.retryCount || 0,
         state.retryAndMissedRunHandling?.maxRetries || 3,
         state.retryAndMissedRunHandling?.autoResumeOnMissed !== false ? 1 : 0,
-        state.retryAndMissedRunHandling?.lastError || null,
-        JSON.stringify(state.auditLogs || []),
+        safeLastError,
+        safeAuditLogsJson,
         nowStr
       ]
     );
   }
 
+  async getImmigrationProgram(programId: string, exec: PgExecutor = this.pg): Promise<any | null> {
+    const { rows } = await exec.query('SELECT * FROM immigration_programs WHERE id = $1', [programId]);
+    return rows[0] || null;
+  }
+
+  async getAllImmigrationPrograms(exec: PgExecutor = this.pg): Promise<any[]> {
+    const { rows } = await exec.query('SELECT * FROM immigration_programs ORDER BY id ASC');
+    return rows;
+  }
+
   async saveImmigrationProgram(prog: any): Promise<void> {
+    this.assertWritable('saveImmigrationProgram');
     await this.pg.query(
       `
       INSERT INTO immigration_programs (
@@ -691,7 +1331,39 @@ export class PostgresImmigrationRepository {
         $31, $32, $33, $34, $35, $36
       )
       ON CONFLICT(id) DO UPDATE SET
+        country_code = EXCLUDED.country_code,
+        category = EXCLUDED.category,
         official_name = EXCLUDED.official_name,
+        local_language_name = EXCLUDED.local_language_name,
+        legal_basis = EXCLUDED.legal_basis,
+        classification_type = EXCLUDED.classification_type,
+        eligibility = EXCLUDED.eligibility,
+        nationality_restrictions = EXCLUDED.nationality_restrictions,
+        age_requirements = EXCLUDED.age_requirements,
+        education_requirements = EXCLUDED.education_requirements,
+        work_experience_requirements = EXCLUDED.work_experience_requirements,
+        min_salary_or_income = EXCLUDED.min_salary_or_income,
+        investment_requirement = EXCLUDED.investment_requirement,
+        required_funds_and_proof = EXCLUDED.required_funds_and_proof,
+        residency_duration = EXCLUDED.residency_duration,
+        renewal_rules = EXCLUDED.renewal_rules,
+        pr_or_citizenship_transition = EXCLUDED.pr_or_citizenship_transition,
+        family_inclusion_rules = EXCLUDED.family_inclusion_rules,
+        work_and_study_rights = EXCLUDED.work_and_study_rights,
+        restrictions_and_exceptions = EXCLUDED.restrictions_and_exceptions,
+        required_documents_json = EXCLUDED.required_documents_json,
+        documents_and_formats = EXCLUDED.documents_and_formats,
+        translation_attestation_requirements = EXCLUDED.translation_attestation_requirements,
+        application_procedure = EXCLUDED.application_procedure,
+        government_fees = EXCLUDED.government_fees,
+        processing_time = EXCLUDED.processing_time,
+        apply_from = EXCLUDED.apply_from,
+        official_application_url = EXCLUDED.official_application_url,
+        official_information_url = EXCLUDED.official_information_url,
+        source_authority = EXCLUDED.source_authority,
+        source_last_updated = EXCLUDED.source_last_updated,
+        last_checked_date = EXCLUDED.last_checked_date,
+        verification_evidence = EXCLUDED.verification_evidence,
         verification_status = EXCLUDED.verification_status,
         updated_at = EXCLUDED.updated_at
       `,
@@ -734,6 +1406,63 @@ export class PostgresImmigrationRepository {
         prog.updated_at || new Date().toISOString()
       ]
     );
+  }
+
+  async saveChangelogEntryToDb(entry: any): Promise<void> {
+    this.assertWritable('saveChangelogEntryToDb');
+    await this.pg.query(
+      `
+      INSERT INTO changelog_entries (
+        id, date, country_code, country_name, change_type, title,
+        old_value, new_value, source_url, auto_blog_slug, email_notified, verified_by, created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      ON CONFLICT(id) DO UPDATE SET
+        date = EXCLUDED.date,
+        country_code = EXCLUDED.country_code,
+        country_name = EXCLUDED.country_name,
+        change_type = EXCLUDED.change_type,
+        title = EXCLUDED.title,
+        old_value = EXCLUDED.old_value,
+        new_value = EXCLUDED.new_value,
+        source_url = EXCLUDED.source_url,
+        auto_blog_slug = EXCLUDED.auto_blog_slug,
+        email_notified = EXCLUDED.email_notified,
+        verified_by = EXCLUDED.verified_by
+      `,
+      [
+        entry.id,
+        entry.date,
+        entry.countryCode || entry.country_code || '',
+        entry.countryName || entry.country_name || '',
+        entry.changeType || entry.change_type || '',
+        entry.title || '',
+        entry.oldValue ?? entry.old_value ?? '',
+        entry.newValue ?? entry.new_value ?? '',
+        entry.sourceUrl || entry.source_url || '',
+        entry.autoBlogSlug || entry.auto_blog_slug || '',
+        redactSensitiveData(String(entry.emailNotified ?? entry.email_notified ?? '')),
+        entry.verifiedBy || entry.verified_by || '',
+        entry.createdAt || entry.created_at || new Date().toISOString()
+      ]
+    );
+  }
+
+  async getChangelogFromDb(exec: PgExecutor = this.pg): Promise<any[]> {
+    const { rows } = await exec.query('SELECT * FROM changelog_entries ORDER BY date DESC, created_at DESC');
+    return rows.map((r: any) => ({
+      id: r.id,
+      date: r.date,
+      countryCode: r.country_code,
+      countryName: r.country_name,
+      changeType: r.change_type,
+      title: r.title,
+      oldValue: r.old_value,
+      newValue: r.new_value,
+      sourceUrl: r.source_url,
+      autoBlogSlug: r.auto_blog_slug,
+      emailNotified: r.email_notified,
+      verifiedBy: r.verified_by
+    }));
   }
 
   async getVisaDetails(programId: string, exec: PgExecutor = this.pg): Promise<any | null> {
@@ -783,11 +1512,17 @@ export class PostgresImmigrationRepository {
     return baseRecord;
   }
 
+  async getAllVisaDetails(exec: PgExecutor = this.pg): Promise<any[]> {
+    const { rows } = await exec.query('SELECT * FROM visa_details ORDER BY id ASC');
+    return rows.map((r) => this.mapVisaDetailRow(r));
+  }
+
   async getPaginatedVisaDetails(
     page: number,
     limit: number,
     search: string = '',
-    status: string = ''
+    status: string = '',
+    _category: string = ''
   ): Promise<{ data: any[]; total: number }> {
     const offset = (page - 1) * limit;
     const conditions: string[] = [];
@@ -822,6 +1557,7 @@ export class PostgresImmigrationRepository {
   }
 
   async saveVisaDetails(details: any, exec: PgExecutor = this.pg): Promise<void> {
+    this.assertWritable('saveVisaDetails');
     const lastUpdated = details.lastUpdated || new Date().toISOString();
     const verificationStatus = details.verificationStatus || 'VERIFIED';
     const normalizedComp = normalizeVisaDetailTo30Sections({
@@ -829,6 +1565,12 @@ export class PostgresImmigrationRepository {
       lastUpdated,
       verificationStatus
     });
+
+    // Normalize vd- identifier consistently with SQLite (sqliteCore.ts)
+    const recordId =
+      details.id && (!String(details.id).startsWith('vd-') || details.id === `vd-${details.programId}`)
+        ? details.id
+        : `vd-${details.programId}`;
 
     await exec.query(
       `
@@ -861,7 +1603,7 @@ export class PostgresImmigrationRepository {
         verification_status = EXCLUDED.verification_status
       `,
       [
-        details.id || `vd-${details.programId}`,
+        recordId,
         details.programId,
         JSON.stringify(details.countryOverview || {}),
         JSON.stringify(details.visaOverview || {}),
@@ -885,17 +1627,90 @@ export class PostgresImmigrationRepository {
   }
 
   async updateVisaStatus(programId: string, status: string, exec: PgExecutor = this.pg): Promise<void> {
+    this.assertWritable('updateVisaStatus');
     await exec.query('UPDATE visa_details SET verification_status = $1 WHERE program_id = $2', [
       status,
       programId
     ]);
   }
 
+  async getVisaClaims(programId: string, exec: PgExecutor = this.pg): Promise<any[]> {
+    const { rows } = await exec.query(
+      'SELECT * FROM visa_detail_claims WHERE program_id = $1 ORDER BY section ASC, description ASC',
+      [programId]
+    );
+    return rows.map((r: any) => ({
+      id: r.id,
+      programId: r.program_id,
+      section: r.section,
+      description: r.description,
+      value: r.value,
+      unit: r.unit,
+      status: r.status,
+      reviewer: r.reviewer,
+      reviewTimestamp: r.review_timestamp,
+      requirementClassification: isValidRequirementClassification(r.requirement_classification)
+        ? r.requirement_classification
+        : 'ADMIN_INSTRUCTION',
+      applicableNationality: r.applicable_nationality || 'ALL',
+      countryIso: r.country_iso || '',
+      visaCategory: r.visa_category || ''
+    }));
+  }
+
+  async getVisaClaimById(claimId: string, exec: PgExecutor = this.pg): Promise<any | null> {
+    const { rows } = await exec.query('SELECT * FROM visa_detail_claims WHERE id = $1', [claimId]);
+    const r = rows[0];
+    if (!r) return null;
+    return {
+      id: r.id,
+      programId: r.program_id,
+      section: r.section,
+      description: r.description,
+      value: r.value,
+      unit: r.unit,
+      status: r.status,
+      reviewer: r.reviewer,
+      reviewTimestamp: r.review_timestamp,
+      requirementClassification: isValidRequirementClassification(r.requirement_classification)
+        ? r.requirement_classification
+        : 'ADMIN_INSTRUCTION',
+      applicableNationality: r.applicable_nationality || 'ALL',
+      countryIso: r.country_iso || '',
+      visaCategory: r.visa_category || ''
+    };
+  }
+
+  async getVisaEvidence(claimId: string, exec: PgExecutor = this.pg): Promise<any[]> {
+    const { rows } = await exec.query('SELECT * FROM visa_detail_evidence WHERE claim_id = $1', [claimId]);
+    return rows.map((r: any) => ({
+      id: r.id,
+      claimId: r.claim_id,
+      sourceUrl: r.source_url,
+      legalInstrument: r.legal_instrument,
+      effectiveDate: r.effective_date,
+      lastCheckedDate: r.last_checked_date,
+      sourceTitle: r.source_title || '',
+      issuingAuthority: r.issuing_authority || '',
+      publicationDate: r.publication_date || '',
+      accessDate: r.access_date || r.last_checked_date || '',
+      reviewerNotes: r.reviewer_notes || '',
+      excerpt: r.excerpt || '',
+      rawStatus: r.status || 'NEEDS_REVIEW',
+      status: normalizeEvidenceStatus(r.status)
+    }));
+  }
+
   async getVisaClaimsWithEvidence(
     programId: string,
-    exec: PgExecutor = this.pg,
+    execOrNationality?: PgExecutor | string,
     targetNationality?: string
   ): Promise<any[]> {
+    const exec: PgExecutor =
+      execOrNationality && typeof execOrNationality !== 'string' ? execOrNationality : this.pg;
+    const resolvedNationality =
+      typeof execOrNationality === 'string' ? execOrNationality : targetNationality;
+
     // Optimized 2-query batch fetch (avoids N+1 queries)
     const claimsRes = await exec.query(
       'SELECT * FROM visa_detail_claims WHERE program_id = $1 ORDER BY section ASC, description ASC',
@@ -965,7 +1780,7 @@ export class PostgresImmigrationRepository {
       const integrity = evaluateClaimIntegrity(claimWithEv, {
         expectedCountryIso: progRow?.country_code || (programId || '').split('-')[0] || '',
         expectedVisaCategory: progRow?.category || '',
-        targetNationality
+        targetNationality: resolvedNationality
       });
       return {
         ...claimWithEv,
@@ -989,6 +1804,7 @@ export class PostgresImmigrationRepository {
     programId?: string;
     versionId?: string;
   }> {
+    this.assertWritable('reconcileClaimVerificationAfterEvidenceChange');
     const claimRes = await exec.query('SELECT * FROM visa_detail_claims WHERE id = $1', [claimId]);
     const claimRow = claimRes.rows[0];
     if (!claimRow) return { downgraded: false, claimId };
@@ -1044,6 +1860,7 @@ export class PostgresImmigrationRepository {
   }
 
   async saveVisaClaim(claim: any, exec: PgExecutor = this.pg): Promise<void> {
+    this.assertWritable('saveVisaClaim');
     const rawClassification = claim.requirementClassification || claim.requirement_classification;
     const requirementClassification: RequirementClassification = isValidRequirementClassification(rawClassification)
       ? rawClassification
@@ -1091,6 +1908,7 @@ export class PostgresImmigrationRepository {
   }
 
   async deleteVisaClaim(claimId: string, exec?: PgExecutor): Promise<void> {
+    this.assertWritable('deleteVisaClaim');
     const runDelete = async (targetExec: PgExecutor) => {
       await targetExec.query('DELETE FROM visa_detail_evidence WHERE claim_id = $1', [claimId]);
       await targetExec.query('DELETE FROM visa_detail_claims WHERE id = $1', [claimId]);
@@ -1101,9 +1919,14 @@ export class PostgresImmigrationRepository {
 
   async saveVisaEvidence(
     evidence: any,
-    exec?: PgExecutor,
+    execOrOptions?: PgExecutor | { skipReconcile?: boolean },
     options?: { skipReconcile?: boolean }
   ): Promise<{ downgradedClaim?: boolean; newClaimStatus?: string; versionId?: string }> {
+    this.assertWritable('saveVisaEvidence');
+    const isExec = Boolean(execOrOptions && typeof (execOrOptions as PgExecutor).query === 'function');
+    const exec = isExec ? (execOrOptions as PgExecutor) : undefined;
+    const resolvedOptions = isExec ? options : (execOrOptions as { skipReconcile?: boolean } | undefined) ?? options;
+
     const runSave = async (targetExec: PgExecutor) => {
       const normalizedStatus = normalizeEvidenceStatus(evidence.status);
       const claimId = evidence.claimId || evidence.claim_id;
@@ -1144,7 +1967,7 @@ export class PostgresImmigrationRepository {
         ]
       );
 
-      if (!options?.skipReconcile && claimId) {
+      if (!resolvedOptions?.skipReconcile && claimId) {
         const rec = await this.reconcileClaimVerificationAfterEvidenceChange(
           claimId,
           `Evidence ${evidence.id} status set to ${normalizedStatus}`,
@@ -1167,6 +1990,7 @@ export class PostgresImmigrationRepository {
     evidenceId: string,
     exec?: PgExecutor
   ): Promise<{ downgradedClaim?: boolean; newClaimStatus?: string; claimId?: string; versionId?: string }> {
+    this.assertWritable('deleteVisaEvidence');
     const runDelete = async (targetExec: PgExecutor) => {
       const evRes = await targetExec.query('SELECT claim_id FROM visa_detail_evidence WHERE id = $1', [
         evidenceId
@@ -1209,6 +2033,7 @@ export class PostgresImmigrationRepository {
   }
 
   async saveVisaVersion(version: any, exec: PgExecutor = this.pg): Promise<void> {
+    this.assertWritable('saveVisaVersion');
     await exec.query(
       `
       INSERT INTO visa_detail_versions (id, program_id, data_json, editor_id, timestamp, change_reason)
@@ -1233,6 +2058,7 @@ export class PostgresImmigrationRepository {
     restoredVersionId: string;
     newVersionId: string;
   }> {
+    this.assertWritable('restoreVersion');
     return this.pg.transaction(async tx => {
       const verRes = await tx.query('SELECT * FROM visa_detail_versions WHERE id = $1', [versionId]);
       const version = verRes.rows[0];
@@ -1311,18 +2137,8 @@ export class PostgresImmigrationRepository {
     };
   }
 
-  async logCronExecutionToDb(log: {
-    id?: string;
-    cronName: string;
-    httpMethod: string;
-    targetCountries: string[];
-    status: string;
-    checkedCount: number;
-    updatesFound: number;
-    logMessage: string;
-    executionDurationMs: number;
-    missedRunResumed?: boolean;
-  }): Promise<string> {
+  async logCronExecutionToDb(log: CronExecutionLogInput): Promise<string> {
+    this.assertWritable('logCronExecutionToDb');
     const id = log.id || `cron-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
     const nowStr = new Date().toISOString();
     const safeMsg = redactSensitiveData(String(log.logMessage || ''));
@@ -1374,6 +2190,7 @@ export class PostgresImmigrationRepository {
     ttlMs: number = 5 * 60 * 1000,
     metadata: Record<string, unknown> = {}
   ): Promise<{ acquired: boolean; existingOwner?: string; expiresAt?: string }> {
+    this.assertWritable('acquireJobLock');
     return this.pg.transaction(async (tx) => {
       const now = Date.now();
       const nowIso = new Date(now).toISOString();
@@ -1413,6 +2230,7 @@ export class PostgresImmigrationRepository {
   }
 
   async releaseJobLock(lockKey: string, ownerId: string): Promise<boolean> {
+    this.assertWritable('releaseJobLock');
     const res = await this.pg.query('DELETE FROM automation_job_locks WHERE lock_key = $1 AND owner_id = $2', [
       lockKey,
       ownerId
@@ -1420,18 +2238,8 @@ export class PostgresImmigrationRepository {
     return res.rowCount > 0;
   }
 
-  async saveAutomationCheckpoint(cp: {
-    checkpointId: string;
-    jobName: string;
-    runId: string;
-    status: string;
-    cursorIndex: number;
-    totalItems: number;
-    completedKeys: string[];
-    failedKeys: string[];
-    idempotencyKeys?: string[];
-    state?: Record<string, unknown>;
-  }): Promise<void> {
+  async saveAutomationCheckpoint(cp: AutomationCheckpointInput): Promise<void> {
+    this.assertWritable('saveAutomationCheckpoint');
     await this.pg.query(
       `INSERT INTO automation_checkpoints (
          checkpoint_id, job_name, run_id, status, cursor_index, total_items,
@@ -1484,17 +2292,8 @@ export class PostgresImmigrationRepository {
     };
   }
 
-  async recordDeadLetterItem(item: {
-    id?: string;
-    jobName: string;
-    runId: string;
-    targetKey: string;
-    failureClass: string;
-    errorMessage: string;
-    payload?: Record<string, unknown>;
-    retryCount?: number;
-    status?: string;
-  }): Promise<string> {
+  async recordDeadLetterItem(item: DeadLetterItemInput): Promise<string> {
+    this.assertWritable('recordDeadLetterItem');
     const id = item.id || `dlq-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
     const safeError = redactSensitiveData(String(item.errorMessage || 'Unknown failure'));
     await this.pg.query(
@@ -1540,4 +2339,327 @@ export class PostgresImmigrationRepository {
       resolvedAt: r.resolved_at
     }));
   }
+
+  async insertOperationalEvent(event: OperationalEvent): Promise<void> {
+    this.assertWritable('insertOperationalEvent');
+    await this.pg.query(
+      `INSERT INTO operational_events (id, timestamp, category, severity, component, message, details_json)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT(id) DO NOTHING`,
+      [
+        event.id,
+        event.timestamp,
+        event.category,
+        event.severity,
+        redactSensitiveData(event.component),
+        redactSensitiveData(event.message),
+        JSON.stringify(redactSensitiveData(event.details || {}))
+      ]
+    );
+  }
+
+  async getOperationalEvents(limit: number = 50): Promise<OperationalEvent[]> {
+    const safeLimit = Math.max(1, Math.min(500, Math.floor(limit)));
+    const { rows } = await this.pg.query(
+      'SELECT * FROM operational_events ORDER BY timestamp DESC LIMIT $1',
+      [safeLimit]
+    );
+    return rows.map((r: any) => ({
+      id: r.id,
+      timestamp: r.timestamp,
+      category: r.category,
+      severity: r.severity,
+      component: r.component,
+      message: redactSensitiveData(String(r.message || '')),
+      details: JSON.parse(r.details_json || '{}')
+    }));
+  }
+
+  async auditIntegrity(): Promise<DatabaseIntegritySummary> {
+    const [appliedRes, dupRes, orphanDetRes, orphanClmRes, orphanEvRes, orphanVerRes, staleLockRes] =
+      await Promise.all([
+        this.pg.query<{ count: string }>('SELECT COUNT(*) AS count FROM schema_migrations'),
+        this.pg.query<{ program_id: string; count: string }>(
+          'SELECT program_id, COUNT(*) AS count FROM visa_details GROUP BY program_id HAVING COUNT(*) > 1'
+        ),
+        this.pg.query<{ count: string }>(
+          'SELECT COUNT(*) AS count FROM visa_details d LEFT JOIN immigration_programs p ON d.program_id = p.id WHERE p.id IS NULL'
+        ),
+        this.pg.query<{ count: string }>(
+          'SELECT COUNT(*) AS count FROM visa_detail_claims c LEFT JOIN immigration_programs p ON c.program_id = p.id WHERE p.id IS NULL'
+        ),
+        this.pg.query<{ count: string }>(
+          'SELECT COUNT(*) AS count FROM visa_detail_evidence e LEFT JOIN visa_detail_claims c ON e.claim_id = c.id WHERE c.id IS NULL'
+        ),
+        this.pg.query<{ count: string }>(
+          'SELECT COUNT(*) AS count FROM visa_detail_versions v LEFT JOIN immigration_programs p ON v.program_id = p.id WHERE p.id IS NULL'
+        ),
+        this.pg.query<{ count: string }>(
+          'SELECT COUNT(*) AS count FROM automation_job_locks WHERE expires_at < $1',
+          [new Date().toISOString()]
+        )
+      ]);
+
+    const appliedMigrationsCount = Number(appliedRes.rows[0]?.count || 0);
+    const duplicates = dupRes.rows.map((r) => ({ programId: r.program_id, count: Number(r.count) }));
+    const orphans = {
+      visaDetailsWithoutProgram: Number(orphanDetRes.rows[0]?.count || 0),
+      claimsWithoutProgram: Number(orphanClmRes.rows[0]?.count || 0),
+      evidenceWithoutClaim: Number(orphanEvRes.rows[0]?.count || 0),
+      versionsWithoutProgram: Number(orphanVerRes.rows[0]?.count || 0)
+    };
+    const staleLocksCount = Number(staleLockRes.rows[0]?.count || 0);
+    const ok =
+      duplicates.length === 0 &&
+      orphans.visaDetailsWithoutProgram === 0 &&
+      orphans.claimsWithoutProgram === 0 &&
+      orphans.evidenceWithoutClaim === 0 &&
+      orphans.versionsWithoutProgram === 0;
+
+    return {
+      backend: this.backend,
+      ok,
+      appliedMigrationsCount,
+      expectedMigrationsCount: POSTGRES_MIGRATIONS.length,
+      duplicates: { visaDetailsProgramId: duplicates },
+      orphans,
+      staleLocksCount
+    };
+  }
+
+  // --- Migration 004 Serverless Unified Store Methods ---
+
+  async getSlotSubscriberCount(activeOnly: boolean = true): Promise<number> {
+    const { rows } = activeOnly
+      ? await this.pg.query<{ count: string }>('SELECT COUNT(*) AS count FROM slot_subscribers WHERE is_active = 1')
+      : await this.pg.query<{ count: string }>('SELECT COUNT(*) AS count FROM slot_subscribers');
+    return Number(rows[0]?.count || 0);
+  }
+
+  async getSlotSubscribers(activeOnly: boolean = true): Promise<SlotSubscriberRecord[]> {
+    const { rows } = activeOnly
+      ? await this.pg.query('SELECT * FROM slot_subscribers WHERE is_active = 1 ORDER BY subscribed_at DESC')
+      : await this.pg.query('SELECT * FROM slot_subscribers ORDER BY subscribed_at DESC');
+    return rows.map((r: any) => ({
+      id: r.id,
+      email: r.email,
+      country: r.country,
+      city: r.city,
+      visaType: r.visa_type,
+      language: r.language || 'en',
+      subscribedAt: r.subscribed_at,
+      lastNotifiedAt: r.last_notified_at ?? null,
+      isActive: Boolean(r.is_active)
+    }));
+  }
+
+  async saveSlotSubscriber(
+    sub: Omit<SlotSubscriberRecord, 'subscribedAt' | 'isActive'> & { subscribedAt?: string; isActive?: boolean }
+  ): Promise<void> {
+    this.assertWritable('saveSlotSubscriber');
+    const normalizedEmail = String(sub.email || '').trim().toLowerCase();
+    const nowIso = sub.subscribedAt || new Date().toISOString();
+    await this.pg.query(
+      `INSERT INTO slot_subscribers (
+         id, email, country, city, visa_type, language, subscribed_at, last_notified_at, is_active
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       ON CONFLICT (id) DO UPDATE SET
+         email = EXCLUDED.email,
+         country = EXCLUDED.country,
+         city = EXCLUDED.city,
+         visa_type = EXCLUDED.visa_type,
+         language = EXCLUDED.language,
+         last_notified_at = EXCLUDED.last_notified_at,
+         is_active = EXCLUDED.is_active`,
+      [
+        sub.id,
+        normalizedEmail,
+        sub.country,
+        sub.city,
+        sub.visaType,
+        sub.language || 'en',
+        nowIso,
+        sub.lastNotifiedAt ?? null,
+        sub.isActive === false ? 0 : 1
+      ]
+    );
+  }
+
+  async deactivateSlotSubscriber(id: string): Promise<boolean> {
+    this.assertWritable('deactivateSlotSubscriber');
+    const res = await this.pg.query('UPDATE slot_subscribers SET is_active = 0 WHERE id = $1', [id]);
+    return res.rowCount > 0;
+  }
+
+  async getSlotEmbassyStatuses(): Promise<SlotEmbassyStatusRecord[]> {
+    const { rows } = await this.pg.query('SELECT * FROM slot_embassy_status ORDER BY embassy_key ASC');
+    return rows.map((r: any) => ({
+      embassyKey: r.embassy_key,
+      country: r.country,
+      city: r.city || '',
+      status: r.status,
+      earliestDate: r.earliest_date ?? null,
+      bookingLink: r.booking_link ?? null,
+      lastCheckedAt: r.last_checked_at,
+      updatedAt: r.updated_at
+    }));
+  }
+
+  async upsertSlotEmbassyStatus(
+    entry: Omit<SlotEmbassyStatusRecord, 'updatedAt'> & { updatedAt?: string }
+  ): Promise<void> {
+    this.assertWritable('upsertSlotEmbassyStatus');
+    const nowIso = entry.updatedAt || new Date().toISOString();
+    await this.pg.query(
+      `INSERT INTO slot_embassy_status (
+         embassy_key, country, city, status, earliest_date, booking_link, last_checked_at, updated_at
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       ON CONFLICT (embassy_key) DO UPDATE SET
+         country = EXCLUDED.country,
+         city = EXCLUDED.city,
+         status = EXCLUDED.status,
+         earliest_date = EXCLUDED.earliest_date,
+         booking_link = EXCLUDED.booking_link,
+         last_checked_at = EXCLUDED.last_checked_at,
+         updated_at = EXCLUDED.updated_at`,
+      [
+        entry.embassyKey,
+        entry.country,
+        entry.city || '',
+        entry.status,
+        entry.earliestDate ?? null,
+        entry.bookingLink ?? null,
+        entry.lastCheckedAt,
+        nowIso
+      ]
+    );
+  }
+
+  async logSlotEmailDelivery(entry: SlotEmailLogRecord): Promise<void> {
+    this.assertWritable('logSlotEmailDelivery');
+    await this.pg.query(
+      `INSERT INTO slot_email_logs (id, embassy_key, recipient_hash, status, provider_message_id, sent_at)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (id) DO NOTHING`,
+      [
+        entry.id,
+        entry.embassyKey,
+        entry.recipientHash,
+        entry.status,
+        entry.providerMessageId ?? null,
+        entry.sentAt
+      ]
+    );
+  }
+
+  async getSlotEmailLogs(limit: number = 50): Promise<SlotEmailLogRecord[]> {
+    const safeLimit = Math.max(1, Math.min(500, Math.floor(limit)));
+    const { rows } = await this.pg.query('SELECT * FROM slot_email_logs ORDER BY sent_at DESC LIMIT $1', [safeLimit]);
+    return rows.map((r: any) => ({
+      id: r.id,
+      embassyKey: r.embassy_key,
+      recipientHash: r.recipient_hash,
+      status: r.status,
+      providerMessageId: r.provider_message_id ?? null,
+      sentAt: r.sent_at
+    }));
+  }
+
+  async getEditorialArticles(status?: EditorialArticleStatus): Promise<EditorialArticleRecord[]> {
+    const { rows } = status
+      ? await this.pg.query('SELECT * FROM editorial_articles WHERE status = $1 ORDER BY updated_at DESC', [status])
+      : await this.pg.query('SELECT * FROM editorial_articles ORDER BY updated_at DESC');
+    return rows.map((r: any) => ({
+      slug: r.slug,
+      status: r.status,
+      title: r.title,
+      frontmatter: JSON.parse(r.frontmatter_json || '{}'),
+      markdownBody: r.markdown_body,
+      sourceOrigin: r.source_origin ?? null,
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+      publishedAt: r.published_at ?? null
+    }));
+  }
+
+  async getEditorialArticleBySlug(slug: string): Promise<EditorialArticleRecord | null> {
+    const { rows } = await this.pg.query('SELECT * FROM editorial_articles WHERE slug = $1', [slug]);
+    const r = rows[0];
+    if (!r) return null;
+    return {
+      slug: r.slug,
+      status: r.status,
+      title: r.title,
+      frontmatter: JSON.parse(r.frontmatter_json || '{}'),
+      markdownBody: r.markdown_body,
+      sourceOrigin: r.source_origin ?? null,
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+      publishedAt: r.published_at ?? null
+    };
+  }
+
+  async saveEditorialArticle(
+    article: Omit<EditorialArticleRecord, 'createdAt' | 'updatedAt'> & { createdAt?: string; updatedAt?: string }
+  ): Promise<void> {
+    this.assertWritable('saveEditorialArticle');
+    const nowIso = new Date().toISOString();
+    await this.pg.query(
+      `INSERT INTO editorial_articles (
+         slug, status, title, frontmatter_json, markdown_body, source_origin, created_at, updated_at, published_at
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       ON CONFLICT (slug) DO UPDATE SET
+         status = EXCLUDED.status,
+         title = EXCLUDED.title,
+         frontmatter_json = EXCLUDED.frontmatter_json,
+         markdown_body = EXCLUDED.markdown_body,
+         source_origin = EXCLUDED.source_origin,
+         updated_at = EXCLUDED.updated_at,
+         published_at = EXCLUDED.published_at`,
+      [
+        article.slug,
+        article.status,
+        article.title,
+        JSON.stringify(article.frontmatter || {}),
+        article.markdownBody,
+        article.sourceOrigin ?? null,
+        article.createdAt || nowIso,
+        article.updatedAt || nowIso,
+        article.publishedAt ?? (article.status === 'published' ? nowIso : null)
+      ]
+    );
+  }
+
+  async deleteEditorialArticle(slug: string): Promise<boolean> {
+    this.assertWritable('deleteEditorialArticle');
+    const res = await this.pg.query('DELETE FROM editorial_articles WHERE slug = $1', [slug]);
+    return res.rowCount > 0;
+  }
+
+  async revokeAdminSessionJti(jti: string, expiresAt: string): Promise<void> {
+    this.assertWritable('revokeAdminSessionJti');
+    await this.pg.query(
+      `INSERT INTO admin_revoked_sessions (jti, revoked_at, expires_at)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (jti) DO UPDATE SET
+         revoked_at = EXCLUDED.revoked_at,
+         expires_at = EXCLUDED.expires_at`,
+      [jti, new Date().toISOString(), expiresAt]
+    );
+  }
+
+  async isAdminSessionRevoked(jti: string): Promise<boolean> {
+    const { rows } = await this.pg.query<{ jti: string }>(
+      'SELECT jti FROM admin_revoked_sessions WHERE jti = $1 AND expires_at > $2',
+      [jti, new Date().toISOString()]
+    );
+    return rows.length > 0;
+  }
+
+  async pruneExpiredRevokedSessions(nowIso: string = new Date().toISOString()): Promise<number> {
+    this.assertWritable('pruneExpiredRevokedSessions');
+    const res = await this.pg.query('DELETE FROM admin_revoked_sessions WHERE expires_at <= $1', [nowIso]);
+    return res.rowCount;
+  }
 }
+

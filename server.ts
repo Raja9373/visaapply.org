@@ -249,9 +249,24 @@ Traveling from the United States to the United Kingdom? US passport holders do n
   }
 }
 
+import { getDatabaseRuntimeDiagnostics } from './src/db/databaseProvider';
+
 seedInitialArticles();
 
 // API Routes
+
+// Credential-free health endpoint (never opens SQLite or Neon connections)
+app.get('/api/health', (_req, res) => {
+  const dbDiag = getDatabaseRuntimeDiagnostics();
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({
+    ok: true,
+    service: 'visaapply-web',
+    environment: dbDiag.environment,
+    effectiveDriver: dbDiag.effectiveDriver,
+    credentialsConfigured: dbDiag.credentialsConfigured
+  });
+});
 
 // Detect User Geo
 app.get('/api/geo', (req, res) => {

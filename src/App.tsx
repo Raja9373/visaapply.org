@@ -2454,9 +2454,20 @@ export default function App() {
   const isVisaManagementAdmin = strippedPath === '/admin/visa-management' || strippedPath === '/admin/visa-management/';
   const visaDetailEditorMatch = strippedPath.match(/^\/admin\/visa-management\/([a-zA-Z0-9-]+)$/);
 
-  // Verify admin login on every page load & navigation
+  const isAuditRouteNow = strippedPath === '/audit' || strippedPath === '/audit/';
+
+  // Verify admin login on admin and audit routes (avoids spurious 401 console errors on public pages)
   useEffect(() => {
     let cancelled = false;
+
+    if (!isAdminRouteNow && !isAuditRouteNow) {
+      purgeLegacyAdminStorage();
+      clearAdminAuthState();
+      setAdminToken('');
+      setIsAdminAuthenticated(false);
+      setAdminSessionChecked(true);
+      return;
+    }
 
     const verifyAdminSession = async () => {
       purgeLegacyAdminStorage();
@@ -2498,7 +2509,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [currentPath]);
+  }, [currentPath, isAdminRouteNow, isAdminLoginNow, isAuditRouteNow]);
 
   const handleAdminLogout = async () => {
     try {
