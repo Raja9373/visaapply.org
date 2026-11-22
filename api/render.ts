@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { renderRouteSsrPayload, injectSsrPayloadIntoHtml } from '../src/utils/ssrRouteRenderer';
 import { extractAdminTokenFromRequest, verifyAdminToken } from '../src/utils/authSecurity';
+import { applySecurityHeaders } from '../src/utils/securityHardening';
 
 const FALLBACK_HTML_TEMPLATE = `<!doctype html>
 <html lang="en">
@@ -55,6 +56,7 @@ function loadBaseHtmlTemplate(): string {
 }
 
 export default function handler(req: any, res: any) {
+  applySecurityHeaders(res, { isApi: false });
   try {
     const queryPath = typeof req.query?.path === 'string' ? req.query.path : '';
     const rawUrl = queryPath

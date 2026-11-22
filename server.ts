@@ -26,12 +26,28 @@ import {
 } from './src/utils/ssrRouteRenderer';
 import { sanitizeHtml } from './src/utils/htmlSanitizer';
 import {
-  deriveAdminToken,
-  extractAdminTokenFromRequest,
+  buildAdminSessionCookies,
+  buildClearAdminSessionCookies,
+  createAdminSession,
+  extractAdminAuthFromRequest,
+  isSecureRequest,
+  revokeAdminSession,
+  verifyAdminCsrfRequest,
   verifyAdminPassword,
-  verifyAdminToken,
+  verifyAdminSession,
   verifyCronAuth
 } from './src/utils/authSecurity';
+import {
+  RATE_LIMIT_POLICIES,
+  buildLocalizedSlotAlertEmail,
+  createRateLimitMiddleware,
+  deliverEmailViaResend,
+  isValidEmailAddress,
+  resolveContainedMarkdownPath,
+  securityHeadersMiddleware,
+  sendSafeServerError,
+  sendSafeTextServerError
+} from './src/utils/securityHardening';
 import { OFFICIAL_SOURCE_REGISTRY_249 } from './src/data/officialSourceRegistry';
 import dotenv from 'dotenv';
 
@@ -95,6 +111,7 @@ dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 app.set('trust proxy', true);
+app.use(securityHeadersMiddleware);
 app.use(express.json());
 
 // Enforce canonical https://www.visaapply.org (301 redirect from http:// and non-www visaapply.org)
@@ -292,9 +309,13 @@ app.get('/api/articles', (req, res) => {
 // Get single article by slug (checks disk first, then DEFAULT_PUBLISHED_GUIDES fallback)
 app.get('/api/articles/:slug', (req, res) => {
   try {
-    const { slug } = req.params;
-    const cleanSlug = (slug || '').replace(/\.md$/i, '').trim();
-    const filePath = path.join(CONTENT_DIR, `${cleanSlug}.md`);
+    const resolved = resolveContainedMarkdownPath(CONTENT_DIR, req.params.slug, { allowMdSuffix: true });
+    if (!resolved.valid) {
+      return res.status(400).json({ success: false, error: 'Invalid article slug.' });
+    }
+
+    const cleanSlug = resolved.slug;
+    const filePath = resolved.resolvedPath;
     if (fs.existsSync(filePath)) {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const parsed = matter(raw);
@@ -325,37 +346,73 @@ app.get('/api/articles/:slug', (req, res) => {
 
     return res.status(404).json({ error: 'Article not found' });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'articles-get', err);
   }
 });
+
+const adminLoginRateLimiter = createRateLimitMiddleware(RATE_LIMIT_POLICIES.adminLogin);
+const slotAlertSubscribeRateLimiter = createRateLimitMiddleware(RATE_LIMIT_POLICIES.slotAlertSubscribe);
+const askFaqRateLimiter = createRateLimitMiddleware(RATE_LIMIT_POLICIES.askFaq);
 
 function getAdminPassword(): string {
   return (process.env.ADMIN_PASSWORD || '').trim();
 }
 
-function getExpectedAdminToken(): string {
-  return deriveAdminToken(getAdminPassword());
+function getAuthenticatedAdminSession(req: any) {
+  const adminPass = getAdminPassword();
+  if (!adminPass) {
+    return { valid: false as const, authSource: 'none' as const, token: '' };
+  }
+  const auth = extractAdminAuthFromRequest(req);
+  const check = verifyAdminSession(auth.token, adminPass);
+  return {
+    valid: check.valid,
+    payload: check.payload,
+    reason: check.reason,
+    authSource: auth.source,
+    token: auth.token
+  };
 }
 
 function isAdminAuthenticatedReq(req: any): boolean {
-  const adminPass = getAdminPassword();
-  if (!adminPass) return false;
-  const provided = extractAdminTokenFromRequest(req);
-  return verifyAdminToken(provided, adminPass);
+  return getAuthenticatedAdminSession(req).valid;
 }
 
 function requireAdminAuth(req: any, res: any, next: any) {
-  if (!isAdminAuthenticatedReq(req)) {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  const session = getAuthenticatedAdminSession(req);
+  if (!session.valid || !session.payload) {
     return res.status(401).json({
       success: false,
       authenticated: false,
       error: 'Unauthorized: Admin login required at /admin/login'
     });
   }
+
+  const csrfCheck = verifyAdminCsrfRequest(req, session.payload, session.authSource);
+  if (!csrfCheck.valid) {
+    return res.status(403).json({
+      success: false,
+      authenticated: true,
+      error: csrfCheck.reason || 'CSRF validation failed.'
+    });
+  }
+
+  (req as any).adminSession = session.payload;
   next();
 }
 
 const handleAdminLogin = (req: any, res: any) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  const originCheck = verifyAdminCsrfRequest(req, undefined, 'none');
+  if (!originCheck.valid) {
+    return res.status(403).json({
+      success: false,
+      authenticated: false,
+      message: originCheck.reason || 'Cross-origin login request rejected.'
+    });
+  }
+
   const { password } = req.body || {};
   const adminPass = getAdminPassword();
   if (!adminPass) {
@@ -366,39 +423,61 @@ const handleAdminLogin = (req: any, res: any) => {
     });
   }
   if (verifyAdminPassword(password, adminPass)) {
-    const token = getExpectedAdminToken();
-    const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
-    const cookieFlags = isSecure
-      ? 'Path=/; HttpOnly; SameSite=None; Secure; Max-Age=86400'
-      : 'Path=/; HttpOnly; SameSite=Lax; Max-Age=86400';
-    res.setHeader('Set-Cookie', `visaapply_admin_session=${encodeURIComponent(token)}; ${cookieFlags}`);
-    return res.json({ success: true, authenticated: true, token });
+    const session = createAdminSession(adminPass);
+    res.setHeader(
+      'Set-Cookie',
+      buildAdminSessionCookies(session, { isSecure: isSecureRequest(req) })
+    );
+    return res.json({
+      success: true,
+      authenticated: true,
+      csrfToken: session.csrfToken,
+      expiresAt: session.expiresAt
+    });
   }
   return res.status(401).json({ success: false, authenticated: false, message: 'Invalid admin password' });
 };
 
-app.post('/api/admin', handleAdminLogin);
-app.post('/api/admin/login', handleAdminLogin);
-app.post('/api/admin/auth', handleAdminLogin);
+app.post('/api/admin', adminLoginRateLimiter, handleAdminLogin);
+app.post('/api/admin/login', adminLoginRateLimiter, handleAdminLogin);
+app.post('/api/admin/auth', adminLoginRateLimiter, handleAdminLogin);
 
 app.get(['/api/admin', '/api/admin/session'], (req, res) => {
-  if (isAdminAuthenticatedReq(req)) {
-    return res.json({ success: true, authenticated: true });
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  const session = getAuthenticatedAdminSession(req);
+  if (session.valid && session.payload) {
+    return res.json({
+      success: true,
+      authenticated: true,
+      csrfToken: session.payload.csrf,
+      expiresAt: session.payload.exp
+    });
   }
   return res.status(401).json({ success: false, authenticated: false });
 });
 
 app.post('/api/admin/logout', (req, res) => {
-  const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
-  const cookieFlags = isSecure
-    ? 'Path=/; HttpOnly; SameSite=None; Secure; Max-Age=0'
-    : 'Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
-  res.setHeader('Set-Cookie', `visaapply_admin_session=; ${cookieFlags}`);
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  const session = getAuthenticatedAdminSession(req);
+  if (session.valid && session.payload) {
+    const csrfCheck = verifyAdminCsrfRequest(req, session.payload, session.authSource);
+    if (!csrfCheck.valid) {
+      return res.status(403).json({
+        success: false,
+        error: csrfCheck.reason || 'CSRF validation failed.'
+      });
+    }
+    revokeAdminSession(session.token, getAdminPassword());
+  }
+  res.setHeader(
+    'Set-Cookie',
+    buildClearAdminSessionCookies({ isSecure: isSecureRequest(req) })
+  );
   return res.json({ success: true, authenticated: false });
 });
 
 // AI FAQ Answer Generation for un-matched queries
-app.get('/api/ask-faq', async (req, res) => {
+app.get('/api/ask-faq', askFaqRateLimiter, async (req, res) => {
   const query = (req.query?.q || '') as string;
   const destination = (req.query?.destination || 'United States') as string;
   const visaType = (req.query?.visaType || 'Tourist') as string;
@@ -475,9 +554,10 @@ app.post('/api/ai-eligibility', async (req, res) => {
   return handleAiEligibilityRequest(req, res);
 });
 
-// Drafts endpoint for local dev
-app.get('/api/drafts', (req, res) => {
+// Drafts endpoint (Strictly Admin-Authenticated: never disclose unreviewed drafts publicly)
+app.get('/api/drafts', requireAdminAuth, (req, res) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, private');
     const files = fs.readdirSync(DRAFTS_DIR).filter(f => f.endsWith('.md'));
     const drafts = files.map(file => {
       const filePath = path.join(DRAFTS_DIR, file);
@@ -492,13 +572,14 @@ app.get('/api/drafts', (req, res) => {
     });
     res.json({ drafts });
   } catch (err: any) {
-    res.json({ drafts: [] });
+    return sendSafeServerError(res, 'drafts-get', err);
   }
 });
 
 // Admin: Get Drafts
 app.get('/api/admin/drafts', requireAdminAuth, (req, res) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, private');
     const files = fs.readdirSync(DRAFTS_DIR).filter(f => f.endsWith('.md'));
     const drafts = files.map(file => {
       const filePath = path.join(DRAFTS_DIR, file);
@@ -513,42 +594,47 @@ app.get('/api/admin/drafts', requireAdminAuth, (req, res) => {
     });
     res.json(drafts);
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-drafts-get', err);
   }
 });
 
 // Admin: Approve Draft
 app.post('/api/admin/approve', requireAdminAuth, (req, res) => {
   try {
-    const { slug } = req.body;
-    const draftPath = path.join(DRAFTS_DIR, `${slug}.md`);
-    const contentPath = path.join(CONTENT_DIR, `${slug}.md`);
+    const rawSlug = req.body?.slug;
+    const draftResolved = resolveContainedMarkdownPath(DRAFTS_DIR, rawSlug);
+    const contentResolved = resolveContainedMarkdownPath(CONTENT_DIR, rawSlug);
+    if (!draftResolved.valid || !contentResolved.valid) {
+      return res.status(400).json({ success: false, error: 'Invalid draft slug.' });
+    }
 
-    if (!fs.existsSync(draftPath)) {
+    if (!fs.existsSync(draftResolved.resolvedPath)) {
       return res.status(404).json({ error: 'Draft not found' });
     }
 
-    const data = fs.readFileSync(draftPath, 'utf-8');
-    fs.writeFileSync(contentPath, data);
-    fs.unlinkSync(draftPath);
+    const data = fs.readFileSync(draftResolved.resolvedPath, 'utf-8');
+    fs.writeFileSync(contentResolved.resolvedPath, data);
+    fs.unlinkSync(draftResolved.resolvedPath);
 
-    res.json({ success: true, message: `Draft ${slug} approved and published.` });
+    res.json({ success: true, message: `Draft ${draftResolved.slug} approved and published.` });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-draft-approve', err);
   }
 });
 
 // Admin: Delete Draft
 app.delete('/api/admin/drafts/:slug', requireAdminAuth, (req, res) => {
   try {
-    const { slug } = req.params;
-    const draftPath = path.join(DRAFTS_DIR, `${slug}.md`);
-    if (fs.existsSync(draftPath)) {
-      fs.unlinkSync(draftPath);
+    const draftResolved = resolveContainedMarkdownPath(DRAFTS_DIR, req.params.slug);
+    if (!draftResolved.valid) {
+      return res.status(400).json({ success: false, error: 'Invalid draft slug.' });
+    }
+    if (fs.existsSync(draftResolved.resolvedPath)) {
+      fs.unlinkSync(draftResolved.resolvedPath);
     }
     res.json({ success: true });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-draft-delete', err);
   }
 });
 
@@ -672,12 +758,16 @@ docs: "Passport, Financial Proofs, Application Forms"
     });
   } catch (err: any) {
     const classified = classifyAutomationError(err);
-    console.error('Cron error:', classified.message);
-    res.status(classified.httpStatus || 500).json({
+    const safeStatus = classified.httpStatus || 500;
+    console.error('Cron error:', redactSensitiveData(classified.message));
+    if (safeStatus >= 500) {
+      return sendSafeServerError(res, 'api-cron-drafts', err, { statusCode: safeStatus });
+    }
+    res.status(safeStatus).json({
       success: false,
       runId,
       failureClass: classified.failureClass,
-      error: classified.message
+      error: 'Cron request could not be completed.'
     });
   } finally {
     releaseJobLock('cron:draft-articles', runId);
@@ -780,7 +870,7 @@ app.post('/api/immigration/batch-state', requireCronOrAdminAuth, (req, res) => {
     writeBatchStateToDisk(newState);
     res.json({ success: true, state: newState, dbPersisted: true });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'immigration-batch-state', err);
   }
 });
 
@@ -791,14 +881,18 @@ app.post('/api/immigration/batch-execute', requireCronOrAdminAuth, async (req, r
     const result = await executeImmigrationBatch(batchIndex, batchSize);
     res.json(result);
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'immigration-batch-execute', err);
   }
 });
 
 function stageBreakingBlogDraft(entry: any, targetDir: string = DRAFTS_DIR) {
   try {
-    const slug = (entry.autoBlogSlug || `candidate-${entry.countryCode}-visa-update-${Date.now()}`).replace(/[^a-zA-Z0-9-_]/g, '-');
-    const filePath = path.join(targetDir, `${slug}.md`);
+    const rawSlug = String(entry.autoBlogSlug || `candidate-${entry.countryCode}-visa-update-${Date.now()}`)
+      .replace(/[^a-zA-Z0-9_-]/g, '-')
+      .replace(/^-+|-+$/g, '') || `candidate-visa-update-${Date.now()}`;
+    const resolved = resolveContainedMarkdownPath(targetDir, rawSlug);
+    if (!resolved.valid) return;
+    const filePath = resolved.resolvedPath;
     const markdown = `---
 title: "${String(entry.title || '').replace(/"/g, "'")}"
 from: "IN"
@@ -840,10 +934,10 @@ app.post('/api/admin/manual-update', requireAdminAuth, (req, res) => {
     const updated = [entry, ...current.filter((x: any) => x.id !== entry.id)];
     writeChangelogToDisk(updated);
     stageBreakingBlogDraft(entry, DRAFTS_DIR);
-    console.log(`📧 [Admin Alert -> ${ADMIN_ALERT_EMAIL || 'admin-channel'}]: Immigration Update for ${entry.countryName}: ${entry.oldValue} -> ${entry.newValue}`);
+    console.log(`[Admin Alert] Immigration update staged for ${String(entry?.countryName || 'unknown')}`);
     res.json({ success: true, changelog: updated, dbPersisted: true, stagedForReview: true });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-manual-update', err);
   }
 });
 
@@ -1271,11 +1365,15 @@ If there is a concrete, verifiable policy/fee/processing change stated directly 
       logMessage: classified.message || 'Unknown error',
       executionDurationMs: durationMs
     });
-    res.status(classified.httpStatus || 500).json({
+    const safeStatus = classified.httpStatus || 500;
+    if (safeStatus >= 500) {
+      return sendSafeServerError(res, 'cron-immigration-sync', err, { statusCode: safeStatus });
+    }
+    res.status(safeStatus).json({
       success: false,
       runId,
       failureClass: classified.failureClass,
-      error: classified.message
+      error: 'Sync request could not be completed.'
     });
   } finally {
     isSyncCronRunning = false;
@@ -1300,7 +1398,7 @@ app.get('/api/visa-details/:programId', (req, res) => {
     });
     res.json(sanitized);
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'visa-details-public', err);
   }
 });
 
@@ -1310,7 +1408,7 @@ app.get('/api/admin/cron-logs', requireAdminAuth, (req, res) => {
     const logs = getCronExecutionLogsFromDb(50);
     res.json({ success: true, count: logs.length, logs });
   } catch (err: any) {
-    res.status(500).json({ error: redactSensitiveData(err.message) });
+    return sendSafeServerError(res, 'admin-cron-logs', err);
   }
 });
 
@@ -1349,13 +1447,7 @@ app.get('/api/admin/operational-health', requireAdminAuth, (req, res) => {
       deadLetterQueue: deadLetters
     });
   } catch (err: any) {
-    recordOperationalEvent({
-      category: 'DB_CONNECTION_ERROR',
-      severity: 'ERROR',
-      component: 'admin-operational-health',
-      message: redactSensitiveData(err?.message || 'Health check failure')
-    });
-    res.status(500).json({ success: false, error: redactSensitiveData(err?.message || 'Health check failure') });
+    return sendSafeServerError(res, 'admin-operational-health', err);
   }
 });
 
@@ -1369,9 +1461,11 @@ app.get('/api/admin/visa-details', requireAdminAuth, (req, res) => {
     const details = getPaginatedVisaDetails(page, limit, search);
     res.json({ success: true, ...details });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-visa-details-list', err);
   }
-});// Admin: Get specific Visa Details
+});
+
+// Admin: Get specific Visa Details
 app.get('/api/admin/visa-details/:programId', requireAdminAuth, (req, res) => {
   try {
     const details = getVisaDetails(req.params.programId);
@@ -1380,7 +1474,7 @@ app.get('/api/admin/visa-details/:programId', requireAdminAuth, (req, res) => {
     }
     res.json({ success: true, details });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-visa-details-get', err);
   }
 });
 
@@ -1421,7 +1515,7 @@ app.post('/api/admin/visa-details', requireAdminAuth, (req, res) => {
 
     res.json({ success: true, message: 'Visa details saved successfully.' });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-visa-details-save', err);
   }
 });
 
@@ -1432,7 +1526,7 @@ app.get('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, res
     const claims = getVisaClaimsWithEvidence(req.params.programId, targetNat);
     res.json({ success: true, claims });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-claims-get', err);
   }
 });
 
@@ -1563,7 +1657,7 @@ app.post('/api/admin/visa-details/:programId/claims', requireAdminAuth, (req, re
     );
     res.json({ success: true, claim: enrichedClaim, versionId });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-claims-save', err);
   }
 });
 
@@ -1578,7 +1672,7 @@ app.delete('/api/admin/visa-details/:programId/claims/:claimId', requireAdminAut
     );
     res.json({ success: true, message: 'Claim and linked evidence deleted successfully', versionId });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-claims-delete', err);
   }
 });
 
@@ -1588,7 +1682,7 @@ app.get('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (r
     const evidence = getVisaEvidence(req.params.claimId);
     res.json({ success: true, evidence });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-evidence-get', err);
   }
 });
 
@@ -1668,7 +1762,7 @@ app.post('/api/admin/visa-details/claims/:claimId/evidence', requireAdminAuth, (
       versionId
     });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-evidence-save', err);
   }
 });
 
@@ -1705,7 +1799,7 @@ app.delete('/api/admin/visa-details/claims/:claimId/evidence/:evidenceId', requi
       versionId
     });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-evidence-delete', err);
   }
 });
 
@@ -1715,7 +1809,7 @@ app.get('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, r
     const versions = getVisaVersions(req.params.programId);
     res.json({ success: true, versions });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-versions-get', err);
   }
 });
 
@@ -1741,7 +1835,7 @@ app.post('/api/admin/visa-details/:programId/versions', requireAdminAuth, (req, 
     );
     res.json({ success: true, versionId });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-versions-save', err);
   }
 });
 
@@ -1751,22 +1845,26 @@ app.get('/api/admin/dashboard-stats', requireAdminAuth, (req, res) => {
     const stats = getDashboardStats();
     res.json({ success: true, stats });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-dashboard-stats', err);
   }
 });
 
 // Admin: Update Status
 app.post('/api/admin/visa-details/:programId/status', requireAdminAuth, (req, res) => {
-  const allowedStatuses = ['DRAFT', 'NEEDS_EVIDENCE', 'UNDER_REVIEW', 'VERIFIED', 'APPROVED', 'PUBLISHED', 'UPDATE_REQUIRED', 'EXPIRED', 'REJECTED', 'QUARANTINED'];
-  const { status } = req.body;
-  if (!allowedStatuses.includes(status)) return res.status(400).json({ error: 'Invalid status' });
-  updateVisaStatus(req.params.programId, status);
-  const versionId = recordAuditVersionSnapshot(
-    req.params.programId,
-    'admin',
-    `Workflow status updated to ${status}`
-  );
-  res.json({ success: true, versionId });
+  try {
+    const allowedStatuses = ['DRAFT', 'NEEDS_EVIDENCE', 'UNDER_REVIEW', 'VERIFIED', 'APPROVED', 'PUBLISHED', 'UPDATE_REQUIRED', 'EXPIRED', 'REJECTED', 'QUARANTINED'];
+    const { status } = req.body;
+    if (!allowedStatuses.includes(status)) return res.status(400).json({ error: 'Invalid status' });
+    updateVisaStatus(req.params.programId, status);
+    const versionId = recordAuditVersionSnapshot(
+      req.params.programId,
+      'admin',
+      `Workflow status updated to ${status}`
+    );
+    res.json({ success: true, versionId });
+  } catch (err: any) {
+    return sendSafeServerError(res, 'admin-visa-status-update', err);
+  }
 });
 
 // Admin: Restore Version (creates a new auditable version without deleting history)
@@ -1775,7 +1873,7 @@ app.post('/api/admin/visa-details/:programId/versions/:versionId/restore', requi
     const result = restoreVersion(req.params.versionId, req.body?.editorId || 'admin');
     res.json({ success: true, ...result });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-version-restore', err);
   }
 });
 
@@ -1832,94 +1930,11 @@ function saveSlotSubscribers(subs: any[]) {
 }
 
 async function sendEmailViaResend(to: string, subject: string, htmlContent: string) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.log(`📧 [Resend MOCK EMAIL to ${to}]: ${subject}`);
-    return { success: true, mock: true };
-  }
-  try {
-    const { Resend } = await import('resend');
-    const resend = new Resend(apiKey);
-    const data = await resend.emails.send({
-      from: 'VisaApply Auto System <alerts@visaapply.org>',
-      to: [to],
-      subject,
-      html: htmlContent
-    });
-    return { success: true, data };
-  } catch (err: any) {
-    console.error('Resend email error:', err.message);
-    return { success: false, error: err.message };
-  }
+  return deliverEmailViaResend(to, subject, htmlContent);
 }
 
 function getLocalizedEmailContent(fromCountry: string, embassyName: string, slotDate: string, bookingLink: string) {
-  const fc = (fromCountry || 'IN').toUpperCase();
-  if (fc === 'AE') {
-    return {
-      subject: `🔔 [${embassyName}] موعد متاح - ${slotDate} - احجز الآن!`,
-      html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b; direction: rtl; text-align: right;">
-          <h2 style="color: #0B3D91;">VisaApply.org - تنبيه موعد السفارة</h2>
-          <p>مرحباً،</p>
-          <p>تم فتح موعد جديد في <strong>${embassyName}</strong>!</p>
-          <p style="background: #f1f5f9; padding: 12px; border-radius: 8px;">
-            <strong>التاريخ المتاح:</strong> ${slotDate}<br/>
-            <strong>الحالة:</strong> متاح (مفحوص تلقائياً)
-          </p>
-          <p>
-            <a href="${bookingLink}" target="_blank" style="background: #10b981; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-              حجز الموعد الآن ↗
-            </a>
-          </p>
-        </div>
-      `
-    };
-  }
-  if (fc === 'FR') {
-    return {
-      subject: `🔔 [${embassyName}] Créneau ouvert - ${slotDate} - Réservez vite !`,
-      html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b;">
-          <h2 style="color: #0B3D91;">VisaApply.org - Alerte de Rendez-vous</h2>
-          <p>Bonjour,</p>
-          <p>Le créneau de rendez-vous pour <strong>${embassyName}</strong> est ouvert !</p>
-          <p style="background: #f1f5f9; padding: 12px; border-radius: 8px;">
-            <strong>Date disponible :</strong> ${slotDate}<br/>
-            <strong>Statut :</strong> OUVERT
-          </p>
-          <p>
-            <a href="${bookingLink}" target="_blank" style="background: #10b981; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-              Réserver maintenant ↗
-            </a>
-          </p>
-        </div>
-      `
-    };
-  }
-  return {
-    subject: `🔔 [${embassyName}] Slot OPEN - ${slotDate} - Jaldi Karo!`,
-    html: `
-      <div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b;">
-        <h2 style="color: #0B3D91;">VisaApply.org - Auto Embassy Slot Alert</h2>
-        <p>Hi,</p>
-        <p><strong>${embassyName}</strong> ka appointment slot khul gaya hai!</p>
-        <p style="background: #f1f5f9; padding: 12px; border-radius: 8px;">
-          <strong>Available Date:</strong> ${slotDate}<br/>
-          <strong>Status:</strong> OPEN (Verified by 30-min Automated Cron)
-        </p>
-        <p>
-          <a href="${bookingLink}" target="_blank" style="background: #10b981; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-            Book Appointment Now ↗
-          </a>
-        </p>
-        <p style="color: #64748b; font-size: 12px; margin-top: 16px;">
-          Embassy appointment slots fill within 10-15 minutes. Please book immediately.<br/>
-          <a href="https://www.visaapply.org/embassy-slot-alert" style="color: #94a3b8;">Click here to manage or unsubscribe from slot alerts</a>
-        </p>
-      </div>
-    `
-  };
+  return buildLocalizedSlotAlertEmail(fromCountry, embassyName, slotDate, bookingLink);
 }
 
 const handleSlotCheckCron = async (req: any, res: any) => {
@@ -1948,37 +1963,46 @@ const handleSlotCheckCron = async (req: any, res: any) => {
       results
     });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'slot-check-cron', err);
   }
 };
 
 app.all('/api/cron/slot-check', requireCronOrAdminAuth, handleSlotCheckCron);
 
-app.post('/api/slot-alert/subscribe', (req, res) => {
+app.post('/api/slot-alert/subscribe', slotAlertSubscribeRateLimiter, (req, res) => {
   try {
     const { email, fromCountry, toCountry, embassyCity } = req.body || {};
     if (!email || !fromCountry || !toCountry) {
       return res.status(400).json({ error: 'Email, fromCountry, and toCountry are required.' });
     }
+    if (!isValidEmailAddress(email)) {
+      return res.status(400).json({ error: 'Please provide a valid email address.' });
+    }
+    const cleanEmail = String(email).trim();
+    const cleanFrom = String(fromCountry).trim().slice(0, 64);
+    const cleanTo = String(toCountry).trim().slice(0, 64);
+    const cleanCity = String(embassyCity || 'Capital Hub').trim().slice(0, 120);
+
     const subs = getSlotSubscribers();
-    const exists = subs.find((s: any) => s.email.toLowerCase() === email.toLowerCase() && s.fromCountry === fromCountry && s.toCountry === toCountry);
+    const exists = subs.find((s: any) => s.email.toLowerCase() === cleanEmail.toLowerCase() && s.fromCountry === cleanFrom && s.toCountry === cleanTo);
     if (!exists) {
       subs.push({
         id: crypto.randomUUID(),
-        email: email.trim(),
-        fromCountry: (fromCountry || 'IN').trim(),
-        toCountry: (toCountry || 'US').trim(),
-        embassyCity: (embassyCity || 'Capital Hub').trim(),
+        email: cleanEmail,
+        fromCountry: cleanFrom,
+        toCountry: cleanTo,
+        embassyCity: cleanCity,
         subscribedAt: new Date().toISOString()
       });
       saveSlotSubscribers(subs);
     }
     res.json({ success: true, message: 'Subscribed successfully for automated global email alerts.' });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'slot-alert-subscribe', err);
   }
 });
 
+// Public aggregate slot status only (NO subscriber emails or personal information)
 app.get('/api/slot-alert/status', (req, res) => {
   try {
     const data = getSlotStatusData();
@@ -1987,11 +2011,28 @@ app.get('/api/slot-alert/status', (req, res) => {
       success: true,
       lastCheckTime: data.lastCheckTime,
       embassies: data.embassies,
+      totalSubscribers: subs.length
+    });
+  } catch (err: any) {
+    return sendSafeServerError(res, 'slot-alert-status', err);
+  }
+});
+
+// Admin-only subscriber management view (strictly authenticated)
+app.get('/api/admin/slot-alert/subscribers', requireAdminAuth, (req, res) => {
+  try {
+    const data = getSlotStatusData();
+    const subs = getSlotSubscribers();
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      success: true,
+      lastCheckTime: data.lastCheckTime,
+      embassies: data.embassies,
       totalSubscribers: subs.length,
       subscribers: subs
     });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-slot-alert-subscribers', err);
   }
 });
 
@@ -2006,7 +2047,7 @@ app.post('/api/admin/slot-alert/toggle', requireAdminAuth, (req, res) => {
     }
     res.status(404).json({ error: 'Embassy not found' });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    return sendSafeServerError(res, 'admin-slot-alert-toggle', err);
   }
 });
 
@@ -2048,7 +2089,7 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     res.setHeader('Cache-Control', 'public, max-age=3600');
     return res.status(200).send(indexXml);
   } catch (err: any) {
-    res.status(500).send(err.message);
+    return sendSafeTextServerError(res, 'sitemap-index', err);
   }
 };
 
@@ -2069,7 +2110,7 @@ const handleSubSitemapXml = (req: any, res: any) => {
     }
     return res.status(404).send('Sitemap not found');
   } catch (err: any) {
-    res.status(500).send(err.message);
+    return sendSafeTextServerError(res, 'sitemap-sub', err);
   }
 };
 

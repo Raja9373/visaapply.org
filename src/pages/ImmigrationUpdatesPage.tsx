@@ -8,6 +8,7 @@ import {
   ImmigrationChangeType,
 } from '../services/immigrationAutoSync';
 import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
+import { getAdminRequestHeaders } from '../utils/adminAuth';
 
 interface ImmigrationUpdatesPageProps {
   onNavigate: (path: string) => void;
@@ -114,10 +115,7 @@ export const ImmigrationUpdatesPage: React.FC<ImmigrationUpdatesPageProps> = ({
       const res = await fetch('/api/admin/manual-update', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(adminToken ? { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken } : {}),
-        },
+        headers: getAdminRequestHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(newEntry),
       });
       if (res.status === 401) {

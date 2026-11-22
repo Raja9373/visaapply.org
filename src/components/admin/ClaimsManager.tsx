@@ -20,7 +20,7 @@ import {
   XCircle,
   Info
 } from 'lucide-react';
-import { getStoredAdminToken } from '../../utils/adminAuth';
+import { getAdminRequestHeaders } from '../../utils/adminAuth';
 import {
   REQUIREMENT_CLASSIFICATIONS,
   REQUIREMENT_CLASSIFICATION_META,
@@ -268,11 +268,7 @@ export const ClaimsManager: React.FC<Props> = ({
   } | null>(null);
 
   const authHeaders = useCallback(() => {
-    const token = getStoredAdminToken();
-    return {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
-    };
+    return getAdminRequestHeaders({ 'Content-Type': 'application/json' });
   }, []);
 
   const showMessage = (type: 'success' | 'error', text: string) => {
@@ -286,6 +282,7 @@ export const ClaimsManager: React.FC<Props> = ({
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
+        credentials: 'include',
         headers: authHeaders()
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to load claims`);
@@ -316,6 +313,7 @@ export const ClaimsManager: React.FC<Props> = ({
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({
           section: newClaim.section,
@@ -389,6 +387,7 @@ export const ClaimsManager: React.FC<Props> = ({
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({
           id: claimId,
@@ -420,6 +419,7 @@ export const ClaimsManager: React.FC<Props> = ({
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims`, {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({
           id: claim.id,
@@ -449,6 +449,7 @@ export const ClaimsManager: React.FC<Props> = ({
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/claims/${claimId}`, {
         method: 'DELETE',
+        credentials: 'include',
         headers: authHeaders()
       });
       const data = await res.json();
@@ -507,6 +508,7 @@ export const ClaimsManager: React.FC<Props> = ({
     try {
       const res = await fetch(`/api/admin/visa-details/claims/${claimId}/evidence`, {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({
           id: editingEvidenceId || undefined,
@@ -544,6 +546,7 @@ export const ClaimsManager: React.FC<Props> = ({
     try {
       const res = await fetch(`/api/admin/visa-details/claims/${claimId}/evidence`, {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({
           ...ev,
@@ -574,6 +577,7 @@ export const ClaimsManager: React.FC<Props> = ({
         `/api/admin/visa-details/claims/${claimId}/evidence/${evidenceId}?programId=${encodeURIComponent(programId)}`,
         {
           method: 'DELETE',
+          credentials: 'include',
           headers: authHeaders()
         }
       );

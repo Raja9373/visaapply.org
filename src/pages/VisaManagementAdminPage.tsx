@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Search, AlertCircle, CheckCircle, Clock, Edit } from 'lucide-react';
+import { getAdminRequestHeaders } from '../utils/adminAuth';
 
 export function VisaManagementAdminPage({ navigate }: { navigate: (path: string) => void }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,14 +13,20 @@ export function VisaManagementAdminPage({ navigate }: { navigate: (path: string)
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetch('/api/admin/dashboard-stats')
+    fetch('/api/admin/dashboard-stats', {
+      credentials: 'include',
+      headers: getAdminRequestHeaders()
+    })
       .then(res => res.json())
       .then(data => data.success && setStats(data.stats))
       .catch(console.error);
   }, []);
 
   useEffect(() => {
-    fetch(`/api/admin/visa-details?page=${page}&limit=${limit}&search=${searchQuery}&status=${statusFilter}`)
+    fetch(`/api/admin/visa-details?page=${page}&limit=${limit}&search=${encodeURIComponent(searchQuery)}&status=${encodeURIComponent(statusFilter)}`, {
+      credentials: 'include',
+      headers: getAdminRequestHeaders()
+    })
       .then(res => res.json())
       .then(data => {
         if (data.success) {

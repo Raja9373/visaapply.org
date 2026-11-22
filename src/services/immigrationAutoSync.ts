@@ -3,6 +3,7 @@ import { getOfficialSourceForCountry, OFFICIAL_SOURCE_REGISTRY_249, OfficialSour
 import { getImmigrationProfileForCountry, getImmigrationDatabaseAuditMetrics, ImmigrationProgram, PathwayVerificationStatus, ImmigrationCategoryKey } from '../data/globalImmigrationHubData';
 import initialChangelog from '../data/immigrationChangelog.json';
 import { NAME_MAP_249 } from '../data/countryLightRegistry';
+import { getAdminRequestHeaders } from '../utils/adminAuth';
 
 export type ImmigrationChangeType =
   | 'NEW_VISA'
@@ -248,20 +249,13 @@ export async function checkImmigrationUpdates(
   batchProgress: ResumableBatchState;
   adminEmailNotified: string;
 }> {
-  const token =
-    adminToken ||
-    (typeof window !== 'undefined' ? sessionStorage.getItem('visaapply_admin_token') || '' : '');
-
   const changelog = getStoredImmigrationChangelog();
 
   try {
     const response = await fetch('/api/cron/immigration-sync', {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}`, 'X-Admin-Token': token } : {})
-      },
+      headers: getAdminRequestHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         countries: targetCountries || ['US', 'CA', 'GB', 'AU', 'DE', 'AE', 'SG', 'FR', 'JP', 'PT']
       })

@@ -301,10 +301,40 @@ export function computeRuleBasedEligibility(input: AiEligibilityInput): AiEligib
   };
 }
 
+export function createAiEligibilityHandler(options?: {
+  rateLimitStore?: import('../utils/securityHardening').RateLimitStore;
+}) {
+  return async function handleAiEligibilityRequestWithLimit(req: any, res: any) {
+    const {
+      RATE_LIMIT_POLICIES,
+      applySecurityHeaders,
+      defaultRateLimitStore,
+      enforceRateLimit
+    } = await import('../utils/securityHardening');
+
+    applySecurityHeaders(res, { isApi: true });
+
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
+    }
+
+    const allowed = await enforceRateLimit(
+      req,
+      res,
+      RATE_LIMIT_POLICIES.aiEligibility,
+      options?.rateLimitStore ?? defaultRateLimitStore
+    );
+    if (!allowed) return;
+
+    return executeAiEligibility(req, res);
+  };
+}
+
 export default async function handleAiEligibilityRequest(req: any, res: any) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
-  }
+  return createAiEligibilityHandler()(req, res);
+}
+
+async function executeAiEligibility(req: any, res: any) {
 
   const body: AiEligibilityInput = {
     fromCountry: String(req.body?.fromCountry || 'India'),

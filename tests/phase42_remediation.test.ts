@@ -136,24 +136,37 @@ test('Auth & Cron security: fail-closed CRON_SECRET, timing-safe passwords, meth
     applyRestrictedCorsHeaders({ headers: { origin: 'https://www.visaapply.org' } }, allowedCorsRes);
     assert.equal(allowedCorsRes._headers['access-control-allow-origin'], 'https://www.visaapply.org');
 
-    // 6. api/admin.ts handles malformed JSON (400), bad password (401), valid login (200) + token verify
+    // 6. api/admin.ts handles malformed JSON (400), bad password (401), valid login (200) + signed HttpOnly cookie session
     process.env.ADMIN_PASSWORD = 'very-secure-admin-password';
     const badJsonRes = createMockRes();
-    adminHandler({ method: 'POST', headers: {}, body: '{invalid json' } as any, badJsonRes);
+    await adminHandler({ method: 'POST', headers: {}, body: '{invalid json' } as any, badJsonRes);
     assert.equal(badJsonRes._status, 400);
 
     const wrongPassRes = createMockRes();
-    adminHandler({ method: 'POST', headers: {}, body: { password: 'nope' } } as any, wrongPassRes);
+    await adminHandler({ method: 'POST', headers: {}, body: { password: 'nope' } } as any, wrongPassRes);
     assert.equal(wrongPassRes._status, 401);
     assert.equal(wrongPassRes._body.authenticated, false);
 
     const okPassRes = createMockRes();
-    adminHandler({ method: 'POST', headers: {}, body: { password: 'very-secure-admin-password' } } as any, okPassRes);
+    await adminHandler({ method: 'POST', headers: {}, body: { password: 'very-secure-admin-password' } } as any, okPassRes);
     assert.equal(okPassRes._status, 200);
     assert.equal(okPassRes._body.authenticated, true);
+    assert.equal(okPassRes._body.token, undefined);
+    assert.equal(typeof okPassRes._body.csrfToken, 'string');
+    assert.ok(okPassRes._body.csrfToken.length >= 24);
+    assert.equal(typeof okPassRes._body.expiresAt, 'number');
+    assert.ok(okPassRes._body.expiresAt > Math.floor(Date.now() / 1000));
     assert.equal(verifyAdminPassword('very-secure-admin-password'), true);
-    assert.equal(verifyAdminToken(okPassRes._body.token), true);
-    assert.equal(okPassRes._body.token, deriveAdminToken('very-secure-admin-password'));
+    const setCookieHeader = okPassRes._headers['set-cookie'];
+    const cookieList = Array.isArray(setCookieHeader) ? setCookieHeader : [String(setCookieHeader || '')];
+    const sessionCookie = cookieList.find((c: string) => c.startsWith('visaapply_admin_session='));
+    assert.ok(sessionCookie, 'Expected visaapply_admin_session Set-Cookie header');
+    assert.equal(sessionCookie.includes('HttpOnly'), true);
+    assert.equal(sessionCookie.includes('SameSite=Lax'), true);
+    const sessionTokenMatch = sessionCookie.match(/^visaapply_admin_session=([^;]+)/);
+    assert.ok(sessionTokenMatch?.[1]);
+    assert.equal(verifyAdminToken(sessionTokenMatch[1]), true);
+    assert.notEqual(sessionTokenMatch[1], deriveAdminToken('very-secure-admin-password'));
   } finally {
     if (prevCron === undefined) delete process.env.CRON_SECRET;
     else process.env.CRON_SECRET = prevCron;

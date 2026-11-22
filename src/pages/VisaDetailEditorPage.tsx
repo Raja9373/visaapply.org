@@ -12,7 +12,7 @@ import {
   Code2,
   RotateCcw
 } from 'lucide-react';
-import { getStoredAdminToken } from '../utils/adminAuth';
+import { getAdminRequestHeaders } from '../utils/adminAuth';
 
 const A_TO_M_SECTIONS = [
   { code: 'A', key: 'countryOverview', label: 'A. Country Overview' },
@@ -63,16 +63,15 @@ export function VisaDetailEditorPage() {
   }, []);
 
   const authHeaders = useCallback(() => {
-    const token = getStoredAdminToken();
-    return {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
-    };
+    return getAdminRequestHeaders({ 'Content-Type': 'application/json' });
   }, []);
 
   const loadDetails = useCallback(() => {
     setLoading(true);
-    fetch(`/api/admin/visa-details/${programId}`, { headers: authHeaders() })
+    fetch(`/api/admin/visa-details/${programId}`, {
+      credentials: 'include',
+      headers: authHeaders()
+    })
       .then(res => {
         if (!res.ok) throw new Error('Visa record not found or unauthorized');
         return res.json();
@@ -146,6 +145,7 @@ export function VisaDetailEditorPage() {
     try {
       const res = await fetch('/api/admin/visa-details', {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({
           ...details,
@@ -178,6 +178,7 @@ export function VisaDetailEditorPage() {
     try {
       const res = await fetch(`/api/admin/visa-details/${programId}/status`, {
         method: 'POST',
+        credentials: 'include',
         headers: authHeaders(),
         body: JSON.stringify({ status: newStatus })
       });

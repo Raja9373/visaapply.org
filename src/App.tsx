@@ -13,6 +13,12 @@ import { AdSenseBanner } from './components/AdSenseBanner';
 import { findGeneratedBlogBySlug, getPreservedPublishedDate } from './data/blogGenerator';
 import { TRAVELPAYOUTS_CONFIG, FLIGHT_LINKS_249, AIRPORT_IATA_MAP, getFlightLinkForCountry, getFlightWidgetWithTP } from './data/travelpayoutsConfig';
 import { sanitizeHtml } from './utils/htmlSanitizer';
+import {
+  clearAdminAuthState,
+  getAdminRequestHeaders,
+  purgeLegacyAdminStorage,
+  setAdminCsrfToken
+} from './utils/adminAuth';
 const VerificationView = React.lazy(() => import('./components/VerificationView').then(m => ({ default: m.VerificationView })));
 const BlogArticleView = React.lazy(() => import('./components/BlogArticleView').then(m => ({ default: m.BlogArticleView })));
 const EligibilityChecker = React.lazy(() => import('./components/EligibilityChecker').then(m => ({ default: m.EligibilityChecker })));
@@ -2388,15 +2394,13 @@ export default function App() {
   const [drafts, setDrafts] = useState<Article[]>([]);
   const [cronLoading, setCronLoading] = useState(false);
   const [cronResult, setCronResult] = useState<string | null>(null);
-  const [adminToken, setAdminToken] = useState<string>(() => {
-    try {
-      return sessionStorage.getItem('visaapply_admin_token') || '';
-    } catch {
-      return '';
-    }
-  });
+  const [adminToken, setAdminToken] = useState<string>('');
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(false);
   const [adminSessionChecked, setAdminSessionChecked] = useState<boolean>(false);
+
+  useEffect(() => {
+    purgeLegacyAdminStorage();
+  }, []);
 
   useEffect(() => {
     applyDocumentLangAttributes(uiLang);
@@ -2455,23 +2459,20 @@ export default function App() {
     let cancelled = false;
 
     const verifyAdminSession = async () => {
-      let storedToken = '';
-      try {
-        storedToken = sessionStorage.getItem('visaapply_admin_token') || '';
-      } catch {
-        storedToken = '';
-      }
+      purgeLegacyAdminStorage();
 
       try {
         const res = await fetch('/api/admin/session', {
           method: 'GET',
-          headers: storedToken ? { Authorization: `Bearer ${storedToken}`, 'X-Admin-Token': storedToken } : {},
           credentials: 'include'
         });
         if (cancelled) return;
         if (res.ok) {
           const data = await res.json().catch(() => ({ authenticated: false }));
           if (data && data.authenticated) {
+            if (typeof data.csrfToken === 'string' && data.csrfToken) {
+              setAdminCsrfToken(data.csrfToken);
+            }
             setIsAdminAuthenticated(true);
             setAdminSessionChecked(true);
             return;
@@ -2482,11 +2483,7 @@ export default function App() {
       }
 
       if (cancelled) return;
-      try {
-        sessionStorage.removeItem('visaapply_admin_token');
-      } catch {
-        // ignore
-      }
+      clearAdminAuthState();
       setAdminToken('');
       setIsAdminAuthenticated(false);
       setAdminSessionChecked(true);
@@ -2505,15 +2502,15 @@ export default function App() {
 
   const handleAdminLogout = async () => {
     try {
-      await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: getAdminRequestHeaders()
+      });
     } catch {
       // ignore network error on logout
     }
-    try {
-      sessionStorage.removeItem('visaapply_admin_token');
-    } catch {
-      // ignore
-    }
+    clearAdminAuthState();
     setAdminToken('');
     setIsAdminAuthenticated(false);
     window.history.replaceState({}, '', '/admin/login');
@@ -2627,7 +2624,11 @@ export default function App() {
     setCronLoading(true);
     setCronResult(null);
     try {
-      const data = await fetchWithRetry<any>('/api/cron', { method: 'POST' }, {
+      const data = await fetchWithRetry<any>('/api/cron', {
+        method: 'POST',
+        credentials: 'include',
+        headers: getAdminRequestHeaders()
+      }, {
         retries: 4,
         initialDelay: 1000,
         maxDelay: 12000,
@@ -7187,12 +7188,9 @@ function AdminLoginView({
         return;
       }
       const data = JSON.parse(text);
-      if (res.ok && data.success && data.token) {
-        try {
-          sessionStorage.setItem('visaapply_admin_token', data.token);
-        } catch {
-          // ignore sessionStorage error
-        }
+      if (res.ok && data.success && data.authenticated) {
+        purgeLegacyAdminStorage();
+        setAdminCsrfToken(typeof data.csrfToken === 'string' ? data.csrfToken : null);
         const params = new URLSearchParams(window.location.search);
         const redirectParam = params.get('redirect');
         const safeTarget =
@@ -7201,9 +7199,9 @@ function AdminLoginView({
             : intendedPath && intendedPath.startsWith('/admin') && intendedPath !== '/admin/login'
               ? intendedPath
               : '/admin/updates';
-        onLoginSuccess(data.token, safeTarget);
+        onLoginSuccess('', safeTarget);
       } else {
-        setAuthError(data.message || 'Invalid administrator password.');
+        setAuthError(data.message || data.error || 'Invalid administrator password.');
       }
     } catch {
       setAuthError('Authentication failed. Please try again.');
@@ -7616,7 +7614,14 @@ function AdminSlotAlertPage({ navigate, adminToken, onLogout }: any) {
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch('/api/slot-alert/status');
+      const res = await fetch('/api/admin/slot-alert/subscribers', {
+        credentials: 'include',
+        headers: getAdminRequestHeaders()
+      });
+      if (res.status === 401) {
+        onLogout?.();
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setStatusData(data);
@@ -7637,8 +7642,13 @@ function AdminSlotAlertPage({ navigate, adminToken, onLogout }: any) {
     try {
       const res = await fetch('/api/cron/slot-check', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken }
+        credentials: 'include',
+        headers: getAdminRequestHeaders()
       });
+      if (res.status === 401) {
+        onLogout?.();
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setCronResult(`Cron check completed successfully! Emails sent: ${data.emailsSent}`);

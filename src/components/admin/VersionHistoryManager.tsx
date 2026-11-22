@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RotateCcw, Eye, GitCompare, PlusCircle, Check, X, History } from 'lucide-react';
+import { getAdminRequestHeaders } from '../../utils/adminAuth';
 
 function flattenObject(obj: any, prefix = ''): Record<string, string> {
   const result: Record<string, string> = {};
@@ -39,7 +40,10 @@ export function VersionHistoryManager({
   const loadVersions = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/visa-details/${programId}/versions`);
+      const res = await fetch(`/api/admin/visa-details/${programId}/versions`, {
+        credentials: 'include',
+        headers: getAdminRequestHeaders()
+      });
       const data = await res.json();
       setVersions(Array.isArray(data.versions) ? data.versions : []);
     } catch (e) {
@@ -59,7 +63,8 @@ export function VersionHistoryManager({
     try {
       await fetch(`/api/admin/visa-details/${programId}/versions`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        headers: getAdminRequestHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           editorId: 'admin',
           changeReason: snapshotReason.trim() || 'Manual checkpoint snapshot'
@@ -75,7 +80,8 @@ export function VersionHistoryManager({
   const handleConfirmRestore = async (versionId: string) => {
     await fetch(`/api/admin/visa-details/${programId}/versions/${versionId}/restore`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      headers: getAdminRequestHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ editorId: 'admin' })
     });
     setConfirmRestoreId(null);
