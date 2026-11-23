@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "2.0.0",
+  "phase": "PHASE_2_SKELETON_ONLY",
+  "bulkMigrationExecuted": false,
+  "architecture": "ZERO_DATABASE_FIRST_STATIC_CATALOG",
+  "coverageScope": {
+    "isoCountries": 249,
+    "bilateralRoutePairs": 61752,
+    "supportedLanguages": 15,
+    "routeStorageStrategy": "COMPACT_RULE_MATRIX_PLUS_SPARSE_OVERRIDES"
+  },
+  "directories": {
+    "countries": {
+      "path": "data/countries",
+      "filePattern": "<iso2>.json",
+      "validator": "validateCountryRecord"
+    },
+    "routes": {
+      "path": "data/routes",
+      "compactMatrix": "data/routes/matrix-compact.json",
+      "overridesDir": "data/routes/overrides",
+      "overrideFilePattern": "<destination-iso2>.json",
+      "validator": "validateBilateralRouteOverride"
+    },
+    "programs": {
+      "path": "data/programs",
+      "filePattern": "<destination-iso2>.json",
+      "validator": "validateProgramCollection"
+    },
+    "visaDetails": {
+      "path": "data/visa-details",
+      "filePattern": "<program-id>.json",
+      "validator": "validateVisaDetailRecord"
+    },
+    "officialSources": {
+      "path": "data/official-sources",
+      "filePattern": "<iso2>.json",
+      "validator": "validateOfficialSourceRecord"
+    },
+    "verification": {
+      "path": "data/verification",
+      "files": [
+        "claims.json",
+        "evidence.json",
+        "quarantine.json",
+        "batch-state.json"
+      ],
+      "validators": [
+        "validateClaimRecord",
+        "validateEvidenceRecord",
+        "validateClaimEvidenceLinkage",
+        "validateQuarantineRecord"
+      ]
+    },
+    "changelog": {
+      "path": "data/changelog",
+      "files": [
+        "latest.json"
+      ],
+      "validator": "validateChangelogRecord"
+    },
+    "editorial": {
+      "publishedPath": "data/editorial/published",
+      "draftsPath": "data/editorial/drafts",
+      "filePattern": "<slug>.md",
+      "validator": "validateEditorialArticleRecord"
+    }
+  }
+}
