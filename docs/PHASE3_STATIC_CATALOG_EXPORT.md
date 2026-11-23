@@ -16,7 +16,7 @@ Phase 3 establishes a strict separation between **authoritative catalog files** 
 
 | Layer | Directory | Authoritative? | Purpose |
 | :--- | :--- | :---: | :--- |
-| **Authoritative Static Catalog** | `data/` | **YES** | Canonical JSON/Markdown records validated against Phase 2 Zod contracts; GitHub-versioned source of truth. |
+| **Authoritative Static Catalog** | `data/` | **YES** | Canonical JSON/Markdown records validated against Phase 2 zero-dependency TypeScript contracts; GitHub-versioned source of truth. |
 | **Generated Search Indexes & Lazy Chunks** | `public/catalog/` | No (Derived) | Content-hashed, compressed-friendly static JSON indexes and lazy chunks built deterministically from `data/`. |
 | **Generated Valid-Only Static Sitemaps** | `public/sitemaps-static/` | No (Derived) | XML sitemaps containing only verified, substantive canonical URLs built strictly from `data/`. |
 | **Legacy Runtime & Database Sources** | `data_db/`, `src/data/`, `public/sitemap*.xml` | Legacy (Untouched) | Preserved unchanged in Phase 3 until Phase 4/5 parity sign-off. |
@@ -39,7 +39,7 @@ Phase 3 establishes a strict separation between **authoritative catalog files** 
 
 ## 3. Source-by-Source Export Reconciliation
 
-Every input source is mapped through Phase 2 normalization adapters (`src/schemas/catalogSchemas.ts`) with full provenance, deduplication, and conflict tracking:
+Every input source is mapped through Phase 2 zero-dependency TypeScript normalization adapters (`src/schemas/catalogSchemas.ts`) with full provenance, deduplication, and conflict tracking:
 
 | Source Input | Source Records | Exported (Authoritative) | Quarantined | Rejected | Notes / Deduplication |
 | :--- | :---: | :---: | :---: | :---: | :--- |

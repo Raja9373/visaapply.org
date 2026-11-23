@@ -33,7 +33,7 @@
 | # | Check Name | Status | Errors | Enforcement Scope |
 | :-: | :--- | :---: | :-: | :--- |
 | 1 | JSON syntax | **PASS** | 0 | Parses every `.json` file strictly; rejects malformed JSON or truncated files. |
-| 2 | Phase 2 schema compliance | **PASS** | 0 | Validates every record against strict Zod contracts in `src/schemas/catalogSchemas.ts`. |
+| 2 | Phase 2 schema compliance | **PASS** | 0 | Validates every record against strict zero-dependency TypeScript contracts in `src/schemas/catalogSchemas.ts`. |
 | 3 | Country ISO identifiers | **PASS** | 0 | Verifies exact 249-country parity against `ALL_249_COUNTRIES`, uppercase ISO alpha-2 codes, and lowercase filename match (`<iso>.json`). |
 | 4 | Program ID validity | **PASS** | 0 | Validates legacy & canonical program ID rules (`src/schemas/idRules.ts`) and destination-file grouping. |
 | 5 | Case-insensitive duplicate IDs | **PASS** | 0 | Rejects any case-insensitive ID collision across countries, official sources, programs, visa details, claims, evidence, routes, and quarantine. |

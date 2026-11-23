@@ -19,6 +19,7 @@ import {
   purgeLegacyAdminStorage,
   setAdminCsrfToken
 } from './utils/adminAuth';
+import { isStaticCatalogEnabled, staticCatalogClient } from './services/staticCatalogClient';
 const VerificationView = React.lazy(() => import('./components/VerificationView').then(m => ({ default: m.VerificationView })));
 const BlogArticleView = React.lazy(() => import('./components/BlogArticleView').then(m => ({ default: m.BlogArticleView })));
 const EligibilityChecker = React.lazy(() => import('./components/EligibilityChecker').then(m => ({ default: m.EligibilityChecker })));
@@ -2589,6 +2590,12 @@ export default function App() {
 
     // 2. Deferred Idle Network Sync for Blogs: runs after initial page load so critical path latency is 0ms
     const syncTimer = window.setTimeout(() => {
+      if (isStaticCatalogEnabled('editorial')) {
+        // Static-catalog-first mode: warm verified static editorial index instead of hitting DB-backed /api/articles
+        void staticCatalogClient.getEditorialIndex({ signal: abortController.signal }).catch(() => {});
+        return;
+      }
+
       void fetchWithRetry<Article[] | { published?: Article[] } | null>(
         '/api/articles',
         { signal: abortController.signal },
@@ -3426,9 +3433,9 @@ export default function App() {
         ) : isScholarshipFinder ? (
           <ScholarshipFinderPage onNavigate={navigate} />
         ) : isImmigrationHub ? (
-          <GlobalImmigrationHubPage navigate={navigate} />
+          <GlobalImmigrationHubPage navigate={navigate} uiLang={uiLang} />
         ) : immigrationDetailMatch ? (
-          <CountryImmigrationDetailPage countryCode={immigrationDetailMatch[1]} navigate={navigate} />
+          <CountryImmigrationDetailPage countryCode={immigrationDetailMatch[1]} navigate={navigate} uiLang={uiLang} />
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isGoldenVisa ? (
@@ -3479,9 +3486,9 @@ export default function App() {
         ) : isFamilyPlanner ? (
           <FamilyPlannerPage onNavigate={navigate} />
         ) : isVisaComparison ? (
-          <VisaComparisonPage onNavigate={navigate} />
+          <VisaComparisonPage onNavigate={navigate} uiLang={uiLang} />
         ) : isSourceVerifier ? (
-          <SourceVerifierPage onNavigate={navigate} />
+          <SourceVerifierPage onNavigate={navigate} uiLang={uiLang} />
         ) : isIntelligenceHub ? (
           <IntelligenceHubPage onNavigate={navigate} />
         ) : isContact ? (
