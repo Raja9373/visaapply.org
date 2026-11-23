@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "NZ",
+  "slug": "nz",
+  "countryName": "New Zealand",
+  "localizedNames": {
+    "en": "New Zealand"
+  },
+  "officialCountryDomain": "immigration.govt.nz",
+  "immigrationAuthorityRefs": [
+    "SRC-NZ-CONSULAR-PORTAL",
+    "SRC-NZ-IMMIGRATION-NEW-ZEALAND-INZ",
+    "SRC-NZ-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇳🇿",
+  "continent": "oceania",
+  "notes": null
+}

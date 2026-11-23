@@ -1,0 +1,32 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "routeId": "us-to-ae",
+    "originCountryIso": "US",
+    "destinationCountryIso": "AE",
+    "applicableVisaCategories": [
+      "pr",
+      "tourist"
+    ],
+    "ruleMatrixRef": "matrix:v2:compact-bilateral",
+    "verifiedOverrides": {
+      "visaFree": false,
+      "eVisaEligible": false,
+      "voaEligible": true,
+      "maxStayDays": 30,
+      "overrideProgramIds": [
+        "uae-family-residence",
+        "uae-golden-visa-investor"
+      ],
+      "scopeNote": "Curated US-to-UAE short-stay VOA & long-term residency corridor backed by UAE official portal."
+    },
+    "routePublicationEligible": true,
+    "verificationMetadata": {
+      "verificationStatus": "AVAILABLE_VERIFIED",
+      "lastVerifiedDate": "2026-11-10",
+      "officialSourceIds": [
+        "SRC-AE-CONSULAR-PORTAL"
+      ]
+    }
+  }
+]

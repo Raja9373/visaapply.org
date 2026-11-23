@@ -1,0 +1,4375 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-0018C1FEE953",
+    "entityType": "country",
+    "entityId": "SK",
+    "countryIso": "SK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Slovakia (SK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SK",
+      "countryName": "Slovakia",
+      "authorityName": "Consular Affairs & Immigration Authority of Slovakia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-005DB9F4DB82",
+    "entityType": "country",
+    "entityId": "LY",
+    "countryIso": "LY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Libya (LY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LY",
+      "countryName": "Libya",
+      "authorityName": "Consular Affairs & Immigration Authority of Libya",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-00E47D69B0F7",
+    "entityType": "country",
+    "entityId": "BE",
+    "countryIso": "BE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Belgium (BE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BE",
+      "countryName": "Belgium",
+      "authorityName": "Consular Affairs & Immigration Authority of Belgium",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-02B745785912",
+    "entityType": "country",
+    "entityId": "IS",
+    "countryIso": "IS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Iceland (IS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "IS",
+      "countryName": "Iceland",
+      "authorityName": "Consular Affairs & Immigration Authority of Iceland",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-0402E33CD191",
+    "entityType": "country",
+    "entityId": "KI",
+    "countryIso": "KI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Kiribati (KI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KI",
+      "countryName": "Kiribati",
+      "authorityName": "Consular Affairs & Immigration Authority of Kiribati",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-043AAA004E0F",
+    "entityType": "country",
+    "entityId": "QA",
+    "countryIso": "QA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Qatar (QA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "QA",
+      "countryName": "Qatar",
+      "authorityName": "Consular Affairs & Immigration Authority of Qatar",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-06950958D010",
+    "entityType": "country",
+    "entityId": "ER",
+    "countryIso": "ER",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Eritrea (ER). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ER",
+      "countryName": "Eritrea",
+      "authorityName": "Consular Affairs & Immigration Authority of Eritrea",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-0B7EF50F0885",
+    "entityType": "country",
+    "entityId": "ME",
+    "countryIso": "ME",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Montenegro (ME). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ME",
+      "countryName": "Montenegro",
+      "authorityName": "Consular Affairs & Immigration Authority of Montenegro",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-0CB0FEA33A14",
+    "entityType": "country",
+    "entityId": "SD",
+    "countryIso": "SD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Sudan (SD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SD",
+      "countryName": "Sudan",
+      "authorityName": "Consular Affairs & Immigration Authority of Sudan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-0F79F77038C7",
+    "entityType": "country",
+    "entityId": "MV",
+    "countryIso": "MV",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Maldives (MV). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MV",
+      "countryName": "Maldives",
+      "authorityName": "Consular Affairs & Immigration Authority of Maldives",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-101A51EE9F7D",
+    "entityType": "country",
+    "entityId": "JM",
+    "countryIso": "JM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Jamaica (JM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "JM",
+      "countryName": "Jamaica",
+      "authorityName": "Consular Affairs & Immigration Authority of Jamaica",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1070BA92B28F",
+    "entityType": "country",
+    "entityId": "GT",
+    "countryIso": "GT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guatemala (GT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GT",
+      "countryName": "Guatemala",
+      "authorityName": "Consular Affairs & Immigration Authority of Guatemala",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-11D6455D79EC",
+    "entityType": "country",
+    "entityId": "BI",
+    "countryIso": "BI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Burundi (BI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BI",
+      "countryName": "Burundi",
+      "authorityName": "Consular Affairs & Immigration Authority of Burundi",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1364C811B00A",
+    "entityType": "country",
+    "entityId": "GR",
+    "countryIso": "GR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Greece (GR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GR",
+      "countryName": "Greece",
+      "authorityName": "Consular Affairs & Immigration Authority of Greece",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-13CD088215D5",
+    "entityType": "country",
+    "entityId": "JE",
+    "countryIso": "JE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Jersey (JE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "JE",
+      "countryName": "Jersey",
+      "authorityName": "Consular Affairs & Immigration Authority of Jersey",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-150DC8FCC751",
+    "entityType": "country",
+    "entityId": "CW",
+    "countryIso": "CW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Curacao (CW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CW",
+      "countryName": "Curacao",
+      "authorityName": "Consular Affairs & Immigration Authority of Curacao",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-15E6F4019E05",
+    "entityType": "country",
+    "entityId": "TZ",
+    "countryIso": "TZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Tanzania (TZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TZ",
+      "countryName": "Tanzania",
+      "authorityName": "Consular Affairs & Immigration Authority of Tanzania",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-163A6D419EE0",
+    "entityType": "country",
+    "entityId": "GE",
+    "countryIso": "GE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Georgia (GE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GE",
+      "countryName": "Georgia",
+      "authorityName": "Consular Affairs & Immigration Authority of Georgia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-168106F014E3",
+    "entityType": "country",
+    "entityId": "KH",
+    "countryIso": "KH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cambodia (KH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KH",
+      "countryName": "Cambodia",
+      "authorityName": "Consular Affairs & Immigration Authority of Cambodia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-16ABC6BC1F97",
+    "entityType": "country",
+    "entityId": "PW",
+    "countryIso": "PW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Palau (PW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PW",
+      "countryName": "Palau",
+      "authorityName": "Consular Affairs & Immigration Authority of Palau",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1794F14C1750",
+    "entityType": "country",
+    "entityId": "CH",
+    "countryIso": "CH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Switzerland (CH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CH",
+      "countryName": "Switzerland",
+      "authorityName": "Consular Affairs & Immigration Authority of Switzerland",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-183A8F5FB6F0",
+    "entityType": "country",
+    "entityId": "GH",
+    "countryIso": "GH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Ghana (GH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GH",
+      "countryName": "Ghana",
+      "authorityName": "Consular Affairs & Immigration Authority of Ghana",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-194EAED60175",
+    "entityType": "country",
+    "entityId": "MX",
+    "countryIso": "MX",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mexico (MX). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MX",
+      "countryName": "Mexico",
+      "authorityName": "Consular Affairs & Immigration Authority of Mexico",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1A5BC1627A7B",
+    "entityType": "country",
+    "entityId": "FI",
+    "countryIso": "FI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Finland (FI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "FI",
+      "countryName": "Finland",
+      "authorityName": "Consular Affairs & Immigration Authority of Finland",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1B9076FF38B0",
+    "entityType": "country",
+    "entityId": "SA",
+    "countryIso": "SA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Saudi Arabia (SA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SA",
+      "countryName": "Saudi Arabia",
+      "authorityName": "Consular Affairs & Immigration Authority of Saudi Arabia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1BCC06C79534",
+    "entityType": "country",
+    "entityId": "MN",
+    "countryIso": "MN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mongolia (MN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MN",
+      "countryName": "Mongolia",
+      "authorityName": "Consular Affairs & Immigration Authority of Mongolia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1DE72E5E93BA",
+    "entityType": "country",
+    "entityId": "SR",
+    "countryIso": "SR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Suriname (SR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SR",
+      "countryName": "Suriname",
+      "authorityName": "Consular Affairs & Immigration Authority of Suriname",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1F40A16C3E31",
+    "entityType": "country",
+    "entityId": "UG",
+    "countryIso": "UG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Uganda (UG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "UG",
+      "countryName": "Uganda",
+      "authorityName": "Consular Affairs & Immigration Authority of Uganda",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-1FD272E6CB09",
+    "entityType": "country",
+    "entityId": "MC",
+    "countryIso": "MC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Monaco (MC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MC",
+      "countryName": "Monaco",
+      "authorityName": "Consular Affairs & Immigration Authority of Monaco",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2175948D3801",
+    "entityType": "country",
+    "entityId": "MU",
+    "countryIso": "MU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mauritius (MU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MU",
+      "countryName": "Mauritius",
+      "authorityName": "Consular Affairs & Immigration Authority of Mauritius",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-22D54EDDE965",
+    "entityType": "country",
+    "entityId": "GI",
+    "countryIso": "GI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Gibraltar (GI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GI",
+      "countryName": "Gibraltar",
+      "authorityName": "Consular Affairs & Immigration Authority of Gibraltar",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2516F6F25105",
+    "entityType": "country",
+    "entityId": "SJ",
+    "countryIso": "SJ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Svalbard & Jan Mayen (SJ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SJ",
+      "countryName": "Svalbard & Jan Mayen",
+      "authorityName": "Consular Affairs & Immigration Authority of Svalbard & Jan Mayen",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-265F217A42FE",
+    "entityType": "country",
+    "entityId": "CN",
+    "countryIso": "CN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for China (CN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CN",
+      "countryName": "China",
+      "authorityName": "Consular Affairs & Immigration Authority of China",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-283E11F705BB",
+    "entityType": "country",
+    "entityId": "NU",
+    "countryIso": "NU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Niue (NU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NU",
+      "countryName": "Niue",
+      "authorityName": "Consular Affairs & Immigration Authority of Niue",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-28EDFE24AD40",
+    "entityType": "country",
+    "entityId": "HK",
+    "countryIso": "HK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Hong Kong (HK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "HK",
+      "countryName": "Hong Kong",
+      "authorityName": "Consular Affairs & Immigration Authority of Hong Kong",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2A26564F3F4E",
+    "entityType": "country",
+    "entityId": "PF",
+    "countryIso": "PF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for French Polynesia (PF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PF",
+      "countryName": "French Polynesia",
+      "authorityName": "Consular Affairs & Immigration Authority of French Polynesia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2CC9BC49D1BF",
+    "entityType": "country",
+    "entityId": "SY",
+    "countryIso": "SY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Syria (SY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SY",
+      "countryName": "Syria",
+      "authorityName": "Consular Affairs & Immigration Authority of Syria",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2CEF809A04E5",
+    "entityType": "country",
+    "entityId": "KP",
+    "countryIso": "KP",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for North Korea (KP). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KP",
+      "countryName": "North Korea",
+      "authorityName": "Consular Affairs & Immigration Authority of North Korea",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2DC85EA37D42",
+    "entityType": "country",
+    "entityId": "CD",
+    "countryIso": "CD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for DR Congo (CD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CD",
+      "countryName": "DR Congo",
+      "authorityName": "Consular Affairs & Immigration Authority of DR Congo",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2E13A99CF388",
+    "entityType": "country",
+    "entityId": "MY",
+    "countryIso": "MY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Malaysia (MY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MY",
+      "countryName": "Malaysia",
+      "authorityName": "Consular Affairs & Immigration Authority of Malaysia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2E76F4425EC6",
+    "entityType": "country",
+    "entityId": "LK",
+    "countryIso": "LK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Sri Lanka (LK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LK",
+      "countryName": "Sri Lanka",
+      "authorityName": "Consular Affairs & Immigration Authority of Sri Lanka",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2F589D1200EB",
+    "entityType": "country",
+    "entityId": "PH",
+    "countryIso": "PH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Philippines (PH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PH",
+      "countryName": "Philippines",
+      "authorityName": "Consular Affairs & Immigration Authority of Philippines",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-2FAA3C92E2A6",
+    "entityType": "country",
+    "entityId": "NO",
+    "countryIso": "NO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Norway (NO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NO",
+      "countryName": "Norway",
+      "authorityName": "Consular Affairs & Immigration Authority of Norway",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-30A04700E40F",
+    "entityType": "country",
+    "entityId": "TT",
+    "countryIso": "TT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Trinidad & Tobago (TT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TT",
+      "countryName": "Trinidad & Tobago",
+      "authorityName": "Consular Affairs & Immigration Authority of Trinidad & Tobago",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3259D7E6832A",
+    "entityType": "country",
+    "entityId": "MS",
+    "countryIso": "MS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Montserrat (MS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MS",
+      "countryName": "Montserrat",
+      "authorityName": "Consular Affairs & Immigration Authority of Montserrat",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-32AE1AF4599D",
+    "entityType": "country",
+    "entityId": "TV",
+    "countryIso": "TV",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Tuvalu (TV). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TV",
+      "countryName": "Tuvalu",
+      "authorityName": "Consular Affairs & Immigration Authority of Tuvalu",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-338A50AFC220",
+    "entityType": "country",
+    "entityId": "AR",
+    "countryIso": "AR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Argentina (AR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "authorityName": "Consular Affairs & Immigration Authority of Argentina",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3408414460E7",
+    "entityType": "country",
+    "entityId": "BS",
+    "countryIso": "BS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bahamas (BS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BS",
+      "countryName": "Bahamas",
+      "authorityName": "Consular Affairs & Immigration Authority of Bahamas",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3523CDAF564B",
+    "entityType": "country",
+    "entityId": "CO",
+    "countryIso": "CO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Colombia (CO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CO",
+      "countryName": "Colombia",
+      "authorityName": "Consular Affairs & Immigration Authority of Colombia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-37B749233AB7",
+    "entityType": "country",
+    "entityId": "LT",
+    "countryIso": "LT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Lithuania (LT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LT",
+      "countryName": "Lithuania",
+      "authorityName": "Consular Affairs & Immigration Authority of Lithuania",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-38E674FD9E3D",
+    "entityType": "country",
+    "entityId": "CV",
+    "countryIso": "CV",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cape Verde (CV). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CV",
+      "countryName": "Cape Verde",
+      "authorityName": "Consular Affairs & Immigration Authority of Cape Verde",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3A0400A6F6C1",
+    "entityType": "country",
+    "entityId": "AL",
+    "countryIso": "AL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Albania (AL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AL",
+      "countryName": "Albania",
+      "authorityName": "Consular Affairs & Immigration Authority of Albania",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3BE492E013A6",
+    "entityType": "country",
+    "entityId": "IM",
+    "countryIso": "IM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Isle of Man (IM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "IM",
+      "countryName": "Isle of Man",
+      "authorityName": "Consular Affairs & Immigration Authority of Isle of Man",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3CADA592E485",
+    "entityType": "country",
+    "entityId": "LI",
+    "countryIso": "LI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Liechtenstein (LI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LI",
+      "countryName": "Liechtenstein",
+      "authorityName": "Consular Affairs & Immigration Authority of Liechtenstein",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3D0DA954D60E",
+    "entityType": "country",
+    "entityId": "MZ",
+    "countryIso": "MZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mozambique (MZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MZ",
+      "countryName": "Mozambique",
+      "authorityName": "Consular Affairs & Immigration Authority of Mozambique",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3F60DF27163C",
+    "entityType": "country",
+    "entityId": "KN",
+    "countryIso": "KN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Kitts & Nevis (KN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KN",
+      "countryName": "St Kitts & Nevis",
+      "authorityName": "Consular Affairs & Immigration Authority of St Kitts & Nevis",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-3FDE4B9942BF",
+    "entityType": "country",
+    "entityId": "KM",
+    "countryIso": "KM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Comoros (KM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KM",
+      "countryName": "Comoros",
+      "authorityName": "Consular Affairs & Immigration Authority of Comoros",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-40A1853F2981",
+    "entityType": "country",
+    "entityId": "SO",
+    "countryIso": "SO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Somalia (SO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SO",
+      "countryName": "Somalia",
+      "authorityName": "Consular Affairs & Immigration Authority of Somalia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-41E5701CF5B8",
+    "entityType": "country",
+    "entityId": "FJ",
+    "countryIso": "FJ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Fiji (FJ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "FJ",
+      "countryName": "Fiji",
+      "authorityName": "Consular Affairs & Immigration Authority of Fiji",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-4262880BB6B2",
+    "entityType": "country",
+    "entityId": "CC",
+    "countryIso": "CC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cocos Islands (CC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CC",
+      "countryName": "Cocos Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Cocos Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-430F5F15899B",
+    "entityType": "country",
+    "entityId": "CK",
+    "countryIso": "CK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cook Islands (CK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CK",
+      "countryName": "Cook Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Cook Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-43993C990BD4",
+    "entityType": "country",
+    "entityId": "NG",
+    "countryIso": "NG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Nigeria (NG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NG",
+      "countryName": "Nigeria",
+      "authorityName": "Consular Affairs & Immigration Authority of Nigeria",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-44284010DB2B",
+    "entityType": "country",
+    "entityId": "PK",
+    "countryIso": "PK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Pakistan (PK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "authorityName": "Consular Affairs & Immigration Authority of Pakistan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-44C7E8F0EA3F",
+    "entityType": "country",
+    "entityId": "PA",
+    "countryIso": "PA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Panama (PA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PA",
+      "countryName": "Panama",
+      "authorityName": "Consular Affairs & Immigration Authority of Panama",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-45CA68B2EA7B",
+    "entityType": "country",
+    "entityId": "BA",
+    "countryIso": "BA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bosnia & Herzegovina (BA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BA",
+      "countryName": "Bosnia & Herzegovina",
+      "authorityName": "Consular Affairs & Immigration Authority of Bosnia & Herzegovina",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-469CE2C4CF6B",
+    "entityType": "country",
+    "entityId": "PE",
+    "countryIso": "PE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Peru (PE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PE",
+      "countryName": "Peru",
+      "authorityName": "Consular Affairs & Immigration Authority of Peru",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-46C336FA74DE",
+    "entityType": "country",
+    "entityId": "EG",
+    "countryIso": "EG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Egypt (EG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "EG",
+      "countryName": "Egypt",
+      "authorityName": "Consular Affairs & Immigration Authority of Egypt",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-4A8371C1BAE2",
+    "entityType": "country",
+    "entityId": "MP",
+    "countryIso": "MP",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Northern Mariana (MP). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MP",
+      "countryName": "Northern Mariana",
+      "authorityName": "Consular Affairs & Immigration Authority of Northern Mariana",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-4C661AE35B1D",
+    "entityType": "country",
+    "entityId": "CZ",
+    "countryIso": "CZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Czech Republic (CZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CZ",
+      "countryName": "Czech Republic",
+      "authorityName": "Consular Affairs & Immigration Authority of Czech Republic",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-4C706541E60C",
+    "entityType": "country",
+    "entityId": "ZM",
+    "countryIso": "ZM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Zambia (ZM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ZM",
+      "countryName": "Zambia",
+      "authorityName": "Consular Affairs & Immigration Authority of Zambia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-4C74A54B0E60",
+    "entityType": "country",
+    "entityId": "BO",
+    "countryIso": "BO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bolivia (BO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BO",
+      "countryName": "Bolivia",
+      "authorityName": "Consular Affairs & Immigration Authority of Bolivia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-4D4B6D181887",
+    "entityType": "country",
+    "entityId": "UY",
+    "countryIso": "UY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Uruguay (UY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "UY",
+      "countryName": "Uruguay",
+      "authorityName": "Consular Affairs & Immigration Authority of Uruguay",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-507819565E75",
+    "entityType": "country",
+    "entityId": "SC",
+    "countryIso": "SC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Seychelles (SC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SC",
+      "countryName": "Seychelles",
+      "authorityName": "Consular Affairs & Immigration Authority of Seychelles",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-50832E51D082",
+    "entityType": "country",
+    "entityId": "RU",
+    "countryIso": "RU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Russia (RU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "RU",
+      "countryName": "Russia",
+      "authorityName": "Consular Affairs & Immigration Authority of Russia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-50FAA010D165",
+    "entityType": "country",
+    "entityId": "SM",
+    "countryIso": "SM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for San Marino (SM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SM",
+      "countryName": "San Marino",
+      "authorityName": "Consular Affairs & Immigration Authority of San Marino",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-54B1D7BB7142",
+    "entityType": "country",
+    "entityId": "OM",
+    "countryIso": "OM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Oman (OM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "OM",
+      "countryName": "Oman",
+      "authorityName": "Consular Affairs & Immigration Authority of Oman",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-54C3B6553487",
+    "entityType": "country",
+    "entityId": "WF",
+    "countryIso": "WF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Wallis & Futuna (WF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "WF",
+      "countryName": "Wallis & Futuna",
+      "authorityName": "Consular Affairs & Immigration Authority of Wallis & Futuna",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-552DC2DD6CC3",
+    "entityType": "country",
+    "entityId": "DZ",
+    "countryIso": "DZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Algeria (DZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "DZ",
+      "countryName": "Algeria",
+      "authorityName": "Consular Affairs & Immigration Authority of Algeria",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-55B7E05D8390",
+    "entityType": "country",
+    "entityId": "ST",
+    "countryIso": "ST",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Sao Tome & Principe (ST). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ST",
+      "countryName": "Sao Tome & Principe",
+      "authorityName": "Consular Affairs & Immigration Authority of Sao Tome & Principe",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5828B8EF5B16",
+    "entityType": "country",
+    "entityId": "BL",
+    "countryIso": "BL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Barthelemy (BL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BL",
+      "countryName": "St Barthelemy",
+      "authorityName": "Consular Affairs & Immigration Authority of St Barthelemy",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-58905D807F74",
+    "entityType": "country",
+    "entityId": "MM",
+    "countryIso": "MM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Myanmar (MM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MM",
+      "countryName": "Myanmar",
+      "authorityName": "Consular Affairs & Immigration Authority of Myanmar",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-59858076C1E8",
+    "entityType": "country",
+    "entityId": "KE",
+    "countryIso": "KE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Kenya (KE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KE",
+      "countryName": "Kenya",
+      "authorityName": "Consular Affairs & Immigration Authority of Kenya",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-59C461ADC7C4",
+    "entityType": "country",
+    "entityId": "BM",
+    "countryIso": "BM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bermuda (BM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BM",
+      "countryName": "Bermuda",
+      "authorityName": "Consular Affairs & Immigration Authority of Bermuda",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5A6704925457",
+    "entityType": "country",
+    "entityId": "TK",
+    "countryIso": "TK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Tokelau (TK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TK",
+      "countryName": "Tokelau",
+      "authorityName": "Consular Affairs & Immigration Authority of Tokelau",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5AE2EDE4F5EA",
+    "entityType": "country",
+    "entityId": "ID",
+    "countryIso": "ID",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Indonesia (ID). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ID",
+      "countryName": "Indonesia",
+      "authorityName": "Consular Affairs & Immigration Authority of Indonesia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5AF3DE47AE40",
+    "entityType": "country",
+    "entityId": "DO",
+    "countryIso": "DO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Dominican Republic (DO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "DO",
+      "countryName": "Dominican Republic",
+      "authorityName": "Consular Affairs & Immigration Authority of Dominican Republic",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5B189BF3B98E",
+    "entityType": "country",
+    "entityId": "CU",
+    "countryIso": "CU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cuba (CU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CU",
+      "countryName": "Cuba",
+      "authorityName": "Consular Affairs & Immigration Authority of Cuba",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5BF257631C52",
+    "entityType": "country",
+    "entityId": "SX",
+    "countryIso": "SX",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Sint Maarten (SX). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SX",
+      "countryName": "Sint Maarten",
+      "authorityName": "Consular Affairs & Immigration Authority of Sint Maarten",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5BFA3CCB034F",
+    "entityType": "country",
+    "entityId": "AO",
+    "countryIso": "AO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Angola (AO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AO",
+      "countryName": "Angola",
+      "authorityName": "Consular Affairs & Immigration Authority of Angola",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5DDE5278011D",
+    "entityType": "country",
+    "entityId": "GA",
+    "countryIso": "GA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Gabon (GA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GA",
+      "countryName": "Gabon",
+      "authorityName": "Consular Affairs & Immigration Authority of Gabon",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5E876593F859",
+    "entityType": "country",
+    "entityId": "TM",
+    "countryIso": "TM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Turkmenistan (TM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TM",
+      "countryName": "Turkmenistan",
+      "authorityName": "Consular Affairs & Immigration Authority of Turkmenistan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5EC5BEC15F64",
+    "entityType": "country",
+    "entityId": "BT",
+    "countryIso": "BT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bhutan (BT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BT",
+      "countryName": "Bhutan",
+      "authorityName": "Consular Affairs & Immigration Authority of Bhutan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-5F623F1EDDE9",
+    "entityType": "country",
+    "entityId": "EE",
+    "countryIso": "EE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Estonia (EE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "EE",
+      "countryName": "Estonia",
+      "authorityName": "Consular Affairs & Immigration Authority of Estonia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-63242E9F8618",
+    "entityType": "country",
+    "entityId": "BZ",
+    "countryIso": "BZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Belize (BZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BZ",
+      "countryName": "Belize",
+      "authorityName": "Consular Affairs & Immigration Authority of Belize",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-65C0C7D1D250",
+    "entityType": "country",
+    "entityId": "ML",
+    "countryIso": "ML",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mali (ML). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ML",
+      "countryName": "Mali",
+      "authorityName": "Consular Affairs & Immigration Authority of Mali",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-65DA748A9060",
+    "entityType": "country",
+    "entityId": "LC",
+    "countryIso": "LC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Lucia (LC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LC",
+      "countryName": "St Lucia",
+      "authorityName": "Consular Affairs & Immigration Authority of St Lucia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-661707EC3A05",
+    "entityType": "country",
+    "entityId": "MQ",
+    "countryIso": "MQ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Martinique (MQ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MQ",
+      "countryName": "Martinique",
+      "authorityName": "Consular Affairs & Immigration Authority of Martinique",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-6811C792FC4E",
+    "entityType": "country",
+    "entityId": "TJ",
+    "countryIso": "TJ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Tajikistan (TJ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TJ",
+      "countryName": "Tajikistan",
+      "authorityName": "Consular Affairs & Immigration Authority of Tajikistan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-684C257C93BF",
+    "entityType": "country",
+    "entityId": "GQ",
+    "countryIso": "GQ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Equatorial Guinea (GQ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GQ",
+      "countryName": "Equatorial Guinea",
+      "authorityName": "Consular Affairs & Immigration Authority of Equatorial Guinea",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-6916CF578603",
+    "entityType": "country",
+    "entityId": "HR",
+    "countryIso": "HR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Croatia (HR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "HR",
+      "countryName": "Croatia",
+      "authorityName": "Consular Affairs & Immigration Authority of Croatia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-69706E449720",
+    "entityType": "country",
+    "entityId": "IR",
+    "countryIso": "IR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Iran (IR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "IR",
+      "countryName": "Iran",
+      "authorityName": "Consular Affairs & Immigration Authority of Iran",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-6B088EB01367",
+    "entityType": "country",
+    "entityId": "KW",
+    "countryIso": "KW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Kuwait (KW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KW",
+      "countryName": "Kuwait",
+      "authorityName": "Consular Affairs & Immigration Authority of Kuwait",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-6C4E48C8FDD1",
+    "entityType": "country",
+    "entityId": "VI",
+    "countryIso": "VI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for US Virgin Islands (VI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VI",
+      "countryName": "US Virgin Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of US Virgin Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-6DCFBD56D270",
+    "entityType": "country",
+    "entityId": "SN",
+    "countryIso": "SN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Senegal (SN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SN",
+      "countryName": "Senegal",
+      "authorityName": "Consular Affairs & Immigration Authority of Senegal",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-6EA7227BB994",
+    "entityType": "country",
+    "entityId": "LA",
+    "countryIso": "LA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Laos (LA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LA",
+      "countryName": "Laos",
+      "authorityName": "Consular Affairs & Immigration Authority of Laos",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-700A2FCE9722",
+    "entityType": "country",
+    "entityId": "IL",
+    "countryIso": "IL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Israel (IL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "IL",
+      "countryName": "Israel",
+      "authorityName": "Consular Affairs & Immigration Authority of Israel",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-701B9DD9820F",
+    "entityType": "country",
+    "entityId": "EC",
+    "countryIso": "EC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Ecuador (EC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "EC",
+      "countryName": "Ecuador",
+      "authorityName": "Consular Affairs & Immigration Authority of Ecuador",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-71101CCAB232",
+    "entityType": "country",
+    "entityId": "YE",
+    "countryIso": "YE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Yemen (YE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "YE",
+      "countryName": "Yemen",
+      "authorityName": "Consular Affairs & Immigration Authority of Yemen",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-72E8FE680E88",
+    "entityType": "country",
+    "entityId": "GL",
+    "countryIso": "GL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Greenland (GL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GL",
+      "countryName": "Greenland",
+      "authorityName": "Consular Affairs & Immigration Authority of Greenland",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-731F48CDD755",
+    "entityType": "country",
+    "entityId": "TH",
+    "countryIso": "TH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Thailand (TH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TH",
+      "countryName": "Thailand",
+      "authorityName": "Consular Affairs & Immigration Authority of Thailand",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-75355D57C4E5",
+    "entityType": "country",
+    "entityId": "AM",
+    "countryIso": "AM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Armenia (AM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AM",
+      "countryName": "Armenia",
+      "authorityName": "Consular Affairs & Immigration Authority of Armenia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-760E87CED77A",
+    "entityType": "country",
+    "entityId": "IQ",
+    "countryIso": "IQ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Iraq (IQ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "IQ",
+      "countryName": "Iraq",
+      "authorityName": "Consular Affairs & Immigration Authority of Iraq",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7614923E35B4",
+    "entityType": "country",
+    "entityId": "VE",
+    "countryIso": "VE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Venezuela (VE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VE",
+      "countryName": "Venezuela",
+      "authorityName": "Consular Affairs & Immigration Authority of Venezuela",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7757DC04B164",
+    "entityType": "country",
+    "entityId": "MO",
+    "countryIso": "MO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Macao (MO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MO",
+      "countryName": "Macao",
+      "authorityName": "Consular Affairs & Immigration Authority of Macao",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-77CFBC0E9D4C",
+    "entityType": "country",
+    "entityId": "CL",
+    "countryIso": "CL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Chile (CL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CL",
+      "countryName": "Chile",
+      "authorityName": "Consular Affairs & Immigration Authority of Chile",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7A929C2E93BC",
+    "entityType": "country",
+    "entityId": "KR",
+    "countryIso": "KR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for South Korea (KR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KR",
+      "countryName": "South Korea",
+      "authorityName": "Consular Affairs & Immigration Authority of South Korea",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7AAB44A4E815",
+    "entityType": "country",
+    "entityId": "AF",
+    "countryIso": "AF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Afghanistan (AF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AF",
+      "countryName": "Afghanistan",
+      "authorityName": "Consular Affairs & Immigration Authority of Afghanistan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7B68E1BF3B9E",
+    "entityType": "country",
+    "entityId": "MA",
+    "countryIso": "MA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Morocco (MA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MA",
+      "countryName": "Morocco",
+      "authorityName": "Consular Affairs & Immigration Authority of Morocco",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7BFF2949E877",
+    "entityType": "country",
+    "entityId": "VG",
+    "countryIso": "VG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for British Virgin Islands (VG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VG",
+      "countryName": "British Virgin Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of British Virgin Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-7F526AD54060",
+    "entityType": "country",
+    "entityId": "DJ",
+    "countryIso": "DJ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Djibouti (DJ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "DJ",
+      "countryName": "Djibouti",
+      "authorityName": "Consular Affairs & Immigration Authority of Djibouti",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8052C4E90130",
+    "entityType": "country",
+    "entityId": "LR",
+    "countryIso": "LR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Liberia (LR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LR",
+      "countryName": "Liberia",
+      "authorityName": "Consular Affairs & Immigration Authority of Liberia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8286684FE359",
+    "entityType": "country",
+    "entityId": "TW",
+    "countryIso": "TW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Taiwan (TW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TW",
+      "countryName": "Taiwan",
+      "authorityName": "Consular Affairs & Immigration Authority of Taiwan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-841AE945524A",
+    "entityType": "country",
+    "entityId": "LS",
+    "countryIso": "LS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Lesotho (LS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LS",
+      "countryName": "Lesotho",
+      "authorityName": "Consular Affairs & Immigration Authority of Lesotho",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-844E7F0F12E2",
+    "entityType": "country",
+    "entityId": "AW",
+    "countryIso": "AW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Aruba (AW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AW",
+      "countryName": "Aruba",
+      "authorityName": "Consular Affairs & Immigration Authority of Aruba",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-84A41A4DAF43",
+    "entityType": "country",
+    "entityId": "BF",
+    "countryIso": "BF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Burkina Faso (BF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BF",
+      "countryName": "Burkina Faso",
+      "authorityName": "Consular Affairs & Immigration Authority of Burkina Faso",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-853BA91B2619",
+    "entityType": "country",
+    "entityId": "MW",
+    "countryIso": "MW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Malawi (MW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MW",
+      "countryName": "Malawi",
+      "authorityName": "Consular Affairs & Immigration Authority of Malawi",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-86D59438CB1C",
+    "entityType": "country",
+    "entityId": "TC",
+    "countryIso": "TC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Turks & Caicos (TC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TC",
+      "countryName": "Turks & Caicos",
+      "authorityName": "Consular Affairs & Immigration Authority of Turks & Caicos",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-87CA57E8486E",
+    "entityType": "country",
+    "entityId": "SE",
+    "countryIso": "SE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Sweden (SE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SE",
+      "countryName": "Sweden",
+      "authorityName": "Consular Affairs & Immigration Authority of Sweden",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-88EF842B03CA",
+    "entityType": "country",
+    "entityId": "PG",
+    "countryIso": "PG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Papua New Guinea (PG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PG",
+      "countryName": "Papua New Guinea",
+      "authorityName": "Consular Affairs & Immigration Authority of Papua New Guinea",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8AB319AA5E8E",
+    "entityType": "country",
+    "entityId": "GN",
+    "countryIso": "GN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guinea (GN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GN",
+      "countryName": "Guinea",
+      "authorityName": "Consular Affairs & Immigration Authority of Guinea",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8AB3BA3C6FD2",
+    "entityType": "country",
+    "entityId": "GM",
+    "countryIso": "GM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Gambia (GM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GM",
+      "countryName": "Gambia",
+      "authorityName": "Consular Affairs & Immigration Authority of Gambia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8B8F04585909",
+    "entityType": "country",
+    "entityId": "BN",
+    "countryIso": "BN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Brunei (BN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BN",
+      "countryName": "Brunei",
+      "authorityName": "Consular Affairs & Immigration Authority of Brunei",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8BD2C670AFF9",
+    "entityType": "country",
+    "entityId": "VU",
+    "countryIso": "VU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Vanuatu (VU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VU",
+      "countryName": "Vanuatu",
+      "authorityName": "Consular Affairs & Immigration Authority of Vanuatu",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8C89C674EC45",
+    "entityType": "country",
+    "entityId": "MF",
+    "countryIso": "MF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Martin (MF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MF",
+      "countryName": "St Martin",
+      "authorityName": "Consular Affairs & Immigration Authority of St Martin",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8D4833E30755",
+    "entityType": "country",
+    "entityId": "SV",
+    "countryIso": "SV",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for El Salvador (SV). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SV",
+      "countryName": "El Salvador",
+      "authorityName": "Consular Affairs & Immigration Authority of El Salvador",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-8FC0A12CA623",
+    "entityType": "country",
+    "entityId": "CF",
+    "countryIso": "CF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Central African Republic (CF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CF",
+      "countryName": "Central African Republic",
+      "authorityName": "Consular Affairs & Immigration Authority of Central African Republic",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-913760EDC48E",
+    "entityType": "country",
+    "entityId": "GY",
+    "countryIso": "GY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guyana (GY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GY",
+      "countryName": "Guyana",
+      "authorityName": "Consular Affairs & Immigration Authority of Guyana",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-9153F145B970",
+    "entityType": "country",
+    "entityId": "TL",
+    "countryIso": "TL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Timor-Leste (TL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TL",
+      "countryName": "Timor-Leste",
+      "authorityName": "Consular Affairs & Immigration Authority of Timor-Leste",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-957DEB5E3452",
+    "entityType": "country",
+    "entityId": "GP",
+    "countryIso": "GP",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guadeloupe (GP). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GP",
+      "countryName": "Guadeloupe",
+      "authorityName": "Consular Affairs & Immigration Authority of Guadeloupe",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-96D38D41092F",
+    "entityType": "country",
+    "entityId": "SL",
+    "countryIso": "SL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Sierra Leone (SL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SL",
+      "countryName": "Sierra Leone",
+      "authorityName": "Consular Affairs & Immigration Authority of Sierra Leone",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-9730E6BAF482",
+    "entityType": "country",
+    "entityId": "EH",
+    "countryIso": "EH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Western Sahara (EH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "EH",
+      "countryName": "Western Sahara",
+      "authorityName": "Consular Affairs & Immigration Authority of Western Sahara",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-975FB46543FA",
+    "entityType": "country",
+    "entityId": "GF",
+    "countryIso": "GF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for French Guiana (GF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GF",
+      "countryName": "French Guiana",
+      "authorityName": "Consular Affairs & Immigration Authority of French Guiana",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-979AD54F6914",
+    "entityType": "country",
+    "entityId": "FO",
+    "countryIso": "FO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Faroe Islands (FO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "FO",
+      "countryName": "Faroe Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Faroe Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-97D01A746D9A",
+    "entityType": "country",
+    "entityId": "RO",
+    "countryIso": "RO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Romania (RO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "RO",
+      "countryName": "Romania",
+      "authorityName": "Consular Affairs & Immigration Authority of Romania",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-98375687F653",
+    "entityType": "country",
+    "entityId": "KY",
+    "countryIso": "KY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cayman Islands (KY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KY",
+      "countryName": "Cayman Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Cayman Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-985201D8F578",
+    "entityType": "country",
+    "entityId": "BW",
+    "countryIso": "BW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Botswana (BW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BW",
+      "countryName": "Botswana",
+      "authorityName": "Consular Affairs & Immigration Authority of Botswana",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-9B021B1BF079",
+    "entityType": "country",
+    "entityId": "AS",
+    "countryIso": "AS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for American Samoa (AS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AS",
+      "countryName": "American Samoa",
+      "authorityName": "Consular Affairs & Immigration Authority of American Samoa",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-9B5D47E57296",
+    "entityType": "country",
+    "entityId": "MD",
+    "countryIso": "MD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Moldova (MD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MD",
+      "countryName": "Moldova",
+      "authorityName": "Consular Affairs & Immigration Authority of Moldova",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-9D65327B7221",
+    "entityType": "country",
+    "entityId": "TN",
+    "countryIso": "TN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Tunisia (TN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TN",
+      "countryName": "Tunisia",
+      "authorityName": "Consular Affairs & Immigration Authority of Tunisia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-9DC976E98C7C",
+    "entityType": "country",
+    "entityId": "LB",
+    "countryIso": "LB",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Lebanon (LB). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LB",
+      "countryName": "Lebanon",
+      "authorityName": "Consular Affairs & Immigration Authority of Lebanon",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-A03D878DE32B",
+    "entityType": "country",
+    "entityId": "BY",
+    "countryIso": "BY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Belarus (BY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BY",
+      "countryName": "Belarus",
+      "authorityName": "Consular Affairs & Immigration Authority of Belarus",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-A6CFA8F97AFA",
+    "entityType": "country",
+    "entityId": "NA",
+    "countryIso": "NA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Namibia (NA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NA",
+      "countryName": "Namibia",
+      "authorityName": "Consular Affairs & Immigration Authority of Namibia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-A924C4933217",
+    "entityType": "country",
+    "entityId": "PM",
+    "countryIso": "PM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Pierre & Miquelon (PM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PM",
+      "countryName": "St Pierre & Miquelon",
+      "authorityName": "Consular Affairs & Immigration Authority of St Pierre & Miquelon",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-A92C283F8F97",
+    "entityType": "country",
+    "entityId": "JO",
+    "countryIso": "JO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Jordan (JO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "JO",
+      "countryName": "Jordan",
+      "authorityName": "Consular Affairs & Immigration Authority of Jordan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-A99B5753B6C6",
+    "entityType": "country",
+    "entityId": "KZ",
+    "countryIso": "KZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Kazakhstan (KZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KZ",
+      "countryName": "Kazakhstan",
+      "authorityName": "Consular Affairs & Immigration Authority of Kazakhstan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-A9AA1A571672",
+    "entityType": "country",
+    "entityId": "BG",
+    "countryIso": "BG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bulgaria (BG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BG",
+      "countryName": "Bulgaria",
+      "authorityName": "Consular Affairs & Immigration Authority of Bulgaria",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-AAFFC9750F6B",
+    "entityType": "country",
+    "entityId": "CM",
+    "countryIso": "CM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cameroon (CM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CM",
+      "countryName": "Cameroon",
+      "authorityName": "Consular Affairs & Immigration Authority of Cameroon",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-ABAAA12A4A1C",
+    "entityType": "country",
+    "entityId": "SH",
+    "countryIso": "SH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Helena (SH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SH",
+      "countryName": "St Helena",
+      "authorityName": "Consular Affairs & Immigration Authority of St Helena",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-AC1EC69E3863",
+    "entityType": "country",
+    "entityId": "NF",
+    "countryIso": "NF",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Norfolk Island (NF). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NF",
+      "countryName": "Norfolk Island",
+      "authorityName": "Consular Affairs & Immigration Authority of Norfolk Island",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-ADA5BFC0C0B0",
+    "entityType": "country",
+    "entityId": "GG",
+    "countryIso": "GG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guernsey (GG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GG",
+      "countryName": "Guernsey",
+      "authorityName": "Consular Affairs & Immigration Authority of Guernsey",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-AEA845E4525E",
+    "entityType": "country",
+    "entityId": "CR",
+    "countryIso": "CR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Costa Rica (CR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CR",
+      "countryName": "Costa Rica",
+      "authorityName": "Consular Affairs & Immigration Authority of Costa Rica",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-AFD846A338F0",
+    "entityType": "country",
+    "entityId": "BQ",
+    "countryIso": "BQ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bonaire (BQ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BQ",
+      "countryName": "Bonaire",
+      "authorityName": "Consular Affairs & Immigration Authority of Bonaire",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B2064850E056",
+    "entityType": "country",
+    "entityId": "VN",
+    "countryIso": "VN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Vietnam (VN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VN",
+      "countryName": "Vietnam",
+      "authorityName": "Consular Affairs & Immigration Authority of Vietnam",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B31B53C235E5",
+    "entityType": "country",
+    "entityId": "CY",
+    "countryIso": "CY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Cyprus (CY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CY",
+      "countryName": "Cyprus",
+      "authorityName": "Consular Affairs & Immigration Authority of Cyprus",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B38475956A7E",
+    "entityType": "country",
+    "entityId": "CG",
+    "countryIso": "CG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Congo (CG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CG",
+      "countryName": "Congo",
+      "authorityName": "Consular Affairs & Immigration Authority of Congo",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B391B287E862",
+    "entityType": "country",
+    "entityId": "PR",
+    "countryIso": "PR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Puerto Rico (PR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PR",
+      "countryName": "Puerto Rico",
+      "authorityName": "Consular Affairs & Immigration Authority of Puerto Rico",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B3E941556C7D",
+    "entityType": "country",
+    "entityId": "SI",
+    "countryIso": "SI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Slovenia (SI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SI",
+      "countryName": "Slovenia",
+      "authorityName": "Consular Affairs & Immigration Authority of Slovenia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B41AEA9AB8B9",
+    "entityType": "country",
+    "entityId": "BD",
+    "countryIso": "BD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bangladesh (BD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BD",
+      "countryName": "Bangladesh",
+      "authorityName": "Consular Affairs & Immigration Authority of Bangladesh",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B7345F03D1CF",
+    "entityType": "country",
+    "entityId": "AI",
+    "countryIso": "AI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Anguilla (AI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AI",
+      "countryName": "Anguilla",
+      "authorityName": "Consular Affairs & Immigration Authority of Anguilla",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B77E47C5C41C",
+    "entityType": "country",
+    "entityId": "HU",
+    "countryIso": "HU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Hungary (HU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "HU",
+      "countryName": "Hungary",
+      "authorityName": "Consular Affairs & Immigration Authority of Hungary",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B8714016A3B1",
+    "entityType": "country",
+    "entityId": "CI",
+    "countryIso": "CI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Ivory Coast (CI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CI",
+      "countryName": "Ivory Coast",
+      "authorityName": "Consular Affairs & Immigration Authority of Ivory Coast",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B8E2DECD9D5A",
+    "entityType": "country",
+    "entityId": "BR",
+    "countryIso": "BR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Brazil (BR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BR",
+      "countryName": "Brazil",
+      "authorityName": "Consular Affairs & Immigration Authority of Brazil",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-B9782E367483",
+    "entityType": "country",
+    "entityId": "TD",
+    "countryIso": "TD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Chad (TD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TD",
+      "countryName": "Chad",
+      "authorityName": "Consular Affairs & Immigration Authority of Chad",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-BA0ACED15F6F",
+    "entityType": "country",
+    "entityId": "SS",
+    "countryIso": "SS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for South Sudan (SS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SS",
+      "countryName": "South Sudan",
+      "authorityName": "Consular Affairs & Immigration Authority of South Sudan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-BADF3E768D7B",
+    "entityType": "country",
+    "entityId": "ZW",
+    "countryIso": "ZW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Zimbabwe (ZW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ZW",
+      "countryName": "Zimbabwe",
+      "authorityName": "Consular Affairs & Immigration Authority of Zimbabwe",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-BC9DCA7BD331",
+    "entityType": "country",
+    "entityId": "AZ",
+    "countryIso": "AZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Azerbaijan (AZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AZ",
+      "countryName": "Azerbaijan",
+      "authorityName": "Consular Affairs & Immigration Authority of Azerbaijan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-BF6BD17CE290",
+    "entityType": "country",
+    "entityId": "PY",
+    "countryIso": "PY",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Paraguay (PY). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PY",
+      "countryName": "Paraguay",
+      "authorityName": "Consular Affairs & Immigration Authority of Paraguay",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-BFC04D2A94A7",
+    "entityType": "country",
+    "entityId": "AD",
+    "countryIso": "AD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Andorra (AD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AD",
+      "countryName": "Andorra",
+      "authorityName": "Consular Affairs & Immigration Authority of Andorra",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-C12EF4BC3F87",
+    "entityType": "country",
+    "entityId": "BJ",
+    "countryIso": "BJ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Benin (BJ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BJ",
+      "countryName": "Benin",
+      "authorityName": "Consular Affairs & Immigration Authority of Benin",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-C2EB6DBDC051",
+    "entityType": "country",
+    "entityId": "SB",
+    "countryIso": "SB",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Solomon Islands (SB). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SB",
+      "countryName": "Solomon Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Solomon Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-C6005074486F",
+    "entityType": "country",
+    "entityId": "RS",
+    "countryIso": "RS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Serbia (RS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "RS",
+      "countryName": "Serbia",
+      "authorityName": "Consular Affairs & Immigration Authority of Serbia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-C9869B11D97B",
+    "entityType": "country",
+    "entityId": "TR",
+    "countryIso": "TR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Turkey (TR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TR",
+      "countryName": "Turkey",
+      "authorityName": "Consular Affairs & Immigration Authority of Turkey",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CA259D247523",
+    "entityType": "country",
+    "entityId": "NI",
+    "countryIso": "NI",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Nicaragua (NI). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NI",
+      "countryName": "Nicaragua",
+      "authorityName": "Consular Affairs & Immigration Authority of Nicaragua",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CABD8B6E580E",
+    "entityType": "country",
+    "entityId": "PL",
+    "countryIso": "PL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Poland (PL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PL",
+      "countryName": "Poland",
+      "authorityName": "Consular Affairs & Immigration Authority of Poland",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CB33DC257BBB",
+    "entityType": "country",
+    "entityId": "FM",
+    "countryIso": "FM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Micronesia (FM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "FM",
+      "countryName": "Micronesia",
+      "authorityName": "Consular Affairs & Immigration Authority of Micronesia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CC09580352C8",
+    "entityType": "country",
+    "entityId": "GD",
+    "countryIso": "GD",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Grenada (GD). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GD",
+      "countryName": "Grenada",
+      "authorityName": "Consular Affairs & Immigration Authority of Grenada",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CC1C369C49F9",
+    "entityType": "country",
+    "entityId": "DK",
+    "countryIso": "DK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Denmark (DK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "DK",
+      "countryName": "Denmark",
+      "authorityName": "Consular Affairs & Immigration Authority of Denmark",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CCF2197C4588",
+    "entityType": "country",
+    "entityId": "RE",
+    "countryIso": "RE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Reunion (RE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "RE",
+      "countryName": "Reunion",
+      "authorityName": "Consular Affairs & Immigration Authority of Reunion",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CD0691963376",
+    "entityType": "country",
+    "entityId": "IE",
+    "countryIso": "IE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Ireland (IE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "IE",
+      "countryName": "Ireland",
+      "authorityName": "Consular Affairs & Immigration Authority of Ireland",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-CD14FDB6456E",
+    "entityType": "country",
+    "entityId": "AX",
+    "countryIso": "AX",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Aland Islands (AX). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AX",
+      "countryName": "Aland Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Aland Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-D0A0279E8F1A",
+    "entityType": "country",
+    "entityId": "DM",
+    "countryIso": "DM",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Dominica (DM). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "DM",
+      "countryName": "Dominica",
+      "authorityName": "Consular Affairs & Immigration Authority of Dominica",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-D208F8B595CE",
+    "entityType": "country",
+    "entityId": "PN",
+    "countryIso": "PN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Pitcairn (PN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PN",
+      "countryName": "Pitcairn",
+      "authorityName": "Consular Affairs & Immigration Authority of Pitcairn",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-D2E0DF2BF6C5",
+    "entityType": "country",
+    "entityId": "MK",
+    "countryIso": "MK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for North Macedonia (MK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MK",
+      "countryName": "North Macedonia",
+      "authorityName": "Consular Affairs & Immigration Authority of North Macedonia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-D62C1D79F807",
+    "entityType": "country",
+    "entityId": "TO",
+    "countryIso": "TO",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Tonga (TO). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TO",
+      "countryName": "Tonga",
+      "authorityName": "Consular Affairs & Immigration Authority of Tonga",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-D75E8507B41F",
+    "entityType": "country",
+    "entityId": "NP",
+    "countryIso": "NP",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Nepal (NP). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NP",
+      "countryName": "Nepal",
+      "authorityName": "Consular Affairs & Immigration Authority of Nepal",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-DBCB53C654AA",
+    "entityType": "country",
+    "entityId": "MR",
+    "countryIso": "MR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mauritania (MR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MR",
+      "countryName": "Mauritania",
+      "authorityName": "Consular Affairs & Immigration Authority of Mauritania",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-DBFCB394ECA5",
+    "entityType": "country",
+    "entityId": "ZA",
+    "countryIso": "ZA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for South Africa (ZA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ZA",
+      "countryName": "South Africa",
+      "authorityName": "Consular Affairs & Immigration Authority of South Africa",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-DCCE21E6D4FB",
+    "entityType": "country",
+    "entityId": "NL",
+    "countryIso": "NL",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Netherlands (NL). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NL",
+      "countryName": "Netherlands",
+      "authorityName": "Consular Affairs & Immigration Authority of Netherlands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-DFD2C70D2DAF",
+    "entityType": "country",
+    "entityId": "HT",
+    "countryIso": "HT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Haiti (HT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "HT",
+      "countryName": "Haiti",
+      "authorityName": "Consular Affairs & Immigration Authority of Haiti",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E0A9790C6037",
+    "entityType": "country",
+    "entityId": "MG",
+    "countryIso": "MG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Madagascar (MG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MG",
+      "countryName": "Madagascar",
+      "authorityName": "Consular Affairs & Immigration Authority of Madagascar",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E0AC233ED2A6",
+    "entityType": "country",
+    "entityId": "NR",
+    "countryIso": "NR",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Nauru (NR). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NR",
+      "countryName": "Nauru",
+      "authorityName": "Consular Affairs & Immigration Authority of Nauru",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E15FC17FC807",
+    "entityType": "country",
+    "entityId": "TG",
+    "countryIso": "TG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Togo (TG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "TG",
+      "countryName": "Togo",
+      "authorityName": "Consular Affairs & Immigration Authority of Togo",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E3AD50792D9E",
+    "entityType": "country",
+    "entityId": "LU",
+    "countryIso": "LU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Luxembourg (LU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LU",
+      "countryName": "Luxembourg",
+      "authorityName": "Consular Affairs & Immigration Authority of Luxembourg",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E4DE948F56CD",
+    "entityType": "country",
+    "entityId": "WS",
+    "countryIso": "WS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Samoa (WS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "WS",
+      "countryName": "Samoa",
+      "authorityName": "Consular Affairs & Immigration Authority of Samoa",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E57A092A505C",
+    "entityType": "country",
+    "entityId": "HN",
+    "countryIso": "HN",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Honduras (HN). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "HN",
+      "countryName": "Honduras",
+      "authorityName": "Consular Affairs & Immigration Authority of Honduras",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E58A23CD8DE4",
+    "entityType": "country",
+    "entityId": "SZ",
+    "countryIso": "SZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Eswatini (SZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "SZ",
+      "countryName": "Eswatini",
+      "authorityName": "Consular Affairs & Immigration Authority of Eswatini",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E6FFE9A59373",
+    "entityType": "country",
+    "entityId": "BH",
+    "countryIso": "BH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Bahrain (BH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BH",
+      "countryName": "Bahrain",
+      "authorityName": "Consular Affairs & Immigration Authority of Bahrain",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-E9E16A035D9D",
+    "entityType": "country",
+    "entityId": "VC",
+    "countryIso": "VC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for St Vincent & Grenadines (VC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VC",
+      "countryName": "St Vincent & Grenadines",
+      "authorityName": "Consular Affairs & Immigration Authority of St Vincent & Grenadines",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-EA3909C55CFC",
+    "entityType": "country",
+    "entityId": "KG",
+    "countryIso": "KG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Kyrgyzstan (KG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "KG",
+      "countryName": "Kyrgyzstan",
+      "authorityName": "Consular Affairs & Immigration Authority of Kyrgyzstan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-EADE18489A59",
+    "entityType": "country",
+    "entityId": "UZ",
+    "countryIso": "UZ",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Uzbekistan (UZ). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "UZ",
+      "countryName": "Uzbekistan",
+      "authorityName": "Consular Affairs & Immigration Authority of Uzbekistan",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-EC4D68AFC7D7",
+    "entityType": "country",
+    "entityId": "NC",
+    "countryIso": "NC",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for New Caledonia (NC). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NC",
+      "countryName": "New Caledonia",
+      "authorityName": "Consular Affairs & Immigration Authority of New Caledonia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-EC941B064BA5",
+    "entityType": "country",
+    "entityId": "MH",
+    "countryIso": "MH",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Marshall Islands (MH). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MH",
+      "countryName": "Marshall Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Marshall Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-EE1F235A3FCF",
+    "entityType": "country",
+    "entityId": "GU",
+    "countryIso": "GU",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guam (GU). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GU",
+      "countryName": "Guam",
+      "authorityName": "Consular Affairs & Immigration Authority of Guam",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F1A1669BB13D",
+    "entityType": "country",
+    "entityId": "VA",
+    "countryIso": "VA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Vatican City (VA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "VA",
+      "countryName": "Vatican City",
+      "authorityName": "Consular Affairs & Immigration Authority of Vatican City",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F1D8C219388D",
+    "entityType": "country",
+    "entityId": "PS",
+    "countryIso": "PS",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Palestine (PS). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "PS",
+      "countryName": "Palestine",
+      "authorityName": "Consular Affairs & Immigration Authority of Palestine",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F26ACF00DDB6",
+    "entityType": "country",
+    "entityId": "LV",
+    "countryIso": "LV",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Latvia (LV). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "LV",
+      "countryName": "Latvia",
+      "authorityName": "Consular Affairs & Immigration Authority of Latvia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F45D80F1C244",
+    "entityType": "country",
+    "entityId": "RW",
+    "countryIso": "RW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Rwanda (RW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "RW",
+      "countryName": "Rwanda",
+      "authorityName": "Consular Affairs & Immigration Authority of Rwanda",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F51CD957F4AA",
+    "entityType": "country",
+    "entityId": "ET",
+    "countryIso": "ET",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Ethiopia (ET). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "authorityName": "Consular Affairs & Immigration Authority of Ethiopia",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F5237B361B91",
+    "entityType": "country",
+    "entityId": "YT",
+    "countryIso": "YT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Mayotte (YT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "YT",
+      "countryName": "Mayotte",
+      "authorityName": "Consular Affairs & Immigration Authority of Mayotte",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F752F13F0348",
+    "entityType": "country",
+    "entityId": "AT",
+    "countryIso": "AT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Austria (AT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AT",
+      "countryName": "Austria",
+      "authorityName": "Consular Affairs & Immigration Authority of Austria",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-F9D683DFC12F",
+    "entityType": "country",
+    "entityId": "MT",
+    "countryIso": "MT",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Malta (MT). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "MT",
+      "countryName": "Malta",
+      "authorityName": "Consular Affairs & Immigration Authority of Malta",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FA2C1123785D",
+    "entityType": "country",
+    "entityId": "NE",
+    "countryIso": "NE",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Niger (NE). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "NE",
+      "countryName": "Niger",
+      "authorityName": "Consular Affairs & Immigration Authority of Niger",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FA7A925F018A",
+    "entityType": "country",
+    "entityId": "CX",
+    "countryIso": "CX",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Christmas Island (CX). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "CX",
+      "countryName": "Christmas Island",
+      "authorityName": "Consular Affairs & Immigration Authority of Christmas Island",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FAC74568AC0A",
+    "entityType": "country",
+    "entityId": "UA",
+    "countryIso": "UA",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Ukraine (UA). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "UA",
+      "countryName": "Ukraine",
+      "authorityName": "Consular Affairs & Immigration Authority of Ukraine",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FBA6E134FF61",
+    "entityType": "country",
+    "entityId": "GW",
+    "countryIso": "GW",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Guinea-Bissau (GW). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "GW",
+      "countryName": "Guinea-Bissau",
+      "authorityName": "Consular Affairs & Immigration Authority of Guinea-Bissau",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FCB15752B989",
+    "entityType": "country",
+    "entityId": "AG",
+    "countryIso": "AG",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Antigua & Barbuda (AG). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "AG",
+      "countryName": "Antigua & Barbuda",
+      "authorityName": "Consular Affairs & Immigration Authority of Antigua & Barbuda",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FD3946228B0D",
+    "entityType": "country",
+    "entityId": "BB",
+    "countryIso": "BB",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Barbados (BB). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "BB",
+      "countryName": "Barbados",
+      "authorityName": "Consular Affairs & Immigration Authority of Barbados",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-COUNTRY-FEA397ADCA22",
+    "entityType": "country",
+    "entityId": "FK",
+    "countryIso": "FK",
+    "verificationStatus": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonCode": "AWAITING_OFFICIAL_VERIFICATION",
+    "reasonSummary": "No verified primary government HTTPS URL in officialSourceRegistry for Falkland Islands (FK). Preserved without fabrication.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "countryCode": "FK",
+      "countryName": "Falkland Islands",
+      "authorityName": "Consular Affairs & Immigration Authority of Falkland Islands",
+      "verificationTier": "Tier-2 Consular / Foreign Affairs",
+      "sourceAccessStatus": "AWAITING_OFFICIAL_SOURCE_VERIFICATION"
+    }
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "quarantineId": "QRN-PROGRAM-EFC6CF28F022",
+    "entityType": "program",
+    "entityId": "pt-golden-visa-expired-realestate",
+    "countryIso": "PT",
+    "verificationStatus": "EXPIRED",
+    "reasonCode": "EXPIRED_PROGRAM",
+    "reasonSummary": "Excluded from public publishable catalog: publicationStatus is \"QUARANTINED\" (must be \"PUBLISHED\"). verificationStatus \"EXPIRED\" is not publishable. Missing lastVerifiedDate.",
+    "quarantinedAt": "2026-11-10T00:00:00Z",
+    "recoverable": true,
+    "preservedPayload": {
+      "schemaVersion": "2.0.0",
+      "programId": "pt-golden-visa-expired-realestate",
+      "destinationCountryIso": "PT",
+      "programName": "Portugal Golden Visa (Real Estate Scheme - EXPIRED)",
+      "localLanguageName": "ARI - Autorização de Residência para Atividade de Investimento (Imobiliário)",
+      "immigrationCategory": "business",
+      "programType": "Expired Scheme",
+      "eligibilitySummary": "Real estate investment pathway officially revoked. Investment funds (€500k+) and cultural donations remain active.",
+      "officialSourceRefs": [
+        {
+          "sourceId": "SRC-PT-AIMA-PORTUGAL-ASSEMBLEIA-DA-REPUBLICA",
+          "url": "https://aima.gov.pt/en/autorizacoes-de-residencia/investimento",
+          "title": "AIMA Portugal & Assembleia da República — Information"
+        },
+        {
+          "sourceId": "SRC-PT-AIMA-PORTUGAL-ASSEMBLEIA-DA-REPUBLICA",
+          "url": "https://aima.gov.pt/en/",
+          "title": "AIMA Portugal & Assembleia da República — Application Portal"
+        }
+      ],
+      "verificationStatus": "EXPIRED",
+      "createdDate": "2023-10-07",
+      "lastVerifiedDate": null,
+      "lastUpdatedDate": "2026-11-10",
+      "publicationStatus": "QUARANTINED",
+      "legalBasis": "Lei n.º 56/2023 (Mais Habitação) amending Lei n.º 23/2007 Article 90-A",
+      "applyFrom": "Offshore"
+    }
+  }
+]

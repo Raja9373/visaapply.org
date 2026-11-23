@@ -1,0 +1,55 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "pt-d7-passive-income",
+    "destinationCountryIso": "PT",
+    "programName": "Portugal D7 Passive Income & Retirement Residence Visa",
+    "localLanguageName": "Visto D7 - Residência por Rendimentos Próprios (Art. 58.º Lei 23/2007)",
+    "immigrationCategory": "digital_nomad",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Non-EU nationals with stable, verifiable PASSIVE income (pensions, real estate rental, dividends, royalties) meeting means-of-subsistence criteria under Portaria n.º 1563/2007 based on the 2026 Portuguese minimum wage (€920/month). Correctly classified as Passive Income/Retirement (D8 is the separate Digital Nomad visa).",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-PT-MINISTRY-OF-FOREIGN-AFFAIRS-MNE-AIMA",
+        "url": "https://vistos.mne.gov.pt/en/national-visas/residence-permits/retirement-or-religious-purposes",
+        "title": "Ministry of Foreign Affairs (MNE) & AIMA Portugal — Information"
+      },
+      {
+        "sourceId": "SRC-PT-MINISTRY-OF-FOREIGN-AFFAIRS-MNE-AIMA",
+        "url": "https://vistos.mne.gov.pt/en/",
+        "title": "Ministry of Foreign Affairs (MNE) & AIMA Portugal — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-15",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Portuguese Foreigners Act (Lei n.º 23/2007, de 4 de julho), Article 58(1), Portaria n.º 1563/2007, de 11 de dezembro (Artigo 2.º) & Decreto-Lei n.º 107/2023",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "pt-d8-digital-nomad",
+    "destinationCountryIso": "PT",
+    "programName": "Portugal D8 Digital Nomad Visa (Remote Work Visa)",
+    "localLanguageName": "Visto D8 - Trabalho Remoto (Nomadas Digitais)",
+    "immigrationCategory": "digital_nomad",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Remote employees or independent freelancers working remotely for foreign clients/employers located outside Portugal.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-PT-MINISTRY-OF-FOREIGN-AFFAIRS-MNE-AIMA",
+        "url": "https://vistos.mne.gov.pt/en/national-visas/residence-permits/remote-work",
+        "title": "Ministry of Foreign Affairs (MNE) & AIMA Portugal — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-01",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Portuguese Foreigners Act (Lei n.º 23/2007 amendment Lei n.º 18/2022) & Article 61.º-B",
+    "applyFrom": "Offshore"
+  }
+]

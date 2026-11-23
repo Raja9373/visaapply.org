@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "GB",
+  "slug": "gb",
+  "countryName": "United Kingdom",
+  "localizedNames": {
+    "en": "United Kingdom"
+  },
+  "officialCountryDomain": "gov.uk",
+  "immigrationAuthorityRefs": [
+    "SRC-GB-CONSULAR-PORTAL",
+    "SRC-GB-LEGISLATION-GAZETTE",
+    "SRC-GB-UK-HOME-OFFICE",
+    "SRC-GB-UK-HOME-OFFICE-UK-VISAS-AND-IMMIGRATION",
+    "SRC-GB-UK-HOME-OFFICE-UKVI",
+    "SRC-GB-UK-HOME-OFFICE-VISAS-AND-IMMIGRATION"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "business",
+    "family",
+    "work"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇬🇧",
+  "continent": "europe",
+  "notes": null
+}

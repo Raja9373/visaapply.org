@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "SG",
+  "slug": "sg",
+  "countryName": "Singapore",
+  "localizedNames": {
+    "en": "Singapore"
+  },
+  "officialCountryDomain": "mom.gov.sg",
+  "immigrationAuthorityRefs": [
+    "SRC-SG-CONSULAR-PORTAL",
+    "SRC-SG-IMMIGRATION-CHECKPOINTS-AUTHORITY-ICA-MINI",
+    "SRC-SG-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇸🇬",
+  "continent": "asia",
+  "notes": null
+}

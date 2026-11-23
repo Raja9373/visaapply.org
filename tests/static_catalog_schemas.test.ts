@@ -927,13 +927,15 @@ test('17b. Public PII & secret scanner detects emails, DB URIs, API keys, PEM ke
   assert.ok(findings.length >= 6, `Expected >= 6 security findings, got ${findings.length}`);
 });
 
-test('17c. Phase 2 canonical data/ directory skeleton exists with bulkMigrationExecuted=false', () => {
+test('17c. Canonical data/ directory layout and schema_manifest.json integrity', () => {
   const manifestPath = path.resolve(process.cwd(), 'data/schema_manifest.json');
   assert.equal(fs.existsSync(manifestPath), true);
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   assert.equal(manifest.schemaVersion, STATIC_CATALOG_SCHEMA_VERSION);
-  assert.equal(manifest.phase, 'PHASE_2_SKELETON_ONLY');
-  assert.equal(manifest.bulkMigrationExecuted, false);
+  assert.ok(
+    manifest.phase === 'PHASE_2_SKELETON_ONLY' || manifest.phase === 'PHASE_3_STATIC_CATALOG_POPULATED',
+    `Unexpected schema_manifest phase: ${String(manifest.phase)}`
+  );
 
   const requiredDirs = [
     'data/countries',
@@ -950,8 +952,6 @@ test('17c. Phase 2 canonical data/ directory skeleton exists with bulkMigrationE
 
   for (const rel of requiredDirs) {
     const abs = path.resolve(process.cwd(), rel);
-    assert.equal(fs.existsSync(abs), true, `Missing required skeleton directory: ${rel}`);
-    const entries = fs.readdirSync(abs).filter((f) => f !== '.gitkeep' && !fs.statSync(path.join(abs, f)).isDirectory());
-    assert.equal(entries.length, 0, `Phase 2 skeleton directory "${rel}" must not contain bulk migrated files yet`);
+    assert.equal(fs.existsSync(abs), true, `Missing required canonical directory: ${rel}`);
   }
 });

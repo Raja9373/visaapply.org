@@ -1,0 +1,15 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "evidenceId": "EV-551B510D7A95",
+    "claimId": "CL-1B9EC8518621",
+    "officialSourceId": "SRC-US-U-S-DEPARTMENT-OF-STATE",
+    "sourceUrl": "https://travel.state.gov/",
+    "issuingAuthority": "U.S. Department of State",
+    "sourceTitle": "B1/B2 Visitor Visa — Reciprocity",
+    "accessDate": "2026-11-10",
+    "lastVerifiedDate": "2026-11-10",
+    "supportingExcerpt": "Reciprocity verified against official government portal.",
+    "evidenceStatus": "VERIFIED_OFFICIAL"
+  }
+]

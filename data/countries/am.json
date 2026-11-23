@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "AM",
+  "slug": "am",
+  "countryName": "Armenia",
+  "localizedNames": {
+    "en": "Armenia"
+  },
+  "officialCountryDomain": "am",
+  "immigrationAuthorityRefs": [],
+  "supportedLanguages": [
+    "en",
+    "ru",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "QUARANTINED",
+  "flag": "🇦🇲",
+  "continent": "middle_east",
+  "notes": "Awaiting primary sovereign official-source verification; no unverified URLs fabricated."
+}

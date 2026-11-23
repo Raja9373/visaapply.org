@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "FR",
+  "slug": "fr",
+  "countryName": "France",
+  "localizedNames": {
+    "en": "France"
+  },
+  "officialCountryDomain": "administration-etrangers-en-france.interieur.gouv.fr",
+  "immigrationAuthorityRefs": [
+    "SRC-FR-CONSULAR-PORTAL",
+    "SRC-FR-LEGISLATION-GAZETTE",
+    "SRC-FR-MINISTRY-OF-THE-INTERIOR-OVERSEAS-FRANCE-ANEF",
+    "SRC-FR-MINISTRY-OF-THE-INTERIOR-PREFECTURES-O"
+  ],
+  "supportedLanguages": [
+    "en",
+    "fr",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "work"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇫🇷",
+  "continent": "europe",
+  "notes": null
+}

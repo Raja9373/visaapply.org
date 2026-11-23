@@ -1,0 +1,74 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "de-eu-blue-card",
+    "destinationCountryIso": "DE",
+    "programName": "Germany EU Blue Card (Blaue Karte EU)",
+    "localLanguageName": "Blaue Karte EU (§ 18g AufenthG)",
+    "immigrationCategory": "work",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Foreign university degree or 3+ years IT professional experience with a German job offer meeting the annual gross salary threshold.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-DE-FEDERAL-EMPLOYMENT-AGENCY-BA-BAMF",
+        "url": "https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card",
+        "title": "Federal Employment Agency (BA) & BAMF — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-01",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "German Residence Act (Aufenthaltsgesetz - AufenthG) § 18g & EU Directive 2021/1883",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "de-family-reunification",
+    "destinationCountryIso": "DE",
+    "programName": "Germany Family Reunification Visa (Familienzusammenführung)",
+    "localLanguageName": "Visum zur Familienzusammenführung (§§ 27-36 AufenthG)",
+    "immigrationCategory": "family",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Spouse, registered partner, or minor child of a German citizen or foreign resident holding a valid German residence permit (EU Blue Card, Skilled Worker, Settlement Permit).",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-DE-BAMF-GERMAN-FEDERAL-FOREIGN-OFFICE",
+        "url": "https://www.make-it-in-germany.com/en/living-in-germany/family-reunification",
+        "title": "BAMF & German Federal Foreign Office — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-01-25",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "German Residence Act (Aufenthaltsgesetz - AufenthG) §§ 27, 28, 29, 30, 32",
+    "applyFrom": "Offshore"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "de-opportunity-card",
+    "destinationCountryIso": "DE",
+    "programName": "Opportunity Card Germany (Chancenkarte)",
+    "localLanguageName": "Chancenkarte zur Arbeitsplatzsuche (§ 20a AufenthG)",
+    "immigrationCategory": "work",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Points-based job seeker permit allowing qualified foreign workers to enter Germany for up to 1 year to seek qualified employment while working up to 20 hours/week part-time.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-DE-GERMAN-FEDERAL-FOREIGN-OFFICE-BAMF",
+        "url": "https://www.make-it-in-germany.com/en/visa-residence/types/opportunity-card",
+        "title": "German Federal Foreign Office & BAMF — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-01-10",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "German Residence Act (Aufenthaltsgesetz - AufenthG) §§ 20a & 20b",
+    "applyFrom": "Offshore"
+  }
+]

@@ -1,0 +1,118 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "uk-family-visa-spouse",
+    "destinationCountryIso": "GB",
+    "programName": "UK Family Visa - Spouse & Partner Route (Appendix FM)",
+    "localLanguageName": "UK Family Visa (Spouse / Partner)",
+    "immigrationCategory": "family",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Spouse, civil partner, or unmarried partner (living together for 2+ years) of a British citizen or settled person (ILR holder).",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE",
+        "url": "https://www.gov.uk/uk-family-visa",
+        "title": "UK Home Office — Information"
+      },
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE",
+        "url": "https://www.gov.uk/uk-family-visa/partner-spouse",
+        "title": "UK Home Office — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-01",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "UK Immigration Rules Appendix FM (Family Members) & Appendix FM-SE",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "uk-innovator-founder",
+    "destinationCountryIso": "GB",
+    "programName": "Innovator Founder Visa",
+    "localLanguageName": "Innovator Founder Visa",
+    "immigrationCategory": "business",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Innovative, viable, and scalable business idea endorsed by an approved UK Endorsing Body.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE",
+        "url": "https://www.gov.uk/innovator-founder-visa",
+        "title": "UK Home Office — Information"
+      },
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE",
+        "url": "https://www.gov.uk/innovator-founder-visa/apply",
+        "title": "UK Home Office — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-01-20",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "UK Immigration Rules Appendix Innovator Founder",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "uk-skilled-worker",
+    "destinationCountryIso": "GB",
+    "programName": "UK Skilled Worker Visa",
+    "localLanguageName": "UK Skilled Worker Visa",
+    "immigrationCategory": "work",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Job offer from a Home Office-licensed sponsor at eligible SOC 2020 skill level meeting salary thresholds.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE-UK-VISAS-AND-IMMIGRATION",
+        "url": "https://www.gov.uk/skilled-worker-visa",
+        "title": "UK Home Office (UK Visas and Immigration) — Information"
+      },
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE-UK-VISAS-AND-IMMIGRATION",
+        "url": "https://www.gov.uk/skilled-worker-visa/apply",
+        "title": "UK Home Office (UK Visas and Immigration) — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-15",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "UK Immigration Rules Appendix Skilled Worker & Immigration Act 1971",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "uk-youth-mobility-scheme",
+    "destinationCountryIso": "GB",
+    "programName": "UK Youth Mobility Scheme Visa (T5 / Appendix Youth Mobility)",
+    "localLanguageName": "UK Youth Mobility Scheme Visa",
+    "immigrationCategory": "work",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Young adults aged 18 to 30 (or 18 to 35 for Australia, Canada, New Zealand, and South Korea passport holders) to live and work in the UK for up to 2 years (3 years for AU/CA/NZ).",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE-UKVI",
+        "url": "https://www.gov.uk/youth-mobility",
+        "title": "UK Home Office (UKVI) — Information"
+      },
+      {
+        "sourceId": "SRC-GB-UK-HOME-OFFICE-UKVI",
+        "url": "https://www.gov.uk/youth-mobility/apply",
+        "title": "UK Home Office (UKVI) — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-01-15",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "UK Immigration Rules Appendix Youth Mobility Scheme",
+    "applyFrom": "Offshore"
+  }
+]

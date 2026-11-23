@@ -1,0 +1,41 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AU-AUSTRALIAN-DEPARTMENT-OF-HOME-AFFAIRS",
+    "countryIso": "AU",
+    "issuingAuthority": "Australian Department of Home Affairs",
+    "officialOrganizationName": "Australian Department of Home Affairs",
+    "officialHttpsUrl": "https://immi.homeaffairs.gov.au/",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AU-CONSULAR-PORTAL",
+    "countryIso": "AU",
+    "issuingAuthority": "Australian Department of Home Affairs — Consular Portal",
+    "officialOrganizationName": "Australian Department of Home Affairs",
+    "officialHttpsUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AU-LEGISLATION-GAZETTE",
+    "countryIso": "AU",
+    "issuingAuthority": "Australian Department of Home Affairs — Official Legislation",
+    "officialOrganizationName": "Australian Department of Home Affairs",
+    "officialHttpsUrl": "https://www.legislation.gov.au/Series/F1996B03551",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "2.0.0",
+  "sourceBackupSha256": "827494c04201f9ea4adcd7530566f41e9c7f091c1507b59abd95b1d8d7fb4e03",
+  "lastBatchRunDate": "2026-11-11",
+  "currentBatchIndex": 1,
+  "totalBatches": 10,
+  "batchSize": 25,
+  "batchCompletionStatus": "Active",
+  "coverageMetrics": {
+    "coverageSlotsCount": 1743,
+    "discoveredProgramsCount": 29,
+    "verifiedAvailableProgramsCount": 28,
+    "confirmedNotAvailableCount": 7,
+    "quarantinedOrPendingCount": 229,
+    "asOfDate": "2026-11-11"
+  }
+}

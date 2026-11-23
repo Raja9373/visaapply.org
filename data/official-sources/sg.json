@@ -1,0 +1,41 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-SG-CONSULAR-PORTAL",
+    "countryIso": "SG",
+    "issuingAuthority": "Immigration & Checkpoints Authority (ICA) & Ministry of Manpower (MOM) — Consular Portal",
+    "officialOrganizationName": "Immigration & Checkpoints Authority (ICA) & Ministry of Manpower (MOM)",
+    "officialHttpsUrl": "https://www.mom.gov.sg/passes-and-permits",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-SG-IMMIGRATION-CHECKPOINTS-AUTHORITY-ICA-MINI",
+    "countryIso": "SG",
+    "issuingAuthority": "Immigration & Checkpoints Authority (ICA) & Ministry of Manpower (MOM)",
+    "officialOrganizationName": "Immigration & Checkpoints Authority (ICA) & Ministry of Manpower (MOM)",
+    "officialHttpsUrl": "https://www.ica.gov.sg/",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-SG-LEGISLATION-GAZETTE",
+    "countryIso": "SG",
+    "issuingAuthority": "Immigration & Checkpoints Authority (ICA) & Ministry of Manpower (MOM) — Official Legislation",
+    "officialOrganizationName": "Immigration & Checkpoints Authority (ICA) & Ministry of Manpower (MOM)",
+    "officialHttpsUrl": "https://sso.agc.gov.sg/Act/IA1959",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  }
+]

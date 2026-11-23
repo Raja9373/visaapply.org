@@ -1,0 +1,339 @@
+{
+  "schemaVersion": "2.0.0",
+  "artifactRole": "GENERATED_STATIC_CATALOG_INDEXES",
+  "authoritativeSourceDir": "data/",
+  "deterministicBuildHash": "0224697ee3466f4b6e73cebdbb5297c34d87f31f612fe387e04c506e64e33ffa",
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "legalContentLanguages": [
+    "en"
+  ],
+  "counts": {
+    "countriesInDirectory": 249,
+    "activeVerifiedCountries": 14,
+    "publishedPrograms": 28,
+    "categoriesWithPrograms": 7,
+    "verifiedOfficialSources": 61,
+    "verifiedRouteOverrides": 3,
+    "publishedVisaDetails": 1,
+    "publishedEditorialArticles": 2,
+    "changelogEntries": 8,
+    "languageSearchIndexes": 15,
+    "lazyCountryChunks": 14,
+    "lazyVisaDetailChunks": 1
+  },
+  "indexes": {
+    "countries": {
+      "logicalId": "index:countries",
+      "filePath": "index-countries.7a9ed9bf96.json",
+      "sha256": "7a9ed9bf963459afd93300a25564fc9845633ecbd7a20861f540120ea9e805a3",
+      "bytes": 47987,
+      "gzipBytes": 4915
+    },
+    "programs": {
+      "logicalId": "index:programs",
+      "filePath": "index-programs.52b20ae611.json",
+      "sha256": "52b20ae6116686fac45a058251c29f2b35da1758aeb9cdef9cdb4bb7d55109e1",
+      "bytes": 11519,
+      "gzipBytes": 2633
+    },
+    "categories": {
+      "logicalId": "index:categories",
+      "filePath": "index-categories.36bdfc503c.json",
+      "sha256": "36bdfc503cf11c0acf16ad47fef705c573c5db76788f196e280213b6c1b0b7d9",
+      "bytes": 1150,
+      "gzipBytes": 523
+    },
+    "routes": {
+      "logicalId": "index:routes",
+      "filePath": "index-routes.e6fd26de57.json",
+      "sha256": "e6fd26de573cae6a83372c2f68261a5899cf582db99caa9f8ecc698ac76f4555",
+      "bytes": 1261,
+      "gzipBytes": 642
+    },
+    "officialSources": {
+      "logicalId": "index:official-sources",
+      "filePath": "index-official-sources.ff90dc5baa.json",
+      "sha256": "ff90dc5baab594bb12f7b622a0c12617f715cb9878c12fd166146ed9f1779a42",
+      "bytes": 17840,
+      "gzipBytes": 3195
+    },
+    "changelog": {
+      "logicalId": "index:changelog",
+      "filePath": "index-changelog.cc564843ff.json",
+      "sha256": "cc564843ff0c7a57e4327304a411c4515cfb74b7458e734871210151e1ae7336",
+      "bytes": 5586,
+      "gzipBytes": 1808
+    },
+    "editorial": {
+      "logicalId": "index:editorial",
+      "filePath": "index-editorial.fcbe849727.json",
+      "sha256": "fcbe849727b9f80244d60911d8de73dd88a4b0e960a5e6f4266546232d2426fa",
+      "bytes": 1069,
+      "gzipBytes": 443
+    },
+    "searchByLanguage": {
+      "en": {
+        "logicalId": "index:search:en",
+        "filePath": "search/search-en.885f126769.json",
+        "sha256": "885f126769936d204cfde9e1cfe056bea083a52aa77f8a3264245e30fc0cde45",
+        "bytes": 38771,
+        "gzipBytes": 5622
+      },
+      "hi": {
+        "logicalId": "index:search:hi",
+        "filePath": "search/search-hi.f567c096e2.json",
+        "sha256": "f567c096e2458cc8f2a5ca57e9d2ce92991a8e4b614162a1f72f1df76b46e094",
+        "bytes": 39183,
+        "gzipBytes": 5897
+      },
+      "de": {
+        "logicalId": "index:search:de",
+        "filePath": "search/search-de.0782eab02d.json",
+        "sha256": "0782eab02d5468203ecef66fe38d8c7b45ef759dcd2088c6080443f24f9681b3",
+        "bytes": 38887,
+        "gzipBytes": 5734
+      },
+      "es": {
+        "logicalId": "index:search:es",
+        "filePath": "search/search-es.975fb35adf.json",
+        "sha256": "975fb35adfb1a750ac322b6548cb2adb6519c7e76409cedb00c85b847ea6c0e7",
+        "bytes": 38899,
+        "gzipBytes": 5742
+      },
+      "pl": {
+        "logicalId": "index:search:pl",
+        "filePath": "search/search-pl.a6e042363a.json",
+        "sha256": "a6e042363a00f519ea748a7ce709bc160d95981c73acd6fe9113bd6d30aab4fd",
+        "bytes": 38873,
+        "gzipBytes": 5762
+      },
+      "fr": {
+        "logicalId": "index:search:fr",
+        "filePath": "search/search-fr.819cccb151.json",
+        "sha256": "819cccb151b8b81932255350fc9301ee831c194dca3f719576accedb7e913db1",
+        "bytes": 38919,
+        "gzipBytes": 5739
+      },
+      "ar": {
+        "logicalId": "index:search:ar",
+        "filePath": "search/search-ar.90d76e51c2.json",
+        "sha256": "90d76e51c214cb99950480a74191de0bc44de83dfb9814640adb2a4a8d3889c6",
+        "bytes": 39100,
+        "gzipBytes": 5877
+      },
+      "ru": {
+        "logicalId": "index:search:ru",
+        "filePath": "search/search-ru.7edd09fdfa.json",
+        "sha256": "7edd09fdfade9e619d0681bc175bc36d239c8996efcde7c82a08a2cfc7c432e4",
+        "bytes": 39143,
+        "gzipBytes": 5932
+      },
+      "zh": {
+        "logicalId": "index:search:zh",
+        "filePath": "search/search-zh.7e4c451742.json",
+        "sha256": "7e4c4517428a9898270e7b645265409c00421a8a469bbc0c1355bb601ddd0850",
+        "bytes": 38836,
+        "gzipBytes": 5864
+      },
+      "ja": {
+        "logicalId": "index:search:ja",
+        "filePath": "search/search-ja.0237a4835d.json",
+        "sha256": "0237a4835daf76cf357d2c0a6eb6761e94b3dd9ab69ffc1c2406a0f084e50ec1",
+        "bytes": 38930,
+        "gzipBytes": 5930
+      },
+      "pt": {
+        "logicalId": "index:search:pt",
+        "filePath": "search/search-pt.8a4f6f49a9.json",
+        "sha256": "8a4f6f49a9064a4cad710a0c7d6dc131d1f528491c1222ba3ba1af23205f6ca2",
+        "bytes": 38889,
+        "gzipBytes": 5726
+      },
+      "it": {
+        "logicalId": "index:search:it",
+        "filePath": "search/search-it.5ddd604722.json",
+        "sha256": "5ddd604722967a4417e7f3eb445e6f8900ae98bda242e656918207c2eb08801e",
+        "bytes": 38878,
+        "gzipBytes": 5710
+      },
+      "nl": {
+        "logicalId": "index:search:nl",
+        "filePath": "search/search-nl.0d010e8c96.json",
+        "sha256": "0d010e8c96daa6379c3f365d3bd5fbb9c4596e1be18554c23ec9b8d9ea70aa02",
+        "bytes": 38882,
+        "gzipBytes": 5720
+      },
+      "tr": {
+        "logicalId": "index:search:tr",
+        "filePath": "search/search-tr.7b121135bd.json",
+        "sha256": "7b121135bd42e9546d2fe4e31e76f90b960bb4f299542b2670703d7bd84fd1a3",
+        "bytes": 38886,
+        "gzipBytes": 5755
+      },
+      "ko": {
+        "logicalId": "index:search:ko",
+        "filePath": "search/search-ko.7201b69eba.json",
+        "sha256": "7201b69eba8db91ba4602a9b3363e59b286fb0e95cb25f6a030b5514f39f2d42",
+        "bytes": 38899,
+        "gzipBytes": 5878
+      }
+    }
+  },
+  "chunks": {
+    "countries": {
+      "ae": {
+        "logicalId": "chunk:country:ae",
+        "filePath": "chunks/countries/ae.d031b6c288.json",
+        "sha256": "d031b6c288652ca1e5a26fa7ca45668956408d6e077cc5f0c5861359297942ec",
+        "bytes": 6760,
+        "gzipBytes": 1978
+      },
+      "au": {
+        "logicalId": "chunk:country:au",
+        "filePath": "chunks/countries/au.e5a6fd9012.json",
+        "sha256": "e5a6fd9012695f5918daf6c0eb8652a564857429d5c511b3f8c4955d63adfcfe",
+        "bytes": 5272,
+        "gzipBytes": 1558
+      },
+      "ca": {
+        "logicalId": "chunk:country:ca",
+        "filePath": "chunks/countries/ca.918fa77ebc.json",
+        "sha256": "918fa77ebced44cc69ebaf94fc8593f0e764eebeb52093d4d3c2bbf9a99c9179",
+        "bytes": 8143,
+        "gzipBytes": 2041
+      },
+      "de": {
+        "logicalId": "chunk:country:de",
+        "filePath": "chunks/countries/de.1b79d72127.json",
+        "sha256": "1b79d721271cefc7442a4ba3353839312d379c0c0f4f2f7c600d6ab7f0fe420d",
+        "bytes": 7100,
+        "gzipBytes": 1815
+      },
+      "es": {
+        "logicalId": "chunk:country:es",
+        "filePath": "chunks/countries/es.f47365563c.json",
+        "sha256": "f47365563c0eb7295579e2c16aee1d796973fe2d71ed2283c8677b3355ff2738",
+        "bytes": 5404,
+        "gzipBytes": 1646
+      },
+      "fr": {
+        "logicalId": "chunk:country:fr",
+        "filePath": "chunks/countries/fr.42c5e46909.json",
+        "sha256": "42c5e46909cc7ff598bdddbefbf6072988adf955a76abf27ce8b13bac850c0bd",
+        "bytes": 4315,
+        "gzipBytes": 1402
+      },
+      "gb": {
+        "logicalId": "chunk:country:gb",
+        "filePath": "chunks/countries/gb.7e3580aa6e.json",
+        "sha256": "7e3580aa6e0f45145d73377c46f633966354df130259c3b2e9147a757b47a626",
+        "bytes": 7794,
+        "gzipBytes": 1804
+      },
+      "in": {
+        "logicalId": "chunk:country:in",
+        "filePath": "chunks/countries/in.a5bbe854fa.json",
+        "sha256": "a5bbe854faba76e80b06c0c720fe8d76ba49c4a67edc50e7a3f040be01a191eb",
+        "bytes": 2921,
+        "gzipBytes": 1066
+      },
+      "it": {
+        "logicalId": "chunk:country:it",
+        "filePath": "chunks/countries/it.a7cbff0673.json",
+        "sha256": "a7cbff0673adbc5597889abb6a70d1f327df1fbf87a8dc496c92de7d0b5cc593",
+        "bytes": 2425,
+        "gzipBytes": 847
+      },
+      "jp": {
+        "logicalId": "chunk:country:jp",
+        "filePath": "chunks/countries/jp.f71c36f87a.json",
+        "sha256": "f71c36f87a1cf1eb2c70f94da5c9d78a0ba1b1bc15370ad4cbfbdce785a03dad",
+        "bytes": 2313,
+        "gzipBytes": 821
+      },
+      "nz": {
+        "logicalId": "chunk:country:nz",
+        "filePath": "chunks/countries/nz.3475c3bdcc.json",
+        "sha256": "3475c3bdcc17aaf57b48eb509898bd7aa726cb5f337fcec6b0185ba9f30a592d",
+        "bytes": 2158,
+        "gzipBytes": 793
+      },
+      "pt": {
+        "logicalId": "chunk:country:pt",
+        "filePath": "chunks/countries/pt.285256d90d.json",
+        "sha256": "285256d90de252413ec1c4e7de0c411f6c4e38e61ccd3cb90af23793eccb52f7",
+        "bytes": 6033,
+        "gzipBytes": 1791
+      },
+      "sg": {
+        "logicalId": "chunk:country:sg",
+        "filePath": "chunks/countries/sg.305c29fd16.json",
+        "sha256": "305c29fd16e2444fc055c07cc2d082d29fd3ffdd3011e75799d5cb646a2df76c",
+        "bytes": 2359,
+        "gzipBytes": 816
+      },
+      "us": {
+        "logicalId": "chunk:country:us",
+        "filePath": "chunks/countries/us.677bae6b06.json",
+        "sha256": "677bae6b06e28ddf4eb7456cb1acf4fc9b620148e5769dfa6e59b171ff003130",
+        "bytes": 14362,
+        "gzipBytes": 3034
+      }
+    },
+    "visaDetails": {
+      "us-TOU-001": {
+        "logicalId": "chunk:visa-detail:us-TOU-001",
+        "filePath": "chunks/visa-details/us-TOU-001.d5940a745a.json",
+        "sha256": "d5940a745a3da05616b853b0c15b89a9eb1a1378e708731099f8d4203d042786",
+        "bytes": 2713,
+        "gzipBytes": 1181
+      }
+    },
+    "routeOverrides": {
+      "ae": {
+        "logicalId": "chunk:route-override:ae",
+        "filePath": "chunks/route-overrides/ae.3e1d51bedc.json",
+        "sha256": "3e1d51bedcb62a0bb7dcb9e95efaeef1c427a37823172813e444218bcf3857f7",
+        "bytes": 715,
+        "gzipBytes": 443
+      },
+      "in": {
+        "logicalId": "chunk:route-override:in",
+        "filePath": "chunks/route-overrides/in.bdd8070e60.json",
+        "sha256": "bdd8070e60c6ce2d80b708beeb11b3c3cf32880d8153991dfadad3d257873f9b",
+        "bytes": 674,
+        "gzipBytes": 425
+      },
+      "us": {
+        "logicalId": "chunk:route-override:us",
+        "filePath": "chunks/route-overrides/us.d8cb74f23c.json",
+        "sha256": "d8cb74f23c8857519deadcea0e6c896b4ce56aeaa07e24805ebf6743303c7257",
+        "bytes": 802,
+        "gzipBytes": 489
+      }
+    }
+  },
+  "performanceSummary": {
+    "initialCoreIndexBytes": 99427,
+    "initialCoreIndexGzipBytes": 13693,
+    "totalArtifactsBytes": 752650,
+    "totalArtifactsGzipBytes": 124997,
+    "monolithic61752RoutesAvoided": true
+  }
+}

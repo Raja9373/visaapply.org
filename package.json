@@ -9,7 +9,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "catalog:export": "tsx scripts/exportCatalogToStatic.ts",
+    "catalog:validate": "tsx scripts/validateStaticCatalog.ts",
+    "catalog:build-indexes": "tsx scripts/buildCatalogIndexes.ts",
+    "catalog:sitemaps": "tsx scripts/generateStaticSitemaps.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.16",

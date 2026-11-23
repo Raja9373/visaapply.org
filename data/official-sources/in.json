@@ -1,0 +1,41 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-IN-CONSULAR-PORTAL",
+    "countryIso": "IN",
+    "issuingAuthority": "Ministry of Home Affairs (MHA) & Bureau of Immigration India — Consular Portal",
+    "officialOrganizationName": "Ministry of Home Affairs (MHA) & Bureau of Immigration India",
+    "officialHttpsUrl": "https://www.mha.gov.in/en/divisionofmha/foreigner-division",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-IN-LEGISLATION-GAZETTE",
+    "countryIso": "IN",
+    "issuingAuthority": "Ministry of Home Affairs (MHA) & Bureau of Immigration India — Official Legislation",
+    "officialOrganizationName": "Ministry of Home Affairs (MHA) & Bureau of Immigration India",
+    "officialHttpsUrl": "https://www.egazette.gov.in/",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-IN-MINISTRY-OF-HOME-AFFAIRS-MHA-BUREAU-OF-IMMIG",
+    "countryIso": "IN",
+    "issuingAuthority": "Ministry of Home Affairs (MHA) & Bureau of Immigration India",
+    "officialOrganizationName": "Ministry of Home Affairs (MHA) & Bureau of Immigration India",
+    "officialHttpsUrl": "https://indianvisaonline.gov.in/",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  }
+]

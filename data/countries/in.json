@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "IN",
+  "slug": "in",
+  "countryName": "India",
+  "localizedNames": {
+    "en": "India"
+  },
+  "officialCountryDomain": "mha.gov.in",
+  "immigrationAuthorityRefs": [
+    "SRC-IN-CONSULAR-PORTAL",
+    "SRC-IN-LEGISLATION-GAZETTE",
+    "SRC-IN-MINISTRY-OF-HOME-AFFAIRS-MHA-BUREAU-OF-IMMIG"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇮🇳",
+  "continent": "asia",
+  "notes": null
+}

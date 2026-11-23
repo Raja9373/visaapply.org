@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.visaapply.org/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.visaapply.org/hi" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.visaapply.org/de" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.visaapply.org/es" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.visaapply.org/pl" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.visaapply.org/fr" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.visaapply.org/ar" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://www.visaapply.org/ru" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.visaapply.org/zh" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.visaapply.org/ja" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.visaapply.org/pt" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.visaapply.org/it" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.visaapply.org/nl" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.visaapply.org/tr" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.visaapply.org/ko" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/immigration</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/immigration" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/immigration" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/routes</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/routes" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.visaapply.org/hi/routes" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.visaapply.org/de/routes" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.visaapply.org/es/routes" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.visaapply.org/pl/routes" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.visaapply.org/fr/routes" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.visaapply.org/ar/routes" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://www.visaapply.org/ru/routes" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.visaapply.org/zh/routes" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.visaapply.org/ja/routes" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.visaapply.org/pt/routes" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.visaapply.org/it/routes" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.visaapply.org/nl/routes" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.visaapply.org/tr/routes" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.visaapply.org/ko/routes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/routes" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/blogs</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/blogs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/blogs" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/verification</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/verification" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/verification" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/about</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/about" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/contact</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/contact" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/privacy</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/privacy" />
+  </url>
+  <url>
+    <loc>https://www.visaapply.org/terms</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.visaapply.org/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.visaapply.org/terms" />
+  </url>
+</urlset>

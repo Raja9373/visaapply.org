@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "JP",
+  "slug": "jp",
+  "countryName": "Japan",
+  "localizedNames": {
+    "en": "Japan"
+  },
+  "officialCountryDomain": "mofa.go.jp",
+  "immigrationAuthorityRefs": [
+    "SRC-JP-CONSULAR-PORTAL",
+    "SRC-JP-IMMIGRATION-SERVICES-AGENCY-OF-JAPAN-ISA-MOF",
+    "SRC-JP-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "ja",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇯🇵",
+  "continent": "asia",
+  "notes": null
+}

@@ -1,0 +1,80 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-DE-BAMF-GERMAN-FEDERAL-FOREIGN-OFFICE",
+    "countryIso": "DE",
+    "issuingAuthority": "BAMF & German Federal Foreign Office",
+    "officialOrganizationName": "BAMF & German Federal Foreign Office",
+    "officialHttpsUrl": "https://www.make-it-in-germany.com/en/living-in-germany/family-reunification",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by de-family-reunification."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-DE-CONSULAR-PORTAL",
+    "countryIso": "DE",
+    "issuingAuthority": "Federal Office for Migration and Refugees (BAMF) & Make it in Germany — Consular Portal",
+    "officialOrganizationName": "Federal Office for Migration and Refugees (BAMF) & Make it in Germany",
+    "officialHttpsUrl": "https://www.auswaertiges-amt.de/en/visa-service",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-DE-FEDERAL-EMPLOYMENT-AGENCY-BA-BAMF",
+    "countryIso": "DE",
+    "issuingAuthority": "Federal Employment Agency (BA) & BAMF",
+    "officialOrganizationName": "Federal Employment Agency (BA) & BAMF",
+    "officialHttpsUrl": "https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by de-eu-blue-card."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-DE-FEDERAL-OFFICE-FOR-MIGRATION-AND-REFUGEES-BAMF",
+    "countryIso": "DE",
+    "issuingAuthority": "Federal Office for Migration and Refugees (BAMF) & Make it in Germany",
+    "officialOrganizationName": "Federal Office for Migration and Refugees (BAMF) & Make it in Germany",
+    "officialHttpsUrl": "https://www.make-it-in-germany.com/en/",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-DE-GERMAN-FEDERAL-FOREIGN-OFFICE-BAMF",
+    "countryIso": "DE",
+    "issuingAuthority": "German Federal Foreign Office & BAMF",
+    "officialOrganizationName": "German Federal Foreign Office & BAMF",
+    "officialHttpsUrl": "https://www.make-it-in-germany.com/en/visa-residence/types/opportunity-card",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by de-opportunity-card."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-DE-LEGISLATION-GAZETTE",
+    "countryIso": "DE",
+    "issuingAuthority": "Federal Office for Migration and Refugees (BAMF) & Make it in Germany — Official Legislation",
+    "officialOrganizationName": "Federal Office for Migration and Refugees (BAMF) & Make it in Germany",
+    "officialHttpsUrl": "https://www.gesetze-im-internet.de/aufenthg_2004/",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "au-partner-visa-820-801",
+    "destinationCountryIso": "AU",
+    "programName": "Australia Partner Visa (Subclass 820/801 Onshore & 309/100 Offshore)",
+    "localLanguageName": "Partner Visa (Subclass 820 / 801 / 309 / 100)",
+    "immigrationCategory": "family",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Spouse or de facto partner (living together for 12+ months or registered relationship) of an Australian citizen, Australian permanent resident, or eligible New Zealand citizen.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-AU-AUSTRALIAN-DEPARTMENT-OF-HOME-AFFAIRS",
+        "url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/partner-onshore-820-801",
+        "title": "Australian Department of Home Affairs — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-01",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Migration Regulations 1994, Schedule 2, Subclasses 820/801 and 309/100",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "au-skilled-independent-189",
+    "destinationCountryIso": "AU",
+    "programName": "Skilled Independent Visa (Subclass 189)",
+    "localLanguageName": "Skilled Independent Visa Subclass 189",
+    "immigrationCategory": "pr",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Points-tested visa for invited workers with skills on the relevant skilled occupation list, aged under 45, with a suitable skills assessment.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-AU-AUSTRALIAN-DEPARTMENT-OF-HOME-AFFAIRS",
+        "url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-independent-189",
+        "title": "Australian Department of Home Affairs — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-10",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Migration Regulations 1994, Schedule 2, Subclass 189",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "au-tss-482-work",
+    "destinationCountryIso": "AU",
+    "programName": "Skills in Demand Visa (Subclass 482)",
+    "localLanguageName": "Skills in Demand Visa (formerly Temporary Skill Shortage / TSS Subclass 482)",
+    "immigrationCategory": "work",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Job offer from an approved Australian business sponsor under Specialist Skills, Core Skills, or Labour Agreement streams for occupations meeting core skill requirements.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-AU-AUSTRALIAN-DEPARTMENT-OF-HOME-AFFAIRS",
+        "url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skills-in-demand-visa-subclass-482",
+        "title": "Australian Department of Home Affairs — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-15",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Migration Regulations 1994, Schedule 2, Subclass 482 & Migration Amendment (Skills in Demand) Regulations",
+    "applyFrom": "Both"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "AU",
+  "slug": "au",
+  "countryName": "Australia",
+  "localizedNames": {
+    "en": "Australia"
+  },
+  "officialCountryDomain": "immi.homeaffairs.gov.au",
+  "immigrationAuthorityRefs": [
+    "SRC-AU-AUSTRALIAN-DEPARTMENT-OF-HOME-AFFAIRS",
+    "SRC-AU-CONSULAR-PORTAL",
+    "SRC-AU-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "family",
+    "pr",
+    "work"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇦🇺",
+  "continent": "oceania",
+  "notes": null
+}

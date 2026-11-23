@@ -1,0 +1,41 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-JP-CONSULAR-PORTAL",
+    "countryIso": "JP",
+    "issuingAuthority": "Immigration Services Agency of Japan (ISA) & MOFA Japan — Consular Portal",
+    "officialOrganizationName": "Immigration Services Agency of Japan (ISA) & MOFA Japan",
+    "officialHttpsUrl": "https://www.mofa.go.jp/j_info/visit/visa/index.html",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-JP-IMMIGRATION-SERVICES-AGENCY-OF-JAPAN-ISA-MOF",
+    "countryIso": "JP",
+    "issuingAuthority": "Immigration Services Agency of Japan (ISA) & MOFA Japan",
+    "officialOrganizationName": "Immigration Services Agency of Japan (ISA) & MOFA Japan",
+    "officialHttpsUrl": "https://www.moj.go.jp/isa/index.html",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-JP-LEGISLATION-GAZETTE",
+    "countryIso": "JP",
+    "issuingAuthority": "Immigration Services Agency of Japan (ISA) & MOFA Japan — Official Legislation",
+    "officialOrganizationName": "Immigration Services Agency of Japan (ISA) & MOFA Japan",
+    "officialHttpsUrl": "https://www.japaneselawtranslation.go.jp/en/laws/view/3642",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  }
+]

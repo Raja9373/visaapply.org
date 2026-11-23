@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "AE",
+  "slug": "ae",
+  "countryName": "United Arab Emirates",
+  "localizedNames": {
+    "en": "United Arab Emirates"
+  },
+  "officialCountryDomain": "icp.gov.ae",
+  "immigrationAuthorityRefs": [
+    "SRC-AE-CONSULAR-PORTAL",
+    "SRC-AE-FEDERAL-AUTHORITY-FOR-IDENTITY-CITIZENSHIP-CUS",
+    "SRC-AE-ICP-GDRFA-DUBAI",
+    "SRC-AE-ICP-GDRFA-DUBAI-DUBAI-LAND-DEPARTMENT",
+    "SRC-AE-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "ar",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "business",
+    "family"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇦🇪",
+  "continent": "middle_east",
+  "notes": null
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "IT",
+  "slug": "it",
+  "countryName": "Italy",
+  "localizedNames": {
+    "en": "Italy"
+  },
+  "officialCountryDomain": "interno.gov.it",
+  "immigrationAuthorityRefs": [
+    "SRC-IT-CONSULAR-PORTAL",
+    "SRC-IT-LEGISLATION-GAZETTE",
+    "SRC-IT-MINISTRY-OF-FOREIGN-AFFAIRS-VISTO-PER-ITALIA"
+  ],
+  "supportedLanguages": [
+    "en",
+    "it",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇮🇹",
+  "continent": "europe",
+  "notes": null
+}

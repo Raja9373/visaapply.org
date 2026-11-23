@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "CA",
+  "slug": "ca",
+  "countryName": "Canada",
+  "localizedNames": {
+    "en": "Canada"
+  },
+  "officialCountryDomain": "ircc.canada.ca",
+  "immigrationAuthorityRefs": [
+    "SRC-CA-CONSULAR-PORTAL",
+    "SRC-CA-IMMIGRATION-REFUGEES-AND-CITIZENSHIP-CA",
+    "SRC-CA-IMMIGRATION-REFUGEES-AND-CITIZENSHIP-CANADA-IR",
+    "SRC-CA-IRCC-PROVINCIAL-IMMIGRATION-AUTHORITIE",
+    "SRC-CA-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "citizenship",
+    "family",
+    "pr"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇨🇦",
+  "continent": "north_america",
+  "notes": null
+}

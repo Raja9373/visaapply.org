@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.0.0",
-  "phase": "PHASE_2_SKELETON_ONLY",
-  "bulkMigrationExecuted": false,
+  "phase": "PHASE_3_STATIC_CATALOG_POPULATED",
+  "bulkMigrationExecuted": true,
   "architecture": "ZERO_DATABASE_FIRST_STATIC_CATALOG",
   "coverageScope": {
     "isoCountries": 249,
@@ -65,5 +65,7 @@
       "filePattern": "<slug>.md",
       "validator": "validateEditorialArticleRecord"
     }
-  }
+  },
+  "exportManifestPath": "data/export_manifest.json",
+  "deterministicContentHash": "a31a06267e50f6cd43004edc665bc8e52f7e4bd23204b74d6af2b5e2655d6768"
 }

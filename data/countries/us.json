@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "US",
+  "slug": "us",
+  "countryName": "United States",
+  "localizedNames": {
+    "en": "United States"
+  },
+  "officialCountryDomain": "travel.state.gov",
+  "immigrationAuthorityRefs": [
+    "SRC-US-CONSULAR-PORTAL",
+    "SRC-US-LEGISLATION-GAZETTE",
+    "SRC-US-U-S-CITIZENSHIP-AND-IMMIGRATION-SERVICE",
+    "SRC-US-U-S-CITIZENSHIP-AND-IMMIGRATION-SERVICES-USCIS",
+    "SRC-US-U-S-DEPARTMENT-OF-STATE",
+    "SRC-US-USCIS-INVESTOR-PROGRAM-OFFICE-IPO",
+    "SRC-US-USCIS-U-S-DEPARTMENT-OF-LABOR-DOL",
+    "SRC-US-USCIS-U-S-DEPARTMENT-OF-STATE-NVC"
+  ],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "business",
+    "citizenship",
+    "family",
+    "pr",
+    "tourist",
+    "work"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇺🇸",
+  "continent": "north_america",
+  "notes": null
+}

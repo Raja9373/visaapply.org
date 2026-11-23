@@ -1,0 +1,31 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "fr-talent-passport",
+    "destinationCountryIso": "FR",
+    "programName": "France Talent Passport (Passeport Talent)",
+    "localLanguageName": "Carte de séjour pluriannuelle « Passeport Talent » (Art. L421-1 CESEDA)",
+    "immigrationCategory": "work",
+    "programType": "Residence Permit Subclass",
+    "eligibilitySummary": "Qualified employee, highly skilled worker, startup founder, investor, corporate officer, or artist/performer entering France to exercise professional activity.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-FR-MINISTRY-OF-THE-INTERIOR-PREFECTURES-O",
+        "url": "https://www.service-public.fr/particuliers/vosdroits/F16922",
+        "title": "Ministry of the Interior & Prefectures of France (ANEF) — Information"
+      },
+      {
+        "sourceId": "SRC-FR-MINISTRY-OF-THE-INTERIOR-PREFECTURES-O",
+        "url": "https://administration-etrangers-en-france.interieur.gouv.fr/",
+        "title": "Ministry of the Interior & Prefectures of France (ANEF) — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-01-20",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Code de l'entrée et du séjour des étrangers et du droit d'asile (CESEDA) Articles L421-1 à L421-16",
+    "applyFrom": "Both"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "PT",
+  "slug": "pt",
+  "countryName": "Portugal",
+  "localizedNames": {
+    "en": "Portugal"
+  },
+  "officialCountryDomain": "aima.gov.pt",
+  "immigrationAuthorityRefs": [
+    "SRC-PT-AGENCY-FOR-INTEGRATION-MIGRATION-AND-ASYLUM-AI",
+    "SRC-PT-AIMA-PORTUGAL-ASSEMBLEIA-DA-REPUBLICA",
+    "SRC-PT-CONSULAR-PORTAL",
+    "SRC-PT-LEGISLATION-GAZETTE",
+    "SRC-PT-MINISTRY-OF-FOREIGN-AFFAIRS-MNE-AIMA"
+  ],
+  "supportedLanguages": [
+    "en",
+    "pt",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "digital_nomad"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇵🇹",
+  "continent": "europe",
+  "notes": null
+}

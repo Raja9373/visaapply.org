@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "MQ",
+  "slug": "mq",
+  "countryName": "Martinique",
+  "localizedNames": {
+    "en": "Martinique"
+  },
+  "officialCountryDomain": "mq",
+  "immigrationAuthorityRefs": [],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "QUARANTINED",
+  "flag": "🇲🇶",
+  "continent": "north_america",
+  "notes": "Awaiting primary sovereign official-source verification; no unverified URLs fabricated."
+}

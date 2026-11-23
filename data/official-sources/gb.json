@@ -1,0 +1,80 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-GB-CONSULAR-PORTAL",
+    "countryIso": "GB",
+    "issuingAuthority": "UK Home Office (Visas and Immigration) — Consular Portal",
+    "officialOrganizationName": "UK Home Office (Visas and Immigration)",
+    "officialHttpsUrl": "https://www.gov.uk/check-uk-visa",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-GB-LEGISLATION-GAZETTE",
+    "countryIso": "GB",
+    "issuingAuthority": "UK Home Office (Visas and Immigration) — Official Legislation",
+    "officialOrganizationName": "UK Home Office (Visas and Immigration)",
+    "officialHttpsUrl": "https://www.gov.uk/guidance/immigration-rules",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-GB-UK-HOME-OFFICE",
+    "countryIso": "GB",
+    "issuingAuthority": "UK Home Office",
+    "officialOrganizationName": "UK Home Office",
+    "officialHttpsUrl": "https://www.gov.uk/uk-family-visa",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by uk-family-visa-spouse."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-GB-UK-HOME-OFFICE-UK-VISAS-AND-IMMIGRATION",
+    "countryIso": "GB",
+    "issuingAuthority": "UK Home Office (UK Visas and Immigration)",
+    "officialOrganizationName": "UK Home Office (UK Visas and Immigration)",
+    "officialHttpsUrl": "https://www.gov.uk/skilled-worker-visa",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by uk-skilled-worker."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-GB-UK-HOME-OFFICE-UKVI",
+    "countryIso": "GB",
+    "issuingAuthority": "UK Home Office (UKVI)",
+    "officialOrganizationName": "UK Home Office (UKVI)",
+    "officialHttpsUrl": "https://www.gov.uk/youth-mobility",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by uk-youth-mobility-scheme."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-GB-UK-HOME-OFFICE-VISAS-AND-IMMIGRATION",
+    "countryIso": "GB",
+    "issuingAuthority": "UK Home Office (Visas and Immigration)",
+    "officialOrganizationName": "UK Home Office (Visas and Immigration)",
+    "officialHttpsUrl": "https://www.gov.uk/browse/visas-immigration",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  }
+]

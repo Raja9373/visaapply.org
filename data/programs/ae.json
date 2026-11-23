@@ -1,0 +1,60 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "uae-family-residence",
+    "destinationCountryIso": "AE",
+    "programName": "UAE Family Residence Visa (Sponsoring Family Members)",
+    "localLanguageName": "تأشيرة أفراد الأسرة الإمارات",
+    "immigrationCategory": "family",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Expatriate resident holding a valid UAE employment or investment residence permit sponsoring spouse, sons up to age 25, unmarried daughters of any age, and parents.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-AE-ICP-GDRFA-DUBAI",
+        "url": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/sponsoring-family-members-residence-visa",
+        "title": "ICP & GDRFA Dubai — Information"
+      },
+      {
+        "sourceId": "SRC-AE-ICP-GDRFA-DUBAI",
+        "url": "https://smart.gdrfad.gov.ae/",
+        "title": "ICP & GDRFA Dubai — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-05",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "UAE Cabinet Resolution No. 65 of 2022 on Foreigners Entry and Residence Regulations",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "uae-golden-visa-investor",
+    "destinationCountryIso": "AE",
+    "programName": "UAE 10-Year Golden Visa (Real Estate & Business Investors)",
+    "localLanguageName": "الإقامة الذهبية الإمارات (مستثمر عقاري / تجاري)",
+    "immigrationCategory": "business",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Property investors owning unmortgaged UAE real estate (or mortgaged with approved UAE bank) worth at least AED 2,000,000 (~$545,000 USD), or commercial business investors/entrepreneurs.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-AE-ICP-GDRFA-DUBAI-DUBAI-LAND-DEPARTMENT",
+        "url": "https://u.ae/en/information-and-services/visa-and-emirates-id/golden-visa",
+        "title": "ICP & GDRFA Dubai (Dubai Land Department) — Information"
+      },
+      {
+        "sourceId": "SRC-AE-ICP-GDRFA-DUBAI-DUBAI-LAND-DEPARTMENT",
+        "url": "https://smart.gdrfad.gov.ae/",
+        "title": "ICP & GDRFA Dubai (Dubai Land Department) — Application Portal"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-10",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "UAE Cabinet Resolution No. 65 of 2022 & GDRFA Executive Directives",
+    "applyFrom": "Both"
+  }
+]

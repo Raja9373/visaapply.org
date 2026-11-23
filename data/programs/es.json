@@ -1,0 +1,50 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "es-digital-nomad-visa",
+    "destinationCountryIso": "ES",
+    "programName": "Spain Digital Nomad Visa (Teletrabajo de Carácter Internacional)",
+    "localLanguageName": "Visado de Teletrabajo de Carácter Internacional (Ley de Startups)",
+    "immigrationCategory": "digital_nomad",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Remote employees or self-employed freelancers working remotely for companies located outside Spain (max 20% Spanish client income for freelancers).",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-ES-MINISTRY-OF-INCLUSION-SOCIAL-SECURITY-A",
+        "url": "https://www.exteriores.gob.es/en/ServiciosAlCiudadano/Paginas/Visados/Visado-de-teletrabajo-de-caracter-internacional.aspx",
+        "title": "Ministry of Inclusion, Social Security and Migration (UGE-CE) & MAEC Spain — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-02-15",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Ley 28/2022, de 21 de diciembre, de fomento del ecosistema de las empresas emergentes (Ley de Startups)",
+    "applyFrom": "Both"
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "programId": "es-family-reunification",
+    "destinationCountryIso": "ES",
+    "programName": "Spain Family Reunification Visa (Reagrupación Familiar)",
+    "localLanguageName": "Autorización de Residencia por Reagrupación Familiar",
+    "immigrationCategory": "family",
+    "programType": "Actual Immigration Program",
+    "eligibilitySummary": "Foreign national holding Spanish residence permit for at least 1 year with renewal granted, sponsoring spouse, registered partner, dependent children under 18, or dependent parents aged 65+.",
+    "officialSourceRefs": [
+      {
+        "sourceId": "SRC-ES-MINISTRY-OF-INCLUSION-SOCIAL-SECURITY-A",
+        "url": "https://www.inclusion.gob.es/web/migraciones/reagrupacion-familiar",
+        "title": "Ministry of Inclusion, Social Security and Migration (Extranjería) — Information"
+      }
+    ],
+    "verificationStatus": "AVAILABLE_VERIFIED",
+    "createdDate": "2026-01-30",
+    "lastVerifiedDate": "2026-11-10",
+    "lastUpdatedDate": "2026-11-10",
+    "publicationStatus": "PUBLISHED",
+    "legalBasis": "Ley Orgánica 4/2000 (Ley de Extranjería) Artículos 16-19 & Real Decreto 557/2011",
+    "applyFrom": "Offshore"
+  }
+]

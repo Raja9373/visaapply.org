@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "UZ",
+  "slug": "uz",
+  "countryName": "Uzbekistan",
+  "localizedNames": {
+    "en": "Uzbekistan"
+  },
+  "officialCountryDomain": "uz",
+  "immigrationAuthorityRefs": [],
+  "supportedLanguages": [
+    "en",
+    "ru",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "QUARANTINED",
+  "flag": "🇺🇿",
+  "continent": "asia",
+  "notes": "Awaiting primary sovereign official-source verification; no unverified URLs fabricated."
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "RU",
+  "slug": "ru",
+  "countryName": "Russia",
+  "localizedNames": {
+    "en": "Russia"
+  },
+  "officialCountryDomain": "ru",
+  "immigrationAuthorityRefs": [],
+  "supportedLanguages": [
+    "en",
+    "ru",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "QUARANTINED",
+  "flag": "🇷🇺",
+  "continent": "europe",
+  "notes": "Awaiting primary sovereign official-source verification; no unverified URLs fabricated."
+}

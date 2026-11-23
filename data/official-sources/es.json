@@ -1,0 +1,54 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-ES-CONSULAR-PORTAL",
+    "countryIso": "ES",
+    "issuingAuthority": "Ministry of Inclusion, Social Security and Migration (Extranjería Spain) — Consular Portal",
+    "officialOrganizationName": "Ministry of Inclusion, Social Security and Migration (Extranjería Spain)",
+    "officialHttpsUrl": "https://www.exteriores.gob.es/en/ServiciosAlCiudadano/Paginas/Visados.aspx",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-ES-LEGISLATION-GAZETTE",
+    "countryIso": "ES",
+    "issuingAuthority": "Ministry of Inclusion, Social Security and Migration (Extranjería Spain) — Official Legislation",
+    "officialOrganizationName": "Ministry of Inclusion, Social Security and Migration (Extranjería Spain)",
+    "officialHttpsUrl": "https://www.boe.es/buscar/act.php?id=BOE-A-2000-544",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-ES-MINISTRY-OF-INCLUSION-SOCIAL-SECURITY-A",
+    "countryIso": "ES",
+    "issuingAuthority": "Ministry of Inclusion, Social Security and Migration (UGE-CE) & MAEC Spain",
+    "officialOrganizationName": "Ministry of Inclusion, Social Security and Migration (UGE-CE) & MAEC Spain",
+    "officialHttpsUrl": "https://www.exteriores.gob.es/en/ServiciosAlCiudadano/Paginas/Visados/Visado-de-teletrabajo-de-caracter-internacional.aspx",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by es-digital-nomad-visa."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-ES-MINISTRY-OF-INCLUSION-SOCIAL-SECURITY-AND-MIGRA",
+    "countryIso": "ES",
+    "issuingAuthority": "Ministry of Inclusion, Social Security and Migration (Extranjería Spain)",
+    "officialOrganizationName": "Ministry of Inclusion, Social Security and Migration (Extranjería Spain)",
+    "officialHttpsUrl": "https://www.inclusion.gob.es/web/migraciones",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  }
+]

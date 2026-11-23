@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "GS",
+  "slug": "gs",
+  "countryName": "South Georgia",
+  "localizedNames": {
+    "en": "South Georgia"
+  },
+  "officialCountryDomain": "gs",
+  "immigrationAuthorityRefs": [],
+  "supportedLanguages": [
+    "en",
+    "hi",
+    "de",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "UNINHABITED_TERRITORY",
+  "flag": "🇬🇸",
+  "continent": "south_america",
+  "notes": "Uninhabited territory excluded from public immigration sitemaps."
+}

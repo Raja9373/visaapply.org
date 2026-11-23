@@ -1,0 +1,67 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-CA-CONSULAR-PORTAL",
+    "countryIso": "CA",
+    "issuingAuthority": "Immigration, Refugees and Citizenship Canada (IRCC) — Consular Portal",
+    "officialOrganizationName": "Immigration, Refugees and Citizenship Canada (IRCC)",
+    "officialHttpsUrl": "https://www.ircc.canada.ca/",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-CA-IMMIGRATION-REFUGEES-AND-CITIZENSHIP-CA",
+    "countryIso": "CA",
+    "issuingAuthority": "Immigration, Refugees and Citizenship Canada (IRCC)",
+    "officialOrganizationName": "Immigration, Refugees and Citizenship Canada (IRCC)",
+    "officialHttpsUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/become-canadian-citizen.html",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by ca-citizenship."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-CA-IMMIGRATION-REFUGEES-AND-CITIZENSHIP-CANADA-IR",
+    "countryIso": "CA",
+    "issuingAuthority": "Immigration, Refugees and Citizenship Canada (IRCC)",
+    "officialOrganizationName": "Immigration, Refugees and Citizenship Canada (IRCC)",
+    "officialHttpsUrl": "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-CA-IRCC-PROVINCIAL-IMMIGRATION-AUTHORITIE",
+    "countryIso": "CA",
+    "issuingAuthority": "IRCC & Provincial Immigration Authorities",
+    "officialOrganizationName": "IRCC & Provincial Immigration Authorities",
+    "officialHttpsUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees.html",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by ca-pnp-provincial."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-CA-LEGISLATION-GAZETTE",
+    "countryIso": "CA",
+    "issuingAuthority": "Immigration, Refugees and Citizenship Canada (IRCC) — Official Legislation",
+    "officialOrganizationName": "Immigration, Refugees and Citizenship Canada (IRCC)",
+    "officialHttpsUrl": "https://laws-lois.justice.gc.ca/eng/acts/I-2.5/",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  }
+]

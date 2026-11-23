@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "ES",
+  "slug": "es",
+  "countryName": "Spain",
+  "localizedNames": {
+    "en": "Spain"
+  },
+  "officialCountryDomain": "exteriores.gob.es",
+  "immigrationAuthorityRefs": [
+    "SRC-ES-CONSULAR-PORTAL",
+    "SRC-ES-LEGISLATION-GAZETTE",
+    "SRC-ES-MINISTRY-OF-INCLUSION-SOCIAL-SECURITY-A",
+    "SRC-ES-MINISTRY-OF-INCLUSION-SOCIAL-SECURITY-AND-MIGRA"
+  ],
+  "supportedLanguages": [
+    "en",
+    "es",
+    "hi",
+    "de",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "digital_nomad",
+    "family"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇪🇸",
+  "continent": "europe",
+  "notes": null
+}

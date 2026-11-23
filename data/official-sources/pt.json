@@ -1,0 +1,67 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-PT-AGENCY-FOR-INTEGRATION-MIGRATION-AND-ASYLUM-AI",
+    "countryIso": "PT",
+    "issuingAuthority": "Agency for Integration, Migration and Asylum (AIMA) & MFA Portugal",
+    "officialOrganizationName": "Agency for Integration, Migration and Asylum (AIMA) & MFA Portugal",
+    "officialHttpsUrl": "https://aima.gov.pt/en",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-PT-AIMA-PORTUGAL-ASSEMBLEIA-DA-REPUBLICA",
+    "countryIso": "PT",
+    "issuingAuthority": "AIMA Portugal & Assembleia da República",
+    "officialOrganizationName": "AIMA Portugal & Assembleia da República",
+    "officialHttpsUrl": "https://aima.gov.pt/en/autorizacoes-de-residencia/investimento",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by pt-golden-visa-expired-realestate."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-PT-CONSULAR-PORTAL",
+    "countryIso": "PT",
+    "issuingAuthority": "Agency for Integration, Migration and Asylum (AIMA) & MFA Portugal — Consular Portal",
+    "officialOrganizationName": "Agency for Integration, Migration and Asylum (AIMA) & MFA Portugal",
+    "officialHttpsUrl": "https://vistos.mne.gov.pt/en/",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-PT-LEGISLATION-GAZETTE",
+    "countryIso": "PT",
+    "issuingAuthority": "Agency for Integration, Migration and Asylum (AIMA) & MFA Portugal — Official Legislation",
+    "officialOrganizationName": "Agency for Integration, Migration and Asylum (AIMA) & MFA Portugal",
+    "officialHttpsUrl": "https://diariodarepublica.pt/",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-PT-MINISTRY-OF-FOREIGN-AFFAIRS-MNE-AIMA",
+    "countryIso": "PT",
+    "issuingAuthority": "Ministry of Foreign Affairs (MNE) & AIMA Portugal",
+    "officialOrganizationName": "Ministry of Foreign Affairs (MNE) & AIMA Portugal",
+    "officialHttpsUrl": "https://vistos.mne.gov.pt/en/national-visas/residence-permits/retirement-or-religious-purposes",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by pt-d7-passive-income."
+  }
+]

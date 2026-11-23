@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "2.0.0",
+  "isoCode": "DE",
+  "slug": "de",
+  "countryName": "Germany",
+  "localizedNames": {
+    "en": "Germany"
+  },
+  "officialCountryDomain": "make-it-in-germany.com",
+  "immigrationAuthorityRefs": [
+    "SRC-DE-BAMF-GERMAN-FEDERAL-FOREIGN-OFFICE",
+    "SRC-DE-CONSULAR-PORTAL",
+    "SRC-DE-FEDERAL-EMPLOYMENT-AGENCY-BA-BAMF",
+    "SRC-DE-FEDERAL-OFFICE-FOR-MIGRATION-AND-REFUGEES-BAMF",
+    "SRC-DE-GERMAN-FEDERAL-FOREIGN-OFFICE-BAMF",
+    "SRC-DE-LEGISLATION-GAZETTE"
+  ],
+  "supportedLanguages": [
+    "en",
+    "de",
+    "hi",
+    "es",
+    "pl",
+    "fr",
+    "ar",
+    "ru",
+    "zh",
+    "ja",
+    "pt",
+    "it",
+    "nl",
+    "tr",
+    "ko"
+  ],
+  "availableImmigrationCategories": [
+    "family",
+    "work"
+  ],
+  "lastReviewedAt": "2026-11-10",
+  "recordStatus": "ACTIVE",
+  "flag": "🇩🇪",
+  "continent": "europe",
+  "notes": null
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AE-CONSULAR-PORTAL",
+    "countryIso": "AE",
+    "issuingAuthority": "Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) & GDRFA Dubai — Consular Portal",
+    "officialOrganizationName": "Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) & GDRFA Dubai",
+    "officialHttpsUrl": "https://icp.gov.ae/",
+    "sourceCategory": "CONSULAR_FOREIGN_AFFAIRS",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Tier-1 consular portal from officialSourceRegistry."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AE-FEDERAL-AUTHORITY-FOR-IDENTITY-CITIZENSHIP-CUS",
+    "countryIso": "AE",
+    "issuingAuthority": "Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) & GDRFA Dubai",
+    "officialOrganizationName": "Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) & GDRFA Dubai",
+    "officialHttpsUrl": "https://u.ae/en/information-and-services/visa-and-emirates-id",
+    "sourceCategory": "SOVEREIGN_IMMIGRATION_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Adapted from officialSourceRegistry (Tier-1 Sovereign Government Portal)."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AE-ICP-GDRFA-DUBAI",
+    "countryIso": "AE",
+    "issuingAuthority": "ICP & GDRFA Dubai",
+    "officialOrganizationName": "ICP & GDRFA Dubai",
+    "officialHttpsUrl": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/sponsoring-family-members-residence-visa",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by uae-family-residence."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AE-ICP-GDRFA-DUBAI-DUBAI-LAND-DEPARTMENT",
+    "countryIso": "AE",
+    "issuingAuthority": "ICP & GDRFA Dubai (Dubai Land Department)",
+    "officialOrganizationName": "ICP & GDRFA Dubai (Dubai Land Department)",
+    "officialHttpsUrl": "https://u.ae/en/information-and-services/visa-and-emirates-id/golden-visa",
+    "sourceCategory": "GOVERNMENT_VISA_PORTAL",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Authoritative program source referenced by uae-golden-visa-investor."
+  },
+  {
+    "schemaVersion": "2.0.0",
+    "sourceId": "SRC-AE-LEGISLATION-GAZETTE",
+    "countryIso": "AE",
+    "issuingAuthority": "Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) & GDRFA Dubai — Official Legislation",
+    "officialOrganizationName": "Federal Authority for Identity, Citizenship, Customs and Port Security (ICP) & GDRFA Dubai",
+    "officialHttpsUrl": "https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/federal-laws",
+    "sourceCategory": "OFFICIAL_GAZETTE_LEGISLATION",
+    "sourceLanguage": "en",
+    "lastCheckedDate": "2026-11-10",
+    "httpAvailabilityStatus": "REACHABLE_2XX",
+    "evidenceNotes": "Official legislation/gazette reference from officialSourceRegistry."
+  }
+]
