@@ -1,0 +1,1678 @@
+{
+  "manifestVersion": "1.1.0",
+  "backupName": "visaapply_backup.tar.gz",
+  "createdAt": "2026-11-23T10:31:08.284Z",
+  "archiveFormat": "tar.gz",
+  "databaseSnapshot": {
+    "included": true,
+    "relativePath": "data_db/immigration_hub.db",
+    "sizeBytes": 561152,
+    "sha256": "827494c04201f9ea4adcd7530566f41e9c7f091c1507b59abd95b1d8d7fb4e03",
+    "walIncludedInSnapshot": true,
+    "sourceFilesObserved": {
+      "dbBytes": 561152,
+      "walBytes": 4173592,
+      "shmBytes": 32768,
+      "dbSha256": "936faacbb233ab114dc9e90393ff2aa93d7a3ff4ca5c2231de1cf1d2f48820d4",
+      "walSha256": "72698faadb3e0d3e8b9525222fd544a82b37fd2ccb13940b64676e87856be09f",
+      "shmSha256": "70d1f2ac7d8a9a06c39f06e8b5ced61b1f9fd9a6d3cccd28a223713bbfcd6b7f"
+    },
+    "rawSourceInventory": {
+      "tablesPresent": [
+        "batch_state",
+        "changelog_entries",
+        "cron_execution_logs",
+        "immigration_programs",
+        "visa_detail_claims",
+        "visa_detail_evidence",
+        "visa_detail_versions",
+        "visa_details"
+      ],
+      "tableCounts": {
+        "batch_state": 1,
+        "changelog_entries": 0,
+        "cron_execution_logs": 0,
+        "immigration_programs": 29,
+        "visa_detail_claims": 0,
+        "visa_detail_evidence": 0,
+        "visa_detail_versions": 0,
+        "visa_details": 1
+      },
+      "migrationsRecordedOnDisk": [],
+      "schemaNormalizedOnIsolatedCopy": true,
+      "newlyAppliedMigrationsOnCopy": [
+        "001_baseline_enrichment_tables",
+        "002_phase31_comprehensive_and_classification",
+        "003_phase44_operational_reliability_and_constraints"
+      ]
+    },
+    "integrityCheck": [
+      "ok"
+    ],
+    "foreignKeyViolations": 0,
+    "duplicateVisaDetailsProgramIds": 0,
+    "orphanCounts": {
+      "visaDetailsWithoutProgram": 0,
+      "claimsWithoutProgram": 0,
+      "evidenceWithoutClaim": 0,
+      "versionsWithoutProgram": 0
+    },
+    "deletedPhase32FixturesFound": [],
+    "tableCounts": {
+      "automation_checkpoints": 0,
+      "automation_dead_letter": 0,
+      "automation_job_locks": 0,
+      "batch_state": 1,
+      "changelog_entries": 0,
+      "cron_execution_logs": 0,
+      "immigration_programs": 29,
+      "operational_events": 0,
+      "schema_migrations": 3,
+      "visa_detail_claims": 0,
+      "visa_detail_evidence": 0,
+      "visa_detail_versions": 0,
+      "visa_details": 1
+    },
+    "tableSha256Digests": {
+      "automation_checkpoints": "ceb72f17571ccead29df876b7cacf11e13d387c7ae50b58b9f2fbc802f0a60b1",
+      "automation_dead_letter": "cbeb2b6484e365bca60d1f3780e5a9daa52666c2428936b65891b9f05d77f1ba",
+      "automation_job_locks": "9621f4f4fc5a862a0224e8eedd34dc844a9bedcde48ace121052d048e4b86d13",
+      "batch_state": "24b5875209a0fa4c05f95c8db8387f20870f4aba236bf52df5d0cd899220e6b0",
+      "changelog_entries": "21ab2d974ca8f393da8e4a5ec4545f8c7302d50d55e1f51e5979c322168e4392",
+      "cron_execution_logs": "24893657b81e2765b8227c5467b4dbda4494337de6032f5348d25606f78ff0a3",
+      "immigration_programs": "c2e517d9d053463593f0b46e365a4330ef583d432007f4f54d11e4ad0040338d",
+      "operational_events": "69a57573f333872aafaa70dc6bc81b2d730f6dd2d508f6f3a1c8d1874316924f",
+      "schema_migrations": "e0f277b60bf112f1709e519c2c1971817486692d0e036f46a43f7086edb9a346",
+      "visa_detail_claims": "1a71635555a0491dd29e0cdf275a8d1e2553f31b6eb0fa1abd28e60a8540efb3",
+      "visa_detail_evidence": "1b59459ff4edfed105884b5209df5e0c8078c89412af453fc5915b5609e32f62",
+      "visa_detail_versions": "cb9547b4483dc06dc33310db4c88fdbb374fea8f7341cbe119673e6a6b952cb9",
+      "visa_details": "72a9e2b966d514d66e088cdd0c9d3e649640c46d2fc991c93ab4ec00c5edd3d9"
+    },
+    "migrationsApplied": [
+      {
+        "version": "001_baseline_enrichment_tables",
+        "name": "Baseline 8 enrichment tables and primary indexes",
+        "checksum": "2bfc56a4a1175c3795ef97f7b24706827ff76083b53c5f5354abc7831a00a4d0",
+        "appliedAt": "2026-11-23T10:31:07.990Z"
+      },
+      {
+        "version": "002_phase31_comprehensive_and_classification",
+        "name": "Phase 3.1/3.2 evidence metadata, 30-section JSON, and 5-tier claim classification",
+        "checksum": "525f78f3304e2a38902cf54bcd872c814084aec5be4975eff5f416e25ae72bda",
+        "appliedAt": "2026-11-23T10:31:07.993Z"
+      },
+      {
+        "version": "003_phase44_operational_reliability_and_constraints",
+        "name": "Phase 4.4 job locks, checkpoints, dead-letter quarantine, operational telemetry, and indexes",
+        "checksum": "1df109fd7fb339881e51c449505f8b7ce5e08e8509b1f9c0fae35291397c8514",
+        "appliedAt": "2026-11-23T10:31:07.994Z"
+      }
+    ]
+  },
+  "nonSqliteInventory": {
+    "changelogJson": {
+      "path": "src/data/immigrationChangelog.json",
+      "exists": true,
+      "validJson": true,
+      "entryCount": 8,
+      "sha256": "b96993cc0271ba1e92ba1eb92b9697d6e1c7c00f48c63b35e563fc8dd6cdefe9"
+    },
+    "slotSubscribersJson": {
+      "path": "content/slot_subscribers.json",
+      "exists": true,
+      "validJson": true,
+      "subscriberCount": 0,
+      "piiRedacted": true,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "slotStatusJson": {
+      "path": "content/slot_status.json",
+      "exists": true,
+      "validJson": true,
+      "embassyCount": 10,
+      "lastCheckTime": "2026-11-07T18:18:59.010Z",
+      "sha256": "407e8fb0a98c9b39fa29ebd4f721661f7d4292ceb4aeaafcb2ab49ed80a6ff50"
+    },
+    "immigrationSyncStateJson": {
+      "path": "content/immigration_sync_state.json",
+      "exists": true,
+      "validJson": true,
+      "status": "LEGACY_SUPERSEDED",
+      "supersededBy": [
+        "batch_state",
+        "automation_job_locks"
+      ],
+      "sha256": "3efe26c61ebeda4c66653258ee891d9208bba0e0d8b27e2ca1f9937e407132e9"
+    },
+    "publishedMarkdown": {
+      "directory": "content",
+      "count": 2,
+      "articles": [
+        {
+          "slug": "in-to-ca-tourist",
+          "path": "content/in-to-ca-tourist.md",
+          "sha256": "e7d24309a3845cec7e907d7ee758afa79727c3c1f736f6338c3d387030bebead"
+        },
+        {
+          "slug": "us-to-uk-tourist",
+          "path": "content/us-to-uk-tourist.md",
+          "sha256": "4c39a9c6485a7848e46c5820d5ceeb56745f7df735c8354de0d141fc8d6afad5"
+        }
+      ]
+    },
+    "draftMarkdown": {
+      "directory": "content/drafts",
+      "count": 3,
+      "articles": [
+        {
+          "slug": "ga-to-fj-student",
+          "path": "content/drafts/ga-to-fj-student.md",
+          "sha256": "bfba4f2440f7bab17369deab8b5eab01c27b67b0bb20419e52816fd6c36e7459"
+        },
+        {
+          "slug": "ga-to-fj-work",
+          "path": "content/drafts/ga-to-fj-work.md",
+          "sha256": "ee989a0b6da14da2c42599a99c2c499e0deb2e3aff63b1f5b0376c376523cc64"
+        },
+        {
+          "slug": "jp-to-ae-business",
+          "path": "content/drafts/jp-to-ae-business.md",
+          "sha256": "87053accded468af9abb98fdaad43fccda9317af89f9becefecdbf25acce5096"
+        }
+      ]
+    }
+  },
+  "files": [
+    {
+      "path": ".env.example",
+      "sizeBytes": 1671,
+      "sha256": "7ebfbaf0899c7701fd11a75d2f4525192595bcadddf399606b2914fb43f6fe58",
+      "mtimeIso": "2026-11-23T10:31:08.058Z"
+    },
+    {
+      "path": "content/drafts/ga-to-fj-student.md",
+      "sizeBytes": 393,
+      "sha256": "bfba4f2440f7bab17369deab8b5eab01c27b67b0bb20419e52816fd6c36e7459",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "content/drafts/ga-to-fj-work.md",
+      "sizeBytes": 384,
+      "sha256": "ee989a0b6da14da2c42599a99c2c499e0deb2e3aff63b1f5b0376c376523cc64",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "content/drafts/jp-to-ae-business.md",
+      "sizeBytes": 428,
+      "sha256": "87053accded468af9abb98fdaad43fccda9317af89f9becefecdbf25acce5096",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "content/immigration_sync_state.json",
+      "sizeBytes": 24,
+      "sha256": "3efe26c61ebeda4c66653258ee891d9208bba0e0d8b27e2ca1f9937e407132e9",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "content/in-to-ca-tourist.md",
+      "sizeBytes": 2754,
+      "sha256": "e7d24309a3845cec7e907d7ee758afa79727c3c1f736f6338c3d387030bebead",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "content/slot_status.json",
+      "sizeBytes": 1285,
+      "sha256": "407e8fb0a98c9b39fa29ebd4f721661f7d4292ceb4aeaafcb2ab49ed80a6ff50",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "content/slot_subscribers.json",
+      "sizeBytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "content/us-to-uk-tourist.md",
+      "sizeBytes": 1134,
+      "sha256": "4c39a9c6485a7848e46c5820d5ceeb56745f7df735c8354de0d141fc8d6afad5",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "data_db/immigration_hub.db",
+      "sizeBytes": 561152,
+      "sha256": "827494c04201f9ea4adcd7530566f41e9c7f091c1507b59abd95b1d8d7fb4e03",
+      "mtimeIso": "2026-11-23T10:31:08.028Z"
+    },
+    {
+      "path": "docs/DATA_RECOVERY_RUNBOOK.md",
+      "sizeBytes": 15961,
+      "sha256": "6cfcf5db78d8fd4edb85110c3a8e069892bfb522b210a29a1cd039d0b88de41b",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "docs/NEON_APP_ROLE_SETUP.sql",
+      "sizeBytes": 10714,
+      "sha256": "aeea1525e9a2335eb3db3849bf4546b8d407d6d2222fa892fcdc1433141169f7",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "docs/NEON_READONLY_ROLE_SETUP.sql",
+      "sizeBytes": 9450,
+      "sha256": "1d74aafbf1c428a46fae3ebe53bc93f793d4564fe0739fe137c721dafee1a878",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "docs/PHASE_B3_BACKUP_AND_MIGRATION_RUNBOOK.md",
+      "sizeBytes": 11060,
+      "sha256": "14d924d6f105f3d65a7075b45fd50b4575f350df354551e8d3fa9cc7fce13d27",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "docs/STAGING_NEON_SETUP_GUIDE.md",
+      "sizeBytes": 12474,
+      "sha256": "de3ad1f26b55df321a4d657ef1ff86e26f1b107a573cd079698a45a8bc779f96",
+      "mtimeIso": "2026-11-23T10:31:08.133Z"
+    },
+    {
+      "path": "package.json",
+      "sizeBytes": 1460,
+      "sha256": "db8d66be254f4d58b00db12b6d885b8b83f66103f8926e5ccf0403261167a6b2",
+      "mtimeIso": "2026-11-23T10:31:08.060Z"
+    },
+    {
+      "path": "phase_3_10_2_batch13_claim_evidence_registry.csv",
+      "sizeBytes": 998582,
+      "sha256": "3789776bc060ee9502530689f970ab91d4d8412d2cf3ca27b6b144d8e7d5cc26",
+      "mtimeIso": "2026-11-23T10:31:08.061Z"
+    },
+    {
+      "path": "phase_3_10_2_batch13_pathway_manifest.json",
+      "sizeBytes": 194772,
+      "sha256": "56eac71e8d68cd2e3087df449b5b23f28eef579099127ec2ea89e8eaacdb75f3",
+      "mtimeIso": "2026-11-23T10:31:08.061Z"
+    },
+    {
+      "path": "phase_3_10_2_batch13_quarantine_register.csv",
+      "sizeBytes": 22595,
+      "sha256": "3d3dd021ffe0d7d99ab3f08dda0596d071d0dd987bc2fba61e59fe8fd369c81c",
+      "mtimeIso": "2026-11-23T10:31:08.062Z"
+    },
+    {
+      "path": "phase_3_10_2_batch13_section_status.csv",
+      "sizeBytes": 55844,
+      "sha256": "b5eae384825aca4813898a90317841252fb8cd7ed725f4ca967c317bb993a9eb",
+      "mtimeIso": "2026-11-23T10:31:08.062Z"
+    },
+    {
+      "path": "phase_3_10_2_batch13_source_registry.csv",
+      "sizeBytes": 3830,
+      "sha256": "e1fe0d59f0d6e6c36a5c585c2d296361b4ef36b6cacdd2a2f54c4d1646aca66e",
+      "mtimeIso": "2026-11-23T10:31:08.062Z"
+    },
+    {
+      "path": "phase_3_10_2_batch13_special_topics_status.csv",
+      "sizeBytes": 119270,
+      "sha256": "d9429e3720047add839430baccd44914d2f28350d298fead3c6398b13bd9441e",
+      "mtimeIso": "2026-11-23T10:31:08.062Z"
+    },
+    {
+      "path": "phase_3_10_2_change_manifest.json",
+      "sizeBytes": 2922,
+      "sha256": "48229534c793ed0405986fcba8360a41929fb4c6432348357954e79ee4ec1c63",
+      "mtimeIso": "2026-11-23T10:31:08.062Z"
+    },
+    {
+      "path": "phase_3_10_2_public_sanitization_test.json",
+      "sizeBytes": 9450,
+      "sha256": "62abcaf45d4a5c625bdf816aa4d3c3229bdf82d85db2bdd12976d545f799de3e",
+      "mtimeIso": "2026-11-23T10:31:08.063Z"
+    },
+    {
+      "path": "phase_3_10_5_batch14_claim_evidence_registry.csv",
+      "sizeBytes": 1013365,
+      "sha256": "e0b1e16697044f5a0eccf114496302303e3dac95812a45f15aa44b3227241acb",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_batch14_pathway_manifest.json",
+      "sizeBytes": 192099,
+      "sha256": "6dd11e1df132d3421e70e939c033b08791844244b3d7ff4dbeeada2a8f68a02b",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_batch14_quarantine_register.csv",
+      "sizeBytes": 24636,
+      "sha256": "69dbb86cd73146f965d8777586b7a53aca8fba933e4bb82c923a4be4eb42ebe3",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_batch14_section_status.csv",
+      "sizeBytes": 51746,
+      "sha256": "a6d673be46655b748494fc2bcc131493679a5990b8abc08be5a3e7d09a8b15c9",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_batch14_source_registry.csv",
+      "sizeBytes": 3751,
+      "sha256": "1b6165fdf38ab6001ab72df14eff0280f1e9ebba70f599e12855800d1075bf3a",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_batch14_special_topics_status.csv",
+      "sizeBytes": 116812,
+      "sha256": "f51551dd412d266204de430043f78ef9b700a54f97a20710fe37b9eb0ecf6765",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_change_manifest.json",
+      "sizeBytes": 2160,
+      "sha256": "bf835bb13f89d8937059353dfbbef4553447888ab7a776538c5be845554c17a2",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_5_public_sanitization_test.json",
+      "sizeBytes": 9024,
+      "sha256": "1bffe31f0f6ba5e8ae925ab236a906bf18cfae9ccd918115bfc24cb19a318fe1",
+      "mtimeIso": "2026-11-23T10:31:08.064Z"
+    },
+    {
+      "path": "phase_3_10_6_batch14_independent_audit.json",
+      "sizeBytes": 5091,
+      "sha256": "369bfa62a1a3886d0d72005518531ccc67513eabccdf062330904296fd4e3313",
+      "mtimeIso": "2026-11-23T10:31:08.065Z"
+    },
+    {
+      "path": "phase_3_6_5_1_2_claim_evidence_audit.json",
+      "sizeBytes": 1374754,
+      "sha256": "19db09bf8422a8b258638550adca721ee99a2c47d5b8c4e547c791474882f66d",
+      "mtimeIso": "2026-11-23T10:31:08.065Z"
+    },
+    {
+      "path": "phase_3_6_5_1_2_numeric_claims.csv",
+      "sizeBytes": 7996,
+      "sha256": "a17872b4b5c942d604d490f533d7cb038923efe3301d794d01ee85e0877dcf75",
+      "mtimeIso": "2026-11-23T10:31:08.065Z"
+    },
+    {
+      "path": "phase_3_6_5_1_2_section_status.csv",
+      "sizeBytes": 112620,
+      "sha256": "8f1feeb065135675d7b03d44889319ec0ad63a54419869ae194f4e4da42c9417",
+      "mtimeIso": "2026-11-23T10:31:08.066Z"
+    },
+    {
+      "path": "phase_3_6_5_1_2_source_registry.csv",
+      "sizeBytes": 9516,
+      "sha256": "81d5b5cfa006e4f9d2aaca0746d0c44d0bf289afd9e13f52badf4821cde1a8c8",
+      "mtimeIso": "2026-11-23T10:31:08.066Z"
+    },
+    {
+      "path": "phase_3_6_5_1_3_claim_evidence_audit.json",
+      "sizeBytes": 1511207,
+      "sha256": "c4d1033eb165a9c05a532d3b1c2b515db4fe55842de047778718a9b445c6ad84",
+      "mtimeIso": "2026-11-23T10:31:08.067Z"
+    },
+    {
+      "path": "phase_3_6_5_1_3_nationality_scope_matrix.csv",
+      "sizeBytes": 225145,
+      "sha256": "119a97131cc2899b76f3f481b7605d1eae6c6807eec3d7682a64aac5a5898e31",
+      "mtimeIso": "2026-11-23T10:31:08.067Z"
+    },
+    {
+      "path": "phase_3_6_5_1_3_numeric_claims.csv",
+      "sizeBytes": 8185,
+      "sha256": "49cd84c888f53a2168d7843d2f4dc9ae5c7364b49146ce99486eebd800db215e",
+      "mtimeIso": "2026-11-23T10:31:08.067Z"
+    },
+    {
+      "path": "phase_3_6_5_1_3_section_status.csv",
+      "sizeBytes": 128096,
+      "sha256": "cfa694aa6af482ab3d969419ad374f7363b98b6814010225be16b94eed440fbf",
+      "mtimeIso": "2026-11-23T10:31:08.067Z"
+    },
+    {
+      "path": "phase_3_6_5_1_3_source_registry.csv",
+      "sizeBytes": 9516,
+      "sha256": "81d5b5cfa006e4f9d2aaca0746d0c44d0bf289afd9e13f52badf4821cde1a8c8",
+      "mtimeIso": "2026-11-23T10:31:08.067Z"
+    },
+    {
+      "path": "phase_3_6_6_batch4_claim_evidence_audit.json",
+      "sizeBytes": 1507708,
+      "sha256": "e90265ebcf9582173f85b2020607f015d2e45cbb09ef829e3bb8397e6e2409d0",
+      "mtimeIso": "2026-11-23T10:31:08.068Z"
+    },
+    {
+      "path": "phase_3_6_6_batch4_nationality_scope_matrix.csv",
+      "sizeBytes": 286704,
+      "sha256": "2ec0b31d0e315d162da2977153240ce4fd2d345c18c59ec1bfdc89e04cc10098",
+      "mtimeIso": "2026-11-23T10:31:08.068Z"
+    },
+    {
+      "path": "phase_3_6_6_batch4_numeric_claims.csv",
+      "sizeBytes": 12998,
+      "sha256": "4b888e41db16a22a1e118d85930f63d9d84d0a5e3874cad03406b76ae6e7366c",
+      "mtimeIso": "2026-11-23T10:31:08.070Z"
+    },
+    {
+      "path": "phase_3_6_6_batch4_pathway_registry.csv",
+      "sizeBytes": 6853,
+      "sha256": "686f2fa5fde123df11215a444c0cb0d8da820351883d4646c40def77863d6659",
+      "mtimeIso": "2026-11-23T10:31:08.070Z"
+    },
+    {
+      "path": "phase_3_6_6_batch4_source_registry.csv",
+      "sizeBytes": 8950,
+      "sha256": "9820f0e63d935ccd1e4e4f99bc418aa8fc3ea0c92271d8124de8ef353a869b2e",
+      "mtimeIso": "2026-11-23T10:31:08.070Z"
+    },
+    {
+      "path": "phase_3_6_7_batch5_claim_evidence_audit.json",
+      "sizeBytes": 1603168,
+      "sha256": "1974c0a6074627b96de2f88f9d784d5ec7b13879494682b42f6f2a5ad3e7a1ce",
+      "mtimeIso": "2026-11-23T10:31:08.071Z"
+    },
+    {
+      "path": "phase_3_6_7_batch5_nationality_scope_matrix.csv",
+      "sizeBytes": 210814,
+      "sha256": "50612caf2dd21cd2fff54a9f550255b68a3294948f9f5212dd1f7cb78c7a8ed2",
+      "mtimeIso": "2026-11-23T10:31:08.072Z"
+    },
+    {
+      "path": "phase_3_6_7_batch5_numeric_claims.csv",
+      "sizeBytes": 12304,
+      "sha256": "5c69cd26e899636673776c0d6f04bff389e98755a026b0c53159f986f781229b",
+      "mtimeIso": "2026-11-23T10:31:08.072Z"
+    },
+    {
+      "path": "phase_3_6_7_batch5_pathway_registry.csv",
+      "sizeBytes": 4609,
+      "sha256": "25e207e79c3e5e9a71d13314a4ccbe40999c587de3706c1e4003a00291c1d9e3",
+      "mtimeIso": "2026-11-23T10:31:08.072Z"
+    },
+    {
+      "path": "phase_3_6_7_batch5_section_status.csv",
+      "sizeBytes": 104056,
+      "sha256": "38ea30fc4e4154f16f1abe66f88039ca7afb6fa90a3ce346b8c552ff4933dd97",
+      "mtimeIso": "2026-11-23T10:31:08.072Z"
+    },
+    {
+      "path": "phase_3_6_7_batch5_source_registry.csv",
+      "sizeBytes": 7147,
+      "sha256": "8ed02fed576a6c87a7b9ed8c71086cd30192c56c3f9ef473c01c0934e382198b",
+      "mtimeIso": "2026-11-23T10:31:08.072Z"
+    },
+    {
+      "path": "phase_3_6_8_batch6_claim_evidence_audit.json",
+      "sizeBytes": 1652098,
+      "sha256": "02706ebd8473d52393671977070498733bf5d1728afaa7ea0766f8e6928de27c",
+      "mtimeIso": "2026-11-23T10:31:08.076Z"
+    },
+    {
+      "path": "phase_3_6_8_batch6_nationality_scope_matrix.csv",
+      "sizeBytes": 204154,
+      "sha256": "26b05f2b327dd9daa602f88b3af0410fcb017809a0a5764edc1bd770e2555b1e",
+      "mtimeIso": "2026-11-23T10:31:08.076Z"
+    },
+    {
+      "path": "phase_3_6_8_batch6_numeric_claims.csv",
+      "sizeBytes": 13943,
+      "sha256": "cd0262bd7db7fd973444348bf2081768072c3a4aaabeb96af617b1c96db20039",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_8_batch6_pathway_registry.csv",
+      "sizeBytes": 5029,
+      "sha256": "57641c0890837ea69ba23695c9252a96c92dc38e43954772d85f7d234ac7dfda",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_8_batch6_section_status.csv",
+      "sizeBytes": 111166,
+      "sha256": "bc44c8803ccbee8ba967e3206b29fca143ad2c8f1c6db759ca72de768b27e0ee",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_8_batch6_source_registry.csv",
+      "sizeBytes": 7493,
+      "sha256": "ad4732ecccd6411cbd6100eaa88cdfc543156642059ed32f9077c7b30a8a7b22",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_9_1_batch7_corrections_report.md",
+      "sizeBytes": 16374,
+      "sha256": "6d07cf1305b721d57181e0a66c17de22f5e9a6546d8f03358585f21ecfa4d2a8",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_9_2_batch7_integrity_report.md",
+      "sizeBytes": 21936,
+      "sha256": "2234d2eef3bc9065607b68ee0ad0d313bb31a9253a6332a28917e04d06e420bd",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_9_2_before_after_log.csv",
+      "sizeBytes": 4628,
+      "sha256": "b5aaff772e625ea01e7547e12efe77f9b903dec4ddb3d08b7a13cefc74f6c9a0",
+      "mtimeIso": "2026-11-23T10:31:08.077Z"
+    },
+    {
+      "path": "phase_3_6_9_2_corrected_claim_evidence_audit.csv",
+      "sizeBytes": 198170,
+      "sha256": "5d9589cee63350a97251d57fc1382f8195d55a6f64f59000ecdfb5d45f374e6b",
+      "mtimeIso": "2026-11-23T10:31:08.078Z"
+    },
+    {
+      "path": "phase_3_6_9_2_direct_source_registry.csv",
+      "sizeBytes": 5963,
+      "sha256": "fa3a9a8aea8bdaee526e5eadd3ca58c9c2b277077a6a5a14350f1dd369f29d88",
+      "mtimeIso": "2026-11-23T10:31:08.079Z"
+    },
+    {
+      "path": "phase_3_6_9_2_numeric_claims_export.csv",
+      "sizeBytes": 7732,
+      "sha256": "363f33b1e7a37bc4a676155f2c43a5afce3a4f26c5ceb66733c3b0e0e26e94d7",
+      "mtimeIso": "2026-11-23T10:31:08.079Z"
+    },
+    {
+      "path": "phase_3_6_9_3_batch7_micro_cleanup_report.md",
+      "sizeBytes": 9024,
+      "sha256": "54e401771a6fc90a8f9c03dd936a8a34d2b967b19e618f3c6d63fabe0c10c346",
+      "mtimeIso": "2026-11-23T10:31:08.079Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_claim_evidence_audit.json",
+      "sizeBytes": 855593,
+      "sha256": "629ac3f4962767ae3f61a977a1700478df336f1c44fa224d6422e4eb0344899c",
+      "mtimeIso": "2026-11-23T10:31:08.080Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_nationality_scope_matrix.csv",
+      "sizeBytes": 109956,
+      "sha256": "5ac4d66703d4a6b7903f978b03f640619a4c4e73d26d58d758c89d19338e3d69",
+      "mtimeIso": "2026-11-23T10:31:08.080Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_numeric_claims.csv",
+      "sizeBytes": 8332,
+      "sha256": "3cc5638988674e571bcd753d950378c7dba629daf918dba2823039dc0e264c32",
+      "mtimeIso": "2026-11-23T10:31:08.080Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_pathway_registry.csv",
+      "sizeBytes": 4950,
+      "sha256": "6949338d4a4c90c87137da35e7db2d28165b40327032ce79d9b22f2786d3ae2a",
+      "mtimeIso": "2026-11-23T10:31:08.080Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_report.md",
+      "sizeBytes": 15319,
+      "sha256": "2c9ae6bf19a71fd99f303f9c484f1fe49dbd5f541358457029d3502d9f6a2747",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_section_status.csv",
+      "sizeBytes": 30310,
+      "sha256": "0d166d6ee05ecf104b859cc4ae5893ffcaa29576810bcf9044a3c7ccd1abd504",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_6_9_batch7_source_registry.csv",
+      "sizeBytes": 7996,
+      "sha256": "698c8a005568c3e35cfe86812299b9d3e9417c94eab9f631ab7d4ca908289a16",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_7_1_change_manifest.json",
+      "sizeBytes": 4770,
+      "sha256": "8b12fd267a69a13c582884c5bcb973f626a75053fc2b2da9c3ed2cc66db46b4e",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_7_1_india_conflict_review.csv",
+      "sizeBytes": 3044,
+      "sha256": "e1a5887578e4860c102418110794624be93798e01cdca4904b718712437638cc",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_7_1_mauritius_conflict_review.csv",
+      "sizeBytes": 2933,
+      "sha256": "3438e73df9a516d9a6202dd69c352ada19c7433ba848264c93f3f9f64c8397f3",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_7_1_qatar_source_recovery.csv",
+      "sizeBytes": 8013,
+      "sha256": "bc201eef786079cbc2fe8bb8598967f3127496267d3797e84a10eaa7b090fbe7",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_7_1_report.md",
+      "sizeBytes": 8025,
+      "sha256": "3dafad8c8fe9f3818547df57984d3385229e93f53449a9ee230232a89df8903a",
+      "mtimeIso": "2026-11-23T10:31:08.081Z"
+    },
+    {
+      "path": "phase_3_7_1_verification_display_audit.csv",
+      "sizeBytes": 5417,
+      "sha256": "b2146c14ca7c317954f7525547c1a42b5f47e71e7d63bda7758f638dbb7a97db",
+      "mtimeIso": "2026-11-23T10:31:08.083Z"
+    },
+    {
+      "path": "phase_3_7_batch8_claim_evidence_audit.json",
+      "sizeBytes": 1168038,
+      "sha256": "e24bf3c7099fe8335c3b0a0de4853df93809b1a6c3c1a0415cbee60428bcdb46",
+      "mtimeIso": "2026-11-23T10:31:08.084Z"
+    },
+    {
+      "path": "phase_3_7_batch8_nationality_scope_matrix.csv",
+      "sizeBytes": 117895,
+      "sha256": "55ceb5e3b25f2dfc01ca05a948f6bfbdbe3c6583d3e082d274b55324f42169e2",
+      "mtimeIso": "2026-11-23T10:31:08.084Z"
+    },
+    {
+      "path": "phase_3_7_batch8_numeric_claims.csv",
+      "sizeBytes": 12037,
+      "sha256": "88d243859d6301e7a840edb0790a1460fc3c522ae4425b5c5acb6e57739b169a",
+      "mtimeIso": "2026-11-23T10:31:08.085Z"
+    },
+    {
+      "path": "phase_3_7_batch8_pathway_registry.csv",
+      "sizeBytes": 6910,
+      "sha256": "0e38d70f5e2953b65552881920358d7f7f327cb131c35aec8fbe9691d41b0ee7",
+      "mtimeIso": "2026-11-23T10:31:08.085Z"
+    },
+    {
+      "path": "phase_3_7_batch8_report.md",
+      "sizeBytes": 7192,
+      "sha256": "e18dcb473459e982b8d15129382c08070e79221c4426df0e57c3f0beb9219f6f",
+      "mtimeIso": "2026-11-23T10:31:08.085Z"
+    },
+    {
+      "path": "phase_3_7_batch8_section_status.csv",
+      "sizeBytes": 25439,
+      "sha256": "ce257d278c779e9bfe3608a7a6663e829f7cf53497ebf8d36217fdd17ee734be",
+      "mtimeIso": "2026-11-23T10:31:08.085Z"
+    },
+    {
+      "path": "phase_3_7_batch8_source_registry.csv",
+      "sizeBytes": 5323,
+      "sha256": "76349049bc5fefa54198c3ab9bfab9ae24d0aa574b9eb6cf686cc06b83dd3f88",
+      "mtimeIso": "2026-11-23T10:31:08.087Z"
+    },
+    {
+      "path": "phase_3_8_1_australia_189_fee_review.csv",
+      "sizeBytes": 4555,
+      "sha256": "3fd1626183a9c2edc540f7451cb96064c143f7fa99c3c2c8c03bc6db08bf1240",
+      "mtimeIso": "2026-11-23T10:31:08.088Z"
+    },
+    {
+      "path": "phase_3_8_1_change_manifest.json",
+      "sizeBytes": 7447,
+      "sha256": "4874d84a51f8d87bc0f9a73137fecaf06bc1762e32099f3506d288cd2caacb15",
+      "mtimeIso": "2026-11-23T10:31:08.088Z"
+    },
+    {
+      "path": "phase_3_8_1_new_zealand_processing_review.csv",
+      "sizeBytes": 3900,
+      "sha256": "326f44203fb5c24399c664a2d88873b07b16883f4d61fe012efbfc83dc34419d",
+      "mtimeIso": "2026-11-23T10:31:08.088Z"
+    },
+    {
+      "path": "phase_3_8_1_report.md",
+      "sizeBytes": 10819,
+      "sha256": "ead1fb7ac7e03fe4aa7f0c3698cc51175851346ceac2f7853f93534cfffd3899",
+      "mtimeIso": "2026-11-23T10:31:08.088Z"
+    },
+    {
+      "path": "phase_3_8_1_source_registry.csv",
+      "sizeBytes": 2944,
+      "sha256": "3aa74339c29d18033f12dd03808fd63c22af5eafa0b4d84407493766e352716d",
+      "mtimeIso": "2026-11-23T10:31:08.088Z"
+    },
+    {
+      "path": "phase_3_8_batch9_claim_evidence_audit.json",
+      "sizeBytes": 1134773,
+      "sha256": "403ee77fce76f299ae9bee7e29c2f3ce785d245032d9879c4728dc35023cd40b",
+      "mtimeIso": "2026-11-23T10:31:08.090Z"
+    },
+    {
+      "path": "phase_3_8_batch9_nationality_scope_matrix.csv",
+      "sizeBytes": 117704,
+      "sha256": "571ca4d383c4904b0ba00c1ad7b5f14f1a4fca9682d2587aa12f7ef34586565a",
+      "mtimeIso": "2026-11-23T10:31:08.092Z"
+    },
+    {
+      "path": "phase_3_8_batch9_numeric_claims.csv",
+      "sizeBytes": 16363,
+      "sha256": "d2461bed8267bf7987aca8df01b64cef1fa49b7f5061e1e6d4997d0cb3ac28db",
+      "mtimeIso": "2026-11-23T10:31:08.092Z"
+    },
+    {
+      "path": "phase_3_8_batch9_pathway_registry.csv",
+      "sizeBytes": 6583,
+      "sha256": "0116c05868cbc057a33a9704b523690a8fa97c9cc12802b1eb4e927ff068196e",
+      "mtimeIso": "2026-11-23T10:31:08.092Z"
+    },
+    {
+      "path": "phase_3_8_batch9_report.md",
+      "sizeBytes": 9783,
+      "sha256": "f085057f7a32fe27dcd89b1528007c2eea56d0085b3e23b7c4ecd7b15a543e1d",
+      "mtimeIso": "2026-11-23T10:31:08.092Z"
+    },
+    {
+      "path": "phase_3_8_batch9_section_status.csv",
+      "sizeBytes": 24845,
+      "sha256": "a0763561b40b699325d887e3ac0755007524302fc46e97b0d7f08be147c35095",
+      "mtimeIso": "2026-11-23T10:31:08.092Z"
+    },
+    {
+      "path": "phase_3_8_batch9_selection_manifest.csv",
+      "sizeBytes": 3736,
+      "sha256": "517784ce7704a863b16f326d761a356e9123105fdb8c4ac203945dc356f7f816",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_8_batch9_source_registry.csv",
+      "sizeBytes": 4909,
+      "sha256": "2f1157339ff6fc8eb4e36967faae8a4e3d7f8d896f8f6d1b36db294dfa4ee039",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_9_1_change_manifest.json",
+      "sizeBytes": 7415,
+      "sha256": "e2045f08533ed3de152779faa16c0744ce4d09de3bb8be660822bdbc6082564e",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_9_1_fee_source_registry.csv",
+      "sizeBytes": 3733,
+      "sha256": "f371326842433d23f9453c3f6fc7fd48027ef860e25254dfd7f6b653bc127dc9",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_9_1_hongkong_iang_fee_review.csv",
+      "sizeBytes": 4257,
+      "sha256": "065fd004619145c964e404bc94b46839d206c482b4faa013093110a9d4e26bd4",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_9_1_report.md",
+      "sizeBytes": 8180,
+      "sha256": "f88a8406d5c83ef72a7952caaf8d92882f002e9c850772ed5482beb7a45a3615",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_9_1_singapore_entrepass_fee_review.csv",
+      "sizeBytes": 3495,
+      "sha256": "5766575cd7d74441eeaf9eebe3b87c70c44700548cd44eeb632f66959a48650d",
+      "mtimeIso": "2026-11-23T10:31:08.093Z"
+    },
+    {
+      "path": "phase_3_9_2_backlog_reconciliation.csv",
+      "sizeBytes": 124834,
+      "sha256": "29e7710d0ca4e3973ab017bdeeb4dc7ccd34cf5813c2e9724eb6ee56febcf3df",
+      "mtimeIso": "2026-11-23T10:31:08.094Z"
+    },
+    {
+      "path": "phase_3_9_2_batch11_preflight.json",
+      "sizeBytes": 12443,
+      "sha256": "3595c85c2d82c9b71263fbdff5ce50d9f6dc0364290d50aafbabebca8b680378",
+      "mtimeIso": "2026-11-23T10:31:08.094Z"
+    },
+    {
+      "path": "phase_3_9_2_change_manifest.json",
+      "sizeBytes": 3736,
+      "sha256": "bf2d62f04e7efd5edc70b3ae8e1b1c5452c23eddebe65e812cb72c777ae31ee8",
+      "mtimeIso": "2026-11-23T10:31:08.094Z"
+    },
+    {
+      "path": "phase_3_9_2_proposed_batch_mapping.csv",
+      "sizeBytes": 35543,
+      "sha256": "bc59b406739afc92f513cd5ff32fc34eac838c66172cba4fd05a1314339543ab",
+      "mtimeIso": "2026-11-23T10:31:08.094Z"
+    },
+    {
+      "path": "phase_3_9_2_reconciliation_report.md",
+      "sizeBytes": 10329,
+      "sha256": "49ef7f4bfc4b7af9d633b179bf5d500e9a47371efeeddf691cdbe89746b97fae",
+      "mtimeIso": "2026-11-23T10:31:08.094Z"
+    },
+    {
+      "path": "phase_3_9_3_candidate_registry.csv",
+      "sizeBytes": 145383,
+      "sha256": "8dc3f5c02eeaaafcf299fc569ba0a594272058e7447bb3abaafc2ead3a223f71",
+      "mtimeIso": "2026-11-23T10:31:08.094Z"
+    },
+    {
+      "path": "phase_3_9_3_change_manifest.json",
+      "sizeBytes": 1876,
+      "sha256": "60cfa178c662fd9a669d93a3430d566de55a6d4a438a5ddc2d3e8dd0f6f12b5b",
+      "mtimeIso": "2026-11-23T10:31:08.095Z"
+    },
+    {
+      "path": "phase_3_9_3_curation_report.md",
+      "sizeBytes": 12070,
+      "sha256": "2fa6f9b872771342f190ed910825f463602c9208b91ef5e57a6581ab1cbde0a2",
+      "mtimeIso": "2026-11-23T10:31:08.095Z"
+    },
+    {
+      "path": "phase_3_9_3_duplicate_and_coverage_review.csv",
+      "sizeBytes": 94311,
+      "sha256": "40d097313880c283f54898e5816de575c332930498c5cbaadb1f5c40212475f0",
+      "mtimeIso": "2026-11-23T10:31:08.095Z"
+    },
+    {
+      "path": "phase_3_9_3_official_source_evidence.csv",
+      "sizeBytes": 47560,
+      "sha256": "40cf00902f655e2ed3815e85f77d8b6e54537afe5f6be4afe773b95864284aec",
+      "mtimeIso": "2026-11-23T10:31:08.095Z"
+    },
+    {
+      "path": "phase_3_9_3_proposed_batch11_candidates.json",
+      "sizeBytes": 15944,
+      "sha256": "51979427fb6d31598aecf4541711c311dc1f670162fff7a324d1a1e9eb7b4abd",
+      "mtimeIso": "2026-11-23T10:31:08.096Z"
+    },
+    {
+      "path": "phase_3_9_4_batch11_approval_report.md",
+      "sizeBytes": 16800,
+      "sha256": "757f37a4c1b589d731600f45f943fccc9c5bb99596c03744b423d41f33a674fd",
+      "mtimeIso": "2026-11-23T10:31:08.096Z"
+    },
+    {
+      "path": "phase_3_9_4_candidate_approval_matrix.csv",
+      "sizeBytes": 12743,
+      "sha256": "5b9dca08e025d0009972a44b3157da6da61e6b4ed9eb9e0e74d5b2f4fcce1f4e",
+      "mtimeIso": "2026-11-23T10:31:08.096Z"
+    },
+    {
+      "path": "phase_3_9_4_change_manifest.json",
+      "sizeBytes": 2504,
+      "sha256": "17c4167f48dfd60708a9acf820b3de60b1139c36059c38a67ceedb49d7cb278b",
+      "mtimeIso": "2026-11-23T10:31:08.096Z"
+    },
+    {
+      "path": "phase_3_9_4_official_source_recheck.csv",
+      "sizeBytes": 6127,
+      "sha256": "40095e913dae10ff67ff42a913e7d15da23061244f236d22206e5f2dc1fd78ea",
+      "mtimeIso": "2026-11-23T10:31:08.096Z"
+    },
+    {
+      "path": "phase_3_9_4_profile_schema_readiness.csv",
+      "sizeBytes": 117925,
+      "sha256": "a6a8888308448ff7bced7f516b3068978ac3f147aaa0a8f3070158d5b70b0fbb",
+      "mtimeIso": "2026-11-23T10:31:08.096Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_claim_evidence_registry.csv",
+      "sizeBytes": 777439,
+      "sha256": "6798057f7e02204eed4af9f181ebb6e89d680a5fb7f0236df11fc767ad4e2ff2",
+      "mtimeIso": "2026-11-23T10:31:08.097Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_implementation_report.md",
+      "sizeBytes": 27946,
+      "sha256": "3794298ef3c79c9a440d1517a7dce63c5e804ce62e5d058e6c3d215f34918622",
+      "mtimeIso": "2026-11-23T10:31:08.097Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_pathway_manifest.json",
+      "sizeBytes": 1553576,
+      "sha256": "15766171304f193976faaf629d43063f732c6da250d9a4b68e838f63049294c0",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_quarantine_register.csv",
+      "sizeBytes": 18847,
+      "sha256": "b62e4dfd5e68e54373a299cf966e96cfada8c78fac176c891488722baf2de50e",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_section_status.csv",
+      "sizeBytes": 49645,
+      "sha256": "17d62b154b44e2997877b5606128bfc2fb768479411f010489777d3062e5b705",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_source_registry.csv",
+      "sizeBytes": 5956,
+      "sha256": "0b5e50f4a51f2a9d5d79fdf790a7e0ea10c8be474f01d9d8a6a2f240d36d66e5",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_5_batch11_special_topics_status.csv",
+      "sizeBytes": 108485,
+      "sha256": "7aad51310009987ce07b67eec4daab8880e884a2f4c76d629859b5efb2602f70",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_5_change_manifest.json",
+      "sizeBytes": 2800,
+      "sha256": "b3c56e651ab9c5e9787f3f3b8495dac1c6d903f734a87c61bf710a85f9e43f12",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_6_backup_integrity_report.json",
+      "sizeBytes": 1158,
+      "sha256": "d2b454c3b9fa9e049f0916f8513b070b76f2a057f36008ac57e9a020615a7f70",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_6_batch11_post_audit_report.md",
+      "sizeBytes": 21833,
+      "sha256": "9ff81370074c3dbe7f2188cd1d4f547336c6f94a0d028527f166b0ff20a5f2b3",
+      "mtimeIso": "2026-11-23T10:31:08.099Z"
+    },
+    {
+      "path": "phase_3_9_6_change_manifest.json",
+      "sizeBytes": 2508,
+      "sha256": "ceaac8c797f15e9bb5350d16000aec55972949181f070d59c1d6f3c1bb234db1",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_6_claim_evidence_audit.csv",
+      "sizeBytes": 391328,
+      "sha256": "0df90598d87f0a2bbe4ef0df308ca8a86e8cfd06882fefc4069de805e5617064",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_6_pathway_integrity_matrix.csv",
+      "sizeBytes": 4367,
+      "sha256": "19dccca93bec6b457acdbb45801ab9f47b7b52d52f21d4bfc880e7c15bcfcb4e",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_6_profile_special_topic_audit.csv",
+      "sizeBytes": 95576,
+      "sha256": "523af22962d942557f5b224056cafa6d65a89b8d1b49e54f5f9ae96b24861d3d",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_6_public_sanitization_test.json",
+      "sizeBytes": 32936,
+      "sha256": "368f98b1b786ad00daad67a235a21a020aa8dd7e47ca5517cd1e45f16e4a0730",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_6_quarantine_integrity_report.csv",
+      "sizeBytes": 14894,
+      "sha256": "6ea24d0fa47f63f5accde97fd44d24a3ac442e9e79db052a2e5a95132135c599",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_7_batch12_candidate_matrix.csv",
+      "sizeBytes": 10787,
+      "sha256": "2469d8dbf65f826a81a629eb894304fb78930534488c38610d40d47d256302f0",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_7_batch12_curation_report.md",
+      "sizeBytes": 28576,
+      "sha256": "fc33f05513e462a7f4649729ac6097bb7baf63824a8fe72ed08ee0f6da005e68",
+      "mtimeIso": "2026-11-23T10:31:08.100Z"
+    },
+    {
+      "path": "phase_3_9_7_change_manifest.json",
+      "sizeBytes": 861,
+      "sha256": "07907e3d62115e9582418831635ac85102b610f6138e6a4a9b6ba471aad38719",
+      "mtimeIso": "2026-11-23T10:31:08.101Z"
+    },
+    {
+      "path": "phase_3_9_7_duplicate_and_evidence_check.csv",
+      "sizeBytes": 32404,
+      "sha256": "74de8a97f900c8ec27d307766ebc6a629d0aef0ccf197d72786321a419c77f74",
+      "mtimeIso": "2026-11-23T10:31:08.101Z"
+    },
+    {
+      "path": "phase_3_9_7_proposed_batch12_candidates.json",
+      "sizeBytes": 34287,
+      "sha256": "f0c7ae1aeb8b70829edbd80909cb48e354a662d96211b9fb04f26b60924b9b9a",
+      "mtimeIso": "2026-11-23T10:31:08.101Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_claim_evidence_registry.csv",
+      "sizeBytes": 904286,
+      "sha256": "bf4cdba2a7559afe1648cbe444c9dfa9d5ccf2b6d30910ce9955413b8ba67fbb",
+      "mtimeIso": "2026-11-23T10:31:08.101Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_implementation_report.md",
+      "sizeBytes": 36444,
+      "sha256": "908117b5bc07eb982da1d61d9ec160cef32cea2dd0612a33ad94541696b32ad7",
+      "mtimeIso": "2026-11-23T10:31:08.102Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_pathway_manifest.json",
+      "sizeBytes": 194684,
+      "sha256": "4c35529c29181961c92bf8269465a95fd0760a7cc09c6d76496b45ca7dc6f20d",
+      "mtimeIso": "2026-11-23T10:31:08.103Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_quarantine_register.csv",
+      "sizeBytes": 20275,
+      "sha256": "67f35d4dd21cbdfffbbe8f79dc6abad9005eca0b0454ad6e2040642ab7fa9c78",
+      "mtimeIso": "2026-11-23T10:31:08.103Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_section_status.csv",
+      "sizeBytes": 57314,
+      "sha256": "dd127d10a3090b1830b9b6f0a5b455ad1b663be6905b8e5d86ab5006676b9587",
+      "mtimeIso": "2026-11-23T10:31:08.103Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_source_registry.csv",
+      "sizeBytes": 3662,
+      "sha256": "4dc39f28e2fc146aeabe7857e6bd39d0614085dcc3a4bc842324e6cbcf4d87b8",
+      "mtimeIso": "2026-11-23T10:31:08.103Z"
+    },
+    {
+      "path": "phase_3_9_8_batch12_special_topics_status.csv",
+      "sizeBytes": 119187,
+      "sha256": "70a94b30b7dfa52bbc1813a215f1da5ded96260e5ab1ce7ab9df105d39189ad3",
+      "mtimeIso": "2026-11-23T10:31:08.104Z"
+    },
+    {
+      "path": "phase_3_9_8_change_manifest.json",
+      "sizeBytes": 2914,
+      "sha256": "093174d31a863a59435da080d515b9a4c701737ca9ad85edfd1751bc099b14c1",
+      "mtimeIso": "2026-11-23T10:31:08.104Z"
+    },
+    {
+      "path": "phase_3_9_8_public_sanitization_test.json",
+      "sizeBytes": 8353,
+      "sha256": "2be6d1bf0fc8a6d04bc20e1c6dc99331f8aefd0822d58cf52022d130f371a763",
+      "mtimeIso": "2026-11-23T10:31:08.104Z"
+    },
+    {
+      "path": "phase_3_9_batch10_claim_evidence_audit.json",
+      "sizeBytes": 1230881,
+      "sha256": "2d68ca4e10cd43fc6ab40ad562b9e996846826af8845b68c2e7015d27b478359",
+      "mtimeIso": "2026-11-23T10:31:08.105Z"
+    },
+    {
+      "path": "phase_3_9_batch10_nationality_scope_matrix.csv",
+      "sizeBytes": 126073,
+      "sha256": "53d69f563af1e095219ffc64cde8c60360a148b2bd9c87f660eb311ab8cb956f",
+      "mtimeIso": "2026-11-23T10:31:08.105Z"
+    },
+    {
+      "path": "phase_3_9_batch10_numeric_claims.csv",
+      "sizeBytes": 18637,
+      "sha256": "b7930f5191f1c32031b8f6b35b700075b24146de1375920233e653f99b354415",
+      "mtimeIso": "2026-11-23T10:31:08.105Z"
+    },
+    {
+      "path": "phase_3_9_batch10_pathway_registry.csv",
+      "sizeBytes": 7535,
+      "sha256": "ba1c89902d8cabaf78d128f0f332cb8a3ea49a9f3ca4ebd04a151d744c6c0d99",
+      "mtimeIso": "2026-11-23T10:31:08.105Z"
+    },
+    {
+      "path": "phase_3_9_batch10_report.md",
+      "sizeBytes": 11855,
+      "sha256": "1fb231302a0dd942d3d5863aa0e225737001638c0478df3e1e79861c5b3ed89d",
+      "mtimeIso": "2026-11-23T10:31:08.106Z"
+    },
+    {
+      "path": "phase_3_9_batch10_section_status.csv",
+      "sizeBytes": 25546,
+      "sha256": "e26bdb042884a66b7be3e6206573304cbe1169641fc082239bfb606c2845d417",
+      "mtimeIso": "2026-11-23T10:31:08.106Z"
+    },
+    {
+      "path": "phase_3_9_batch10_selection_manifest.csv",
+      "sizeBytes": 4259,
+      "sha256": "c7c202b445c3d6fdc6a18dbfe61cb4ed0affeb61577fe9b4b22835a09262b68e",
+      "mtimeIso": "2026-11-23T10:31:08.107Z"
+    },
+    {
+      "path": "phase_3_9_batch10_source_registry.csv",
+      "sizeBytes": 5582,
+      "sha256": "72b4bbc5005c0555e552ae475bfe087127df8aa514ff1f304157322ef1f368c0",
+      "mtimeIso": "2026-11-23T10:31:08.107Z"
+    },
+    {
+      "path": "phase_4_0_master_change_manifest.json",
+      "sizeBytes": 9797,
+      "sha256": "1daba12211ded3f97ebeec7ccfc55328a23e1833ce09304ae18437d9242b70fc",
+      "mtimeIso": "2026-11-23T10:31:08.107Z"
+    },
+    {
+      "path": "phase_4_0_master_claim_evidence_registry.csv",
+      "sizeBytes": 3782605,
+      "sha256": "04d469fddd9a03a65d7f598416d1761222fb6f299052a518bd101461c0b5cbb1",
+      "mtimeIso": "2026-11-23T10:31:08.110Z"
+    },
+    {
+      "path": "phase_4_0_master_pathway_manifest.json",
+      "sizeBytes": 995086,
+      "sha256": "69c90bcca5d0931ed75f7b56ae75137cab25640d7f2abede59811e10d1d44800",
+      "mtimeIso": "2026-11-23T10:31:08.113Z"
+    },
+    {
+      "path": "phase_4_0_master_quarantine_register.csv",
+      "sizeBytes": 134311,
+      "sha256": "1167f2a2a3c7157376ff28219cd809d7c1feb04b342ef6d35f188bea2c71b216",
+      "mtimeIso": "2026-11-23T10:31:08.113Z"
+    },
+    {
+      "path": "phase_4_0_master_section_status.csv",
+      "sizeBytes": 306092,
+      "sha256": "2998913abc1a081f982c59a161bdcca3c9e86519117bdcb12de63850f8fa9500",
+      "mtimeIso": "2026-11-23T10:31:08.114Z"
+    },
+    {
+      "path": "phase_4_0_master_source_registry.csv",
+      "sizeBytes": 36799,
+      "sha256": "b887b67967f58ffe9f492428cfdaf0e7b6738e2b8d2914c3c335457527d26069",
+      "mtimeIso": "2026-11-23T10:31:08.114Z"
+    },
+    {
+      "path": "phase_4_0_master_special_topics_status.csv",
+      "sizeBytes": 690090,
+      "sha256": "f8228a07362e462f79db43379407f10cccc727bba8523a388866f8e51d237221",
+      "mtimeIso": "2026-11-23T10:31:08.115Z"
+    },
+    {
+      "path": "phase_4_0_public_sanitization_test.json",
+      "sizeBytes": 48406,
+      "sha256": "2dc482d54050672bc681493267008deefbc63282721ef92396b49abf91f3aa39",
+      "mtimeIso": "2026-11-23T10:31:08.115Z"
+    },
+    {
+      "path": "src/data/all249Countries.ts",
+      "sizeBytes": 12149,
+      "sha256": "af7a3f30f27e099303b057b8c83fa3e8f805a916f9765bf2a3f2d517b2a9ceaa",
+      "mtimeIso": "2026-11-23T10:31:08.117Z"
+    },
+    {
+      "path": "src/data/anyToAnyLight.ts",
+      "sizeBytes": 19429,
+      "sha256": "e1976ddd17506d34b9c35c76c2ec8d2f5fa2151fd7a90976cb6e021f77736437",
+      "mtimeIso": "2026-11-23T10:31:08.117Z"
+    },
+    {
+      "path": "src/data/anyToAnyMatrix.ts",
+      "sizeBytes": 21354,
+      "sha256": "f23df60ccc1789a593fb0a9f980468b2f2be58ae2f1f10c2e9b805b0560f6e13",
+      "mtimeIso": "2026-11-23T10:31:08.118Z"
+    },
+    {
+      "path": "src/data/asiaOptionAVisas.ts",
+      "sizeBytes": 22145,
+      "sha256": "823d82cfe4ae58ea859fa884dadbe0e9ecd44d620cd99bc1108f83cb75eab950",
+      "mtimeIso": "2026-11-23T10:31:08.118Z"
+    },
+    {
+      "path": "src/data/australiaVisas.ts",
+      "sizeBytes": 119730,
+      "sha256": "6c16ebbc3f814770f007c0042a5832b3b3729fcdcff519569b746214ac743625",
+      "mtimeIso": "2026-11-23T10:31:08.118Z"
+    },
+    {
+      "path": "src/data/austriaVisas.ts",
+      "sizeBytes": 69542,
+      "sha256": "d5f8ef92d3813587a563f8e27fc25f4c7f4559f854a90e79e602d9cbd466c66f",
+      "mtimeIso": "2026-11-23T10:31:08.118Z"
+    },
+    {
+      "path": "src/data/belgiumVisas.ts",
+      "sizeBytes": 69927,
+      "sha256": "764059fef02386170e6e1babc3b3ecf22446083c6c598a2f6e55d20d28179b28",
+      "mtimeIso": "2026-11-23T10:31:08.118Z"
+    },
+    {
+      "path": "src/data/blogGenerator.ts",
+      "sizeBytes": 30405,
+      "sha256": "7bb279e1f8824c2204ca09dbaee4c343493cc9c4fb4da6ef6527fd0822270a42",
+      "mtimeIso": "2026-11-23T10:31:08.118Z"
+    },
+    {
+      "path": "src/data/brazilVisas.ts",
+      "sizeBytes": 67184,
+      "sha256": "c6b63bec1b67f132ebda73cb091f4b7d0cbe0ec14fdd33ab67300a0048a1fe0c",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/canada130Visas.ts",
+      "sizeBytes": 128745,
+      "sha256": "6ee77e2bbdaab97b8ba4ce67b4ddb671b793f2e7d496b851ea8eb75b1a398885",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/canadaVisas.ts",
+      "sizeBytes": 162300,
+      "sha256": "e31fa231c523da63e70840f4ac97a5142c3e1f5affc9abe1a39ae0007b494fdd",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/chinaVisas.ts",
+      "sizeBytes": 78302,
+      "sha256": "f0a1b4733b6fc1497ac45a8e71622a8b0f5eab63fa8b72cc5162ff235c6c0b2e",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/continentMap.ts",
+      "sizeBytes": 7324,
+      "sha256": "1199c667488f4fd5ec1c1fcdba08a539e7b2e6e1cce69629ab3d0844fdec0f0e",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/countryLightRegistry.ts",
+      "sizeBytes": 11398,
+      "sha256": "7b6787c679fc37ce29c3eab120a93d0f4b8aba85d17da4d8e3024e1c403c5834",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/countryMetaData.ts",
+      "sizeBytes": 49833,
+      "sha256": "092077026f27dee358a861ad43205f9c98738bcd470243b965f662e39b52324e",
+      "mtimeIso": "2026-11-23T10:31:08.119Z"
+    },
+    {
+      "path": "src/data/defaultArticles.ts",
+      "sizeBytes": 33074,
+      "sha256": "431479f8877e1408eaa3e96902812f04ff74fa2adcc151b9ce74229dbe7c4ba2",
+      "mtimeIso": "2026-11-23T10:31:08.120Z"
+    },
+    {
+      "path": "src/data/denmarkVisas.ts",
+      "sizeBytes": 66402,
+      "sha256": "ae088ba690b25975023e3c52ed3279beb8602b2381649139b4f0b8fbd9c3942c",
+      "mtimeIso": "2026-11-23T10:31:08.120Z"
+    },
+    {
+      "path": "src/data/embassyAddresses.ts",
+      "sizeBytes": 23030,
+      "sha256": "52c43fdc30c77df46803a1cb52283aeaa88cf95f6c4874a01f30cae29bd2239c",
+      "mtimeIso": "2026-11-23T10:31:08.120Z"
+    },
+    {
+      "path": "src/data/finlandVisas.ts",
+      "sizeBytes": 69368,
+      "sha256": "bcf93dfc625362a8b1789c0ae7d6aa9676dd0eef2e232d1e783bdcf46023f891",
+      "mtimeIso": "2026-11-23T10:31:08.120Z"
+    },
+    {
+      "path": "src/data/franceVisas.ts",
+      "sizeBytes": 102073,
+      "sha256": "cffa0ae60f2a7362f0a7ee0e49b3aa47f08238a37340e82cb0739ce2937d8f9a",
+      "mtimeIso": "2026-11-23T10:31:08.120Z"
+    },
+    {
+      "path": "src/data/fullVisaDatabase.ts",
+      "sizeBytes": 123151,
+      "sha256": "f14a75be9706ba9a5fd92b7d543d7113312828f674eda6f8b1a51a81806f11cd",
+      "mtimeIso": "2026-11-23T10:31:08.120Z"
+    },
+    {
+      "path": "src/data/germanyVisas.ts",
+      "sizeBytes": 107409,
+      "sha256": "623fb0e2cc1600aa74a9d5c743f7bc68c2ef90ff2ed9bd576db2c214a939ddff",
+      "mtimeIso": "2026-11-23T10:31:08.121Z"
+    },
+    {
+      "path": "src/data/globalImmigrationHubData.ts",
+      "sizeBytes": 99402,
+      "sha256": "ad1c71b3c4effa91a44467d5c8e4b17545ccaacc99d10a4906b03d16cb6eb796",
+      "mtimeIso": "2026-11-23T10:31:08.121Z"
+    },
+    {
+      "path": "src/data/immigrationChangelog.json",
+      "sizeBytes": 5597,
+      "sha256": "b96993cc0271ba1e92ba1eb92b9697d6e1c7c00f48c63b35e563fc8dd6cdefe9",
+      "mtimeIso": "2026-11-23T10:31:08.121Z"
+    },
+    {
+      "path": "src/data/indiaVisas.ts",
+      "sizeBytes": 119829,
+      "sha256": "6802e8736016dce42fe1b1b1165ff58615e2b49bcd50fc646203b4d8ff71d533",
+      "mtimeIso": "2026-11-23T10:31:08.121Z"
+    },
+    {
+      "path": "src/data/indonesiaVisas.ts",
+      "sizeBytes": 90243,
+      "sha256": "08945e3989f3ff9f556eec37b5c35759acb1015a8df18dac18c2a92c1eb5dfbf",
+      "mtimeIso": "2026-11-23T10:31:08.121Z"
+    },
+    {
+      "path": "src/data/irelandVisas.ts",
+      "sizeBytes": 81916,
+      "sha256": "afb2cf6dda6ce5c7ee1d211de13c6739817eabd819548a26a97465af784ae573",
+      "mtimeIso": "2026-11-23T10:31:08.122Z"
+    },
+    {
+      "path": "src/data/italyVisas.ts",
+      "sizeBytes": 111769,
+      "sha256": "caa5675dc1e0ca7127ef3e0dd83045ad2f850d5da13b04e4cec994c41301d6a4",
+      "mtimeIso": "2026-11-23T10:31:08.122Z"
+    },
+    {
+      "path": "src/data/japanVisas.ts",
+      "sizeBytes": 100103,
+      "sha256": "6998e2837b2c02a75f0f74bdfb70e1026478563f5b51decca8ce6e330ffc7e37",
+      "mtimeIso": "2026-11-23T10:31:08.122Z"
+    },
+    {
+      "path": "src/data/jpToInDetailed.ts",
+      "sizeBytes": 13318,
+      "sha256": "2654d6fc5d4383ebd8b215fbfad89bb0b2021016d208169f54020d7d11d665ba",
+      "mtimeIso": "2026-11-23T10:31:08.122Z"
+    },
+    {
+      "path": "src/data/languageMap.ts",
+      "sizeBytes": 642,
+      "sha256": "d7cca78bf6f722a7516b7e9ee227ca19444e7fdcf55a9ec4af6a9c9f02249253",
+      "mtimeIso": "2026-11-23T10:31:08.122Z"
+    },
+    {
+      "path": "src/data/malaysiaVisas.ts",
+      "sizeBytes": 96547,
+      "sha256": "7a84e0bbcf79c55a97dd1223793383b17af82a2cf61467e54636e1547bda4f44",
+      "mtimeIso": "2026-11-23T10:31:08.122Z"
+    },
+    {
+      "path": "src/data/mexicoVisas.ts",
+      "sizeBytes": 65029,
+      "sha256": "0fc4a1fb8ff58a0ba244faebc60c725dc75663e03269095b98dea31a35ca714a",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/netherlandsVisas.ts",
+      "sizeBytes": 87150,
+      "sha256": "b3eb56c112309f51d4e4c076b9483b7ccad83e3b757daedd1c36ac9e90982c90",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/newZealandVisas.ts",
+      "sizeBytes": 84016,
+      "sha256": "962774ceb5f8f3fcf104c4c0e182fce63a1dc368ccfc49ae27810332c0b5d09f",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/norwayVisas.ts",
+      "sizeBytes": 67294,
+      "sha256": "489fd0e098c551736def6c5cdde61ee8ab85f06acff6892a44588be3c505ba3f",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/officialSourceRegistry.ts",
+      "sizeBytes": 16086,
+      "sha256": "d60184d24b0346e95cf961c1c7f46e77f8dbc9cdc3574bae66f9e06d8eb6a580",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/optionBVisas.ts",
+      "sizeBytes": 24708,
+      "sha256": "a8e105d4c73e979c47ad47604b9254f74ab166b089ee7d428eea3939aa58ce23",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/optionDVisas.ts",
+      "sizeBytes": 27232,
+      "sha256": "188995864f0cce8d5ef5db9ea50f166daa9e9aa3394901af861c15dca3f779e9",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/optionEVisas.ts",
+      "sizeBytes": 20006,
+      "sha256": "6fb87029326a148c20a946a0c6386ebca8cc435825ceffdeceb9e3263c91a061",
+      "mtimeIso": "2026-11-23T10:31:08.123Z"
+    },
+    {
+      "path": "src/data/philippinesVisas.ts",
+      "sizeBytes": 78468,
+      "sha256": "b8164f0601cdb0ce84331a3006fd809bbdaea0899f79cc6298f5b585bef3e68d",
+      "mtimeIso": "2026-11-23T10:31:08.124Z"
+    },
+    {
+      "path": "src/data/polandVisas.ts",
+      "sizeBytes": 67435,
+      "sha256": "2587f517badaf75ec981f8cda92f25a156d3a1b14c04b6fec1d4bc8ca395a759",
+      "mtimeIso": "2026-11-23T10:31:08.124Z"
+    },
+    {
+      "path": "src/data/portugalVisas.ts",
+      "sizeBytes": 86122,
+      "sha256": "645f81bebedae11d8de96f19f91e246d29ff62221335473a4dddd79b454dfdb4",
+      "mtimeIso": "2026-11-23T10:31:08.124Z"
+    },
+    {
+      "path": "src/data/priority1AuditData.ts",
+      "sizeBytes": 25947,
+      "sha256": "71810821fcc77dd9f2f637601fa6fefd442aefbcee6b83949d119f9cbf0c302e",
+      "mtimeIso": "2026-11-23T10:31:08.124Z"
+    },
+    {
+      "path": "src/data/priority2AuditData.ts",
+      "sizeBytes": 468257,
+      "sha256": "78c7aeb8c5c493e7ac7ccdc6a671f6faba7853ab34373453fd2c1122a384feab",
+      "mtimeIso": "2026-11-23T10:31:08.124Z"
+    },
+    {
+      "path": "src/data/qatarVisas.ts",
+      "sizeBytes": 47812,
+      "sha256": "614f5523f93f682bafad82f9d5f06ed5913a512c70b40cfebfb0ee56201b1932",
+      "mtimeIso": "2026-11-23T10:31:08.125Z"
+    },
+    {
+      "path": "src/data/regionalMigration.ts",
+      "sizeBytes": 12723,
+      "sha256": "16f4d3a78f04f67a3c494c742ba83e8be7f7305cc180d8c4996325c0adaae541",
+      "mtimeIso": "2026-11-23T10:31:08.125Z"
+    },
+    {
+      "path": "src/data/saudiArabiaVisas.ts",
+      "sizeBytes": 68588,
+      "sha256": "a50f8b1bc92958ee5081c9ee281d5e1e2f6fa374833edf072c86f771d8c827d6",
+      "mtimeIso": "2026-11-23T10:31:08.125Z"
+    },
+    {
+      "path": "src/data/schengenVisas.ts",
+      "sizeBytes": 78742,
+      "sha256": "e5d2e7a72e161517a246a818d3d31bbaa164288f8b38d41886a1c04b11973649",
+      "mtimeIso": "2026-11-23T10:31:08.125Z"
+    },
+    {
+      "path": "src/data/singaporeVisas.ts",
+      "sizeBytes": 88137,
+      "sha256": "54b887a258cf7c894dba5ab45a03b9bd31a9d3f10275cfa2a3b192a13773c0a9",
+      "mtimeIso": "2026-11-23T10:31:08.125Z"
+    },
+    {
+      "path": "src/data/southAfricaVisas.ts",
+      "sizeBytes": 65343,
+      "sha256": "3492bf30687080a5cb84afefd0d1d3da5785b2b441242d4cb309993465da9a40",
+      "mtimeIso": "2026-11-23T10:31:08.125Z"
+    },
+    {
+      "path": "src/data/southKoreaVisas.ts",
+      "sizeBytes": 72184,
+      "sha256": "c49780ddc4bc4dc1d42c62ee6767c749e1e7993786b7e14c44675804105ec215",
+      "mtimeIso": "2026-11-23T10:31:08.126Z"
+    },
+    {
+      "path": "src/data/sovereignAuthorityDirectory.ts",
+      "sizeBytes": 6943,
+      "sha256": "37b6675218ff1f784d84aa350d3c25aa53ad28d3842f99e54967f24f1ccc59c0",
+      "mtimeIso": "2026-11-23T10:31:08.126Z"
+    },
+    {
+      "path": "src/data/spainVisas.ts",
+      "sizeBytes": 113086,
+      "sha256": "cf5dc2534cf307c96cee5bae3cfae2bba84c380b14d5a99f9f77325a5eb21020",
+      "mtimeIso": "2026-11-23T10:31:08.126Z"
+    },
+    {
+      "path": "src/data/specialVisasAudit.ts",
+      "sizeBytes": 46019,
+      "sha256": "45fc96ec985c8ea6c764ee04c6e5a3f4f7fbb486cce29294d9372d14113316ae",
+      "mtimeIso": "2026-11-23T10:31:08.126Z"
+    },
+    {
+      "path": "src/data/swedenVisas.ts",
+      "sizeBytes": 68839,
+      "sha256": "7552d078f9040d96e5f45e5e2f9179b6757a31d2889b7514bfddab4cdc2085a6",
+      "mtimeIso": "2026-11-23T10:31:08.127Z"
+    },
+    {
+      "path": "src/data/switzerlandVisas.ts",
+      "sizeBytes": 93075,
+      "sha256": "e78599bfb1f235860dca4c06abec7c5139f07aac207ca574ad063cb80fc183b3",
+      "mtimeIso": "2026-11-23T10:31:08.127Z"
+    },
+    {
+      "path": "src/data/thailandVisas.ts",
+      "sizeBytes": 94068,
+      "sha256": "ead1d7549e37fd2dd1a7beb33824b99a46cea154b05a03e7625408e78c246bfd",
+      "mtimeIso": "2026-11-23T10:31:08.127Z"
+    },
+    {
+      "path": "src/data/translations.ts",
+      "sizeBytes": 25272,
+      "sha256": "e3826bf24b4970d353a6acde63ce7c41ce3352adf6780eeceaf40a2c4a89fe9a",
+      "mtimeIso": "2026-11-23T10:31:08.128Z"
+    },
+    {
+      "path": "src/data/travelpayoutsConfig.ts",
+      "sizeBytes": 6101,
+      "sha256": "cb72d8421f7d18ea26ebde4e52a2184383ea84d3776e2503fb4c6c85950500d1",
+      "mtimeIso": "2026-11-23T10:31:08.128Z"
+    },
+    {
+      "path": "src/data/turkeyVisas.ts",
+      "sizeBytes": 71494,
+      "sha256": "61981bb017cc52e14636143905e777cf551f509cdd433ad951d707f5d4fdb89e",
+      "mtimeIso": "2026-11-23T10:31:08.128Z"
+    },
+    {
+      "path": "src/data/uaeVisas.ts",
+      "sizeBytes": 111076,
+      "sha256": "78016a20c6503f3901c9e1ef3d0eeea3fdbc71b388a444a77529b3494591f442",
+      "mtimeIso": "2026-11-23T10:31:08.129Z"
+    },
+    {
+      "path": "src/data/ukAdditionalRoutes.ts",
+      "sizeBytes": 134334,
+      "sha256": "cdcfca991444b663a81ab4bb85b4cc157018adf3c6d93fa720241e3aef9534c9",
+      "mtimeIso": "2026-11-23T10:31:08.129Z"
+    },
+    {
+      "path": "src/data/ukRegionalJobs.ts",
+      "sizeBytes": 14853,
+      "sha256": "00be13ce286f582e46453d08196529f0d61759e699b62b55f4a3477d8ae1a3b2",
+      "mtimeIso": "2026-11-23T10:31:08.129Z"
+    },
+    {
+      "path": "src/data/ukVisas.ts",
+      "sizeBytes": 146413,
+      "sha256": "4ab6ad359dee58e67289af1ea94e281421cdc857af207246fc8a852ea5ac1af4",
+      "mtimeIso": "2026-11-23T10:31:08.130Z"
+    },
+    {
+      "path": "src/data/universalEmbassyDatabase.ts",
+      "sizeBytes": 10775,
+      "sha256": "4c43825f115f24e2cbbbbbd11450463db6b35372d7e3b78f85ddb2bf82801c0f",
+      "mtimeIso": "2026-11-23T10:31:08.130Z"
+    },
+    {
+      "path": "src/data/usa201Visas.ts",
+      "sizeBytes": 8819,
+      "sha256": "372172e17b2e56cfee64b32319af85e1d6569e9297366df714c9713af324e411",
+      "mtimeIso": "2026-11-23T10:31:08.130Z"
+    },
+    {
+      "path": "src/data/usaVisas.ts",
+      "sizeBytes": 250920,
+      "sha256": "dc7e4bbd8ffe33751a4b0dca8ae3e304d1e67459e35c967f5a09e55ef9df815b",
+      "mtimeIso": "2026-11-23T10:31:08.131Z"
+    },
+    {
+      "path": "src/data/vietnamVisas.ts",
+      "sizeBytes": 63315,
+      "sha256": "17982216baba56abb7ada0ab478da2b6eb0fbd110fb0c247e75b6ddbabce23df",
+      "mtimeIso": "2026-11-23T10:31:08.131Z"
+    },
+    {
+      "path": "src/db/databaseProvider.ts",
+      "sizeBytes": 22756,
+      "sha256": "c891f54788704144cad011340768f8cbc9ab3a4df8983fbb52092d08149ae4d3",
+      "mtimeIso": "2026-11-23T10:31:08.116Z"
+    },
+    {
+      "path": "src/db/immigrationDatabase.ts",
+      "sizeBytes": 10286,
+      "sha256": "7ef849f37df08116fb3e4706171e680a15772e36f1af6f19aac490515061d5de",
+      "mtimeIso": "2026-11-23T10:31:08.116Z"
+    },
+    {
+      "path": "src/db/phaseB3MigrationEngine.ts",
+      "sizeBytes": 45203,
+      "sha256": "df91c736054ef8f1872cb7b3f8e461e5077b1c8b44911fdc92e373a0fd75bb26",
+      "mtimeIso": "2026-11-23T10:31:08.116Z"
+    },
+    {
+      "path": "src/db/phaseB3ParityVerifier.ts",
+      "sizeBytes": 15022,
+      "sha256": "38ebfdb8bae71ad59794885a960440a516b1cde6f81cc7ef5ae3fb97a7dce6d7",
+      "mtimeIso": "2026-11-23T10:31:08.116Z"
+    },
+    {
+      "path": "src/db/postgresDatabase.ts",
+      "sizeBytes": 100924,
+      "sha256": "f57dd8f4fcd805cebf8dbea183d60a604aa90bb677d066899943e5b0afb50fa1",
+      "mtimeIso": "2026-11-23T10:31:08.116Z"
+    },
+    {
+      "path": "src/db/repository.ts",
+      "sizeBytes": 25280,
+      "sha256": "b99c9de7c69036aa6b532fba8a449a5f84e368ba6e04672738df95dccc5dd6e7",
+      "mtimeIso": "2026-11-23T10:31:08.116Z"
+    },
+    {
+      "path": "src/db/sqliteCore.ts",
+      "sizeBytes": 62723,
+      "sha256": "f3f716ead122a4f0cd552ab87487ba16c8eb007092842d6641154a7f789f6271",
+      "mtimeIso": "2026-11-23T10:31:08.117Z"
+    },
+    {
+      "path": "src/types/visaComprehensiveProfile.ts",
+      "sizeBytes": 125738,
+      "sha256": "f9571d035a441b07dd4542ee70cba0b5185b59782ed994a97d768719e790b1f7",
+      "mtimeIso": "2026-11-23T10:31:08.132Z"
+    },
+    {
+      "path": "tsconfig.json",
+      "sizeBytes": 472,
+      "sha256": "d0a33699988bf3975389fdb06006eaa92ca7c86f710405d5c0dfb8bf7a442839",
+      "mtimeIso": "2026-11-23T10:31:08.115Z"
+    },
+    {
+      "path": "vercel.json",
+      "sizeBytes": 4398,
+      "sha256": "04bb6a70c387a36d4c961ccf62142860455a70c3c7bf0bd7dc6d71ce0b7b41b0",
+      "mtimeIso": "2026-11-23T10:31:08.115Z"
+    }
+  ],
+  "totalFiles": 245,
+  "totalUncompressedBytes": 34649417,
+  "excludedPatterns": [
+    ".env",
+    ".env.*",
+    "!/.env.example",
+    "node_modules/**",
+    ".git/**",
+    "dist/**",
+    "build/**",
+    ".vercel/**",
+    "*.tar.gz",
+    "*.log",
+    "*.tmp",
+    "*.db-wal",
+    "*.db-shm",
+    "*.pem",
+    "*.key",
+    "*.p12",
+    "*.pfx"
+  ]
+}
