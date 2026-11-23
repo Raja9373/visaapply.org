@@ -518,7 +518,11 @@ export function buildContentSecurityPolicy(options?: { allowPreviewFraming?: boo
     'https://ep1.adtrafficquality.google',
     'https://ep2.adtrafficquality.google',
     'https://emrldco.com',
+    'https://*.emrldco.com',
     'https://tp.media',
+    'https://*.tp.media',
+    'https://travelpayouts.com',
+    'https://*.travelpayouts.com',
     ...CSP_EXTERNAL_CONNECT_ALLOWLIST
   ].join(' ');
 
@@ -529,11 +533,11 @@ export function buildContentSecurityPolicy(options?: { allowPreviewFraming?: boo
   return [
     "default-src 'self'",
     `script-src ${scriptSources}`,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://emrldco.com https://*.emrldco.com https://tp.media https://*.tp.media",
     "font-src 'self' data: https://fonts.gstatic.com",
-    "img-src 'self' data: blob: https://flagcdn.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://emrldco.com https://tp.media",
+    "img-src 'self' data: blob: https://flagcdn.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://emrldco.com https://*.emrldco.com https://tp.media https://*.tp.media",
     `connect-src ${connectSources}`,
-    "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep2.adtrafficquality.google https://www.google.com https://tp.media https://c121.travelpayouts.com",
+    "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep2.adtrafficquality.google https://www.google.com https://tp.media https://*.tp.media https://c121.travelpayouts.com https://*.travelpayouts.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

@@ -943,4 +943,16 @@ test('Preview Security: AI Studio preview iframe framing allowed ONLY on scoped 
   const previewApiHeaders = getSecurityHeaders({ isApi: true, allowPreviewFraming: true });
   assert.equal(previewApiHeaders['X-Frame-Options'], 'DENY');
   assert.match(previewApiHeaders['Content-Security-Policy'], /frame-ancestors 'none'/);
+
+  // Production CSP permits Travelpayouts/Emerald tooltip stylesheets and check_auth origins
+  const prodHtmlHeaders = getSecurityHeaders({ isApi: false, allowPreviewFraming: false });
+  assert.match(prodHtmlHeaders['Content-Security-Policy'], /style-src[^;]*https:\/\/emrldco\.com/);
+  assert.match(prodHtmlHeaders['Content-Security-Policy'], /connect-src[^;]*https:\/\/\*\.travelpayouts\.com/);
+
+  // index.html skips injecting third-party ad/affiliate scripts (emrldco.com / adsbygoogle) on preview/local/iframe hosts
+  const indexHtml = fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf-8');
+  assert.ok(indexHtml.includes('host.endsWith(".run.app")'), 'index.html must skip preview *.run.app hosts for ad scripts');
+  assert.ok(indexHtml.includes('window.self !== window.top'), 'index.html must skip embedded iframes for ad scripts');
+  assert.ok(indexHtml.includes('isPreviewOrLocalHost'), 'index.html must gate loadThirdPartyScripts cleanly');
 });
+

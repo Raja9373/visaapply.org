@@ -152,6 +152,25 @@
     </script>
     <script>
       (function () {
+        var host = (window.location && window.location.hostname ? window.location.hostname : "").toLowerCase();
+        var inIframe = false;
+        try {
+          inIframe = window.self !== window.top;
+        } catch (e) {
+          inIframe = true;
+        }
+        var isPreviewOrLocalHost =
+          inIframe ||
+          !host ||
+          host === "localhost" ||
+          host === "127.0.0.1" ||
+          host === "[::1]" ||
+          host.endsWith(".run.app") ||
+          host.endsWith(".local");
+        if (isPreviewOrLocalHost) {
+          return;
+        }
+
         var loaded = false;
         function loadThirdPartyScripts() {
           if (loaded) return;
@@ -161,6 +180,7 @@
             adScript.async = true;
             adScript.crossOrigin = "anonymous";
             adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9048615701580913";
+            adScript.onerror = function () {};
             document.head.appendChild(adScript);
           } catch (e) {}
           try {
@@ -168,6 +188,7 @@
             tpScript.async = true;
             tpScript.setAttribute("data-cmp-ab", "2");
             tpScript.src = "https://emrldco.com/NTk2NjI2.js?t=596626";
+            tpScript.onerror = function () {};
             document.head.appendChild(tpScript);
           } catch (e) {}
         }
