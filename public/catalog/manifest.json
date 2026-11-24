@@ -2,7 +2,7 @@
   "schemaVersion": "2.0.0",
   "artifactRole": "GENERATED_STATIC_CATALOG_INDEXES",
   "authoritativeSourceDir": "data/",
-  "deterministicBuildHash": "0224697ee3466f4b6e73cebdbb5297c34d87f31f612fe387e04c506e64e33ffa",
+  "deterministicBuildHash": "22589745dfc80276c31cac47d1caf1cbdab217a1ffa17941a3c574a52924fadd",
   "supportedLanguages": [
     "en",
     "hi",
@@ -35,7 +35,8 @@
     "changelogEntries": 8,
     "languageSearchIndexes": 15,
     "lazyCountryChunks": 14,
-    "lazyVisaDetailChunks": 1
+    "lazyVisaDetailChunks": 1,
+    "lazyEditorialChunks": 2
   },
   "indexes": {
     "countries": {
@@ -82,10 +83,17 @@
     },
     "editorial": {
       "logicalId": "index:editorial",
-      "filePath": "index-editorial.fcbe849727.json",
-      "sha256": "fcbe849727b9f80244d60911d8de73dd88a4b0e960a5e6f4266546232d2426fa",
-      "bytes": 1069,
-      "gzipBytes": 443
+      "filePath": "index-editorial.cb677dc269.json",
+      "sha256": "cb677dc2693496a5ae2b6253e2e01bd339b3d622b69a719c031686dca7c48eac",
+      "bytes": 1197,
+      "gzipBytes": 491
+    },
+    "verificationSummary": {
+      "logicalId": "index:verification-summary",
+      "filePath": "index-verification-summary.8573ac3a4a.json",
+      "sha256": "8573ac3a4aa8e14970d16ae73a6d4a827ca95b6b7629ba94c72edcfbe3e63877",
+      "bytes": 748,
+      "gzipBytes": 465
     },
     "searchByLanguage": {
       "en": {
@@ -327,13 +335,29 @@
         "bytes": 802,
         "gzipBytes": 489
       }
+    },
+    "editorial": {
+      "in-to-ca-tourist": {
+        "logicalId": "chunk:editorial:in-to-ca-tourist",
+        "filePath": "chunks/editorial/in-to-ca-tourist.7cdb807dc5.json",
+        "sha256": "7cdb807dc5beb18fbd4998f8232dfc9c376260db1e39063abeaab47e2eb8af7c",
+        "bytes": 3123,
+        "gzipBytes": 1624
+      },
+      "us-to-uk-tourist": {
+        "logicalId": "chunk:editorial:us-to-uk-tourist",
+        "filePath": "chunks/editorial/us-to-uk-tourist.be14b68d7a.json",
+        "sha256": "be14b68d7a3b476d48fcdd3bcd9d40c3bdc83cba29c26231c5eebf8b61ca8c6d",
+        "bytes": 1473,
+        "gzipBytes": 807
+      }
     }
   },
   "performanceSummary": {
     "initialCoreIndexBytes": 99427,
     "initialCoreIndexGzipBytes": 13693,
-    "totalArtifactsBytes": 752650,
-    "totalArtifactsGzipBytes": 124997,
+    "totalArtifactsBytes": 758122,
+    "totalArtifactsGzipBytes": 127941,
     "monolithic61752RoutesAvoided": true
   }
 }

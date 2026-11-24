@@ -55,6 +55,7 @@ export interface CatalogBuildManifest {
     languageSearchIndexes: number;
     lazyCountryChunks: number;
     lazyVisaDetailChunks: number;
+    lazyEditorialChunks: number;
   };
   indexes: {
     countries: HashedArtifactEntry;
@@ -64,12 +65,14 @@ export interface CatalogBuildManifest {
     officialSources: HashedArtifactEntry;
     changelog: HashedArtifactEntry;
     editorial: HashedArtifactEntry;
+    verificationSummary: HashedArtifactEntry;
     searchByLanguage: Record<SupportedLangCode, HashedArtifactEntry>;
   };
   chunks: {
     countries: Record<string, HashedArtifactEntry>;
     visaDetails: Record<string, HashedArtifactEntry>;
     routeOverrides: Record<string, HashedArtifactEntry>;
+    editorial: Record<string, HashedArtifactEntry>;
   };
   performanceSummary: {
     initialCoreIndexBytes: number;
@@ -217,6 +220,24 @@ export function buildCatalogIndexes(options: BuildCatalogIndexesOptions = {}): B
   }
   publishedEditorial.sort((a, b) => a.slug.localeCompare(b.slug));
 
+  // Count draft editorial files (strictly excluded from public catalog; count only for audit transparency)
+  const draftEditorialFiles = listFiles(path.join(dataDir, 'editorial/drafts'), '.md');
+
+  // Read quarantine summary metadata (NEVER leak preservedPayload or unverified country records)
+  interface RawQuarantineRecord {
+    entityType?: string;
+    entityId?: string;
+    countryIso?: string | null;
+    verificationStatus?: string;
+    reasonCode?: string;
+    reasonSummary?: string;
+    quarantinedAt?: string;
+  }
+  const quarantinePath = path.join(dataDir, 'verification/quarantine.json');
+  const rawQuarantineRecords: RawQuarantineRecord[] = fs.existsSync(quarantinePath)
+    ? readJsonFile<RawQuarantineRecord[]>(quarantinePath)
+    : [];
+
   // Clean output directory for deterministic hashed filenames
   fs.mkdirSync(outDir, { recursive: true });
   removeDirContents(outDir);
@@ -224,6 +245,7 @@ export function buildCatalogIndexes(options: BuildCatalogIndexesOptions = {}): B
   fs.mkdirSync(path.join(outDir, 'chunks/countries'), { recursive: true });
   fs.mkdirSync(path.join(outDir, 'chunks/visa-details'), { recursive: true });
   fs.mkdirSync(path.join(outDir, 'chunks/route-overrides'), { recursive: true });
+  fs.mkdirSync(path.join(outDir, 'chunks/editorial'), { recursive: true });
 
   const allArtifacts: HashedArtifactEntry[] = [];
 
@@ -297,6 +319,34 @@ export function buildCatalogIndexes(options: BuildCatalogIndexesOptions = {}): B
       destinationCountryIso: iso,
       overrides: list
     });
+  }
+
+  // Lazy-loadable verified published editorial article chunks (drafts NEVER emitted)
+  const editorialChunkMap: Record<string, HashedArtifactEntry> = {};
+  for (const article of publishedEditorial) {
+    const safeRefs = (article.officialReferences || []).filter(
+      (u) => typeof u === 'string' && u.startsWith('https://')
+    );
+    editorialChunkMap[article.slug] = emitHashedJson(
+      `chunk:editorial:${article.slug}`,
+      'chunks/editorial',
+      article.slug,
+      {
+        schemaVersion: STATIC_CATALOG_SCHEMA_VERSION,
+        slug: article.slug,
+        language: article.language,
+        title: article.title,
+        description: article.description,
+        publicationDate: article.publicationDate,
+        updatedDate: article.updatedDate,
+        originCountryIso: article.originCountryIso ?? null,
+        destinationCountryIso: article.destinationCountryIso ?? null,
+        category: article.category ?? null,
+        officialReferences: safeRefs,
+        editorialStatus: 'published' as const,
+        markdownContent: article.markdownContent
+      }
+    );
   }
 
   // --------------------------------------------------------------------------
@@ -414,8 +464,48 @@ export function buildCatalogIndexes(options: BuildCatalogIndexesOptions = {}): B
       originCountryIso: e.originCountryIso ?? null,
       destinationCountryIso: e.destinationCountryIso ?? null,
       category: e.category ?? null,
-      officialReferences: e.officialReferences
+      officialReferences: e.officialReferences,
+      chunkPath: editorialChunkMap[e.slug]?.filePath ?? null
     }))
+  });
+
+  // Public verification & quarantine status summary (strictly non-PII, aggregate counts + expired statutory notices)
+  const activeCountryCount = countries.filter((c) => c.recordStatus === 'ACTIVE').length;
+  const quarantinedCountryCount = countries.filter((c) => c.recordStatus === 'QUARANTINED').length;
+  const uninhabitedCount = countries.filter((c) => c.recordStatus === 'UNINHABITED_TERRITORY').length;
+  let totalVerifiedHttpsSources = 0;
+  for (const list of officialSourcesByCountry.values()) totalVerifiedHttpsSources += list.length;
+
+  const expiredProgramNotices = rawQuarantineRecords
+    .filter((q) => q.entityType === 'program' && q.reasonCode === 'EXPIRED_PROGRAM')
+    .sort((a, b) => String(a.countryIso || '').localeCompare(String(b.countryIso || '')))
+    .map((q) => ({
+      countryIso: String(q.countryIso || '').toUpperCase(),
+      status: 'EXPIRED' as const,
+      reasonCode: 'EXPIRED_PROGRAM' as const,
+      reasonSummary: String(
+        q.reasonSummary || 'Program legally abolished or expired; excluded from active catalog and sitemaps.'
+      ),
+      quarantinedDate: String(q.quarantinedAt || '').slice(0, 10) || '2026-11-10'
+    }));
+
+  const verificationSummaryIndex = emitHashedJson('index:verification-summary', '', 'index-verification-summary', {
+    schemaVersion: STATIC_CATALOG_SCHEMA_VERSION,
+    canonicalMetrics: {
+      isoCountriesRegistry: countries.length,
+      potentialBilateralRoutes: countries.length * (countries.length - 1),
+      trackedCoverageSlots: countries.length * 7,
+      verifiedActiveCountries: activeCountryCount,
+      awaitingOfficialVerificationCountries: quarantinedCountryCount,
+      uninhabitedTerritories: uninhabitedCount,
+      verifiedAvailablePrograms: eligiblePrograms.length,
+      expiredExcludedPrograms: expiredProgramNotices.length,
+      verifiedOfficialHttpsSources: totalVerifiedHttpsSources,
+      verifiedChangelogEntries: changelog.length,
+      publishedEditorialArticles: publishedEditorial.length,
+      excludedDraftEditorialArticles: draftEditorialFiles.length
+    },
+    expiredProgramNotices
   });
 
   // --------------------------------------------------------------------------
@@ -522,7 +612,8 @@ export function buildCatalogIndexes(options: BuildCatalogIndexesOptions = {}): B
       changelogEntries: changelog.length,
       languageSearchIndexes: Object.keys(searchByLanguage).length,
       lazyCountryChunks: Object.keys(countryChunkMap).length,
-      lazyVisaDetailChunks: Object.keys(visaDetailChunkMap).length
+      lazyVisaDetailChunks: Object.keys(visaDetailChunkMap).length,
+      lazyEditorialChunks: Object.keys(editorialChunkMap).length
     },
     indexes: {
       countries: countryDirectoryIndex,
@@ -532,12 +623,14 @@ export function buildCatalogIndexes(options: BuildCatalogIndexesOptions = {}): B
       officialSources: officialSourceIndex,
       changelog: changelogIndex,
       editorial: editorialIndex,
+      verificationSummary: verificationSummaryIndex,
       searchByLanguage
     },
     chunks: {
       countries: countryChunkMap,
       visaDetails: visaDetailChunkMap,
-      routeOverrides: routeOverrideChunkMap
+      routeOverrides: routeOverrideChunkMap,
+      editorial: editorialChunkMap
     },
     performanceSummary: {
       initialCoreIndexBytes,

@@ -24,6 +24,7 @@ import type {
   CountriesIndexPayload,
   CountryChunkPayload,
   CountryIndexEntry,
+  EditorialArticleChunkPayload,
   EditorialIndexPayload,
   OfficialSourcesIndexPayload,
   ProgramsIndexPayload,
@@ -33,6 +34,7 @@ import type {
   StaticCatalogFeatureKey,
   StaticCatalogManifest,
   StaticRouteOverrideRecord,
+  VerificationSummaryIndexPayload,
   VisaDetailChunkPayload,
 } from '../types/staticCatalog';
 
@@ -184,6 +186,10 @@ export function validateManifestPayload(raw: unknown): StaticCatalogManifest | n
     if (!isValidDescriptor(idx[key])) return null;
   }
 
+  if (idx.verificationSummary !== undefined && !isValidDescriptor(idx.verificationSummary)) {
+    return null;
+  }
+
   if (!isPlainObject(idx.searchByLanguage)) return null;
   for (const desc of Object.values(idx.searchByLanguage)) {
     if (!isValidDescriptor(desc)) return null;
@@ -193,6 +199,12 @@ export function validateManifestPayload(raw: unknown): StaticCatalogManifest | n
   for (const bucket of ['countries', 'visaDetails', 'routeOverrides']) {
     if (!isPlainObject(chunks[bucket])) return null;
     for (const desc of Object.values(chunks[bucket] as Record<string, unknown>)) {
+      if (!isValidDescriptor(desc)) return null;
+    }
+  }
+  if (chunks.editorial !== undefined) {
+    if (!isPlainObject(chunks.editorial)) return null;
+    for (const desc of Object.values(chunks.editorial as Record<string, unknown>)) {
       if (!isValidDescriptor(desc)) return null;
     }
   }
@@ -269,7 +281,52 @@ function validateChangelogIndex(raw: unknown): ChangelogIndexPayload | null {
 
 function validateEditorialIndex(raw: unknown): EditorialIndexPayload | null {
   if (!isPlainObject(raw) || !Array.isArray(raw.articles)) return null;
-  return raw as unknown as EditorialIndexPayload;
+  const safeArticles = (raw.articles as Array<Record<string, unknown>>).filter(
+    (a) =>
+      isPlainObject(a) &&
+      typeof a.slug === 'string' &&
+      a.slug.length > 0 &&
+      typeof a.title === 'string' &&
+      a.title.length > 0 &&
+      typeof a.publicationDate === 'string' &&
+      a.publicationDate.length > 0
+  );
+  return {
+    schemaVersion: String(raw.schemaVersion || '2.0.0'),
+    totalPublished: safeArticles.length,
+    articles: safeArticles as unknown as EditorialIndexPayload['articles'],
+  };
+}
+
+function validateEditorialArticleChunk(raw: unknown): EditorialArticleChunkPayload | null {
+  if (!isPlainObject(raw)) return null;
+  if (raw.editorialStatus !== 'published') return null;
+  if (
+    typeof raw.slug !== 'string' ||
+    !raw.slug.trim() ||
+    typeof raw.title !== 'string' ||
+    !raw.title.trim() ||
+    typeof raw.markdownContent !== 'string' ||
+    !raw.markdownContent.trim()
+  ) {
+    return null;
+  }
+  const safeRefs = Array.isArray(raw.officialReferences)
+    ? raw.officialReferences.filter((u): u is string => typeof u === 'string' && u.startsWith('https://'))
+    : [];
+  if (safeRefs.length === 0) return null;
+  return {
+    ...(raw as unknown as EditorialArticleChunkPayload),
+    editorialStatus: 'published',
+    officialReferences: safeRefs,
+  };
+}
+
+function validateVerificationSummary(raw: unknown): VerificationSummaryIndexPayload | null {
+  if (!isPlainObject(raw) || !isPlainObject(raw.canonicalMetrics) || !Array.isArray(raw.expiredProgramNotices)) {
+    return null;
+  }
+  return raw as unknown as VerificationSummaryIndexPayload;
 }
 
 function validateSearchIndex(raw: unknown): SearchIndexPayload | null {
@@ -728,6 +785,110 @@ export class StaticCatalogClient {
       manifestRes.data.indexes.editorial.logicalId,
       url,
       validateEditorialIndex,
+      options
+    );
+  }
+
+  /**
+   * Fetches a lazy published editorial article chunk ONLY when listed in `manifest.chunks.editorial`.
+   * Drafts, quarantined articles, and unknown slugs return `status: 'unavailable'` fail-closed.
+   */
+  public async getEditorialChunk(
+    slug: string,
+    options?: { forceRefresh?: boolean; signal?: AbortSignal }
+  ): Promise<CatalogLoadResult<EditorialArticleChunkPayload>> {
+    const cleanSlug = String(slug || '')
+      .trim()
+      .replace(/^\/+|\/+$/g, '')
+      .toLowerCase();
+    if (!cleanSlug || cleanSlug.includes('..') || cleanSlug.includes('/') || cleanSlug.includes('\\')) {
+      return {
+        status: 'unavailable',
+        data: null,
+        code: 'INVALID_EDITORIAL_SLUG',
+        error: 'Invalid article slug.',
+        retryable: false,
+        fromCache: false,
+        source: 'static_catalog',
+      };
+    }
+
+    const manifestRes = await this.getManifest(options);
+    if (manifestRes.status !== 'ok' || !manifestRes.data) {
+      return { ...manifestRes, data: null };
+    }
+
+    const editorialChunks = manifestRes.data.chunks.editorial || {};
+    const descriptor = editorialChunks[cleanSlug];
+    if (!descriptor) {
+      return {
+        status: 'unavailable',
+        data: null,
+        code: 'EDITORIAL_ARTICLE_NOT_PUBLISHED',
+        error: `No verified published editorial guide exists for "${cleanSlug}". Draft and unverified articles are excluded.`,
+        retryable: false,
+        fromCache: false,
+        source: 'static_catalog',
+      };
+    }
+
+    const url = this.resolveSafeManifestUrl(descriptor);
+    if (!url) {
+      return {
+        status: 'error',
+        data: null,
+        code: 'INVALID_MANIFEST_PATH',
+        error: `Editorial chunk path for "${cleanSlug}" failed manifest safety checks.`,
+        retryable: false,
+        fromCache: false,
+        source: 'static_catalog',
+      };
+    }
+
+    return this.fetchJsonValidated<EditorialArticleChunkPayload>(
+      descriptor.logicalId,
+      url,
+      validateEditorialArticleChunk,
+      options
+    );
+  }
+
+  public async getVerificationSummary(options?: {
+    forceRefresh?: boolean;
+    signal?: AbortSignal;
+  }): Promise<CatalogLoadResult<VerificationSummaryIndexPayload>> {
+    const manifestRes = await this.getManifest(options);
+    if (manifestRes.status !== 'ok' || !manifestRes.data) {
+      return { ...manifestRes, data: null };
+    }
+    const descriptor = manifestRes.data.indexes.verificationSummary;
+    if (!descriptor) {
+      return {
+        status: 'unavailable',
+        data: null,
+        code: 'VERIFICATION_SUMMARY_UNAVAILABLE',
+        error: 'Verification summary index is not present in the static catalog manifest.',
+        retryable: false,
+        fromCache: false,
+        source: 'static_catalog',
+      };
+    }
+    const url = this.resolveSafeManifestUrl(descriptor);
+    if (!url) {
+      return {
+        status: 'error',
+        data: null,
+        code: 'INVALID_MANIFEST_PATH',
+        error: 'Verification summary index path failed manifest safety checks.',
+        retryable: false,
+        fromCache: false,
+        source: 'static_catalog',
+      };
+    }
+    return this.fetchJsonValidated<VerificationSummaryIndexPayload>(
+      descriptor.logicalId,
+      url,
+      validateVerificationSummary,
       options
     );
   }

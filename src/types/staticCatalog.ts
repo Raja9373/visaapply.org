@@ -53,6 +53,7 @@ export interface StaticCatalogManifest {
     languageSearchIndexes: number;
     lazyCountryChunks: number;
     lazyVisaDetailChunks: number;
+    lazyEditorialChunks?: number;
   };
   indexes: {
     countries: CatalogArtifactDescriptor;
@@ -62,12 +63,14 @@ export interface StaticCatalogManifest {
     officialSources: CatalogArtifactDescriptor;
     changelog: CatalogArtifactDescriptor;
     editorial: CatalogArtifactDescriptor;
+    verificationSummary?: CatalogArtifactDescriptor;
     searchByLanguage: Record<string, CatalogArtifactDescriptor>;
   };
   chunks: {
     countries: Record<string, CatalogArtifactDescriptor>;
     visaDetails: Record<string, CatalogArtifactDescriptor>;
     routeOverrides: Record<string, CatalogArtifactDescriptor>;
+    editorial?: Record<string, CatalogArtifactDescriptor>;
   };
   performanceSummary: {
     initialCoreIndexBytes: number;
@@ -175,16 +178,60 @@ export interface EditorialIndexArticle {
   description: string;
   publicationDate: string;
   updatedDate: string;
-  originCountryIso: string;
-  destinationCountryIso: string;
-  category: string;
+  originCountryIso: string | null;
+  destinationCountryIso: string | null;
+  category: string | null;
   officialReferences: string[];
+  chunkPath?: string | null;
 }
 
 export interface EditorialIndexPayload {
   schemaVersion: string;
   totalPublished: number;
   articles: EditorialIndexArticle[];
+}
+
+export interface EditorialArticleChunkPayload {
+  schemaVersion: string;
+  slug: string;
+  language: string;
+  title: string;
+  description: string;
+  publicationDate: string;
+  updatedDate: string;
+  originCountryIso: string | null;
+  destinationCountryIso: string | null;
+  category: string | null;
+  officialReferences: string[];
+  editorialStatus: 'published';
+  markdownContent: string;
+}
+
+export interface ExpiredProgramPublicNotice {
+  countryIso: string;
+  status: 'EXPIRED';
+  reasonCode: 'EXPIRED_PROGRAM';
+  reasonSummary: string;
+  quarantinedDate: string;
+}
+
+export interface VerificationSummaryIndexPayload {
+  schemaVersion: string;
+  canonicalMetrics: {
+    isoCountriesRegistry: number;
+    potentialBilateralRoutes: number;
+    trackedCoverageSlots: number;
+    verifiedActiveCountries: number;
+    awaitingOfficialVerificationCountries: number;
+    uninhabitedTerritories: number;
+    verifiedAvailablePrograms: number;
+    expiredExcludedPrograms: number;
+    verifiedOfficialHttpsSources: number;
+    verifiedChangelogEntries: number;
+    publishedEditorialArticles: number;
+    excludedDraftEditorialArticles: number;
+  };
+  expiredProgramNotices: ExpiredProgramPublicNotice[];
 }
 
 export interface SearchLanguageMeta {
@@ -465,4 +512,9 @@ export type StaticCatalogFeatureKey =
   | 'sourceVerifier'
   | 'visaComparison'
   | 'editorial'
-  | 'changelog';
+  | 'changelog'
+  | 'blogArticle'
+  | 'blogsDirectory'
+  | 'visaComparisonWidget'
+  | 'verificationView'
+  | 'sitemapPage';
