@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "2.1.0",
+  "catalogSchemaVersion": "2.0.0",
+  "generatedAt": "2026-11-25T11:07:25.660Z",
+  "reportIntegrity": {
+    "noFabricatedCoveragePercentages": true,
+    "strictMetricSeparationEnforced": true,
+    "liveExternalMonitoringExecutedInThisReport": false
+  },
+  "canonicalScopeMetrics": {
+    "totalCountriesAndTerritoriesInRegistry": 249,
+    "potentialBilateralRoutes": 61752,
+    "trackedSevenCategoryCoverageSlots": 1743,
+    "activeVerifiedCountries": 14,
+    "awaitingVerificationCountries": 228,
+    "uninhabitedTerritories": 7
+  },
+  "verifiedCatalogMetrics": {
+    "verifiedAvailablePrograms": 28,
+    "programsConfirmedUnavailableOrExpired": 1,
+    "verifiedOfficialSourcesRegistered": 61,
+    "verifiedRouteOverrides": 3,
+    "publishedEditorialArticles": 2,
+    "excludedDraftEditorialArticles": 3
+  },
+  "monitoringMetrics": {
+    "sourcesCheckedInLatestRun": 0,
+    "sourcesReachable": 0,
+    "sourcesUnavailable": 0,
+    "sourcesChanged": 0,
+    "sourcesAwaitingInitialCheck": 61,
+    "claimsVerified": 1,
+    "claimsAwaitingReview": 0,
+    "recordsQuarantinedTotal": 229,
+    "quarantinedCountriesCount": 228,
+    "quarantinedProgramsCount": 1,
+    "recordLevelMonitoringQuarantinesCount": 0
+  },
+  "timestamps": {
+    "lastSuccessfulMonitoringRun": null,
+    "latestCatalogBuildHash": "22589745dfc80276c31cac47d1caf1cbdab217a1ffa17941a3c574a52924fadd",
+    "latestCatalogGenerationTime": "2026-11-25T09:18:44.861Z"
+  }
+}

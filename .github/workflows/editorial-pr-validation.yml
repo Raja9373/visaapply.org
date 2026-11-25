@@ -1,0 +1,72 @@
+name: Editorial Pull Request Validation Gate
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Strict least-privilege read-only permissions.
+# Uses standard `pull_request` trigger with NO `paths:` filter so:
+# 1. Untrusted PR code receives zero repository secrets and zero write permissions.
+# 2. The required status check always reports on every PR targeting `main`
+#    (preventing deadlocked "Expected" checks on docs-only PRs and ensuring
+#    src/, tests/, public/, and package.json changes cannot bypass validation).
+permissions:
+  contents: read
+
+concurrency:
+  group: visaapply-editorial-pr-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  editorial-pr-gate:
+    name: Validate Editorial PR, Governance, Audit Trail & Atomic Catalog Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout PR head commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      - name: TypeScript type-check
+        run: npm run lint
+
+      - name: Verify GitHub CODEOWNERS, role-policy & workflow security invariants
+        run: npm run editorial:verify-github-config
+
+      - name: Extract base branch audit log for append-only integrity verification
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          mkdir -p /tmp/base-governance
+          if git show "origin/${BASE_REF}:data/editorial-governance/audit-log.json" > /tmp/base-governance/audit-log.json 2>/dev/null; then
+            echo "BASE_AUDIT_FLAG=--base-audit-log /tmp/base-governance/audit-log.json" >> "$GITHUB_ENV"
+          else
+            echo "BASE_AUDIT_FLAG=" >> "$GITHUB_ENV"
+          fi
+
+      - name: Run Phase 6 Editorial Pull Request Validator (blocks merge on any failure)
+        run: npx tsx scripts/validateEditorialPullRequest.ts ${BASE_AUDIT_FLAG}
+
+      - name: Run full automated regression, Phase 5B, Phase 6 & Phase 6.1 test suites
+        run: node --test --import tsx tests/*.test.ts
+
+      - name: Verify production frontend bundle compiles cleanly
+        run: npm run build

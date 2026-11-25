@@ -1,424 +1,505 @@
-import React, { useState } from 'react';
-import { FULL_VISA_DB, BASE_COUNTRY_VISAS, COUNTRY_INFO, NAME_MAP_249, FLAG_MAP_249, VisaItem, CountryVisas } from '../data/fullVisaDatabase';
-import { UK_111_VISAS } from '../data/ukVisas';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
-  UK_GROUP_1_REGIONAL_WORK,
-  UK_GROUP_2_FAMILY_SPECIAL,
-  UK_GROUP_3_EUSS_ROUTES,
-  UK_GROUP_4_BNO_ROUTES,
-  UK_GROUP_5_UKRAINE_SCHEMES,
-  UK_GROUP_6_PROTECTION_STATELESS,
-  UK_GROUP_7_SETTLEMENT_ROUTES,
-  UK_GROUP_8_NATIONALITY_CITIZENSHIP,
-  UK_GROUP_9_ENTRY_STATUS,
-  UK_GROUP_10_ARMED_FORCES,
-  UK_GROUP_11_LEGACY_ROUTES
-} from '../data/ukAdditionalRoutes';
+  CheckCircle2,
+  ExternalLink,
+  Search,
+  AlertTriangle,
+  RefreshCw,
+  Shield,
+  BookOpen,
+  Globe,
+  Compass,
+} from 'lucide-react';
+import {
+  isStaticCatalogEnabled,
+  staticCatalogClient,
+} from '../services/staticCatalogClient';
+import type {
+  CountryIndexEntry,
+  EditorialIndexArticle,
+  ProgramIndexEntry,
+  StaticRouteOverrideRecord,
+  VerificationSummaryIndexPayload,
+} from '../types/staticCatalog';
+
+const CORE_PLATFORM_PAGES: ReadonlyArray<{ url: string; label: string; desc: string }> = [
+  { url: '/', label: 'VisaApply.org Home', desc: 'Global visa & immigration intelligence entry point' },
+  { url: '/immigration', label: 'Global Immigration & Residency Hub', desc: '249-jurisdiction registry with 6 verified category filters' },
+  { url: '/routes', label: 'Bilateral Visa Routes Checker', desc: 'Compact rule lookup across 61,752 potential passport corridors' },
+  { url: '/blogs', label: 'Verified Editorial Guides', desc: 'Published, officially sourced visa guides (drafts excluded)' },
+  { url: '/verification', label: 'Verification & Evidence Registry', desc: 'Live verification ledger distinguishing verified, awaiting, and expired records' },
+  { url: '/tools/source-verifier', label: 'Official Source Verifier', desc: 'Direct HTTPS government immigration portals registry' },
+  { url: '/tools/visa-comparison', label: 'Verified Visa Comparison Tool', desc: 'Compare verified immigration pathways side by side' },
+  { url: '/about', label: 'About & Editorial Standards', desc: 'Independent non-government research methodology' },
+  { url: '/contact', label: 'Contact', desc: 'Editorial contact and correction reporting' },
+  { url: '/privacy', label: 'Privacy Policy', desc: 'Privacy & data protection terms' },
+  { url: '/terms', label: 'Terms of Service', desc: 'Terms of use & non-affiliation notice' },
+];
+
+const PUBLIC_CONSULAR_TOOLS: ReadonlyArray<{ url: string; label: string; sub: string }> = [
+  { url: '/tools/cost-calculator', label: 'Visa Cost Calculator', sub: 'Estimate visa fees & trip expenses' },
+  { url: '/tools/funds-calculator', label: 'Proof of Funds Calculator', sub: 'Plan financial documentation' },
+  { url: '/tools/timeline-planner', label: 'Application Timeline Planner', sub: 'Work backwards from target travel dates' },
+  { url: '/tools/document-checklist', label: 'Document Checklist Tool', sub: 'Interactive application document checklist' },
+  { url: '/tools/stay-calculator', label: 'Schengen 90/180 Stay Calculator', sub: 'Calculate compliant short-stay days' },
+  { url: '/tools/readiness-checker', label: 'Visa Readiness Checker', sub: 'Self-assessment before filing' },
+  { url: '/tools/eligibility-checker', label: 'Eligibility Checker', sub: 'Structured visa eligibility screening' },
+  { url: '/tools/family-planner', label: 'Family Immigration Planner', sub: 'Plan dependant and spouse documentation' },
+  { url: '/visa-tracking', label: 'Official Visa Tracking Portals', sub: 'Direct links to CEAC, VFS Global, IRCC, UKVI & ImmiAccount' },
+  { url: '/photo-resizer', label: 'Biometric Visa Photo Resizer', sub: 'Client-side 35x45mm & 2x2 inch photo cropper' },
+  { url: '/cover-letter-generator', label: 'Cover Letter Generator', sub: 'Draft structured consular cover letters' },
+  { url: '/sop-generator', label: 'Student SOP Generator', sub: 'Draft structured Statement of Purpose documents' },
+];
 
 export function SitemapPage({ navigate }: { navigate?: (path: string) => void }) {
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const countryCodes = Object.keys(NAME_MAP_249)
-    .filter(code => code !== 'eu')
-    .map(code => code.toUpperCase());
+  const [activeCountries, setActiveCountries] = useState<CountryIndexEntry[]>([]);
+  const [verifiedPrograms, setVerifiedPrograms] = useState<ProgramIndexEntry[]>([]);
+  const [publishedArticles, setPublishedArticles] = useState<EditorialIndexArticle[]>([]);
+  const [verifiedRoutes, setVerifiedRoutes] = useState<StaticRouteOverrideRecord[]>([]);
+  const [summary, setSummary] = useState<VerificationSummaryIndexPayload | null>(null);
+  const [legacyFallbackCodes, setLegacyFallbackCodes] = useState<string[] | null>(null);
 
-  const filteredCodes = countryCodes.filter(code => {
-    if (!search.trim()) return true;
-    const q = search.toLowerCase();
-    const lower = code.toLowerCase();
-    const name = (NAME_MAP_249[lower] || COUNTRY_INFO[code]?.name || '').toLowerCase();
-    return lower.includes(q) || name.includes(q);
-  });
+  const loadSitemapData = useCallback(async (forceRefresh = false) => {
+    setLoading(true);
+    setErrorMsg(null);
 
-  const categoriesList: (keyof CountryVisas)[] = ['tourist', 'work', 'student', 'family', 'business', 'pr'];
-  
-  let totalUniqueRecords = 0;
-  countryCodes.forEach(toCode => {
-    const cData = BASE_COUNTRY_VISAS[toCode.toLowerCase()] || BASE_COUNTRY_VISAS[toCode] || FULL_VISA_DB[toCode];
-    if (cData) {
-      categoriesList.forEach(cat => {
-        totalUniqueRecords += cData[cat]?.length || 0;
+    // Controlled rollback branch ONLY when `sitemapPage` feature flag is disabled
+    if (!isStaticCatalogEnabled('sitemapPage')) {
+      try {
+        const regMod = await import('../data/countryLightRegistry');
+        setLegacyFallbackCodes(Object.keys(regMod.NAME_MAP_249).sort());
+        setLoading(false);
+        return;
+      } catch (err: unknown) {
+        setErrorMsg(err instanceof Error ? err.message : 'Unable to load legacy sitemap directory.');
+        setLoading(false);
+        return;
+      }
+    }
+
+    setLegacyFallbackCodes(null);
+
+    const [cRes, pRes, eRes, rRes, sRes] = await Promise.all([
+      staticCatalogClient.getCountriesIndex({ forceRefresh }),
+      staticCatalogClient.getProgramsIndex({ forceRefresh }),
+      staticCatalogClient.getEditorialIndex({ forceRefresh }),
+      staticCatalogClient.getRoutesIndex({ forceRefresh }),
+      staticCatalogClient.getVerificationSummary({ forceRefresh }),
+    ]);
+
+    if (cRes.status !== 'ok' || !cRes.data || pRes.status !== 'ok' || !pRes.data) {
+      setErrorMsg(cRes.error || pRes.error || 'Unable to load validated static sitemap catalog.');
+      setLoading(false);
+      return;
+    }
+
+    // Strictly include ONLY ACTIVE verified country hubs (exclude 228 quarantined & 7 uninhabited)
+    const verifiedHubs = cRes.data.countries
+      .filter((c) => c.status === 'ACTIVE' && c.officialSourceCount > 0)
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    setActiveCountries(verifiedHubs);
+    setVerifiedPrograms(pRes.data.programs);
+    setPublishedArticles(eRes.status === 'ok' && eRes.data ? eRes.data.articles : []);
+    setSummary(sRes.status === 'ok' ? sRes.data : null);
+
+    // Load verified bilateral route overrides listed in compact routes index
+    if (rRes.status === 'ok' && rRes.data) {
+      const destSlugs = Object.keys(rRes.data.verifiedOverrideChunks || {});
+      const overrideChunks = await Promise.all(
+        destSlugs.map((slug) => staticCatalogClient.getRouteOverrideChunk(slug, { forceRefresh }))
+      );
+      const flatOverrides: StaticRouteOverrideRecord[] = [];
+      overrideChunks.forEach((res) => {
+        if (res.status === 'ok' && res.data) {
+          res.data.overrides.forEach((o) => {
+            if (o.routePublicationEligible) flatOverrides.push(o);
+          });
+        }
       });
+      setVerifiedRoutes(flatOverrides);
+    } else {
+      setVerifiedRoutes([]);
     }
-  });
 
-  const ukAdditionalGroups = [
-    { title: "1. Regional Work, Salary & Shortage Classifications (11)", items: UK_GROUP_1_REGIONAL_WORK },
-    { title: "2. Family Circumstance & Breakdown Routes (6)", items: UK_GROUP_2_FAMILY_SPECIAL },
-    { title: "3. EU Settlement Scheme (EUSS) Complete Routes (8)", items: UK_GROUP_3_EUSS_ROUTES },
-    { title: "4. Hong Kong BN(O) Additional Routes (5)", items: UK_GROUP_4_BNO_ROUTES },
-    { title: "5. Ukraine Schemes (6)", items: UK_GROUP_5_UKRAINE_SCHEMES },
-    { title: "6. Protection, Asylum & Stateless Routes (8)", items: UK_GROUP_6_PROTECTION_STATELESS },
-    { title: "7. Settlement & Indefinite Leave to Remain (ILR) Routes (11)", items: UK_GROUP_7_SETTLEMENT_ROUTES },
-    { title: "8. British Nationality & Citizenship Registration Routes (13)", items: UK_GROUP_8_NATIONALITY_CITIZENSHIP },
-    { title: "9. Permission to Enter, Electronic Status & Special Entry (13)", items: UK_GROUP_9_ENTRY_STATUS },
-    { title: "10. Armed Forces & Dependants Routes (7)", items: UK_GROUP_10_ARMED_FORCES },
-    { title: "11. Historical & Legacy UK Visa Classifications (23)", items: UK_GROUP_11_LEGACY_ROUTES },
-  ];
+    setLoading(false);
+  }, []);
 
-  const buildVisaUrl = (fromCode: string, toCode: string, cat: string, v: VisaItem) => {
-    const f = fromCode.toLowerCase();
-    const t = toCode.toLowerCase();
-    if (f === t) {
-      return `/immigration/${t}`;
+  useEffect(() => {
+    void loadSitemapData(false);
+  }, [loadSitemapData]);
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    if (navigate) {
+      e.preventDefault();
+      navigate(url);
     }
-    if (/^in-to-/i.test(v.id)) {
-      return `/${v.id.replace(/^in-to-/i, `${f}-to-`)}`.toLowerCase();
-    }
-    const prefixRegex = new RegExp(`^[a-z]{2,3}-to-${t}-${cat}-`, 'i');
-    const shortId = v.id.replace(prefixRegex, '');
-    return `/${f}-to-${t}-${cat}-${shortId}`.toLowerCase();
   };
+
+  const filteredCountries = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return activeCountries;
+    return activeCountries.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.iso.toLowerCase().includes(q) ||
+        verifiedPrograms.some(
+          (p) => p.countryIso === c.iso && p.name.toLowerCase().includes(q)
+        )
+    );
+  }, [activeCountries, verifiedPrograms, search]);
+
+  const totalSubstantiveUrls =
+    9 + activeCountries.length + verifiedPrograms.length + verifiedRoutes.length + publishedArticles.length;
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8 font-sans">
-      <div>
-        <div className="flex items-center gap-2 text-xs text-slate-600 mb-2 font-medium">
-          <button onClick={() => navigate?.('/')} className="hover:underline text-blue-700 cursor-pointer">Home</button>
-          <span>&gt;</span>
-          <span className="text-slate-900 font-bold">Global Visa Sitemap Index (77,806 Total Indexed Pages)</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2">
-          VisaApply.org - Global Sitemap Architecture (77,806 Pages Across 85 XML Sitemaps)
+      {/* Header & Breadcrumb */}
+      <div className="space-y-2">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+          <button
+            type="button"
+            onClick={() => navigate?.('/')}
+            className="hover:underline text-[#0B3D91] font-semibold cursor-pointer"
+          >
+            Home
+          </button>
+          <span aria-hidden="true">&gt;</span>
+          <span className="text-slate-900 font-bold">Valid-Only Static Sitemap Directory</span>
+        </nav>
+
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          VisaApply.org — Verified Public Sitemap Directory
         </h1>
-        <p className="text-slate-700 text-sm">
-          Complete index of 249 Countries + 1,494 Category Pages + {totalUniqueRecords.toLocaleString()} Visa Detail Pages + 61,752 Bilateral Routes (70 XML Files) + 2,748 Blog &amp; Interview Guides using canonical <code className="font-mono font-bold">https://www.visaapply.org/</code> URLs.
+        <p className="text-slate-700 text-sm max-w-3xl leading-relaxed">
+          Navigable HTML directory backed by validated static catalog artifacts. Excludes quarantined
+          countries awaiting verification, uninhabited territories, draft editorial articles, expired
+          statutory schemes, and thin placeholder routes.
         </p>
       </div>
 
-      {/* XML Sitemap Index Directory Banner */}
+      {/* XML Sitemap Artifact Status Banner */}
       <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="bg-emerald-700 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
-                ✅ Master Sitemap Index Live (77,806 Pages)
+              <span className="inline-flex items-center gap-1 bg-emerald-700 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Candidate Valid-Only XML Sitemap Prepared ({totalSubstantiveUrls} Substantive URLs)</span>
               </span>
-              <h2 className="text-sm sm:text-base font-extrabold text-emerald-950">
-                sitemap-index.xml — 85 Sub-Sitemaps (https://www.visaapply.org/)
-              </h2>
             </div>
-            <p className="text-xs text-emerald-900">
-              Master Index: <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">https://www.visaapply.org/sitemap-index.xml</code> (No GSC API, pure XML Sitemap indexing).
+            <p className="text-xs text-emerald-950 leading-relaxed">
+              Candidate valid-only index:{' '}
+              <code className="bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">
+                /sitemaps-static/sitemap-static-index.xml
+              </code>{' '}
+              (legacy <code className="bg-white px-1.5 py-0.5 rounded border border-emerald-200 font-mono">/sitemap-index.xml</code> remains preserved until production cutover).
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap shrink-0">
             <a
+              href="/sitemaps-static/sitemap-static-index.xml"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors"
+            >
+              <span>Candidate Static Sitemap XML</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <a
               href="/sitemap-index.xml"
               target="_blank"
-              rel="nofollow noopener noreferrer"
-              className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-colors"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
             >
-              Open /sitemap-index.xml ↗
+              <span>Legacy /sitemap-index.xml</span>
+              <ExternalLink className="w-3.5 h-3.5" />
             </a>
             <a
               href="/robots.txt"
               target="_blank"
-              rel="nofollow noopener noreferrer"
-              className="px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold rounded-xl transition-colors"
             >
-              View /robots.txt ↗
+              <span>/robots.txt</span>
+              <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-1">
-          <a
-            href="/sitemap-countries.xml"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
-          >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-countries.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">249 Pages</div>
-            <div className="text-[11px] text-slate-600">All 249 ISO Destination Hubs</div>
-          </a>
-          <a
-            href="/sitemap-categories.xml"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
-          >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-categories.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">1,514 Pages</div>
-            <div className="text-[11px] text-slate-600">249 Countries × 6 Categories + Tools</div>
-          </a>
-          <a
-            href="/sitemap-visas-1.xml"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
-          >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-visas-1..12.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">{totalUniqueRecords.toLocaleString()} Pages</div>
-            <div className="text-[11px] text-slate-600">Split into 12 XML Files (Real Visas Only)</div>
-          </a>
-          <a
-            href="/sitemap-routes-1.xml"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
-          >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-routes-1..70.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">61,752 Pages</div>
-            <div className="text-[11px] text-slate-600">Split into 70 XML Files (249×248)</div>
-          </a>
-          <a
-            href="/sitemap-blogs.xml"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="bg-white hover:bg-emerald-100/60 border border-emerald-200 rounded-xl p-3 transition-colors block"
-          >
-            <div className="text-xs font-extrabold text-[#0B3D91]">sitemap-blogs.xml</div>
-            <div className="text-lg font-black text-slate-900 mt-0.5">2,748 Pages</div>
-            <div className="text-[11px] text-slate-600">SEO Blogs &amp; Interview Guides</div>
-          </a>
-        </div>
-      </div>
-
-      {/* Free Consular Services & Tools Index */}
-      <div className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-4">
-        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3">
-          <h2 className="text-lg font-extrabold text-slate-900">
-            🛠️ Free Consular Services &amp; Visa Tools Directory (100% Free)
-          </h2>
-          <span className="bg-blue-50 text-[#0B3D91] text-xs font-black px-3 py-1 rounded-full">
-            Public &amp; Indexable Tools
-          </span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-          {[
-            { url: '/scholarship-finder', label: '🏆 Scholarship Finder (100% Free)', sub: '15 Fully Funded, Partial & Merit Scholarships + Deadline Calendar' },
-            { url: '/work-permit-guide', label: '🛠️ Work Permit Guide', sub: '100% Free • Jobs Abroad with Visa Sponsorship (Gulf, Europe, CA, AU)' },
-            { url: '/student-visa-university', label: '🎓 Student Visa + University Finder', sub: 'FREE • Compare 5 Universities, Tuition, IELTS & Post-Study Work' },
-            { url: '/passport-seva-guide', label: '📘 Passport Seva Guide (India)', sub: 'FREE Guide • New Passport, Renewal, Tatkal & Checklist PDF' },
-            { url: '/oci-pio-guide', label: '🇮🇳 OCI / PIO Card Guide for NRI', sub: 'FREE Guide • Lifetime India Visa ($275), Eligibility & Documents' },
-            { url: '/sponsorship-finder', label: '💼 Visa Sponsorship Finder', sub: '100% Free • H1B, UK, Canada, Australia & Germany Sponsors' },
-            { url: '/multi-country-planner', label: '🧭 Multi-Country Trip Visa Planner', sub: 'Check 2–5 Countries in 1 Min • Full Trip PDF' },
-            { url: '/visa-map', label: '🗺️ Interactive Global Visa Map', sub: '249 Passports • Visa-Free, VOA & e-Visa Map' },
-            { url: '/bank-statement-guide', label: '🏦 Bank Statement Guide for Visa', sub: 'Required Balance Calculator & Checklist PDF' },
-            { url: '/travel-insurance-compare', label: '🛡️ Travel Insurance Compare', sub: '100% FREE Compare • Tata AIG, HDFC Ergo, Niva Bupa' },
-            { url: '/esim-249', label: '📶 eSIM for 249 Countries', sub: 'FREE Compare • Airalo, Holafly, Nomad in USD & INR' },
-            { url: '/forex-card-compare', label: '💳 Forex Card Compare (0% Markup)', sub: 'FREE Compare • Niyo Global, Wise, HDFC, BookMyForex' },
-            { url: '/visa-rejection-appeal', label: '⚖️ Visa Rejection Appeal Guide', sub: '100% Free Check & Appeal Letter PDF' },
-            { url: '/sop-generator', label: '🎓 Free SOP Generator for Student Visa', sub: '800-Word Official SOP PDF' },
-            { url: '/visa-tracking', label: '🔍 Track Your Visa Application Status', sub: 'Official VFS, CEAC, TLS & IRCC Links' },
-            { url: '/dummy-ticket', label: '✈️ Dummy Ticket (Flight & Hotel)', sub: 'Verifiable Reservation Guide & PDF' },
-            { url: '/cover-letter-generator', label: '📄 Cover Letter Generator', sub: '100% Free Consular Cover Letter PDF' },
-            { url: '/embassy-slot-alert', label: '🔔 Embassy Slot Alert', sub: 'Free Email Alert for USA & Schengen' },
-            { url: '/photo-resizer', label: '📷 Visa Photo Resizer (300 DPI)', sub: '35x45mm & 2x2 Inch Biometric Tool' },
-            { url: '/golden-visa', label: '👑 Golden Visa Directory (2026)', sub: 'Sovereign Residency by Investment' }
-          ].map((tool) => (
-            <a
-              key={tool.url}
-              href={tool.url}
-              onClick={(e) => {
-                if (navigate) {
-                  e.preventDefault();
-                  navigate(tool.url);
-                }
-              }}
-              className="p-3.5 bg-slate-50 hover:bg-blue-50/60 border border-slate-200 rounded-xl transition-colors block"
-            >
-              <div className="font-extrabold text-[#0B3D91]">{tool.label}</div>
-              <div className="text-[11px] text-slate-600 mt-0.5">{tool.sub}</div>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-white border border-slate-200 p-4 sm:p-6 rounded-2xl shadow-xs">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search destination country (e.g. United Kingdom, GB, US, Canada, Australia)..."
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"
-        />
-      </div>
-
-      <div className="space-y-8">
-        {filteredCodes.map(toCode => {
-          const lowerCode = toCode.toLowerCase();
-          const cName = NAME_MAP_249[lowerCode] || COUNTRY_INFO[toCode]?.name || toCode;
-          const cFlag = FLAG_MAP_249[lowerCode] || COUNTRY_INFO[toCode]?.flag || '🌍';
-          
-          return (
-            <div key={toCode} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <span>{cFlag}</span>
-                  <span>Visa & Immigration Guides for {cName} ({toCode})</span>
-                </h2>
-                {toCode === 'GB' && (
-                  <span className="bg-indigo-600 text-white text-xs font-extrabold px-3 py-1 rounded-full">
-                    🇬🇧 222 Total UK Records (111 Official Visas + 111 Additional Routes)
-                  </span>
-                )}
-              </div>
-
-              {/* Special 2-Directory Breakdown for United Kingdom (GB) */}
-              {toCode === 'GB' && (
-                <div className="space-y-6 bg-indigo-50/40 border border-indigo-200 rounded-2xl p-5">
-                  <div>
-                    <h3 className="text-base font-extrabold text-indigo-950 mb-1">
-                      🛂 Directory 1: Official UK Visa & Immigration Documents (111 Entries)
-                    </h3>
-                    <p className="text-xs text-slate-600 mb-3">
-                      Tourist (13) · Work (32) · Student (10) · Family (27) · Business (9) · PR & Settlement (20)
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {categoriesList.map(cat => {
-                        const visas = UK_111_VISAS[cat] || [];
-                        return (
-                          <div key={`uk-dir1-${cat}`} className="bg-white p-3.5 rounded-xl border border-indigo-100 shadow-2xs">
-                            <h4 className="text-xs font-extrabold uppercase text-indigo-900 mb-2 flex justify-between">
-                              <span>{cat} Visas</span>
-                              <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">{visas.length}</span>
-                            </h4>
-                            <ul className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
-                              {visas.map(v => {
-                                const url = buildVisaUrl('IN', 'GB', cat, v);
-                                return (
-                                  <li key={v.id} className="text-xs flex items-start justify-between gap-2 border-b border-slate-100 pb-1">
-                                    <a
-                                      href={url}
-                                      onClick={(e) => { if (navigate) { e.preventDefault(); navigate(url); } }}
-                                      className="text-blue-600 hover:underline font-medium"
-                                    >
-                                      {v.officialCode ? `[${v.officialCode}] ` : ''}{v.name}
-                                    </a>
-                                    <span className="text-[10px] font-mono bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded shrink-0">
-                                      {v.record_type || 'VISA_ROUTE'}
-                                    </span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-indigo-200">
-                    <h3 className="text-base font-extrabold text-purple-950 mb-1">
-                      📋 Directory 2: Additional UK Routes, Schemes & Classifications (111 Entries)
-                    </h3>
-                    <p className="text-xs text-slate-600 mb-3">
-                      Grouped across 11 statutory categories with record_type, application status, and official GOV.UK verification links.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {ukAdditionalGroups.map((grp, idx) => (
-                        <div key={`uk-dir2-${idx}`} className="bg-white p-3.5 rounded-xl border border-purple-200 shadow-2xs">
-                          <h4 className="text-xs font-extrabold text-purple-950 mb-2">{grp.title}</h4>
-                          <ul className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
-                            {grp.items.map(v => {
-                              const url = buildVisaUrl('IN', 'GB', v.category || 'pr', v);
-                              return (
-                                <li key={v.id} className="text-xs flex flex-col gap-0.5 border-b border-slate-100 pb-1.5">
-                                  <div className="flex items-start justify-between gap-2">
-                                    <a
-                                      href={url}
-                                      onClick={(e) => { if (navigate) { e.preventDefault(); navigate(url); } }}
-                                      className="text-blue-700 hover:underline font-semibold"
-                                    >
-                                      [{v.officialCode}] {v.officialName || v.name}
-                                    </a>
-                                    <span className="text-[10px] font-mono bg-purple-100 text-purple-900 px-1.5 py-0.5 rounded shrink-0">
-                                      {v.record_type}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center justify-between text-[10px] text-slate-500">
-                                    <span>Status: <strong>{v.status || 'Active'}</strong> ({v.application_status || 'OPEN'})</span>
-                                    {v.officialSource && (
-                                      <a href={v.officialSource} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
-                                        GOV.UK ↗
-                                      </a>
-                                    )}
-                                  </div>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* Standard Country Matrix (Showing Primary Origin IN + Dual Access) */}
-              {['IN', 'US', 'GB', 'CA', 'AU'].map(fromCode => {
-                if (fromCode.toLowerCase() === toCode.toLowerCase()) return null;
-                const fLower = fromCode.toLowerCase();
-                const tLower = toCode.toLowerCase();
-                const countryData: CountryVisas =
-                  FULL_VISA_DB[fromCode]?.[toCode] ||
-                  BASE_COUNTRY_VISAS[tLower] ||
-                  BASE_COUNTRY_VISAS[toCode];
-                if (!countryData) return null;
-
-                return (
-                  <div key={`${fLower}-to-${tLower}`} className="space-y-2">
-                    <h3 className="text-sm font-semibold text-slate-700 flex items-center justify-between flex-wrap gap-2">
-                      <a
-                        href={`/${fLower}-to-${tLower}`}
-                        onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/${fLower}-to-${tLower}`); } }}
-                        className="text-[#0B3D91] hover:underline font-bold"
-                      >
-                        From {COUNTRY_INFO[fromCode]?.name || fromCode} to {cName} ({fromCode.toUpperCase()} → {toCode.toUpperCase()}):
-                      </a>
-                      <a
-                        href={`/immigration/${tLower}`}
-                        onClick={(e) => { if (navigate) { e.preventDefault(); navigate(`/immigration/${tLower}`); } }}
-                        className="text-xs text-slate-500 hover:text-blue-700 hover:underline"
-                      >
-                        {cName} Immigration Hub →
-                      </a>
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {categoriesList.map(cat => {
-                        const visas = countryData[cat] || [];
-                        if (visas.length === 0) return null;
-                        const catHref = `/${fLower}-to-${tLower}-${cat}`;
-                        return (
-                          <div key={cat} className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                            <h4 className="text-xs font-bold uppercase text-slate-500 mb-2 flex justify-between">
-                              <a
-                                href={catHref}
-                                onClick={(e) => { if (navigate) { e.preventDefault(); navigate(catHref); } }}
-                                className="hover:text-[#0B3D91] hover:underline"
-                              >
-                                {cat} Visas
-                              </a>
-                              <span>({visas.length})</span>
-                            </h4>
-                            <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">
-                              {visas.map(v => {
-                                const url = buildVisaUrl(fromCode, toCode, cat, v);
-                                return (
-                                  <li key={v.id} className="text-xs">
-                                    <a href={url} onClick={(e) => { if (navigate) { e.preventDefault(); navigate(url); } }} className="text-blue-600 hover:underline">
-                                      {v.name}
-                                    </a>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
+        {summary && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
+            <div className="bg-white rounded-xl p-3 border border-emerald-200">
+              <div className="text-slate-500 font-semibold">Included Active Hubs</div>
+              <div className="text-lg font-black text-emerald-900">{activeCountries.length} Countries</div>
             </div>
-          );
-        })}
+            <div className="bg-white rounded-xl p-3 border border-emerald-200">
+              <div className="text-slate-500 font-semibold">Included Verified Programs</div>
+              <div className="text-lg font-black text-emerald-900">{verifiedPrograms.length} Programs</div>
+            </div>
+            <div className="bg-white rounded-xl p-3 border border-emerald-200">
+              <div className="text-slate-500 font-semibold">Excluded Quarantined / Uninhabited</div>
+              <div className="text-lg font-black text-amber-800">
+                {summary.canonicalMetrics.awaitingOfficialVerificationCountries +
+                  summary.canonicalMetrics.uninhabitedTerritories}{' '}
+                Jurisdictions
+              </div>
+            </div>
+            <div className="bg-white rounded-xl p-3 border border-emerald-200">
+              <div className="text-slate-500 font-semibold">Excluded Drafts &amp; Expired</div>
+              <div className="text-lg font-black text-rose-800">
+                {summary.canonicalMetrics.excludedDraftEditorialArticles} Drafts •{' '}
+                {summary.canonicalMetrics.expiredExcludedPrograms} Expired
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div aria-busy="true" className="space-y-4 animate-pulse">
+          <div className="h-32 bg-white rounded-2xl border border-slate-200" />
+          <div className="h-64 bg-white rounded-2xl border border-slate-200" />
+        </div>
+      )}
+
+      {/* Error State */}
+      {!loading && errorMsg && (
+        <div
+          role="alert"
+          className="bg-rose-50 border border-rose-300 rounded-2xl p-6 text-rose-950 flex items-center justify-between gap-4"
+        >
+          <div className="flex items-start gap-3 text-xs">
+            <AlertTriangle className="w-5 h-5 text-rose-700 shrink-0 mt-0.5" />
+            <div>
+              <div className="font-extrabold">Unable to Load Static Sitemap Catalog</div>
+              <p className="text-rose-800 mt-1">{errorMsg}</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => void loadSitemapData(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-700 text-white rounded-xl text-xs font-bold cursor-pointer shrink-0"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* Legacy Rollback View */}
+      {!loading && !errorMsg && legacyFallbackCodes !== null && (
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-3">
+          <h2 className="text-lg font-extrabold text-slate-900">
+            Legacy Rollback Directory ({legacyFallbackCodes.length} ISO Codes)
+          </h2>
+          <div className="flex flex-wrap gap-2 text-xs">
+            {legacyFallbackCodes.slice(0, 50).map((code) => (
+              <a
+                key={code}
+                href={`/immigration/${code}`}
+                onClick={(e) => handleLinkClick(e, `/immigration/${code}`)}
+                className="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 text-[#0B3D91] rounded font-mono font-bold"
+              >
+                /immigration/{code}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Static Catalog Valid-Only Directory */}
+      {!loading && !errorMsg && legacyFallbackCodes === null && (
+        <>
+          {/* Section 1: Core Platform Pages */}
+          <section className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-4">
+            <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+              <Compass className="w-5 h-5 text-[#0B3D91]" />
+              <span>Core Platform Pages ({CORE_PLATFORM_PAGES.length})</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+              {CORE_PLATFORM_PAGES.map((item) => (
+                <a
+                  key={item.url}
+                  href={item.url}
+                  onClick={(e) => handleLinkClick(e, item.url)}
+                  className="p-3.5 bg-slate-50 hover:bg-blue-50/60 border border-slate-200 rounded-xl transition-colors block"
+                >
+                  <div className="font-extrabold text-[#0B3D91]">{item.label}</div>
+                  <div className="text-[11px] text-slate-600 mt-0.5">{item.desc}</div>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* Section 2: Verified Published Editorial Guides & Verified Bilateral Routes */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-3">
+              <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-emerald-700" />
+                <span>Verified Published Editorial Guides ({publishedArticles.length})</span>
+              </h2>
+              {publishedArticles.length === 0 ? (
+                <p className="text-xs text-slate-500">No published editorial guides are currently indexed.</p>
+              ) : (
+                <ul className="space-y-2.5 text-xs">
+                  {publishedArticles.map((article) => (
+                    <li
+                      key={article.slug}
+                      className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1"
+                    >
+                      <a
+                        href={`/blogs/${article.slug}`}
+                        onClick={(e) => handleLinkClick(e, `/blogs/${article.slug}`)}
+                        className="font-extrabold text-[#0B3D91] hover:underline block"
+                      >
+                        {article.title}
+                      </a>
+                      <div className="text-[11px] text-slate-600 flex items-center justify-between gap-2">
+                        <span>Published {article.publicationDate}</span>
+                        <span className="font-mono text-slate-500">/{article.slug}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <section className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-3">
+              <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-[#0B3D91]" />
+                <span>Verified Bilateral Route Overrides ({verifiedRoutes.length})</span>
+              </h2>
+              {verifiedRoutes.length === 0 ? (
+                <p className="text-xs text-slate-500">No verified bilateral route overrides indexed.</p>
+              ) : (
+                <ul className="space-y-2.5 text-xs">
+                  {verifiedRoutes.map((route) => (
+                    <li
+                      key={route.routeId}
+                      className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1"
+                    >
+                      <a
+                        href={`/${route.routeId}`}
+                        onClick={(e) => handleLinkClick(e, `/${route.routeId}`)}
+                        className="font-extrabold text-[#0B3D91] hover:underline block"
+                      >
+                        {route.originCountryIso} → {route.destinationCountryIso} Verified Corridor (/{route.routeId})
+                      </a>
+                      <p className="text-[11px] text-slate-600">{route.verifiedOverrides.scopeNote}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </div>
+
+          {/* Section 3: Verified Active Country Hubs & Verified Programs */}
+          <section className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-[#0B3D91]" />
+                  <span>
+                    Verified Active Country Hubs ({activeCountries.length}) &amp; Published Programs ({verifiedPrograms.length})
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Every listed country hub and program URL is backed by verified sovereign HTTPS sources.
+                </p>
+              </div>
+              <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 sm:w-80">
+                <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Filter verified hubs or programs..."
+                  className="w-full bg-transparent text-xs text-slate-900 outline-none"
+                />
+              </div>
+            </div>
+
+            {filteredCountries.length === 0 ? (
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 text-center text-xs text-slate-600">
+                No verified country hub or program matches &ldquo;{search}&rdquo;.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredCountries.map((country) => {
+                  const progs = verifiedPrograms.filter((p) => p.countryIso === country.iso);
+                  return (
+                    <div
+                      key={country.iso}
+                      className="p-4 bg-slate-50/70 border border-slate-200 rounded-xl space-y-3"
+                    >
+                      <div className="flex items-center justify-between gap-2 border-b border-slate-200 pb-2">
+                        <a
+                          href={`/immigration/${country.slug}`}
+                          onClick={(e) => handleLinkClick(e, `/immigration/${country.slug}`)}
+                          className="font-extrabold text-sm text-[#0B3D91] hover:underline flex items-center gap-1.5"
+                        >
+                          <span>{country.flag}</span>
+                          <span>
+                            {country.name} ({country.iso})
+                          </span>
+                        </a>
+                        <span className="text-[10px] font-extrabold bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-full">
+                          {progs.length} Verified
+                        </span>
+                      </div>
+                      <ul className="space-y-1.5 text-xs">
+                        {progs.map((prog) => {
+                          const progHref = `/visa/${country.slug}/${prog.id.toLowerCase()}`;
+                          return (
+                            <li key={prog.id} className="flex items-center justify-between gap-2">
+                              <a
+                                href={progHref}
+                                onClick={(e) => handleLinkClick(e, progHref)}
+                                className="text-slate-800 hover:text-[#0B3D91] hover:underline font-medium"
+                              >
+                                {prog.name}
+                              </a>
+                              <span className="text-[10px] uppercase font-mono bg-white border border-slate-200 px-1.5 py-0.5 rounded text-slate-600 shrink-0">
+                                {prog.category}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          {/* Section 4: Public Consular Utilities & Calculators */}
+          <section className="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-xs space-y-4">
+            <h2 className="text-lg font-extrabold text-slate-900">
+              Public Consular Utilities &amp; Planning Tools ({PUBLIC_CONSULAR_TOOLS.length})
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              {PUBLIC_CONSULAR_TOOLS.map((tool) => (
+                <a
+                  key={tool.url}
+                  href={tool.url}
+                  onClick={(e) => handleLinkClick(e, tool.url)}
+                  className="p-3.5 bg-slate-50 hover:bg-blue-50/60 border border-slate-200 rounded-xl transition-colors block"
+                >
+                  <div className="font-extrabold text-[#0B3D91]">{tool.label}</div>
+                  <div className="text-[11px] text-slate-600 mt-0.5">{tool.sub}</div>
+                </a>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 }
-
-

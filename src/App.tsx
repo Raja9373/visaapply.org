@@ -75,6 +75,7 @@ const GlobalVerificationPilotPage = React.lazy(() => import('./pages/GlobalVerif
 const EvidenceTraceabilityAuditPage = React.lazy(() => import('./pages/EvidenceTraceabilityAuditPage').then(m => ({ default: m.EvidenceTraceabilityAuditPage })));
 const OfficialSourceMonitoringPage = React.lazy(() => import('./pages/OfficialSourceMonitoringPage').then(m => ({ default: m.OfficialSourceMonitoringPage })));
 const GlobalVisaCoverageAuditPage = React.lazy(() => import('./pages/GlobalVisaCoverageAuditPage').then(m => ({ default: m.GlobalVisaCoverageAuditPage })));
+const EditorialReviewQueuePage = React.lazy(() => import('./pages/EditorialReviewQueuePage').then(m => ({ default: m.EditorialReviewQueuePage })));
 const CanonicalPathwayPage = React.lazy(() => import('./pages/CanonicalPathwayPage').then(m => ({ default: m.CanonicalPathwayPage })));
 
 function PageLoadingFallback() {
@@ -2795,6 +2796,7 @@ export default function App() {
   const isEvidenceTraceability = routePath === '/admin/evidence-traceability' || routePath === '/admin/evidence-traceability/';
   const isOfficialSourceMonitoring = routePath === '/admin/official-source-monitoring' || routePath === '/admin/official-source-monitoring/';
   const isGlobalVisaCoverageAudit = routePath === '/admin/global-visa-coverage-audit' || routePath === '/admin/global-visa-coverage-audit/';
+  const isEditorialReviewQueue = routePath === '/admin/editorial-review' || routePath === '/admin/editorial-review/';
 
   // 1. Level 1: /in-to-us or /ae-to-us or /us-visa
   const shortCountryMatch = routePath.match(/^\/([a-z]{2,3})-visa$/i);
@@ -2830,10 +2832,15 @@ export default function App() {
   })();
 
   const isCanonicalPathway = /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(routePath);
+  const staticProgramRouteMatch =
+    !resolvePublicCanonicalPathwayByUrl(routePath)
+      ? routePath.match(/^\/visa\/([a-z]{2})\/([a-z0-9-]+)\/?$/i)
+      : null;
+  const blogSlugMatch = routePath.match(/^\/(?:blog|blogs)\/([a-z0-9-]+)\/?$/i);
 
-  const isBlogMatch = !isHome && !isAnyAdminRoute && !isCanonicalPathway && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring && !isGlobalVisaCoverageAudit &&
+  const isBlogMatch = !isHome && !isAnyAdminRoute && !isCanonicalPathway && !staticProgramRouteMatch && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring && !isGlobalVisaCoverageAudit &&
     !isLevel1Match && !isLevel2Match && !isLevel3Match && (
-      Boolean(matchedBlogArticle) || (
+      Boolean(blogSlugMatch) || Boolean(matchedBlogArticle) || (
         !cleanPathSlug.includes('/') && (cleanPathSlug.includes('guide') || cleanPathSlug.includes('blog') || cleanPathSlug.includes('visa'))
       )
     );
@@ -3381,6 +3388,8 @@ export default function App() {
             <OfficialSourceMonitoringPage onNavigate={navigate} adminToken={adminToken} />
           ) : isGlobalVisaCoverageAudit ? (
             <GlobalVisaCoverageAuditPage onNavigate={navigate} adminToken={adminToken} />
+          ) : isEditorialReviewQueue ? (
+            <EditorialReviewQueuePage onNavigate={navigate} />
           ) : (
             <AdminPortal 
               drafts={drafts} 
@@ -3529,15 +3538,23 @@ export default function App() {
           />
         ) : isLevel3Match ? (
           <ArticleView match={isLevel3Match} articles={articles} navigate={navigate} />
+        ) : staticProgramRouteMatch ? (
+          <CountryImmigrationDetailPage
+            countryCode={staticProgramRouteMatch[1]}
+            initialProgramId={staticProgramRouteMatch[2]}
+            navigate={navigate}
+            uiLang={uiLang}
+            locationSearch={routeSearch}
+          />
         ) : isCanonicalPathway ? (
           <CanonicalPathwayPage pathwayUrl={routePath} navigate={navigate} />
         ) : isBlogMatch ? (
-          <BlogArticleView 
-            article={matchedBlogArticle} 
-            pathSlug={cleanPathSlug}
+          <BlogArticleView
+            article={matchedBlogArticle}
+            pathSlug={blogSlugMatch ? blogSlugMatch[1] : cleanPathSlug}
             articles={articles}
-            countries={countries} 
-            navigate={navigate} 
+            countries={countries}
+            navigate={navigate}
           />
         ) : isHome ? (
           <HomeView 

@@ -1,0 +1,81 @@
+name: Daily Official Source Monitoring (03:00 AM IST)
+
+on:
+  schedule:
+    # 03:00 AM IST = 21:30 UTC daily
+    - cron: '30 21 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run monitoring in read-only dry-run mode without updating local monitoring state'
+        required: false
+        type: boolean
+        default: false
+      force_slot:
+        description: 'Force re-execution even if the current 03:00 AM IST UTC slot already completed'
+        required: false
+        type: boolean
+        default: false
+
+# Strict least-privilege permissions: monitoring never auto-commits to main
+permissions:
+  contents: read
+
+# Prevent overlapping duplicate runs
+concurrency:
+  group: visaapply-daily-source-monitoring
+  cancel-in-progress: false
+
+jobs:
+  monitor-official-sources:
+    name: Monitor Official HTTPS Sources & Generate Evidence Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate canonical static catalog before monitoring
+        run: npm run catalog:validate
+
+      - name: Run automated official source monitoring & change detection
+        run: |
+          ARGS="--triggered-by SCHEDULED_0300_IST"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ARGS="--triggered-by CI_WORKFLOW"
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          if [ "${{ inputs.force_slot }}" = "true" ]; then
+            ARGS="$ARGS --force-slot"
+          fi
+          npx tsx scripts/monitorOfficialSources.ts $ARGS
+
+      - name: Generate machine-readable Data Quality & Coverage Dashboard Report
+        run: npm run catalog:quality-report
+
+      - name: Upload monitoring, change-detection, quarantine & data quality artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-source-monitoring-report-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            data/monitoring/latest-run-report.json
+            data/monitoring/data-quality-report.json
+            data/monitoring/source-registry-state.json
+            data/monitoring/record-level-quarantines.json
+            data/monitoring/changes/
+            data/monitoring/history/

@@ -13,7 +13,12 @@
     "catalog:export": "tsx scripts/exportCatalogToStatic.ts",
     "catalog:validate": "tsx scripts/validateStaticCatalog.ts",
     "catalog:build-indexes": "tsx scripts/buildCatalogIndexes.ts",
-    "catalog:sitemaps": "tsx scripts/generateStaticSitemaps.ts"
+    "catalog:sitemaps": "tsx scripts/generateStaticSitemaps.ts",
+    "catalog:monitor": "tsx scripts/monitorOfficialSources.ts",
+    "catalog:quality-report": "tsx scripts/generateDataQualityReport.ts",
+    "catalog:regenerate-safe": "tsx scripts/runSafeCatalogRegeneration.ts",
+    "editorial:validate-pr": "tsx scripts/validateEditorialPullRequest.ts",
+    "editorial:verify-github-config": "tsx scripts/verifyGithubGovernanceConfig.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.16",

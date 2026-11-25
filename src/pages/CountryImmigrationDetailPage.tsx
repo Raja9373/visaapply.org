@@ -46,6 +46,7 @@ interface CountryImmigrationDetailPageProps {
   navigate: (path: string) => void;
   uiLang?: SupportedLangCode;
   locationSearch?: string;
+  initialProgramId?: string;
 }
 
 export function CountryImmigrationDetailPage({
@@ -53,9 +54,11 @@ export function CountryImmigrationDetailPage({
   navigate,
   uiLang = 'en',
   locationSearch,
+  initialProgramId,
 }: CountryImmigrationDetailPageProps) {
   const rawNorm = (countryCode || 'US').trim().toUpperCase();
   const normCode = rawNorm === 'UK' ? 'GB' : rawNorm;
+  const normalizedTargetProgramId = (initialProgramId || '').trim().toLowerCase();
 
   const [activeCategory, setActiveCategory] = useState<ImmigrationCategoryKey>(() =>
     parseCategoryFromSearchOrWindow(locationSearch)
@@ -103,7 +106,31 @@ export function CountryImmigrationDetailPage({
 
       if (res.status === 'ok' && res.data) {
         setCountryChunk(res.data);
-        setChunkState('ok');
+        if (normalizedTargetProgramId) {
+          const targetProg = res.data.programs.find(
+            (p) => p.programId.toLowerCase() === normalizedTargetProgramId
+          );
+          if (targetProg) {
+            const catMap: Record<string, ImmigrationCategoryKey> = {
+              pr: 'pr',
+              citizenship: 'citizenship',
+              work: 'work',
+              family: 'family',
+              business: 'business',
+              investor: 'business',
+              digital_nomad: 'digital_nomad',
+              retirement: 'digital_nomad',
+              tourist: 'tourist',
+            };
+            setActiveCategory(catMap[targetProg.immigrationCategory] || 'pr');
+            setChunkState('ok');
+          } else {
+            // Fail-closed: expired, quarantined, or unknown program ID must never render as active
+            setChunkState('unavailable');
+          }
+        } else {
+          setChunkState('ok');
+        }
         setLoading(false);
         return;
       }
@@ -133,12 +160,14 @@ export function CountryImmigrationDetailPage({
       setErrorMsg(res.error || 'Unable to load country immigration data. Please retry.');
       setLoading(false);
     },
-    [normCode]
+    [normCode, normalizedTargetProgramId]
   );
 
   useEffect(() => {
-    setActiveCategory(parseCategoryFromSearchOrWindow(locationSearch));
-  }, [normCode, locationSearch]);
+    if (!normalizedTargetProgramId) {
+      setActiveCategory(parseCategoryFromSearchOrWindow(locationSearch));
+    }
+  }, [normCode, locationSearch, normalizedTargetProgramId]);
 
   useEffect(() => {
     void loadCountryData(false);
@@ -191,11 +220,28 @@ export function CountryImmigrationDetailPage({
   const activeCategoryMeta = categories.find((c) => c.id === activeCategory) || categories[0];
 
   const staticProgramsInCategory: StaticProgramRecord[] = (countryChunk?.programs || []).filter(
-    (p) => p.immigrationCategory === activeCategory
+    (p) => {
+      if (normalizedTargetProgramId && p.programId.toLowerCase() === normalizedTargetProgramId) {
+        return true;
+      }
+      if (activeCategory === 'business') {
+        return p.immigrationCategory === 'business' || p.immigrationCategory === 'investor';
+      }
+      if (activeCategory === 'digital_nomad') {
+        return p.immigrationCategory === 'digital_nomad' || p.immigrationCategory === 'retirement';
+      }
+      return p.immigrationCategory === activeCategory;
+    }
   );
   const legacyProgramsInCategory: ImmigrationProgram[] = (legacyProfile?.programs || []).filter(
     (p) => p.category === activeCategory
   );
+
+  const focusedProgram = normalizedTargetProgramId
+    ? (countryChunk?.programs || []).find(
+        (p) => p.programId.toLowerCase() === normalizedTargetProgramId
+      ) || null
+    : null;
 
   const hasVerifiedInCategory = legacyProfile
     ? legacyProgramsInCategory.some((p) => p.verificationStatus === 'AVAILABLE_VERIFIED')
@@ -384,20 +430,37 @@ export function CountryImmigrationDetailPage({
           </div>
         )}
 
-        {/* Unavailable / Unknown Country Code */}
+        {/* Unavailable / Unknown Country Code or Unverified/Expired Program ID (Fail-Closed) */}
         {!loading && !errorMsg && chunkState === 'unavailable' && (
-          <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-3 mb-10">
-            <h2 className="text-xl font-black text-slate-900">Country Hub Not Available ({normCode})</h2>
-            <p className="text-sm text-slate-600">
-              No active static catalog record exists for country identifier <code>{normCode}</code>.
+          <div className="bg-white border-2 border-amber-300 rounded-2xl p-8 text-center space-y-3 mb-10">
+            <h2 className="text-xl font-black text-slate-900">
+              {normalizedTargetProgramId
+                ? `404 — Verified Program Not Found (${normCode}/${normalizedTargetProgramId})`
+                : `Country Hub Not Available (${normCode})`}
+            </h2>
+            <p className="text-sm text-slate-600 max-w-xl mx-auto">
+              {normalizedTargetProgramId
+                ? `No currently active, verified static catalog program matches "${normalizedTargetProgramId}" for ${countryName}. Expired, revoked, or unverified programs are excluded from public pages.`
+                : `No active static catalog record exists for country identifier ${normCode}.`}
             </p>
-            <button
-              type="button"
-              onClick={() => navigate('/immigration')}
-              className="px-4 py-2 bg-[#0B3D91] text-white rounded-xl text-xs font-bold cursor-pointer"
-            >
-              Return to All 249 Country Hubs
-            </button>
+            <div className="flex flex-wrap justify-center gap-3 pt-2">
+              {normalizedTargetProgramId && (
+                <button
+                  type="button"
+                  onClick={() => navigate(`/immigration/${normCode.toLowerCase()}`)}
+                  className="px-4 py-2 bg-[#0B3D91] text-white rounded-xl text-xs font-bold cursor-pointer"
+                >
+                  View {countryName} Immigration Hub
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => navigate('/immigration')}
+                className="px-4 py-2 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold cursor-pointer"
+              >
+                Return to All 249 Country Hubs
+              </button>
+            </div>
           </div>
         )}
 
@@ -480,7 +543,15 @@ export function CountryImmigrationDetailPage({
                     </p>
                   </div>
                 ) : (
-                  staticProgramsInCategory.map((prog) => (
+                  (focusedProgram
+                    ? [
+                        focusedProgram,
+                        ...staticProgramsInCategory.filter(
+                          (p) => p.programId !== focusedProgram.programId
+                        ),
+                      ]
+                    : staticProgramsInCategory
+                  ).map((prog) => (
                     <StaticProgramCard
                       key={prog.programId}
                       prog={prog}

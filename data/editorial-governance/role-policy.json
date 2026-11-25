@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "2.2.0",
+  "enforcementLayer": "GITHUB_PROTECTED_BRANCHES_AND_CODEOWNERS",
+  "frontendRoleChecksAreAuthoritative": false,
+  "roles": {
+    "ADMINISTRATOR": {
+      "githubTeam": "@visaapply-org/platform-admins",
+      "permissions": [
+        "VIEW_RECORDS",
+        "REVIEW_EVIDENCE",
+        "PROPOSE_CHANGES",
+        "EDIT_DRAFTS",
+        "APPROVE_LOW_RISK_CHANGES",
+        "APPROVE_HIGH_RISK_CHANGES",
+        "MERGE_APPROVED_PR",
+        "VIEW_AUDIT_HISTORY",
+        "MANAGE_SOURCE_REGISTRY"
+      ]
+    },
+    "SENIOR_IMMIGRATION_REVIEWER": {
+      "githubTeam": "@visaapply-org/senior-immigration-reviewers",
+      "permissions": [
+        "VIEW_RECORDS",
+        "REVIEW_EVIDENCE",
+        "PROPOSE_CHANGES",
+        "EDIT_DRAFTS",
+        "APPROVE_LOW_RISK_CHANGES",
+        "APPROVE_HIGH_RISK_CHANGES",
+        "MERGE_APPROVED_PR",
+        "VIEW_AUDIT_HISTORY",
+        "MANAGE_SOURCE_REGISTRY"
+      ]
+    },
+    "COUNTRY_EDITOR": {
+      "githubTeam": "@visaapply-org/country-editors",
+      "permissions": [
+        "VIEW_RECORDS",
+        "REVIEW_EVIDENCE",
+        "PROPOSE_CHANGES",
+        "EDIT_DRAFTS",
+        "APPROVE_LOW_RISK_CHANGES",
+        "VIEW_AUDIT_HISTORY"
+      ]
+    },
+    "EVIDENCE_REVIEWER": {
+      "githubTeam": "@visaapply-org/evidence-reviewers",
+      "permissions": [
+        "VIEW_RECORDS",
+        "REVIEW_EVIDENCE",
+        "PROPOSE_CHANGES",
+        "APPROVE_LOW_RISK_CHANGES",
+        "VIEW_AUDIT_HISTORY"
+      ]
+    },
+    "READ_ONLY_AUDITOR": {
+      "githubTeam": "@visaapply-org/read-only-auditors",
+      "permissions": [
+        "VIEW_RECORDS",
+        "VIEW_AUDIT_HISTORY"
+      ]
+    }
+  },
+  "riskPolicy": {
+    "failClosedDefault": "HIGH_RISK",
+    "aiOnlyHighRiskApprovalAllowed": false,
+    "selfApprovalAllowedForHighRisk": false,
+    "conflictingSourcesRequireQuarantine": true,
+    "autoReleaseQuarantineOnReachabilityAllowed": false
+  }
+}

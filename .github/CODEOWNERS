@@ -1,0 +1,57 @@
+# ==============================================================================
+# VISAAPPLY.ORG — GITHUB CODEOWNERS (PHASE 6 / 6.1 EDITORIAL GOVERNANCE)
+# Enforces domain-specific human reviewer approval via GitHub Branch Protection.
+#
+# CRITICAL GITHUB ENFORCEMENT NOTES:
+# 1. Replace `@visaapply-org/*` with your real GitHub Organization slug if the
+#    repository is hosted under a different GitHub Organization name.
+# 2. Every listed team MUST exist in that GitHub Organization AND have explicit
+#    Write (or Maintain/Admin) access to this repository, or GitHub ignores the rule.
+# 3. Multiple teams on one line act as logical OR (any ONE team member approves).
+#    Therefore, high-risk statutory, quarantine, source-registry, governance,
+#    public catalog, and CI paths are strictly restricted to Senior Immigration
+#    Reviewers and/or Platform Admins (never Country Editors or Evidence Reviewers).
+# 4. `@visaapply-org/read-only-auditors` is intentionally omitted (zero approval rights).
+# 5. Repository Branch Protection / Ruleset MUST enable "Require review from Code Owners".
+# ==============================================================================
+
+# Default fallback owner — guarantees zero unowned files anywhere in the repository
+*                                     @visaapply-org/platform-admins
+
+# High-risk immigration law, eligibility, visa details, quarantine & verification claims
+/data/programs/                       @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/visa-details/                   @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/verification/                   @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/routes/                         @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/countries/                      @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+
+# Official government source registry (requires MANAGE_SOURCE_REGISTRY role)
+/data/official-sources/               @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+
+# Editorial governance policies, proposals, quarantine releases, changelog & append-only audit log
+/data/editorial-governance/           @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/editorial/published/            @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/changelog/                      @visaapply-org/senior-immigration-reviewers @visaapply-org/platform-admins
+/data/schema_manifest.json            @visaapply-org/platform-admins @visaapply-org/senior-immigration-reviewers
+/data/export_manifest.json            @visaapply-org/platform-admins @visaapply-org/senior-immigration-reviewers
+
+# Non-published drafts & raw monitoring evidence intake (non-authoritative spaces)
+/data/editorial/drafts/               @visaapply-org/country-editors @visaapply-org/senior-immigration-reviewers
+/data/monitoring/                     @visaapply-org/evidence-reviewers @visaapply-org/senior-immigration-reviewers
+
+# Generated static catalog artifacts, candidate sitemaps & legacy production sitemaps
+/public/catalog/                      @visaapply-org/platform-admins @visaapply-org/senior-immigration-reviewers
+/public/sitemaps-static/              @visaapply-org/platform-admins
+/public/sitemap*.xml                  @visaapply-org/platform-admins
+/public/robots.txt                    @visaapply-org/platform-admins
+
+# Validation pipelines, schemas, governance UI, tests, server & GitHub Actions automation
+/src/schemas/                         @visaapply-org/platform-admins @visaapply-org/senior-immigration-reviewers
+/src/services/staticCatalogClient.ts  @visaapply-org/platform-admins
+/src/pages/EditorialReviewQueuePage.tsx @visaapply-org/platform-admins
+/scripts/                             @visaapply-org/platform-admins
+/tests/                               @visaapply-org/platform-admins
+/package.json                         @visaapply-org/platform-admins
+/bun.lock                             @visaapply-org/platform-admins
+/server.ts                            @visaapply-org/platform-admins
+/.github/                             @visaapply-org/platform-admins

@@ -169,10 +169,11 @@ export const VisaTrackingPage: React.FC<VisaTrackingPageProps> = ({
   const [refNumber, setRefNumber] = useState('');
   const [searched, setSearched] = useState(false);
 
-  // Email Reminder state (Same Email Only system as Slot Alert)
+  // Email Reminder state (isolated persistent-backend feature — never stores PII in localStorage)
   const [reminderEmail, setReminderEmail] = useState('');
   const [reminderSaved, setReminderSaved] = useState(false);
   const [reminderLoading, setReminderLoading] = useState(false);
+  const [reminderError, setReminderError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const handleTrackSearch = (e: React.FormEvent) => {
@@ -186,13 +187,14 @@ export const VisaTrackingPage: React.FC<VisaTrackingPageProps> = ({
 
   const handleReminderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setReminderError(null);
     if (!reminderEmail || !reminderEmail.includes('@')) {
-      alert('Please enter a valid email address.');
+      setReminderError('Please enter a valid email address.');
       return;
     }
     setReminderLoading(true);
     try {
-      await fetch('/api/slot-alert/subscribe', {
+      const res = await fetch('/api/slot-alert/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -202,22 +204,30 @@ export const VisaTrackingPage: React.FC<VisaTrackingPageProps> = ({
           embassyCity: `Visa Tracking Reminder (${appType})`
         })
       });
+      if (!res.ok) {
+        setReminderSaved(false);
+        setReminderError(
+          'Email status reminders require a persistent backend service, which is currently unavailable. Your email was not saved locally—please bookmark the official tracking portal above.'
+        );
+        return;
+      }
+      const data = await res.json();
+      if (data && data.success) {
+        setReminderSaved(true);
+      } else {
+        setReminderSaved(false);
+        setReminderError(
+          data?.error || 'Unable to save reminder right now. Please use the official tracking portals above.'
+        );
+      }
     } catch {
-      // Fallback to localStorage
+      setReminderSaved(false);
+      setReminderError(
+        'Persistent backend unavailable: automated email status reminders require secure server-side storage and are currently isolated. Use the direct official government tracking portals above.'
+      );
+    } finally {
+      setReminderLoading(false);
     }
-    try {
-      const existing = JSON.parse(localStorage.getItem('visaapply_email_subscribers') || '[]');
-      existing.push({
-        email: reminderEmail.trim(),
-        context: `Visa Tracking Status Reminder - ${country} (${appType})`,
-        date: new Date().toISOString()
-      });
-      localStorage.setItem('visaapply_email_subscribers', JSON.stringify(existing));
-    } catch {
-      // ignore storage errors
-    }
-    setReminderLoading(false);
-    setReminderSaved(true);
   };
 
   const activePortals = TRACKING_PORTALS[country] || TRACKING_PORTALS.Global;
@@ -459,7 +469,15 @@ export const VisaTrackingPage: React.FC<VisaTrackingPageProps> = ({
               </p>
             </div>
 
-            <div className="w-full lg:w-auto shrink-0">
+            <div className="w-full lg:w-auto shrink-0 space-y-2">
+              {reminderError && (
+                <div
+                  role="alert"
+                  className="bg-amber-500/20 border border-amber-300/60 p-3 rounded-xl text-xs text-amber-100 font-semibold max-w-md"
+                >
+                  {reminderError}
+                </div>
+              )}
               {reminderSaved ? (
                 <div className="bg-emerald-500/20 border border-emerald-400/40 p-4 rounded-xl flex items-center gap-2 text-xs sm:text-sm text-emerald-200 font-bold justify-center">
                   <CheckCircle2 className="w-5 h-5 text-emerald-300 shrink-0" />
@@ -480,10 +498,13 @@ export const VisaTrackingPage: React.FC<VisaTrackingPageProps> = ({
                     disabled={reminderLoading}
                     className="px-5 py-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-black rounded-xl transition-colors cursor-pointer shrink-0"
                   >
-                    {reminderLoading ? 'Saving...' : 'Set Email Reminder →'}
+                    {reminderLoading ? 'Checking Backend...' : 'Set Email Reminder →'}
                   </button>
                 </form>
               )}
+              <p className="text-[11px] text-blue-200 max-w-md">
+                Note: Automated email reminders require a persistent backend service and are never stored in browser localStorage. Official government tracking links above always work directly.
+              </p>
             </div>
           </div>
         </div>

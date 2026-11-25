@@ -1,0 +1,94 @@
+name: Propose Official Source Refresh Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_slot:
+        description: 'Force re-execution of the monitoring slot before proposing a PR'
+        required: false
+        type: boolean
+        default: true
+      source_limit:
+        description: 'Optional max number of official sources to check (leave empty for all)'
+        required: false
+        type: string
+        default: ''
+
+# Scoped permissions strictly limited to opening a reviewable Pull Request.
+# Material legal changes are NEVER auto-merged; human PR approval is mandatory.
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: visaapply-propose-catalog-refresh-pr
+  cancel-in-progress: false
+
+jobs:
+  propose-refresh-pr:
+    name: Monitor Sources & Open Human-Review Pull Request
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate canonical catalog before refresh
+        run: npm run catalog:validate
+
+      - name: Run official source monitoring & emit change/quarantine proposals
+        env:
+          INPUT_FORCE_SLOT: ${{ inputs.force_slot }}
+          INPUT_SOURCE_LIMIT: ${{ inputs.source_limit }}
+        run: |
+          ARGS="--triggered-by CI_WORKFLOW"
+          if [ "$INPUT_FORCE_SLOT" = "true" ]; then
+            ARGS="$ARGS --force-slot"
+          fi
+          if [ -n "$INPUT_SOURCE_LIMIT" ]; then
+            ARGS="$ARGS --limit $INPUT_SOURCE_LIMIT"
+          fi
+          npx tsx scripts/monitorOfficialSources.ts $ARGS
+
+      - name: Re-validate canonical catalog & dry-run atomic regeneration
+        run: |
+          npm run catalog:validate
+          npm run catalog:regenerate-safe -- --dry-run
+
+      - name: Open or update Pull Request for human legal review (never auto-merged)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "visaapply-monitoring-bot"
+          git config user.email "visaapply-monitoring-bot@users.noreply.github.com"
+
+          if [ -z "$(git status --porcelain data/monitoring)" ]; then
+            echo "No monitoring report changes detected; skipping PR creation."
+            exit 0
+          fi
+
+          BRANCH="chore/official-source-monitoring-refresh"
+          git checkout -B "$BRANCH"
+          git add data/monitoring
+          git commit -m "chore(monitoring): official source check report & evidence proposals"
+          git push --force-with-lease origin "$BRANCH"
+
+          if gh pr view "$BRANCH" >/dev/null 2>&1; then
+            echo "Existing human-review PR updated on branch $BRANCH."
+          else
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "chore(monitoring): Official Source Verification & Evidence Proposals" \
+              --body "Automated Phase 5B monitoring report, change-detection evidence proposals, and record-level quarantine candidates.\n\n**Human Review Gate:**\n- Published immigration rules in \`data/programs/\` and \`data/visa-details/\` were NOT automatically modified.\n- Material legal, fee, eligibility, or closure changes require explicit human legal review and official HTTPS verification.\n- Never auto-merge without reviewer sign-off."
+          fi

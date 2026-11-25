@@ -487,6 +487,53 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
     };
   }
 
+  // 4b. Check Static Catalog Program Route (/visa/:iso/:programId)
+  const staticProgMatch = cleanPath.match(/^\/visa\/([a-z]{2})\/([a-z0-9-]+)$/);
+  if (staticProgMatch && ISO2_COUNTRY_NAMES[staticProgMatch[1]]) {
+    const code = staticProgMatch[1];
+    const progSlug = staticProgMatch[2];
+    const countryName = ISO2_COUNTRY_NAMES[code];
+    const readableProgram = humanizeSlug(progSlug, code);
+    const title = `${countryName} ${readableProgram} – Verified Official Pathway Guide | VisaApply.org`;
+    const description = `Verified official ${countryName} immigration pathway (${readableProgram}) backed by sovereign HTTPS government sources on VisaApply.org.`;
+    const ogImage = resolveValidOgImageUrl(code);
+    const metrics = getDeterministicCorridorMetrics('in', code);
+
+    const jsonLdGraph = buildBilateralJsonLd({
+      canonicalUrl,
+      title,
+      description,
+      fromCode: 'in',
+      fromName: 'International',
+      toCode: code,
+      toName: countryName,
+      visaSubtypeName: readableProgram,
+      metrics,
+      includeFaqSchema: false,
+    });
+
+    const ssrBodyHtml = buildCountryHubSsrHtml({
+      cleanPath,
+      canonicalUrl,
+      code,
+      countryName: `${countryName} — ${readableProgram}`,
+      metrics,
+    });
+
+    return {
+      statusCode: 200,
+      canonicalUrl,
+      cleanPath,
+      title,
+      description,
+      ogImage,
+      ogType: 'article',
+      robots,
+      jsonLdGraph,
+      ssrBodyHtml,
+    };
+  }
+
   // 5. Check Static Route Registry or Fallback
   const staticEntry = resolveStaticRouteSeoMetadata(cleanPath);
   const title = staticEntry?.title || 'VisaApply.org – Global Visa Requirements, PR Pathways & Official Links (249 Countries)';

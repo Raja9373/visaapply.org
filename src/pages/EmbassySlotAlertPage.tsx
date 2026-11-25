@@ -36,12 +36,15 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [slotStatuses, setSlotStatuses] = useState<any>({});
 
-  // Silent IP geo-detection on mount
+  const [backendAvailable, setBackendAvailable] = useState<'checking' | 'available' | 'unavailable'>('checking');
+
+  // Check optional backend status honestly (never fake live statuses when persistent backend is unavailable)
   useEffect(() => {
+    let active = true;
     fetch('/api/geo')
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.country) {
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data && data.country) {
           const code = String(data.country).toUpperCase();
           if (NAME_MAP_249[code]) {
             setFromCountry(code);
@@ -51,13 +54,23 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
       .catch(() => {});
 
     fetch('/api/slot-alert/status')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!active) return;
+        if (data && data.success) {
           setSlotStatuses(data.embassies || {});
+          setBackendAvailable('available');
+        } else {
+          setBackendAvailable('unavailable');
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (active) setBackendAvailable('unavailable');
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Auto-fill embassy cities based on From + To
@@ -95,21 +108,34 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
       const res = await fetch('/api/slot-alert/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: email.trim(), 
-          fromCountry, 
-          toCountry, 
-          embassyCity 
+        body: JSON.stringify({
+          email: email.trim(),
+          fromCountry,
+          toCountry,
+          embassyCity
         })
       });
+      if (!res.ok) {
+        setSubscribed(false);
+        setBackendAvailable('unavailable');
+        setErrorMsg(
+          'Automated email slot alerts require a persistent backend database service, which is currently unavailable. Your email was not saved locally.'
+        );
+        return;
+      }
       const data = await res.json();
-      if (data.success) {
+      if (data && data.success) {
         setSubscribed(true);
       } else {
-        setErrorMsg(data.error || 'Subscription failed. Please try again.');
+        setSubscribed(false);
+        setErrorMsg(data?.error || 'Subscription could not be saved. Please try again when the alert backend is active.');
       }
     } catch {
-      setSubscribed(true);
+      setSubscribed(false);
+      setBackendAvailable('unavailable');
+      setErrorMsg(
+        'Persistent backend unavailable: automated embassy slot alert subscriptions cannot be stored in static mode. Your email was not saved in browser storage.'
+      );
     } finally {
       setLoading(false);
     }
@@ -194,25 +220,46 @@ export const EmbassySlotAlertPage: React.FC<EmbassySlotAlertPageProps> = ({
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 space-y-8">
         
+        {/* Persistent Backend Isolation Notice */}
+        <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 sm:p-5 text-amber-950 text-xs sm:text-sm space-y-1">
+          <div className="font-extrabold">
+            Persistent Backend Required for Automated Email Alerts
+          </div>
+          <p className="text-amber-900 leading-relaxed">
+            Automated embassy appointment slot alerts require a secure persistent database and
+            scheduled notification backend, which is isolated from the Zero-Database-First public
+            static site. VisaApply.org never fakes alert subscriptions or stores your email in browser
+            local storage.
+          </p>
+        </div>
+
         {/* Live Slot Status Dashboard */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
           <h3 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4 text-[#0B3D91]" />
-            <span>Live Consular Status (Checked Every 30 Mins Worldwide)</span>
+            <span>Consular Slot Monitor Status</span>
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            {Object.entries(slotStatuses).map(([emb, info]: [string, any]) => {
-              const isOpen = info.status === 'Open';
-              return (
-                <div key={emb} className={`p-3 rounded-xl border text-center ${isOpen ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'}`}>
-                  <span className="text-[11px] font-extrabold text-slate-700 block truncate">{emb}</span>
-                  <span className={`text-xs font-black px-2 py-0.5 rounded-full inline-block mt-1 ${isOpen ? 'bg-emerald-600 text-white animate-pulse' : 'bg-slate-200 text-slate-600'}`}>
-                    {isOpen ? `🟢 OPEN` : '🔴 Closed'}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          {backendAvailable === 'unavailable' || Object.keys(slotStatuses).length === 0 ? (
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+              {backendAvailable === 'checking'
+                ? 'Checking optional backend monitor availability...'
+                : 'Live slot status polling is currently unavailable because the persistent slot-monitoring backend is not enabled in static mode. Please verify appointment availability directly on official USVisaScheduling, VFS Global, TLScontact, or embassy booking portals.'}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {Object.entries(slotStatuses).map(([emb, info]: [string, any]) => {
+                const isOpen = info.status === 'Open';
+                return (
+                  <div key={emb} className={`p-3 rounded-xl border text-center ${isOpen ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'}`}>
+                    <span className="text-[11px] font-extrabold text-slate-700 block truncate">{emb}</span>
+                    <span className={`text-xs font-black px-2 py-0.5 rounded-full inline-block mt-1 ${isOpen ? 'bg-emerald-600 text-white animate-pulse' : 'bg-slate-200 text-slate-600'}`}>
+                      {isOpen ? `🟢 OPEN` : '🔴 Closed'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Subscription Form */}
