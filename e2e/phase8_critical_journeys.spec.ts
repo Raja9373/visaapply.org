@@ -339,6 +339,8 @@ test.describe('Phase 8 Real-Browser End-to-End Critical User Journeys', () => {
     expect(mobileHomePerf.cls).toBeLessThanOrEqual(0.10);
     expect(desktopHubPerf.cls).toBeLessThanOrEqual(0.10);
     expect(mobileHubPerf.cls).toBeLessThanOrEqual(0.10);
+    expect(desktopCountryPerf.cls).toBeLessThanOrEqual(0.10);
+    expect(mobileCountryPerf.cls).toBeLessThanOrEqual(0.10);
     expect(desktopHomeAxe.violations).toEqual([]);
     expect(desktopHubAxe.violations).toEqual([]);
     expect(desktopCountryAxe.violations).toEqual([]);

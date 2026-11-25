@@ -3408,7 +3408,7 @@ export default function App() {
 
       {/* Independent Non-Government Notice & Bilingual Fallback Disclosure */}
       {!isAnyAdminRoute && (
-        <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 min-h-[60px] sm:min-h-[32px] flex items-center text-[11px] sm:text-xs text-slate-700 no-print">
+        <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 min-h-[64px] sm:min-h-[32px] flex items-start sm:items-center text-[11px] sm:text-xs text-slate-700 no-print">
           <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
             <span className="font-medium leading-tight">{getUIString(uiLang).nonGovDisclaimer}</span>
             {uiLang !== 'en' && (

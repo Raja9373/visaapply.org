@@ -16,6 +16,7 @@ import type {
   PathwayVerificationStatus,
 } from '../data/globalImmigrationHubData';
 import type { SupportedLangCode } from '../i18n/config';
+import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import { CountryPAAFaqSection } from '../components/CountryPAAFaqSection';
 import {
   buildCountryImmigrationUrl,
@@ -192,15 +193,18 @@ export function CountryImmigrationDetailPage({
     { id: 'tourist', label: 'Tourist & Visitor', icon: '✈️', desc: 'Tourism, sightseeing, and visitor visas.' },
   ];
 
+  const lowerCode = normCode.toLowerCase();
   const countryName =
     countryChunk?.country.countryName ||
     directoryEntry?.name ||
     legacyProfile?.countryName ||
+    NAME_MAP_249[lowerCode] ||
     normCode;
   const countryFlag =
     countryChunk?.country.flag ||
     directoryEntry?.flag ||
     legacyProfile?.flag ||
+    FLAG_MAP_249[lowerCode] ||
     '🌍';
   const lastReviewed =
     countryChunk?.country.lastReviewedAt ||
@@ -292,46 +296,58 @@ export function CountryImmigrationDetailPage({
       {/* Hero Header */}
       <section className="bg-gradient-to-b from-[#0B3D91] to-[#072a68] text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center space-y-4">
-          <div className="text-6xl mb-2">{countryFlag}</div>
+          <div className="text-6xl leading-none h-[60px] flex items-center justify-center mb-2" aria-hidden="true">{countryFlag}</div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
             {countryName} Immigration &amp; Residency Hub
           </h1>
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal">
             Evidence-based guide to verified immigration pathways in {countryName}, cross-referenced against official sovereign HTTPS portals.
           </p>
-          <p className="text-amber-200/95 text-xs max-w-2xl mx-auto font-semibold">
+          <p className="text-amber-200/95 text-xs max-w-2xl mx-auto font-semibold min-h-[64px] sm:min-h-[36px]">
             Informational Guide Only: VisaApply.org is not affiliated with the government of {countryName} or any embassy. Legal and statutory clauses are maintained in verified English{uiLang !== 'en' ? ` (UI language: ${uiLang.toUpperCase()})` : ''}; always confirm final eligibility on the official government portal below.
           </p>
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl max-w-xl mx-auto text-xs text-left space-y-1.5">
-            <div className="font-bold text-blue-200 flex items-center gap-1.5">
-              <Building2 className="w-4 h-4 text-emerald-300" />
-              <span>Official Registered Source Authority:</span>
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl max-w-xl mx-auto text-xs text-left space-y-1.5 min-h-[156px] sm:min-h-[136px] flex flex-col justify-between">
+            <div className="space-y-1.5">
+              <div className="font-bold text-blue-200 flex items-center gap-1.5">
+                <Building2 className="w-4 h-4 text-emerald-300 shrink-0" aria-hidden="true" />
+                <span>Official Registered Source Authority:</span>
+              </div>
+              <div className="text-white font-semibold min-h-[20px]">
+                {loading ? 'Loading verified sovereign authority…' : primaryAuthority}
+              </div>
+              <div className="text-blue-300 text-[11px] flex items-center gap-2 flex-wrap pt-1">
+                <span>
+                  Status:{' '}
+                  {loading
+                    ? 'VERIFYING CATALOG…'
+                    : chunkState === 'ok'
+                      ? 'VERIFIED ACTIVE HUB'
+                      : chunkState === 'uninhabited'
+                        ? 'UNINHABITED TERRITORY'
+                        : 'VERIFICATION PENDING (QUARANTINED)'}
+                </span>
+                <span>•</span>
+                <span>Last Reviewed: {lastReviewed}</span>
+              </div>
             </div>
-            <div className="text-white font-semibold">{primaryAuthority}</div>
-            <div className="text-blue-300 text-[11px] flex items-center gap-2 flex-wrap pt-1">
-              <span>
-                Status:{' '}
-                {chunkState === 'ok'
-                  ? 'VERIFIED ACTIVE HUB'
-                  : chunkState === 'uninhabited'
-                    ? 'UNINHABITED TERRITORY'
-                    : 'VERIFICATION PENDING (QUARANTINED)'}
-              </span>
-              <span>•</span>
-              <span>Last Reviewed: {lastReviewed}</span>
+            <div className="min-h-[22px] pt-1">
+              {loading ? (
+                <div className="h-4 w-52 bg-white/15 rounded animate-pulse" aria-hidden="true" />
+              ) : primaryPortalUrl ? (
+                <a
+                  href={primaryPortalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-emerald-300 hover:text-emerald-200 font-bold underline break-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span>{primaryPortalUrl}</span>
+                </a>
+              ) : (
+                <span className="text-blue-200/80 text-[11px]">Official HTTPS portal pending verification</span>
+              )}
             </div>
-            {primaryPortalUrl && (
-              <a
-                href={primaryPortalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-emerald-300 hover:text-emerald-200 font-bold pt-1 underline break-all"
-              >
-                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                <span>{primaryPortalUrl}</span>
-              </a>
-            )}
           </div>
         </div>
       </section>
@@ -339,7 +355,7 @@ export function CountryImmigrationDetailPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Loading Skeleton */}
         {loading && (
-          <div className="space-y-6 animate-pulse" aria-busy="true">
+          <div className="space-y-6 animate-pulse min-h-[900px]" aria-busy="true">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
               {Array.from({ length: 7 }).map((_, i) => (
                 <div key={i} className="h-28 bg-white rounded-2xl border border-slate-200 p-4" />
