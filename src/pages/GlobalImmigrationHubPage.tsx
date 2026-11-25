@@ -16,6 +16,18 @@ import {
 } from 'lucide-react';
 import type { ImmigrationCategoryKey } from '../data/globalImmigrationHubData';
 import type { SupportedLangCode } from '../i18n/config';
+import { buildLocalizedUrl } from '../utils/autoLanguage';
+import {
+  CANONICAL_IMMIGRATION_CATEGORIES,
+  CATEGORY_INTERNAL_TO_PARAM_MAP,
+  CATEGORY_URL_PARAM_MAP,
+  HONEST_EMPTY_CATEGORY_MESSAGE,
+  buildCountryImmigrationUrl,
+  buildImmigrationHubUrl,
+  getCanonicalCategoryMeta,
+  parseCategoryFromLocation,
+  parseImmigrationCategoryQuery,
+} from '../config/immigrationCategories';
 import {
   CANONICAL_COVERAGE_SLOTS_COUNT,
   isStaticCatalogEnabled,
@@ -32,51 +44,26 @@ import type {
   SearchIndexPayload,
 } from '../types/staticCatalog';
 
+export { CATEGORY_URL_PARAM_MAP, CATEGORY_INTERNAL_TO_PARAM_MAP, parseCategoryFromLocation };
+
 interface GlobalImmigrationHubPageProps {
   navigate: (path: string) => void;
   uiLang?: SupportedLangCode;
-}
-
-export const CATEGORY_URL_PARAM_MAP: Record<string, ImmigrationCategoryKey> = {
-  'permanent-residency': 'pr',
-  citizenship: 'citizenship',
-  work: 'work',
-  family: 'family',
-  'business-investor': 'business',
-  'digital-nomad-retirement': 'digital_nomad',
-  'tourist-visitor': 'tourist',
-  pr: 'pr',
-  business: 'business',
-  digital_nomad: 'digital_nomad',
-  tourist: 'tourist',
-};
-
-export const CATEGORY_INTERNAL_TO_PARAM_MAP: Record<ImmigrationCategoryKey, string> = {
-  pr: 'permanent-residency',
-  citizenship: 'citizenship',
-  work: 'work',
-  family: 'family',
-  business: 'business-investor',
-  digital_nomad: 'digital-nomad-retirement',
-  tourist: 'tourist-visitor',
-};
-
-export function parseCategoryFromLocation(): ImmigrationCategoryKey | 'all' {
-  if (typeof window === 'undefined') return 'all';
-  const params = new URLSearchParams(window.location.search);
-  const catParam = params.get('category');
-  if (!catParam) return 'all';
-  const mapped = CATEGORY_URL_PARAM_MAP[catParam.toLowerCase()];
-  return mapped || 'all';
+  locationSearch?: string;
 }
 
 export function GlobalImmigrationHubPage({
   navigate,
   uiLang = 'en',
+  locationSearch,
 }: GlobalImmigrationHubPageProps) {
+  const initialQuery = parseImmigrationCategoryQuery(locationSearch);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ImmigrationCategoryKey | 'all'>(
-    parseCategoryFromLocation()
+    initialQuery.category
+  );
+  const [invalidCategoryParam, setInvalidCategoryParam] = useState<string | null>(
+    initialQuery.invalidCategoryParam
   );
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'QUARANTINED' | 'UNINHABITED'>('ALL');
   const [viewMode, setViewMode] = useState<'countries' | 'programs' | 'updates'>('countries');
@@ -207,9 +194,22 @@ export function GlobalImmigrationHubPage({
     };
   }, [viewMode, activeSourceMode]);
 
+  // Keep selectedCategory & invalid-filter state synchronized with URL query changes (App navigation, direct load, refresh)
   useEffect(() => {
+    const parsed = parseImmigrationCategoryQuery(
+      locationSearch !== undefined ? locationSearch : undefined
+    );
+    setSelectedCategory(parsed.category);
+    setInvalidCategoryParam(parsed.invalidCategoryParam);
+  }, [locationSearch]);
+
+  // Also synchronize on browser Back / Forward (popstate)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     const handlePopState = () => {
-      setSelectedCategory(parseCategoryFromLocation());
+      const parsed = parseImmigrationCategoryQuery(window.location.search);
+      setSelectedCategory(parsed.category);
+      setInvalidCategoryParam(parsed.invalidCategoryParam);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -217,81 +217,39 @@ export function GlobalImmigrationHubPage({
 
   const handleSelectCategory = (catId: ImmigrationCategoryKey | 'all') => {
     setSelectedCategory(catId);
-    if (typeof window !== 'undefined') {
-      if (catId === 'all') {
-        window.history.pushState({}, '', '/immigration');
-      } else {
-        const paramSlug = CATEGORY_INTERNAL_TO_PARAM_MAP[catId];
-        window.history.pushState({}, '', `/immigration?category=${paramSlug}`);
-      }
-    }
+    setInvalidCategoryParam(null);
+    const rawTarget = buildImmigrationHubUrl(catId);
+    const targetUrl = uiLang && uiLang !== 'en' ? buildLocalizedUrl(rawTarget, uiLang) : rawTarget;
+    navigate(targetUrl);
+  };
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setStatusFilter('ALL');
+    handleSelectCategory('all');
   };
 
   const categories = [
-    { id: 'all', paramSlug: '', label: 'All 7 Categories', icon: '🌍' },
-    { id: 'pr', paramSlug: 'permanent-residency', label: 'Permanent Residency', icon: '🏠' },
-    { id: 'citizenship', paramSlug: 'citizenship', label: 'Citizenship', icon: '🛂' },
-    { id: 'work', paramSlug: 'work', label: 'Work & Employment', icon: '💼' },
-    { id: 'family', paramSlug: 'family', label: 'Family & Spouse', icon: '👨‍👩‍👧‍👦' },
-    { id: 'business', paramSlug: 'business-investor', label: 'Business & Investor', icon: '📈' },
-    { id: 'digital_nomad', paramSlug: 'digital-nomad-retirement', label: 'Digital Nomad & Retirement', icon: '🌴' },
-    { id: 'tourist', paramSlug: 'tourist-visitor', label: 'Tourist & Visitor', icon: '✈️' },
+    { id: 'all' as const, paramSlug: '', label: 'All 7 Categories', icon: '🌍' },
+    ...CANONICAL_IMMIGRATION_CATEGORIES.map((c) => ({
+      id: c.id,
+      paramSlug: c.slug,
+      label: c.tabLabel,
+      icon: c.icon,
+    })),
   ];
 
-  const getHeaderMeta = () => {
-    switch (selectedCategory) {
-      case 'pr':
-        return {
-          title: 'Permanent Residency Pathways (249 Countries Tracked)',
-          description:
-            'Verified sovereign PR permits, points-based selection systems, and settlement rules with official government portal links.',
-        };
-      case 'citizenship':
-        return {
-          title: 'Citizenship & Naturalization Pathways (249 Countries Tracked)',
-          description:
-            'Verified naturalization statutes and official government citizenship application portals.',
-        };
-      case 'work':
-        return {
-          title: 'Work & Employment Visa Pathways (249 Countries Tracked)',
-          description:
-            'Verified skilled worker visas, employer sponsorships, and job seeker permits backed by sovereign portals.',
-        };
-      case 'family':
-        return {
-          title: 'Family & Spouse Reunification Pathways (249 Countries Tracked)',
-          description:
-            'Verified spouse visas, dependent children sponsorships, and family reunification routes.',
-        };
-      case 'business':
-        return {
-          title: 'Business & Investor Residency Pathways (249 Countries Tracked)',
-          description:
-            'Verified sovereign investor visas, startup founder permits, and Golden Visa programs.',
-        };
-      case 'digital_nomad':
-        return {
-          title: 'Digital Nomad & Retirement Residency Pathways (249 Countries Tracked)',
-          description:
-            'Verified remote worker visas and passive-income retirement residency routes.',
-        };
-      case 'tourist':
-        return {
-          title: 'Tourist & Visitor Visa Pathways (249 Countries Tracked)',
-          description:
-            'Verified short-stay visitor and tourist visa programs backed by primary consular portals.',
-        };
-      default:
-        return {
-          title: 'Global Immigration & Residency Hub (249 ISO Countries)',
-          description:
-            'Evidence-based directory of verified immigration programs, official government sources, and honest verification status across all 249 ISO countries and territories.',
-        };
-    }
-  };
-
-  const headerMeta = getHeaderMeta();
+  const activeCategoryCanonicalMeta = getCanonicalCategoryMeta(selectedCategory);
+  const headerMeta = activeCategoryCanonicalMeta
+    ? {
+        title: activeCategoryCanonicalMeta.pageTitle,
+        description: activeCategoryCanonicalMeta.pageDescription,
+      }
+    : {
+        title: 'Global Immigration & Residency Hub (249 ISO Countries)',
+        description:
+          'Evidence-based directory of verified immigration programs, official government sources, and honest verification status across all 249 ISO countries and territories.',
+      };
 
   const programsByCountry = useMemo(() => {
     const map = new Map<string, ProgramIndexEntry[]>();
@@ -457,17 +415,20 @@ export function GlobalImmigrationHubPage({
           </div>
 
           {/* Category Filter Tabs */}
-          <div className="flex items-center justify-center gap-2 flex-wrap pt-4">
+          <div className="flex items-center justify-center gap-2 flex-wrap pt-4" role="tablist" aria-label="Immigration category filters">
             {categories.map((cat) => {
               const isSelected = selectedCategory === cat.id;
               const catCount =
                 cat.id === 'all'
                   ? programsIndex?.totalPrograms
-                  : categoriesIndex?.categories[cat.id]?.count;
+                  : categoriesIndex?.categories[cat.id]?.count ?? 0;
               return (
                 <button
                   key={cat.id}
                   type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  data-category-tab={cat.id}
                   onClick={() => handleSelectCategory(cat.id as ImmigrationCategoryKey | 'all')}
                   className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     isSelected
@@ -477,15 +438,52 @@ export function GlobalImmigrationHubPage({
                 >
                   <span>{cat.icon}</span>
                   <span>{cat.label}</span>
-                  {typeof catCount === 'number' && (
+                  {programsIndex && (
                     <span className="text-[10px] opacity-80">({catCount})</span>
                   )}
                 </button>
               );
             })}
+            {(selectedCategory !== 'all' || invalidCategoryParam) && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-500/20 hover:bg-rose-500/30 text-white border border-rose-300/40 cursor-pointer transition-colors"
+              >
+                Clear Filter ✕
+              </button>
+            )}
           </div>
         </div>
       </section>
+
+      {/* Invalid Category Filter Notice (Graceful Recovery — Never 404) */}
+      {invalidCategoryParam && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <div
+            role="status"
+            className="bg-amber-50 border border-amber-300 rounded-xl p-4 text-xs sm:text-sm text-amber-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+          >
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+              <div>
+                <strong>Unrecognized Category Filter:</strong> The requested category{' '}
+                <code className="px-1.5 py-0.5 bg-amber-100 rounded font-mono text-xs">
+                  {invalidCategoryParam}
+                </code>{' '}
+                is not a canonical immigration category. Displaying the complete Global Immigration Hub listing instead.
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="px-3 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-800 text-white text-xs font-bold shrink-0 cursor-pointer"
+            >
+              Reset URL Filter
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Honest Language Fallback Disclosure (for non-EN interfaces) */}
       {searchIndex?.translationCoverage &&
@@ -645,6 +643,105 @@ export function GlobalImmigrationHubPage({
         {/* VIEW 1: Country Hubs Directory */}
         {!loading && !errorMsg && viewMode === 'countries' && (
           <>
+            {/* Active Category Verified Programs Summary or Honest Empty State */}
+            {selectedCategory !== 'all' && (
+              <div className="mb-8 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-black text-slate-900">
+                      Verified {activeCategoryCanonicalMeta?.cardTitle || selectedCategory} Programs ({filteredPrograms.length})
+                    </h2>
+                    <p className="text-xs text-slate-600 mt-0.5">
+                      Showing only officially verified programs (`AVAILABLE_VERIFIED` + `PUBLISHED`). Unverified countries remain transparently marked below.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {filteredPrograms.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setViewMode('programs')}
+                        className="px-3 py-1.5 rounded-lg bg-[#0B3D91] text-white text-xs font-bold hover:bg-blue-900 cursor-pointer"
+                      >
+                        View Program Cards ({filteredPrograms.length})
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleResetFilters}
+                      className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold cursor-pointer"
+                    >
+                      Clear Filter
+                    </button>
+                  </div>
+                </div>
+
+                {filteredPrograms.length === 0 ? (
+                  <div
+                    data-empty-category-state="true"
+                    className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-center space-y-2"
+                  >
+                    <p className="text-sm font-bold text-amber-950">{HONEST_EMPTY_CATEGORY_MESSAGE}</p>
+                    <button
+                      type="button"
+                      onClick={handleResetFilters}
+                      className="text-xs font-bold text-[#0B3D91] hover:underline cursor-pointer"
+                    >
+                      Reset Filter &amp; Browse All Categories
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {filteredPrograms.map((prog) => {
+                      const c = countriesIndex?.countries.find((item) => item.iso === prog.countryIso);
+                      const detailUrl = buildCountryImmigrationUrl(
+                        prog.countryIso.toLowerCase(),
+                        selectedCategory
+                      );
+                      return (
+                        <div
+                          key={prog.id}
+                          className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 flex flex-col justify-between gap-2"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between gap-2 text-xs font-bold text-slate-800">
+                              <span>
+                                {c?.flag || '🌍'} {c?.name || prog.countryIso}
+                              </span>
+                              <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full">
+                                VERIFIED
+                              </span>
+                            </div>
+                            <div className="text-sm font-black text-slate-900 mt-1">{prog.name}</div>
+                            <div className="text-[11px] text-slate-600 mt-0.5">
+                              Verified: {prog.lastVerifiedDate}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 pt-2 border-t border-emerald-200/70 text-xs">
+                            <button
+                              type="button"
+                              onClick={() => navigate(detailUrl)}
+                              className="font-bold text-[#0B3D91] hover:underline cursor-pointer"
+                            >
+                              Open Country Hub →
+                            </button>
+                            <a
+                              href={prog.officialUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-bold text-emerald-800 hover:underline inline-flex items-center gap-1"
+                            >
+                              <span>Official Portal</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
               <div>
                 <h2 className="text-2xl font-black text-slate-900">
@@ -684,9 +781,7 @@ export function GlobalImmigrationHubPage({
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {filteredCountries.map((c) => {
-                  const paramSlug =
-                    selectedCategory !== 'all' ? CATEGORY_INTERNAL_TO_PARAM_MAP[selectedCategory] : '';
-                  const destinationUrl = `/immigration/${c.slug}${paramSlug ? `?category=${paramSlug}` : ''}`;
+                  const destinationUrl = buildCountryImmigrationUrl(c.slug, selectedCategory);
                   const countryPrograms = programsByCountry.get(c.iso) || [];
                   const matchingCatProg =
                     selectedCategory === 'all'
@@ -768,16 +863,18 @@ export function GlobalImmigrationHubPage({
             </div>
 
             {filteredPrograms.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-2">
+              <div
+                data-empty-category-state="true"
+                className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-2"
+              >
                 <p className="text-sm font-bold text-slate-800">
-                  No verified programs match the selected category and search filter.
+                  {searchQuery.trim()
+                    ? 'No verified programs match the selected category and search filter.'
+                    : HONEST_EMPTY_CATEGORY_MESSAGE}
                 </p>
                 <button
                   type="button"
-                  onClick={() => {
-                    setSearchQuery('');
-                    handleSelectCategory('all');
-                  }}
+                  onClick={handleResetFilters}
                   className="text-xs font-bold text-[#0B3D91] hover:underline cursor-pointer"
                 >
                   Show All Verified Programs

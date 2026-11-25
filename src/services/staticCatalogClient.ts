@@ -15,6 +15,7 @@
  */
 
 import { SUPPORTED_LANGUAGES_15, type SupportedLangCode } from '../i18n/config';
+import { normalizeCanonicalCategory } from '../config/immigrationCategories';
 import type {
   CatalogArtifactDescriptor,
   CatalogLoadResult,
@@ -675,6 +676,75 @@ export class StaticCatalogClient {
       validateProgramsIndex,
       options
     );
+  }
+
+  /**
+   * Filters verified published programs by canonical category ID or URL slug
+   * (e.g. 'permanent-residency' -> 'pr'). Never fabricates programs: returns
+   * `status: 'empty'` with `data: []` if a valid category has zero verified records,
+   * and `status: 'unavailable'` with `code: 'INVALID_CATEGORY'` for unknown inputs.
+   */
+  public async getProgramsByCategory(
+    categoryIdOrSlug: string | 'all',
+    options?: { forceRefresh?: boolean; signal?: AbortSignal }
+  ): Promise<
+    CatalogLoadResult<ProgramsIndexPayload['programs']> & {
+      canonicalCategory: string | 'all' | null;
+    }
+  > {
+    const raw = String(categoryIdOrSlug || 'all').trim().toLowerCase();
+    const isAll = raw === '' || raw === 'all';
+    const canonicalCategory = isAll ? 'all' : normalizeCanonicalCategory(raw);
+
+    if (!isAll && !canonicalCategory) {
+      return {
+        status: 'unavailable',
+        data: null,
+        canonicalCategory: null,
+        code: 'INVALID_CATEGORY',
+        error: `Unknown immigration category filter: "${categoryIdOrSlug}".`,
+        retryable: false,
+        fromCache: false,
+        source: 'static_catalog',
+      };
+    }
+
+    const programsRes = await this.getProgramsIndex(options);
+    if (programsRes.status !== 'ok' || !programsRes.data) {
+      return {
+        ...programsRes,
+        data: null,
+        canonicalCategory,
+      };
+    }
+
+    const filtered =
+      canonicalCategory === 'all'
+        ? programsRes.data.programs
+        : programsRes.data.programs.filter((p) => p.category === canonicalCategory);
+
+    if (filtered.length === 0) {
+      return {
+        status: 'empty',
+        data: [],
+        canonicalCategory,
+        code: 'NO_VERIFIED_PROGRAMS_IN_CATEGORY',
+        error:
+          'No verified programs are currently published in this category. Please check back after official verification.',
+        retryable: false,
+        fromCache: programsRes.fromCache,
+        source: 'static_catalog',
+      };
+    }
+
+    return {
+      status: 'ok',
+      data: filtered,
+      canonicalCategory,
+      retryable: false,
+      fromCache: programsRes.fromCache,
+      source: 'static_catalog',
+    };
   }
 
   public async getCategoriesIndex(options?: {

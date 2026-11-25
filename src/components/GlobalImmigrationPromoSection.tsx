@@ -1,5 +1,9 @@
 import React from 'react';
 import { Globe, ArrowRight, Sparkles } from 'lucide-react';
+import {
+  IMMIGRATION_HUB_PROMO_CATEGORIES,
+  buildImmigrationHubUrl,
+} from '../config/immigrationCategories';
 
 interface GlobalImmigrationPromoSectionProps {
   onNavigate: (path: string) => void;
@@ -8,67 +12,12 @@ interface GlobalImmigrationPromoSectionProps {
 
 export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSectionProps> = ({
   onNavigate,
-  className = ''
+  className = '',
 }) => {
-  const categories = [
-    {
-      id: 'pr',
-      urlParam: 'permanent-residency',
-      name: 'Permanent Residency',
-      icon: '🏠',
-      desc: 'Sovereign PR permits, points systems, and settlement pathways across 249 countries.',
-      badge: 'PR Pathways',
-      cta: 'Explore PR Countries'
-    },
-    {
-      id: 'citizenship',
-      urlParam: 'citizenship',
-      name: 'Citizenship & Naturalization',
-      icon: '🛂',
-      desc: 'Naturalization timelines, dual citizenship laws, and statutory passport acquisition.',
-      badge: 'Citizenship',
-      cta: 'Explore Citizenship Options'
-    },
-    {
-      id: 'work',
-      urlParam: 'work',
-      name: 'Work Immigration',
-      icon: '💼',
-      desc: 'Skilled worker visas, employer sponsorships, and job seeker opportunity permits.',
-      badge: 'Work Permits',
-      cta: 'Explore Work Immigration'
-    },
-    {
-      id: 'family',
-      urlParam: 'family',
-      name: 'Family Immigration',
-      icon: '👨‍👩‍👧‍👦',
-      desc: 'Spouse visas, dependent children, and parent sponsorships worldwide.',
-      badge: 'Family Reunion',
-      cta: 'Explore Family Immigration'
-    },
-    {
-      id: 'business',
-      urlParam: 'business-investor',
-      name: 'Business & Investor Immigration',
-      icon: '📈',
-      desc: 'Investor visas, startup entrepreneur permits, and sovereign Golden Visas.',
-      badge: 'Investment PR',
-      cta: 'Explore Investor Routes'
-    },
-    {
-      id: 'digital_nomad',
-      urlParam: 'digital-nomad-retirement',
-      name: 'Digital Nomad & Retirement Residency',
-      icon: '🌴',
-      desc: 'Remote work permits, freelancer visas, and self-funded retirement residency.',
-      badge: 'Remote & Retire',
-      cta: 'Explore Digital Nomad Options'
-    }
-  ];
-
   return (
-    <section className={`w-full bg-gradient-to-b from-slate-900 via-[#0B2A5B] to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-blue-500/30 overflow-hidden relative ${className}`}>
+    <section
+      className={`w-full bg-gradient-to-b from-slate-900 via-[#0B2A5B] to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-blue-500/30 overflow-hidden relative ${className}`}
+    >
       {/* Background Subtle Accent */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -90,51 +39,71 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
           </p>
         </div>
 
-        {/* 6 Clickable Category Cards with Unique Destinations */}
+        {/* 6 Clickable Category Cards Using Canonical Category URLs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => onNavigate(`/immigration?category=${cat.urlParam}`)}
-              className="w-full text-left bg-white/10 hover:bg-white/15 border border-white/15 hover:border-emerald-400/50 rounded-2xl p-5 transition-all duration-200 cursor-pointer group flex flex-col justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-            >
-              <div className="space-y-3 w-full">
-                <div className="flex items-center justify-between">
-                  <span className="text-3xl p-2 bg-white/10 rounded-xl" aria-hidden="true">{cat.icon}</span>
-                  <span className="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">
-                    {cat.badge}
-                  </span>
+          {IMMIGRATION_HUB_PROMO_CATEGORIES.map((cat) => {
+            const targetUrl = buildImmigrationHubUrl(cat.id);
+            return (
+              <a
+                key={cat.id}
+                href={targetUrl}
+                data-category-id={cat.id}
+                data-category-slug={cat.slug}
+                onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+                    return;
+                  }
+                  e.preventDefault();
+                  onNavigate(targetUrl);
+                }}
+                className="w-full text-left bg-white/10 hover:bg-white/15 border border-white/15 hover:border-emerald-400/50 rounded-2xl p-5 transition-all duration-200 cursor-pointer group flex flex-col justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              >
+                <div className="space-y-3 w-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl p-2 bg-white/10 rounded-xl" aria-hidden="true">
+                      {cat.icon}
+                    </span>
+                    <span className="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">
+                      {cat.badge}
+                    </span>
+                  </div>
+
+                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                    {cat.cardTitle}
+                  </h3>
+
+                  <p className="text-xs text-slate-200 leading-relaxed">{cat.cardDescription}</p>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
-                  {cat.name}
-                </h3>
-
-                <p className="text-xs text-slate-200 leading-relaxed">
-                  {cat.desc}
-                </p>
-              </div>
-
-              <div className="mt-5 pt-3 border-t border-white/10 w-full flex items-center justify-between text-xs font-bold text-emerald-300 group-hover:text-emerald-200">
-                <span>{cat.cta}</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-              </div>
-            </button>
-          ))}
+                <div className="mt-5 pt-3 border-t border-white/10 w-full flex items-center justify-between text-xs font-bold text-emerald-300 group-hover:text-emerald-200">
+                  <span>{cat.cardCta}</span>
+                  <ArrowRight
+                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                    aria-hidden="true"
+                  />
+                </div>
+              </a>
+            );
+          })}
         </div>
 
-        {/* Main Prominent CTA Button */}
+        {/* Main Prominent CTA Link */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-          <button
-            type="button"
-            onClick={() => onNavigate('/immigration')}
+          <a
+            href="/immigration"
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+                return;
+              }
+              e.preventDefault();
+              onNavigate('/immigration');
+            }}
             className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm sm:text-base rounded-2xl shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sparkles className="w-5 h-5 text-amber-950 shrink-0" />
             <span>Explore All 249 Country Immigration Hubs</span>
             <ArrowRight className="w-5 h-5" />
-          </button>
+          </a>
         </div>
       </div>
     </section>

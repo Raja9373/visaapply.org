@@ -111,6 +111,7 @@ import {
   isRouteRegisteredInSeoManager
 } from './utils/seoMetadataManager';
 import { resolvePublicCanonicalPathwayByUrl } from './pages/CanonicalPathwayPage';
+import { splitRoutePathAndSearch } from './config/immigrationCategories';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
   CheckCircle2, Trash2, RefreshCw, FileText, Shield, Search, 
@@ -2212,7 +2213,11 @@ const getAllCountriesFromDB = () => {
 };
 
 export default function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentPath, setCurrentPath] = useState(() =>
+    typeof window !== 'undefined'
+      ? `${window.location.pathname}${window.location.search || ''}`
+      : '/'
+  );
   const [countries, setCountries] = useState<Country[]>(FALLBACK_COUNTRIES);
   const [forceUpdate, setForceUpdate] = useState(0);
 
@@ -2723,8 +2728,10 @@ export default function App() {
     }
   };
 
-  // Router parsing (supports 10-language prefixes like /hi/in-to-us, /ar/ae-to-us, /de/de-to-us, etc.)
-  const { strippedPath: routePath } = getLangFromUrlPath(currentPath);
+  // Router parsing (supports 15-language prefixes like /hi/in-to-us, /de/immigration?category=work, etc.)
+  // Strip ?query and #hash into routeSearch so query parameters NEVER trigger false 404 fallbacks.
+  const { strippedPath: rawStrippedRoute } = getLangFromUrlPath(currentPath);
+  const { pathname: routePath, search: routeSearch } = splitRoutePathAndSearch(rawStrippedRoute);
   const isHome = routePath === '/';
   const isAdminLogin = routePath === '/admin/login' || routePath === '/admin/login/';
   const isAdmin = routePath === '/admin' || routePath === '/admin/';
@@ -2759,7 +2766,7 @@ export default function App() {
     routePath === '/oci- pio-guide/';
   const isScholarshipFinder = routePath === '/scholarship-finder' || routePath === '/scholarship-finder/' || routePath.startsWith('/scholarship-finder?');
   const isImmigrationHub = routePath === '/immigration' || routePath === '/immigration/';
-  const immigrationDetailMatch = routePath.match(/^\/immigration\/([a-z]{2,3})$/i);
+  const immigrationDetailMatch = routePath.match(/^\/immigration\/([a-z]{2,3})\/?$/i);
   const isRoutes = routePath === '/routes' || routePath === '/routes/';
   const isAbout = routePath === '/about' || routePath === '/backlink-widget';
   const isFlights = routePath === '/flights' || routePath === '/flights/' || routePath.startsWith('/flights?');
@@ -3433,9 +3440,14 @@ export default function App() {
         ) : isScholarshipFinder ? (
           <ScholarshipFinderPage onNavigate={navigate} />
         ) : isImmigrationHub ? (
-          <GlobalImmigrationHubPage navigate={navigate} uiLang={uiLang} />
+          <GlobalImmigrationHubPage navigate={navigate} uiLang={uiLang} locationSearch={routeSearch} />
         ) : immigrationDetailMatch ? (
-          <CountryImmigrationDetailPage countryCode={immigrationDetailMatch[1]} navigate={navigate} uiLang={uiLang} />
+          <CountryImmigrationDetailPage
+            countryCode={immigrationDetailMatch[1]}
+            navigate={navigate}
+            uiLang={uiLang}
+            locationSearch={routeSearch}
+          />
         ) : isAtlysVsVisaApply ? (
           <AtlysVsVisaApplyPage onNavigate={navigate} />
         ) : isGoldenVisa ? (

@@ -17,7 +17,10 @@ import type {
 } from '../data/globalImmigrationHubData';
 import type { SupportedLangCode } from '../i18n/config';
 import { CountryPAAFaqSection } from '../components/CountryPAAFaqSection';
-import { CATEGORY_URL_PARAM_MAP, CATEGORY_INTERNAL_TO_PARAM_MAP } from './GlobalImmigrationHubPage';
+import {
+  buildCountryImmigrationUrl,
+  parseImmigrationCategoryQuery,
+} from '../config/immigrationCategories';
 import { VisaDetailRenderer } from '../components/VisaDetailRenderer';
 import {
   adaptStaticVisaDetailForRenderer,
@@ -31,29 +34,32 @@ import type {
   VisaDetailChunkPayload,
 } from '../types/staticCatalog';
 
-function parseCategoryFromUrl(): ImmigrationCategoryKey {
-  if (typeof window === 'undefined') return 'pr';
-  const params = new URLSearchParams(window.location.search);
-  const catParam = params.get('category');
-  if (!catParam) return 'pr';
-  return CATEGORY_URL_PARAM_MAP[catParam.toLowerCase()] || 'pr';
+function parseCategoryFromSearchOrWindow(locationSearch?: string): ImmigrationCategoryKey {
+  const parsed = parseImmigrationCategoryQuery(
+    locationSearch !== undefined ? locationSearch : undefined
+  );
+  return parsed.category === 'all' ? 'pr' : parsed.category;
 }
 
 interface CountryImmigrationDetailPageProps {
   countryCode: string;
   navigate: (path: string) => void;
   uiLang?: SupportedLangCode;
+  locationSearch?: string;
 }
 
 export function CountryImmigrationDetailPage({
   countryCode,
   navigate,
   uiLang = 'en',
+  locationSearch,
 }: CountryImmigrationDetailPageProps) {
   const rawNorm = (countryCode || 'US').trim().toUpperCase();
   const normCode = rawNorm === 'UK' ? 'GB' : rawNorm;
 
-  const [activeCategory, setActiveCategory] = useState<ImmigrationCategoryKey>(parseCategoryFromUrl());
+  const [activeCategory, setActiveCategory] = useState<ImmigrationCategoryKey>(() =>
+    parseCategoryFromSearchOrWindow(locationSearch)
+  );
   const [applicantNationality, setApplicantNationality] = useState<string>('ALL');
 
   const [loading, setLoading] = useState(true);
@@ -131,9 +137,21 @@ export function CountryImmigrationDetailPage({
   );
 
   useEffect(() => {
-    setActiveCategory(parseCategoryFromUrl());
+    setActiveCategory(parseCategoryFromSearchOrWindow(locationSearch));
+  }, [normCode, locationSearch]);
+
+  useEffect(() => {
     void loadCountryData(false);
   }, [normCode, loadCountryData]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handlePopState = () => {
+      setActiveCategory(parseCategoryFromSearchOrWindow(window.location.search));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const categories: Array<{ id: ImmigrationCategoryKey; label: string; icon: string; desc: string }> = [
     { id: 'pr', label: 'Permanent Residency', icon: '🏠', desc: 'Sovereign PR permits, points systems, and settlement pathways.' },
@@ -402,14 +420,7 @@ export function CountryImmigrationDetailPage({
                     type="button"
                     onClick={() => {
                       setActiveCategory(cat.id);
-                      const paramSlug = CATEGORY_INTERNAL_TO_PARAM_MAP[cat.id];
-                      if (typeof window !== 'undefined') {
-                        window.history.pushState(
-                          {},
-                          '',
-                          `/immigration/${normCode.toLowerCase()}?category=${paramSlug}`
-                        );
-                      }
+                      navigate(buildCountryImmigrationUrl(normCode.toLowerCase(), cat.id));
                     }}
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                       isActive
