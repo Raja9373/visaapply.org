@@ -438,9 +438,9 @@ export function GlobalImmigrationHubPage({
                 >
                   <span>{cat.icon}</span>
                   <span>{cat.label}</span>
-                  {programsIndex && (
-                    <span className="text-[10px] opacity-80">({catCount})</span>
-                  )}
+                  <span className="text-[10px] opacity-80 tabular-nums">
+                    ({programsIndex ? catCount : '–'})
+                  </span>
                 </button>
               );
             })}

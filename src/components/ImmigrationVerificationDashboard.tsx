@@ -470,7 +470,7 @@ export function ImmigrationVerificationDashboard() {
                   <a
                     href={src.primaryGovUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="text-blue-400 hover:underline inline-flex items-center gap-1"
                   >
                     <span>Primary Portal</span>
@@ -629,7 +629,7 @@ export function ImmigrationVerificationDashboard() {
                 <a
                   href={inspectProgram.officialInformationUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl inline-flex items-center gap-1.5"
                 >
                   <span>Open Official Source Portal</span>

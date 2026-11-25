@@ -110,6 +110,7 @@ dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+app.disable('x-powered-by');
 app.set('trust proxy', true);
 app.use(securityHeadersMiddleware);
 app.use(express.json());

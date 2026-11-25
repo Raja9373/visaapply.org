@@ -1502,7 +1502,7 @@ export const ClaimsManager: React.FC<Props> = ({
                               <a
                                 href={ev.sourceUrl}
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 className="text-indigo-600 hover:underline font-medium inline-flex items-center gap-1 break-all"
                               >
                                 {ev.sourceUrl} <ExternalLink size={11} />

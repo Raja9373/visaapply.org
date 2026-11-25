@@ -532,7 +532,37 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
     noindex: true,
     breadcrumbName: 'Admin Slot Monitor',
   },
+  '/admin/editorial-review': {
+    title: 'Editorial Review & PR Approval Queue – Admin Portal – VisaApply.org',
+    description:
+      'Restricted editorial review workbench for role-gated immigration data approvals, GitHub pull requests, and audit log verification.',
+    noindex: true,
+    breadcrumbName: 'Editorial Review Queue',
+  },
 };
+
+export const OG_LOCALE_BY_LANG: Record<string, string> = {
+  en: 'en_US',
+  hi: 'hi_IN',
+  de: 'de_DE',
+  es: 'es_ES',
+  pl: 'pl_PL',
+  fr: 'fr_FR',
+  ar: 'ar_AE',
+  ru: 'ru_RU',
+  zh: 'zh_CN',
+  ja: 'ja_JP',
+  pt: 'pt_BR',
+  it: 'it_IT',
+  nl: 'nl_NL',
+  tr: 'tr_TR',
+  ko: 'ko_KR',
+};
+
+export function resolveOgLocaleForPath(rawPath: string): string {
+  const { lang } = getLangFromUrlPath(rawPath || '/');
+  return OG_LOCALE_BY_LANG[lang] || 'en_US';
+}
 
 const KNOWN_DYNAMIC_ROUTE_PATTERNS: ReadonlyArray<{ name: string; regex: RegExp }> = [
   { name: 'Consular Interview Prep (/interview-prep/:code)', regex: /^\/interview-prep\/([a-z]{2,3})$/i },
@@ -960,7 +990,7 @@ export function validateAndSanitizeSeoMetadata(
     bingbot: partial.bingbot || botValue,
     ogType: partial.ogType || 'website',
     ogSiteName: partial.ogSiteName || 'VisaApply.org',
-    ogLocale: partial.ogLocale || 'en_IN',
+    ogLocale: partial.ogLocale || resolveOgLocaleForPath(rawPath),
     ogTitle,
     ogDescription,
     ogUrl: canonical,

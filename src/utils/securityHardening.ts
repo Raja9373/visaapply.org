@@ -556,7 +556,8 @@ export function getSecurityHeaders(options?: {
       : buildContentSecurityPolicy({ allowPreviewFraming: allowPreview }),
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'X-Content-Type-Options': 'nosniff',
-    'Referrer-Policy': 'strict-origin-when-cross-origin'
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()'
   };
 
   if (options?.isApi) {

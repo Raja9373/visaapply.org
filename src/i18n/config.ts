@@ -994,7 +994,7 @@ export const UI_TRANSLATIONS_15: Record<SupportedLangCode, I18nStrings> = {
     anyToAnyRoutes: '🌍 Alle 61.752 Routes',
     immigrationUpdates: '🔄 Officiële Bronnenlijst',
     checkEligibilityBtn: 'Controleer Geschiktheid →',
-    downloadChecklistPdf: '📄 Download Checklist PDF',
+    downloadChecklistPdf: '📄 PDF-checklist downloaden',
     fromToLabel: 'Van {from} naar {to}',
     continentAll: 'Alle',
     continentEurope: 'Europa',

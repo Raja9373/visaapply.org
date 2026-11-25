@@ -111,7 +111,6 @@ import {
   validateCurrentDomMetadata,
   isRouteRegisteredInSeoManager
 } from './utils/seoMetadataManager';
-import { resolvePublicCanonicalPathwayByUrl } from './pages/CanonicalPathwayPage';
 import { splitRoutePathAndSearch } from './config/immigrationCategories';
 import { 
   Globe, Plane, Briefcase, GraduationCap, Users, Building2, Award, 
@@ -211,9 +210,13 @@ export function renderCountryHeaderFixed(fromCode: string, toCode: string) {
   };
 }
 
-// PATCH EXISTING RENDER
+// PATCH EXISTING RENDER (Safe DOM construction + strict ISO allowlist — zero raw innerHTML/inline onclick)
 export function renderCountryPageFixed(countryCode: string) {
-  const code = (countryCode || '').toLowerCase();
+  const rawCode = String(countryCode || '').trim().toLowerCase();
+  if (!/^[a-z]{2,3}$/.test(rawCode)) {
+    return;
+  }
+  const code = rawCode;
   const toName = getCountryDisplayName(code);
   const toFlag = getCountryFlag(code);
   const fromName = getCountryDisplayName("in");
@@ -221,50 +224,130 @@ export function renderCountryPageFixed(countryCode: string) {
   const liveCount = (typeof (window as any).getLiveVisaCount === "function")
     ? (window as any).getLiveVisaCount(code)
     : getLiveVisaCount(code);
-  
+  const safeCount = Number.isFinite(Number(liveCount)) ? Number(liveCount) : 0;
+
   // Synchronize title & OG/Twitter tags via centralized SEO metadata manager
-  const pageTitle = `VisaApply.org - ${fromName} to ${toName} - ${liveCount} Visas`;
+  const pageTitle = `VisaApply.org - ${fromName} to ${toName} - ${safeCount} Visas`;
   applySeoMetadataToDom(
     {
       title: pageTitle,
-      description: `${toName} visa requirements for ${fromName} citizens: ${liveCount} official visa subclasses, 2026 fees, processing times, and document checklists.`,
+      description: `${toName} visa requirements for ${fromName} citizens: ${safeCount} official visa subclasses, 2026 fees, processing times, and document checklists.`,
       ogImage: resolveValidOgImageUrl(code),
       ogImageAlt: pageTitle
     },
     `/in-to-${code}`
   );
-  
-  let html = `<div style="padding:24px;"><div style="display:flex; align-items:center; gap:12px; margin-bottom:8px; justify-content:center;"><div style="width:48px; height:32px; background:#1e40af; color:white; display:flex; align-items:center; justify-content:center; border-radius:4px; font-weight:800;">IN</div><div style="font-size:20px; color:#94a3b8;">→</div><div style="width:48px; height:32px; background:#f1f5f9; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; border-radius:4px; font-size:24px;">${toFlag}</div></div><h1 style="font-size:28px; font-weight:800; text-align:center;">Travel from ${fromName} to ${toName}</h1><p style="color:#64748b; text-align:center; margin-top:8px;">Step 1 of 2: Select your primary purpose of travel below to see all official visa options.</p>`;
-  
-  html += `<div style="margin-top:8px; text-align:center; font-size:12px; color:#93c5fd;">${fromFlag} ${fromName} → ${toFlag} ${toName} • ${liveCount} Visa Types</div>`;
-  
-  html += `<div style="display:flex; gap:8px; justify-content:center; margin:16px 0;"><button onclick="if(typeof renderCountryCardsOption2Left==='function') renderCountryCardsOption2Left(); else window.location.href='/'" style="background:#f1f5f9; padding:8px 16px; border-radius:8px; border:1px solid #e2e8f0; cursor:pointer;">← Back to Countries</button></div>`;
-  
-  const categories = [
-    {key:"tourist", label:"Tourist Visa", labelHi:"टूरिस्ट वीजा", icon:"🏖️", desc:"Vacations, sightseeing, visiting friends & short term stay"},
-    {key:"business", label:"Business Visa", labelHi:"बिजनेस वीजा", icon:"💼", desc:"Business meetings, conferences, trade & investment"},
-    {key:"work", label:"Work & Employment Visa", labelHi:"वर्क एवं एम्प्लॉयमेंट वीजा", icon:"🔧", desc:"Employment, job permit, executive transfers & skilled work"},
-    {key:"student", label:"Student & Study Visa", labelHi:"स्टूडेंट एवं स्टडी वीजा", icon:"🎓", desc:"Higher education, university degree & vocational study"},
-    {key:"family", label:"Family Visa", labelHi:"फैमिली वीजा", icon:"👨👩👧👦", desc:"Family reunion, spouse, child & dependent visas"},
-    {key:"pr", label:"PR & Golden Visa", labelHi:"पीआर एवं गोल्डन वीजा", icon:"🏠", desc:"Permanent residence, citizenship & investment visas"}
-  ];
-  
-  html += `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:24px;">`;
-  const winBase = typeof window !== 'undefined' ? ((window as any).BASE_COUNTRY_VISAS || {}) : {};
-  categories.forEach(cat=>{
-    const visas = (typeof (window as any).getVisasByCategoryFixed === "function")
-      ? (window as any).getVisasByCategoryFixed(code, cat.key)
-      : (winBase[code]||[]).filter((v: any)=>v.category===cat.key);
-    const count = visas.length;
-    if(count===0) return;
-    html += `<div onclick="if(typeof (window as any).renderVisaList==='function') (window as any).renderVisaList('${code}','${cat.key}'); else window.location.href='/in-to-${code}-${cat.key}'" style="background:white; border:1px solid #e2e8f0; border-radius:16px; padding:20px; cursor:pointer; transition:all 0.2s;"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="font-size:32px;">${cat.icon}</div><div style="background:#dbeafe; color:#2563eb; font-size:11px; padding:4px 8px; border-radius:9999px; font-weight:600;">${count} Visa Types</div></div><h3 style="font-weight:700; font-size:16px; margin-top:12px;">${cat.labelHi} (${cat.label})</h3><p style="font-size:12px; color:#64748b; margin-top:6px;">${cat.desc}</p><div style="margin-top:12px; color:#2563eb; font-size:12px; font-weight:600;">Explore Category →</div></div>`;
+
+  if (typeof document === 'undefined') return;
+  const container =
+    document.getElementById('main-content') ||
+    document.getElementById('country-detail') ||
+    document.querySelector('[data-country-detail]');
+  if (!container) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'p-6';
+
+  const headerRow = document.createElement('div');
+  headerRow.className = 'flex items-center gap-3 mb-2 justify-center';
+  const fromBadge = document.createElement('div');
+  fromBadge.className = 'w-12 h-8 bg-blue-800 text-white flex items-center justify-center rounded font-extrabold';
+  fromBadge.textContent = 'IN';
+  const arrowDiv = document.createElement('div');
+  arrowDiv.className = 'text-xl text-slate-400';
+  arrowDiv.setAttribute('aria-hidden', 'true');
+  arrowDiv.textContent = '→';
+  const toBadge = document.createElement('div');
+  toBadge.className = 'w-12 h-8 bg-slate-100 border border-slate-200 flex items-center justify-center rounded text-2xl';
+  toBadge.setAttribute('aria-hidden', 'true');
+  toBadge.textContent = toFlag;
+  headerRow.append(fromBadge, arrowDiv, toBadge);
+
+  const heading = document.createElement('h1');
+  heading.className = 'text-2xl font-extrabold text-center';
+  heading.textContent = `Travel from ${fromName} to ${toName}`;
+
+  const intro = document.createElement('p');
+  intro.className = 'text-slate-500 text-center mt-2';
+  intro.textContent = 'Step 1 of 2: Select your primary purpose of travel below to see all official visa options.';
+
+  const summaryLine = document.createElement('div');
+  summaryLine.className = 'mt-2 text-center text-xs text-blue-600';
+  summaryLine.textContent = `${fromFlag} ${fromName} → ${toFlag} ${toName} • ${safeCount} Visa Types`;
+
+  const backWrap = document.createElement('div');
+  backWrap.className = 'flex gap-2 justify-center my-4';
+  const backBtn = document.createElement('button');
+  backBtn.type = 'button';
+  backBtn.className = 'bg-slate-100 px-4 py-2 rounded-lg border border-slate-200 cursor-pointer';
+  backBtn.textContent = '← Back to Countries';
+  backBtn.addEventListener('click', () => {
+    if (typeof (window as any).renderCountryCardsOption2Left === 'function') {
+      (window as any).renderCountryCardsOption2Left();
+    } else {
+      window.location.href = '/';
+    }
   });
-  html += `</div></div>`;
-  
-  const container = document.getElementById('main-content') || document.getElementById('country-detail') || document.querySelector('[data-country-detail]');
-  if(container) container.innerHTML = html;
-  
-  console.log(`✅ FIXED HEADER: Travel from ${fromName} to ${toName} - Flag ${toFlag} - ${liveCount} types - Was showing KH now showing ${toName}`);
+  backWrap.appendChild(backBtn);
+
+  const categories = [
+    { key: 'tourist', label: 'Tourist Visa', labelHi: 'टूरिस्ट वीजा', icon: '🏖️', desc: 'Vacations, sightseeing, visiting friends & short term stay' },
+    { key: 'business', label: 'Business Visa', labelHi: 'बिजनेस वीजा', icon: '💼', desc: 'Business meetings, conferences, trade & investment' },
+    { key: 'work', label: 'Work & Employment Visa', labelHi: 'वर्क एवं एम्प्लॉयमेंट वीजा', icon: '🔧', desc: 'Employment, job permit, executive transfers & skilled work' },
+    { key: 'student', label: 'Student & Study Visa', labelHi: 'स्टूडेंट एवं स्टडी वीजा', icon: '🎓', desc: 'Higher education, university degree & vocational study' },
+    { key: 'family', label: 'Family Visa', labelHi: 'फैमिली वीजा', icon: '👨‍👩‍👧‍👦', desc: 'Family reunion, spouse, child & dependent visas' },
+    { key: 'pr', label: 'PR & Golden Visa', labelHi: 'पीआर एवं गोल्डन वीजा', icon: '🏠', desc: 'Permanent residence, citizenship & investment visas' }
+  ];
+
+  const grid = document.createElement('div');
+  grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6';
+  const winBase = typeof window !== 'undefined' ? ((window as any).BASE_COUNTRY_VISAS || {}) : {};
+  categories.forEach((cat) => {
+    const visas = (typeof (window as any).getVisasByCategoryFixed === 'function')
+      ? (window as any).getVisasByCategoryFixed(code, cat.key)
+      : (winBase[code] || []).filter((v: any) => v.category === cat.key);
+    const count = Array.isArray(visas) ? visas.length : 0;
+    if (count === 0) return;
+
+    const card = document.createElement('a');
+    card.href = `/in-to-${code}-${cat.key}`;
+    card.className = 'block bg-white border border-slate-200 rounded-2xl p-5 cursor-pointer transition-all hover:border-blue-400';
+    card.addEventListener('click', (ev) => {
+      if (typeof (window as any).renderVisaList === 'function') {
+        ev.preventDefault();
+        (window as any).renderVisaList(code, cat.key);
+      }
+    });
+
+    const topRow = document.createElement('div');
+    topRow.className = 'flex justify-between items-center';
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'text-3xl';
+    iconSpan.setAttribute('aria-hidden', 'true');
+    iconSpan.textContent = cat.icon;
+    const countBadge = document.createElement('span');
+    countBadge.className = 'bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-semibold';
+    countBadge.textContent = `${count} Visa Types`;
+    topRow.append(iconSpan, countBadge);
+
+    const h3 = document.createElement('h3');
+    h3.className = 'font-bold text-base mt-3 text-slate-900';
+    h3.textContent = `${cat.labelHi} (${cat.label})`;
+
+    const descP = document.createElement('p');
+    descP.className = 'text-xs text-slate-500 mt-1.5';
+    descP.textContent = cat.desc;
+
+    const cta = document.createElement('div');
+    cta.className = 'mt-3 text-blue-600 text-xs font-semibold';
+    cta.textContent = 'Explore Category →';
+
+    card.append(topRow, h3, descP, cta);
+    grid.appendChild(card);
+  });
+
+  wrapper.append(headerRow, heading, intro, summaryLine, backWrap, grid);
+  container.replaceChildren(wrapper);
 }
 
 // OVERRIDE GLOBAL
@@ -623,26 +706,17 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
     description = `Official 2026 comprehensive visa requirements, fee schedule, embassy appointment process, and downloadable PDF checklist for ${formatted}.`;
   }
 
-  const canonicalPathwayMatch = /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(path)
-    ? resolvePublicCanonicalPathwayByUrl(path)
-    : null;
-  const isQuarantinedOrMissingPathway =
-    /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(path) && !canonicalPathwayMatch;
+  const isStaticProgramPath = /^\/visa\/[a-z]{2}\/[a-z0-9-]+$/i.test(path);
+  const isCanonicalPathwayPath =
+    !isStaticProgramPath && /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(path);
   const isUnregisteredUnknownRoute =
     path !== '/' &&
     !article &&
-    !canonicalPathwayMatch &&
+    !isStaticProgramPath &&
+    !isCanonicalPathwayPath &&
     !isRouteRegisteredInSeoManager(rawPath).registered;
 
-  if (canonicalPathwayMatch) {
-    const { pathway, priorityTier } = canonicalPathwayMatch;
-    const tierLabel =
-      priorityTier === 'PRIORITY_1'
-        ? 'Priority 1 Statutory Pathway'
-        : 'Priority 2 Statutory Pathway';
-    title = `${pathway.destination} – ${pathway.category} (${tierLabel}) | VisaApply.org`;
-    description = `Verified statutory reference for ${pathway.localStatutoryName} in ${pathway.destination}, issued by ${pathway.issuingAuthority} under ${pathway.legalProvision}.`;
-  } else if (isQuarantinedOrMissingPathway || isUnregisteredUnknownRoute) {
+  if (isUnregisteredUnknownRoute) {
     title = '404 – Page or Immigration Pathway Not Found | VisaApply.org';
     description =
       'The requested immigration pathway or page is either not found or quarantined pending statutory source verification on VisaApply.org.';
@@ -650,21 +724,25 @@ function generateMetadata(rawPath: string, countries: Country[], article?: Artic
 
   const canonicalHref = normalizeCanonicalUrl(rawPath);
   const isArticleView = Boolean(
-    canonicalPathwayMatch || level3DetailMatch || articleMatch || (article && article.title)
+    isCanonicalPathwayPath || isStaticProgramPath || level3DetailMatch || articleMatch || (article && article.title)
   );
 
-  applySeoMetadataToDom(
-    {
-      title,
-      description,
-      canonical: canonicalHref,
-      ogType: isArticleView ? 'article' : 'website',
-      ogImage: ogImageUrl,
-      ogImageAlt,
-      noindex: isAdminRoute || isAudit || isQuarantinedOrMissingPathway || isUnregisteredUnknownRoute
-    },
-    rawPath
-  );
+  // For /visa/:country/:slug canonical pathways, CanonicalPathwayPage lazily resolves exact verified
+  // statutory metadata (or 404 noindex) without pulling 450KB+ of audit data into the initial entry chunk.
+  if (!isCanonicalPathwayPath) {
+    applySeoMetadataToDom(
+      {
+        title,
+        description,
+        canonical: canonicalHref,
+        ogType: isArticleView ? 'article' : 'website',
+        ogImage: ogImageUrl,
+        ogImageAlt,
+        noindex: isAdminRoute || isAudit || isUnregisteredUnknownRoute
+      },
+      rawPath
+    );
+  }
 
   // Inject Schema.org JSON-LD for AEO, GEO & SEO Knowledge Graph (Organization, WebSite, WebApplication, BreadcrumbList, FAQPage, HowTo)
   let ldScript = document.getElementById('seo-ld-json');
@@ -2831,11 +2909,9 @@ export default function App() {
     return undefined;
   })();
 
-  const isCanonicalPathway = /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(routePath);
-  const staticProgramRouteMatch =
-    !resolvePublicCanonicalPathwayByUrl(routePath)
-      ? routePath.match(/^\/visa\/([a-z]{2})\/([a-z0-9-]+)\/?$/i)
-      : null;
+  const staticProgramRouteMatch = routePath.match(/^\/visa\/([a-z]{2})\/([a-z0-9-]+)\/?$/i);
+  const isCanonicalPathway =
+    !staticProgramRouteMatch && /^\/visa\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(routePath);
   const blogSlugMatch = routePath.match(/^\/(?:blog|blogs)\/([a-z0-9-]+)\/?$/i);
 
   const isBlogMatch = !isHome && !isAnyAdminRoute && !isCanonicalPathway && !staticProgramRouteMatch && !isAtlysVsVisaApply && !isGoldenVisa && !isDummyTicket && !isCoverLetter && !isSlotAlert && !isPhotoResizer && !isRejectionAppeal && !isSopGenerator && !isVisaTracking && !isVisaMap && !isMultiCountryPlanner && !isBankStatementGuide && !isTravelInsuranceCompare && !isEsim249 && !isForexCardCompare && !isSponsorshipFinder && !isWorkPermitGuide && !isStudentVisaUniversity && !isPassportSevaGuide && !isOciPioGuide && !isScholarshipFinder && !isImmigrationHub && !immigrationDetailMatch && !isRoutes && !isAbout && !isFlights && !isBlogs && !interviewMatch && !isAudit && !isContact && !isPrivacy && !isTerms && !isSitemap && !isVerification && !isCostCalculator && !isFundsCalculator && !isTimelinePlanner && !isDocumentChecklist && !isStayCalculator && !isReadinessChecker && !isEligibilityChecker && !isFamilyPlanner && !isVisaComparison && !isSourceVerifier && !isIntelligenceHub && !isGlobalDataCoverage && !isGlobalVerificationPilot && !isEvidenceTraceability && !isOfficialSourceMonitoring && !isGlobalVisaCoverageAudit &&
@@ -6937,7 +7013,7 @@ function AboutView({ navigate }: any) {
     • <strong>Approval Rate:</strong> ${cMeta.successRate}<br/>
     • <strong>Capital & Currency:</strong> ${cMeta.capital} (${cMeta.currency})
   </div>
-  <a href="https://www.visaapply.org/in-to-${selectedCode}" target="_blank" rel="dofollow" style="display:block;text-align:center;background:#0B3D91;color:#ffffff;text-decoration:none;font-size:12px;font-weight:700;padding:10px 14px;border-radius:10px;">
+  <a href="https://www.visaapply.org/in-to-${selectedCode}" target="_blank" rel="noopener" style="display:block;text-align:center;background:#0B3D91;color:#ffffff;text-decoration:none;font-size:12px;font-weight:700;padding:10px 14px;border-radius:10px;">
     Check ${cName} Visa Fees &amp; Free PDF Checklist on VisaApply.org →
   </a>
 </div>`;

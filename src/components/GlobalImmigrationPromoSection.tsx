@@ -16,21 +16,22 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
 }) => {
   return (
     <section
+      aria-labelledby="global-immigration-hub-heading"
       className={`w-full bg-gradient-to-b from-slate-900 via-[#0B2A5B] to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-blue-500/30 overflow-hidden relative ${className}`}
     >
       {/* Background Subtle Accent */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
 
       <div className="relative z-10 space-y-8">
         {/* Header Block */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-3.5 py-1.5 rounded-full text-xs font-black tracking-wide uppercase">
-            <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" aria-hidden="true" />
             <span>249 Countries | 6 Immigration Categories</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight balance">
+          <h2 id="global-immigration-hub-heading" className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight balance">
             Global Immigration &amp; Residency Hub
           </h2>
 
@@ -98,11 +99,11 @@ export const GlobalImmigrationPromoSection: React.FC<GlobalImmigrationPromoSecti
               e.preventDefault();
               onNavigate('/immigration');
             }}
-            className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm sm:text-base rounded-2xl shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm sm:text-base rounded-2xl shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
-            <Sparkles className="w-5 h-5 text-amber-950 shrink-0" />
+            <Sparkles className="w-5 h-5 text-amber-950 shrink-0" aria-hidden="true" />
             <span>Explore All 249 Country Immigration Hubs</span>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-5 h-5" aria-hidden="true" />
           </a>
         </div>
       </div>
