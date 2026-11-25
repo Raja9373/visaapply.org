@@ -1068,6 +1068,28 @@ function setOrCreateLinkTag(relVal: string, hrefVal: string) {
   }
 }
 
+export const STAGING_PREVIEW_ROBOTS_DIRECTIVE = 'noindex, nofollow, noarchive';
+
+/**
+ * Returns true ONLY for staging/preview hostnames (e.g., *.vercel.app, staging.visaapply.org).
+ * Production hosts (www.visaapply.org, visaapply.org) and localhost always return false.
+ */
+export function isPreviewHostname(hostname?: string): boolean {
+  const host = (
+    hostname ??
+    (typeof window !== 'undefined' ? window.location.hostname : '')
+  )
+    .trim()
+    .toLowerCase();
+  if (!host || host === 'www.visaapply.org' || host === 'visaapply.org') {
+    return false;
+  }
+  if (host.endsWith('.vercel.app')) {
+    return true;
+  }
+  return /^(?:staging|preview|visaapply-staging)\.visaapply\.org$/i.test(host);
+}
+
 /**
  * Validates the route against MANDATORY_SEO_TAG_LIST before rendering, then synchronizes
  * all required SEO, Canonical, OpenGraph, and Twitter tags to the live DOM.
@@ -1076,7 +1098,15 @@ export function applySeoMetadataToDom(
   partial: Partial<SeoMetadataPayload> & { noindex?: boolean },
   rawPath: string
 ): { metadata: SeoMetadataPayload; validation: SeoValidationReport } {
-  const { metadata, validation } = validateAndSanitizeSeoMetadata(partial, rawPath);
+  const { metadata: rawMetadata, validation } = validateAndSanitizeSeoMetadata(partial, rawPath);
+  const metadata: SeoMetadataPayload = isPreviewHostname()
+    ? {
+        ...rawMetadata,
+        robots: STAGING_PREVIEW_ROBOTS_DIRECTIVE,
+        googlebot: STAGING_PREVIEW_ROBOTS_DIRECTIVE,
+        bingbot: STAGING_PREVIEW_ROBOTS_DIRECTIVE,
+      }
+    : rawMetadata;
 
   if (typeof document !== 'undefined') {
     if (document.title !== metadata.title) {

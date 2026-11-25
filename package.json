@@ -19,7 +19,9 @@
     "catalog:regenerate-safe": "tsx scripts/runSafeCatalogRegeneration.ts",
     "editorial:validate-pr": "tsx scripts/validateEditorialPullRequest.ts",
     "editorial:verify-github-config": "tsx scripts/verifyGithubGovernanceConfig.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:preview": "playwright test e2e/phase9_2_preview_staging.spec.ts",
+    "test:e2e:preview:phase93": "playwright test e2e/phase9_3_zero_cost_preview.spec.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.16",

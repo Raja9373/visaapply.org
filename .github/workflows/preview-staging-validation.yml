@@ -1,0 +1,104 @@
+name: Zero-Cost Staging & Preview Validation
+
+on:
+  pull_request:
+    branches:
+      - visaapply-staging
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: 'Optional live Vercel Hobby Preview URL (https://*.vercel.app) for live E2E, SEO, a11y & CLS checks'
+        required: false
+        type: string
+        default: ''
+
+# Strict least-privilege read-only permissions (zero secrets, zero write access, 100% free GitHub Actions tier)
+permissions:
+  contents: read
+
+# Cancel superseded runs immediately to conserve GitHub Actions Free minutes
+concurrency:
+  group: visaapply-preview-staging-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zero-cost-staging-checks:
+    name: Zero-Cost Staging Validation (TS, Build, Regression, Catalog, Editorial & SEO)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (lockfile-safe)
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      - name: TypeScript check (tsc --noEmit)
+        run: npm run lint
+
+      - name: Static catalog validation (17 checks)
+        run: npm run catalog:validate
+
+      - name: Editorial governance & PR validation
+        run: npm run editorial:validate-pr
+
+      - name: Full regression, SEO & Preview-noindex unit test suite
+        run: node --test --import tsx tests/*.test.ts
+
+      - name: Production frontend bundle build
+        run: npm run build
+
+  optional-live-preview-e2e:
+    name: Optional Live Vercel Preview E2E, Accessibility & CLS Check
+    if: github.event_name == 'workflow_dispatch' && inputs.preview_url != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (lockfile-safe)
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Install Playwright Chromium (free headless browser)
+        run: npx playwright install chromium
+
+      - name: Verify live Preview X-Robots-Tag noindex header
+        env:
+          PREVIEW_URL: ${{ inputs.preview_url }}
+        run: |
+          if [[ ! "$PREVIEW_URL" =~ ^https://[a-zA-Z0-9.-]+$ ]]; then
+            echo "Invalid preview_url format; must be https://<hostname> without path/query."
+            exit 1
+          fi
+          HEADERS="$(curl -fsSI "${PREVIEW_URL}/")"
+          echo "$HEADERS" | grep -iE '^x-robots-tag:.*noindex'
+
+      - name: Run Playwright Preview & Phase 9.3 Zero-Cost E2E Suites
+        env:
+          PREVIEW_URL: ${{ inputs.preview_url }}
+        run: |
+          npm run test:e2e:preview
+          npm run test:e2e:preview:phase93

@@ -4,12 +4,13 @@ on:
   pull_request:
     branches:
       - main
+      - visaapply-staging
   workflow_dispatch:
 
 # Strict least-privilege read-only permissions.
 # Uses standard `pull_request` trigger with NO `paths:` filter so:
 # 1. Untrusted PR code receives zero repository secrets and zero write permissions.
-# 2. The required status check always reports on every PR targeting `main`
+# 2. The required status check always reports on every PR targeting `main` or `visaapply-staging`
 #    (preventing deadlocked "Expected" checks on docs-only PRs and ensuring
 #    src/, tests/, public/, and package.json changes cannot bypass validation).
 permissions:
@@ -46,6 +47,9 @@ jobs:
 
       - name: TypeScript type-check
         run: npm run lint
+
+      - name: Validate canonical static catalog (17 checks)
+        run: npm run catalog:validate
 
       - name: Verify GitHub CODEOWNERS, role-policy & workflow security invariants
         run: npm run editorial:verify-github-config
