@@ -272,7 +272,7 @@ test.describe('Phase 8 Real-Browser End-to-End Critical User Journeys', () => {
   });
 
   test('Real-Browser Performance (Desktop & Mobile) and axe-core WCAG 2.2 AA Audit', async ({ browser }) => {
-    // 1. Desktop (1280x800) performance + axe-core audit
+    // 1. Desktop (1280x800) performance + axe-core audit across 5 key routes
     const desktopCtx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const desktopPage = await desktopCtx.newPage();
     const desktopHomePerf = await measurePagePerformance(desktopPage, '/');
@@ -281,11 +281,14 @@ test.describe('Phase 8 Real-Browser End-to-End Critical User Journeys', () => {
     const desktopHubPerf = await measurePagePerformance(desktopPage, '/immigration');
     const desktopHubAxe = await runAxeAudit(desktopPage);
 
-    await desktopPage.goto('/immigration/us', { waitUntil: 'networkidle' });
+    const desktopCountryPerf = await measurePagePerformance(desktopPage, '/immigration/us');
     const desktopCountryAxe = await runAxeAudit(desktopPage);
 
-    await desktopPage.goto('/tools/visa-comparison', { waitUntil: 'networkidle' });
+    const desktopComparePerf = await measurePagePerformance(desktopPage, '/tools/visa-comparison');
     const desktopCompareAxe = await runAxeAudit(desktopPage);
+
+    const desktopBlogPerf = await measurePagePerformance(desktopPage, '/in-to-ca-tourist');
+    const desktopBlogAxe = await runAxeAudit(desktopPage);
     await desktopCtx.close();
 
     // 2. Mobile (390x844) performance + mobile navigation toggle check
@@ -305,24 +308,41 @@ test.describe('Phase 8 Real-Browser End-to-End Critical User Journeys', () => {
     }
 
     const mobileHubPerf = await measurePagePerformance(mobilePage, '/immigration');
+    const mobileCountryPerf = await measurePagePerformance(mobilePage, '/immigration/us');
+    const mobileComparePerf = await measurePagePerformance(mobilePage, '/tools/visa-comparison');
+    const mobileBlogPerf = await measurePagePerformance(mobilePage, '/in-to-ca-tourist');
     await mobileCtx.close();
 
-    console.log('PHASE8_BROWSER_PERF_METRICS:', JSON.stringify({
+    console.log('PHASE9_BROWSER_PERF_METRICS:', JSON.stringify({
       desktopHomePerf,
       desktopHubPerf,
+      desktopCountryPerf,
+      desktopComparePerf,
+      desktopBlogPerf,
       mobileHomePerf,
       mobileHubPerf,
+      mobileCountryPerf,
+      mobileComparePerf,
+      mobileBlogPerf,
     }));
-    console.log('PHASE8_AXE_WCAG_AUDIT:', JSON.stringify({
+    console.log('PHASE9_AXE_WCAG_AUDIT:', JSON.stringify({
       desktopHomeAxe,
       desktopHubAxe,
       desktopCountryAxe,
       desktopCompareAxe,
+      desktopBlogAxe,
     }));
 
     expect(desktopHomePerf.fcpMs).not.toBeNull();
     expect(mobileHomePerf.fcpMs).not.toBeNull();
-    expect(desktopHomePerf.cls).toBeLessThanOrEqual(0.25);
-    expect(mobileHomePerf.cls).toBeLessThanOrEqual(0.25);
+    expect(desktopHomePerf.cls).toBeLessThanOrEqual(0.10);
+    expect(mobileHomePerf.cls).toBeLessThanOrEqual(0.10);
+    expect(desktopHubPerf.cls).toBeLessThanOrEqual(0.10);
+    expect(mobileHubPerf.cls).toBeLessThanOrEqual(0.10);
+    expect(desktopHomeAxe.violations).toEqual([]);
+    expect(desktopHubAxe.violations).toEqual([]);
+    expect(desktopCountryAxe.violations).toEqual([]);
+    expect(desktopCompareAxe.violations).toEqual([]);
+    expect(desktopBlogAxe.violations).toEqual([]);
   });
 });

@@ -80,7 +80,7 @@ const CanonicalPathwayPage = React.lazy(() => import('./pages/CanonicalPathwayPa
 
 function PageLoadingFallback() {
   return (
-    <div className="min-h-[50vh] flex flex-col items-center justify-center py-20 px-4 text-center">
+    <div className="min-h-[110vh] flex flex-col items-center justify-start pt-28 pb-20 px-4 text-center">
       <div className="w-10 h-10 border-4 border-blue-200 border-t-[#0B3D91] rounded-full animate-spin mb-4" />
       <p className="text-sm font-semibold text-slate-600">Loading VisaApply.org Knowledge Engine...</p>
     </div>
@@ -2951,14 +2951,14 @@ export default function App() {
           </a>
 
           {/* Nav Links */}
-          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-4 text-xs xl:text-sm font-medium text-blue-100">
-            <button type="button" onClick={() => navigate('/')} className={`transition-colors cursor-pointer ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
-            <button type="button" onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
-            <button type="button" onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
+          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-2.5 xl:gap-3.5 text-xs font-medium text-blue-100 whitespace-nowrap">
+            <button type="button" onClick={() => navigate('/')} className={`transition-colors cursor-pointer whitespace-nowrap ${isHome ? 'text-white font-bold' : 'hover:text-white'}`}>{getUIString(uiLang).navHome}</button>
+            <button type="button" onClick={() => navigate('/routes')} className={`transition-colors cursor-pointer whitespace-nowrap ${isRoutes ? 'text-amber-300 font-bold' : 'text-amber-200 hover:text-white'}`}>{getUIString(uiLang).navRoutes}</button>
+            <button type="button" onClick={() => navigate('/flights')} className={`transition-colors cursor-pointer whitespace-nowrap ${isFlights ? 'text-emerald-300 font-bold' : 'text-emerald-200 hover:text-white'}`}>{getUIString(uiLang).navFlights}</button>
             <button
               type="button"
               onClick={() => navigate('/immigration')}
-              className={`flex items-center gap-1.5 transition-colors cursor-pointer px-2.5 py-1 rounded-full ${
+              className={`flex items-center gap-1.5 transition-colors cursor-pointer px-2.5 py-1 rounded-full whitespace-nowrap ${
                 isImmigrationHub || immigrationDetailMatch
                   ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
                   : 'bg-emerald-600/15 text-emerald-200 hover:text-white font-semibold hover:bg-emerald-600/30 border border-emerald-500/20'
@@ -2973,7 +2973,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => navigate('/golden-visa')}
-              className="golden-visa-premium-btn px-3 py-1.5 text-xs xl:text-xs"
+              className="golden-visa-premium-btn px-3 py-1.5 text-xs xl:text-xs whitespace-nowrap"
               title="Sovereign Residency by Investment Directory"
             >
               <span aria-hidden="true">✨</span>
@@ -2990,9 +2990,9 @@ export default function App() {
                 type="button"
                 aria-expanded={servicesDropdownOpen}
                 aria-haspopup="true"
-                aria-controls="desktop-services-menu"
+                aria-controls={servicesDropdownOpen ? 'desktop-services-menu' : undefined}
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                className={`flex items-center gap-1 transition-colors cursor-pointer py-1.5 ${
+                className={`flex items-center gap-1 transition-colors cursor-pointer py-1.5 whitespace-nowrap ${
                   isDummyTicket || isCoverLetter || isSlotAlert || isPhotoResizer || isRejectionAppeal || isSopGenerator || isVisaTracking || isVisaMap || isMultiCountryPlanner || isBankStatementGuide || isTravelInsuranceCompare || isEsim249 || isForexCardCompare || isSponsorshipFinder || isWorkPermitGuide || isStudentVisaUniversity || isPassportSevaGuide || isOciPioGuide || isScholarshipFinder
                     ? 'text-amber-300 font-bold' 
                     : 'text-blue-100 hover:text-white'
@@ -3241,16 +3241,16 @@ export default function App() {
           {/* Primary Action / 15-Language Switcher + Geo Indicator */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {/* Part B: Auto Language Switcher Dropdown */}
-            <div className="flex items-center gap-1 bg-white/10 hover:bg-white/15 px-2 sm:px-2.5 py-1.5 rounded-xl border border-white/20 text-xs">
-              <span>🌐</span>
+            <div className="flex items-center gap-1 bg-[#072963] hover:bg-[#093278] px-2 sm:px-2.5 py-1.5 rounded-xl border border-white/25 text-xs">
+              <span aria-hidden="true">🌐</span>
               <select
                 aria-label={getUIString(uiLang).selectLanguageLabel}
                 value={uiLang}
                 onChange={(e) => handleLanguageChange(e.target.value as SupportedLangCode)}
-                className="bg-transparent text-white font-bold text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded cursor-pointer max-w-[92px] sm:max-w-none truncate"
+                className="bg-[#072963] text-white font-bold text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded cursor-pointer max-w-[92px] sm:max-w-[130px] truncate"
               >
                 {SUPPORTED_LANGUAGES_15.map((l) => (
-                  <option key={l.code} value={l.code} className="text-slate-900 font-semibold">
+                  <option key={l.code} value={l.code} className="bg-white text-slate-900 font-semibold">
                     {l.flag} {l.nativeName} ({l.name})
                   </option>
                 ))}
@@ -3408,11 +3408,11 @@ export default function App() {
 
       {/* Independent Non-Government Notice & Bilingual Fallback Disclosure */}
       {!isAnyAdminRoute && (
-        <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 text-[11px] sm:text-xs text-slate-700 no-print">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-            <span className="font-medium">{getUIString(uiLang).nonGovDisclaimer}</span>
+        <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 min-h-[60px] sm:min-h-[32px] flex items-center text-[11px] sm:text-xs text-slate-700 no-print">
+          <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+            <span className="font-medium leading-tight">{getUIString(uiLang).nonGovDisclaimer}</span>
             {uiLang !== 'en' && (
-              <span className="text-amber-800 font-semibold">
+              <span className="text-amber-900 font-semibold leading-tight">
                 {getUIString(uiLang).englishFallbackNotice.replace('{lang}', getLanguageOption(uiLang).nativeName)}
               </span>
             )}

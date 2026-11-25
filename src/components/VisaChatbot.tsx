@@ -388,10 +388,10 @@ export const VisaChatbot: React.FC<VisaChatbotProps> = ({ onNavigate }) => {
         onClick={() => setIsOpen((prev) => !prev)}
         className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-3xl cursor-pointer shadow-lg z-[9999] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-400"
         title="Ask 249-Country Visa Assistant"
-        aria-label="Toggle 249-Country Visa Assistant"
         aria-expanded={isOpen}
-        aria-controls="visa-chatbot-window"
+        aria-controls={isOpen ? 'visa-chatbot-window' : undefined}
       >
+        <span className="sr-only">Toggle 249-Country Visa Assistant</span>
         <span aria-hidden="true">{isOpen ? '✕' : '💬'}</span>
       </button>
 

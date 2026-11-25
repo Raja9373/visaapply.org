@@ -1,0 +1,8 @@
+# VisaApply.org — Cloudflare Pages Canonical Redirects (Phase 9)
+# SPA Fallback: Cloudflare Pages automatically serves /index.html (HTTP 200) for all
+# unmatched client routes when no static 404.html exists in dist/.
+# Unrecognized paths are rendered by the React SPA 404 view with <meta name="robots" content="noindex">.
+# Explicit self-route canonical redirects mirrored from vercel.json:
+
+/in-to-in /immigration/in 301
+/in-to-in-* /immigration/in 301

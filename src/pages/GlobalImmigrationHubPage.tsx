@@ -485,21 +485,6 @@ export function GlobalImmigrationHubPage({
         </div>
       )}
 
-      {/* Honest Language Fallback Disclosure (for non-EN interfaces) */}
-      {searchIndex?.translationCoverage &&
-        !searchIndex.translationCoverage.hasVerifiedNativeLegalTranslation &&
-        searchIndex.translationCoverage.fallbackNotice && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-950 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-[#0B3D91] shrink-0 mt-0.5" />
-              <div>
-                <strong>Language Coverage Disclosure ({searchIndex.language.nativeName}):</strong>{' '}
-                {searchIndex.translationCoverage.fallbackNotice}
-              </div>
-            </div>
-          </div>
-        )}
-
       {/* Honest Coverage Metrics Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs sm:text-sm">
@@ -622,11 +607,11 @@ export function GlobalImmigrationHubPage({
 
         {/* Loading Skeleton */}
         {loading && !errorMsg && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" aria-busy="true">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 min-h-[1000px]" aria-busy="true">
             {Array.from({ length: 8 }).map((_, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-pulse space-y-4"
+                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-pulse space-y-4 h-[230px]"
               >
                 <div className="flex items-center justify-between">
                   <div className="w-10 h-10 rounded-full bg-slate-200" />
@@ -639,6 +624,21 @@ export function GlobalImmigrationHubPage({
             ))}
           </div>
         )}
+
+        {/* Honest Language Fallback Disclosure (placed inside main flow below controls to prevent above-the-fold CLS) */}
+        {!loading &&
+          !errorMsg &&
+          searchIndex?.translationCoverage &&
+          !searchIndex.translationCoverage.hasVerifiedNativeLegalTranslation &&
+          searchIndex.translationCoverage.fallbackNotice && (
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-950 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-[#0B3D91] shrink-0 mt-0.5" aria-hidden="true" />
+              <div>
+                <strong>Language Coverage Disclosure ({searchIndex.language.nativeName}):</strong>{' '}
+                {searchIndex.translationCoverage.fallbackNotice}
+              </div>
+            </div>
+          )}
 
         {/* VIEW 1: Country Hubs Directory */}
         {!loading && !errorMsg && viewMode === 'countries' && (
