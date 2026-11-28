@@ -894,25 +894,28 @@ test('17a. Existing VERIFIED_IMMIGRATION_PROGRAMS, Tier-1 OFFICIAL_SOURCE_REGIST
     );
   }
 
-  // 4) Real Markdown guide content/in-to-ca-tourist.md via gray-matter
-  const mdRaw = fs.readFileSync(path.resolve(process.cwd(), 'content/in-to-ca-tourist.md'), 'utf8');
+  // 4) Real canonical Markdown guide data/editorial/published/in-to-ca-tourist.md via gray-matter
+  const mdRaw = fs.readFileSync(
+    path.resolve(process.cwd(), 'data/editorial/published/in-to-ca-tourist.md'),
+    'utf8'
+  );
   const parsed = matter(mdRaw);
   const editorialRes = validateEditorialArticleRecord({
-    schemaVersion: STATIC_CATALOG_SCHEMA_VERSION,
-    slug: 'in-to-ca-tourist',
-    language: 'en',
-    title: String(parsed.data.title),
-    description: 'India to Canada Visitor Visa (TRV) step-by-step official guide.',
-    markdownContent: parsed.content.trim(),
-    officialReferences: ['https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada.html'],
-    publicationDate: String(parsed.data.date),
-    updatedDate: String(parsed.data.date),
-    editorialStatus: 'published',
-    originCountryIso: String(parsed.data.from),
-    destinationCountryIso: String(parsed.data.to),
-    category: parsed.data.type
+    ...parsed.data,
+    markdownContent: parsed.content.trim()
   });
-  assert.equal(editorialRes.success, true);
+  assert.equal(
+    editorialRes.success,
+    true,
+    `Failed validating canonical editorial guide: ${!editorialRes.success ? JSON.stringify(editorialRes.issues) : ''}`
+  );
+  if (editorialRes.success) {
+    assert.equal(editorialRes.data.slug, 'in-to-ca-tourist');
+    assert.equal(editorialRes.data.editorialStatus, 'published');
+    assert.equal(editorialRes.data.originCountryIso, 'IN');
+    assert.equal(editorialRes.data.destinationCountryIso, 'CA');
+    assert.equal(editorialRes.data.category, 'tourist');
+  }
 });
 
 test('17b. Public PII & secret scanner detects emails, DB URIs, API keys, PEM keys, and secret field names', () => {
