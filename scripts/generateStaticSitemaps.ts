@@ -70,6 +70,13 @@ export interface GenerateStaticSitemapsOptions {
   outDir?: string;
   publicDir?: string;
   evaluationDate?: Date;
+  /**
+   * Phase 9.8.5: When true (default for standard CLI runs targeting public/sitemaps-static),
+   * synchronizes root public/sitemap-index.xml, public/sitemap_index.xml, and public/sitemap.xml
+   * to the verified-only static catalog and removes obsolete quarantined legacy sitemap chunks.
+   * Automatically defaults to false when a custom outDir is passed (e.g., isolated staging/unit tests).
+   */
+  updateRootPublicSitemaps?: boolean;
 }
 
 function escapeXml(raw: string): string {
@@ -343,7 +350,7 @@ export function generateStaticSitemaps(options: GenerateStaticSitemapsOptions = 
     });
   }
 
-  // Emit standalone static catalog sitemap index alongside legacy sitemaps (does NOT delete legacy files)
+  // Emit static catalog sitemap index
   const indexRel = path.relative(publicDir, path.join(outDir, 'sitemap-static-index.xml')).replace(/\\/g, '/');
   const indexLines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -363,6 +370,26 @@ export function generateStaticSitemaps(options: GenerateStaticSitemapsOptions = 
   fs.writeFileSync(indexFilePath, indexXml, 'utf8');
 
   const legacyTotalUrlsCounted = countLegacyPublicSitemapUrls(publicDir);
+
+  // Phase 9.8.5: Cut over public root sitemaps (sitemap-index.xml, sitemap_index.xml, sitemap.xml)
+  // to verified-only URLs and remove obsolete quarantined legacy chunks when targeting default public/sitemaps-static.
+  const shouldUpdateRootPublic = options.updateRootPublicSitemaps ?? (options.outDir === undefined);
+  if (shouldUpdateRootPublic && validationErrors.length === 0) {
+    fs.writeFileSync(path.join(publicDir, 'sitemap-index.xml'), indexXml, 'utf8');
+    fs.writeFileSync(path.join(publicDir, 'sitemap_index.xml'), indexXml, 'utf8');
+    fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), buildUrlsetXml(entries), 'utf8');
+
+    const rootKeep = new Set(['sitemap-index.xml', 'sitemap_index.xml', 'sitemap.xml']);
+    for (const existingFile of fs.readdirSync(publicDir)) {
+      if (!/^sitemap.*\.xml$/i.test(existingFile)) continue;
+      if (rootKeep.has(existingFile)) continue;
+      const fullPath = path.join(publicDir, existingFile);
+      if (fs.statSync(fullPath).isFile()) {
+        fs.unlinkSync(fullPath);
+      }
+    }
+  }
+
   const urlReductionPercent =
     legacyTotalUrlsCounted > 0
       ? Number((((legacyTotalUrlsCounted - entries.length) / legacyTotalUrlsCounted) * 100).toFixed(2))

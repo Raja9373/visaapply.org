@@ -4,7 +4,11 @@ import {
   inspectRouteIndexingDirective,
   resolveValidOgImageUrl,
   getHreflangAlternatesForRoute,
+  isMultiLanguageLocalizedRoute,
+  resolveOgLocaleForPath,
 } from './seoMetadataManager.js';
+import { getLangFromUrlPath } from './autoLanguage.js';
+import { SUPPORTED_LANGUAGES_15, UI_TRANSLATIONS_15, type SupportedLangCode } from '../i18n/config.js';
 
 export interface SsrRouteRenderResult {
   statusCode: number;
@@ -16,6 +20,11 @@ export interface SsrRouteRenderResult {
   ogImage: string;
   ogType: string;
   robots: string;
+  htmlLang: string;
+  htmlDir: 'ltr' | 'rtl';
+  ogLocale: string;
+  requestedLang: string;
+  isEnglishFallback?: boolean;
   jsonLdGraph: Record<string, unknown>;
   ssrBodyHtml: string;
 }
@@ -84,6 +93,108 @@ export const UNINHABITED_TERRITORY_CODES = new Set<string>([
   'tf', // French Southern Territories
   'um', // U.S. Minor Outlying Islands
 ]);
+
+const COUNTRY_SLUG_TO_ISO2: Record<string, string> = (() => {
+  const map: Record<string, string> = {
+    usa: 'us',
+    uk: 'gb',
+    uae: 'ae',
+    'czech-republic': 'cz',
+    'ivory-coast': 'ci',
+    'south-korea': 'kr',
+    'north-korea': 'kp',
+  };
+  for (const [iso, name] of Object.entries(ISO2_COUNTRY_NAMES)) {
+    const slug = name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    if (slug) map[slug] = iso;
+    map[iso] = iso;
+  }
+  return map;
+})();
+
+function normalizeBilateralIso(code: string): string {
+  return code === 'uk' ? 'gb' : code;
+}
+
+function resolveSsrLanguageContext(rawRequestPath: string, cleanPath: string) {
+  const { lang } = getLangFromUrlPath(rawRequestPath || '/');
+  const requestedLang: SupportedLangCode = lang || 'en';
+  const langOption = SUPPORTED_LANGUAGES_15.find((l) => l.code === requestedLang);
+  const requestedDir: 'ltr' | 'rtl' = langOption?.dir === 'rtl' ? 'rtl' : 'ltr';
+  const isLocalizedRoute = isMultiLanguageLocalizedRoute(cleanPath);
+  const isNonEnglishRequest = requestedLang !== 'en';
+
+  if (isNonEnglishRequest && isLocalizedRoute) {
+    return {
+      requestedLang,
+      htmlLang: requestedLang,
+      htmlDir: requestedDir,
+      ogLocale: resolveOgLocaleForPath(rawRequestPath),
+      isEnglishFallback: false,
+      langNativeName: langOption?.nativeName || requestedLang.toUpperCase(),
+      langEnglishName: langOption?.name || requestedLang.toUpperCase(),
+    };
+  }
+
+  return {
+    requestedLang,
+    htmlLang: 'en',
+    htmlDir: 'ltr' as const,
+    ogLocale: 'en_US',
+    isEnglishFallback: isNonEnglishRequest && !isLocalizedRoute,
+    langNativeName: langOption?.nativeName || requestedLang.toUpperCase(),
+    langEnglishName: langOption?.name || requestedLang.toUpperCase(),
+    requestedDir,
+  };
+}
+
+function prependLanguageContextBanner(
+  bodyHtml: string,
+  langCtx: ReturnType<typeof resolveSsrLanguageContext>,
+  englishCanonicalPath: string
+): string {
+  if (langCtx.requestedLang === 'en') {
+    return bodyHtml;
+  }
+  const ui = UI_TRANSLATIONS_15[langCtx.requestedLang as SupportedLangCode] || UI_TRANSLATIONS_15.en;
+  if (langCtx.isEnglishFallback) {
+    const banner = `<aside role="note" data-language-fallback="true" style="max-width:1120px;margin:12px auto 0;padding:12px 16px;background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#78350f;">
+  <p style="margin:0;"><strong>Language Notice:</strong> Official immigration reference text on this page is published in English (not yet verified in ${escapeHtml(langCtx.langEnglishName)}). <span lang="${escapeHtml(langCtx.requestedLang)}" dir="${langCtx.requestedLang === 'ar' ? 'rtl' : 'ltr'}">${escapeHtml(ui.heroSubtitle)}</span> • <a href="${escapeHtml(englishCanonicalPath)}" style="color:#0B3D91;font-weight:700;">View canonical English guide</a></p>
+</aside>`;
+    return `${banner}\n${bodyHtml}`;
+  }
+
+  const localizedBar = `<div role="region" aria-label="Localized interface summary" lang="${escapeHtml(langCtx.htmlLang)}" dir="${langCtx.htmlDir}" style="max-width:1120px;margin:12px auto 0;padding:10px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#1e3a8a;">
+  <strong>${escapeHtml(ui.heroTitle)}</strong> — ${escapeHtml(ui.heroSubtitle)}
+</div>`;
+  return `${localizedBar}\n${bodyHtml}`;
+}
+
+function buildNotFoundSsrHtml(rawRequestPath: string): string {
+  const safePath = escapeHtml(rawRequestPath || '/');
+  return `<main class="ssr-not-found" style="max-width:860px;margin:48px auto;padding:32px 20px;font-family:system-ui,-apple-system,sans-serif;color:#0f172a;line-height:1.6;">
+  <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#b91c1c;margin:0 0 8px 0;">HTTP 404 • Not Found</p>
+  <h1 style="font-size:30px;font-weight:800;margin:0 0 12px 0;color:#0f172a;">404 – Page Not Found</h1>
+  <p style="font-size:16px;color:#334155;margin:0 0 16px 0;">The requested page (<code>${safePath}</code>) could not be found on VisaApply.org. It may have moved, never existed, or correspond to an unverified pathway.</p>
+  <p style="font-size:13px;color:#475569;margin:0 0 24px 0;">VisaApply.org is an independent global visa information portal and is not affiliated with any government, embassy, or VFS Global.</p>
+  <nav aria-label="Helpful VisaApply.org links" style="border-top:1px solid #e2e8f0;padding-top:20px;">
+    <h2 style="font-size:18px;font-weight:700;margin:0 0 12px 0;">Explore Verified Pages</h2>
+    <ul style="padding-left:20px;margin:0;color:#1e40af;">
+      <li><a href="/">VisaApply.org Home</a></li>
+      <li><a href="/immigration">Global Immigration Hub (Verified Countries)</a></li>
+      <li><a href="/routes">All Bilateral Visa Routes Directory</a></li>
+      <li><a href="/tools/visa-comparison">Visa Comparison Tool</a></li>
+      <li><a href="/blogs">Visa Guides &amp; Editorial Articles</a></li>
+      <li><a href="/sitemap">Complete HTML Sitemap</a></li>
+    </ul>
+  </nav>
+</main>`;
+}
 
 const CATEGORY_LABELS: Record<string, string> = {
   tourist: 'Tourist & Short-Stay Visitor Visa',
@@ -254,13 +365,18 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       ogImage: 'https://www.visaapply.org/og-image.jpg',
       ogType: 'website',
       robots: 'noindex, follow',
+      htmlLang: 'en',
+      htmlDir: 'ltr',
+      ogLocale: 'en_US',
+      requestedLang: 'en',
       jsonLdGraph: {},
       ssrBodyHtml: `<main style="max-width:860px;margin:40px auto;padding:24px;font-family:system-ui,sans-serif;"><h1>Permanent Redirect</h1><p>This page has moved to <a href="${escapeHtml(directive.canonicalRedirectPath)}">${escapeHtml(targetCanonical)}</a>.</p></main>`,
     };
   }
 
   const cleanPath = directive.normalizedLowerPath || '/';
-  const canonicalUrl = normalizeCanonicalUrl(cleanPath, 'https://www.visaapply.org');
+  const langCtx = resolveSsrLanguageContext(rawRequestPath, cleanPath);
+  const canonicalUrl = normalizeCanonicalUrl(rawRequestPath, 'https://www.visaapply.org');
   const isAdminOrAudit = cleanPath === '/admin' || cleanPath.startsWith('/admin/') || cleanPath === '/audit';
   const robots = isAdminOrAudit
     ? 'noindex, nofollow'
@@ -268,18 +384,22 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
 
   // 2. Check Level-3 or Shorthand Bilateral Visa Detail Route: /:from-to-:to-:rest
   const bilateralDetailMatch = cleanPath.match(/^\/([a-z]{2})-to-([a-z]{2})-([a-z0-9-]+)$/);
-  if (bilateralDetailMatch) {
-    const [, fromCode, toCode, restSlug] = bilateralDetailMatch;
-    const fromName = ISO2_COUNTRY_NAMES[fromCode] || fromCode.toUpperCase();
-    const toName = ISO2_COUNTRY_NAMES[toCode] || toCode.toUpperCase();
+  const detailFromCode = bilateralDetailMatch ? normalizeBilateralIso(bilateralDetailMatch[1]) : '';
+  const detailToCode = bilateralDetailMatch ? normalizeBilateralIso(bilateralDetailMatch[2]) : '';
+  if (bilateralDetailMatch && ISO2_COUNTRY_NAMES[detailFromCode] && ISO2_COUNTRY_NAMES[detailToCode]) {
+    const fromCode = detailFromCode;
+    const toCode = detailToCode;
+    const restSlug = bilateralDetailMatch[3];
+    const fromName = ISO2_COUNTRY_NAMES[fromCode];
+    const toName = ISO2_COUNTRY_NAMES[toCode];
     const metrics = getDeterministicCorridorMetrics(fromCode, toCode);
 
     // Check if it is strictly a Level-2 Category Route: /:from-to-:to-(tourist|work|student|family|business|pr)
     if (['tourist', 'work', 'student', 'family', 'business', 'pr'].includes(restSlug)) {
       const catLabel = CATEGORY_LABELS[restSlug] || `${restSlug.toUpperCase()} Visa`;
       const catShort = restSlug === 'pr' ? 'Permanent Residency (PR)' : `${restSlug.charAt(0).toUpperCase() + restSlug.slice(1)} Visa`;
-      const title = `${toName} ${catShort} for ${fromName} Citizens (2026 Rules & Fees) – VisaApply.org`;
-      const description = `Official 2026 ${toName} ${catLabel.toLowerCase()} requirements for ${fromName} passport holders. Check eligibility criteria, consular fees (${metrics.standardFeeUsd}), processing time (${metrics.processingWindow}), and mandatory document checklist.`;
+      const title = `${toName} ${catShort} for ${fromName} Citizens (2026 Guide) – VisaApply.org`;
+      const description = `2026 ${toName} ${catShort} guide for ${fromName} citizens. Review eligibility criteria, required documents, official portal links, and filing steps.`;
       const ogImage = resolveValidOgImageUrl(toCode);
 
       const jsonLdGraph = buildBilateralJsonLd({
@@ -293,22 +413,27 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
         categorySlug: restSlug,
         categoryLabel: catLabel,
         metrics,
+        inLanguage: langCtx.htmlLang,
         includeFaqSchema: true,
       });
 
-      const ssrBodyHtml = buildBilateralSsrHtml({
-        cleanPath,
-        canonicalUrl,
-        heading: `${toName} ${catShort} for ${fromName} Citizens (2026 Official Guide)`,
-        subheading: `Verified ${catLabel} eligibility, consular fees, processing timelines, and document checklist for ${fromName} (${fromCode.toUpperCase()}) passport holders traveling or relocating to ${toName} (${toCode.toUpperCase()}).`,
-        fromCode,
-        fromName,
-        toCode,
-        toName,
-        categorySlug: restSlug,
-        categoryLabel: catLabel,
-        metrics,
-      });
+      const ssrBodyHtml = prependLanguageContextBanner(
+        buildBilateralSsrHtml({
+          cleanPath,
+          canonicalUrl,
+          heading: `${toName} ${catShort} for ${fromName} Citizens (2026 Official Guide)`,
+          subheading: `Verified ${catLabel} eligibility, consular fees, processing timelines, and document checklist for ${fromName} (${fromCode.toUpperCase()}) passport holders traveling or relocating to ${toName} (${toCode.toUpperCase()}).`,
+          fromCode,
+          fromName,
+          toCode,
+          toName,
+          categorySlug: restSlug,
+          categoryLabel: catLabel,
+          metrics,
+        }),
+        langCtx,
+        cleanPath
+      );
 
       return {
         statusCode: 200,
@@ -319,6 +444,11 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
         ogImage,
         ogType: 'article',
         robots,
+        htmlLang: langCtx.htmlLang,
+        htmlDir: langCtx.htmlDir,
+        ogLocale: langCtx.ogLocale,
+        requestedLang: langCtx.requestedLang,
+        isEnglishFallback: langCtx.isEnglishFallback,
         jsonLdGraph,
         ssrBodyHtml,
       };
@@ -332,7 +462,7 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
     const visaTitleReadable = humanizeSlug(subtypeRemainder, toCode);
 
     const title = `${toName} ${visaTitleReadable} Visa for ${fromName} Citizens (2026) – VisaApply.org`;
-    const description = `Complete 2026 ${toName} ${visaTitleReadable} (${detectedCategoryLabel}) guide for ${fromName} citizens. Verify official eligibility rules, ${toName} government fees (${metrics.standardFeeUsd}), processing time (${metrics.processingWindow}), and required documents.`;
+    const description = `2026 ${toName} ${visaTitleReadable} guide for ${fromName} citizens. Check eligibility rules, required documents, and official government portal links.`;
     const ogImage = resolveValidOgImageUrl(toCode);
 
     const parentCategory = ['tourist', 'work', 'student', 'family', 'business', 'pr'].includes(firstToken)
@@ -361,23 +491,28 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       categoryLabel: `${visaTitleReadable} (${detectedCategoryLabel})`,
       visaSubtypeName: visaTitleReadable,
       metrics,
+      inLanguage: langCtx.htmlLang,
       includeFaqSchema: true,
     });
 
-    const ssrBodyHtml = buildBilateralSsrHtml({
-      cleanPath,
-      canonicalUrl,
-      heading: `${toName} ${visaTitleReadable} for ${fromName} Citizens (2026 Requirements & Checklist)`,
-      subheading: `Authoritative 2026 step-by-step application guide, statutory eligibility criteria, consular fees, and document checklist for ${fromName} citizens applying for the ${toName} ${visaTitleReadable} (${detectedCategoryLabel}).`,
-      fromCode,
-      fromName,
-      toCode,
-      toName,
-      categorySlug: parentCategory,
-      categoryLabel: `${visaTitleReadable} — ${detectedCategoryLabel}`,
-      visaSubtypeName: visaTitleReadable,
-      metrics,
-    });
+    const ssrBodyHtml = prependLanguageContextBanner(
+      buildBilateralSsrHtml({
+        cleanPath,
+        canonicalUrl,
+        heading: `${toName} ${visaTitleReadable} for ${fromName} Citizens (2026 Requirements & Checklist)`,
+        subheading: `Authoritative 2026 step-by-step application guide, statutory eligibility criteria, consular fees, and document checklist for ${fromName} citizens applying for the ${toName} ${visaTitleReadable} (${detectedCategoryLabel}).`,
+        fromCode,
+        fromName,
+        toCode,
+        toName,
+        categorySlug: parentCategory,
+        categoryLabel: `${visaTitleReadable} — ${detectedCategoryLabel}`,
+        visaSubtypeName: visaTitleReadable,
+        metrics,
+      }),
+      langCtx,
+      cleanPath
+    );
 
     return {
       statusCode: 200,
@@ -388,21 +523,37 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       ogImage,
       ogType: 'article',
       robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
       jsonLdGraph,
       ssrBodyHtml,
     };
   }
 
-  // 3. Check Level-1 Bilateral Route: /:from-to-:to (e.g. /am-to-ba, /au-to-my, /in-to-us, /zw-to-gb)
+  // 3. Check Level-1 Bilateral Route: /:from-to-:to (e.g. /am-to-ba, /au-to-my, /in-to-us, /zw-to-gb) or short /:to-visa
   const bilateralMatch = cleanPath.match(/^\/([a-z]{2})-to-([a-z]{2})$/);
-  if (bilateralMatch) {
-    const [, fromCode, toCode] = bilateralMatch;
-    const fromName = ISO2_COUNTRY_NAMES[fromCode] || fromCode.toUpperCase();
-    const toName = ISO2_COUNTRY_NAMES[toCode] || toCode.toUpperCase();
+  const shortCountryVisaMatch = !bilateralMatch ? cleanPath.match(/^\/([a-z]{2})-visa$/) : null;
+  const lvl1FromCode = bilateralMatch ? normalizeBilateralIso(bilateralMatch[1]) : 'in';
+  const lvl1ToCode = bilateralMatch
+    ? normalizeBilateralIso(bilateralMatch[2])
+    : shortCountryVisaMatch
+      ? normalizeBilateralIso(shortCountryVisaMatch[1])
+      : '';
+  if (
+    (bilateralMatch && ISO2_COUNTRY_NAMES[lvl1FromCode] && ISO2_COUNTRY_NAMES[lvl1ToCode]) ||
+    (shortCountryVisaMatch && ISO2_COUNTRY_NAMES[lvl1ToCode])
+  ) {
+    const fromCode = lvl1FromCode;
+    const toCode = lvl1ToCode;
+    const fromName = ISO2_COUNTRY_NAMES[fromCode];
+    const toName = ISO2_COUNTRY_NAMES[toCode];
     const metrics = getDeterministicCorridorMetrics(fromCode, toCode);
 
-    const title = `${toName} Visa for ${fromName} Citizens – 2026 Requirements, Fees & E-Visa Guide | VisaApply.org`;
-    const description = `Do ${fromName} citizens need a visa for ${toName} in 2026? View verified ${toName} entry rules (${metrics.entryRegime}), visa fees (${metrics.standardFeeUsd}), processing time (${metrics.processingWindow}), and tourist, work, student & PR pathways.`;
+    const title = `${toName} Visa for ${fromName} Citizens – 2026 Requirements & Official Guide | VisaApply.org`;
+    const description = `Check 2026 ${toName} visa requirements for ${fromName} citizens. Review tourist, work, student, family, and residency pathways with official portal links.`;
     const ogImage = resolveValidOgImageUrl(toCode);
 
     const jsonLdGraph = buildBilateralJsonLd({
@@ -414,20 +565,25 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       toCode,
       toName,
       metrics,
+      inLanguage: langCtx.htmlLang,
       includeFaqSchema: true,
     });
 
-    const ssrBodyHtml = buildBilateralSsrHtml({
-      cleanPath,
-      canonicalUrl,
-      heading: `${toName} Visa Requirements for ${fromName} Citizens (2026 Official Guide)`,
-      subheading: `Complete bilateral immigration & travel verification for ${fromName} (${fromCode.toUpperCase()}) passport holders traveling to ${toName} (${toCode.toUpperCase()}): entry regime, tourist & business visas, work permits, student visas, family reunification, and permanent residency.`,
-      fromCode,
-      fromName,
-      toCode,
-      toName,
-      metrics,
-    });
+    const ssrBodyHtml = prependLanguageContextBanner(
+      buildBilateralSsrHtml({
+        cleanPath,
+        canonicalUrl,
+        heading: `${toName} Visa Requirements for ${fromName} Citizens (2026 Official Guide)`,
+        subheading: `Complete bilateral immigration & travel verification for ${fromName} (${fromCode.toUpperCase()}) passport holders traveling to ${toName} (${toCode.toUpperCase()}): entry regime, tourist & business visas, work permits, student visas, family reunification, and permanent residency.`,
+        fromCode,
+        fromName,
+        toCode,
+        toName,
+        metrics,
+      }),
+      langCtx,
+      cleanPath
+    );
 
     return {
       statusCode: 200,
@@ -438,6 +594,11 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       ogImage,
       ogType: 'website',
       robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
       jsonLdGraph,
       ssrBodyHtml,
     };
@@ -445,11 +606,11 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
 
   // 4. Check Global Immigration Country Hub (/immigration/:code)
   const immMatch = cleanPath.match(/^\/immigration\/([a-z]{2})$/);
-  if (immMatch) {
+  if (immMatch && ISO2_COUNTRY_NAMES[immMatch[1]]) {
     const code = immMatch[1];
-    const countryName = ISO2_COUNTRY_NAMES[code] || code.toUpperCase();
+    const countryName = ISO2_COUNTRY_NAMES[code];
     const title = `${countryName} Immigration & Visa Pathways (2026 Official Portal Guide) – VisaApply.org`;
-    const description = `Explore all official 2026 ${countryName} visa categories, work permits, permanent residency pathways, citizenship rules, consular fees, and government immigration links on VisaApply.org.`;
+    const description = `Explore official 2026 ${countryName} visa categories, work permits, permanent residency pathways, citizenship rules, and government links on VisaApply.org.`;
     const ogImage = resolveValidOgImageUrl(code);
     const metrics = getDeterministicCorridorMetrics('in', code);
 
@@ -462,16 +623,21 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       toCode: code,
       toName: countryName,
       metrics,
+      inLanguage: langCtx.htmlLang,
       includeFaqSchema: false,
     });
 
-    const ssrBodyHtml = buildCountryHubSsrHtml({
-      cleanPath,
-      canonicalUrl,
-      code,
-      countryName,
-      metrics,
-    });
+    const ssrBodyHtml = prependLanguageContextBanner(
+      buildCountryHubSsrHtml({
+        cleanPath,
+        canonicalUrl,
+        code,
+        countryName,
+        metrics,
+      }),
+      langCtx,
+      cleanPath
+    );
 
     return {
       statusCode: 200,
@@ -482,15 +648,77 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       ogImage,
       ogType: 'website',
       robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
       jsonLdGraph,
       ssrBodyHtml,
     };
   }
 
-  // 4b. Check Static Catalog Program Route (/visa/:iso/:programId)
-  const staticProgMatch = cleanPath.match(/^\/visa\/([a-z]{2})\/([a-z0-9-]+)$/);
-  if (staticProgMatch && ISO2_COUNTRY_NAMES[staticProgMatch[1]]) {
-    const code = staticProgMatch[1];
+  // 4a. Check Consular Interview Prep (/interview-prep/:code)
+  const interviewMatch = cleanPath.match(/^\/interview-prep\/([a-z]{2})$/);
+  if (interviewMatch && ISO2_COUNTRY_NAMES[interviewMatch[1]]) {
+    const code = interviewMatch[1];
+    const countryName = ISO2_COUNTRY_NAMES[code];
+    const title = `${countryName} Consular Visa Interview Prep & Questions (2026) – VisaApply.org`;
+    const description = `Prepare for your ${countryName} embassy or consular visa interview with common questions, documentation reminders, and official links on VisaApply.org.`;
+    const ogImage = resolveValidOgImageUrl(code);
+    const metrics = getDeterministicCorridorMetrics('in', code);
+
+    const jsonLdGraph = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebPage',
+          '@id': `${canonicalUrl}#webpage`,
+          url: canonicalUrl,
+          name: title,
+          description,
+          inLanguage: langCtx.htmlLang,
+          isPartOf: { '@id': 'https://www.visaapply.org/#website' },
+        },
+      ],
+    };
+
+    const ssrBodyHtml = prependLanguageContextBanner(
+      buildCountryHubSsrHtml({
+        cleanPath,
+        canonicalUrl,
+        code,
+        countryName: `${countryName} Consular Interview Preparation`,
+        metrics,
+      }),
+      langCtx,
+      cleanPath
+    );
+
+    return {
+      statusCode: 200,
+      canonicalUrl,
+      cleanPath,
+      title,
+      description,
+      ogImage,
+      ogType: 'website',
+      robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
+      jsonLdGraph,
+      ssrBodyHtml,
+    };
+  }
+
+  // 4b. Check Static Catalog or Canonical Sovereign Program Route (/visa/:country/:programId)
+  const staticProgMatch = cleanPath.match(/^\/visa\/([a-z0-9-]+)\/([a-z0-9-]+)$/);
+  const resolvedProgIso = staticProgMatch ? COUNTRY_SLUG_TO_ISO2[staticProgMatch[1]] : undefined;
+  if (staticProgMatch && resolvedProgIso && ISO2_COUNTRY_NAMES[resolvedProgIso]) {
+    const code = resolvedProgIso;
     const progSlug = staticProgMatch[2];
     const countryName = ISO2_COUNTRY_NAMES[code];
     const readableProgram = humanizeSlug(progSlug, code);
@@ -509,16 +737,21 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       toName: countryName,
       visaSubtypeName: readableProgram,
       metrics,
+      inLanguage: langCtx.htmlLang,
       includeFaqSchema: false,
     });
 
-    const ssrBodyHtml = buildCountryHubSsrHtml({
-      cleanPath,
-      canonicalUrl,
-      code,
-      countryName: `${countryName} — ${readableProgram}`,
-      metrics,
-    });
+    const ssrBodyHtml = prependLanguageContextBanner(
+      buildCountryHubSsrHtml({
+        cleanPath,
+        canonicalUrl,
+        code,
+        countryName: `${countryName} — ${readableProgram}`,
+        metrics,
+      }),
+      langCtx,
+      cleanPath
+    );
 
     return {
       statusCode: 200,
@@ -529,61 +762,133 @@ export function renderRouteSsrPayload(rawRequestPath: string): SsrRouteRenderRes
       ogImage,
       ogType: 'article',
       robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
       jsonLdGraph,
       ssrBodyHtml,
     };
   }
 
-  // 5. Check Static Route Registry or Fallback
+  // 5. Check Static Route Registry
   const staticEntry = resolveStaticRouteSeoMetadata(cleanPath);
-  const title = staticEntry?.title || 'VisaApply.org – Global Visa Requirements, PR Pathways & Official Links (249 Countries)';
-  const description =
-    staticEntry?.description ||
-    'Check bilateral visa requirements for any passport to 249 countries and territories. Compare tourist, work, student, business, family, and PR visa fees, processing times, and official government links.';
-  const ogImage = resolveValidOgImageUrl(staticEntry?.ogImage);
-  const ogType = staticEntry?.ogType || 'website';
+  if (staticEntry) {
+    const title = staticEntry.title;
+    const description = staticEntry.description;
+    const ogImage = resolveValidOgImageUrl(staticEntry.ogImage);
+    const ogType = staticEntry.ogType || 'website';
 
-  const jsonLdGraph = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': 'https://www.visaapply.org/#organization',
-        name: 'VisaApply.org',
-        url: 'https://www.visaapply.org/',
-        logo: 'https://www.visaapply.org/favicon.svg',
-        description: 'Independent global visa and immigration information portal — not affiliated with any government, embassy, or VFS Global.',
-      },
-      {
-        '@type': 'WebPage',
-        '@id': `${canonicalUrl}#webpage`,
-        url: canonicalUrl,
-        name: title,
+    const jsonLdGraph = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebPage',
+          '@id': `${canonicalUrl}#webpage`,
+          url: canonicalUrl,
+          name: title,
+          description,
+          inLanguage: langCtx.htmlLang,
+          isPartOf: { '@id': 'https://www.visaapply.org/#website' },
+        },
+      ],
+    };
+
+    const ssrBodyHtml = prependLanguageContextBanner(
+      buildStaticDirectorySsrHtml({
+        cleanPath,
+        canonicalUrl,
+        title,
         description,
-        inLanguage: 'en',
-        isPartOf: { '@id': 'https://www.visaapply.org/#website' },
-      },
-    ],
-  };
+      }),
+      langCtx,
+      cleanPath
+    );
 
-  const ssrBodyHtml = buildStaticDirectorySsrHtml({
-    cleanPath,
-    canonicalUrl,
-    title,
-    description,
-  });
+    return {
+      statusCode: 200,
+      canonicalUrl,
+      cleanPath,
+      title,
+      description,
+      ogImage,
+      ogType,
+      robots: staticEntry.noindex ? 'noindex, nofollow' : robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
+      jsonLdGraph,
+      ssrBodyHtml,
+    };
+  }
 
+  // 5b. Explicit Blog Article Routes (/blog/:slug or /blogs/:slug)
+  const explicitBlogMatch = cleanPath.match(/^\/(?:blog|blogs)\/([a-z0-9-]+)$/);
+  if (explicitBlogMatch) {
+    const readableSlug = humanizeSlug(explicitBlogMatch[1]);
+    const title = `${readableSlug} – Official Visa Guide | VisaApply.org`;
+    const description = `Read the ${readableSlug} visa guide on VisaApply.org with official government portal links, eligibility summaries, and preparation checklists.`;
+    const ogImage = resolveValidOgImageUrl(undefined);
+
+    const jsonLdGraph = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Article',
+          headline: readableSlug,
+          description,
+          mainEntityOfPage: canonicalUrl,
+          publisher: { '@id': 'https://www.visaapply.org/#organization' },
+          author: { '@id': 'https://www.visaapply.org/#organization' },
+          inLanguage: 'en',
+        },
+      ],
+    };
+
+    return {
+      statusCode: 200,
+      canonicalUrl,
+      cleanPath,
+      title,
+      description,
+      ogImage,
+      ogType: 'article',
+      robots,
+      htmlLang: langCtx.htmlLang,
+      htmlDir: langCtx.htmlDir,
+      ogLocale: langCtx.ogLocale,
+      requestedLang: langCtx.requestedLang,
+      isEnglishFallback: langCtx.isEnglishFallback,
+      jsonLdGraph,
+      ssrBodyHtml: prependLanguageContextBanner(
+        buildStaticDirectorySsrHtml({ cleanPath, canonicalUrl, title, description }),
+        langCtx,
+        cleanPath
+      ),
+    };
+  }
+
+  // 6. Genuine HTTP 404 Not Found (no Soft-404, noindex/nofollow, no self-canonical)
   return {
-    statusCode: 200,
-    canonicalUrl,
+    statusCode: 404,
+    canonicalUrl: '',
     cleanPath,
-    title,
-    description,
-    ogImage,
-    ogType,
-    robots: staticEntry?.noindex ? 'noindex, nofollow' : robots,
-    jsonLdGraph,
-    ssrBodyHtml,
+    title: '404 – Page Not Found | VisaApply.org',
+    description:
+      'The requested page could not be found on VisaApply.org. Browse verified official visa guides, immigration hubs, and free planning tools.',
+    ogImage: 'https://www.visaapply.org/og-image.jpg',
+    ogType: 'website',
+    robots: 'noindex, nofollow',
+    htmlLang: 'en',
+    htmlDir: 'ltr',
+    ogLocale: 'en_US',
+    requestedLang: langCtx.requestedLang,
+    isEnglishFallback: false,
+    jsonLdGraph: {},
+    ssrBodyHtml: buildNotFoundSsrHtml(rawRequestPath),
   };
 }
 
@@ -599,6 +904,7 @@ function buildBilateralJsonLd(params: {
   categoryLabel?: string;
   visaSubtypeName?: string;
   metrics: ReturnType<typeof getDeterministicCorridorMetrics>;
+  inLanguage?: string;
   includeFaqSchema?: boolean;
 }): Record<string, unknown> {
   const {
@@ -613,6 +919,7 @@ function buildBilateralJsonLd(params: {
     categoryLabel,
     visaSubtypeName,
     metrics,
+    inLanguage = 'en',
     includeFaqSchema = false,
   } = params;
 
@@ -646,21 +953,14 @@ function buildBilateralJsonLd(params: {
 
   const graph: Array<Record<string, unknown>> = [
     {
-      '@type': 'Organization',
-      '@id': 'https://www.visaapply.org/#organization',
-      name: 'VisaApply.org',
-      url: 'https://www.visaapply.org/',
-      description: 'Independent global visa and immigration information portal — not affiliated with any government, embassy, or VFS Global.',
-    },
-    {
       '@type': 'WebPage',
       '@id': `${canonicalUrl}#webpage`,
       url: canonicalUrl,
       name: title,
       description,
-      inLanguage: 'en',
+      inLanguage,
       dateModified: '2026-11-14',
-      isPartOf: { '@id': 'https://www.visaapply.org/#organization' },
+      isPartOf: { '@id': 'https://www.visaapply.org/#website' },
     },
     {
       '@type': 'BreadcrumbList',
@@ -675,9 +975,10 @@ function buildBilateralJsonLd(params: {
           ? `${toName} ${categoryLabel} Guide for ${fromName} Citizens`
           : `${toName} Visa Information Guide for ${fromName} Citizens`,
       description,
+      inLanguage,
       mainEntityOfPage: canonicalUrl,
       publisher: { '@id': 'https://www.visaapply.org/#organization' },
-      author: { '@type': 'Organization', name: 'VisaApply.org Editorial Research' },
+      author: { '@id': 'https://www.visaapply.org/#organization' },
       dateModified: '2026-11-14',
     },
   ];
@@ -891,9 +1192,9 @@ function buildBilateralSsrHtml(params: {
     <p style="font-size:13px;color:#475569;">
       <a href="/routes">Browse All Bilateral Visa Routes</a> •
       <a href="/sitemap">Complete HTML Sitemap</a> •
-      <a href="/checklists">Downloadable Visa PDF Checklists</a> •
-      <a href="/visa-free">Visa-Free Countries Directory</a> •
-      <a href="/pr-visas">Global Permanent Residency Guide</a>
+      <a href="/tools/document-checklist">Visa Document Checklist Builder</a> •
+      <a href="/tools/visa-comparison">Visa Comparison Tool</a> •
+      <a href="/immigration">Global Immigration Hub</a>
     </p>
   </nav>
 </main>`;
@@ -957,14 +1258,14 @@ function buildStaticDirectorySsrHtml(params: {
   <nav aria-label="Core Visa Directories">
     <h2 style="font-size:20px;font-weight:700;margin:0 0 10px 0;">Primary Global Visa &amp; Immigration Directories</h2>
     <ul style="padding-left:20px;margin:0 0 20px 0;">
-      <li><a href="/routes">All Bilateral Visa Routes (249 Countries &amp; Territories)</a></li>
-      <li><a href="/sitemap">Complete HTML Sitemap &amp; Visa Subclass Index</a></li>
-      <li><a href="/checklists">Free Downloadable Visa Document Checklists</a></li>
-      <li><a href="/visa-free">Visa-Free &amp; Visa-on-Arrival Countries Guide</a></li>
-      <li><a href="/e-visas">Official e-Visa Portals Directory</a></li>
-      <li><a href="/pr-visas">Permanent Residency &amp; Citizenship Pathways</a></li>
-      <li><a href="/work-visas">Global Work Permits &amp; Skilled Migration</a></li>
-      <li><a href="/study-visas">International Student Visas</a></li>
+      <li><a href="/immigration">Global Immigration Hub (Verified Countries &amp; Programs)</a></li>
+      <li><a href="/routes">All Bilateral Visa Routes Directory</a></li>
+      <li><a href="/tools/visa-comparison">Visa Comparison Tool</a></li>
+      <li><a href="/tools/document-checklist">Free Visa Document Checklist Builder</a></li>
+      <li><a href="/work-permit-guide">Global Work Permits &amp; Skilled Migration Guide</a></li>
+      <li><a href="/student-visa-university">International Student Visas &amp; Universities</a></li>
+      <li><a href="/golden-visa">Golden Visa &amp; Residency by Investment Guide</a></li>
+      <li><a href="/sitemap">Complete HTML Sitemap</a></li>
     </ul>
     <h2 style="font-size:20px;font-weight:700;margin:0 0 10px 0;">Featured Country Visa &amp; Immigration Hubs</h2>
     <ul style="padding-left:20px;margin:0;">${hubLinks}</ul>
@@ -973,7 +1274,7 @@ function buildStaticDirectorySsrHtml(params: {
 }
 
 /**
- * Injects the SSR metadata, canonical URL, JSON-LD, and pre-rendered semantic HTML into the base index.html template.
+ * Injects the SSR metadata, canonical URL, language/RTL attributes, JSON-LD, and pre-rendered semantic HTML into the base index.html template.
  */
 export function injectSsrPayloadIntoHtml(rawHtmlTemplate: string, payload: SsrRouteRenderResult): string {
   const safeTitle = escapeHtml(payload.title);
@@ -981,28 +1282,30 @@ export function injectSsrPayloadIntoHtml(rawHtmlTemplate: string, payload: SsrRo
   const safeCanonical = escapeHtml(payload.canonicalUrl);
   const safeOgImage = escapeHtml(resolveValidOgImageUrl(payload.ogImage));
   const safeRobots = escapeHtml(payload.robots);
-  const alternates = payload.robots.includes('noindex')
-    ? []
-    : getHreflangAlternatesForRoute(payload.cleanPath, 'https://www.visaapply.org');
+  const safeLang = escapeHtml(payload.htmlLang || 'en');
+  const safeDir = payload.htmlDir === 'rtl' ? 'rtl' : 'ltr';
+  const safeOgLocale = escapeHtml(payload.ogLocale || 'en_US');
+  const isNotFound = payload.statusCode === 404;
+
+  const alternates =
+    isNotFound || payload.robots.includes('noindex')
+      ? []
+      : getHreflangAlternatesForRoute(payload.cleanPath, 'https://www.visaapply.org');
   const hreflangBlock = alternates
     .map((alt) => `    <link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />`)
     .join('\n');
 
   let html = rawHtmlTemplate
+    .replace(/<html\b[^>]*>/i, `<html lang="${safeLang}" dir="${safeDir}">`)
     .replace(/<title>[\s\S]*?<\/title>/i, `<title>${safeTitle}</title>`)
     .replace(/<meta\s+name="title"\s+content="[^"]*"\s*\/?>/i, `<meta name="title" content="${safeTitle}" />`)
     .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${safeDesc}" />`)
     .replace(/<meta\s+name="robots"\s+content="[^"]*"\s*\/?>/i, `<meta name="robots" content="${safeRobots}" />`)
     .replace(/<meta\s+name="googlebot"\s+content="[^"]*"\s*\/?>/i, `<meta name="googlebot" content="${safeRobots}" />`)
     .replace(/<meta\s+name="bingbot"\s+content="[^"]*"\s*\/?>/i, `<meta name="bingbot" content="${safeRobots}" />`)
-    .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${safeCanonical}" />`)
     .replace(/\s*<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*\/?>/gi, '')
-    .replace(
-      /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
-      `<link rel="canonical" href="${safeCanonical}" />${hreflangBlock ? `\n${hreflangBlock}` : ''}`
-    )
     .replace(/<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:type" content="${escapeHtml(payload.ogType)}" />`)
-    .replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${safeCanonical}" />`)
+    .replace(/<meta\s+property="og:locale"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:locale" content="${safeOgLocale}" />`)
     .replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${safeTitle}" />`)
     .replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${safeDesc}" />`)
     .replace(/<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image" content="${safeOgImage}" />`)
@@ -1011,15 +1314,31 @@ export function injectSsrPayloadIntoHtml(rawHtmlTemplate: string, payload: SsrRo
       `<meta property="og:image:secure_url" content="${safeOgImage}" />`
     )
     .replace(/<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:alt" content="${safeTitle}" />`)
-    .replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${safeCanonical}" />`)
     .replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${safeTitle}" />`)
     .replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${safeDesc}" />`)
     .replace(/<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${safeOgImage}" />`)
     .replace(/<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image:alt" content="${safeTitle}" />`);
 
-  // Inject route-specific JSON-LD script before </head>
-  const jsonLdScript = `<script id="ssr-route-jsonld" type="application/ld+json">${JSON.stringify(payload.jsonLdGraph)}</script>`;
-  html = html.replace('</head>', `${jsonLdScript}\n</head>`);
+  if (isNotFound || !safeCanonical) {
+    html = html
+      .replace(/\s*<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/gi, '')
+      .replace(/\s*<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/gi, '')
+      .replace(/\s*<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/gi, '');
+  } else {
+    html = html
+      .replace(
+        /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
+        `<link rel="canonical" href="${safeCanonical}" />${hreflangBlock ? `\n${hreflangBlock}` : ''}`
+      )
+      .replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${safeCanonical}" />`)
+      .replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${safeCanonical}" />`);
+  }
+
+  // Inject route-specific JSON-LD script before </head> when non-empty
+  if (payload.jsonLdGraph && Object.keys(payload.jsonLdGraph).length > 0) {
+    const jsonLdScript = `<script id="ssr-route-jsonld" type="application/ld+json">${JSON.stringify(payload.jsonLdGraph)}</script>`;
+    html = html.replace('</head>', `${jsonLdScript}\n</head>`);
+  }
 
   // Inject pre-rendered semantic HTML inside <div id="root"></div> so crawlers index complete content before JS hydration
   html = html.replace(/<div\s+id="root"\s*><\/div>/i, `<div id="root">${payload.ssrBodyHtml}</div>`);

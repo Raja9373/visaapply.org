@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   Sparkles
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 import { TopFreeToolsStrip } from '../components/TopFreeToolsStrip';
 import { BottomFreeToolsSection } from '../components/BottomFreeToolsSection';
@@ -28,8 +27,9 @@ export const DummyTicketPage: React.FC<DummyTicketPageProps> = ({
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
 
-  const handleDownloadSamplePdf = () => {
+  const handleDownloadSamplePdf = async () => {
     try {
+      const { jsPDF } = await import('jspdf');
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',

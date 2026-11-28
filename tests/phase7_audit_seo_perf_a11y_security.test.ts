@@ -143,9 +143,19 @@ test('Phase 7 Sitemaps: candidate static sitemaps are clean and legacy productio
     assert.ok(!/\/([a-z]{2})-to-\1(?:-|$)/i.test(loc), `Self-route leaked into sitemap: ${loc}`);
   }
 
-  // Legacy production sitemaps & robots.txt must remain untouched
-  const legacySitemaps = fs.readdirSync(path.join(ROOT, 'public')).filter((f) => /^sitemap.*\.xml$/.test(f));
-  assert.equal(legacySitemaps.length, 89, 'All 89 legacy production sitemap files must remain untouched');
+  // Phase 9.8.5: Public root sitemaps serve verified-only URLs (obsolete quarantined legacy chunks removed)
+  const rootPublicSitemaps = fs
+    .readdirSync(path.join(ROOT, 'public'))
+    .filter((f) => /^sitemap.*\.xml$/.test(f))
+    .sort();
+  assert.deepEqual(
+    rootPublicSitemaps,
+    ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml'],
+    'Public root must expose only the 3 verified-only sitemap files'
+  );
+  const publicIndexXml = fs.readFileSync(path.join(ROOT, 'public/sitemap-index.xml'), 'utf-8');
+  assert.ok(publicIndexXml.includes('/sitemaps-static/sitemap-static-core.xml'));
+  assert.equal(publicIndexXml.includes('sitemap-routes-'), false);
 
   const robots = fs.readFileSync(path.join(ROOT, 'public/robots.txt'), 'utf-8');
   assert.ok(robots.includes('Disallow: /admin'), 'robots.txt must disallow /admin');
@@ -153,9 +163,8 @@ test('Phase 7 Sitemaps: candidate static sitemaps are clean and legacy productio
   assert.ok(robots.includes('Disallow: /api/'), 'robots.txt must disallow /api/');
   assert.ok(
     robots.includes('Sitemap: https://www.visaapply.org/sitemap-index.xml'),
-    'robots.txt must still point to legacy sitemap-index.xml until explicit cutover'
+    'robots.txt must point to canonical https://www.visaapply.org/sitemap-index.xml'
   );
-  assert.ok(!robots.includes('sitemaps-static'), 'robots.txt must not auto-cutover to candidate sitemaps in Phase 7');
 });
 
 // ============================================================================

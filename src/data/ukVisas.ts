@@ -2332,7 +2332,7 @@ import {
   UK_NATIONALITY_WARNING_TEXT,
   UK_ENTRY_WARNING_TEXT,
   UK_LEGACY_WARNING_TEXT
-} from './ukAdditionalRoutes';
+} from './ukAdditionalRoutes.js';
 
 export { 
   UK_111_ADDITIONAL_ROUTES, 
@@ -2344,7 +2344,7 @@ export {
   UK_LEGACY_WARNING_TEXT 
 };
 
-export { UK_REGIONAL_WARNING_TEXT } from './ukRegionalJobs';
+export { UK_REGIONAL_WARNING_TEXT } from './ukRegionalJobs.js';
 
 const additionalWork = UK_GROUP_1_REGIONAL_WORK; // 11
 const additionalFamily = [...UK_GROUP_2_FAMILY_SPECIAL, ...UK_GROUP_3_EUSS_ROUTES]; // 6 + 8 = 14

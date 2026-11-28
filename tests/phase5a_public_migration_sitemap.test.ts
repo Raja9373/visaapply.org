@@ -401,11 +401,19 @@ test('Candidate static sitemap output passes full URL, route-resolution, canonic
 
   assert.equal(allUrls.length, 56, 'Candidate valid-only sitemap must emit exactly 56 substantive URLs');
 
-  // Verify ALL 89 legacy public/sitemap*.xml files remain intact (no production cutover yet)
-  const legacySitemapFiles = fs
+  // Phase 9.8.5: Root public sitemaps have cut over to verified-only catalog sitemaps (3 root files)
+  const rootPublicSitemaps = fs
     .readdirSync(path.join(ROOT_DIR, 'public'))
-    .filter((f) => /^sitemap.*\.xml$/i.test(f));
-  assert.equal(legacySitemapFiles.length, 89, 'All 89 legacy public/sitemap*.xml files must remain untouched');
+    .filter((f) => /^sitemap.*\.xml$/i.test(f))
+    .sort();
+  assert.deepEqual(
+    rootPublicSitemaps,
+    ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml'],
+    'Root public/ must contain only the 3 verified-only public sitemap files'
+  );
+  const rootIndexXml = fs.readFileSync(path.join(ROOT_DIR, 'public/sitemap-index.xml'), 'utf8');
+  assert.ok(rootIndexXml.includes('/sitemaps-static/sitemap-static-countries.xml'));
+  assert.equal(rootIndexXml.includes('sitemap-routes-1.xml'), false, 'Legacy quarantined route chunks must not be referenced');
 
   // Verify robots.txt consistency
   const robotsTxt = fs.readFileSync(path.join(ROOT_DIR, 'public/robots.txt'), 'utf8');

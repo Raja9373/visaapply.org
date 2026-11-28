@@ -2335,27 +2335,30 @@ app.use(async (req, res, next) => {
     transformed = transformed.replace(/<meta\s+name=['"]impact-site-verification['"][^>]*>\s*/gi, '');
     transformed = transformed.replace(/<head>/i, `<head>\n    ${impactTag}`);
 
-    const og = getServerSideOgMeta(req.path);
+    const isNotFound = ssrPayload.statusCode === 404;
+    const og = isNotFound ? { ogTitle: '', ogDesc: '', ogImage: '' } : getServerSideOgMeta(req.path);
     const mergedPayload = {
       ...ssrPayload,
-      title: og.ogTitle && !og.ogTitle.startsWith('VisaApply.org – Global Visa') ? og.ogTitle : ssrPayload.title,
-      description: og.ogDesc && !og.ogDesc.startsWith('Check bilateral visa requirements for any passport') ? og.ogDesc : ssrPayload.description,
+      title: !isNotFound && og.ogTitle && !og.ogTitle.startsWith('VisaApply.org – Global Visa') ? og.ogTitle : ssrPayload.title,
+      description: !isNotFound && og.ogDesc && !og.ogDesc.startsWith('Check bilateral visa requirements for any passport') ? og.ogDesc : ssrPayload.description,
       canonicalUrl: ssrPayload.canonicalUrl,
-      ogImage: og.ogImage || ssrPayload.ogImage,
-      robots: (isAdminPageReq || isAuditPageReq) ? 'noindex, nofollow' : ssrPayload.robots,
+      ogImage: (!isNotFound && og.ogImage) || ssrPayload.ogImage,
+      robots: (isAdminPageReq || isAuditPageReq || isNotFound) ? 'noindex, nofollow' : ssrPayload.robots,
     };
 
     transformed = injectSsrPayloadIntoHtml(transformed, mergedPayload);
 
-    if (isAdminPageReq || isAuditPageReq) {
+    if (isAdminPageReq || isAuditPageReq || isNotFound) {
       res.setHeader('X-Robots-Tag', 'noindex, nofollow');
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     } else {
       res.setHeader('X-Robots-Tag', mergedPayload.robots);
-      res.setHeader('Link', `<${mergedPayload.canonicalUrl}>; rel="canonical"`);
+      if (mergedPayload.canonicalUrl) {
+        res.setHeader('Link', `<${mergedPayload.canonicalUrl}>; rel="canonical"`);
+      }
     }
 
-    res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(transformed);
+    res.status(mergedPayload.statusCode || 200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(transformed);
   } catch (err) {
     next(err);
   }

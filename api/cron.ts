@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
-import { applyRestrictedCorsHeaders, verifyCronAuth } from '../src/utils/authSecurity';
+import { applyRestrictedCorsHeaders, verifyCronAuth } from '../src/utils/authSecurity.js';
 import {
   CheckpointStore,
   FileCheckpointStore,
@@ -9,8 +9,8 @@ import {
   JobLockStore,
   classifyAutomationError,
   runCheckpointedAutomationJob
-} from '../src/utils/automationPipeline';
-import { recordOperationalEvent, redactSensitiveData } from '../src/utils/operationalObservability';
+} from '../src/utils/automationPipeline.js';
+import { recordOperationalEvent, redactSensitiveData } from '../src/utils/operationalObservability.js';
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-4-hydrogen';
 

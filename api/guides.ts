@@ -1,8 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { DEFAULT_PUBLISHED_GUIDES } from '../src/data/defaultArticles';
-import { applyRestrictedCorsHeaders } from '../src/utils/authSecurity';
+import { DEFAULT_PUBLISHED_GUIDES } from '../src/data/defaultArticles.js';
+import { applyRestrictedCorsHeaders } from '../src/utils/authSecurity.js';
+import { applySecurityHeaders } from '../src/utils/securityHardening.js';
 
 export default (req: VercelRequest, res: VercelResponse) => {
+  applySecurityHeaders(res, { isApi: true });
   applyRestrictedCorsHeaders(req, res, 'GET, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method && req.method !== 'GET') {

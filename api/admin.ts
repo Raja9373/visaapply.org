@@ -10,14 +10,14 @@ import {
   verifyAdminCsrfRequest,
   verifyAdminPassword,
   verifyAdminSession
-} from '../src/utils/authSecurity';
+} from '../src/utils/authSecurity.js';
 import {
   RATE_LIMIT_POLICIES,
   type RateLimitStore,
   applySecurityHeaders,
   defaultRateLimitStore,
   enforceRateLimit
-} from '../src/utils/securityHardening';
+} from '../src/utils/securityHardening.js';
 
 export function createAdminHandler(options?: { rateLimitStore?: RateLimitStore }) {
   const rateLimitStore = options?.rateLimitStore ?? defaultRateLimitStore;

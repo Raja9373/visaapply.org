@@ -137,15 +137,18 @@ export default function handler(req: any, res: any) {
     const baseHtml = loadBaseHtmlTemplate();
     const fullHtml = injectSsrPayloadIntoHtml(baseHtml, effectivePayload);
 
+    const isNotFound = effectivePayload.statusCode === 404;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('X-Robots-Tag', effectivePayload.robots);
-    if (isAdminPageReq || isAuditPageReq || isPreview) {
+    res.setHeader('X-Robots-Tag', isNotFound ? 'noindex, nofollow' : effectivePayload.robots);
+    if (isAdminPageReq || isAuditPageReq || isPreview || isNotFound) {
       res.setHeader('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
     } else {
-      res.setHeader('Link', `<${effectivePayload.canonicalUrl}>; rel="canonical"`);
+      if (effectivePayload.canonicalUrl) {
+        res.setHeader('Link', `<${effectivePayload.canonicalUrl}>; rel="canonical"`);
+      }
       res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
     }
-    return res.status(200).send(fullHtml);
+    return res.status(effectivePayload.statusCode || 200).send(fullHtml);
   } catch (err: any) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     if (isPreview) {

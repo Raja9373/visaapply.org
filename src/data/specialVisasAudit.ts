@@ -1,4 +1,4 @@
-import { VisaItem, CountryVisas } from './fullVisaDatabase';
+import type { VisaItem, CountryVisas } from './fullVisaDatabase.js';
 
 // Interface extension helper
 export interface SpecialVisaDefinition {

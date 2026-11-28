@@ -16,7 +16,6 @@ import {
   Upload,
   Scale
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
@@ -222,9 +221,10 @@ Application Reference: [YOUR REFUSAL REFERENCE NUMBER]`;
     }, 100);
   };
 
-  const handleDownloadPdfText = (textContent: string, filename: string) => {
+  const handleDownloadPdfText = async (textContent: string, filename: string) => {
     if (!textContent) return;
     try {
+      const { jsPDF } = await import('jspdf');
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',

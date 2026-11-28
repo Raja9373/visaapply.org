@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import { Article } from '../components/BlogArticleView';
+import type { Article } from '../components/BlogArticleView';
 
 export const DEFAULT_PUBLISHED_GUIDES: Article[] = [
   // TODAY'S 5 BLOGS (2026-10-30)

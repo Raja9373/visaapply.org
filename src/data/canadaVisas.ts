@@ -3305,8 +3305,8 @@ export const CA_IRCC_REFERENCE_LINKS = [
   { id: 10, title: "Canada Border Services Agency (CBSA) Visitor Records", url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/extend-stay.html" }
 ];
 
-export { CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS } from './canada130Visas';
-import { CANADA_130_VISAS } from './canada130Visas';
+export { CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS } from './canada130Visas.js';
+import { CANADA_130_VISAS } from './canada130Visas.js';
 
 export const CANADA_VISAS: CountryVisas = CANADA_130_VISAS;
 export const CANADA_102_VISAS = CANADA_130_VISAS;

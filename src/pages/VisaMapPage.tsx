@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { geoNaturalEarth1, geoPath } from 'd3-geo';
 import { feature } from 'topojson-client';
-import worldAtlas50m from 'world-atlas/countries-50m.json';
+import worldAtlas110m from 'world-atlas/countries-110m.json';
 import {
   Globe,
   Share2,
@@ -253,7 +253,7 @@ export const VisaMapPage: React.FC<VisaMapPageProps> = ({
 
   // Parse world-atlas TopoJSON into GeoJSON features once
   const mapFeatures = useMemo(() => {
-    const topo: any = worldAtlas50m;
+    const topo: any = worldAtlas110m;
     const geojson: any = feature(topo, topo.objects.countries);
     const projection = geoNaturalEarth1().scale(175).translate([480, 265]);
     const pathGenerator = geoPath().projection(projection);

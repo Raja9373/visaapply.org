@@ -170,14 +170,14 @@ test('3. Security & environment audit: zero secret .env files, .gitignore protec
   assert.equal(/vercel\.app|visaapply-staging|staging\.visaapply\.org/i.test(robotsTxt), false);
 
   const publicDir = path.join(ROOT, 'public');
-  const legacySitemaps = fs.readdirSync(publicDir).filter((f) => /^sitemap.*\.xml$/i.test(f));
-  const candidateSitemaps = fs.readdirSync(path.join(publicDir, 'sitemaps-static')).filter((f) => f.endsWith('.xml'));
-  assert.equal(legacySitemaps.length, 89, 'All 89 legacy production sitemaps must remain intact');
-  assert.equal(candidateSitemaps.length, 6, 'All 6 candidate static sitemaps must remain intact');
+  const rootSitemaps = fs.readdirSync(publicDir).filter((f) => /^sitemap.*\.xml$/i.test(f)).sort();
+  const staticSitemaps = fs.readdirSync(path.join(publicDir, 'sitemaps-static')).filter((f) => f.endsWith('.xml'));
+  assert.deepEqual(rootSitemaps, ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml'], 'Only 3 verified root public sitemaps may exist');
+  assert.equal(staticSitemaps.length, 6, 'All 6 verified static sitemaps must remain intact');
 
   for (const file of [
-    ...legacySitemaps.map((f) => path.join(publicDir, f)),
-    ...candidateSitemaps.map((f) => path.join(publicDir, 'sitemaps-static', f)),
+    ...rootSitemaps.map((f) => path.join(publicDir, f)),
+    ...staticSitemaps.map((f) => path.join(publicDir, 'sitemaps-static', f)),
   ]) {
     const content = fs.readFileSync(file, 'utf8');
     assert.equal(/vercel\.app|visaapply-staging|staging\.visaapply\.org/i.test(content), false, `No staging URL in ${file}`);

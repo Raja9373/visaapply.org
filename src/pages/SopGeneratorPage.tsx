@@ -12,7 +12,6 @@ import {
   ChevronUp,
   Award
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
@@ -151,9 +150,10 @@ ${university}, ${country}`;
     }, 100);
   };
 
-  const handleDownloadPdf = (content: string, fileName: string) => {
+  const handleDownloadPdf = async (content: string, fileName: string) => {
     if (!content) return;
     try {
+      const { jsPDF } = await import('jspdf');
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',

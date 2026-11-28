@@ -539,6 +539,114 @@ export const STATIC_ROUTE_SEO_REGISTRY: Record<string, StaticRouteSeoEntry> = {
     noindex: true,
     breadcrumbName: 'Editorial Review Queue',
   },
+  '/admin/global-data-coverage': {
+    title: 'Global Data Coverage Audit – Admin Portal – VisaApply.org',
+    description: 'Restricted administrator report for global immigration catalog coverage across 249 ISO jurisdictions.',
+    noindex: true,
+    breadcrumbName: 'Global Data Coverage',
+  },
+  '/admin/global-data-verification-pilot': {
+    title: 'Global Data Verification Pilot – Admin Portal – VisaApply.org',
+    description: 'Restricted administrator workbench for sovereign source verification pilots on VisaApply.org.',
+    noindex: true,
+    breadcrumbName: 'Verification Pilot',
+  },
+  '/admin/evidence-traceability': {
+    title: 'Evidence Traceability Audit – Admin Portal – VisaApply.org',
+    description: 'Restricted administrator workbench auditing statutory claims and official source evidence on VisaApply.org.',
+    noindex: true,
+    breadcrumbName: 'Evidence Traceability',
+  },
+  '/admin/official-source-monitoring': {
+    title: 'Official Source Monitoring – Admin Portal – VisaApply.org',
+    description: 'Restricted administrator monitor tracking official sovereign government immigration portal updates.',
+    noindex: true,
+    breadcrumbName: 'Source Monitoring',
+  },
+  '/admin/global-visa-coverage-audit': {
+    title: 'Global Visa Coverage Audit – Admin Portal – VisaApply.org',
+    description: 'Restricted administrator audit of visa category and sovereign pathway coverage on VisaApply.org.',
+    noindex: true,
+    breadcrumbName: 'Visa Coverage Audit',
+  },
+  '/admin/visa-management': {
+    title: 'Visa Catalog Management – Admin Portal – VisaApply.org',
+    description: 'Restricted administrator console for reviewing and managing immigration catalog entries.',
+    noindex: true,
+    breadcrumbName: 'Visa Management',
+  },
+  '/tools/visa-comparison': {
+    title: 'Visa Comparison Tool – Compare Official Pathways Side by Side | VisaApply.org',
+    description:
+      'Compare official immigration pathways side by side across countries, categories, fees, processing steps, and verified government sources on VisaApply.org.',
+    breadcrumbName: 'Visa Comparison Tool',
+  },
+  '/tools/cost-calculator': {
+    title: 'Visa & Relocation Cost Calculator – Estimate Official Fees | VisaApply.org',
+    description:
+      'Estimate official visa application fees, biometrics, medical exams, and relocation costs across verified global destinations on VisaApply.org.',
+    breadcrumbName: 'Cost Calculator',
+  },
+  '/tools/funds-calculator': {
+    title: 'Proof of Funds Calculator for Visa Applications | VisaApply.org',
+    description:
+      'Calculate estimated proof-of-funds benchmarks for tourist, student, and skilled immigration applications using verified official guidance on VisaApply.org.',
+    breadcrumbName: 'Funds Calculator',
+  },
+  '/tools/timeline-planner': {
+    title: 'Visa Application Timeline Planner – Milestones & Deadlines | VisaApply.org',
+    description:
+      'Plan your visa application schedule with document prep, biometrics, and submission milestones tailored to official consular workflows on VisaApply.org.',
+    breadcrumbName: 'Timeline Planner',
+  },
+  '/tools/document-checklist': {
+    title: 'Visa Document Checklist Builder – Free Official Prep Guide | VisaApply.org',
+    description:
+      'Build a tailored document checklist for tourist, work, student, family, or residency visa filings with official verification reminders on VisaApply.org.',
+    breadcrumbName: 'Document Checklist Builder',
+  },
+  '/tools/stay-calculator': {
+    title: 'Schengen 90/180 & Visa Stay Duration Calculator | VisaApply.org',
+    description:
+      'Calculate remaining authorized stay days under Schengen 90/180 rolling windows and short-stay visitor visa limits on VisaApply.org.',
+    breadcrumbName: 'Stay Duration Calculator',
+  },
+  '/tools/readiness-checker': {
+    title: 'Visa Application Readiness Checker – Self-Assessment | VisaApply.org',
+    description:
+      'Review passport validity, financial documentation, travel history, and filing completeness before submitting an official visa application on VisaApply.org.',
+    breadcrumbName: 'Readiness Checker',
+  },
+  '/tools/eligibility-checker': {
+    title: 'Visa & Immigration Eligibility Checker – Pathway Screening | VisaApply.org',
+    description:
+      'Screen potential work, study, business, family, and permanent residency pathways against publicly documented criteria and official links on VisaApply.org.',
+    breadcrumbName: 'Eligibility Checker',
+  },
+  '/tools/family-planner': {
+    title: 'Family & Dependent Visa Planner – Multi-Applicant Guide | VisaApply.org',
+    description:
+      'Organize spouse, partner, and dependent visa filings alongside primary work, study, or residency applications with official portal links on VisaApply.org.',
+    breadcrumbName: 'Family Visa Planner',
+  },
+  '/tools/source-verifier': {
+    title: 'Official Immigration Source Verifier – Government Portal Directory | VisaApply.org',
+    description:
+      'Verify official sovereign immigration domains, consular agencies, and government portal URLs before submitting personal visa applications on VisaApply.org.',
+    breadcrumbName: 'Source Verifier',
+  },
+  '/tools/intelligence-hub': {
+    title: 'Global Visa Intelligence & Planning Hub – Free Tools | VisaApply.org',
+    description:
+      'Access VisaApply.org free immigration planning tools including visa comparison, cost estimators, stay calculators, and official source verification.',
+    breadcrumbName: 'Intelligence Hub',
+  },
+  '/immigration-hub': {
+    title: 'Global Immigration & Planning Intelligence Hub | VisaApply.org',
+    description:
+      'Explore official immigration pathways, country directories, and free planning calculators backed by verified sovereign government sources on VisaApply.org.',
+    breadcrumbName: 'Immigration Intelligence Hub',
+  },
 };
 
 export const OG_LOCALE_BY_LANG: Record<string, string> = {
@@ -587,10 +695,6 @@ const KNOWN_DYNAMIC_ROUTE_PATTERNS: ReadonlyArray<{ name: string; regex: RegExp 
   {
     name: 'Canonical Sovereign Pathway (/visa/:country/:slug)',
     regex: /^\/visa\/([a-z0-9-]+)\/([a-z0-9-]+)$/i,
-  },
-  {
-    name: 'Interactive Visa Tool (/tools/:tool)',
-    regex: /^\/tools\/([a-z0-9-]+)$/i,
   },
   {
     name: 'Blog / Guide Article Slug',
@@ -1119,8 +1223,15 @@ export function applySeoMetadataToDom(
     setOrCreateMetaTag('name', 'googlebot', metadata.googlebot);
     setOrCreateMetaTag('name', 'bingbot', metadata.bingbot);
 
-    // Canonical Link
-    setOrCreateLinkTag('canonical', metadata.canonical);
+    // Canonical Link — omit/remove on intrinsic noindex routes (404, /admin, /audit, self-routes)
+    if (partial.noindex || rawMetadata.robots.includes('noindex')) {
+      const existingCanonical = document.querySelector('link[rel="canonical"]');
+      if (existingCanonical) {
+        existingCanonical.remove();
+      }
+    } else {
+      setOrCreateLinkTag('canonical', metadata.canonical);
+    }
 
     // OpenGraph Tags
     setOrCreateMetaTag('property', 'og:type', metadata.ogType);

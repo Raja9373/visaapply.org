@@ -14,7 +14,6 @@ import {
   User,
   Globe2
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
@@ -144,9 +143,10 @@ Contact: ${formData.homeAddress ? `${formData.homeAddress} • ` : ''}India
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     if (!generatedLetter) return;
     try {
+      const { jsPDF } = await import('jspdf');
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',

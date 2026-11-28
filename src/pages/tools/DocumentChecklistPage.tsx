@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FileText, CheckCircle2, AlertTriangle, ArrowLeft, Download, Plus, Trash2, ShieldCheck, Info, Check, Globe, Printer } from 'lucide-react';
 import { SUPPORTED_LANGUAGES_10, SupportedLangCode } from '../../i18n/config';
 import { getUIString } from '../../utils/autoLanguage';
-import jsPDF from 'jspdf';
 
 export type RequirementClassification = 
   | 'REQUIRED_VERIFIED' 
@@ -183,7 +182,8 @@ export const DocumentChecklistPage: React.FC<DocumentChecklistPageProps> = ({ on
   const acquiredCount = documents.filter(d => d.progressStatus === 'ACQUIRED' || d.progressStatus === 'REVIEWED').length;
   const progressPercent = Math.round((acquiredCount / documents.length) * 100);
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);

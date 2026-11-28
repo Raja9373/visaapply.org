@@ -74,7 +74,7 @@ test('4. Public static output contains zero database files, zero .env files, and
   const envFiles = entries.filter((f) => /^\.env/i.test(f));
   assert.deepEqual(envFiles, [], 'No .env files may exist under public/');
 
-  const legacySitemaps = entries.filter((f) => /^sitemap.*\.xml$/i.test(f));
-  assert.equal(legacySitemaps.length, 89, 'All 89 legacy public/sitemap*.xml files must remain untouched');
+  const rootSitemaps = entries.filter((f) => /^sitemap.*\.xml$/i.test(f)).sort();
+  assert.deepEqual(rootSitemaps, ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml'], 'Only 3 verified-only root public sitemap files may exist');
   assert.equal(fs.existsSync(path.join(publicDir, 'robots.txt')), true, 'public/robots.txt must remain intact');
 });

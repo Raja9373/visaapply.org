@@ -131,7 +131,7 @@ test('5. Production and candidate sitemaps contain zero staging/preview URLs, an
     ...fs.readdirSync(path.join(publicDir, 'sitemaps-static')).filter((f) => f.endsWith('.xml')).map((f) => path.join(publicDir, 'sitemaps-static', f)),
   ];
 
-  assert.equal(sitemapFiles.length, 89 + 6, 'All 89 legacy + 6 candidate sitemap XML files must exist');
+  assert.equal(sitemapFiles.length, 3 + 6, 'All 3 verified root + 6 static verified sitemap XML files must exist');
   for (const f of sitemapFiles) {
     const xml = fs.readFileSync(f, 'utf8');
     assert.equal(/\.vercel\.app/i.test(xml), false, `Sitemap ${f} must not contain vercel.app URLs`);

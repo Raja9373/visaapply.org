@@ -165,8 +165,8 @@ test('Phase A [A - Subscriber Privacy]: server.ts strips subscriber PII from pub
   assert.equal(adminBlock.includes('no-store'), true, 'Admin subscribers endpoint must disable caching');
 
   // Frontend AdminSlotAlertPage must call the authenticated admin route instead of public status
-  const appSrc = fs.readFileSync(path.join(process.cwd(), 'src/App.tsx'), 'utf8');
-  assert.equal(appSrc.includes("fetch('/api/admin/slot-alert/subscribers'"), true);
+  const adminInlineSrc = fs.readFileSync(path.join(process.cwd(), 'src/pages/AdminInlineViews.tsx'), 'utf8');
+  assert.equal(adminInlineSrc.includes("fetch('/api/admin/slot-alert/subscribers'"), true);
 });
 
 // ============================================================================

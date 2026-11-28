@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { applyRestrictedCorsHeaders } from '../src/utils/authSecurity';
+import { applyRestrictedCorsHeaders } from '../src/utils/authSecurity.js';
+import { applySecurityHeaders } from '../src/utils/securityHardening.js';
 
 const COUNTRIES = [
   { code: "US", name: "United States", flag: "🇺🇸" },
@@ -91,6 +92,7 @@ const COUNTRIES = [
 ];
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
+  applySecurityHeaders(res, { isApi: true });
   applyRestrictedCorsHeaders(req, res, 'GET, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method && req.method !== 'GET') {

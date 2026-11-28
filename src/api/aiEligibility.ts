@@ -302,7 +302,7 @@ export function computeRuleBasedEligibility(input: AiEligibilityInput): AiEligib
 }
 
 export function createAiEligibilityHandler(options?: {
-  rateLimitStore?: import('../utils/securityHardening').RateLimitStore;
+  rateLimitStore?: import('../utils/securityHardening.js').RateLimitStore;
 }) {
   return async function handleAiEligibilityRequestWithLimit(req: any, res: any) {
     const {
@@ -310,7 +310,7 @@ export function createAiEligibilityHandler(options?: {
       applySecurityHeaders,
       defaultRateLimitStore,
       enforceRateLimit
-    } = await import('../utils/securityHardening');
+    } = await import('../utils/securityHardening.js');
 
     applySecurityHeaders(res, { isApi: true });
 

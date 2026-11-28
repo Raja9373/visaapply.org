@@ -1,60 +1,60 @@
-import { AUSTRALIA_135_VISAS } from './australiaVisas';
-import { USA_145_VISAS, USA_201_VISAS, US_201_FULL, US_201_ITEMS } from './usaVisas';
+import { AUSTRALIA_135_VISAS } from './australiaVisas.js';
+import { USA_145_VISAS, USA_201_VISAS, US_201_FULL, US_201_ITEMS } from './usaVisas.js';
 export { USA_201_VISAS, US_201_FULL, US_201_ITEMS };
-import { CANADA_102_VISAS, CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS } from './canadaVisas';
+import { CANADA_102_VISAS, CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS } from './canadaVisas.js';
 export { CANADA_130_VISAS, CA_130_FULL, CANADA_130_ALL_ITEMS };
-import { UK_111_VISAS, UK_222_VISAS, UK_222_ALL_ITEMS, UK_111_ADDITIONAL_ROUTES } from './ukVisas';
+import { UK_111_VISAS, UK_222_VISAS, UK_222_ALL_ITEMS, UK_111_ADDITIONAL_ROUTES } from './ukVisas.js';
 export { UK_111_VISAS, UK_222_VISAS, UK_222_ALL_ITEMS, UK_111_ADDITIONAL_ROUTES };
-import { UAE_135_VISAS } from './uaeVisas';
-import { GERMANY_138_VISAS } from './germanyVisas';
-import { SINGAPORE_109_VISAS } from './singaporeVisas';
-import { THAILAND_113_VISAS } from './thailandVisas';
-import { JAPAN_123_VISAS } from './japanVisas';
-import { FRANCE_127_VISAS } from './franceVisas';
-import { ITALY_130_VISAS } from './italyVisas';
-import { SPAIN_130_VISAS } from './spainVisas';
-import { INDIA_130_VISAS } from './indiaVisas';
-import { SWITZERLAND_96_VISAS } from './switzerlandVisas';
-import { NEW_ZEALAND_88_VISAS } from './newZealandVisas';
-import { BRAZIL_72_VISAS } from './brazilVisas';
-import { MEXICO_74_VISAS } from './mexicoVisas';
-import { SOUTH_KOREA_94_VISAS } from './southKoreaVisas';
-import { CHINA_108_VISAS } from './chinaVisas';
-import { SAUDI_ARABIA_88_VISAS } from './saudiArabiaVisas';
-import { IRELAND_86_VISAS } from './irelandVisas';
-import { NETHERLANDS_92_VISAS } from './netherlandsVisas';
-import { SOUTH_AFRICA_71_VISAS } from './southAfricaVisas';
-import { TURKEY_79_VISAS } from './turkeyVisas';
-import { VIETNAM_76_VISAS } from './vietnamVisas';
-import { MALAYSIA_84_VISAS } from './malaysiaVisas';
-import { INDONESIA_82_VISAS } from './indonesiaVisas';
-import { PHILIPPINES_68_VISAS } from './philippinesVisas';
-import { SCHENGEN_96_VISAS } from './schengenVisas';
-import { SWEDEN_94_VISAS } from './swedenVisas';
-import { DENMARK_92_VISAS, DK_92 } from './denmarkVisas';
+import { UAE_135_VISAS } from './uaeVisas.js';
+import { GERMANY_138_VISAS } from './germanyVisas.js';
+import { SINGAPORE_109_VISAS } from './singaporeVisas.js';
+import { THAILAND_113_VISAS } from './thailandVisas.js';
+import { JAPAN_123_VISAS } from './japanVisas.js';
+import { FRANCE_127_VISAS } from './franceVisas.js';
+import { ITALY_130_VISAS } from './italyVisas.js';
+import { SPAIN_130_VISAS } from './spainVisas.js';
+import { INDIA_130_VISAS } from './indiaVisas.js';
+import { SWITZERLAND_96_VISAS } from './switzerlandVisas.js';
+import { NEW_ZEALAND_88_VISAS } from './newZealandVisas.js';
+import { BRAZIL_72_VISAS } from './brazilVisas.js';
+import { MEXICO_74_VISAS } from './mexicoVisas.js';
+import { SOUTH_KOREA_94_VISAS } from './southKoreaVisas.js';
+import { CHINA_108_VISAS } from './chinaVisas.js';
+import { SAUDI_ARABIA_88_VISAS } from './saudiArabiaVisas.js';
+import { IRELAND_86_VISAS } from './irelandVisas.js';
+import { NETHERLANDS_92_VISAS } from './netherlandsVisas.js';
+import { SOUTH_AFRICA_71_VISAS } from './southAfricaVisas.js';
+import { TURKEY_79_VISAS } from './turkeyVisas.js';
+import { VIETNAM_76_VISAS } from './vietnamVisas.js';
+import { MALAYSIA_84_VISAS } from './malaysiaVisas.js';
+import { INDONESIA_82_VISAS } from './indonesiaVisas.js';
+import { PHILIPPINES_68_VISAS } from './philippinesVisas.js';
+import { SCHENGEN_96_VISAS } from './schengenVisas.js';
+import { SWEDEN_94_VISAS } from './swedenVisas.js';
+import { DENMARK_92_VISAS, DK_92 } from './denmarkVisas.js';
 export { DENMARK_92_VISAS, DK_92 };
-import { FINLAND_28_VISAS, FINLAND_92_VISAS, FI_92 } from './finlandVisas';
+import { FINLAND_28_VISAS, FINLAND_92_VISAS, FI_92 } from './finlandVisas.js';
 export { FINLAND_28_VISAS, FINLAND_92_VISAS, FI_92 };
-import { BELGIUM_22_VISAS, BELGIUM_92_VISAS, BE_92 } from './belgiumVisas';
+import { BELGIUM_22_VISAS, BELGIUM_92_VISAS, BE_92 } from './belgiumVisas.js';
 export { BELGIUM_22_VISAS, BELGIUM_92_VISAS, BE_92 };
-import { AUSTRIA_92_VISAS, AT_92 } from './austriaVisas';
+import { AUSTRIA_92_VISAS, AT_92 } from './austriaVisas.js';
 export { AUSTRIA_92_VISAS, AT_92 };
-import { POLAND_92_VISAS, PL_92 } from './polandVisas';
+import { POLAND_92_VISAS, PL_92 } from './polandVisas.js';
 export { POLAND_92_VISAS, PL_92 };
-import { NORWAY_92_VISAS } from './norwayVisas';
-import { PORTUGAL_94_VISAS } from './portugalVisas';
-import { QATAR_66_VISAS, QA_66 } from './qatarVisas';
+import { NORWAY_92_VISAS } from './norwayVisas.js';
+import { PORTUGAL_94_VISAS } from './portugalVisas.js';
+import { QATAR_66_VISAS, QA_66 } from './qatarVisas.js';
 export { QATAR_66_VISAS, QA_66 };
-import { ASIA_OPTION_A_COUNTRIES, ALL_ASIA_OPTION_A_DATA } from './asiaOptionAVisas';
+import { ASIA_OPTION_A_COUNTRIES, ALL_ASIA_OPTION_A_DATA } from './asiaOptionAVisas.js';
 export { ASIA_OPTION_A_COUNTRIES, ALL_ASIA_OPTION_A_DATA };
-import { OPTION_B_COUNTRIES, ALL_OPTION_B_DATA } from './optionBVisas';
+import { OPTION_B_COUNTRIES, ALL_OPTION_B_DATA } from './optionBVisas.js';
 export { OPTION_B_COUNTRIES, ALL_OPTION_B_DATA };
-import { OPTION_D_COUNTRIES, ALL_OPTION_D_DATA } from './optionDVisas';
+import { OPTION_D_COUNTRIES, ALL_OPTION_D_DATA } from './optionDVisas.js';
 export { OPTION_D_COUNTRIES, ALL_OPTION_D_DATA };
-import { OPTION_E_COUNTRIES, ALL_OPTION_E_DATA } from './optionEVisas';
+import { OPTION_E_COUNTRIES, ALL_OPTION_E_DATA } from './optionEVisas.js';
 export { OPTION_E_COUNTRIES, ALL_OPTION_E_DATA };
 
-import { auditAndEnhanceAllVisas } from './specialVisasAudit';
+import { auditAndEnhanceAllVisas } from './specialVisasAudit.js';
 
 export interface VisaItem {
   id: string;
@@ -915,7 +915,7 @@ import {
   getCorrectCount,
   TOTAL_REAL_VISAS_249,
   getLiveVisaCount,
-} from './countryLightRegistry';
+} from './countryLightRegistry.js';
 export {
   FLAG_MAP_249,
   NAME_MAP_249,

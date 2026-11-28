@@ -1,7 +1,8 @@
 import { GoogleGenAI, Type, ThinkingLevel } from '@google/genai';
-import { FULL_VISA_DB, CountryVisas } from '../data/fullVisaDatabase';
-import { fetchWithRetry } from '../utils/fetchWithRetry';
-import { applyRestrictedCorsHeaders } from '../utils/authSecurity';
+import { FULL_VISA_DB, type CountryVisas } from '../data/fullVisaDatabase.js';
+import { fetchWithRetry } from '../utils/fetchWithRetry.js';
+import { applyRestrictedCorsHeaders } from '../utils/authSecurity.js';
+import { applySecurityHeaders } from '../utils/securityHardening.js';
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-4-hydrogen';
 
@@ -331,6 +332,7 @@ export async function fetchFaqContent(
  * Universal serverless / Express request handler
  */
 export default async function handleFaqRequest(req: any, res: any) {
+  applySecurityHeaders(res, { isApi: true });
   applyRestrictedCorsHeaders(req, res, 'GET, POST, OPTIONS', 'Content-Type');
 
   if (req.method === 'OPTIONS') {

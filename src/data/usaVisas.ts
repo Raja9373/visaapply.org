@@ -4478,8 +4478,8 @@ const USA_LEGACY_145_VISAS: CountryVisas = {
     }
   ]
 };
-export { US_201_FULL, US_201_ITEMS, USA_201_VISAS } from './usa201Visas';
-import { USA_201_VISAS } from './usa201Visas';
+export { US_201_FULL, US_201_ITEMS, USA_201_VISAS } from './usa201Visas.js';
+import { USA_201_VISAS } from './usa201Visas.js';
 
 export const USA_145_VISAS: CountryVisas = USA_201_VISAS;
 

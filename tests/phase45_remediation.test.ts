@@ -171,9 +171,11 @@ test('WCAG 2.2 AA & CSS safeguards: focus-visible, reduced-motion, overflow-x cl
   assert.ok(appTsx.includes('aria-controls="mobile-nav-drawer"'), 'Mobile menu button must control #mobile-nav-drawer');
   assert.ok(appTsx.includes('inert={!mobileMenuOpen}'), 'Closed mobile drawer must be inert');
   assert.ok(appTsx.includes('aria-label="Breadcrumb"'), 'Breadcrumbs must declare aria-label="Breadcrumb"');
-  assert.ok(appTsx.includes('htmlFor="contact-name"'), 'ContactView inputs must bind htmlFor/id labels');
-  assert.ok(appTsx.includes('htmlFor="admin-password-input"'), 'AdminLoginView input must bind htmlFor/id label');
-  assert.ok(appTsx.includes('role="alert"'), 'AdminLoginView error banner must use role="alert"');
+  const staticLegalTsx = readWorkspaceFile('src/pages/StaticLegalViews.tsx');
+  const adminInlineTsx = readWorkspaceFile('src/pages/AdminInlineViews.tsx');
+  assert.ok(staticLegalTsx.includes('htmlFor="contact-name"'), 'ContactView inputs must bind htmlFor/id labels');
+  assert.ok(adminInlineTsx.includes('htmlFor="admin-password-input"'), 'AdminLoginView input must bind htmlFor/id label');
+  assert.ok(adminInlineTsx.includes('role="alert"'), 'AdminLoginView error banner must use role="alert"');
   assert.ok(appTsx.includes("uiLang === 'ar' ? 'rtl' : 'ltr'"), 'Arabic interface must set dir="rtl"');
 
   const promoSection = readWorkspaceFile('src/components/GlobalImmigrationPromoSection.tsx');

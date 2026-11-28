@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   Calendar
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
@@ -247,7 +246,8 @@ export const BankStatementGuidePage: React.FC<BankStatementGuidePageProps> = ({
     }, 80);
   };
 
-  const handleDownloadChecklistPdf = () => {
+  const handleDownloadChecklistPdf = async () => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',

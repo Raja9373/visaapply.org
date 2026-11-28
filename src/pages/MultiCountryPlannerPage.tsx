@@ -19,7 +19,6 @@ import {
   Info,
   ExternalLink
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { NAME_MAP_249, FLAG_MAP_249 } from '../data/countryLightRegistry';
 import { calculateVisaCount } from '../data/anyToAnyLight';
 import { getPassportDestinationCategory, MapVisaCategory } from './VisaMapPage';
@@ -571,7 +570,8 @@ export const MultiCountryPlannerPage: React.FC<MultiCountryPlannerPageProps> = (
     };
   }, [selectedTransitHub, originCountry.name, tripRows]);
 
-  const handleDownloadFullTripPdf = () => {
+  const handleDownloadFullTripPdf = async () => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',

@@ -40,7 +40,17 @@ export default defineConfig(({ command }) => {
         workbox: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MiB max per cached asset
           globPatterns: ['**/*.{js,css,html,ico,png,svg}', 'manifest.webmanifest'],
-          globIgnores: ['**/assets/aistudio/**', '**/sitemap*.xml', '**/*.map'],
+          globIgnores: [
+            '**/assets/aistudio/**',
+            '**/sitemap*.xml',
+            '**/*.map',
+            '**/fullVisaDatabase-*.js',
+            '**/geo-map-*.js',
+            '**/pdf-tools-*.js',
+            '**/priority2AuditData-*.js',
+            '**/Comprehensive30SectionEditor-*.js',
+            '**/GlobalVisaCoverageAuditPage-*.js',
+          ],
           runtimeCaching: [
             {
               urlPattern: /\/sitemap.*\.xml$/i,

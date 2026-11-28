@@ -153,15 +153,19 @@ test('Workstream A4: Generated XML sitemaps and robots.txt contain zero syntheti
   const serverTs = fs.readFileSync(path.join(ROOT_DIR, 'server.ts'), 'utf8');
   assert.ok(serverTs.includes('Disallow: /audit'), 'server.ts inline robots.txt fallback must disallow /audit');
 
-  const sitemapFiles = fs
-    .readdirSync(PUBLIC_DIR)
-    .filter((f) => /^sitemap.*\.xml$/i.test(f));
-  assert.ok(sitemapFiles.length >= 2, 'Expected sitemap index and at least one chunk file in public/');
+  const sitemapFiles = [
+    ...fs.readdirSync(PUBLIC_DIR).filter((f) => /^sitemap.*\.xml$/i.test(f)).map((f) => path.join(PUBLIC_DIR, f)),
+    ...fs
+      .readdirSync(path.join(PUBLIC_DIR, 'sitemaps-static'))
+      .filter((f) => f.endsWith('.xml'))
+      .map((f) => path.join(PUBLIC_DIR, 'sitemaps-static', f))
+  ];
+  assert.equal(sitemapFiles.length, 3 + 6, 'Expected 3 verified root public sitemaps + 6 static verified bucket sitemaps');
 
-  let totalUrls = 0;
-  let visaDetailUrls = 0;
-  for (const file of sitemapFiles) {
-    const xml = fs.readFileSync(path.join(PUBLIC_DIR, file), 'utf8');
+  let flatVerifiedUrls = 0;
+  for (const filePath of sitemapFiles) {
+    const file = path.basename(filePath);
+    const xml = fs.readFileSync(filePath, 'utf8');
     assert.ok(!xml.includes('p1-audit-'), `${file} leaked quarantined p1-audit- pathway`);
     assert.ok(!xml.includes('-pathway-'), `${file} leaked synthetic -pathway- URL`);
     assert.ok(!xml.includes('/admin'), `${file} leaked /admin URL`);
@@ -170,16 +174,13 @@ test('Workstream A4: Generated XML sitemaps and robots.txt contain zero syntheti
       assert.ok(!xml.includes(`in-to-${uninhabited}<`), `${file} included uninhabited territory in-to-${uninhabited}`);
       assert.ok(!xml.includes(`/immigration/${uninhabited}<`), `${file} included uninhabited territory /immigration/${uninhabited}`);
     }
-    const urlMatches = xml.match(/<url>/g);
-    const count = urlMatches ? urlMatches.length : 0;
-    totalUrls += count;
-    if (/^sitemap-visas-\d+\.xml$/i.test(file)) {
-      visaDetailUrls += count;
+    if (file === 'sitemap.xml') {
+      const urlMatches = xml.match(/<url>/g);
+      flatVerifiedUrls = urlMatches ? urlMatches.length : 0;
     }
   }
 
-  assert.ok(visaDetailUrls > 1000 && visaDetailUrls < 14084, `Expected genuine visa URLs without 14,084 synthetic padding, got ${visaDetailUrls}`);
-  assert.ok(totalUrls > 70000 && totalUrls < 80000, `Unexpected total sitemap URL count (${totalUrls})`);
+  assert.equal(flatVerifiedUrls, 56, `Expected 56 verified, published URLs in public/sitemap.xml, got ${flatVerifiedUrls}`);
 });
 
 // ---------------------------------------------------------------------------

@@ -176,13 +176,15 @@ test('Phase 8 Sitemap & Safety: every candidate sitemap URL resolves cleanly, le
     assert.ok(!ssr.robots.includes('noindex'), `Candidate sitemap URL emitted noindex: ${fullUrl}`);
   }
 
-  // Legacy sitemaps (89) + robots.txt + protected SQLite DBs/backup must remain untouched
-  const legacySitemaps = fs.readdirSync(path.join(ROOT, 'public')).filter((f) => /^sitemap.*\.xml$/.test(f));
-  assert.equal(legacySitemaps.length, 89);
+  // Phase 9.8.5: Verified-only public root sitemaps + robots.txt + protected SQLite DBs/backup
+  const rootPublicSitemaps = fs
+    .readdirSync(path.join(ROOT, 'public'))
+    .filter((f) => /^sitemap.*\.xml$/.test(f))
+    .sort();
+  assert.deepEqual(rootPublicSitemaps, ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml']);
 
   const robots = fs.readFileSync(path.join(ROOT, 'public/robots.txt'), 'utf-8');
   assert.ok(robots.includes('Sitemap: https://www.visaapply.org/sitemap-index.xml'));
-  assert.ok(!robots.includes('sitemaps-static'));
 
   assert.equal(
     sha256File('data_db/immigration_hub.db'),

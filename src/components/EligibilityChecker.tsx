@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { jsPDF } from 'jspdf';
 import {
   Sparkles,
   CheckCircle2,
@@ -335,7 +334,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
     }
   }, [fromCode, destCode, purpose, duration, passportValidity, monthlyIncome, bankBalance, travelHistory, jobType]);
 
-  const handleDownloadAiReportPdf = () => {
+  const handleDownloadAiReportPdf = async () => {
     const report =
       aiReport ||
       buildClientRuleFallback({
@@ -351,6 +350,7 @@ export const EligibilityChecker: React.FC<EligibilityCheckerProps> = ({
         jobType
       });
 
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({ unit: 'pt', format: 'a4' });
     const pageW = doc.internal.pageSize.getWidth();
     let y = 44;

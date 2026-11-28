@@ -731,8 +731,13 @@ test('23. Legacy APIs, loaders, Phase A security controls, and all 89 legacy sit
 
   const sitemaps = fs
     .readdirSync(path.join(ROOT_DIR, 'public'))
-    .filter((f) => /^sitemap.*\.xml$/.test(f));
-  assert.equal(sitemaps.length, 89, `Expected 89 legacy public/sitemap*.xml files, found ${sitemaps.length}`);
+    .filter((f) => /^sitemap.*\.xml$/.test(f))
+    .sort();
+  assert.deepEqual(
+    sitemaps,
+    ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml'],
+    `Expected 3 verified root public/sitemap*.xml files, found ${sitemaps.length}`
+  );
 });
 
 // ============================================================================

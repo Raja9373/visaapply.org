@@ -6,7 +6,7 @@ import {
   OperationalEventSink,
   recordOperationalEvent,
   redactSensitiveData
-} from './operationalObservability';
+} from './operationalObservability.js';
 
 export type AutomationFailureClass =
   | 'MISSING_CREDENTIALS'

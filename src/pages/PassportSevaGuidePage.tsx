@@ -13,7 +13,6 @@ import {
   FileText,
   ShieldCheck
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import { EmailSubscribeBox } from '../components/EmailSubscribeBox';
 import { PageBackBar, PageBottomBack } from '../components/PageBackBar';
 
@@ -141,7 +140,8 @@ export const PassportSevaGuidePage: React.FC<PassportSevaGuidePageProps> = ({
 
   const info = useMemo(() => SERVICE_DETAILS[selectedService], [selectedService]);
 
-  const handleDownloadPassportPdf = () => {
+  const handleDownloadPassportPdf = async () => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',

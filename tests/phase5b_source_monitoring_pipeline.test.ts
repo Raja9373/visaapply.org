@@ -788,11 +788,12 @@ test('14 & 15. Atomic regeneration succeeds cleanly, verifies SHA-256 & preserve
     assert.ok(candidateIndexXml.includes('https://www.visaapply.org/sitemaps-static/sitemap-static-core.xml'));
     assert.equal(candidateIndexXml.includes('.staging-'), false);
 
-    // 4. Verify real repo has all 89 legacy public/sitemap*.xml files untouched
-    const realLegacyCount = fs
+    // 4. Phase 9.8.5: Real repo exposes strictly the 3 verified root public/sitemap*.xml files
+    const rootPublicSitemaps = fs
       .readdirSync(PUBLIC_DIR)
-      .filter((f) => /^sitemap.*\.xml$/i.test(f) && !fs.statSync(path.join(PUBLIC_DIR, f)).isDirectory()).length;
-    assert.equal(realLegacyCount, 89);
+      .filter((f) => /^sitemap.*\.xml$/i.test(f) && !fs.statSync(path.join(PUBLIC_DIR, f)).isDirectory())
+      .sort();
+    assert.deepEqual(rootPublicSitemaps, ['sitemap-index.xml', 'sitemap.xml', 'sitemap_index.xml']);
   } finally {
     fs.rmSync(tmpPublic, { recursive: true, force: true });
   }
