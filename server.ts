@@ -2080,8 +2080,7 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     if (fs.existsSync(indexPath)) {
       const xml = stripAdminUrlsFromXml(fs.readFileSync(indexPath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('X-Robots-Tag', 'index, follow');
-      res.setHeader('Link', '<https://www.visaapply.org/sitemap-index.xml>; rel="canonical"');
+      res.setHeader('X-Robots-Tag', 'noindex, follow');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }
@@ -2100,8 +2099,7 @@ const handleSitemapIndexXml = (req: any, res: any) => {
     }
     indexXml += `</sitemapindex>\n`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.setHeader('X-Robots-Tag', 'index, follow');
-    res.setHeader('Link', '<https://www.visaapply.org/sitemap-index.xml>; rel="canonical"');
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
     res.setHeader('Cache-Control', 'public, max-age=3600');
     return res.status(200).send(indexXml);
   } catch (err: any) {
@@ -2119,8 +2117,7 @@ const handleSubSitemapXml = (req: any, res: any) => {
     if (fs.existsSync(filePath)) {
       const xml = stripAdminUrlsFromXml(fs.readFileSync(filePath, 'utf-8'));
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('X-Robots-Tag', 'index, follow');
-      res.setHeader('Link', `<https://www.visaapply.org/sitemap-${rawSub}.xml>; rel="canonical"`);
+      res.setHeader('X-Robots-Tag', 'noindex, follow');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       return res.status(200).send(xml);
     }

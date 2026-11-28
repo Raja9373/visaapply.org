@@ -106,8 +106,22 @@ test('4. vercel.json preserves existing production configuration, adds static ca
   assert.ok(parsed.headers.some((h: any) => h.source === '/sitemaps-static/(.*)'), 'Candidate sitemap headers added');
   assert.ok(parsed.rewrites.some((r: any) => r.destination === '/api/render?path=/$1'), 'SPA SSR catch-all rewrite preserved');
 
-  // Ensure vercel.json never applies global noindex to production
-  assert.equal(/noindex/i.test(raw), false, 'vercel.json must not hardcode global noindex');
+  // Ensure vercel.json never applies noindex to HTML/global routes, while XML sitemaps emit noindex, follow (prevents GSC "Crawled - currently not indexed" on sitemap XML files)
+  for (const rule of parsed.headers) {
+    const isXmlSitemapRule = /sitemap/i.test(String(rule.source || ''));
+    const xRobots = (rule.headers || []).find((h: any) => String(h.key).toLowerCase() === 'x-robots-tag');
+    const canonicalLink = (rule.headers || []).find((h: any) => String(h.key).toLowerCase() === 'link');
+    if (isXmlSitemapRule && String(rule.source).endsWith('.xml')) {
+      assert.equal(xRobots?.value, 'noindex, follow', `${rule.source} must emit X-Robots-Tag: noindex, follow`);
+      assert.equal(canonicalLink, undefined, `${rule.source} must not emit a self-canonical Link header`);
+    } else if (!isXmlSitemapRule) {
+      assert.equal(
+        /noindex/i.test(String(xRobots?.value || '')),
+        false,
+        `Non-sitemap rule ${rule.source} must never hardcode global noindex`
+      );
+    }
+  }
 });
 
 test('5. Production and candidate sitemaps contain zero staging/preview URLs, and VERCEL_PREVIEW_STAGING_GUIDE.md is complete with zero secrets', () => {

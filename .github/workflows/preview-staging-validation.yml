@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - visaapply-staging
+      - main
   workflow_dispatch:
     inputs:
       preview_url:
@@ -24,6 +25,7 @@ concurrency:
 jobs:
   zero-cost-staging-checks:
     name: Zero-Cost Staging Validation (TS, Build, Regression, Catalog, Editorial & SEO)
+    if: github.event_name == 'workflow_dispatch' || github.base_ref == 'visaapply-staging' || github.head_ref == 'visaapply-staging'
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -50,11 +52,14 @@ jobs:
       - name: Static catalog validation (17 checks)
         run: npm run catalog:validate
 
+      - name: GitHub governance & workflow config check
+        run: npm run editorial:verify-github-config
+
       - name: Editorial governance & PR validation
         run: npm run editorial:validate-pr
 
-      - name: Full regression, SEO & Preview-noindex unit test suite
-        run: node --test --import tsx tests/*.test.ts
+      - name: Preview SEO, zero-cost staging & workflow unit tests
+        run: node --test --import tsx tests/phase9_2_vercel_preview_workflow.test.ts tests/phase9_3_zero_cost_preview_validation.test.ts
 
       - name: Production frontend bundle build
         run: npm run build

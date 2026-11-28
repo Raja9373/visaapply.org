@@ -18,8 +18,7 @@ export default function handler(req: any, res: any) {
       if (fs.existsSync(p)) {
         const xml = fs.readFileSync(p, 'utf-8');
         res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-        res.setHeader('X-Robots-Tag', 'index, follow');
-        res.setHeader('Link', `<https://www.visaapply.org/${isIndex ? 'sitemap-index.xml' : 'sitemap.xml'}>; rel="canonical"`);
+        res.setHeader('X-Robots-Tag', 'noindex, follow');
         res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
         return res.status(200).send(xml);
       }
@@ -35,6 +34,7 @@ export default function handler(req: any, res: any) {
   </sitemap>
 </sitemapindex>`;
       res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.setHeader('X-Robots-Tag', 'noindex, follow');
       return res.status(200).send(indexXml);
     }
 
@@ -52,6 +52,7 @@ export default function handler(req: any, res: any) {
   </url>
 </urlset>`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
     return res.status(200).send(fallbackXml);
   } catch (err: any) {
     res.status(500).send('Error generating sitemap');

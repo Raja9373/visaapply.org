@@ -38,8 +38,7 @@
       "source": "/sitemap.xml",
       "headers": [
         { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "X-Robots-Tag", "value": "index, follow" },
-        { "key": "Link", "value": "<https://www.visaapply.org/sitemap.xml>; rel=\"canonical\"" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
         { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=3600" }
       ]
     },
@@ -47,8 +46,7 @@
       "source": "/sitemap-index.xml",
       "headers": [
         { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "X-Robots-Tag", "value": "index, follow" },
-        { "key": "Link", "value": "<https://www.visaapply.org/sitemap-index.xml>; rel=\"canonical\"" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
         { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=3600" }
       ]
     },
@@ -56,8 +54,7 @@
       "source": "/sitemap_index.xml",
       "headers": [
         { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "X-Robots-Tag", "value": "index, follow" },
-        { "key": "Link", "value": "<https://www.visaapply.org/sitemap-index.xml>; rel=\"canonical\"" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
         { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=3600" }
       ]
     },
@@ -65,7 +62,7 @@
       "source": "/sitemap-(.*).xml",
       "headers": [
         { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "X-Robots-Tag", "value": "index, follow" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
         { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=3600" }
       ]
     },
@@ -115,6 +112,7 @@
       "source": "/sitemaps-static/(.*)",
       "headers": [
         { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
         { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=3600" },
         { "key": "X-Content-Type-Options", "value": "nosniff" }
       ]
