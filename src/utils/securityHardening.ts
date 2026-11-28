@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { recordOperationalEvent, redactSensitiveData } from './operationalObservability';
+import { recordOperationalEvent, redactSensitiveData } from './operationalObservability.js';
 
 // ============================================================================
 // 1. PATH TRAVERSAL PROTECTION (STRICT SLUG ALLOWLIST + CANONICAL CONTAINMENT)

@@ -5,8 +5,8 @@ import {
   SupportedLangCode,
   I18nStrings,
   LanguageOption,
-} from '../i18n/config';
-import { getHreflangAlternatesForRoute } from './seoMetadataManager';
+} from '../i18n/config.js';
+import { getHreflangAlternatesForRoute } from './seoMetadataManager.js';
 
 const MANUAL_LANG_KEY = 'visaapply_manual_lang_v2';
 const MANUAL_LANG_FOR_COUNTRY_KEY = 'visaapply_manual_lang_country_v2';

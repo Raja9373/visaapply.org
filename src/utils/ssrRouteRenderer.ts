@@ -4,7 +4,7 @@ import {
   inspectRouteIndexingDirective,
   resolveValidOgImageUrl,
   getHreflangAlternatesForRoute,
-} from './seoMetadataManager';
+} from './seoMetadataManager.js';
 
 export interface SsrRouteRenderResult {
   statusCode: number;

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { renderRouteSsrPayload, injectSsrPayloadIntoHtml } from '../src/utils/ssrRouteRenderer';
-import { extractAdminTokenFromRequest, verifyAdminToken } from '../src/utils/authSecurity';
-import { applySecurityHeaders } from '../src/utils/securityHardening';
+import { renderRouteSsrPayload, injectSsrPayloadIntoHtml } from '../src/utils/ssrRouteRenderer.js';
+import { extractAdminTokenFromRequest, verifyAdminToken } from '../src/utils/authSecurity.js';
+import { applySecurityHeaders } from '../src/utils/securityHardening.js';
 
 const FALLBACK_HTML_TEMPLATE = `<!doctype html>
 <html lang="en">

@@ -1,5 +1,5 @@
-import { CANONICAL_15_LANG_CODES } from '../i18n/config';
-import { getCanonicalBaseOrigin, getLangFromUrlPath } from './autoLanguage';
+import { CANONICAL_15_LANG_CODES } from '../i18n/config.js';
+import { getCanonicalBaseOrigin, getLangFromUrlPath } from './autoLanguage.js';
 
 export interface SeoMetadataPayload {
   title: string;
