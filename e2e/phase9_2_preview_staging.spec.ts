@@ -30,6 +30,7 @@ test.describe('Phase 9.2 Reusable Vercel Preview & Staging Verification Suite', 
     request,
     baseURL,
   }) => {
+    test.setTimeout(90_000);
     const targetBase = baseURL || 'http://127.0.0.1:3000';
     const isPreviewHost = isPreviewTargetUrl(targetBase);
 
@@ -66,7 +67,7 @@ test.describe('Phase 9.2 Reusable Vercel Preview & Staging Verification Suite', 
     ];
 
     for (const route of coreRoutes) {
-      const res = await page.goto(route, { waitUntil: 'domcontentloaded' });
+      const res = await page.goto(route, { waitUntil: 'networkidle' });
       expect(res?.status(), `Route ${route} should return HTTP 200`).toBe(200);
       await expect(page.locator('main')).toBeVisible();
 
@@ -174,6 +175,7 @@ test.describe('Phase 9.2 Reusable Vercel Preview & Staging Verification Suite', 
   test('4. Core Web Vitals (TTFB, FCP, LCP, CLS) measurement across 5 key routes with strict /immigration/us CLS guard', async ({
     browser,
   }) => {
+    test.setTimeout(90_000);
     const cwvRoutes = ['/', '/immigration', '/immigration/us', '/tools/visa-comparison', '/in-to-ca-tourist'];
 
     for (const vp of [

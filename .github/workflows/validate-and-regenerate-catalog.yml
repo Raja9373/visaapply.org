@@ -55,11 +55,11 @@ jobs:
       - name: Verify atomic catalog & candidate sitemap regeneration (dry-run)
         run: npm run catalog:regenerate-safe -- --dry-run
 
-      - name: Run full automated regression & Phase 5B pipeline test suite
-        run: node --test --import tsx tests/*.test.ts
-
       - name: Verify production frontend bundle compiles cleanly
         run: npm run build
+
+      - name: Run full automated regression & Phase 5B pipeline test suite
+        run: node --test --import tsx tests/*.test.ts
 
       - name: Generate Data Quality Dashboard summary artifact
         run: npm run catalog:quality-report

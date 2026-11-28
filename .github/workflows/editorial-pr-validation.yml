@@ -69,8 +69,8 @@ jobs:
       - name: Run Phase 6 Editorial Pull Request Validator (blocks merge on any failure)
         run: npx tsx scripts/validateEditorialPullRequest.ts ${BASE_AUDIT_FLAG}
 
-      - name: Run full automated regression, Phase 5B, Phase 6 & Phase 6.1 test suites
-        run: node --test --import tsx tests/*.test.ts
-
       - name: Verify production frontend bundle compiles cleanly
         run: npm run build
+
+      - name: Run full automated regression, Phase 5B, Phase 6 & Phase 6.1 test suites
+        run: node --test --import tsx tests/*.test.ts

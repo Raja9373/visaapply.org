@@ -8,3 +8,4 @@ coverage/
 !.env.example
 test-results/
 playwright-report/
+backups/phase_9_6_recovery_snapshot/

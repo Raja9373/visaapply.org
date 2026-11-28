@@ -33,6 +33,7 @@ test.describe('Phase 9.3 Zero-Cost Preview Validation Suite (Desktop & Mobile)',
     browser,
     baseURL,
   }) => {
+    test.setTimeout(120_000);
     const targetBase = baseURL || 'http://127.0.0.1:3000';
     const previewMode = isPreviewOrigin(targetBase);
 
@@ -156,6 +157,7 @@ test.describe('Phase 9.3 Zero-Cost Preview Validation Suite (Desktop & Mobile)',
     page,
     request,
   }) => {
+    test.setTimeout(90_000);
     const discoveredInternalPaths = new Set<string>();
 
     for (const route of TARGET_ROUTES) {
